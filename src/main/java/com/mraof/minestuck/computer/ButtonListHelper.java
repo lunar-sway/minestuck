@@ -12,7 +12,7 @@ import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 
-public abstract class ButtonListProgram implements ProgramGui
+public final class ButtonListHelper
 {
 	public static final String CLEAR_BUTTON = "minestuck.clear_button";
 	
@@ -22,11 +22,11 @@ public abstract class ButtonListProgram implements ProgramGui
 	
 	private int index = 0;
 	
-	protected record ButtonData(Component message, Runnable onClick)
+	public record ButtonData(Component message, Runnable onClick)
 	{
 	}
 	
-	public final void onButtonPressed(ComputerScreen screen, Button button)
+	private void onButtonPressed(ComputerScreen screen, Button button)
 	{
 		Runnable runnable = buttonMap.get(button);
 		
@@ -36,7 +36,7 @@ public abstract class ButtonListProgram implements ProgramGui
 		screen.updateGui();
 	}
 	
-	public final void onArrowPressed(ComputerScreen screen, boolean reverse)
+	private void onArrowPressed(ComputerScreen screen, boolean reverse)
 	{
 		if(reverse) index--;
 		else index++;
@@ -44,8 +44,7 @@ public abstract class ButtonListProgram implements ProgramGui
 		screen.updateGui();
 	}
 	
-	@Override
-	public final void onInit(ComputerScreen gui)
+	public void init(ComputerScreen gui)
 	{
 		var xOffset = (gui.width - ComputerScreen.xSize) / 2;
 		var yOffset = (gui.height - ComputerScreen.ySize) / 2;
@@ -63,7 +62,7 @@ public abstract class ButtonListProgram implements ProgramGui
 		downButton = gui.addRenderableWidget(new ArrowButton(false, gui));
 	}
 	
-	protected final void updateButtons(List<ButtonData> buttonsData)
+	public void updateButtons(List<ButtonData> buttonsData)
 	{
 		downButton.active = buttonsData.size() >= index + 4;
 		upButton.active = index > 0;
@@ -86,12 +85,12 @@ public abstract class ButtonListProgram implements ProgramGui
 		}
 	}
 	
-	protected class ArrowButton extends ExtendedButton
+	private class ArrowButton extends ExtendedButton
 	{
 		boolean reverse;
 		ComputerScreen gui;
 		
-		public ArrowButton(boolean reverse, ComputerScreen gui)
+		ArrowButton(boolean reverse, ComputerScreen gui)
 		{
 			super((gui.width - ComputerScreen.xSize) / 2 + 140, (gui.height - ComputerScreen.ySize) / 2 + (reverse ? 60 : 132), 20, 20, Component.empty(), b -> onArrowPressed(gui, reverse));
 			this.reverse = reverse;

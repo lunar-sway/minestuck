@@ -9,15 +9,23 @@ import net.minecraft.network.chat.Component;
 
 import java.util.List;
 
-public final class SettingsApp extends ButtonListProgram
+public final class SettingsApp implements ProgramGui
 {
 	public static final String THEME = "minestuck.program.settings.theme";
 	public static final String TITLE = "minestuck.program.settings.title";
 	
+	private final ButtonListHelper buttonListHelper = new ButtonListHelper();
+	
+	@Override
+	public void onInit(ComputerScreen gui)
+	{
+		this.buttonListHelper.init(gui);
+	}
+	
 	@Override
 	public void onUpdate(ComputerScreen gui)
 	{
-		updateButtons(List.of(new ButtonData(Component.translatable(THEME), () -> openThemeScreen(gui.be))));
+		this.buttonListHelper.updateButtons(List.of(new ButtonListHelper.ButtonData(Component.translatable(THEME), () -> openThemeScreen(gui.be))));
 	}
 	
 	private static void openThemeScreen(ComputerBlockEntity computer)

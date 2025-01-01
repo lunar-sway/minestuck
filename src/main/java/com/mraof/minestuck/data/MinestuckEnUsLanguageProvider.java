@@ -2361,7 +2361,7 @@ public class MinestuckEnUsLanguageProvider extends MinestuckLanguageProvider
 		add(SummonerBlock.SUMMON_TYPE_CHANGE, "Summoned entity type changed to %s.");
 		add(HashMapModus.MESSAGE, "[HASHMAP] %s %% %s -> %s");
 		
-		add(ButtonListProgram.CLEAR_BUTTON, "Clear message");
+		add(ButtonListHelper.CLEAR_BUTTON, "Clear message");
 		add(SburbClient.CLOSE_BUTTON, "Disconnect");
 		add(SburbServer.EDIT_BUTTON, "Activate edit mode");
 		add(SburbServer.GIVE_BUTTON, "Give items");

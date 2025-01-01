@@ -20,7 +20,7 @@ import java.util.List;
 import java.util.Optional;
 import java.util.OptionalInt;
 
-public final class SburbServer extends ButtonListProgram
+public final class SburbServer implements ProgramGui
 {
 	public static final String CLOSE_BUTTON = SburbClient.CLOSE_BUTTON;
 	public static final String EDIT_BUTTON = "minestuck.program.server.edit_button";
@@ -32,14 +32,21 @@ public final class SburbServer extends ButtonListProgram
 	public static final String SERVER_ACTIVE = "minestuck.program.server.server_active_message";
 	public static final String RESUME_SERVER = "minestuck.program.server.resume_server_message";
 	
+	private final ButtonListHelper buttonListHelper = new ButtonListHelper();
 	private Component message;
+	
+	@Override
+	public void onInit(ComputerScreen gui)
+	{
+		this.buttonListHelper.init(gui);
+	}
 	
 	@Override
 	public void onUpdate(ComputerScreen gui)
 	{
 		ComputerBlockEntity computer = gui.be;
 		Component message;
-		List<ButtonData> list = new ArrayList<>();
+		List<ButtonListHelper.ButtonData> list = new ArrayList<>();
 		
 		SburbServerData data = computer.getSburbServerData();
 		Optional<String> eventMessage = data.getEventMessage();
@@ -49,17 +56,17 @@ public final class SburbServer extends ButtonListProgram
 			connection = null;
 		
 		if(eventMessage.isPresent())
-			list.add(new ButtonData(Component.translatable(CLEAR_BUTTON), () -> sendClearMessagePacketIfRelevant(computer)));
+			list.add(new ButtonListHelper.ButtonData(Component.translatable(ButtonListHelper.CLEAR_BUTTON), () -> sendClearMessagePacketIfRelevant(computer)));
 		
 		String displayPlayer = connection == null ? "UNDEFINED" : connection.client().name();
 		if(connection != null)
 		{
 			message = Component.translatable(CONNECT, displayPlayer);
-			list.add(new ButtonData(Component.translatable(CLOSE_BUTTON), () -> {
+			list.add(new ButtonListHelper.ButtonData(Component.translatable(CLOSE_BUTTON), () -> {
 				sendClearMessagePacketIfRelevant(computer);
 				sendCloseConnectionPacket(computer);
 			}));
-			list.add(new ButtonData(Component.translatable(MinestuckConfig.SERVER.giveItems.get() ? GIVE_BUTTON : EDIT_BUTTON),
+			list.add(new ButtonListHelper.ButtonData(Component.translatable(MinestuckConfig.SERVER.giveItems.get() ? GIVE_BUTTON : EDIT_BUTTON),
 					() -> {
 						sendClearMessagePacketIfRelevant(computer);
 						sendActivateEditmodePacket(computer);
@@ -67,7 +74,7 @@ public final class SburbServer extends ButtonListProgram
 		} else if(data.isOpen())
 		{
 			message = Component.translatable(RESUME_SERVER);
-			list.add(new ButtonData(Component.translatable(CLOSE_BUTTON), () -> {
+			list.add(new ButtonListHelper.ButtonData(Component.translatable(CLOSE_BUTTON), () -> {
 				sendClearMessagePacketIfRelevant(computer);
 				sendCloseConnectionPacket(computer);
 			}));
@@ -79,14 +86,14 @@ public final class SburbServer extends ButtonListProgram
 			if(MinestuckConfig.SERVER.allowSecondaryConnections.get()
 					|| !SkaiaClient.hasPrimaryConnectionAsServer(computer.ownerId))
 			{
-				list.add(new ButtonData(Component.translatable(OPEN_BUTTON), () -> {
+				list.add(new ButtonListHelper.ButtonData(Component.translatable(OPEN_BUTTON), () -> {
 					sendClearMessagePacketIfRelevant(computer);
 					PacketDistributor.sendToServer(OpenSburbServerPacket.create(computer));
 				}));
 			}
 			if(SkaiaClient.hasPrimaryConnectionAsServer(computer.ownerId))
 			{
-				list.add(new ButtonData(Component.translatable(RESUME_BUTTON), () -> {
+				list.add(new ButtonListHelper.ButtonData(Component.translatable(RESUME_BUTTON), () -> {
 					sendClearMessagePacketIfRelevant(computer);
 					PacketDistributor.sendToServer(ResumeSburbConnectionPackets.asServer(computer));
 				}));
@@ -94,7 +101,7 @@ public final class SburbServer extends ButtonListProgram
 		}
 		
 		this.message = eventMessage.<Component>map(Component::translatable).orElse(message);
-		updateButtons(list);
+		this.buttonListHelper.updateButtons(list);
 	}
 	
 	private static void sendClearMessagePacketIfRelevant(ComputerBlockEntity computer)

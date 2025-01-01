@@ -16,7 +16,7 @@ import java.util.List;
 import java.util.Map;
 import java.util.Optional;
 
-public final class SburbClient extends ButtonListProgram
+public final class SburbClient implements ProgramGui
 {
 	public static final String CLOSE_BUTTON = "minestuck.program.close_button"; //also used in SburbServer
 	public static final String RESUME_BUTTON = "minestuck.program.resume_button"; //also used in SburbServer
@@ -26,33 +26,40 @@ public final class SburbClient extends ButtonListProgram
 	public static final String SELECT = "minestuck.program.client.select_message";
 	public static final String RESUME_CLIENT = "minestuck.program.client.resume_client_message";
 	
+	private final ButtonListHelper buttonListHelper = new ButtonListHelper();
 	private Component message;
+	
+	@Override
+	public void onInit(ComputerScreen gui)
+	{
+		this.buttonListHelper.init(gui);
+	}
 	
 	@Override
 	public void onUpdate(ComputerScreen gui)
 	{
 		ComputerBlockEntity computer = gui.be;
 		Component message;
-		List<ButtonData> list = new ArrayList<>();
+		List<ButtonListHelper.ButtonData> list = new ArrayList<>();
 		SburbClientData data = computer.getSburbClientData();
 		Optional<String> eventMessage = data.getEventMessage();
 		
 		if(eventMessage.isPresent())
-			list.add(new ButtonData(Component.translatable(CLEAR_BUTTON), () -> sendClearMessagePacketIfRelevant(computer)));
+			list.add(new ButtonListHelper.ButtonData(Component.translatable(ButtonListHelper.CLEAR_BUTTON), () -> sendClearMessagePacketIfRelevant(computer)));
 		
 		ReducedConnection c = SkaiaClient.getClientConnection(computer.ownerId);
 		if(data.isConnectedToServer() && c != null) //If it is connected to someone.
 		{
 			String displayPlayer = c.server().name();
 			message = Component.translatable(CONNECT, displayPlayer);
-			list.add(new ButtonData(Component.translatable(CLOSE_BUTTON), () -> {
+			list.add(new ButtonListHelper.ButtonData(Component.translatable(CLOSE_BUTTON), () -> {
 				sendClearMessagePacketIfRelevant(computer);
 				sendCloseConnectionPacket(computer);
 			}));
 		} else if(data.isResuming())
 		{
 			message = Component.translatable(RESUME_CLIENT);
-			list.add(new ButtonData(Component.translatable(CLOSE_BUTTON), () -> {
+			list.add(new ButtonListHelper.ButtonData(Component.translatable(CLOSE_BUTTON), () -> {
 				sendClearMessagePacketIfRelevant(computer);
 				sendCloseConnectionPacket(computer);
 			}));
@@ -61,14 +68,14 @@ public final class SburbClient extends ButtonListProgram
 			message = Component.translatable(SELECT);
 			if(SkaiaClient.hasPrimaryConnectionAsClient(computer.ownerId))
 			{
-				list.add(new ButtonData(Component.translatable(RESUME_BUTTON), () -> {
+				list.add(new ButtonListHelper.ButtonData(Component.translatable(RESUME_BUTTON), () -> {
 					sendClearMessagePacketIfRelevant(computer);
 					PacketDistributor.sendToServer(ResumeSburbConnectionPackets.asClient(computer));
 				}));
 			}
 			for(Map.Entry<Integer, String> entry : SkaiaClient.getAvailableServers(computer.ownerId).entrySet())
 			{
-				list.add(new ButtonData(Component.literal(entry.getValue()), () -> {
+				list.add(new ButtonListHelper.ButtonData(Component.literal(entry.getValue()), () -> {
 					sendClearMessagePacketIfRelevant(computer);
 					PacketDistributor.sendToServer(ConnectToSburbServerPacket.create(computer, entry.getKey()));
 				}));
@@ -76,21 +83,21 @@ public final class SburbClient extends ButtonListProgram
 		} else
 		{
 			message = Component.translatable(CLIENT_ACTIVE);
-			list.add(new ButtonData(Component.translatable(CLOSE_BUTTON), () -> {
+			list.add(new ButtonListHelper.ButtonData(Component.translatable(CLOSE_BUTTON), () -> {
 				sendClearMessagePacketIfRelevant(computer);
 				sendCloseConnectionPacket(computer);
 			}));
 		}
 		if(SkaiaClient.canSelect(computer.ownerId))
 		{
-			list.add(new ButtonData(Component.translatable(SELECT_COLOR), () -> {
+			list.add(new ButtonListHelper.ButtonData(Component.translatable(SELECT_COLOR), () -> {
 				sendClearMessagePacketIfRelevant(computer);
 				Minecraft.getInstance().setScreen(new ColorSelectorScreen(computer));
 			}));
 		}
 		
 		this.message = eventMessage.<Component>map(Component::translatable).orElse(message);
-		updateButtons(list);
+		this.buttonListHelper.updateButtons(list);
 	}
 	
 	private static void sendClearMessagePacketIfRelevant(ComputerBlockEntity computer)
