@@ -1,7 +1,6 @@
-package com.mraof.minestuck.computer;
+package com.mraof.minestuck.client.gui.computer;
 
 import com.mojang.blaze3d.systems.RenderSystem;
-import com.mraof.minestuck.client.gui.ComputerScreen;
 import net.minecraft.client.gui.GuiGraphics;
 import net.minecraft.client.gui.components.Button;
 import net.minecraft.network.chat.Component;

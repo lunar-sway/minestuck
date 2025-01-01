@@ -1,8 +1,6 @@
-package com.mraof.minestuck.computer;
+package com.mraof.minestuck.client.gui.computer;
 
 import com.mraof.minestuck.blockentity.ComputerBlockEntity;
-import com.mraof.minestuck.client.gui.ComputerScreen;
-import com.mraof.minestuck.client.gui.ComputerThemeScreen;
 import net.minecraft.client.Minecraft;
 import net.minecraft.client.gui.GuiGraphics;
 import net.minecraft.network.chat.Component;

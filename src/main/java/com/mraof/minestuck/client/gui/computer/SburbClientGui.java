@@ -1,8 +1,8 @@
-package com.mraof.minestuck.computer;
+package com.mraof.minestuck.client.gui.computer;
 
 import com.mraof.minestuck.blockentity.ComputerBlockEntity;
 import com.mraof.minestuck.client.gui.ColorSelectorScreen;
-import com.mraof.minestuck.client.gui.ComputerScreen;
+import com.mraof.minestuck.computer.SburbClientData;
 import com.mraof.minestuck.network.computer.*;
 import com.mraof.minestuck.skaianet.client.ReducedConnection;
 import com.mraof.minestuck.skaianet.client.SkaiaClient;

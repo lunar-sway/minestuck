@@ -1,9 +1,8 @@
-package com.mraof.minestuck.client.gui;
+package com.mraof.minestuck.client.gui.computer;
 
 import com.mojang.blaze3d.systems.RenderSystem;
 import com.mraof.minestuck.Minestuck;
 import com.mraof.minestuck.blockentity.ComputerBlockEntity;
-import com.mraof.minestuck.computer.ProgramGui;
 import com.mraof.minestuck.computer.ProgramType;
 import com.mraof.minestuck.computer.theme.ComputerTheme;
 import com.mraof.minestuck.computer.theme.ComputerThemes;
@@ -41,7 +40,7 @@ public class ComputerScreen extends Screen
 	private ProgramGui program;
 	private ComputerTheme cachedTheme;
 	
-	ComputerScreen(Minecraft mc, ComputerBlockEntity be)
+	public ComputerScreen(Minecraft mc, ComputerBlockEntity be)
 	{
 		super(Component.translatable(TITLE));
 		

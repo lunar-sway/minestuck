@@ -2,8 +2,8 @@ package com.mraof.minestuck.skaianet.client;
 
 import com.mraof.minestuck.Minestuck;
 import com.mraof.minestuck.blockentity.ComputerBlockEntity;
-import com.mraof.minestuck.client.gui.ComputerScreen;
 import com.mraof.minestuck.client.gui.MSScreenFactories;
+import com.mraof.minestuck.client.gui.computer.ComputerScreen;
 import com.mraof.minestuck.network.computer.SkaianetInfoPackets;
 import com.mraof.minestuck.skaianet.LandChain;
 import net.minecraft.client.Minecraft;

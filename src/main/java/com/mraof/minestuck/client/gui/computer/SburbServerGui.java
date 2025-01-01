@@ -1,8 +1,8 @@
-package com.mraof.minestuck.computer;
+package com.mraof.minestuck.client.gui.computer;
 
 import com.mraof.minestuck.MinestuckConfig;
 import com.mraof.minestuck.blockentity.ComputerBlockEntity;
-import com.mraof.minestuck.client.gui.ComputerScreen;
+import com.mraof.minestuck.computer.SburbServerData;
 import com.mraof.minestuck.network.computer.ClearMessagePacket;
 import com.mraof.minestuck.network.computer.CloseSburbConnectionPackets;
 import com.mraof.minestuck.network.computer.OpenSburbServerPacket;
