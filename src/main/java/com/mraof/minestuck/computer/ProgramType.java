@@ -27,7 +27,7 @@ public final class ProgramType
 	public static final ProgramType DISK_BURNER = new ProgramType(null, Handlers.EMPTY);
 	public static final ProgramType SETTINGS = new ProgramType(null, Handlers.EMPTY);
 	
-	private static final BiMap<String, ProgramType> REGISTRY = ImmutableBiMap.of("sburb_client", SBURB_CLIENT, "sburb_server", SBURB_SERVER, "disk_burner", DISK_BURNER, "settings", SETTINGS);
+	public static final BiMap<String, ProgramType> REGISTRY = ImmutableBiMap.of("sburb_client", SBURB_CLIENT, "sburb_server", SBURB_SERVER, "disk_burner", DISK_BURNER, "settings", SETTINGS);
 	
 	public static final Codec<ProgramType> CODEC = Codec.STRING.flatXmap(
 			name -> Optional.ofNullable(REGISTRY.get(name)).map(DataResult::success).orElse(DataResult.error(() -> "Unknown program name " + name)),

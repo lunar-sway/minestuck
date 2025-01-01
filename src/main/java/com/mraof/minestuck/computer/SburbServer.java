@@ -1,6 +1,5 @@
 package com.mraof.minestuck.computer;
 
-import com.mraof.minestuck.Minestuck;
 import com.mraof.minestuck.MinestuckConfig;
 import com.mraof.minestuck.blockentity.ComputerBlockEntity;
 import com.mraof.minestuck.network.computer.ClearMessagePacket;
@@ -12,7 +11,6 @@ import com.mraof.minestuck.skaianet.client.ReducedConnection;
 import com.mraof.minestuck.skaianet.client.SkaiaClient;
 import net.minecraft.network.chat.Component;
 import net.minecraft.network.protocol.common.custom.CustomPacketPayload;
-import net.minecraft.resources.ResourceLocation;
 import net.neoforged.neoforge.network.PacketDistributor;
 
 import java.util.ArrayList;
@@ -31,8 +29,6 @@ public final class SburbServer extends ButtonListProgram
 	public static final String OFFLINE = "minestuck.program.server.offline_message";
 	public static final String SERVER_ACTIVE = "minestuck.program.server.server_active_message";
 	public static final String RESUME_SERVER = "minestuck.program.server.resume_server_message";
-	
-	public static final ResourceLocation ICON = ResourceLocation.fromNamespaceAndPath(Minestuck.MOD_ID, "textures/gui/desktop_icon/sburb_server.png");
 	
 	@Override
 	protected InterfaceData getInterfaceData(ComputerBlockEntity computer)
@@ -110,11 +106,5 @@ public final class SburbServer extends ButtonListProgram
 	{
 		CustomPacketPayload packet = new ClientEditPackets.Activate(computer.ownerId, computer.getSburbServerData().getConnectedClientId().orElseThrow());
 		PacketDistributor.sendToServer(packet);
-	}
-	
-	@Override
-	public ResourceLocation getIcon()
-	{
-		return ICON;
 	}
 }

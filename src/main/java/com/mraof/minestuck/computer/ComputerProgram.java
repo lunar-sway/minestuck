@@ -1,10 +1,8 @@
 package com.mraof.minestuck.computer;
 
-import com.mraof.minestuck.Minestuck;
 import com.mraof.minestuck.blockentity.ComputerBlockEntity;
 import com.mraof.minestuck.client.gui.ComputerScreen;
 import net.minecraft.client.gui.GuiGraphics;
-import net.minecraft.resources.ResourceLocation;
 
 import java.util.HashMap;
 import java.util.function.Supplier;
@@ -19,7 +17,6 @@ public abstract class ComputerProgram
 { //This is overall a bad way of handling programs. Should be rewritten
 	
 	private static final HashMap<ProgramType, Supplier<? extends ComputerProgram>> programs = new HashMap<>();
-	public static final ResourceLocation INVALID_ICON = Minestuck.id("textures/gui/desktop_icon/invalid.png");
 	
 	/**
 	 * Should only be used client-side
@@ -60,12 +57,4 @@ public abstract class ComputerProgram
 	 * but I do not know since I do not know very much about minecraft graphics.
 	 */
 	public abstract void paintGui(GuiGraphics guiGraphics, ComputerScreen gui, ComputerBlockEntity be);
-	
-	/**
-	 * @return desktop icon for this program.
-	 */
-	public ResourceLocation getIcon()
-	{
-		return INVALID_ICON;
-	}
 }

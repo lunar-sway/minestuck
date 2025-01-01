@@ -1,10 +1,8 @@
 package com.mraof.minestuck.computer;
 
-import com.mraof.minestuck.Minestuck;
 import com.mraof.minestuck.blockentity.ComputerBlockEntity;
 import com.mraof.minestuck.network.computer.BurnDiskPacket;
 import net.minecraft.network.chat.Component;
-import net.minecraft.resources.ResourceLocation;
 import net.neoforged.neoforge.network.PacketDistributor;
 
 import java.util.List;
@@ -16,8 +14,6 @@ public class DiskBurner extends ButtonListProgram
 	public static final String BURN_SERVER_DISK = "minestuck.program.disk_burner.burn_server_disk";
 	public static final String BURN_CLIENT_DISK = "minestuck.program.disk_burner.burn_client_disk";
 	public static final String CHOOSE = "minestuck.program.disk_burner.choose";
-	
-	public static final ResourceLocation ICON = ResourceLocation.fromNamespaceAndPath(Minestuck.MOD_ID, "textures/gui/desktop_icon/disk_burner.png");
 	
 	@Override
 	protected InterfaceData getInterfaceData(ComputerBlockEntity be)
@@ -33,11 +29,5 @@ public class DiskBurner extends ButtonListProgram
 						() -> PacketDistributor.sendToServer(BurnDiskPacket.create(be, false))),
 				new ButtonData(Component.translatable(BURN_CLIENT_DISK),
 						() -> PacketDistributor.sendToServer(BurnDiskPacket.create(be, true)))));
-	}
-	
-	@Override
-	public ResourceLocation getIcon()
-	{
-		return ICON;
 	}
 }

@@ -22,6 +22,7 @@ import org.lwjgl.glfw.GLFW;
 import javax.annotation.ParametersAreNonnullByDefault;
 import java.util.ArrayList;
 import java.util.List;
+import java.util.Objects;
 
 //TODO continually check that player is in reach of the computer
 @ParametersAreNonnullByDefault
@@ -191,14 +192,15 @@ public class ComputerScreen extends Screen
 	
 	private class ComputerIcon extends ExtendedButton
 	{
-		private final ComputerProgram program;
+		private final ResourceLocation icon;
 		private static final int WIDTH = 16, HEIGHT = 16;
 		
 		public ComputerIcon(int xPos, int yPos, ProgramType programType)
 		{
 			super(xPos, yPos, WIDTH, HEIGHT, Component.empty(), button -> setProgram(programType));
 			
-			this.program = ComputerProgram.getProgram(programType);
+			String programName = Objects.requireNonNullElse(ProgramType.REGISTRY.inverse().get(programType), "invalid");
+			this.icon = Minestuck.id("textures/gui/desktop_icon/" + programName + ".png");
 		}
 		
 		@Override
@@ -207,7 +209,7 @@ public class ComputerScreen extends Screen
 			if(!visible) return;
 			RenderSystem.setShaderColor(1, 1, 1, 1);
 			
-			guiGraphics.blit(this.program.getIcon(), getX(), getY(), WIDTH, HEIGHT, 0, 0, WIDTH, HEIGHT, WIDTH, HEIGHT);
+			guiGraphics.blit(this.icon, getX(), getY(), WIDTH, HEIGHT, 0, 0, WIDTH, HEIGHT, WIDTH, HEIGHT);
 		}
 	}
 	
