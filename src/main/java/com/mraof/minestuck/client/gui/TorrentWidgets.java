@@ -1,10 +1,7 @@
 package com.mraof.minestuck.client.gui;
 
 import com.mojang.blaze3d.systems.RenderSystem;
-import com.mojang.blaze3d.vertex.BufferBuilder;
-import com.mojang.blaze3d.vertex.DefaultVertexFormat;
-import com.mojang.blaze3d.vertex.Tesselator;
-import com.mojang.blaze3d.vertex.VertexFormat;
+import com.mojang.blaze3d.vertex.*;
 import com.mojang.datafixers.util.Pair;
 import com.mraof.minestuck.alchemy.TorrentHelper;
 import com.mraof.minestuck.alchemy.TorrentSession;
@@ -54,15 +51,14 @@ public class TorrentWidgets
 		float scaledIconX = (float) iconX * 0.65F;
 		float scaledIconY = (float) iconY * 0.65F;
 		
-		BufferBuilder render = Tesselator.getInstance().getBuilder();
-		render.begin(VertexFormat.Mode.QUADS, DefaultVertexFormat.POSITION_TEX);
+		BufferBuilder render = Tesselator.getInstance().begin(VertexFormat.Mode.QUADS, DefaultVertexFormat.POSITION_TEX);
 		
-		render.vertex(x, y + scaledIconY, 0D).uv((iconU) * scale, (iconV + iconY) * scale).endVertex();
-		render.vertex(x + scaledIconX, y + scaledIconY, 0D).uv((iconU + iconX) * scale, (iconV + iconY) * scale).endVertex();
-		render.vertex(x + scaledIconX, y, 0D).uv((iconU + iconX) * scale, (iconV) * scale).endVertex();
-		render.vertex(x, y, 0D).uv((iconU) * scale, (iconV) * scale).endVertex();
+		render.addVertex(x, y + scaledIconY, 0).setUv((iconU) * scale, (iconV + iconY) * scale);
+		render.addVertex(x + scaledIconX, y + scaledIconY, 0).setUv((iconU + iconX) * scale, (iconV + iconY) * scale);
+		render.addVertex(x + scaledIconX, y, 0).setUv((iconU + iconX) * scale, (iconV) * scale);
+		render.addVertex(x, y, 0).setUv((iconU) * scale, (iconV) * scale);
 		
-		Tesselator.getInstance().end();
+		BufferUploader.drawWithShader(render.buildOrThrow());
 	}
 	
 	protected static class GristEntry extends AbstractWidget
@@ -164,9 +160,9 @@ public class TorrentWidgets
 			
 			isActive = !isActive;
 			if(isOwner)
-				PacketDistributor.SERVER.noArg().send(new TorrentPackets.ModifySeeding(gristType, isActive));
+				PacketDistributor.sendToServer(new TorrentPackets.ModifySeeding(gristType, isActive));
 			else
-				PacketDistributor.SERVER.noArg().send(new TorrentPackets.ModifyLeeching(torrentSession, gristType, isActive));
+				PacketDistributor.sendToServer(new TorrentPackets.ModifyLeeching(torrentSession, gristType, isActive));
 		}
 		
 		@Override

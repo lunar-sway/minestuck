@@ -27,7 +27,7 @@ public class TorrentScreen extends Screen
 {
 	public static final String TITLE = "minestuck.computer_themes"; //TODO
 	
-	public static final ResourceLocation GUI_MAIN = new ResourceLocation(Minestuck.MOD_ID, "textures/gui/torrent.png");
+	public static final ResourceLocation GUI_MAIN = Minestuck.id("textures/gui/torrent.png");
 	
 	protected static final int GUI_WIDTH = 190;
 	protected static final int GUI_HEIGHT = 200;

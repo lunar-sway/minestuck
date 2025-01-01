@@ -201,7 +201,7 @@ public class GristGutter
 		
 		ServerPlayer serverPlayer = player.getPlayer(mcServer);
 		if(serverPlayer != null)
-			PacketDistributor.PLAYER.with(serverPlayer).send(new GutterUpdatePacket(this.gristSet, this.getRemainingCapacity()));
+			PacketDistributor.sendToPlayer(serverPlayer, new GutterUpdatePacket(this.gristSet.asImmutable(), this.getRemainingCapacity()));
 	}
 	
 	private double getDistributionRateModifier()

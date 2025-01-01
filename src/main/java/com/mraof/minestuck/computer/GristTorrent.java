@@ -9,8 +9,8 @@ import net.minecraft.resources.ResourceLocation;
 
 public class GristTorrent extends ComputerProgram
 {
-	public static final ResourceLocation GUI_MAIN = new ResourceLocation(Minestuck.MOD_ID, "textures/gui/torrent.png");
-	public static final ResourceLocation ICON = new ResourceLocation(Minestuck.MOD_ID, "textures/gui/desktop_icon/torrent.png");
+	public static final ResourceLocation GUI_MAIN = Minestuck.id("textures/gui/torrent.png");
+	public static final ResourceLocation ICON = Minestuck.id("textures/gui/desktop_icon/torrent.png");
 	
 	/*
 	private static final int GUI_WIDTH = 176;
