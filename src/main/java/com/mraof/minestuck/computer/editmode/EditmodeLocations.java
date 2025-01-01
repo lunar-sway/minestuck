@@ -4,6 +4,7 @@ import com.google.common.collect.ArrayListMultimap;
 import com.google.common.collect.Multimap;
 import com.mraof.minestuck.MinestuckConfig;
 import com.mraof.minestuck.blockentity.ComputerBlockEntity;
+import com.mraof.minestuck.computer.ProgramType;
 import com.mraof.minestuck.network.editmode.EditmodeLocationsPacket;
 import com.mraof.minestuck.player.PlayerData;
 import com.mraof.minestuck.player.PlayerIdentifier;
@@ -309,6 +310,6 @@ public final class EditmodeLocations implements INBTSerializable<CompoundTag>
 	
 	private static boolean isComputerSourceInvalid(ComputerBlockEntity computer)
 	{
-		return computer.isBroken() || !computer.hasProgram(0);
+		return computer.isBroken() || !computer.hasProgram(ProgramType.CLIENT);
 	}
 }

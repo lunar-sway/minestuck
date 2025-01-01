@@ -86,7 +86,7 @@ public class ComputerBlock extends MachineBlock implements EntityBlock
 		ItemStack heldItem = player.getItemInHand(hand);
 		if(state.getValue(STATE) == State.OFF)
 		{
-			if(ProgramData.getProgramID(heldItem).isEmpty())
+			if(ProgramData.getProgramType(heldItem).isEmpty())
 				return ItemInteractionResult.SKIP_DEFAULT_BLOCK_INTERACTION;
 			
 			turnOn(state, level, pos, player);
@@ -165,7 +165,7 @@ public class ComputerBlock extends MachineBlock implements EntityBlock
 		be.closeAll();
 		
 		//program disks
-		be.installedPrograms().forEach(id -> Containers.dropItemStack(level, x, y, z, ProgramData.getItem(id)));
+		be.installedPrograms().forEach(programType -> Containers.dropItemStack(level, x, y, z, ProgramData.getItem(programType)));
 		
 		//blank disks
 		Containers.dropItemStack(level, x, y, z, new ItemStack(MSItems.BLANK_DISK.get(), be.blankDisksStored));

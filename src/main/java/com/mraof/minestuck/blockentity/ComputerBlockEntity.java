@@ -32,31 +32,34 @@ import net.minecraft.world.item.Items;
 import net.minecraft.world.level.block.Block;
 import net.minecraft.world.level.block.entity.BlockEntity;
 import net.minecraft.world.level.block.state.BlockState;
+import org.apache.logging.log4j.LogManager;
+import org.apache.logging.log4j.Logger;
 
 import javax.annotation.Nonnull;
 import javax.annotation.Nullable;
 import javax.annotation.ParametersAreNonnullByDefault;
-import java.util.*;
+import java.util.HashSet;
+import java.util.Objects;
+import java.util.Optional;
+import java.util.Set;
 import java.util.stream.Stream;
 
 @ParametersAreNonnullByDefault
 @MethodsReturnNonnullByDefault
 public class ComputerBlockEntity extends BlockEntity implements ISburbComputer
 {
-	//TODO The implementation of this class need a serious rewrite
+	private static final Logger LOGGER = LogManager.getLogger();
+	
 	public ComputerBlockEntity(BlockPos pos, BlockState state)
 	{
 		super(MSBlockEntityTypes.COMPUTER.get(), pos, state);
 		
 		// always should exist on computers
-		this.installedPrograms.add(2);
-		this.installedPrograms.add(3);
+		this.installedPrograms.add(ProgramType.DISK_BURNER);
+		this.installedPrograms.add(ProgramType.SETTINGS);
 	}
 	
-	/**
-	 * 0 = client, 1 = server, 2 = disk burner, 3 = settings
-	 */
-	private final Set<Integer> installedPrograms = new HashSet<>();
+	private final Set<ProgramType> installedPrograms = new HashSet<>();
 	public ComputerScreen gui;
 	@Nullable
 	private PlayerIdentifier owner;
@@ -64,7 +67,8 @@ public class ComputerBlockEntity extends BlockEntity implements ISburbComputer
 	public int ownerId;
 	private SburbClientData sburbClientProgramData = new SburbClientData(this::markDirtyAndResend);
 	private SburbServerData sburbServerProgramData = new SburbServerData(this::markDirtyAndResend);
-	public int programSelected = -1;
+	@Nullable
+	public ProgramType programSelected = null;
 	@Nonnull
 	public Set<Block> hieroglyphsStored = new HashSet<>();
 	public boolean hasParadoxInfoStored = false; //sburb code component received from the lotus flower
@@ -76,18 +80,12 @@ public class ComputerBlockEntity extends BlockEntity implements ISburbComputer
 	{
 		super.loadAdditional(nbt, pRegistries);
 		
-		if(nbt.contains("programs"))
+		for(int id : nbt.getIntArray("programs"))
 		{
-			if(nbt.contains("programs", Tag.TAG_INT_ARRAY))
-			{
-				for(int id : nbt.getIntArray("programs"))
-					installedPrograms.add(id);
-			} else
-			{
-				CompoundTag programs = nbt.getCompound("programs");
-				for(String name : programs.getAllKeys())
-					installedPrograms.add(programs.getInt(name));
-			}
+			if(0 <= id && id < ProgramType.values().length)
+				installedPrograms.add(ProgramType.values()[id]);
+			else
+				LOGGER.error("Unknown program id {}", id);
 		}
 		
 		sburbClientProgramData.read(nbt.getCompound("sburb_client_data"));
@@ -148,7 +146,7 @@ public class ComputerBlockEntity extends BlockEntity implements ISburbComputer
 	
 	private void writeSharedData(CompoundTag compoundtag)
 	{
-		compoundtag.put("programs", new IntArrayTag(installedPrograms.stream().toList()));
+		compoundtag.put("programs", new IntArrayTag(installedPrograms.stream().map(ProgramType::ordinal).toList()));
 		
 		IncompleteSburbCodeItem.writeBlockSet(compoundtag, "hieroglyphsStored", hieroglyphsStored);
 		compoundtag.putBoolean("hasParadoxInfoStored", hasParadoxInfoStored);
@@ -169,8 +167,8 @@ public class ComputerBlockEntity extends BlockEntity implements ISburbComputer
 	public void onLoad()
 	{
 		super.onLoad();
-		for(int id : installedPrograms)
-			ProgramData.getHandler(id).ifPresent(handler -> handler.onLoad(this));
+		for(ProgramType programType : installedPrograms)
+			ProgramData.getHandler(programType).ifPresent(handler -> handler.onLoad(this));
 	}
 	
 	public boolean isBroken()
@@ -178,9 +176,9 @@ public class ComputerBlockEntity extends BlockEntity implements ISburbComputer
 		return getBlockState().getValue(ComputerBlock.STATE) == ComputerBlock.State.BROKEN;
 	}
 	
-	public boolean hasProgram(int id)
+	public boolean hasProgram(ProgramType programType)
 	{
-		return installedPrograms.contains(id);
+		return installedPrograms.contains(programType);
 	}
 	
 	@Override
@@ -204,11 +202,11 @@ public class ComputerBlockEntity extends BlockEntity implements ISburbComputer
 	
 	public void closeAll()
 	{
-		for(int id : installedPrograms)
-			ProgramData.getHandler(id).ifPresent(handler -> handler.onClosed(this));
+		for(ProgramType programType : installedPrograms)
+			ProgramData.getHandler(programType).ifPresent(handler -> handler.onClosed(this));
 	}
 	
-	public Stream<Integer> installedPrograms()
+	public Stream<ProgramType> installedPrograms()
 	{
 		return this.installedPrograms.stream();
 	}
@@ -249,7 +247,7 @@ public class ComputerBlockEntity extends BlockEntity implements ISburbComputer
 		if(isBroken() || level == null)
 			return false;
 		
-		OptionalInt optionalId = ProgramData.getProgramID(stackInHand);
+		Optional<ProgramType> optionalType = ProgramData.getProgramType(stackInHand);
 		
 		if(stackInHand.is(MSItems.BLANK_DISK.get()))
 		{
@@ -272,17 +270,17 @@ public class ComputerBlockEntity extends BlockEntity implements ISburbComputer
 				level.sendBlockUpdated(getBlockPos(), getBlockState(), getBlockState(), 3);
 			}
 			return true;
-		} else if(optionalId.isPresent())
+		} else if(optionalType.isPresent())
 		{
-			int id = optionalId.getAsInt();
-			if(!level.isClientSide && !hasProgram(id))
+			ProgramType programType = optionalType.get();
+			if(!level.isClientSide && !hasProgram(programType))
 			{
 				stackInHand.shrink(1);
-				installedPrograms.add(id);
+				installedPrograms.add(programType);
 				level.setBlock(getBlockPos(), getBlockState().setValue(ComputerBlock.STATE, ComputerBlock.State.GAME_LOADED), Block.UPDATE_CLIENTS);
 				setChanged();
 				level.sendBlockUpdated(getBlockPos(), getBlockState(), getBlockState(), 3);
-				ProgramData.getHandler(id).ifPresent(handler -> handler.onDiskInserted(this));
+				ProgramData.getHandler(programType).ifPresent(handler -> handler.onDiskInserted(this));
 			}
 			return true;
 		}
@@ -290,13 +288,13 @@ public class ComputerBlockEntity extends BlockEntity implements ISburbComputer
 		return false;
 	}
 	
-	public void burnDisk(int programId)
+	public void burnDisk(ProgramType programType)
 	{
 		if(level == null)
 			return;
 		
 		BlockPos bePos = getBlockPos();
-		ItemStack diskStack = ProgramData.getItem(programId);
+		ItemStack diskStack = ProgramData.getItem(programType);
 		if(!diskStack.isEmpty() && blankDisksStored > 0 && hasAllCode())
 		{
 			RandomSource random = level.getRandom();

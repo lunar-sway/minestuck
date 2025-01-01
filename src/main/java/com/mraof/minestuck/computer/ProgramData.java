@@ -10,9 +10,9 @@ import net.minecraft.world.item.ItemStack;
 
 import javax.annotation.Nonnull;
 import java.util.HashMap;
+import java.util.Map;
 import java.util.Objects;
 import java.util.Optional;
-import java.util.OptionalInt;
 
 /**
  * A quickfix to some sidedness issues
@@ -20,60 +20,60 @@ import java.util.OptionalInt;
  */
 public final class ProgramData
 {
-	private static final HashMap<Integer, ProgramHandler> programHandlers = new HashMap<>();
+	private static final Map<ProgramType, ProgramHandler> programHandlers = new HashMap<>();
 	
-	private static final HashMap<Integer, ItemStack> disks = new HashMap<>();
+	private static final Map<ProgramType, ItemStack> disks = new HashMap<>();
 	
 	public static void init()
 	{
-		ProgramData.registerProgram(0, new ItemStack(MSItems.CLIENT_DISK.get()), CLIENT_HANDLER);
-		ProgramData.registerProgram(1, new ItemStack(MSItems.SERVER_DISK.get()), SERVER_HANDLER);
+		ProgramData.registerProgram(ProgramType.CLIENT, new ItemStack(MSItems.CLIENT_DISK.get()), CLIENT_HANDLER);
+		ProgramData.registerProgram(ProgramType.SERVER, new ItemStack(MSItems.SERVER_DISK.get()), SERVER_HANDLER);
 	}
 	
 	/**
 	 * Registers a program class to the list.
 	 *
-	 * @param id
-	 *            The program id. If it is already used, the method will throw
+	 * @param programType
+	 *            The program type. If it is already registered, the method will throw
 	 *            an IllegalArgumentException.
 	 * @param disk
 	 *            The item that will serve as the disk that installs the
 	 *            program.
 	 */
-	public static void registerProgram(int id, ItemStack disk, ProgramHandler programHandler)
+	public static void registerProgram(ProgramType programType, ItemStack disk, ProgramHandler programHandler)
 	{
-		if(disks.containsKey(id) || id == -1)
-			throw new IllegalArgumentException("Program id " + id + " is already used!");
-		programHandlers.put(id, programHandler);
-		disks.put(id, disk);
+		if(disks.containsKey(programType))
+			throw new IllegalArgumentException("Program type " + programType.name() + " is already registered!");
+		programHandlers.put(programType, programHandler);
+		disks.put(programType, disk);
 	}
 	
-	public static Optional<ProgramHandler> getHandler(int id)
+	public static Optional<ProgramHandler> getHandler(ProgramType programType)
 	{
-		return Optional.ofNullable(programHandlers.get(id));
+		return Optional.ofNullable(programHandlers.get(programType));
 	}
 	
 	/**
-	 * Returns the id of the program corresponding to the given item.
+	 * Returns the type of the program corresponding to the given item.
 	 */
-	public static OptionalInt getProgramID(ItemStack item)
+	public static Optional<ProgramType> getProgramType(ItemStack item)
 	{
 		if(item.isEmpty())
-			return OptionalInt.empty();
+			return Optional.empty();
 		item = item.copy();
 		item.setCount(1);
-		for(int id : disks.keySet())
-			if(ItemStack.isSameItem(disks.get(id), item))
-				return OptionalInt.of(id);
-		return OptionalInt.empty();
+		for(Map.Entry<ProgramType, ItemStack> entry : disks.entrySet())
+			if(ItemStack.isSameItem(entry.getValue(), item))
+				return Optional.of(entry.getKey());
+		return Optional.empty();
 	}
 	
 	@Nonnull
-	public static ItemStack getItem(int id)
+	public static ItemStack getItem(ProgramType programType)
 	{
-		if(id == 2 || id==3)
+		if(programType == ProgramType.DISK_BURNER || programType == ProgramType.SETTINGS)
 			return ItemStack.EMPTY;
-		return disks.get(id).copy();
+		return disks.get(programType).copy();
 	}
 	
 	public interface ProgramHandler

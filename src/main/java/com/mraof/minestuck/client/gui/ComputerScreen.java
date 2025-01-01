@@ -4,6 +4,7 @@ import com.mojang.blaze3d.systems.RenderSystem;
 import com.mraof.minestuck.Minestuck;
 import com.mraof.minestuck.blockentity.ComputerBlockEntity;
 import com.mraof.minestuck.computer.ComputerProgram;
+import com.mraof.minestuck.computer.ProgramType;
 import com.mraof.minestuck.computer.theme.ComputerTheme;
 import com.mraof.minestuck.computer.theme.ComputerThemes;
 import net.minecraft.client.Minecraft;
@@ -34,7 +35,7 @@ public class ComputerScreen extends Screen
 	public static final int xSize = 176;
 	public static final int ySize = 166;
 	
-	private static final Comparator<Integer> PROGRAM_DISPLAY_ORDER = Comparator.reverseOrder();
+	private static final Comparator<ProgramType> PROGRAM_DISPLAY_ORDER = Comparator.reverseOrder();
 	
 	public final ComputerBlockEntity be;
 	private final List<ComputerIcon> icons;
@@ -59,7 +60,8 @@ public class ComputerScreen extends Screen
 	{
 		genIcons();
 		powerButton = addRenderableWidget(new PowerButton());
-		setProgram(be.programSelected);
+		if(be.programSelected != null)
+			setProgram(be.programSelected);
 	}
 	
 	@Override
@@ -113,15 +115,15 @@ public class ComputerScreen extends Screen
 		if(program!=null) program.onUpdateGui(this);
 	}
 	
-	protected void setProgram(int id)
+	protected void setProgram(ProgramType programType)
 	{
-		if(be.isBroken() || id == -1 || id == -2)
+		if(be.isBroken())
 			return;
 		
-		program = ComputerProgram.getProgram(id);
+		program = ComputerProgram.getProgram(programType);
 		if(program==null) return;
 		
-		be.programSelected = id;
+		be.programSelected = programType;
 		program.onInitGui(this);
 		
 		for(ComputerIcon icon : icons)
@@ -133,7 +135,7 @@ public class ComputerScreen extends Screen
 	protected void exitProgram()
 	{
 		program = null;
-		be.programSelected = -1;
+		be.programSelected = null;
 		
 		clearWidgets();
 		icons.forEach(this::addRenderableWidget);
@@ -151,11 +153,11 @@ public class ComputerScreen extends Screen
 		icons.clear();
 		
 		int programCount = 0;
-		for(int id : be.installedPrograms().sorted(PROGRAM_DISPLAY_ORDER).toList())
+		for(ProgramType programType : be.installedPrograms().sorted(PROGRAM_DISPLAY_ORDER).toList())
 		{
 			icons.add(addRenderableWidget(new ComputerIcon(
 					xOffset + 15 + Math.floorDiv(programCount, 5) * 20,
-					yOffset + 44 + programCount % 5 * 20, id)
+					yOffset + 44 + programCount % 5 * 20, programType)
 			));
 			programCount++;
 		}
@@ -195,11 +197,11 @@ public class ComputerScreen extends Screen
 		private final ComputerProgram program;
 		private static final int WIDTH = 16, HEIGHT = 16;
 		
-		public ComputerIcon(int xPos, int yPos, int id)
+		public ComputerIcon(int xPos, int yPos, ProgramType programType)
 		{
-			super(xPos, yPos, WIDTH, HEIGHT, Component.empty(), button -> setProgram(id));
+			super(xPos, yPos, WIDTH, HEIGHT, Component.empty(), button -> setProgram(programType));
 			
-			this.program = ComputerProgram.getProgram(id);
+			this.program = ComputerProgram.getProgram(programType);
 		}
 		
 		@Override

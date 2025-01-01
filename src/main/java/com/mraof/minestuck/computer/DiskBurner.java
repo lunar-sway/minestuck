@@ -30,9 +30,9 @@ public class DiskBurner extends ButtonListProgram
 		
 		return new InterfaceData(Component.translatable(CHOOSE), List.of(
 				new ButtonData(Component.translatable(BURN_SERVER_DISK),
-						() -> PacketDistributor.sendToServer(BurnDiskPacket.create(be, 1))),
+						() -> PacketDistributor.sendToServer(BurnDiskPacket.create(be, ProgramType.SERVER))),
 				new ButtonData(Component.translatable(BURN_CLIENT_DISK),
-						() -> PacketDistributor.sendToServer(BurnDiskPacket.create(be, 0)))));
+						() -> PacketDistributor.sendToServer(BurnDiskPacket.create(be, ProgramType.CLIENT)))));
 	}
 	
 	@Override

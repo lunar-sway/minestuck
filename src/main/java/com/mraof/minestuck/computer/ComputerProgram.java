@@ -18,26 +18,26 @@ import java.util.function.Supplier;
 public abstract class ComputerProgram
 { //This is overall a bad way of handling programs. Should be rewritten
 	
-	private static final HashMap<Integer, Supplier<? extends ComputerProgram>> programs = new HashMap<>();
+	private static final HashMap<ProgramType, Supplier<? extends ComputerProgram>> programs = new HashMap<>();
 	public static final ResourceLocation INVALID_ICON = Minestuck.id("textures/gui/desktop_icon/invalid.png");
 	
 	/**
 	 * Should only be used client-side
 	 */
-	public static void registerProgramGui(int id, Supplier<? extends ComputerProgram> program)
+	public static void registerProgramGui(ProgramType programType, Supplier<? extends ComputerProgram> program)
 	{
-		if(programs.containsKey(id) || id == -1 || id == -2)
-			throw new IllegalArgumentException("Program id " + id + " is already used!");
-		programs.put(id, program);
+		if(programs.containsKey(programType))
+			throw new IllegalArgumentException("Program type " + programType.name() + " is already registered!");
+		programs.put(programType, program);
 	}
 	
 	/**
 	 * Creates and returns a new computer program for the given id (or null if there is none)
 	 * Should only be used in a client-side context due to gui sidedness!
 	 */
-	public static ComputerProgram getProgram(int id)
+	public static ComputerProgram getProgram(ProgramType programType)
 	{
-		return programs.get(id).get();
+		return programs.get(programType).get();
 	}
 	
 	/**
