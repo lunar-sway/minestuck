@@ -5,6 +5,7 @@ import com.mraof.minestuck.Minestuck;
 import com.mraof.minestuck.item.block.TransportalizerItem;
 import net.minecraft.core.GlobalPos;
 import net.minecraft.core.component.DataComponentType;
+import net.minecraft.core.registries.Registries;
 import net.minecraft.network.codec.ByteBufCodecs;
 import net.minecraft.network.codec.StreamCodec;
 import net.minecraft.util.Unit;
@@ -15,7 +16,7 @@ import java.util.function.Supplier;
 
 public final class MSItemComponents
 {
-	public static final DeferredRegister.DataComponents REGISTRY = DeferredRegister.createDataComponents(Minestuck.MOD_ID);
+	public static final DeferredRegister.DataComponents REGISTRY = DeferredRegister.createDataComponents(Registries.DATA_COMPONENT_TYPE, Minestuck.MOD_ID);
 	
 	public static final Supplier<DataComponentType<EncodedItemComponent>> ENCODED_ITEM = REGISTRY.registerComponentType("encoded_item",
 			builder -> builder.persistent(EncodedItemComponent.CODEC).networkSynchronized(EncodedItemComponent.STREAM_CODEC));

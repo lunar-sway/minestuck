@@ -137,12 +137,10 @@ public class AlchemiterBlock extends MultiMachineBlock<AlchemiterMultiblock> imp
 		}
 		
 		@Override
-		public VoxelShape getShape(BlockState state, BlockGetter worldIn, BlockPos pos, CollisionContext context)
+		protected VoxelShape getShape(BlockState state, BlockGetter worldIn, BlockPos pos, CollisionContext context)
 		{
 			if(state.getValue(DOWEL).equals(EnumDowelType.NONE))
-			{
 				return super.getShape(state, worldIn, pos, context);
-			}
 			
 			return dowelShape.get(state.getValue(FACING));
 		}

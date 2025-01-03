@@ -32,9 +32,8 @@ public class SpikeBlock extends CustomShapeBlock
 	/**
 	 * Damages relevant entities as they move through the block
 	 */
-	@SuppressWarnings("deprecation")
 	@Override
-	public void entityInside(BlockState state, Level level, BlockPos pos, Entity entityIn)
+	protected void entityInside(BlockState state, Level level, BlockPos pos, Entity entityIn)
 	{
 		if(entityIn instanceof LivingEntity && entityIn.fallDistance < 1)
 		{

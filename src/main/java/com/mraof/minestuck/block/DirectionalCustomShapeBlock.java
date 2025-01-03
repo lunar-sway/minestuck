@@ -44,9 +44,8 @@ public class DirectionalCustomShapeBlock extends MSDirectionalBlock implements S
 		return this.defaultBlockState().setValue(FACING, context.getNearestLookingDirection().getOpposite()).setValue(WATERLOGGED, iFluidState.getType() == Fluids.WATER);
 	}
 	
-	@SuppressWarnings("deprecation")
 	@Override
-	public BlockState updateShape(BlockState stateIn, Direction facing, BlockState facingState, LevelAccessor level, BlockPos currentPos, BlockPos facingPos)
+	protected BlockState updateShape(BlockState stateIn, Direction facing, BlockState facingState, LevelAccessor level, BlockPos currentPos, BlockPos facingPos)
 	{
 		if(stateIn.getValue(WATERLOGGED))
 		{
@@ -75,16 +74,14 @@ public class DirectionalCustomShapeBlock extends MSDirectionalBlock implements S
 		return state.setValue(FACING, direction.rotate(state.getValue(FACING)));
 	}
 	
-	@SuppressWarnings("deprecation")
 	@Override
-	public VoxelShape getShape(BlockState state, BlockGetter level, BlockPos pos, CollisionContext context)
+	protected VoxelShape getShape(BlockState state, BlockGetter level, BlockPos pos, CollisionContext context)
 	{
 		return shape.get(state.getValue(FACING));
 	}
 	
-	@SuppressWarnings("deprecation")
 	@Override
-	public FluidState getFluidState(BlockState state)
+	protected FluidState getFluidState(BlockState state)
 	{
 		return state.getValue(WATERLOGGED) ? Fluids.WATER.getSource(false) : super.getFluidState(state);
 	}

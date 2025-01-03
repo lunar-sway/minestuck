@@ -256,6 +256,7 @@ public class PawnEntity extends CarapacianEntity implements RangedAttackMob, Ene
 		}
 	}
 	
+	@SuppressWarnings("deprecation") // Overriding is fine
 	@Nullable
 	@Override
 	public SpawnGroupData finalizeSpawn(ServerLevelAccessor level, DifficultyInstance difficultyIn, MobSpawnType reason, @Nullable SpawnGroupData spawnDataIn)

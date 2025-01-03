@@ -9,7 +9,6 @@ import net.minecraft.client.renderer.RenderType;
 import net.minecraft.client.renderer.entity.EntityRendererProvider;
 import net.minecraft.core.BlockPos;
 import net.minecraft.resources.ResourceLocation;
-import net.minecraft.world.entity.Pose;
 import software.bernie.geckolib.renderer.GeoEntityRenderer;
 
 import javax.annotation.Nullable;
@@ -39,7 +38,7 @@ public class ServerCursorRenderer extends GeoEntityRenderer<ServerCursorEntity>
 	}
 	
 	@Override
-	protected void applyRotations(ServerCursorEntity animatable, PoseStack poseStack, float ageInTicks, float rotationYaw, float partialTick)
+	protected void applyRotations(ServerCursorEntity animatable, PoseStack poseStack, float ageInTicks, float rotationYaw, float partialTick, float nativeScale)
 	{
 		poseStack.mulPose(Axis.YP.rotationDegrees(180.0F - animatable.getYRot()));
 	}

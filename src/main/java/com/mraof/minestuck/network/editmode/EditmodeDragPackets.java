@@ -14,11 +14,9 @@ import com.mraof.minestuck.util.MSSoundEvents;
 import net.minecraft.core.BlockPos;
 import net.minecraft.core.Direction;
 import net.minecraft.network.FriendlyByteBuf;
-import net.minecraft.network.RegistryFriendlyByteBuf;
 import net.minecraft.network.codec.ByteBufCodecs;
 import net.minecraft.network.codec.StreamCodec;
 import net.minecraft.network.protocol.common.custom.CustomPacketPayload;
-import net.minecraft.resources.ResourceLocation;
 import net.minecraft.server.level.ServerPlayer;
 import net.minecraft.sounds.SoundSource;
 import net.minecraft.world.InteractionHand;
@@ -109,7 +107,7 @@ public final class EditmodeDragPackets
 			if(data == null)
 				return;
 			
-			IEditTools cap = player.getData(MSAttachments.EDIT_TOOLS);
+			EditTools cap = player.getData(MSAttachments.EDIT_TOOLS);
 			
 			cap.setEditPos1(positionStart);
 			cap.setEditPos2(positionEnd);
