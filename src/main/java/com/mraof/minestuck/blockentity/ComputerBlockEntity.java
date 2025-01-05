@@ -206,16 +206,6 @@ public class ComputerBlockEntity extends BlockEntity implements ISburbComputer
 		return false;
 	}
 	
-	@Deprecated
-	public void clearComputerData()
-	{
-		if(hasProgram(ProgramType.SBURB_CLIENT))
-			insertNewProgramInstance(ProgramType.SBURB_CLIENT);
-		if(hasProgram(ProgramType.SBURB_SERVER))
-			insertNewProgramInstance(ProgramType.SBURB_SERVER);
-		markDirtyAndResend();
-	}
-	
 	public void closeAll()
 	{
 		for(ProgramType<?> programType : this.existingPrograms.keySet())

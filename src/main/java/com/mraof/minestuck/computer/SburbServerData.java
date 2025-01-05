@@ -93,4 +93,12 @@ public final class SburbServerData implements ProgramType.Data
 	{
 		this.markDirty.run();
 	}
+	
+	public void handleBeingDuplicated()
+	{
+		this.eventMessage = null;
+		this.isOpen = false;
+		this.connectedClient = -1;
+		this.markDirty.run();
+	}
 }

@@ -79,4 +79,12 @@ public final class SburbClientData implements ProgramType.Data
 		this.isConnectedToServer = isConnectedToServer;
 		this.markDirty.run();
 	}
+	
+	public void handleBeingDuplicated()
+	{
+		this.eventMessage = null;
+		this.isResuming = false;
+		this.isConnectedToServer = false;
+		this.markDirty.run();
+	}
 }
