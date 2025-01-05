@@ -53,10 +53,10 @@ public final class SkaiaClient
 	 */
 	public static boolean requestData(ComputerBlockEntity computer)
 	{
-		boolean b = playerStateMap.get(computer.ownerId) != null;
+		boolean b = playerStateMap.get(computer.clientSideOwnerId()) != null;
 		if(!b)
 		{
-			PacketDistributor.sendToServer(new SkaianetInfoPackets.Request(computer.ownerId));
+			PacketDistributor.sendToServer(new SkaianetInfoPackets.Request(computer.clientSideOwnerId()));
 			be = computer;
 		}
 		return b;
@@ -134,7 +134,7 @@ public final class SkaiaClient
 		Screen gui = Minecraft.getInstance().screen;
 		if(gui instanceof ComputerScreen computerScreen)
 			computerScreen.updateGui();
-		else if(be != null && be.ownerId == data.playerId())
+		else if(be != null && be.clientSideOwnerId() == data.playerId())
 		{
 			if(!Minecraft.getInstance().player.isShiftKeyDown())
 				MSScreenFactories.displayComputerScreen(be);

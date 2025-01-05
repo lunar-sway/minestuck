@@ -56,7 +56,7 @@ public class ComputerBlockEntity extends BlockEntity implements ISburbComputer
 	@Nullable
 	private PlayerIdentifier owner;
 	//client side only
-	public int ownerId;
+	private int ownerId;
 	private SburbClientData sburbClientProgramData = new SburbClientData(this::markDirtyAndResend);
 	private SburbServerData sburbServerProgramData = new SburbServerData(this::markDirtyAndResend);
 	@Nullable
@@ -227,6 +227,11 @@ public class ComputerBlockEntity extends BlockEntity implements ISburbComputer
 		if(this.owner != null)
 			throw new IllegalStateException("Not allowed to set computer owner in this state");
 		this.owner = owner;
+	}
+	
+	public int clientSideOwnerId()
+	{
+		return this.ownerId;
 	}
 	
 	@Override

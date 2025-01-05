@@ -52,7 +52,7 @@ public final class SburbServerGui implements ProgramGui
 		Optional<String> eventMessage = data.getEventMessage();
 		OptionalInt clientId = data.getConnectedClientId();
 		ReducedConnection connection = clientId.isPresent() ? SkaiaClient.getClientConnection(clientId.getAsInt()) : null;
-		if(connection != null && connection.server().id() != computer.ownerId)
+		if(connection != null && connection.server().id() != computer.clientSideOwnerId())
 			connection = null;
 		
 		if(eventMessage.isPresent())
@@ -78,20 +78,20 @@ public final class SburbServerGui implements ProgramGui
 				sendClearMessagePacketIfRelevant(computer);
 				sendCloseConnectionPacket(computer);
 			}));
-		} else if(SkaiaClient.isActive(computer.ownerId, false))
+		} else if(SkaiaClient.isActive(computer.clientSideOwnerId(), false))
 			message = Component.translatable(SERVER_ACTIVE);
 		else
 		{
 			message = Component.translatable(OFFLINE);
 			if(MinestuckConfig.SERVER.allowSecondaryConnections.get()
-					|| !SkaiaClient.hasPrimaryConnectionAsServer(computer.ownerId))
+					|| !SkaiaClient.hasPrimaryConnectionAsServer(computer.clientSideOwnerId()))
 			{
 				list.add(new ButtonListHelper.ButtonData(Component.translatable(OPEN_BUTTON), () -> {
 					sendClearMessagePacketIfRelevant(computer);
 					PacketDistributor.sendToServer(OpenSburbServerPacket.create(computer));
 				}));
 			}
-			if(SkaiaClient.hasPrimaryConnectionAsServer(computer.ownerId))
+			if(SkaiaClient.hasPrimaryConnectionAsServer(computer.clientSideOwnerId()))
 			{
 				list.add(new ButtonListHelper.ButtonData(Component.translatable(RESUME_BUTTON), () -> {
 					sendClearMessagePacketIfRelevant(computer);
@@ -117,7 +117,7 @@ public final class SburbServerGui implements ProgramGui
 	
 	private static void sendActivateEditmodePacket(ComputerBlockEntity computer)
 	{
-		CustomPacketPayload packet = new ClientEditPackets.Activate(computer.ownerId, computer.getSburbServerData().getConnectedClientId().orElseThrow());
+		CustomPacketPayload packet = new ClientEditPackets.Activate(computer.clientSideOwnerId(), computer.getSburbServerData().getConnectedClientId().orElseThrow());
 		PacketDistributor.sendToServer(packet);
 	}
 	

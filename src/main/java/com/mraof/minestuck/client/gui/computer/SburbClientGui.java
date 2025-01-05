@@ -47,7 +47,7 @@ public final class SburbClientGui implements ProgramGui
 		if(eventMessage.isPresent())
 			list.add(new ButtonListHelper.ButtonData(Component.translatable(ButtonListHelper.CLEAR_BUTTON), () -> sendClearMessagePacketIfRelevant(computer)));
 		
-		ReducedConnection c = SkaiaClient.getClientConnection(computer.ownerId);
+		ReducedConnection c = SkaiaClient.getClientConnection(computer.clientSideOwnerId());
 		if(data.isConnectedToServer() && c != null) //If it is connected to someone.
 		{
 			String displayPlayer = c.server().name();
@@ -63,17 +63,17 @@ public final class SburbClientGui implements ProgramGui
 				sendClearMessagePacketIfRelevant(computer);
 				sendCloseConnectionPacket(computer);
 			}));
-		} else if(!SkaiaClient.isActive(computer.ownerId, true)) //If the player doesn't have an other active client
+		} else if(!SkaiaClient.isActive(computer.clientSideOwnerId(), true)) //If the player doesn't have an other active client
 		{
 			message = Component.translatable(SELECT);
-			if(SkaiaClient.hasPrimaryConnectionAsClient(computer.ownerId))
+			if(SkaiaClient.hasPrimaryConnectionAsClient(computer.clientSideOwnerId()))
 			{
 				list.add(new ButtonListHelper.ButtonData(Component.translatable(RESUME_BUTTON), () -> {
 					sendClearMessagePacketIfRelevant(computer);
 					PacketDistributor.sendToServer(ResumeSburbConnectionPackets.asClient(computer));
 				}));
 			}
-			for(Map.Entry<Integer, String> entry : SkaiaClient.getAvailableServers(computer.ownerId).entrySet())
+			for(Map.Entry<Integer, String> entry : SkaiaClient.getAvailableServers(computer.clientSideOwnerId()).entrySet())
 			{
 				list.add(new ButtonListHelper.ButtonData(Component.literal(entry.getValue()), () -> {
 					sendClearMessagePacketIfRelevant(computer);
@@ -88,7 +88,7 @@ public final class SburbClientGui implements ProgramGui
 				sendCloseConnectionPacket(computer);
 			}));
 		}
-		if(SkaiaClient.canSelect(computer.ownerId))
+		if(SkaiaClient.canSelect(computer.clientSideOwnerId()))
 		{
 			list.add(new ButtonListHelper.ButtonData(Component.translatable(SELECT_COLOR), () -> {
 				sendClearMessagePacketIfRelevant(computer);
