@@ -3,12 +3,12 @@ package com.mraof.minestuck.client.renderer.blockentity;
 import com.mojang.blaze3d.vertex.PoseStack;
 import com.mojang.blaze3d.vertex.VertexConsumer;
 import com.mojang.math.Axis;
-import com.mraof.minestuck.alchemy.AlchemyHelper;
 import com.mraof.minestuck.block.CruxiteDowelBlock;
 import com.mraof.minestuck.block.MSBlocks;
 import com.mraof.minestuck.block.MSProperties;
 import com.mraof.minestuck.blockentity.machine.TotemLatheDowelBlockEntity;
 import com.mraof.minestuck.client.model.blockentity.TotemLatheModel;
+import com.mraof.minestuck.item.components.MSItemComponents;
 import net.minecraft.MethodsReturnNonnullByDefault;
 import net.minecraft.client.Minecraft;
 import net.minecraft.client.multiplayer.ClientLevel;
@@ -57,10 +57,8 @@ public class TotemLatheRenderer extends GeoBlockRenderer<TotemLatheDowelBlockEnt
 			}
 			
 			BlockState cruxiteDowel = MSBlocks.CRUXITE_DOWEL.get().defaultBlockState();
-			if(AlchemyHelper.hasDecodedItem(dowel))
-			{
+			if(dowel.has(MSItemComponents.ENCODED_ITEM))
 				cruxiteDowel = cruxiteDowel.setValue(MSProperties.DOWEL_BLOCK, CruxiteDowelBlock.Type.TOTEM);
-			}
 			
 			// position adjustments
 			poseStack.pushPose();

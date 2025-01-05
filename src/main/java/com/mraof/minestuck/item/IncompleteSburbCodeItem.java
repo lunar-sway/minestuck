@@ -1,19 +1,14 @@
 package com.mraof.minestuck.item;
 
 import com.mraof.minestuck.blockentity.ComputerBlockEntity;
+import com.mraof.minestuck.item.components.HieroglyphCode;
 import com.mraof.minestuck.item.components.MSItemComponents;
-import com.mraof.minestuck.item.components.SburbCodeComponent;
 import com.mraof.minestuck.util.MSTags;
 import net.minecraft.client.gui.screens.Screen;
-import net.minecraft.core.registries.BuiltInRegistries;
-import net.minecraft.nbt.CompoundTag;
-import net.minecraft.nbt.ListTag;
-import net.minecraft.nbt.StringTag;
-import net.minecraft.nbt.Tag;
 import net.minecraft.network.chat.Component;
-import net.minecraft.resources.ResourceLocation;
 import net.minecraft.sounds.SoundEvents;
 import net.minecraft.sounds.SoundSource;
+import net.minecraft.util.Unit;
 import net.minecraft.world.InteractionHand;
 import net.minecraft.world.InteractionResult;
 import net.minecraft.world.entity.player.Player;
@@ -24,10 +19,8 @@ import net.minecraft.world.level.Level;
 import net.minecraft.world.level.block.Block;
 import net.minecraft.world.level.block.state.BlockState;
 
-import javax.annotation.Nonnull;
-import java.util.*;
-import java.util.stream.Collectors;
-import java.util.stream.Stream;
+import java.util.List;
+import java.util.Set;
 
 /**
  * Used for the Sburb Code item, extends ReadableSburbCodeItem which is used by Completed Sburb Code.
@@ -43,17 +36,7 @@ public class IncompleteSburbCodeItem extends ReadableSburbCodeItem
 	@Override
 	public boolean getParadoxInfo(ItemStack stack)
 	{
-		return stack != null && stack.has(MSItemComponents.SBURB_CODE) && stack.get(MSItemComponents.SBURB_CODE).paradoxCode();
-	}
-	
-	public static void setParadoxInfo(ItemStack stack, boolean hasInfo)
-	{
-		List<Block> recordedHieroglyphs = new ArrayList<>();
-		
-		if(stack.has(MSItemComponents.SBURB_CODE))
-			recordedHieroglyphs = stack.get(MSItemComponents.SBURB_CODE).hieroglyphs();
-		
-		stack.set(MSItemComponents.SBURB_CODE, new SburbCodeComponent(hasInfo, recordedHieroglyphs));
+		return stack.has(MSItemComponents.PARADOX_CODE);
 	}
 	
 	/**
@@ -63,27 +46,7 @@ public class IncompleteSburbCodeItem extends ReadableSburbCodeItem
 	@Override
 	public Set<Block> getRecordedBlocks(ItemStack stack)
 	{
-		if(stack.has(MSItemComponents.SBURB_CODE))
-			return new HashSet<>(stack.get(MSItemComponents.SBURB_CODE).hieroglyphs());
-		else
-			return Collections.emptySet();
-	}
-	
-	/**
-	 * Takes a block that is in the GREEN_HIEROGLYPHS block tag and adds its registry name(as a string) to the item's nbt if it did not already have it stored.
-	 * @return true if the item stack was changed.
-	 */
-	public static boolean addRecordedInfo(ItemStack stack, Block block)
-	{
-		return tryAddBlockToSet(stack, block);
-	}
-	
-	public static ItemStack setRecordedInfo(ItemStack stack, Set<Block> blockList)
-	{
-		for(Block block : blockList)
-			addRecordedInfo(stack, block);
-		
-		return stack;
+		return HieroglyphCode.getBlocks(stack);
 	}
 	
 	@Override
@@ -96,14 +59,14 @@ public class IncompleteSburbCodeItem extends ReadableSburbCodeItem
 		
 		if(blockEntity.hasParadoxInfoStored && !getParadoxInfo(heldStack))
 		{
-			IncompleteSburbCodeItem.setParadoxInfo(heldStack, true);
+			heldStack.set(MSItemComponents.PARADOX_CODE, Unit.INSTANCE);
 			changedItem = true;
 		}
 		
 		for(Block iterateBlock : blockEntity.hieroglyphsStored)
 		{
 			if(iterateBlock.defaultBlockState().is(MSTags.Blocks.GREEN_HIEROGLYPHS))
-				changedItem |= IncompleteSburbCodeItem.addRecordedInfo(heldStack, iterateBlock);
+				changedItem |= HieroglyphCode.addBlock(heldStack, iterateBlock);
 		}
 		
 		if(changedItem)
@@ -128,7 +91,7 @@ public class IncompleteSburbCodeItem extends ReadableSburbCodeItem
 		if(!state.is(MSTags.Blocks.GREEN_HIEROGLYPHS))
 			return InteractionResult.FAIL;
 		
-		if(!addRecordedInfo(stackInUse, state.getBlock()))
+		if(!HieroglyphCode.addBlock(stackInUse, state.getBlock()))
 			return InteractionResult.FAIL;
 		
 		level.playSound(null, player.blockPosition(), SoundEvents.VILLAGER_WORK_CARTOGRAPHER, SoundSource.BLOCKS, 1.0F, 1.0F);
@@ -172,41 +135,5 @@ public class IncompleteSburbCodeItem extends ReadableSburbCodeItem
 			tooltip.add(Component.translatable("item.minestuck.sburb_code.additional_info"));
 		} else
 			tooltip.add(Component.translatable("message.shift_for_more_info"));
-	}
-	
-	public static Set<Block> readBlockSet(CompoundTag nbt, String key)
-	{
-		return nbt.getList(key, Tag.TAG_STRING).stream().map(Tag::getAsString)
-				//Turn the Strings into ResourceLocations
-				.flatMap(blockName -> Stream.ofNullable(ResourceLocation.tryParse(blockName)))
-				//Turn the ResourceLocations into Blocks
-				.flatMap(blockId -> Stream.ofNullable(BuiltInRegistries.BLOCK.get(blockId)))
-				//Gather the blocks into a set
-				.collect(Collectors.toSet());
-	}
-	
-	public static void writeBlockSet(CompoundTag nbt, String key, @Nonnull Set<Block> blocks)
-	{
-		ListTag listTag = new ListTag();
-		for(Block blockIterate : blocks)
-		{
-			String blockName = String.valueOf(BuiltInRegistries.BLOCK.getKey(blockIterate));
-			listTag.add(StringTag.valueOf(blockName));
-		}
-		
-		nbt.put(key, listTag);
-	}
-	
-	public static boolean tryAddBlockToSet(ItemStack stack, Block block)
-	{
-		if(!stack.has(MSItemComponents.SBURB_CODE))
-			return false;
-		
-		List<Block> recordedHieroglyphs = stack.get(MSItemComponents.SBURB_CODE).hieroglyphs();
-		
-		recordedHieroglyphs.add(block);
-		stack.set(MSItemComponents.SBURB_CODE, new SburbCodeComponent(stack.get(MSItemComponents.SBURB_CODE).paradoxCode(), recordedHieroglyphs));
-		
-		return true;
 	}
 }

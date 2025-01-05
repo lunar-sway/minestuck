@@ -76,7 +76,13 @@ enumExtensions="META-INF/enumextensions.json"
     ordering="NONE"
     side="BOTH"
 
-# Here's another dependency
+[[dependencies.minestuck]]
+    modId="jei"
+    type="optional"
+    versionRange="[19.5.4,)"
+    ordering="NONE"
+    side="CLIENT"
+
 [[dependencies.minestuck]]
     modId="minecraft"
     type="required"

@@ -1,7 +1,7 @@
 package com.mraof.minestuck.inventory.captchalogue;
 
 import com.mraof.minestuck.MinestuckConfig;
-import com.mraof.minestuck.alchemy.AlchemyHelper;
+import com.mraof.minestuck.item.CaptchaCardItem;
 import com.mraof.minestuck.item.MSItems;
 import net.minecraft.core.HolderLookup;
 import net.minecraft.core.NonNullList;
@@ -170,7 +170,7 @@ public class StackModus extends Modus
 		{
 			size--;
 			markDirty();
-			return AlchemyHelper.createCard(list.removeFirst());
+			return CaptchaCardItem.createCardWithItem(list.removeFirst(), player.server);
 		}
 		else
 		{

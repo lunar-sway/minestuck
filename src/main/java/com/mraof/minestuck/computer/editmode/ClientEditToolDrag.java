@@ -58,7 +58,7 @@ public class ClientEditToolDrag
 		if (player == null || !player.isAlive() || !ClientEditmodeData.isInEditmode())
 			return;
 		
-		IEditTools cap = player.getData(MSAttachments.EDIT_TOOLS);
+		EditTools cap = player.getData(MSAttachments.EDIT_TOOLS);
 		
 		ClientEditToolDrag.doRecycleCode(mc, player, cap);
 		ClientEditToolDrag.doReviseCode(mc, player, cap);
@@ -74,7 +74,7 @@ public class ClientEditToolDrag
 	 * Resets the drag tool, and removes the server-cursor if the given edit tool is active.
 	 * @param cap The current edit-tools capability.
 	 */
-	private static void cancelDrag(IEditTools cap)
+	private static void cancelDrag(EditTools cap)
 	{
 		PacketDistributor.sendToServer(new EditmodeDragPackets.Reset());
 		cap.resetDragTools();
@@ -88,7 +88,7 @@ public class ClientEditToolDrag
 	 * @param player Current client-side player.
 	 * @return True if the ray hits a block. False if it doesn't
 	 */
-	private static boolean tryBeginDrag(IEditTools.ToolMode targetTool, IEditTools cap, Player player)
+	private static boolean tryBeginDrag(EditTools.ToolMode targetTool, EditTools cap, Player player)
 	{
 		BlockHitResult blockHit = getPlayerPOVHitResult(player.level(), player);
 		if (blockHit.getType() == BlockHitResult.Type.BLOCK)
@@ -108,9 +108,9 @@ public class ClientEditToolDrag
 	 * @param player Current client-side player.
 	 * @param toolKey The given tool's key.
 	 */
-	private static void updateDragPosition(IEditTools.ToolMode targetTool, IEditTools cap, Player player, KeyMapping toolKey)
+	private static void updateDragPosition(EditTools.ToolMode targetTool, EditTools cap, Player player, KeyMapping toolKey)
 	{
-		cap.setEditPos2(getSelectionEndPoint(player, cap.getEditReachDistance(), targetTool == IEditTools.ToolMode.REVISE ? true : false));
+		cap.setEditPos2(getSelectionEndPoint(player, cap.getEditReachDistance(), targetTool == EditTools.ToolMode.REVISE));
 		PacketDistributor.sendToServer(new EditmodeDragPackets.Cursor(toolKey.isDown(), cap.getEditPos1(), cap.getEditPos2()));
 	}
 	
@@ -121,34 +121,34 @@ public class ClientEditToolDrag
 	 * @param cap The current edit-tools capability.
 	 * @param player Current client-side player.
 	 */
-	private static void finishDragging(IEditTools.ToolMode targetTool, IEditTools cap, Player player)
+	private static void finishDragging(EditTools.ToolMode targetTool, EditTools cap, Player player)
 	{
-		if(targetTool == IEditTools.ToolMode.REVISE)
+		if(targetTool == EditTools.ToolMode.REVISE)
 			PacketDistributor.sendToServer(new EditmodeDragPackets.Fill(false, cap.getEditPos1(), cap.getEditPos2(), cap.getEditTraceHit(), cap.getEditTraceDirection()));
 		else
 			PacketDistributor.sendToServer(new EditmodeDragPackets.Destroy(false, cap.getEditPos1(), cap.getEditPos2(), cap.getEditTraceHit(), cap.getEditTraceDirection()));
-		playSoundAndSetParticles(player, targetTool == IEditTools.ToolMode.REVISE ? true : false, cap.getEditPos1(), cap.getEditPos2());
+		playSoundAndSetParticles(player, targetTool == EditTools.ToolMode.REVISE, cap.getEditPos1(), cap.getEditPos2());
 	
 		cap.resetDragTools();
 	}
 	
-	public static boolean isValidDragToolOrNull(IEditTools.ToolMode toolMode) { return toolMode == null || isValidDragTool(toolMode); }
+	public static boolean isValidDragToolOrNull(EditTools.ToolMode toolMode) { return toolMode == null || isValidDragTool(toolMode); }
 	
-	public static boolean isValidDragTool(IEditTools.ToolMode toolMode) { return toolMode == IEditTools.ToolMode.REVISE || toolMode == IEditTools.ToolMode.RECYCLE; }
+	public static boolean isValidDragTool(EditTools.ToolMode toolMode) { return toolMode == EditTools.ToolMode.REVISE || toolMode == EditTools.ToolMode.RECYCLE; }
 	
 	/**
 	 * Handles code for the revise tool on the client-side.
 	 */
-	public static void doReviseCode(Minecraft mc, Player player, IEditTools cap)
+	public static void doReviseCode(Minecraft mc, Player player, EditTools cap)
 	{
 		//Return early if there IS a tool active and it ISN'T revise.
-		if (cap.getToolMode() != null && cap.getToolMode() != IEditTools.ToolMode.REVISE)
+		if (cap.getToolMode() != null && cap.getToolMode() != EditTools.ToolMode.REVISE)
 			return;
 		
 		KeyMapping toolKey = mc.options.keyUse;
 		
 		//If key is pressed, and not allowed to recycle, cancel the tool.
-		if(toolKey.isDown() && !canEditRevise(player) && (cap.getToolMode() == null || cap.getToolMode() == IEditTools.ToolMode.REVISE))
+		if(toolKey.isDown() && !canEditRevise(player) && (cap.getToolMode() == null || cap.getToolMode() == EditTools.ToolMode.REVISE))
 		{
 			cancelDrag(cap);
 			return;
@@ -156,16 +156,16 @@ public class ClientEditToolDrag
 		
 		//If key has just been pressed, begin drag.
 		if(toolKey.isDown() && cap.getEditPos1() == null)
-			if(!tryBeginDrag(IEditTools.ToolMode.REVISE, cap, player))
+			if(!tryBeginDrag(EditTools.ToolMode.REVISE, cap, player))
 				return; //Returns if the player is not highlighting a block.
 		
 		//If the selection has already successfully found a starting point, find the end-point.
 		if(cap.getEditPos1() != null)
-			updateDragPosition(IEditTools.ToolMode.REVISE, cap, player, toolKey);
+			updateDragPosition(EditTools.ToolMode.REVISE, cap, player, toolKey);
 		
 		//If key has just been released, finish drag.
 		if(!toolKey.isDown() && cap.getEditPos1() != null)
-			finishDragging(IEditTools.ToolMode.REVISE, cap, player);
+			finishDragging(EditTools.ToolMode.REVISE, cap, player);
 		
 	}
 	
@@ -186,16 +186,16 @@ public class ClientEditToolDrag
 	/**
 	 * Handles code for the recycle tool on the client-side.
 	 */
-	public static void doRecycleCode(Minecraft mc, Player player, IEditTools cap)
+	public static void doRecycleCode(Minecraft mc, Player player, EditTools cap)
 	{
 		//Return early if there IS a tool active and it ISN'T recycle.
-		if (cap.getToolMode() != null && cap.getToolMode() != IEditTools.ToolMode.RECYCLE)
+		if (cap.getToolMode() != null && cap.getToolMode() != EditTools.ToolMode.RECYCLE)
 			return;
 		
 		KeyMapping toolKey = mc.options.keyAttack;
 		
 		//If key is pressed, and not allowed to recycle, cancel the tool.
-		if(toolKey.isDown() && !canEditRecycle(player) && (cap.getToolMode() == null || cap.getToolMode() == IEditTools.ToolMode.RECYCLE))
+		if(toolKey.isDown() && !canEditRecycle(player) && (cap.getToolMode() == null || cap.getToolMode() == EditTools.ToolMode.RECYCLE))
 		{
 			cancelDrag(cap);
 			return;
@@ -203,16 +203,16 @@ public class ClientEditToolDrag
 		
 		//If key has just been pressed, begin drag.
 		if(toolKey.isDown() && cap.getEditPos1() == null)
-			if(!tryBeginDrag(IEditTools.ToolMode.RECYCLE, cap, player))
+			if(!tryBeginDrag(EditTools.ToolMode.RECYCLE, cap, player))
 				return; //Returns if the player is not highlighting a block.
 		
 		//If the selection has already successfully found a starting point, find the end-point.
 		if(cap.getEditPos1() != null)
-			updateDragPosition(IEditTools.ToolMode.RECYCLE, cap, player, toolKey);
+			updateDragPosition(EditTools.ToolMode.RECYCLE, cap, player, toolKey);
 		
 		//If key has just been released, finish drag.
 		if(!toolKey.isDown() && cap.getEditPos1() != null)
-			finishDragging(IEditTools.ToolMode.RECYCLE, cap, player);
+			finishDragging(EditTools.ToolMode.RECYCLE, cap, player);
 
 	}
 	
@@ -365,7 +365,7 @@ public class ClientEditToolDrag
 			Player player = mc.player;
 			Camera info = event.getCamera();
 			
-			IEditTools cap = player.getData(MSAttachments.EDIT_TOOLS);
+			EditTools cap = player.getData(MSAttachments.EDIT_TOOLS);
 			
 			double d1 = info.getPosition().x;
 			double d2 = info.getPosition().y;
@@ -390,7 +390,7 @@ public class ClientEditToolDrag
 					//Create new MultiBufferSource because RenderLevelStageEvent doesn't come with one.
 					MultiBufferSource.BufferSource renderTypeBuffer = MultiBufferSource.immediate(new ByteBufferBuilder(1536));
 					
-					drawReviseToolOutline(event.getPoseStack(), renderTypeBuffer.getBuffer(RenderType.LINES), Shapes.create(boundingBox), 0, 0, 0, cap.getToolMode() == IEditTools.ToolMode.RECYCLE ? 1 : 0, cap.getToolMode() == IEditTools.ToolMode.REVISE ? 1 : 0, 0, 1);
+					drawReviseToolOutline(event.getPoseStack(), renderTypeBuffer.getBuffer(RenderType.LINES), Shapes.create(boundingBox), 0, 0, 0, cap.getToolMode() == EditTools.ToolMode.RECYCLE ? 1 : 0, cap.getToolMode() == EditTools.ToolMode.REVISE ? 1 : 0, 0, 1);
 					renderTypeBuffer.endBatch();
 					
 					RenderSystem.depthMask(true);

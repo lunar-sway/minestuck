@@ -2,7 +2,6 @@ package com.mraof.minestuck.item.weapon;
 
 import com.mraof.minestuck.Minestuck;
 import com.mraof.minestuck.block.EnumCassetteType;
-import com.mraof.minestuck.inventory.musicplayer.IMusicPlaying;
 import com.mraof.minestuck.inventory.musicplayer.MusicPlaying;
 import com.mraof.minestuck.item.CassetteItem;
 import com.mraof.minestuck.network.MusicPlayerPacket;
@@ -151,7 +150,7 @@ public class MusicPlayerWeapon extends WeaponItem
 	@Override
 	public boolean hurtEnemy(ItemStack stack, LivingEntity target, LivingEntity attacker)
 	{
-		IMusicPlaying musicPlaying = attacker.getData(MSAttachments.MUSIC_PLAYING);
+		MusicPlaying musicPlaying = attacker.getData(MSAttachments.MUSIC_PLAYING);
 		if(musicPlaying.getCassetteType() != EnumCassetteType.NONE && musicPlaying.getCurrentMusicPlayer() == stack)
 		{
 			RandomSource r = attacker.level().getRandom();

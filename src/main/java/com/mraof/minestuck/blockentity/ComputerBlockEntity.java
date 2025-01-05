@@ -5,7 +5,6 @@ import com.mraof.minestuck.block.machine.ComputerBlock;
 import com.mraof.minestuck.computer.*;
 import com.mraof.minestuck.computer.editmode.ServerEditHandler;
 import com.mraof.minestuck.computer.theme.MSComputerThemes;
-import com.mraof.minestuck.item.IncompleteSburbCodeItem;
 import com.mraof.minestuck.item.MSItems;
 import com.mraof.minestuck.network.MSPacket;
 import com.mraof.minestuck.player.IdentifierHandler;
@@ -15,9 +14,8 @@ import net.minecraft.MethodsReturnNonnullByDefault;
 import net.minecraft.commands.Commands;
 import net.minecraft.core.BlockPos;
 import net.minecraft.core.HolderLookup;
-import net.minecraft.nbt.CompoundTag;
-import net.minecraft.nbt.NbtOps;
-import net.minecraft.nbt.Tag;
+import net.minecraft.core.registries.BuiltInRegistries;
+import net.minecraft.nbt.*;
 import net.minecraft.network.protocol.Packet;
 import net.minecraft.network.protocol.game.ClientGamePacketListener;
 import net.minecraft.network.protocol.game.ClientboundBlockEntityDataPacket;
@@ -39,6 +37,7 @@ import javax.annotation.Nonnull;
 import javax.annotation.Nullable;
 import javax.annotation.ParametersAreNonnullByDefault;
 import java.util.*;
+import java.util.stream.Collectors;
 import java.util.stream.Stream;
 
 @ParametersAreNonnullByDefault
@@ -91,7 +90,7 @@ public class ComputerBlockEntity extends BlockEntity implements ISburbComputer
 		else if(nbt.contains("theme", Tag.TAG_INT))
 			computerTheme = MSComputerThemes.getThemeFromOldOrdinal(nbt.getInt("theme"));
 		
-		hieroglyphsStored = IncompleteSburbCodeItem.readBlockSet(nbt, "hieroglyphsStored");
+		hieroglyphsStored = readBlockSet(nbt, "hieroglyphsStored");
 		if(nbt.contains("hasParadoxInfoStored"))
 			hasParadoxInfoStored = nbt.getBoolean("hasParadoxInfoStored");
 		if(nbt.contains("blankDisksStored"))
@@ -99,7 +98,7 @@ public class ComputerBlockEntity extends BlockEntity implements ISburbComputer
 		
 		if(nbt.contains("ownerId"))
 			ownerId = nbt.getInt("ownerId");
-		else this.owner = IdentifierHandler.loadOrThrow(nbt, "owner");
+		else this.owner = IdentifierHandler.load(nbt, "owner").result().orElse(null);
 		
 		//keep this after everything else has been loaded
 		if(guiCallback != null)
@@ -142,7 +141,7 @@ public class ComputerBlockEntity extends BlockEntity implements ISburbComputer
 	{
 		compoundtag.put("programs", ProgramType.LIST_CODEC.encodeStart(NbtOps.INSTANCE, new ArrayList<>(installedPrograms)).getOrThrow());
 		
-		IncompleteSburbCodeItem.writeBlockSet(compoundtag, "hieroglyphsStored", hieroglyphsStored);
+		writeBlockSet(compoundtag, "hieroglyphsStored", hieroglyphsStored);
 		compoundtag.putBoolean("hasParadoxInfoStored", hasParadoxInfoStored);
 		
 		compoundtag.putInt("blankDisksStored", blankDisksStored);
@@ -348,5 +347,28 @@ public class ComputerBlockEntity extends BlockEntity implements ISburbComputer
 					|| player.hasPermissions(Commands.LEVEL_GAMEMASTERS);
 		} else
 			return true;
+	}
+	
+	private static Set<Block> readBlockSet(CompoundTag nbt, String key)
+	{
+		return nbt.getList(key, Tag.TAG_STRING).stream().map(Tag::getAsString)
+				//Turn the Strings into ResourceLocations
+				.flatMap(blockName -> Stream.ofNullable(ResourceLocation.tryParse(blockName)))
+				//Turn the ResourceLocations into Blocks
+				.flatMap(blockId -> Stream.ofNullable(BuiltInRegistries.BLOCK.get(blockId)))
+				//Gather the blocks into a set
+				.collect(Collectors.toSet());
+	}
+	
+	private static void writeBlockSet(CompoundTag nbt, String key, @Nonnull Set<Block> blocks)
+	{
+		ListTag listTag = new ListTag();
+		for(Block blockIterate : blocks)
+		{
+			String blockName = String.valueOf(BuiltInRegistries.BLOCK.getKey(blockIterate));
+			listTag.add(StringTag.valueOf(blockName));
+		}
+		
+		nbt.put(key, listTag);
 	}
 }
