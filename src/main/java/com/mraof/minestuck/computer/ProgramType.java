@@ -20,13 +20,14 @@ import java.util.Comparator;
 import java.util.List;
 import java.util.Objects;
 import java.util.Optional;
+import java.util.function.Function;
 
 public final class ProgramType<D extends ProgramType.Data>
 {
-	public static final ProgramType<SburbClientData> SBURB_CLIENT = new ProgramType<>(MSItems.CLIENT_DISK, Handlers.CLIENT);
-	public static final ProgramType<SburbServerData> SBURB_SERVER = new ProgramType<>(MSItems.SERVER_DISK, Handlers.SERVER);
-	public static final ProgramType<DiskBurnerData> DISK_BURNER = new ProgramType<>(null, Handlers.EMPTY);
-	public static final ProgramType<EmptyData> SETTINGS = new ProgramType<>(null, Handlers.EMPTY);
+	public static final ProgramType<SburbClientData> SBURB_CLIENT = new ProgramType<>(MSItems.CLIENT_DISK, Handlers.CLIENT, SburbClientData::new);
+	public static final ProgramType<SburbServerData> SBURB_SERVER = new ProgramType<>(MSItems.SERVER_DISK, Handlers.SERVER, SburbServerData::new);
+	public static final ProgramType<DiskBurnerData> DISK_BURNER = new ProgramType<>(null, Handlers.EMPTY, DiskBurnerData::new);
+	public static final ProgramType<EmptyData> SETTINGS = new ProgramType<>(null, Handlers.EMPTY, ignored -> EmptyData.INSTANCE);
 	
 	public static final BiMap<String, ProgramType<?>> REGISTRY = ImmutableBiMap.of("sburb_client", SBURB_CLIENT, "sburb_server", SBURB_SERVER, "disk_burner", DISK_BURNER, "settings", SETTINGS);
 	
@@ -60,11 +61,13 @@ public final class ProgramType<D extends ProgramType.Data>
 	@Nullable
 	private final Holder<Item> diskItem;
 	private final EventHandler eventHandler;
+	private final Function<Runnable, D> dataConstructor;
 	
-	private ProgramType(@Nullable Holder<Item> diskItem, EventHandler eventHandler)
+	private ProgramType(@Nullable Holder<Item> diskItem, EventHandler eventHandler, Function<Runnable, D> dataConstructor)
 	{
 		this.diskItem = diskItem;
 		this.eventHandler = eventHandler;
+		this.dataConstructor = dataConstructor;
 	}
 	
 	public Optional<Item> diskItem()
@@ -75,6 +78,11 @@ public final class ProgramType<D extends ProgramType.Data>
 	public EventHandler eventHandler()
 	{
 		return this.eventHandler;
+	}
+	
+	public D newDataInstance(Runnable markDirty)
+	{
+		return this.dataConstructor.apply(markDirty);
 	}
 	
 	@Override

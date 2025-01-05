@@ -2,6 +2,7 @@ package com.mraof.minestuck.network.computer;
 
 import com.mraof.minestuck.Minestuck;
 import com.mraof.minestuck.blockentity.ComputerBlockEntity;
+import com.mraof.minestuck.computer.DiskBurnerData;
 import com.mraof.minestuck.computer.ProgramType;
 import com.mraof.minestuck.network.MSPacket;
 import net.minecraft.core.BlockPos;
@@ -14,8 +15,6 @@ import net.minecraft.world.entity.item.ItemEntity;
 import net.minecraft.world.item.Item;
 import net.minecraft.world.level.Level;
 import net.neoforged.neoforge.network.handling.IPayloadContext;
-
-import java.util.Optional;
 
 public record BurnDiskPacket(BlockPos computerPos, boolean isClientDisk) implements MSPacket.PlayToServer
 {
@@ -49,13 +48,13 @@ public record BurnDiskPacket(BlockPos computerPos, boolean isClientDisk) impleme
 	private void tryBurnDisk(ComputerBlockEntity computer)
 	{
 		ProgramType<?> programType = this.isClientDisk ? ProgramType.SBURB_CLIENT : ProgramType.SBURB_SERVER;
+		Item disk = programType.diskItem().orElseThrow();
 		Level level = computer.getLevel();
 		BlockPos bePos = computer.getBlockPos();
 		if(level == null)
 			return;
 		
-		Optional<Item> disk = programType.diskItem();
-		if(disk.isEmpty() || !computer.getDiskBurnerData().hasAllCode())
+		if(!computer.getProgramData(ProgramType.DISK_BURNER).map(DiskBurnerData::hasAllCode).orElse(false))
 			return;
 		
 		if(computer.tryTakeBlankDisk())
@@ -66,7 +65,7 @@ public record BurnDiskPacket(BlockPos computerPos, boolean isClientDisk) impleme
 			float ry = random.nextFloat() * 0.8F + 0.1F;
 			float rz = random.nextFloat() * 0.8F + 0.1F;
 			
-			ItemEntity entityItem = new ItemEntity(level, bePos.getX() + rx, bePos.getY() + ry, bePos.getZ() + rz, disk.get().getDefaultInstance());
+			ItemEntity entityItem = new ItemEntity(level, bePos.getX() + rx, bePos.getY() + ry, bePos.getZ() + rz, disk.getDefaultInstance());
 			entityItem.setDeltaMovement(random.nextGaussian() * 0.05F, random.nextGaussian() * 0.05F + 0.2F, random.nextGaussian() * 0.05F);
 			level.addFreshEntity(entityItem);
 		}

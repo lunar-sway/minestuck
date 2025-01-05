@@ -31,10 +31,10 @@ import org.apache.logging.log4j.Logger;
 
 import javax.annotation.Nullable;
 import javax.annotation.ParametersAreNonnullByDefault;
-import java.util.HashSet;
+import java.util.HashMap;
+import java.util.Map;
 import java.util.Objects;
 import java.util.Optional;
-import java.util.Set;
 import java.util.function.Function;
 import java.util.stream.Stream;
 
@@ -49,22 +49,19 @@ public class ComputerBlockEntity extends BlockEntity implements ISburbComputer
 		super(MSBlockEntityTypes.COMPUTER.get(), pos, state);
 		
 		// always should exist on computers
-		this.installedPrograms.add(ProgramType.DISK_BURNER);
-		this.installedPrograms.add(ProgramType.SETTINGS);
+		insertNewProgramInstance(ProgramType.DISK_BURNER);
+		insertNewProgramInstance(ProgramType.SETTINGS);
 	}
 	
-	private final Set<ProgramType<?>> installedPrograms = new HashSet<>();
 	@Nullable
 	private Runnable guiCallback = null;
 	@Nullable
 	private PlayerIdentifier owner;
 	//client side only
 	private int ownerId;
-	private SburbClientData sburbClientProgramData = new SburbClientData(this::markDirtyAndResend);
-	private SburbServerData sburbServerProgramData = new SburbServerData(this::markDirtyAndResend);
 	@Nullable
 	public ProgramType<?> programSelected = null;
-	private final DiskBurnerData diskBurnerData = new DiskBurnerData(this::markDirtyAndResend);
+	private final Map<ProgramType<?>, ProgramType.Data> existingPrograms = new HashMap<>();
 	private int blankDisksStored = 0;
 	private ResourceLocation computerTheme = MSComputerThemes.DEFAULT;
 	
@@ -82,8 +79,7 @@ public class ComputerBlockEntity extends BlockEntity implements ISburbComputer
 				LOGGER.error("Unknown program type by name \"{}\" in computer data.", programKey);
 				continue;
 			}
-			this.installedPrograms.add(programType);
-			this.getProgramData(programType).orElseThrow().read(programs.getCompound(programKey));
+			insertNewProgramInstance(programType).read(programs.getCompound(programKey));
 		}
 		
 		if(nbt.contains("theme", Tag.TAG_STRING))
@@ -132,10 +128,10 @@ public class ComputerBlockEntity extends BlockEntity implements ISburbComputer
 	private void writeSharedData(CompoundTag compoundtag, Function<ProgramType.Data, CompoundTag> serializer)
 	{
 		CompoundTag programs = new CompoundTag();
-		for(ProgramType<?> programType : this.installedPrograms)
+		for(Map.Entry<ProgramType<?>, ProgramType.Data> entry : this.existingPrograms.entrySet())
 		{
-			String programKey = Objects.requireNonNull(ProgramType.REGISTRY.inverse().get(programType));
-			programs.put(programKey, serializer.apply(getProgramData(programType).orElseThrow()));
+			String programKey = Objects.requireNonNull(ProgramType.REGISTRY.inverse().get(entry.getKey()));
+			programs.put(programKey, serializer.apply(entry.getValue()));
 		}
 		compoundtag.put("programs", programs);
 		
@@ -155,7 +151,7 @@ public class ComputerBlockEntity extends BlockEntity implements ISburbComputer
 	public void onLoad()
 	{
 		super.onLoad();
-		for(ProgramType<?> programType : installedPrograms)
+		for(ProgramType<?> programType : this.existingPrograms.keySet())
 			programType.eventHandler().onLoad(this);
 	}
 	
@@ -166,25 +162,20 @@ public class ComputerBlockEntity extends BlockEntity implements ISburbComputer
 	
 	public boolean hasProgram(ProgramType<?> programType)
 	{
-		return installedPrograms.contains(programType);
+		return this.existingPrograms.containsKey(programType);
+	}
+	
+	private <D extends ProgramType.Data> D insertNewProgramInstance(ProgramType<D> programType)
+	{
+		D data = programType.newDataInstance(this::markDirtyAndResend);
+		this.existingPrograms.put(programType, data);
+		return data;
 	}
 	
 	@SuppressWarnings("unchecked")
 	public <D extends ProgramType.Data> Optional<D> getProgramData(ProgramType<D> type)
 	{
-		if(!hasProgram(type))
-			return Optional.empty();
-		
-		if(type == ProgramType.SBURB_CLIENT)
-			return Optional.of((D) this.sburbClientProgramData);
-		else if(type == ProgramType.SBURB_SERVER)
-			return Optional.of((D) this.sburbServerProgramData);
-		else if(type == ProgramType.DISK_BURNER)
-			return Optional.of((D) this.diskBurnerData);
-		else if(type == ProgramType.SETTINGS)
-			return Optional.of((D) ProgramType.EmptyData.INSTANCE);
-		else
-			throw new IllegalArgumentException();
+		return Optional.ofNullable((D) this.existingPrograms.get(type));
 	}
 	
 	@Override
@@ -197,11 +188,6 @@ public class ComputerBlockEntity extends BlockEntity implements ISburbComputer
 	public Optional<SburbServerData> getSburbServerData()
 	{
 		return this.getProgramData(ProgramType.SBURB_SERVER);
-	}
-	
-	public DiskBurnerData getDiskBurnerData()
-	{
-		return diskBurnerData;
 	}
 	
 	public int getBlankDisksStored()
@@ -223,19 +209,22 @@ public class ComputerBlockEntity extends BlockEntity implements ISburbComputer
 	@Deprecated
 	public void clearComputerData()
 	{
-		this.sburbClientProgramData = new SburbClientData(this::markDirtyAndResend);
-		this.sburbServerProgramData = new SburbServerData(this::markDirtyAndResend);
+		if(hasProgram(ProgramType.SBURB_CLIENT))
+			insertNewProgramInstance(ProgramType.SBURB_CLIENT);
+		if(hasProgram(ProgramType.SBURB_SERVER))
+			insertNewProgramInstance(ProgramType.SBURB_SERVER);
+		markDirtyAndResend();
 	}
 	
 	public void closeAll()
 	{
-		for(ProgramType<?> programType : installedPrograms)
+		for(ProgramType<?> programType : this.existingPrograms.keySet())
 			programType.eventHandler().onClosed(this);
 	}
 	
 	public Stream<ProgramType<?>> installedPrograms()
 	{
-		return this.installedPrograms.stream();
+		return this.existingPrograms.keySet().stream();
 	}
 	
 	@Nullable
@@ -292,7 +281,7 @@ public class ComputerBlockEntity extends BlockEntity implements ISburbComputer
 			}
 		} else if(stackInHand.is(Items.MUSIC_DISC_11))
 		{
-			if(!level.isClientSide && installedPrograms.size() < 3)
+			if(!level.isClientSide && this.existingPrograms.size() < 3)
 			{
 				stackInHand.shrink(1);
 				closeAll();
@@ -306,7 +295,7 @@ public class ComputerBlockEntity extends BlockEntity implements ISburbComputer
 			if(!level.isClientSide && !hasProgram(programType))
 			{
 				stackInHand.shrink(1);
-				installedPrograms.add(programType);
+				insertNewProgramInstance(programType);
 				level.setBlock(getBlockPos(), getBlockState().setValue(ComputerBlock.STATE, ComputerBlock.State.GAME_LOADED), Block.UPDATE_CLIENTS);
 				markDirtyAndResend();
 				programType.eventHandler().onDiskInserted(this);
