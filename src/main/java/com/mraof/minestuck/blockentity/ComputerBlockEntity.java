@@ -74,19 +74,19 @@ public final class ComputerBlockEntity extends BlockEntity implements ISburbComp
 	}
 	
 	@Override
-	protected void loadAdditional(CompoundTag nbt, HolderLookup.Provider pRegistries)
+	protected void loadAdditional(CompoundTag tag, HolderLookup.Provider pRegistries)
 	{
-		super.loadAdditional(nbt, pRegistries);
+		super.loadAdditional(tag, pRegistries);
 		
 		this.programDisks.clear();
-		if(nbt.contains("program_disks"))
-			DISK_LIST_CODEC.parse(NbtOps.INSTANCE, nbt.get("program_disks"))
+		if(tag.contains("program_disks"))
+			DISK_LIST_CODEC.parse(NbtOps.INSTANCE, tag.get("program_disks"))
 					.resultOrPartial(LOGGER::error).ifPresent(this.programDisks::addAll);
 		this.blankDisks.clear();
-		DISK_LIST_CODEC.parse(NbtOps.INSTANCE, nbt.get("blank_disks"))
+		DISK_LIST_CODEC.parse(NbtOps.INSTANCE, tag.get("blank_disks"))
 				.resultOrPartial(LOGGER::error).ifPresent(this.blankDisks::addAll);
 		
-		CompoundTag programs = nbt.getCompound("programs");
+		CompoundTag programs = tag.getCompound("programs");
 		for(String programKey : programs.getAllKeys())
 		{
 			ProgramType<?> programType = ProgramType.REGISTRY.get(programKey);
@@ -98,15 +98,15 @@ public final class ComputerBlockEntity extends BlockEntity implements ISburbComp
 			insertNewProgramInstance(programType).read(programs.getCompound(programKey));
 		}
 		
-		if(nbt.contains("theme", Tag.TAG_STRING))
-			computerTheme = Objects.requireNonNullElse(ResourceLocation.tryParse(nbt.getString("theme")), computerTheme);
+		if(tag.contains("theme", Tag.TAG_STRING))
+			computerTheme = Objects.requireNonNullElse(ResourceLocation.tryParse(tag.getString("theme")), computerTheme);
 		// Backwards-compatibility with Minestuck-1.20.1-1.11.2.0 and earlier
-		else if(nbt.contains("theme", Tag.TAG_INT))
-			computerTheme = MSComputerThemes.getThemeFromOldOrdinal(nbt.getInt("theme"));
+		else if(tag.contains("theme", Tag.TAG_INT))
+			computerTheme = MSComputerThemes.getThemeFromOldOrdinal(tag.getInt("theme"));
 		
-		if(nbt.contains("ownerId"))
-			ownerId = nbt.getInt("ownerId");
-		else this.owner = IdentifierHandler.load(nbt, "owner").result().orElse(null);
+		if(tag.contains("ownerId"))
+			ownerId = tag.getInt("ownerId");
+		else this.owner = IdentifierHandler.load(tag, "owner").result().orElse(null);
 		
 		//keep this after everything else has been loaded
 		if(guiCallback != null)
@@ -114,16 +114,16 @@ public final class ComputerBlockEntity extends BlockEntity implements ISburbComp
 	}
 	
 	@Override
-	public void saveAdditional(CompoundTag compound, HolderLookup.Provider provider)
+	public void saveAdditional(CompoundTag tag, HolderLookup.Provider provider)
 	{
-		super.saveAdditional(compound, provider);
+		super.saveAdditional(tag, provider);
 		
-		compound.put("program_disks", DISK_LIST_CODEC.encodeStart(NbtOps.INSTANCE, this.blankDisks).result().orElseThrow());
+		tag.put("program_disks", DISK_LIST_CODEC.encodeStart(NbtOps.INSTANCE, this.blankDisks).result().orElseThrow());
 		
 		if(owner != null)
-			owner.saveToNBT(compound, "owner");
+			owner.saveToNBT(tag, "owner");
 		
-		writeSharedData(compound, ProgramType.Data::write);
+		writeSharedData(tag, ProgramType.Data::write);
 	}
 	
 	@Override
@@ -140,9 +140,9 @@ public final class ComputerBlockEntity extends BlockEntity implements ISburbComp
 		return compoundtag;
 	}
 	
-	private void writeSharedData(CompoundTag compoundtag, Function<ProgramType.Data, CompoundTag> serializer)
+	private void writeSharedData(CompoundTag tag, Function<ProgramType.Data, CompoundTag> serializer)
 	{
-		compoundtag.put("blank_disks", DISK_LIST_CODEC.encodeStart(NbtOps.INSTANCE, this.blankDisks).result().orElseThrow());
+		tag.put("blank_disks", DISK_LIST_CODEC.encodeStart(NbtOps.INSTANCE, this.blankDisks).result().orElseThrow());
 		
 		CompoundTag programs = new CompoundTag();
 		for(Map.Entry<ProgramType<?>, ProgramType.Data> entry : this.existingPrograms.entrySet())
@@ -150,9 +150,9 @@ public final class ComputerBlockEntity extends BlockEntity implements ISburbComp
 			String programKey = Objects.requireNonNull(ProgramType.REGISTRY.inverse().get(entry.getKey()));
 			programs.put(programKey, serializer.apply(entry.getValue()));
 		}
-		compoundtag.put("programs", programs);
+		tag.put("programs", programs);
 		
-		compoundtag.putString("theme", computerTheme.toString());
+		tag.putString("theme", computerTheme.toString());
 	}
 	
 	@Override
