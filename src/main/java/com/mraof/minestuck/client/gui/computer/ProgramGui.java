@@ -47,11 +47,11 @@ public interface ProgramGui<D>
 		/**
 		 * Should only be used client-side
 		 */
-		public static <D extends ProgramType.Data> void register(ProgramType<D> programType, Supplier<? extends ProgramGui<D>> factory)
+		public static <D extends ProgramType.Data> void register(Supplier<ProgramType<D>> programType, Supplier<? extends ProgramGui<D>> factory)
 		{
-			if(programs.containsKey(programType))
-				throw new IllegalArgumentException("Program type " + programType + " is already registered!");
-			programs.put(programType, factory);
+			if(programs.containsKey(programType.get()))
+				throw new IllegalArgumentException("Program type " + programType.get() + " is already registered!");
+			programs.put(programType.get(), factory);
 		}
 		
 		/**

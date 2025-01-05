@@ -6,7 +6,6 @@ import com.mraof.minestuck.block.GateBlock;
 import com.mraof.minestuck.block.MSBlocks;
 import com.mraof.minestuck.blockentity.ComputerBlockEntity;
 import com.mraof.minestuck.blockentity.TransportalizerBlockEntity;
-import com.mraof.minestuck.computer.ProgramType;
 import com.mraof.minestuck.computer.SburbClientData;
 import com.mraof.minestuck.computer.SburbServerData;
 import com.mraof.minestuck.computer.editmode.ServerEditHandler;
@@ -434,8 +433,8 @@ public class EntryProcess
 				//Avoid duplicating computer data when a computer is kept in the overworld
 				if(blockEntity instanceof ComputerBlockEntity computer)
 				{
-					computer.getProgramData(ProgramType.SBURB_CLIENT).ifPresent(SburbClientData::handleBeingDuplicated);
-					computer.getProgramData(ProgramType.SBURB_SERVER).ifPresent(SburbServerData::handleBeingDuplicated);
+					computer.getSburbClientData().ifPresent(SburbClientData::handleBeingDuplicated);
+					computer.getSburbServerData().ifPresent(SburbServerData::handleBeingDuplicated);
 				}
 				else if(blockEntity instanceof TransportalizerBlockEntity)
 					level.removeBlockEntity(pos);

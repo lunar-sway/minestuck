@@ -4,6 +4,7 @@ import com.mraof.minestuck.Minestuck;
 import com.mraof.minestuck.blockentity.ComputerBlockEntity;
 import com.mraof.minestuck.computer.DiskBurnerData;
 import com.mraof.minestuck.computer.ProgramType;
+import com.mraof.minestuck.computer.ProgramTypes;
 import com.mraof.minestuck.network.MSPacket;
 import net.minecraft.core.BlockPos;
 import net.minecraft.network.FriendlyByteBuf;
@@ -47,14 +48,14 @@ public record BurnDiskPacket(BlockPos computerPos, boolean isClientDisk) impleme
 	
 	private void tryBurnDisk(ComputerBlockEntity computer)
 	{
-		ProgramType<?> programType = this.isClientDisk ? ProgramType.SBURB_CLIENT : ProgramType.SBURB_SERVER;
+		ProgramType<?> programType = this.isClientDisk ? ProgramTypes.SBURB_CLIENT.get() : ProgramTypes.SBURB_SERVER.get();
 		Item disk = programType.diskItem().orElseThrow();
 		Level level = computer.getLevel();
 		BlockPos bePos = computer.getBlockPos();
 		if(level == null)
 			return;
 		
-		if(!computer.getProgramData(ProgramType.DISK_BURNER).map(DiskBurnerData::hasAllCode).orElse(false))
+		if(!computer.getProgramData(ProgramTypes.DISK_BURNER).map(DiskBurnerData::hasAllCode).orElse(false))
 			return;
 		
 		if(computer.tryTakeBlankDisk())

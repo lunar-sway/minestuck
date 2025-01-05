@@ -4,6 +4,7 @@ import com.mojang.blaze3d.systems.RenderSystem;
 import com.mraof.minestuck.Minestuck;
 import com.mraof.minestuck.blockentity.ComputerBlockEntity;
 import com.mraof.minestuck.computer.ProgramType;
+import com.mraof.minestuck.computer.ProgramTypes;
 import com.mraof.minestuck.computer.theme.ComputerTheme;
 import com.mraof.minestuck.computer.theme.ComputerThemes;
 import net.minecraft.client.Minecraft;
@@ -147,7 +148,7 @@ public class ComputerScreen extends Screen
 		icons.clear();
 		
 		int programCount = 0;
-		for(ProgramType<?> programType : be.installedPrograms().sorted(ProgramType.DISPLAY_ORDER_SORTER).toList())
+		for(ProgramType<?> programType : be.installedPrograms().sorted(ProgramTypes.DISPLAY_ORDER_SORTER).toList())
 		{
 			icons.add(addRenderableWidget(new ComputerIcon(
 					xOffset + 15 + Math.floorDiv(programCount, 5) * 20,
@@ -216,8 +217,8 @@ public class ComputerScreen extends Screen
 		{
 			super(xPos, yPos, WIDTH, HEIGHT, Component.empty(), button -> setProgram(programType));
 			
-			String programName = Objects.requireNonNullElse(ProgramType.REGISTRY.inverse().get(programType), "invalid");
-			this.icon = Minestuck.id("textures/gui/desktop_icon/" + programName + ".png");
+			ResourceLocation programKey = Objects.requireNonNullElse(ProgramTypes.REGISTRY.getKey(programType), Minestuck.id("invalid"));
+			this.icon = programKey.withPath(name -> "textures/gui/desktop_icon/" + name + ".png");
 		}
 		
 		@Override

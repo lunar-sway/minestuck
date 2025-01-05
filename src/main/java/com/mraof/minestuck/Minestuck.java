@@ -10,6 +10,7 @@ import com.mraof.minestuck.block.plant.MSPottedSaplings;
 import com.mraof.minestuck.blockentity.MSBlockEntityTypes;
 import com.mraof.minestuck.command.MSSuggestionProviders;
 import com.mraof.minestuck.command.argument.MSArgumentTypes;
+import com.mraof.minestuck.computer.ProgramTypes;
 import com.mraof.minestuck.computer.editmode.DeployList;
 import com.mraof.minestuck.effects.MSEffects;
 import com.mraof.minestuck.entity.MSEntityTypes;
@@ -96,6 +97,7 @@ public class Minestuck
 		MSLootTables.MODIFIER_REGISTER.register(eventBus);
 		
 		ModusTypes.REGISTER.register(eventBus);
+		ProgramTypes.REGISTER.register(eventBus);
 		Conditions.REGISTER.register(eventBus);
 		Triggers.REGISTER.register(eventBus);
 		

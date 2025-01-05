@@ -3,7 +3,7 @@ package com.mraof.minestuck.item;
 import com.mraof.minestuck.blockentity.ComputerBlockEntity;
 import com.mraof.minestuck.client.gui.MSScreenFactories;
 import com.mraof.minestuck.computer.DiskBurnerData;
-import com.mraof.minestuck.computer.ProgramType;
+import com.mraof.minestuck.computer.ProgramTypes;
 import com.mraof.minestuck.util.MSTags;
 import net.minecraft.client.gui.screens.Screen;
 import net.minecraft.core.BlockPos;
@@ -64,7 +64,7 @@ public abstract class ReadableSburbCodeItem extends Item
 		
 		if(player != null && level.getBlockEntity(pos) instanceof ComputerBlockEntity computer)
 		{
-			Optional<DiskBurnerData> diskBurnerData = computer.getProgramData(ProgramType.DISK_BURNER);
+			Optional<DiskBurnerData> diskBurnerData = computer.getProgramData(ProgramTypes.DISK_BURNER);
 			if(diskBurnerData.isPresent() && useOnComputer(heldStack, player, hand, diskBurnerData.get()))
 				return InteractionResult.sidedSuccess(level.isClientSide);
 			else

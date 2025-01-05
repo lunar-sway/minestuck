@@ -15,7 +15,7 @@ import com.mraof.minestuck.client.renderer.blockentity.*;
 import com.mraof.minestuck.client.renderer.entity.*;
 import com.mraof.minestuck.client.renderer.entity.frog.FrogRenderer;
 import com.mraof.minestuck.client.util.MSKeyHandler;
-import com.mraof.minestuck.computer.ProgramType;
+import com.mraof.minestuck.computer.ProgramTypes;
 import com.mraof.minestuck.entity.FrogEntity;
 import com.mraof.minestuck.entity.MSEntityTypes;
 import com.mraof.minestuck.entity.carapacian.EnumEntityKingdom;
@@ -117,10 +117,10 @@ public class ClientProxy
 		EntityRenderers.register(MSEntityTypes.BOUNCING_PROJECTILE.get(), ThrownItemRenderer::new);
 		EntityRenderers.register(MSEntityTypes.POSTER.get(), PosterRenderer::new);
 		
-		ProgramGui.Registry.register(ProgramType.SBURB_CLIENT, SburbClientGui::new);
-		ProgramGui.Registry.register(ProgramType.SBURB_SERVER, SburbServerGui::new);
-		ProgramGui.Registry.register(ProgramType.DISK_BURNER, DiskBurnerGui::new);
-		ProgramGui.Registry.register(ProgramType.SETTINGS, SettingsAppGui::new);
+		ProgramGui.Registry.register(ProgramTypes.SBURB_CLIENT, SburbClientGui::new);
+		ProgramGui.Registry.register(ProgramTypes.SBURB_SERVER, SburbServerGui::new);
+		ProgramGui.Registry.register(ProgramTypes.DISK_BURNER, DiskBurnerGui::new);
+		ProgramGui.Registry.register(ProgramTypes.SETTINGS, SettingsAppGui::new);
 		
 		registerArmorModels();
 		

@@ -40,6 +40,7 @@ import java.util.Map;
 import java.util.Objects;
 import java.util.Optional;
 import java.util.function.Function;
+import java.util.function.Supplier;
 import java.util.stream.Stream;
 
 @ParametersAreNonnullByDefault
@@ -69,8 +70,8 @@ public final class ComputerBlockEntity extends BlockEntity implements ISburbComp
 		super(MSBlockEntityTypes.COMPUTER.get(), pos, state);
 		
 		// always should exist on computers
-		insertNewProgramInstance(ProgramType.DISK_BURNER);
-		insertNewProgramInstance(ProgramType.SETTINGS);
+		insertNewProgramInstance(ProgramTypes.DISK_BURNER.get());
+		insertNewProgramInstance(ProgramTypes.SETTINGS.get());
 	}
 	
 	@Override
@@ -89,7 +90,8 @@ public final class ComputerBlockEntity extends BlockEntity implements ISburbComp
 		CompoundTag programs = tag.getCompound("programs");
 		for(String programKey : programs.getAllKeys())
 		{
-			ProgramType<?> programType = ProgramType.REGISTRY.get(programKey);
+			ProgramType<?> programType = ResourceLocation.read(programKey).result()
+					.flatMap(ProgramTypes.REGISTRY::getOptional).orElse(null);
 			if(programType == null)
 			{
 				LOGGER.error("Unknown program type by name \"{}\" in computer data.", programKey);
@@ -147,7 +149,7 @@ public final class ComputerBlockEntity extends BlockEntity implements ISburbComp
 		CompoundTag programs = new CompoundTag();
 		for(Map.Entry<ProgramType<?>, ProgramType.Data> entry : this.existingPrograms.entrySet())
 		{
-			String programKey = Objects.requireNonNull(ProgramType.REGISTRY.inverse().get(entry.getKey()));
+			String programKey = Objects.requireNonNull(ProgramTypes.REGISTRY.getKey(entry.getKey())).toString();
 			programs.put(programKey, serializer.apply(entry.getValue()));
 		}
 		tag.put("programs", programs);
@@ -186,6 +188,11 @@ public final class ComputerBlockEntity extends BlockEntity implements ISburbComp
 		return data;
 	}
 	
+	public <D extends ProgramType.Data> Optional<D> getProgramData(Supplier<ProgramType<D>> type)
+	{
+		return this.getProgramData(type.get());
+	}
+	
 	@SuppressWarnings("unchecked")
 	public <D extends ProgramType.Data> Optional<D> getProgramData(ProgramType<D> type)
 	{
@@ -195,13 +202,13 @@ public final class ComputerBlockEntity extends BlockEntity implements ISburbComp
 	@Override
 	public Optional<SburbClientData> getSburbClientData()
 	{
-		return this.getProgramData(ProgramType.SBURB_CLIENT);
+		return this.getProgramData(ProgramTypes.SBURB_CLIENT);
 	}
 	
 	@Override
 	public Optional<SburbServerData> getSburbServerData()
 	{
-		return this.getProgramData(ProgramType.SBURB_SERVER);
+		return this.getProgramData(ProgramTypes.SBURB_SERVER);
 	}
 	
 	public boolean hasBlankDisks()
