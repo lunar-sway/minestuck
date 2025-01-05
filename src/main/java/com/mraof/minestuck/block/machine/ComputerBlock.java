@@ -7,7 +7,6 @@ import com.mraof.minestuck.blockentity.ComputerBlockEntity;
 import com.mraof.minestuck.client.gui.MSScreenFactories;
 import com.mraof.minestuck.computer.ProgramType;
 import com.mraof.minestuck.computer.theme.MSComputerThemes;
-import com.mraof.minestuck.item.MSItems;
 import com.mraof.minestuck.player.IdentifierHandler;
 import com.mraof.minestuck.skaianet.client.SkaiaClient;
 import net.minecraft.MethodsReturnNonnullByDefault;
@@ -15,13 +14,11 @@ import net.minecraft.core.BlockPos;
 import net.minecraft.core.Direction;
 import net.minecraft.resources.ResourceLocation;
 import net.minecraft.util.StringRepresentable;
-import net.minecraft.world.Containers;
 import net.minecraft.world.InteractionHand;
 import net.minecraft.world.InteractionResult;
 import net.minecraft.world.ItemInteractionResult;
 import net.minecraft.world.entity.player.Player;
 import net.minecraft.world.item.ItemStack;
-import net.minecraft.world.item.Items;
 import net.minecraft.world.level.BlockGetter;
 import net.minecraft.world.level.Level;
 import net.minecraft.world.level.block.Block;
@@ -150,29 +147,17 @@ public class ComputerBlock extends MachineBlock implements EntityBlock
 	protected void onRemove(BlockState state, Level level, BlockPos pos, BlockState newState, boolean isMoving)
 	{
 		if(!newState.is(state.getBlock()))
-			dropItems(level, pos.getX(), pos.getY(), pos.getZ(), state);
+			dropItems(level, pos, state);
 		super.onRemove(state, level, pos, newState, isMoving);
 	}
 	
-	private void dropItems(Level level, int x, int y, int z, BlockState state)
+	private void dropItems(Level level, BlockPos pos, BlockState state)
 	{
-		ComputerBlockEntity be = (ComputerBlockEntity) level.getBlockEntity(new BlockPos(x, y, z));
-		if(be == null)
+		if(level.getBlockEntity(pos) instanceof ComputerBlockEntity computer)
 		{
-			return;
+			computer.closeAll();
+			computer.dropItems();
 		}
-		be.closeAll();
-		
-		//program disks
-		be.installedPrograms().forEach(programType -> programType.diskItem()
-				.ifPresent(disk -> Containers.dropItemStack(level, x, y, z, disk.getDefaultInstance())));
-		
-		//blank disks
-		Containers.dropItemStack(level, x, y, z, new ItemStack(MSItems.BLANK_DISK.get(), be.getBlankDisksStored()));
-		
-		//music disc
-		if(state.getValue(STATE) == State.BROKEN)
-			Containers.dropItemStack(level, x, y, z, new ItemStack(Items.MUSIC_DISC_11));
 	}
 	
 	@Override
