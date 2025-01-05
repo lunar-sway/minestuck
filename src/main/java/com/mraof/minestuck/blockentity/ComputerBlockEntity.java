@@ -14,7 +14,6 @@ import net.minecraft.commands.Commands;
 import net.minecraft.core.BlockPos;
 import net.minecraft.core.HolderLookup;
 import net.minecraft.nbt.CompoundTag;
-import net.minecraft.nbt.NbtOps;
 import net.minecraft.nbt.Tag;
 import net.minecraft.network.protocol.Packet;
 import net.minecraft.network.protocol.game.ClientGamePacketListener;
@@ -22,7 +21,6 @@ import net.minecraft.network.protocol.game.ClientboundBlockEntityDataPacket;
 import net.minecraft.resources.ResourceLocation;
 import net.minecraft.server.level.ServerLevel;
 import net.minecraft.server.level.ServerPlayer;
-import net.minecraft.util.Unit;
 import net.minecraft.world.item.ItemStack;
 import net.minecraft.world.item.Items;
 import net.minecraft.world.level.block.Block;
@@ -33,7 +31,11 @@ import org.apache.logging.log4j.Logger;
 
 import javax.annotation.Nullable;
 import javax.annotation.ParametersAreNonnullByDefault;
-import java.util.*;
+import java.util.HashSet;
+import java.util.Objects;
+import java.util.Optional;
+import java.util.Set;
+import java.util.function.Function;
 import java.util.stream.Stream;
 
 @ParametersAreNonnullByDefault
@@ -71,20 +73,24 @@ public class ComputerBlockEntity extends BlockEntity implements ISburbComputer
 	{
 		super.loadAdditional(nbt, pRegistries);
 		
-		installedPrograms.addAll(
-				ProgramType.LIST_CODEC.parse(NbtOps.INSTANCE, nbt.get("programs"))
-						.resultOrPartial(LOGGER::error).orElse(Collections.emptyList()));
-		
-		sburbClientProgramData.read(nbt.getCompound("sburb_client_data"));
-		sburbServerProgramData.read(nbt.getCompound("sburb_server_data"));
+		CompoundTag programs = nbt.getCompound("programs");
+		for(String programKey : programs.getAllKeys())
+		{
+			ProgramType<?> programType = ProgramType.REGISTRY.get(programKey);
+			if(programType == null)
+			{
+				LOGGER.error("Unknown program type by name \"{}\" in computer data.", programKey);
+				continue;
+			}
+			this.installedPrograms.add(programType);
+			this.getProgramData(programType).orElseThrow().read(programs.getCompound(programKey));
+		}
 		
 		if(nbt.contains("theme", Tag.TAG_STRING))
 			computerTheme = Objects.requireNonNullElse(ResourceLocation.tryParse(nbt.getString("theme")), computerTheme);
 		// Backwards-compatibility with Minestuck-1.20.1-1.11.2.0 and earlier
 		else if(nbt.contains("theme", Tag.TAG_INT))
 			computerTheme = MSComputerThemes.getThemeFromOldOrdinal(nbt.getInt("theme"));
-		
-		this.diskBurnerData.read(nbt.getCompound("disk_burner_data"));
 		
 		if(nbt.contains("blankDisksStored"))
 			blankDisksStored = nbt.getInt("blankDisksStored");
@@ -103,13 +109,10 @@ public class ComputerBlockEntity extends BlockEntity implements ISburbComputer
 	{
 		super.saveAdditional(compound, provider);
 		
-		compound.put("sburb_client_data", sburbClientProgramData.write());
-		compound.put("sburb_server_data", sburbServerProgramData.write());
-		
 		if(owner != null)
 			owner.saveToNBT(compound, "owner");
 		
-		writeSharedData(compound);
+		writeSharedData(compound, ProgramType.Data::write);
 	}
 	
 	@Override
@@ -118,22 +121,23 @@ public class ComputerBlockEntity extends BlockEntity implements ISburbComputer
 		CompoundTag compoundtag = new CompoundTag();
 		super.saveAdditional(compoundtag, provider);
 		
-		compoundtag.put("sburb_client_data", sburbClientProgramData.write());
-		compoundtag.put("sburb_server_data", sburbServerProgramData.writeForUpdatePacket(this, getLevel().getServer()));
-		
 		if(owner != null)
 			compoundtag.putInt("ownerId", owner.getId());
 		
-		writeSharedData(compoundtag);
+		writeSharedData(compoundtag, programData -> programData.writeForSync(this, getLevel().getServer()));
 		
 		return compoundtag;
 	}
 	
-	private void writeSharedData(CompoundTag compoundtag)
+	private void writeSharedData(CompoundTag compoundtag, Function<ProgramType.Data, CompoundTag> serializer)
 	{
-		compoundtag.put("programs", ProgramType.LIST_CODEC.encodeStart(NbtOps.INSTANCE, new ArrayList<>(installedPrograms)).getOrThrow());
-		
-		compoundtag.put("disk_burner_data", this.diskBurnerData.write());
+		CompoundTag programs = new CompoundTag();
+		for(ProgramType<?> programType : this.installedPrograms)
+		{
+			String programKey = Objects.requireNonNull(ProgramType.REGISTRY.inverse().get(programType));
+			programs.put(programKey, serializer.apply(getProgramData(programType).orElseThrow()));
+		}
+		compoundtag.put("programs", programs);
 		
 		compoundtag.putInt("blankDisksStored", blankDisksStored);
 		
@@ -166,7 +170,7 @@ public class ComputerBlockEntity extends BlockEntity implements ISburbComputer
 	}
 	
 	@SuppressWarnings("unchecked")
-	public <D> Optional<D> getProgramData(ProgramType<D> type)
+	public <D extends ProgramType.Data> Optional<D> getProgramData(ProgramType<D> type)
 	{
 		if(!hasProgram(type))
 			return Optional.empty();
@@ -178,7 +182,7 @@ public class ComputerBlockEntity extends BlockEntity implements ISburbComputer
 		else if(type == ProgramType.DISK_BURNER)
 			return Optional.of((D) this.diskBurnerData);
 		else if(type == ProgramType.SETTINGS)
-			return Optional.of((D) Unit.INSTANCE);
+			return Optional.of((D) ProgramType.EmptyData.INSTANCE);
 		else
 			throw new IllegalArgumentException();
 	}

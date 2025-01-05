@@ -9,9 +9,9 @@ import com.mraof.minestuck.computer.editmode.EditmodeLocations;
 import com.mraof.minestuck.item.MSItems;
 import com.mraof.minestuck.skaianet.ComputerInteractions;
 import net.minecraft.core.Holder;
+import net.minecraft.nbt.CompoundTag;
 import net.minecraft.server.MinecraftServer;
 import net.minecraft.server.level.ServerLevel;
-import net.minecraft.util.Unit;
 import net.minecraft.world.item.Item;
 import net.minecraft.world.item.ItemStack;
 
@@ -21,12 +21,12 @@ import java.util.List;
 import java.util.Objects;
 import java.util.Optional;
 
-public final class ProgramType<D>
+public final class ProgramType<D extends ProgramType.Data>
 {
 	public static final ProgramType<SburbClientData> SBURB_CLIENT = new ProgramType<>(MSItems.CLIENT_DISK, Handlers.CLIENT);
 	public static final ProgramType<SburbServerData> SBURB_SERVER = new ProgramType<>(MSItems.SERVER_DISK, Handlers.SERVER);
 	public static final ProgramType<DiskBurnerData> DISK_BURNER = new ProgramType<>(null, Handlers.EMPTY);
-	public static final ProgramType<Unit> SETTINGS = new ProgramType<>(null, Handlers.EMPTY);
+	public static final ProgramType<EmptyData> SETTINGS = new ProgramType<>(null, Handlers.EMPTY);
 	
 	public static final BiMap<String, ProgramType<?>> REGISTRY = ImmutableBiMap.of("sburb_client", SBURB_CLIENT, "sburb_server", SBURB_SERVER, "disk_burner", DISK_BURNER, "settings", SETTINGS);
 	
@@ -81,6 +81,34 @@ public final class ProgramType<D>
 	public String toString()
 	{
 		return Objects.requireNonNullElse(REGISTRY.inverse().get(this), "unknown");
+	}
+	
+	public interface Data
+	{
+		void read(CompoundTag tag);
+		
+		CompoundTag write();
+		
+		default CompoundTag writeForSync(ISburbComputer computer, MinecraftServer mcServer)
+		{
+			return write();
+		}
+	}
+	
+	public enum EmptyData implements Data
+	{
+		INSTANCE;
+		
+		@Override
+		public void read(CompoundTag tag)
+		{
+		}
+		
+		@Override
+		public CompoundTag write()
+		{
+			return new CompoundTag();
+		}
 	}
 	
 	public interface EventHandler

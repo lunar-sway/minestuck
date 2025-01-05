@@ -9,7 +9,7 @@ import javax.annotation.Nullable;
 import java.util.Optional;
 import java.util.OptionalInt;
 
-public final class SburbServerData
+public final class SburbServerData implements ProgramType.Data
 {
 	private final Runnable markDirty;
 	
@@ -23,6 +23,7 @@ public final class SburbServerData
 		this.markDirty = markDirty;
 	}
 	
+	@Override
 	public void read(CompoundTag tag)
 	{
 		if(tag.contains("message", Tag.TAG_STRING))
@@ -33,6 +34,7 @@ public final class SburbServerData
 			this.connectedClient = tag.getInt("connectedClient");
 	}
 	
+	@Override
 	public CompoundTag write()
 	{
 		CompoundTag tag = new CompoundTag();
@@ -42,7 +44,8 @@ public final class SburbServerData
 		return tag;
 	}
 	
-	public CompoundTag writeForUpdatePacket(ISburbComputer computer, MinecraftServer mcServer)
+	@Override
+	public CompoundTag writeForSync(ISburbComputer computer, MinecraftServer mcServer)
 	{
 		CompoundTag tag = this.write();
 		SburbConnections.get(mcServer).getServerConnection(computer).ifPresent(c ->

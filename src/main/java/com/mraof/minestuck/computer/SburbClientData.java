@@ -6,7 +6,7 @@ import net.minecraft.nbt.Tag;
 import javax.annotation.Nullable;
 import java.util.Optional;
 
-public final class SburbClientData
+public final class SburbClientData implements ProgramType.Data
 {
 	private final Runnable markDirty;
 	
@@ -20,6 +20,7 @@ public final class SburbClientData
 		this.markDirty = markDirty;
 	}
 	
+	@Override
 	public void read(CompoundTag tag)
 	{
 		if(tag.contains("message", Tag.TAG_STRING))
@@ -29,6 +30,7 @@ public final class SburbClientData
 		this.isConnectedToServer = tag.getBoolean("connectedToServer");
 	}
 	
+	@Override
 	public CompoundTag write()
 	{
 		CompoundTag tag = new CompoundTag();

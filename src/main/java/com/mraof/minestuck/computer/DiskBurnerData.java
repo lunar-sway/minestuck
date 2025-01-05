@@ -15,7 +15,7 @@ import java.util.Set;
 import java.util.stream.Collectors;
 import java.util.stream.Stream;
 
-public final class DiskBurnerData
+public final class DiskBurnerData implements ProgramType.Data
 {
 	private final Runnable markDirty;
 	
@@ -27,12 +27,14 @@ public final class DiskBurnerData
 		this.markDirty = markDirty;
 	}
 	
+	@Override
 	public void read(CompoundTag tag)
 	{
 		this.hieroglyphsStored = readBlockSet(tag, "hieroglyphsStored");
 		this.hasParadoxInfoStored = tag.getBoolean("hasParadoxInfoStored");
 	}
 	
+	@Override
 	public CompoundTag write()
 	{
 		CompoundTag tag = new CompoundTag();

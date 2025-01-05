@@ -47,7 +47,7 @@ public interface ProgramGui<D>
 		/**
 		 * Should only be used client-side
 		 */
-		public static <D> void register(ProgramType<D> programType, Supplier<? extends ProgramGui<D>> factory)
+		public static <D extends ProgramType.Data> void register(ProgramType<D> programType, Supplier<? extends ProgramGui<D>> factory)
 		{
 			if(programs.containsKey(programType))
 				throw new IllegalArgumentException("Program type " + programType + " is already registered!");
@@ -59,7 +59,7 @@ public interface ProgramGui<D>
 		 * Should only be used in a client-side context due to gui sidedness!
 		 */
 		@SuppressWarnings("unchecked")
-		public static <D> ProgramGui<D> createGuiInstance(ProgramType<D> programType)
+		public static <D extends ProgramType.Data> ProgramGui<D> createGuiInstance(ProgramType<D> programType)
 		{
 			return (ProgramGui<D>) Objects.requireNonNull(programs.get(programType)).get();
 		}

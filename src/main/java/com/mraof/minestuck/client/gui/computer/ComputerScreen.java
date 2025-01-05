@@ -190,7 +190,7 @@ public class ComputerScreen extends Screen
 		return false;
 	}
 	
-	private static final class TypedProgramGui<D>
+	private static final class TypedProgramGui<D extends ProgramType.Data>
 	{
 		private final ProgramType<D> type;
 		private final ProgramGui<D> gui;
