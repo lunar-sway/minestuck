@@ -59,6 +59,7 @@ public class ComputerScreen extends Screen
 	{
 		genIcons();
 		powerButton = addRenderableWidget(new PowerButton());
+		updateGui();
 	}
 	
 	@Override
@@ -110,7 +111,12 @@ public class ComputerScreen extends Screen
 	{
 		if(!this.cachedTheme.id().equals(be.getTheme()))
 			this.cachedTheme = ComputerThemes.instance().lookup(be.getTheme());
-		if(program!=null) program.updateGui(this);
+		
+		if(program != null)
+			program.updateGui(this);
+		
+		boolean shouldShowIcons = this.program == null && !this.be.isBroken();
+		this.icons.forEach(icon -> icon.visible = shouldShowIcons);
 	}
 	
 	protected void setProgram(ProgramType<?> programType)
@@ -119,11 +125,7 @@ public class ComputerScreen extends Screen
 			return;
 		
 		program = new TypedProgramGui<>(programType);
-		
 		program.gui.onInit(this);
-		
-		for(ComputerIcon icon : icons)
-			icon.visible = false;
 		
 		updateGui();
 	}
@@ -134,13 +136,12 @@ public class ComputerScreen extends Screen
 		
 		clearWidgets();
 		icons.forEach(this::addRenderableWidget);
-		icons.forEach(icon -> icon.visible = true);
 		addRenderableWidget(powerButton);
 		
 		updateGui();
 	}
 	
-	protected void genIcons()
+	private void genIcons()
 	{
 		var xOffset = (width-xSize)/2;
 		var yOffset = (height-ySize)/2;
