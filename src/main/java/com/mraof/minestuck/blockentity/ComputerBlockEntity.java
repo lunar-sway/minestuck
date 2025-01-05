@@ -40,18 +40,10 @@ import java.util.stream.Stream;
 
 @ParametersAreNonnullByDefault
 @MethodsReturnNonnullByDefault
-public class ComputerBlockEntity extends BlockEntity implements ISburbComputer
+public final class ComputerBlockEntity extends BlockEntity implements ISburbComputer
 {
 	private static final Logger LOGGER = LogManager.getLogger();
-	
-	public ComputerBlockEntity(BlockPos pos, BlockState state)
-	{
-		super(MSBlockEntityTypes.COMPUTER.get(), pos, state);
-		
-		// always should exist on computers
-		insertNewProgramInstance(ProgramType.DISK_BURNER);
-		insertNewProgramInstance(ProgramType.SETTINGS);
-	}
+	private static final int PROGRAM_DISK_CAPACITY = 2, BLANK_DISK_CAPACITY = 2;
 	
 	@Nullable
 	private Runnable guiCallback = null;
@@ -62,6 +54,15 @@ public class ComputerBlockEntity extends BlockEntity implements ISburbComputer
 	private final Map<ProgramType<?>, ProgramType.Data> existingPrograms = new HashMap<>();
 	private int blankDisksStored = 0;
 	private ResourceLocation computerTheme = MSComputerThemes.DEFAULT;
+	
+	public ComputerBlockEntity(BlockPos pos, BlockState state)
+	{
+		super(MSBlockEntityTypes.COMPUTER.get(), pos, state);
+		
+		// always should exist on computers
+		insertNewProgramInstance(ProgramType.DISK_BURNER);
+		insertNewProgramInstance(ProgramType.SETTINGS);
+	}
 	
 	@Override
 	protected void loadAdditional(CompoundTag nbt, HolderLookup.Provider pRegistries)
@@ -260,7 +261,7 @@ public class ComputerBlockEntity extends BlockEntity implements ISburbComputer
 		
 		if(stackInHand.is(MSItems.BLANK_DISK))
 		{
-			if(blankDisksStored < 2) //only allow two blank disks to be burned at a time
+			if(blankDisksStored < BLANK_DISK_CAPACITY)
 			{
 				stackInHand.shrink(1);
 				blankDisksStored++;
@@ -269,7 +270,7 @@ public class ComputerBlockEntity extends BlockEntity implements ISburbComputer
 			}
 		} else if(stackInHand.is(Items.MUSIC_DISC_11))
 		{
-			if(!level.isClientSide && this.existingPrograms.size() < 3)
+			if(!level.isClientSide && this.existingPrograms.size() < PROGRAM_DISK_CAPACITY + 2)
 			{
 				stackInHand.shrink(1);
 				closeAll();
