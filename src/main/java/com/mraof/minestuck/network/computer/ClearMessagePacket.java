@@ -2,13 +2,13 @@ package com.mraof.minestuck.network.computer;
 
 import com.mraof.minestuck.Minestuck;
 import com.mraof.minestuck.blockentity.ComputerBlockEntity;
+import com.mraof.minestuck.computer.SburbClientData;
+import com.mraof.minestuck.computer.SburbServerData;
 import com.mraof.minestuck.network.MSPacket;
 import net.minecraft.core.BlockPos;
 import net.minecraft.network.FriendlyByteBuf;
 import net.minecraft.network.codec.ByteBufCodecs;
 import net.minecraft.network.codec.StreamCodec;
-import net.minecraft.network.protocol.common.custom.CustomPacketPayload;
-import net.minecraft.resources.ResourceLocation;
 import net.minecraft.server.level.ServerPlayer;
 import net.neoforged.neoforge.network.handling.IPayloadContext;
 
@@ -33,7 +33,7 @@ public record ClearMessagePacket(BlockPos computerPos, int program) implements M
 	
 	
 	@Override
-	public Type<? extends CustomPacketPayload> type()
+	public Type<ClearMessagePacket> type()
 	{
 		return ID;
 	}
@@ -44,9 +44,9 @@ public record ClearMessagePacket(BlockPos computerPos, int program) implements M
 	{
 		ComputerBlockEntity.getAccessibleComputer(player, computerPos).ifPresent(computer -> {
 			if(program == 0)
-				computer.getSburbClientData().clearEventMessage();
+				computer.getSburbClientData().ifPresent(SburbClientData::clearEventMessage);
 			if(program == 1)
-				computer.getSburbServerData().clearEventMessage();
+				computer.getSburbServerData().ifPresent(SburbServerData::clearEventMessage);
 		});
 	}
 }

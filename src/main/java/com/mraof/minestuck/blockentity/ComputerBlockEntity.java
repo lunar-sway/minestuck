@@ -184,15 +184,15 @@ public class ComputerBlockEntity extends BlockEntity implements ISburbComputer
 	}
 	
 	@Override
-	public SburbClientData getSburbClientData()
+	public Optional<SburbClientData> getSburbClientData()
 	{
-		return this.sburbClientProgramData;
+		return this.getProgramData(ProgramType.SBURB_CLIENT);
 	}
 	
 	@Override
-	public SburbServerData getSburbServerData()
+	public Optional<SburbServerData> getSburbServerData()
 	{
-		return this.sburbServerProgramData;
+		return this.getProgramData(ProgramType.SBURB_SERVER);
 	}
 	
 	public DiskBurnerData getDiskBurnerData()

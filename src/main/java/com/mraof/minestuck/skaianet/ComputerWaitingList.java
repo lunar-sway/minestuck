@@ -2,6 +2,8 @@ package com.mraof.minestuck.skaianet;
 
 import com.mraof.minestuck.computer.ComputerReference;
 import com.mraof.minestuck.computer.ISburbComputer;
+import com.mraof.minestuck.computer.SburbClientData;
+import com.mraof.minestuck.computer.SburbServerData;
 import com.mraof.minestuck.player.IdentifierHandler;
 import com.mraof.minestuck.player.PlayerIdentifier;
 import net.minecraft.nbt.CompoundTag;
@@ -15,6 +17,7 @@ import java.util.HashMap;
 import java.util.Map;
 import java.util.Optional;
 import java.util.Set;
+import java.util.function.BiPredicate;
 import java.util.function.Predicate;
 
 class ComputerWaitingList
@@ -63,6 +66,26 @@ class ComputerWaitingList
 			list.add(nbt);
 		}
 		return list;
+	}
+	
+	void useAsClientAndRemoveOnSuccess(PlayerIdentifier player, BiPredicate<ISburbComputer, SburbClientData> consumer)
+	{
+		useComputerAndRemoveOnSuccess(player, clientComputer -> {
+			Optional<SburbClientData> clientData = clientComputer.getSburbClientData();
+			if(clientData.isEmpty())
+				return true;
+			return consumer.test(clientComputer, clientData.get());
+		});
+	}
+	
+	void useAsServerAndRemoveOnSuccess(PlayerIdentifier player, BiPredicate<ISburbComputer, SburbServerData> consumer)
+	{
+		useComputerAndRemoveOnSuccess(player, serverComputer -> {
+			Optional<SburbServerData> serverData = serverComputer.getSburbServerData();
+			if(serverData.isEmpty())
+				return true;
+			return consumer.test(serverComputer, serverData.get());
+		});
 	}
 	
 	void useComputerAndRemoveOnSuccess(PlayerIdentifier player, Predicate<ISburbComputer> computerConsumer)
