@@ -3,8 +3,8 @@ package com.mraof.minestuck.network.computer;
 import com.mraof.minestuck.Minestuck;
 import com.mraof.minestuck.blockentity.ComputerBlockEntity;
 import com.mraof.minestuck.computer.DiskBurnerData;
-import com.mraof.minestuck.computer.ProgramType;
 import com.mraof.minestuck.computer.ProgramTypes;
+import com.mraof.minestuck.item.MSItems;
 import com.mraof.minestuck.network.MSPacket;
 import net.minecraft.core.BlockPos;
 import net.minecraft.network.FriendlyByteBuf;
@@ -48,8 +48,7 @@ public record BurnDiskPacket(BlockPos computerPos, boolean isClientDisk) impleme
 	
 	private void tryBurnDisk(ComputerBlockEntity computer)
 	{
-		ProgramType<?> programType = this.isClientDisk ? ProgramTypes.SBURB_CLIENT.get() : ProgramTypes.SBURB_SERVER.get();
-		Item disk = programType.diskItem().orElseThrow();
+		Item disk = this.isClientDisk ? MSItems.CLIENT_DISK.get() : MSItems.SERVER_DISK.get();
 		Level level = computer.getLevel();
 		BlockPos bePos = computer.getBlockPos();
 		if(level == null)

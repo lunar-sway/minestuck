@@ -3,11 +3,12 @@ package com.mraof.minestuck.computer;
 import com.mraof.minestuck.Minestuck;
 import com.mraof.minestuck.blockentity.ComputerBlockEntity;
 import com.mraof.minestuck.computer.editmode.EditmodeLocations;
-import com.mraof.minestuck.item.MSItems;
 import com.mraof.minestuck.skaianet.ComputerInteractions;
 import net.minecraft.core.Registry;
+import net.minecraft.resources.ResourceKey;
 import net.minecraft.server.MinecraftServer;
 import net.minecraft.server.level.ServerLevel;
+import net.neoforged.neoforge.registries.DeferredHolder;
 import net.neoforged.neoforge.registries.DeferredRegister;
 
 import java.util.Comparator;
@@ -16,18 +17,20 @@ import java.util.function.Supplier;
 
 public final class ProgramTypes
 {
-	public static final DeferredRegister<ProgramType<?>> REGISTER = DeferredRegister.create(Minestuck.id("program_type"), Minestuck.MOD_ID);
+	public static final ResourceKey<Registry<ProgramType<?>>> REGISTRY_KEY = ResourceKey.createRegistryKey(Minestuck.id("program_type"));
+	
+	public static final DeferredRegister<ProgramType<?>> REGISTER = DeferredRegister.create(REGISTRY_KEY, Minestuck.MOD_ID);
 	
 	public static final Registry<ProgramType<?>> REGISTRY = REGISTER.makeRegistry(builder -> builder.sync(true));
 	
 	public static final Supplier<ProgramType<ProgramType.EmptyData>> SETTINGS = REGISTER.register("settings",
-			() -> new ProgramType<>(null, Handlers.EMPTY, ignored -> ProgramType.EmptyData.INSTANCE));
+			() -> new ProgramType<>(Handlers.EMPTY, ignored -> ProgramType.EmptyData.INSTANCE));
 	public static final Supplier<ProgramType<DiskBurnerData>> DISK_BURNER = REGISTER.register("disk_burner",
-			() -> new ProgramType<>(null, Handlers.EMPTY, DiskBurnerData::new));
-	public static final Supplier<ProgramType<SburbServerData>> SBURB_SERVER = REGISTER.register("sburb_server",
-			() -> new ProgramType<>(MSItems.SERVER_DISK, Handlers.SERVER, SburbServerData::new));
-	public static final Supplier<ProgramType<SburbClientData>> SBURB_CLIENT = REGISTER.register("sburb_client",
-			() -> new ProgramType<>(MSItems.CLIENT_DISK, Handlers.CLIENT, SburbClientData::new));
+			() -> new ProgramType<>(Handlers.EMPTY, DiskBurnerData::new));
+	public static final DeferredHolder<ProgramType<?>, ProgramType<SburbServerData>> SBURB_SERVER = REGISTER.register("sburb_server",
+			() -> new ProgramType<>(Handlers.SERVER, SburbServerData::new));
+	public static final DeferredHolder<ProgramType<?>, ProgramType<SburbClientData>> SBURB_CLIENT = REGISTER.register("sburb_client",
+			() -> new ProgramType<>(Handlers.CLIENT, SburbClientData::new));
 	
 	public static final Comparator<ProgramType<?>> DISPLAY_ORDER_SORTER = Comparator.comparing(REGISTRY::getId);
 	

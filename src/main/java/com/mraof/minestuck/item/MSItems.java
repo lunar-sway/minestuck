@@ -3,6 +3,7 @@ package com.mraof.minestuck.item;
 import com.mraof.minestuck.Minestuck;
 import com.mraof.minestuck.block.EnumCassetteType;
 import com.mraof.minestuck.block.MSBlocks;
+import com.mraof.minestuck.computer.ProgramTypes;
 import com.mraof.minestuck.effects.MSEffects;
 import com.mraof.minestuck.entity.MSEntityTypes;
 import com.mraof.minestuck.entity.item.MetalBoatEntity;
@@ -13,6 +14,7 @@ import com.mraof.minestuck.item.armor.PrismarineArmorItem;
 import com.mraof.minestuck.item.artifact.CruxiteAppleItem;
 import com.mraof.minestuck.item.artifact.CruxitePotionItem;
 import com.mraof.minestuck.item.block.*;
+import com.mraof.minestuck.item.components.MSItemComponents;
 import com.mraof.minestuck.item.components.PosterComponent;
 import com.mraof.minestuck.item.foods.*;
 import com.mraof.minestuck.item.weapon.*;
@@ -482,8 +484,8 @@ public class MSItems
 	public static final DeferredItem<Item> COMPLETED_SBURB_CODE = REGISTER.register("completed_sburb_code", () -> new ReadableSburbCodeItem.Completed(new Item.Properties().stacksTo(1).rarity(Rarity.UNCOMMON)));
 	public static final DeferredItem<Item> COMPUTER_PARTS = REGISTER.register("computer_parts", () -> new Item(new Item.Properties()));
 	public static final DeferredItem<Item> BLANK_DISK = REGISTER.register("blank_disk", () -> new Item(new Item.Properties()));
-	public static final DeferredItem<Item> CLIENT_DISK = REGISTER.register("client_disk", () -> new Item(new Item.Properties().stacksTo(1)));
-	public static final DeferredItem<Item> SERVER_DISK = REGISTER.register("server_disk", () -> new Item(new Item.Properties().stacksTo(1)));
+	public static final DeferredItem<Item> CLIENT_DISK = REGISTER.register("client_disk", () -> new Item(new Item.Properties().stacksTo(1).component(MSItemComponents.PROGRAM_TYPE, ProgramTypes.SBURB_CLIENT)));
+	public static final DeferredItem<Item> SERVER_DISK = REGISTER.register("server_disk", () -> new Item(new Item.Properties().stacksTo(1).component(MSItemComponents.PROGRAM_TYPE, ProgramTypes.SBURB_SERVER)));
 	
 	public static final DeferredItem<Item> CAPTCHA_CARD = REGISTER.register("captcha_card", () -> new CaptchaCardItem(new Item.Properties()));
 	public static final DeferredItem<Item> STACK_MODUS_CARD = REGISTER.register("stack_modus_card", () -> new Item(new Item.Properties().stacksTo(1)));
@@ -1657,4 +1659,3 @@ public class MSItems
 		return REGISTER.register(block.getId().getPath(), () -> function.apply(block.get())); //assumed getKey() will be non-null due to the way DeferredRegistry works
 	}
 }
-	

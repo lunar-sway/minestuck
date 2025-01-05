@@ -5,8 +5,8 @@ import com.mraof.minestuck.block.MSBlockShapes;
 import com.mraof.minestuck.block.MSProperties;
 import com.mraof.minestuck.blockentity.ComputerBlockEntity;
 import com.mraof.minestuck.client.gui.MSScreenFactories;
-import com.mraof.minestuck.computer.ProgramType;
 import com.mraof.minestuck.computer.theme.MSComputerThemes;
+import com.mraof.minestuck.item.components.MSItemComponents;
 import com.mraof.minestuck.player.IdentifierHandler;
 import com.mraof.minestuck.skaianet.client.SkaiaClient;
 import net.minecraft.MethodsReturnNonnullByDefault;
@@ -83,7 +83,7 @@ public class ComputerBlock extends MachineBlock implements EntityBlock
 		ItemStack heldItem = player.getItemInHand(hand);
 		if(state.getValue(STATE) == State.OFF)
 		{
-			if(ProgramType.getForDisk(heldItem).isEmpty())
+			if(!heldItem.has(MSItemComponents.PROGRAM_TYPE))
 				return ItemInteractionResult.SKIP_DEFAULT_BLOCK_INTERACTION;
 			
 			turnOn(state, level, pos, player);

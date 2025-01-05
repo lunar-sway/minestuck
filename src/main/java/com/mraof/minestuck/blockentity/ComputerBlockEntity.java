@@ -7,12 +7,14 @@ import com.mraof.minestuck.computer.*;
 import com.mraof.minestuck.computer.editmode.ServerEditHandler;
 import com.mraof.minestuck.computer.theme.MSComputerThemes;
 import com.mraof.minestuck.item.MSItems;
+import com.mraof.minestuck.item.components.MSItemComponents;
 import com.mraof.minestuck.network.MSPacket;
 import com.mraof.minestuck.player.IdentifierHandler;
 import com.mraof.minestuck.player.PlayerIdentifier;
 import net.minecraft.MethodsReturnNonnullByDefault;
 import net.minecraft.commands.Commands;
 import net.minecraft.core.BlockPos;
+import net.minecraft.core.Holder;
 import net.minecraft.core.HolderLookup;
 import net.minecraft.core.NonNullList;
 import net.minecraft.nbt.CompoundTag;
@@ -288,7 +290,8 @@ public final class ComputerBlockEntity extends BlockEntity implements ISburbComp
 		if(isBroken() || level == null)
 			return false;
 		
-		Optional<ProgramType<?>> optionalType = ProgramType.getForDisk(stackInHand);
+		@Nullable
+		Holder<ProgramType<?>> optionalType = stackInHand.get(MSItemComponents.PROGRAM_TYPE);
 		
 		if(stackInHand.is(MSItems.BLANK_DISK))
 		{
@@ -308,9 +311,9 @@ public final class ComputerBlockEntity extends BlockEntity implements ISburbComp
 				markDirtyAndResend();
 			}
 			return true;
-		} else if(optionalType.isPresent())
+		} else if(optionalType != null)
 		{
-			ProgramType<?> programType = optionalType.get();
+			ProgramType<?> programType = optionalType.value();
 			if(!level.isClientSide && !hasProgram(programType) && this.programDisks.size() < PROGRAM_DISK_CAPACITY)
 			{
 				this.programDisks.add(stackInHand.split(1));
