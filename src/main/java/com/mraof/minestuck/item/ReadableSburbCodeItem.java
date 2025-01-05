@@ -70,31 +70,9 @@ public abstract class ReadableSburbCodeItem extends Item
 		return InteractionResult.PASS;
 	}
 	
-	protected boolean useOnComputer(ItemStack heldStack, Player player, InteractionHand hand, ComputerBlockEntity blockEntity)
+	protected boolean useOnComputer(ItemStack heldStack, Player player, InteractionHand hand, ComputerBlockEntity computer)
 	{
-		boolean newInfo = false;
-		
-		if(getParadoxInfo(heldStack) && !blockEntity.hasParadoxInfoStored)
-		{
-			blockEntity.hasParadoxInfoStored = true;
-			newInfo = true;
-		}
-		
-		//for each block in the item's list, adds it to the block entity should it not exist there yet
-		for(Block iterateBlock : getRecordedBlocks(heldStack))
-		{
-			if(iterateBlock.defaultBlockState().is(MSTags.Blocks.GREEN_HIEROGLYPHS))
-				newInfo |= blockEntity.hieroglyphsStored.add(iterateBlock);
-		}
-		
-		if(newInfo)
-		{
-			blockEntity.markDirtyAndResend();
-			
-			return true;
-		}
-		
-		return false;
+		return computer.getDiskBurnerData().recordNewInfo(getParadoxInfo(heldStack), getRecordedBlocks(heldStack));
 	}
 	
 	public static class Completed extends ReadableSburbCodeItem

@@ -27,11 +27,11 @@ public final class DiskBurnerGui implements ProgramGui
 	@Override
 	public void onUpdate(ComputerScreen gui)
 	{
-		if(!gui.be.hasAllCode())
+		if(!gui.be.getDiskBurnerData().hasAllCode())
 		{
 			this.message = Component.translatable(NEED_CODE);
 			this.buttonListHelper.updateButtons(List.of());
-		} else if(gui.be.blankDisksStored == 0)
+		} else if(gui.be.getBlankDisksStored() == 0)
 		{
 			this.message = Component.translatable(NO_DISKS);
 			this.buttonListHelper.updateButtons(List.of());

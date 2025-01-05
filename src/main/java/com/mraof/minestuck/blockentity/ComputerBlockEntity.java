@@ -9,22 +9,19 @@ import com.mraof.minestuck.item.MSItems;
 import com.mraof.minestuck.network.MSPacket;
 import com.mraof.minestuck.player.IdentifierHandler;
 import com.mraof.minestuck.player.PlayerIdentifier;
-import com.mraof.minestuck.util.MSTags;
 import net.minecraft.MethodsReturnNonnullByDefault;
 import net.minecraft.commands.Commands;
 import net.minecraft.core.BlockPos;
 import net.minecraft.core.HolderLookup;
-import net.minecraft.core.registries.BuiltInRegistries;
-import net.minecraft.nbt.*;
+import net.minecraft.nbt.CompoundTag;
+import net.minecraft.nbt.NbtOps;
+import net.minecraft.nbt.Tag;
 import net.minecraft.network.protocol.Packet;
 import net.minecraft.network.protocol.game.ClientGamePacketListener;
 import net.minecraft.network.protocol.game.ClientboundBlockEntityDataPacket;
 import net.minecraft.resources.ResourceLocation;
 import net.minecraft.server.level.ServerLevel;
 import net.minecraft.server.level.ServerPlayer;
-import net.minecraft.util.RandomSource;
-import net.minecraft.world.entity.item.ItemEntity;
-import net.minecraft.world.item.Item;
 import net.minecraft.world.item.ItemStack;
 import net.minecraft.world.item.Items;
 import net.minecraft.world.level.block.Block;
@@ -33,11 +30,9 @@ import net.minecraft.world.level.block.state.BlockState;
 import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.Logger;
 
-import javax.annotation.Nonnull;
 import javax.annotation.Nullable;
 import javax.annotation.ParametersAreNonnullByDefault;
 import java.util.*;
-import java.util.stream.Collectors;
 import java.util.stream.Stream;
 
 @ParametersAreNonnullByDefault
@@ -66,10 +61,8 @@ public class ComputerBlockEntity extends BlockEntity implements ISburbComputer
 	private SburbServerData sburbServerProgramData = new SburbServerData(this::markDirtyAndResend);
 	@Nullable
 	public ProgramType programSelected = null;
-	@Nonnull
-	public Set<Block> hieroglyphsStored = new HashSet<>();
-	public boolean hasParadoxInfoStored = false; //sburb code component received from the lotus flower
-	public int blankDisksStored;
+	private final DiskBurnerData diskBurnerData = new DiskBurnerData(this::markDirtyAndResend);
+	private int blankDisksStored = 0;
 	private ResourceLocation computerTheme = MSComputerThemes.DEFAULT;
 	
 	@Override
@@ -90,9 +83,8 @@ public class ComputerBlockEntity extends BlockEntity implements ISburbComputer
 		else if(nbt.contains("theme", Tag.TAG_INT))
 			computerTheme = MSComputerThemes.getThemeFromOldOrdinal(nbt.getInt("theme"));
 		
-		hieroglyphsStored = readBlockSet(nbt, "hieroglyphsStored");
-		if(nbt.contains("hasParadoxInfoStored"))
-			hasParadoxInfoStored = nbt.getBoolean("hasParadoxInfoStored");
+		this.diskBurnerData.read(nbt.getCompound("disk_burner_data"));
+		
 		if(nbt.contains("blankDisksStored"))
 			blankDisksStored = nbt.getInt("blankDisksStored");
 		
@@ -128,7 +120,6 @@ public class ComputerBlockEntity extends BlockEntity implements ISburbComputer
 		compoundtag.put("sburb_client_data", sburbClientProgramData.write());
 		compoundtag.put("sburb_server_data", sburbServerProgramData.writeForUpdatePacket(this, getLevel().getServer()));
 		
-		
 		if(owner != null)
 			compoundtag.putInt("ownerId", owner.getId());
 		
@@ -141,8 +132,7 @@ public class ComputerBlockEntity extends BlockEntity implements ISburbComputer
 	{
 		compoundtag.put("programs", ProgramType.LIST_CODEC.encodeStart(NbtOps.INSTANCE, new ArrayList<>(installedPrograms)).getOrThrow());
 		
-		writeBlockSet(compoundtag, "hieroglyphsStored", hieroglyphsStored);
-		compoundtag.putBoolean("hasParadoxInfoStored", hasParadoxInfoStored);
+		compoundtag.put("disk_burner_data", this.diskBurnerData.write());
 		
 		compoundtag.putInt("blankDisksStored", blankDisksStored);
 		
@@ -184,6 +174,27 @@ public class ComputerBlockEntity extends BlockEntity implements ISburbComputer
 	public SburbServerData getSburbServerData()
 	{
 		return this.sburbServerProgramData;
+	}
+	
+	public DiskBurnerData getDiskBurnerData()
+	{
+		return diskBurnerData;
+	}
+	
+	public int getBlankDisksStored()
+	{
+		return this.blankDisksStored;
+	}
+	
+	public boolean tryTakeBlankDisk()
+	{
+		if(this.blankDisksStored > 0)
+		{
+			this.blankDisksStored = this.blankDisksStored - 1;
+			this.markDirtyAndResend();
+			return true;
+		}
+		return false;
 	}
 	
 	@Deprecated
@@ -235,21 +246,20 @@ public class ComputerBlockEntity extends BlockEntity implements ISburbComputer
 		markDirtyAndResend();
 	}
 	
-	public boolean insertDisk(ItemStack stackInHand)
+	public boolean tryInsertDisk(ItemStack stackInHand)
 	{
 		if(isBroken() || level == null)
 			return false;
 		
 		Optional<ProgramType> optionalType = ProgramType.getForDisk(stackInHand);
 		
-		if(stackInHand.is(MSItems.BLANK_DISK.get()))
+		if(stackInHand.is(MSItems.BLANK_DISK))
 		{
 			if(blankDisksStored < 2) //only allow two blank disks to be burned at a time
 			{
 				stackInHand.shrink(1);
 				blankDisksStored++;
-				setChanged();
-				level.sendBlockUpdated(getBlockPos(), getBlockState(), getBlockState(), 3);
+				markDirtyAndResend();
 				return true;
 			}
 		} else if(stackInHand.is(Items.MUSIC_DISC_11))
@@ -259,8 +269,7 @@ public class ComputerBlockEntity extends BlockEntity implements ISburbComputer
 				stackInHand.shrink(1);
 				closeAll();
 				level.setBlock(getBlockPos(), getBlockState().setValue(ComputerBlock.STATE, ComputerBlock.State.BROKEN), Block.UPDATE_CLIENTS);
-				setChanged();
-				level.sendBlockUpdated(getBlockPos(), getBlockState(), getBlockState(), 3);
+				markDirtyAndResend();
 			}
 			return true;
 		} else if(optionalType.isPresent())
@@ -271,47 +280,13 @@ public class ComputerBlockEntity extends BlockEntity implements ISburbComputer
 				stackInHand.shrink(1);
 				installedPrograms.add(programType);
 				level.setBlock(getBlockPos(), getBlockState().setValue(ComputerBlock.STATE, ComputerBlock.State.GAME_LOADED), Block.UPDATE_CLIENTS);
-				setChanged();
-				level.sendBlockUpdated(getBlockPos(), getBlockState(), getBlockState(), 3);
+				markDirtyAndResend();
 				programType.eventHandler().onDiskInserted(this);
 			}
 			return true;
 		}
 		
 		return false;
-	}
-	
-	public void burnDisk(ProgramType programType)
-	{
-		if(level == null)
-			return;
-		
-		BlockPos bePos = getBlockPos();
-		Optional<Item> disk = programType.diskItem();
-		if(disk.isPresent() && blankDisksStored > 0 && hasAllCode())
-		{
-			RandomSource random = level.getRandom();
-			
-			float rx = random.nextFloat() * 0.8F + 0.1F;
-			float ry = random.nextFloat() * 0.8F + 0.1F;
-			float rz = random.nextFloat() * 0.8F + 0.1F;
-			
-			ItemEntity entityItem = new ItemEntity(level, bePos.getX() + rx, bePos.getY() + ry, bePos.getZ() + rz, disk.get().getDefaultInstance());
-			entityItem.setDeltaMovement(random.nextGaussian() * 0.05F, random.nextGaussian() * 0.05F + 0.2F, random.nextGaussian() * 0.05F);
-			level.addFreshEntity(entityItem);
-			
-			blankDisksStored--;
-			
-			markDirtyAndResend();
-		}
-	}
-	
-	/**
-	 * Returns true if the block entity has the paradox info and all the hieroglyphs
-	 */
-	public boolean hasAllCode()
-	{
-		return hasParadoxInfoStored && hieroglyphsStored.containsAll(MSTags.getBlocksFromTag(MSTags.Blocks.GREEN_HIEROGLYPHS));
 	}
 	
 	public void setGuiCallback(Runnable guiCallback)
@@ -321,7 +296,7 @@ public class ComputerBlockEntity extends BlockEntity implements ISburbComputer
 		this.guiCallback = guiCallback;
 	}
 	
-	public void markDirtyAndResend()
+	private void markDirtyAndResend()
 	{
 		setChanged();
 		if(level instanceof ServerLevel serverLevel)
@@ -347,28 +322,5 @@ public class ComputerBlockEntity extends BlockEntity implements ISburbComputer
 					|| player.hasPermissions(Commands.LEVEL_GAMEMASTERS);
 		} else
 			return true;
-	}
-	
-	private static Set<Block> readBlockSet(CompoundTag nbt, String key)
-	{
-		return nbt.getList(key, Tag.TAG_STRING).stream().map(Tag::getAsString)
-				//Turn the Strings into ResourceLocations
-				.flatMap(blockName -> Stream.ofNullable(ResourceLocation.tryParse(blockName)))
-				//Turn the ResourceLocations into Blocks
-				.flatMap(blockId -> Stream.ofNullable(BuiltInRegistries.BLOCK.get(blockId)))
-				//Gather the blocks into a set
-				.collect(Collectors.toSet());
-	}
-	
-	private static void writeBlockSet(CompoundTag nbt, String key, @Nonnull Set<Block> blocks)
-	{
-		ListTag listTag = new ListTag();
-		for(Block blockIterate : blocks)
-		{
-			String blockName = String.valueOf(BuiltInRegistries.BLOCK.getKey(blockIterate));
-			listTag.add(StringTag.valueOf(blockName));
-		}
-		
-		nbt.put(key, listTag);
 	}
 }

@@ -57,13 +57,13 @@ public class IncompleteSburbCodeItem extends ReadableSburbCodeItem
 		
 		// adds any new hieroglyph and paradox info from the computer to the item
 		
-		if(blockEntity.hasParadoxInfoStored && !getParadoxInfo(heldStack))
+		if(blockEntity.getDiskBurnerData().isHasParadoxInfoStored() && !getParadoxInfo(heldStack))
 		{
 			heldStack.set(MSItemComponents.PARADOX_CODE, Unit.INSTANCE);
 			changedItem = true;
 		}
 		
-		for(Block iterateBlock : blockEntity.hieroglyphsStored)
+		for(Block iterateBlock : blockEntity.getDiskBurnerData().getHieroglyphsStored())
 		{
 			if(iterateBlock.defaultBlockState().is(MSTags.Blocks.GREEN_HIEROGLYPHS))
 				changedItem |= HieroglyphCode.addBlock(heldStack, iterateBlock);
