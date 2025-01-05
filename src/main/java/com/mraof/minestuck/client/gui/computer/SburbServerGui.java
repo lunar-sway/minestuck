@@ -20,7 +20,7 @@ import java.util.List;
 import java.util.Optional;
 import java.util.OptionalInt;
 
-public final class SburbServerGui implements ProgramGui
+public final class SburbServerGui implements ProgramGui<SburbServerData>
 {
 	public static final String CLOSE_BUTTON = SburbClientGui.CLOSE_BUTTON;
 	public static final String EDIT_BUTTON = "minestuck.program.server.edit_button";
@@ -42,13 +42,12 @@ public final class SburbServerGui implements ProgramGui
 	}
 	
 	@Override
-	public void onUpdate(ComputerScreen gui)
+	public void onUpdate(ComputerScreen gui, SburbServerData data)
 	{
 		ComputerBlockEntity computer = gui.be;
 		Component message;
 		List<ButtonListHelper.ButtonData> list = new ArrayList<>();
 		
-		SburbServerData data = computer.getSburbServerData();
 		Optional<String> eventMessage = data.getEventMessage();
 		OptionalInt clientId = data.getConnectedClientId();
 		ReducedConnection connection = clientId.isPresent() ? SkaiaClient.getClientConnection(clientId.getAsInt()) : null;
@@ -56,26 +55,30 @@ public final class SburbServerGui implements ProgramGui
 			connection = null;
 		
 		if(eventMessage.isPresent())
-			list.add(new ButtonListHelper.ButtonData(Component.translatable(ButtonListHelper.CLEAR_BUTTON), () -> sendClearMessagePacketIfRelevant(computer)));
+			list.add(new ButtonListHelper.ButtonData(Component.translatable(ButtonListHelper.CLEAR_BUTTON),
+					() -> sendClearMessagePacket(computer)));
 		
 		String displayPlayer = connection == null ? "UNDEFINED" : connection.client().name();
 		if(connection != null)
 		{
 			message = Component.translatable(CONNECT, displayPlayer);
 			list.add(new ButtonListHelper.ButtonData(Component.translatable(CLOSE_BUTTON), () -> {
-				sendClearMessagePacketIfRelevant(computer);
+				if(eventMessage.isPresent())
+					sendClearMessagePacket(computer);
 				sendCloseConnectionPacket(computer);
 			}));
 			list.add(new ButtonListHelper.ButtonData(Component.translatable(MinestuckConfig.SERVER.giveItems.get() ? GIVE_BUTTON : EDIT_BUTTON),
 					() -> {
-						sendClearMessagePacketIfRelevant(computer);
-						sendActivateEditmodePacket(computer);
+						if(eventMessage.isPresent())
+							sendClearMessagePacket(computer);
+						sendActivateEditmodePacket(computer, clientId.orElseThrow());
 					}));
 		} else if(data.isOpen())
 		{
 			message = Component.translatable(RESUME_SERVER);
 			list.add(new ButtonListHelper.ButtonData(Component.translatable(CLOSE_BUTTON), () -> {
-				sendClearMessagePacketIfRelevant(computer);
+				if(eventMessage.isPresent())
+					sendClearMessagePacket(computer);
 				sendCloseConnectionPacket(computer);
 			}));
 		} else if(SkaiaClient.isActive(computer.clientSideOwnerId(), false))
@@ -87,14 +90,16 @@ public final class SburbServerGui implements ProgramGui
 					|| !SkaiaClient.hasPrimaryConnectionAsServer(computer.clientSideOwnerId()))
 			{
 				list.add(new ButtonListHelper.ButtonData(Component.translatable(OPEN_BUTTON), () -> {
-					sendClearMessagePacketIfRelevant(computer);
+					if(eventMessage.isPresent())
+						sendClearMessagePacket(computer);
 					PacketDistributor.sendToServer(OpenSburbServerPacket.create(computer));
 				}));
 			}
 			if(SkaiaClient.hasPrimaryConnectionAsServer(computer.clientSideOwnerId()))
 			{
 				list.add(new ButtonListHelper.ButtonData(Component.translatable(RESUME_BUTTON), () -> {
-					sendClearMessagePacketIfRelevant(computer);
+					if(eventMessage.isPresent())
+						sendClearMessagePacket(computer);
 					PacketDistributor.sendToServer(ResumeSburbConnectionPackets.asServer(computer));
 				}));
 			}
@@ -104,10 +109,9 @@ public final class SburbServerGui implements ProgramGui
 		this.buttonListHelper.updateButtons(list);
 	}
 	
-	private static void sendClearMessagePacketIfRelevant(ComputerBlockEntity computer)
+	private static void sendClearMessagePacket(ComputerBlockEntity computer)
 	{
-		if(computer.getSburbServerData().getEventMessage().isPresent())
-			PacketDistributor.sendToServer(new ClearMessagePacket(computer.getBlockPos(), 1));
+		PacketDistributor.sendToServer(new ClearMessagePacket(computer.getBlockPos(), 1));
 	}
 	
 	private static void sendCloseConnectionPacket(ComputerBlockEntity computer)
@@ -115,9 +119,9 @@ public final class SburbServerGui implements ProgramGui
 		PacketDistributor.sendToServer(CloseSburbConnectionPackets.asServer(computer));
 	}
 	
-	private static void sendActivateEditmodePacket(ComputerBlockEntity computer)
+	private static void sendActivateEditmodePacket(ComputerBlockEntity computer, int targetClientId)
 	{
-		CustomPacketPayload packet = new ClientEditPackets.Activate(computer.clientSideOwnerId(), computer.getSburbServerData().getConnectedClientId().orElseThrow());
+		CustomPacketPayload packet = new ClientEditPackets.Activate(computer.clientSideOwnerId(), targetClientId);
 		PacketDistributor.sendToServer(packet);
 	}
 	

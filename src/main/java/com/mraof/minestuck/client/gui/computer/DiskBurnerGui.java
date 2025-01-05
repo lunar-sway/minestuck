@@ -1,5 +1,6 @@
 package com.mraof.minestuck.client.gui.computer;
 
+import com.mraof.minestuck.computer.DiskBurnerData;
 import com.mraof.minestuck.network.computer.BurnDiskPacket;
 import net.minecraft.client.gui.GuiGraphics;
 import net.minecraft.network.chat.Component;
@@ -7,7 +8,7 @@ import net.neoforged.neoforge.network.PacketDistributor;
 
 import java.util.List;
 
-public final class DiskBurnerGui implements ProgramGui
+public final class DiskBurnerGui implements ProgramGui<DiskBurnerData>
 {
 	public static final String NEED_CODE = "minestuck.program.disk_burner.needs_code";
 	public static final String NO_DISKS = "minestuck.program.disk_burner.needs_disks";
@@ -25,9 +26,9 @@ public final class DiskBurnerGui implements ProgramGui
 	}
 	
 	@Override
-	public void onUpdate(ComputerScreen gui)
+	public void onUpdate(ComputerScreen gui, DiskBurnerData data)
 	{
-		if(!gui.be.getDiskBurnerData().hasAllCode())
+		if(!data.hasAllCode())
 		{
 			this.message = Component.translatable(NEED_CODE);
 			this.buttonListHelper.updateButtons(List.of());

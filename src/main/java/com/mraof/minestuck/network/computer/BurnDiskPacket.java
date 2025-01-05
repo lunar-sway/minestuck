@@ -48,7 +48,7 @@ public record BurnDiskPacket(BlockPos computerPos, boolean isClientDisk) impleme
 	
 	private void tryBurnDisk(ComputerBlockEntity computer)
 	{
-		ProgramType programType = this.isClientDisk ? ProgramType.SBURB_CLIENT : ProgramType.SBURB_SERVER;
+		ProgramType<?> programType = this.isClientDisk ? ProgramType.SBURB_CLIENT : ProgramType.SBURB_SERVER;
 		Level level = computer.getLevel();
 		BlockPos bePos = computer.getBlockPos();
 		if(level == null)

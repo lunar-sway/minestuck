@@ -22,6 +22,7 @@ import javax.annotation.ParametersAreNonnullByDefault;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Objects;
+import java.util.Optional;
 
 //TODO continually check that player is in reach of the computer
 @ParametersAreNonnullByDefault
@@ -37,7 +38,7 @@ public class ComputerScreen extends Screen
 	public final ComputerBlockEntity be;
 	private final List<ComputerIcon> icons;
 	private PowerButton powerButton;
-	private ProgramGui program;
+	private TypedProgramGui<?> program;
 	private ComputerTheme cachedTheme;
 	
 	public ComputerScreen(Minecraft mc, ComputerBlockEntity be)
@@ -93,7 +94,7 @@ public class ComputerScreen extends Screen
 		{
 			//program and widgets
 			if(program != null)
-				program.render(guiGraphics, this);
+				program.gui.render(guiGraphics, this);
 		}
 		
 		//corner bits (goes on top of computer screen slightly)
@@ -110,19 +111,18 @@ public class ComputerScreen extends Screen
 	{
 		if(!this.cachedTheme.id().equals(be.getTheme()))
 			this.cachedTheme = ComputerThemes.instance().lookup(be.getTheme());
-		if(program!=null) program.onUpdate(this);
+		if(program!=null) program.updateGui(this);
 	}
 	
-	protected void setProgram(ProgramType programType)
+	protected void setProgram(ProgramType<?> programType)
 	{
 		if(be.isBroken())
 			return;
 		
-		program = ProgramGui.Registry.createGuiInstance(programType);
-		if(program==null) return;
+		program = new TypedProgramGui<>(programType);
 		
 		be.programSelected = programType;
-		program.onInit(this);
+		program.gui.onInit(this);
 		
 		for(ComputerIcon icon : icons)
 			icon.visible = false;
@@ -151,7 +151,7 @@ public class ComputerScreen extends Screen
 		icons.clear();
 		
 		int programCount = 0;
-		for(ProgramType programType : be.installedPrograms().sorted(ProgramType.DISPLAY_ORDER_SORTER).toList())
+		for(ProgramType<?> programType : be.installedPrograms().sorted(ProgramType.DISPLAY_ORDER_SORTER).toList())
 		{
 			icons.add(addRenderableWidget(new ComputerIcon(
 					xOffset + 15 + Math.floorDiv(programCount, 5) * 20,
@@ -190,12 +190,33 @@ public class ComputerScreen extends Screen
 		return false;
 	}
 	
+	private static final class TypedProgramGui<D>
+	{
+		private final ProgramType<D> type;
+		private final ProgramGui<D> gui;
+		
+		TypedProgramGui(ProgramType<D> type)
+		{
+			this.type = type;
+			this.gui = ProgramGui.Registry.createGuiInstance(type);
+		}
+		
+		void updateGui(ComputerScreen screen)
+		{
+			Optional<D> programData = screen.be.getProgramData(this.type);
+			if(programData.isPresent())
+				this.gui.onUpdate(screen, programData.get());
+			else
+				screen.exitProgram();
+		}
+	}
+	
 	private class ComputerIcon extends ExtendedButton
 	{
 		private final ResourceLocation icon;
 		private static final int WIDTH = 16, HEIGHT = 16;
 		
-		public ComputerIcon(int xPos, int yPos, ProgramType programType)
+		public ComputerIcon(int xPos, int yPos, ProgramType<?> programType)
 		{
 			super(xPos, yPos, WIDTH, HEIGHT, Component.empty(), button -> setProgram(programType));
 			

@@ -11,27 +11,27 @@ import java.util.function.Supplier;
 /**
  * @author Kirderf1
  */
-public interface ProgramGui
+public interface ProgramGui<D>
 {
 	/**
 	 * Called when the gui is created or if the player pressed the switch
 	 * program button.
 	 */
-	default void onInit(ComputerScreen gui)
+	default void onInit(ComputerScreen screen)
 	{
 	}
 	
 	/**
 	 * Called when some related data have changed that may affect the program.
 	 */
-	default void onUpdate(ComputerScreen gui)
+	default void onUpdate(ComputerScreen screen, D data)
 	{
 	}
 	
 	/**
 	 * Called when the gui is to be rendered.
 	 */
-	void render(GuiGraphics guiGraphics, ComputerScreen gui);
+	void render(GuiGraphics guiGraphics, ComputerScreen screen);
 	
 	static void drawHeaderMessage(Component message, GuiGraphics guiGraphics, ComputerScreen gui)
 	{
@@ -42,13 +42,12 @@ public interface ProgramGui
 	
 	final class Registry
 	{
-		
-		private static final HashMap<ProgramType, Supplier<? extends ProgramGui>> programs = new HashMap<>();
+		private static final HashMap<ProgramType<?>, Supplier<? extends ProgramGui<?>>> programs = new HashMap<>();
 		
 		/**
 		 * Should only be used client-side
 		 */
-		public static void register(ProgramType programType, Supplier<? extends ProgramGui> factory)
+		public static <D> void register(ProgramType<D> programType, Supplier<? extends ProgramGui<D>> factory)
 		{
 			if(programs.containsKey(programType))
 				throw new IllegalArgumentException("Program type " + programType + " is already registered!");
@@ -59,9 +58,10 @@ public interface ProgramGui
 		 * Creates and returns a new computer program gui for the given type.
 		 * Should only be used in a client-side context due to gui sidedness!
 		 */
-		public static ProgramGui createGuiInstance(ProgramType programType)
+		@SuppressWarnings("unchecked")
+		public static <D> ProgramGui<D> createGuiInstance(ProgramType<D> programType)
 		{
-			return Objects.requireNonNull(programs.get(programType)).get();
+			return (ProgramGui<D>) Objects.requireNonNull(programs.get(programType)).get();
 		}
 	}
 }

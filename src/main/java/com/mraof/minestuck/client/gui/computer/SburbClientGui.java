@@ -16,7 +16,7 @@ import java.util.List;
 import java.util.Map;
 import java.util.Optional;
 
-public final class SburbClientGui implements ProgramGui
+public final class SburbClientGui implements ProgramGui<SburbClientData>
 {
 	public static final String CLOSE_BUTTON = "minestuck.program.close_button"; //also used in SburbServer
 	public static final String RESUME_BUTTON = "minestuck.program.resume_button"; //also used in SburbServer
@@ -36,16 +36,16 @@ public final class SburbClientGui implements ProgramGui
 	}
 	
 	@Override
-	public void onUpdate(ComputerScreen gui)
+	public void onUpdate(ComputerScreen gui, SburbClientData data)
 	{
 		ComputerBlockEntity computer = gui.be;
 		Component message;
 		List<ButtonListHelper.ButtonData> list = new ArrayList<>();
-		SburbClientData data = computer.getSburbClientData();
 		Optional<String> eventMessage = data.getEventMessage();
 		
 		if(eventMessage.isPresent())
-			list.add(new ButtonListHelper.ButtonData(Component.translatable(ButtonListHelper.CLEAR_BUTTON), () -> sendClearMessagePacketIfRelevant(computer)));
+			list.add(new ButtonListHelper.ButtonData(Component.translatable(ButtonListHelper.CLEAR_BUTTON),
+					() -> sendClearMessagePacket(computer)));
 		
 		ReducedConnection c = SkaiaClient.getClientConnection(computer.clientSideOwnerId());
 		if(data.isConnectedToServer() && c != null) //If it is connected to someone.
@@ -53,15 +53,17 @@ public final class SburbClientGui implements ProgramGui
 			String displayPlayer = c.server().name();
 			message = Component.translatable(CONNECT, displayPlayer);
 			list.add(new ButtonListHelper.ButtonData(Component.translatable(CLOSE_BUTTON), () -> {
-				sendClearMessagePacketIfRelevant(computer);
-				sendCloseConnectionPacket(computer);
+				if(eventMessage.isPresent())
+					sendClearMessagePacket(computer);
+				sendCloseConnectionPacket(computer, data);
 			}));
 		} else if(data.isResuming())
 		{
 			message = Component.translatable(RESUME_CLIENT);
 			list.add(new ButtonListHelper.ButtonData(Component.translatable(CLOSE_BUTTON), () -> {
-				sendClearMessagePacketIfRelevant(computer);
-				sendCloseConnectionPacket(computer);
+				if(eventMessage.isPresent())
+					sendClearMessagePacket(computer);
+				sendCloseConnectionPacket(computer, data);
 			}));
 		} else if(!SkaiaClient.isActive(computer.clientSideOwnerId(), true)) //If the player doesn't have an other active client
 		{
@@ -69,14 +71,16 @@ public final class SburbClientGui implements ProgramGui
 			if(SkaiaClient.hasPrimaryConnectionAsClient(computer.clientSideOwnerId()))
 			{
 				list.add(new ButtonListHelper.ButtonData(Component.translatable(RESUME_BUTTON), () -> {
-					sendClearMessagePacketIfRelevant(computer);
+					if(eventMessage.isPresent())
+						sendClearMessagePacket(computer);
 					PacketDistributor.sendToServer(ResumeSburbConnectionPackets.asClient(computer));
 				}));
 			}
 			for(Map.Entry<Integer, String> entry : SkaiaClient.getAvailableServers(computer.clientSideOwnerId()).entrySet())
 			{
 				list.add(new ButtonListHelper.ButtonData(Component.literal(entry.getValue()), () -> {
-					sendClearMessagePacketIfRelevant(computer);
+					if(eventMessage.isPresent())
+						sendClearMessagePacket(computer);
 					PacketDistributor.sendToServer(ConnectToSburbServerPacket.create(computer, entry.getKey()));
 				}));
 			}
@@ -84,14 +88,16 @@ public final class SburbClientGui implements ProgramGui
 		{
 			message = Component.translatable(CLIENT_ACTIVE);
 			list.add(new ButtonListHelper.ButtonData(Component.translatable(CLOSE_BUTTON), () -> {
-				sendClearMessagePacketIfRelevant(computer);
-				sendCloseConnectionPacket(computer);
+				if(eventMessage.isPresent())
+					sendClearMessagePacket(computer);
+				sendCloseConnectionPacket(computer, data);
 			}));
 		}
 		if(SkaiaClient.canSelect(computer.clientSideOwnerId()))
 		{
 			list.add(new ButtonListHelper.ButtonData(Component.translatable(SELECT_COLOR), () -> {
-				sendClearMessagePacketIfRelevant(computer);
+				if(eventMessage.isPresent())
+					sendClearMessagePacket(computer);
 				Minecraft.getInstance().setScreen(new ColorSelectorScreen(computer));
 			}));
 		}
@@ -100,15 +106,19 @@ public final class SburbClientGui implements ProgramGui
 		this.buttonListHelper.updateButtons(list);
 	}
 	
-	private static void sendClearMessagePacketIfRelevant(ComputerBlockEntity computer)
+	private static void sendClearMessagePacketIfRelevant(ComputerBlockEntity computer, SburbClientData data)
 	{
-		if(computer.getSburbServerData().getEventMessage().isPresent())
-			PacketDistributor.sendToServer(new ClearMessagePacket(computer.getBlockPos(), 0));
+		if(data.getEventMessage().isPresent())
+			sendClearMessagePacket(computer);
 	}
 	
-	private static void sendCloseConnectionPacket(ComputerBlockEntity computer)
+	private static void sendClearMessagePacket(ComputerBlockEntity computer)
 	{
-		SburbClientData data = computer.getSburbClientData();
+		PacketDistributor.sendToServer(new ClearMessagePacket(computer.getBlockPos(), 0));
+	}
+	
+	private static void sendCloseConnectionPacket(ComputerBlockEntity computer, SburbClientData data)
+	{
 		if(!data.isResuming() && !data.isConnectedToServer())
 			PacketDistributor.sendToServer(CloseRemoteSburbConnectionPacket.asClient(computer));
 		else

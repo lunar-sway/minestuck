@@ -22,6 +22,7 @@ import net.minecraft.network.protocol.game.ClientboundBlockEntityDataPacket;
 import net.minecraft.resources.ResourceLocation;
 import net.minecraft.server.level.ServerLevel;
 import net.minecraft.server.level.ServerPlayer;
+import net.minecraft.util.Unit;
 import net.minecraft.world.item.ItemStack;
 import net.minecraft.world.item.Items;
 import net.minecraft.world.level.block.Block;
@@ -50,7 +51,7 @@ public class ComputerBlockEntity extends BlockEntity implements ISburbComputer
 		this.installedPrograms.add(ProgramType.SETTINGS);
 	}
 	
-	private final Set<ProgramType> installedPrograms = new HashSet<>();
+	private final Set<ProgramType<?>> installedPrograms = new HashSet<>();
 	@Nullable
 	private Runnable guiCallback = null;
 	@Nullable
@@ -60,7 +61,7 @@ public class ComputerBlockEntity extends BlockEntity implements ISburbComputer
 	private SburbClientData sburbClientProgramData = new SburbClientData(this::markDirtyAndResend);
 	private SburbServerData sburbServerProgramData = new SburbServerData(this::markDirtyAndResend);
 	@Nullable
-	public ProgramType programSelected = null;
+	public ProgramType<?> programSelected = null;
 	private final DiskBurnerData diskBurnerData = new DiskBurnerData(this::markDirtyAndResend);
 	private int blankDisksStored = 0;
 	private ResourceLocation computerTheme = MSComputerThemes.DEFAULT;
@@ -150,7 +151,7 @@ public class ComputerBlockEntity extends BlockEntity implements ISburbComputer
 	public void onLoad()
 	{
 		super.onLoad();
-		for(ProgramType programType : installedPrograms)
+		for(ProgramType<?> programType : installedPrograms)
 			programType.eventHandler().onLoad(this);
 	}
 	
@@ -159,9 +160,27 @@ public class ComputerBlockEntity extends BlockEntity implements ISburbComputer
 		return getBlockState().getValue(ComputerBlock.STATE) == ComputerBlock.State.BROKEN;
 	}
 	
-	public boolean hasProgram(ProgramType programType)
+	public boolean hasProgram(ProgramType<?> programType)
 	{
 		return installedPrograms.contains(programType);
+	}
+	
+	@SuppressWarnings("unchecked")
+	public <D> Optional<D> getProgramData(ProgramType<D> type)
+	{
+		if(!hasProgram(type))
+			return Optional.empty();
+		
+		if(type == ProgramType.SBURB_CLIENT)
+			return Optional.of((D) this.sburbClientProgramData);
+		else if(type == ProgramType.SBURB_SERVER)
+			return Optional.of((D) this.sburbServerProgramData);
+		else if(type == ProgramType.DISK_BURNER)
+			return Optional.of((D) this.diskBurnerData);
+		else if(type == ProgramType.SETTINGS)
+			return Optional.of((D) Unit.INSTANCE);
+		else
+			throw new IllegalArgumentException();
 	}
 	
 	@Override
@@ -206,11 +225,11 @@ public class ComputerBlockEntity extends BlockEntity implements ISburbComputer
 	
 	public void closeAll()
 	{
-		for(ProgramType programType : installedPrograms)
+		for(ProgramType<?> programType : installedPrograms)
 			programType.eventHandler().onClosed(this);
 	}
 	
-	public Stream<ProgramType> installedPrograms()
+	public Stream<ProgramType<?>> installedPrograms()
 	{
 		return this.installedPrograms.stream();
 	}
@@ -256,7 +275,7 @@ public class ComputerBlockEntity extends BlockEntity implements ISburbComputer
 		if(isBroken() || level == null)
 			return false;
 		
-		Optional<ProgramType> optionalType = ProgramType.getForDisk(stackInHand);
+		Optional<ProgramType<?>> optionalType = ProgramType.getForDisk(stackInHand);
 		
 		if(stackInHand.is(MSItems.BLANK_DISK))
 		{
@@ -279,7 +298,7 @@ public class ComputerBlockEntity extends BlockEntity implements ISburbComputer
 			return true;
 		} else if(optionalType.isPresent())
 		{
-			ProgramType programType = optionalType.get();
+			ProgramType<?> programType = optionalType.get();
 			if(!level.isClientSide && !hasProgram(programType))
 			{
 				stackInHand.shrink(1);
