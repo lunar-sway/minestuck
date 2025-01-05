@@ -1,0 +1,8 @@
+{
+  "type": "minestuck:grist_cost",
+  "grist_cost": {
+  },
+  "ingredient": {
+    "item": "extradelight:croutons"
+  }
+}

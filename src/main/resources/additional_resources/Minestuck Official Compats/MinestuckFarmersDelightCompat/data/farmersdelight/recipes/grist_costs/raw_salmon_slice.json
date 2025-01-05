@@ -1,0 +1,11 @@
+{
+  "type": "minestuck:grist_cost",
+  "grist_cost": {
+    "minestuck:amber": 2,
+    "minestuck:caulk": 2,
+    "minestuck:cobalt": 1
+  },
+  "ingredient": {
+    "item": "farmersdelight:salmon_slice"
+  }
+}

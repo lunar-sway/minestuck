@@ -7,6 +7,7 @@ The format is based on [Keep a Changelog](https://keepachangelog.com/en/1.1.0/).
 ## [Unreleased 1.21]
 
 - Updated to run with Minecraft 1.21 / Neoforge 21.0
+- Added `additional_resources` folder, containing officially endorsed content that can be manually installed
 
 ### Changed
 
@@ -19,7 +20,7 @@ The format is based on [Keep a Changelog](https://keepachangelog.com/en/1.1.0/).
 
 ### Contributors for this release
 
-- Cibernet, Dweblenod, kirderf1, glubtier
+- Cibernet, Dweblenod, kirderf1, glubtier, 4seer2, Vinnelli
 
 ## [1.20.4-1.12.2.0] - 2024-10-06
 

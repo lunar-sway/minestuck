@@ -1,0 +1,12 @@
+{
+  "type": "minestuck:grist_cost",
+  "grist_cost": {
+    "minestuck:build": 100,
+    "minestuck:sulfur": 100,
+    "minestuck:rust": 100,
+    "minestuck:cobalt": 100
+  },
+  "ingredient": {
+    "item": "supplementaries:bomb_blue"
+  }
+}

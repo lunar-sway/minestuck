@@ -1,0 +1,7 @@
+{
+  "type": "minestuck:wildcard_grist_cost",
+  "grist_cost": 1000,
+  "ingredient": {
+    "item": "supplementaries:antique_ink"
+  }
+}

@@ -1,0 +1,10 @@
+{
+  "type": "minestuck:grist_cost",
+  "grist_cost": {
+    "minestuck:iodine": 12,
+    "minestuck:sulfur": 4
+  },
+  "ingredient": {
+    "item": "nethersdelight:strider_slice"
+  }
+}

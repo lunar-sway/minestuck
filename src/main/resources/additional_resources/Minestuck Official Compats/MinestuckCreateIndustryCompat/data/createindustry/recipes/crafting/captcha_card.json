@@ -1,0 +1,21 @@
+{
+  "type": "minecraft:crafting_shapeless",
+  "ingredients": [
+    {
+      "item": "createindustry:plastic_sheet"
+    },
+    {
+      "item": "createindustry:plastic_sheet"
+    },
+    {
+      "item": "createindustry:plastic_sheet"
+    },
+    {
+      "item": "minestuck:raw_cruxite"
+    }
+  ],
+  "result": {
+    "item": "minestuck:captcha_card",
+    "count": 64
+  }
+}

@@ -1,0 +1,10 @@
+{
+  "type": "minestuck:grist_cost",
+  "grist_cost": {
+    "minestuck:mercury": 50,
+    "minestuck:uranium": 10
+  },
+  "ingredient": {
+    "item": "supplementaries:enderman_head"
+  }
+}

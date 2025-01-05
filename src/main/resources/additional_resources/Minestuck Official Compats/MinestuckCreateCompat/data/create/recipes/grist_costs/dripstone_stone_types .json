@@ -1,0 +1,10 @@
+{
+  "type": "minestuck:source_grist_cost",
+  "grist_cost": {},
+  "ingredient": {
+    "tag": "create:stone_types/dripstone"
+  },
+  "sources": [
+    "minecraft:dripstone_block"
+  ]
+}

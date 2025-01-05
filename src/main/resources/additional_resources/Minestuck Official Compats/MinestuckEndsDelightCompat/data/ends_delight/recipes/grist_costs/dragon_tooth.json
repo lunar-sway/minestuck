@@ -1,0 +1,9 @@
+{
+  "type": "minestuck:grist_cost",
+  "grist_cost": {
+    "minestuck:zillium": 1
+  },
+  "ingredient": {
+    "item": "ends_delight:dragon_tooth"
+  }
+}

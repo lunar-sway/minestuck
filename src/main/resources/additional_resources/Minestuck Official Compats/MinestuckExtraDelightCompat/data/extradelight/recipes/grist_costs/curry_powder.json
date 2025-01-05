@@ -1,0 +1,10 @@
+{
+  "type": "minestuck:grist_cost",
+  "grist_cost": {
+    "minestuck:sulfur": 5,
+    "minestuck:marble": 5
+  },
+  "ingredient": {
+    "item": "extradelight:curry_powder"
+  }
+}

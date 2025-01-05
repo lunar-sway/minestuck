@@ -1,0 +1,11 @@
+{
+  "type": "minestuck:grist_cost",
+  "grist_cost": {
+    "minestuck:shale": 1,
+    "minestuck:cobalt": 1,
+    "minestuck:marble": 1
+  },
+  "ingredient": {
+    "item": "enlightened_end:cerulichen"
+  }
+}

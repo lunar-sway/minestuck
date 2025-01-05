@@ -1,0 +1,12 @@
+{
+  "type": "minestuck:grist_cost",
+  "grist_cost": {
+    "minestuck:mercury": 32,
+    "minestuck:diamond": 20,
+    "minestuck:uranium": 56,
+    "minestuck:zillium": 1
+  },
+  "ingredient": {
+    "item": "ends_delight:liquid_dragon_egg"
+  }
+}
