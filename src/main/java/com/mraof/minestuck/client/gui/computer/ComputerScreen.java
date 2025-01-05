@@ -58,8 +58,6 @@ public class ComputerScreen extends Screen
 	{
 		genIcons();
 		powerButton = addRenderableWidget(new PowerButton());
-		if(be.programSelected != null)
-			setProgram(be.programSelected);
 	}
 	
 	@Override
@@ -121,7 +119,6 @@ public class ComputerScreen extends Screen
 		
 		program = new TypedProgramGui<>(programType);
 		
-		be.programSelected = programType;
 		program.gui.onInit(this);
 		
 		for(ComputerIcon icon : icons)
@@ -133,7 +130,6 @@ public class ComputerScreen extends Screen
 	protected void exitProgram()
 	{
 		program = null;
-		be.programSelected = null;
 		
 		clearWidgets();
 		icons.forEach(this::addRenderableWidget);

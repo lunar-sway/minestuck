@@ -59,8 +59,6 @@ public class ComputerBlockEntity extends BlockEntity implements ISburbComputer
 	private PlayerIdentifier owner;
 	//client side only
 	private int ownerId;
-	@Nullable
-	public ProgramType<?> programSelected = null;
 	private final Map<ProgramType<?>, ProgramType.Data> existingPrograms = new HashMap<>();
 	private int blankDisksStored = 0;
 	private ResourceLocation computerTheme = MSComputerThemes.DEFAULT;
