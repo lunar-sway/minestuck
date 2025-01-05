@@ -83,8 +83,8 @@ public final class ComputerInteractions
 	
 	public void connectToServerPlayer(ISburbComputer computer, PlayerIdentifier serverPlayer)
 	{
-		Optional<SburbClientData> clientData = computer.getSburbClientData();
-		if(clientData.isEmpty())
+		Optional<ClientAccess> client = ClientAccess.tryGet(computer);
+		if(client.isEmpty())
 			return;
 		
 		PlayerIdentifier player = computer.getOwner();
@@ -95,14 +95,14 @@ public final class ComputerInteractions
 		if(isClientActive(player))
 			return;
 		
-		openedServers.useAsServerAndRemoveOnSuccess(serverPlayer, (serverComputer, serverData) ->
-				skaianetData.connections.tryConnect(computer, clientData.get(), serverComputer, serverData));
+		openedServers.useAsServerAndRemoveOnSuccess(serverPlayer, server ->
+				skaianetData.connections.tryConnect(client.get(), server));
 	}
 	
 	public void resumeClientConnection(ISburbComputer clientComputer)
 	{
-		Optional<SburbClientData> clientData = clientComputer.getSburbClientData();
-		if(clientData.isEmpty())
+		Optional<ClientAccess> client = ClientAccess.tryGet(clientComputer);
+		if(client.isEmpty())
 			return;
 		
 		PlayerIdentifier player = clientComputer.getOwner();
@@ -112,53 +112,53 @@ public final class ComputerInteractions
 		if(!skaianetData.connections.hasPrimaryConnectionForClient(player))
 			return;
 		
-		Optional<PlayerIdentifier> server = skaianetData.connections.primaryPartnerForClient(player);
-		if(server.isPresent() && resumingServers.contains(server.get()))
+		Optional<PlayerIdentifier> serverPlayer = skaianetData.connections.primaryPartnerForClient(player);
+		if(serverPlayer.isPresent() && resumingServers.contains(serverPlayer.get()))
 		{
-			resumingServers.useAsServerAndRemoveOnSuccess(server.get(), (serverComputer, serverData) ->
-					skaianetData.connections.tryConnect(clientComputer, clientData.get(), serverComputer, serverData));
+			resumingServers.useAsServerAndRemoveOnSuccess(serverPlayer.get(), server ->
+					skaianetData.connections.tryConnect(client.get(), server));
 			return;
 		}
-		if(server.isPresent() && openedServers.contains(server.get()))
+		if(serverPlayer.isPresent() && openedServers.contains(serverPlayer.get()))
 		{
-			openedServers.useAsServerAndRemoveOnSuccess(server.get(), (serverComputer, serverData) ->
-					skaianetData.connections.tryConnect(clientComputer, clientData.get(), serverComputer, serverData));
+			openedServers.useAsServerAndRemoveOnSuccess(serverPlayer.get(), server ->
+					skaianetData.connections.tryConnect(client.get(), server));
 			return;
 		}
 		
-		clientData.get().setIsResuming(true);
+		client.get().data().setIsResuming(true);
 		resumingClients.put(player, clientComputer.createReference());
 	}
 	
 	public void resumeServerConnection(ISburbComputer serverComputer)
 	{
-		Optional<SburbServerData> serverData = serverComputer.getSburbServerData();
-		if(serverData.isEmpty())
+		Optional<ServerAccess> server = ServerAccess.tryGet(serverComputer);
+		if(server.isEmpty())
 			return;
 		
 		PlayerIdentifier player = serverComputer.getOwner();
 		if(serverComputer.createReference().isInNether() || hasResumingServer(player))
 			return;
 		
-		Optional<PlayerIdentifier> client = skaianetData.connections.primaryPartnerForServer(player);
-		if(client.isEmpty())
+		Optional<PlayerIdentifier> clientPlayer = skaianetData.connections.primaryPartnerForServer(player);
+		if(clientPlayer.isEmpty())
 			return;
 		
-		if(resumingClients.contains(client.get()))
+		if(resumingClients.contains(clientPlayer.get()))
 		{
-			resumingClients.useAsClientAndRemoveOnSuccess(client.get(), (clientComputer, clientData) ->
-					skaianetData.connections.tryConnect(clientComputer, clientData, serverComputer, serverData.get()));
+			resumingClients.useAsClientAndRemoveOnSuccess(clientPlayer.get(), client ->
+					skaianetData.connections.tryConnect(client, server.get()));
 			return;
 		}
 		
-		serverData.get().setIsOpen(true);
+		server.get().data().setIsOpen(true);
 		resumingServers.put(player, serverComputer.createReference());
 	}
 	
 	public void openServer(ISburbComputer serverComputer)
 	{
-		Optional<SburbServerData> serverData = serverComputer.getSburbServerData();
-		if(serverData.isEmpty())
+		Optional<ServerAccess> server = ServerAccess.tryGet(serverComputer);
+		if(server.isEmpty())
 			return;
 		
 		PlayerIdentifier player = serverComputer.getOwner();
@@ -168,12 +168,12 @@ public final class ComputerInteractions
 		Optional<PlayerIdentifier> primaryClient = skaianetData.connections.primaryPartnerForServer(player);
 		if(primaryClient.isPresent() && resumingClients.contains(primaryClient.get()))
 		{
-			resumingClients.useAsClientAndRemoveOnSuccess(primaryClient.get(), (clientComputer, clientData) ->
-					skaianetData.connections.tryConnect(clientComputer, clientData, serverComputer, serverData.get()));
+			resumingClients.useAsClientAndRemoveOnSuccess(primaryClient.get(), client ->
+					skaianetData.connections.tryConnect(client, server.get()));
 			return;
 		}
 		
-		serverData.get().setIsOpen(true);
+		server.get().data().setIsOpen(true);
 		openedServers.put(player, serverComputer.createReference());
 	}
 	
@@ -181,9 +181,9 @@ public final class ComputerInteractions
 	{
 		if(resumingClients.contains(player))
 		{
-			resumingClients.useAsClientAndRemoveOnSuccess(player, (computer, data) -> {
-				data.setIsResuming(false);
-				data.setEventMessage(STOP_RESUME);
+			resumingClients.useAsClientAndRemoveOnSuccess(player, client -> {
+				client.data().setIsResuming(false);
+				client.data().setEventMessage(STOP_RESUME);
 				return true;
 			});
 		} else

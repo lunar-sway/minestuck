@@ -2,8 +2,6 @@ package com.mraof.minestuck.skaianet;
 
 import com.mraof.minestuck.computer.ComputerReference;
 import com.mraof.minestuck.computer.ISburbComputer;
-import com.mraof.minestuck.computer.SburbClientData;
-import com.mraof.minestuck.computer.SburbServerData;
 import com.mraof.minestuck.player.IdentifierHandler;
 import com.mraof.minestuck.player.PlayerIdentifier;
 import net.minecraft.nbt.CompoundTag;
@@ -17,10 +15,9 @@ import java.util.HashMap;
 import java.util.Map;
 import java.util.Optional;
 import java.util.Set;
-import java.util.function.BiPredicate;
 import java.util.function.Predicate;
 
-class ComputerWaitingList
+final class ComputerWaitingList
 {
 	private static final Logger LOGGER = LogManager.getLogger();
 	
@@ -68,24 +65,16 @@ class ComputerWaitingList
 		return list;
 	}
 	
-	void useAsClientAndRemoveOnSuccess(PlayerIdentifier player, BiPredicate<ISburbComputer, SburbClientData> consumer)
+	void useAsClientAndRemoveOnSuccess(PlayerIdentifier player, Predicate<ClientAccess> consumer)
 	{
-		useComputerAndRemoveOnSuccess(player, clientComputer -> {
-			Optional<SburbClientData> clientData = clientComputer.getSburbClientData();
-			if(clientData.isEmpty())
-				return true;
-			return consumer.test(clientComputer, clientData.get());
-		});
+		useComputerAndRemoveOnSuccess(player, clientComputer ->
+				ClientAccess.tryGet(clientComputer).map(consumer::test).orElse(true));
 	}
 	
-	void useAsServerAndRemoveOnSuccess(PlayerIdentifier player, BiPredicate<ISburbComputer, SburbServerData> consumer)
+	void useAsServerAndRemoveOnSuccess(PlayerIdentifier player, Predicate<ServerAccess> consumer)
 	{
-		useComputerAndRemoveOnSuccess(player, serverComputer -> {
-			Optional<SburbServerData> serverData = serverComputer.getSburbServerData();
-			if(serverData.isEmpty())
-				return true;
-			return consumer.test(serverComputer, serverData.get());
-		});
+		useComputerAndRemoveOnSuccess(player, serverComputer ->
+				ServerAccess.tryGet(serverComputer).map(consumer::test).orElse(true));
 	}
 	
 	void useComputerAndRemoveOnSuccess(PlayerIdentifier player, Predicate<ISburbComputer> computerConsumer)
