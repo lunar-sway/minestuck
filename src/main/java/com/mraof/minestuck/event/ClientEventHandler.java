@@ -1,13 +1,9 @@
 package com.mraof.minestuck.event;
 
 import com.mraof.minestuck.Minestuck;
-import com.mraof.minestuck.MinestuckConfig;
-import com.mraof.minestuck.client.gui.ColorSelectorScreen;
 import com.mraof.minestuck.entity.consort.EnumConsort;
 import com.mraof.minestuck.inventory.ConsortMerchantMenu;
-import com.mraof.minestuck.player.ClientPlayerData;
 import net.minecraft.ChatFormatting;
-import net.minecraft.client.Minecraft;
 import net.minecraft.client.resources.language.I18n;
 import net.minecraft.core.registries.BuiltInRegistries;
 import net.minecraft.network.chat.Component;
@@ -17,7 +13,6 @@ import net.neoforged.api.distmarker.Dist;
 import net.neoforged.bus.api.EventPriority;
 import net.neoforged.bus.api.SubscribeEvent;
 import net.neoforged.fml.common.EventBusSubscriber;
-import net.neoforged.neoforge.client.event.ClientTickEvent;
 import net.neoforged.neoforge.event.entity.player.ItemTooltipEvent;
 
 /**
@@ -26,18 +21,6 @@ import net.neoforged.neoforge.event.entity.player.ItemTooltipEvent;
 @EventBusSubscriber(modid = Minestuck.MOD_ID, bus = EventBusSubscriber.Bus.GAME, value = Dist.CLIENT)
 public class ClientEventHandler
 {
-	@SubscribeEvent
-	public static void onClientTick(ClientTickEvent.Post event)
-	{
-		if(ClientPlayerData.shouDisplayColorSelection() && Minecraft.getInstance().screen == null)
-		{
-			ClientPlayerData.clearDisplayColorSelection();
-			if(MinestuckConfig.CLIENT.loginColorSelector.get())
-				Minecraft.getInstance().setScreen(new ColorSelectorScreen(true));
-		}
-	
-	}
-	
 	@SubscribeEvent(priority=EventPriority.HIGHEST)
 	public static void addCustomTooltip(ItemTooltipEvent event)
 	{
