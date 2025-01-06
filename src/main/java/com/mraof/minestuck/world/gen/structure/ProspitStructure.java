@@ -178,7 +178,7 @@ public final class ProspitStructure
 		public static final WFCData.EntryProvider INTERIOR_STAIRS = WFCData.TemplateEntry.rotatable(Minestuck.id("prospit/interior_stairs"));
 	}
 	
-	private static WFCData.EntriesData buildCenterEntries(StructureTemplateManager templateManager)
+	private static WFCData.EntryPalette buildCenterEntries(StructureTemplateManager templateManager)
 	{
 		WFCData.EntriesBuilder builder = new WFCData.EntriesBuilder(PIECE_SIZE, templateManager);
 		
@@ -203,7 +203,7 @@ public final class ProspitStructure
 		return builder.build();
 	}
 	
-	private static WFCData.EntriesData buildBorderEntries(StructureTemplateManager templateManager)
+	private static WFCData.EntryPalette buildBorderEntries(StructureTemplateManager templateManager)
 	{
 		WFCData.EntriesBuilder builder = new WFCData.EntriesBuilder(PIECE_SIZE, templateManager);
 		

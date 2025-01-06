@@ -31,14 +31,14 @@ public final class WFC
 	public static final class InfiniteModularGeneration
 	{
 		public static void generateModule(PositionTransform middleTransform, Dimensions dimensions,
-										  WFCData.EntriesData centerEntries, WFCData.EntriesData borderEntries,
+										  WFCData.EntryPalette centerPalette, WFCData.EntryPalette borderPalette,
 										  PositionalRandomFactory randomFactory, StructurePiecesBuilder piecesBuilder)
 		{
-			EntryTemplate borderTemplate = new EntryTemplate(dimensions, borderEntries);
+			GridTemplate borderTemplate = new GridTemplate(dimensions, borderPalette);
 			borderTemplate.setupFixedEdgeBounds(Direction.UP, Set.of(WFCData.ConnectorType.TOP_BORDER));
 			borderTemplate.setupFixedEdgeBounds(Direction.DOWN, Set.of(WFCData.ConnectorType.BOTTOM_BORDER));
 			
-			EntryTemplate centerTemplate = new EntryTemplate(dimensions, centerEntries);
+			GridTemplate centerTemplate = new GridTemplate(dimensions, centerPalette);
 			centerTemplate.setupFixedEdgeBounds(Direction.UP, Set.of(WFCData.ConnectorType.TOP_BORDER));
 			centerTemplate.setupFixedEdgeBounds(Direction.DOWN, Set.of(WFCData.ConnectorType.BOTTOM_BORDER));
 			
@@ -86,13 +86,13 @@ public final class WFC
 					PiecePlacer.placeAt(centerTransform, piecesBuilder));
 		}
 		
-		private static Generator cornerGenerator(EntryTemplate template, Dimensions fullDimensions)
+		private static Generator cornerGenerator(GridTemplate template, Dimensions fullDimensions)
 		{
 			return new Generator(new Dimensions(1, fullDimensions.yAxisCells(), 1),
 					template.grid.connectionTester, template::entriesFromTemplate);
 		}
 		
-		private static Generator xEdgeGenerator(EntryTemplate template, Dimensions fullDimensions, Generator northCorner, Generator southCorner)
+		private static Generator xEdgeGenerator(GridTemplate template, Dimensions fullDimensions, Generator northCorner, Generator southCorner)
 		{
 			Generator generator = new Generator(new Dimensions(1, fullDimensions.yAxisCells(), fullDimensions.zAxisCells() - 1),
 					template.grid.connectionTester, template::entriesFromTemplate);
@@ -101,7 +101,7 @@ public final class WFC
 			return generator;
 		}
 		
-		private static Generator zEdgeGenerator(EntryTemplate template, Dimensions fullDimensions, Generator westCorner, Generator eastCorner)
+		private static Generator zEdgeGenerator(GridTemplate template, Dimensions fullDimensions, Generator westCorner, Generator eastCorner)
 		{
 			Generator generator = new Generator(new Dimensions(fullDimensions.xAxisCells() - 1, fullDimensions.yAxisCells(), 1),
 					template.grid.connectionTester, template::entriesFromTemplate);
@@ -110,7 +110,7 @@ public final class WFC
 			return generator;
 		}
 		
-		private static Generator centerGenerator(EntryTemplate template, Dimensions fullDimensions, Generator northSide, Generator westSide, Generator southSide, Generator eastSide)
+		private static Generator centerGenerator(GridTemplate template, Dimensions fullDimensions, Generator northSide, Generator westSide, Generator southSide, Generator eastSide)
 		{
 			Generator generator = new Generator(new Dimensions(fullDimensions.xAxisCells() - 1, fullDimensions.yAxisCells(), fullDimensions.zAxisCells() - 1),
 					template.grid.connectionTester, template::entriesFromTemplate);
@@ -122,14 +122,14 @@ public final class WFC
 		}
 	}
 	
-	public static final class EntryTemplate
+	public static final class GridTemplate
 	{
 		private final PieceEntryGrid grid;
 		
-		public EntryTemplate(Dimensions dimensions, WFCData.EntriesData entriesData)
+		public GridTemplate(Dimensions dimensions, WFCData.EntryPalette entryPalette)
 		{
 			this.grid = new PieceEntryGrid(new Dimensions(1, dimensions.yAxisCells(), 1),
-					entriesData.connectionTester(), true, (ignored, list) -> list.addAll(entriesData.entries()));
+					entryPalette.connectionTester(), true, (ignored, list) -> list.addAll(entryPalette.entries()));
 		}
 		
 		public void setupFixedEdgeBounds(Direction direction, Set<WFCData.ConnectorType> connections)

@@ -299,7 +299,7 @@ public final class WFCData
 		}
 	}
 	
-	public record EntriesData(Collection<WeightedEntry.Wrapper<PieceEntry>> entries, ConnectionTester connectionTester)
+	public record EntryPalette(Collection<WeightedEntry.Wrapper<PieceEntry>> entries, ConnectionTester connectionTester)
 	{
 	}
 	
@@ -350,7 +350,7 @@ public final class WFCData
 			provider.build(new EntryBuilderContext(this.connectionsBuilder, pieceEntry -> this.pieceEntries.add(WeightedEntry.wrap(pieceEntry, weight)), this.cellSize, this.templateManager));
 		}
 		
-		public EntriesData build()
+		public EntryPalette build()
 		{
 			ImmutableList<WeightedEntry.Wrapper<PieceEntry>> entriesList = this.pieceEntries.build();
 			ConnectionTester connectionTester = this.connectionsBuilder.buildConnectionTester();
@@ -360,7 +360,7 @@ public final class WFCData
 					LOGGER.warn("Found unknown connector: {}", connector.id());
 			});
 			
-			return new EntriesData(entriesList, connectionTester);
+			return new EntryPalette(entriesList, connectionTester);
 		}
 	}
 }

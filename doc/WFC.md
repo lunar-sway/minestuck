@@ -33,7 +33,7 @@ Determiner of if two connector types can connect.
 
 Is built by pairing connector types that should connect together.
 
-### Entries Data
+### Entry Palette
 
 Consists of a list of piece entries weighted for random selection, as well as a connection tester.
 
@@ -62,8 +62,8 @@ This fits well in with Minecraft world generation, especially on the chunk and s
 For adjacent modules to still connect, the border surrounding the module is generated first and then used to generate the rest of the module.
 The border is generated under a seed and circumstances so that adjacent modules use the same border.
 
-A module is generated using two sets of entries data.
-A full set is used for the inner area of the module, while a reduced set is used for the border area.
+A module is generated using two entry palette.
+A full palette is used for the inner area of the module, while a reduced palette is used for the border area.
 
 A module corresponds to a StructureStart.
 
