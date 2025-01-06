@@ -96,8 +96,9 @@ public final class ProspitStructure
 			
 			WFC.PositionTransform middleTransform = new WFC.PositionTransform(context.chunkPos().getMiddleBlockPosition(BOTTOM_Y), PIECE_SIZE);
 			
+			WFCData.EntryPalette centerPalette = context.random().nextBoolean() ? buildCenterPalette(templateManager) : buildOpenZonePalette(templateManager);
 			WFC.InfiniteModularGeneration.generateModule(middleTransform, ProspitStructure.WFC_DIMENSIONS,
-					buildCenterEntries(templateManager), buildBorderEntries(templateManager), randomFactory, piecesBuilder);
+					centerPalette, buildBorderPalette(templateManager), randomFactory, piecesBuilder);
 		}
 	}
 	
@@ -178,7 +179,7 @@ public final class ProspitStructure
 		public static final WFCData.EntryProvider INTERIOR_STAIRS = WFCData.TemplateEntry.rotatable(Minestuck.id("prospit/interior_stairs"));
 	}
 	
-	private static WFCData.EntryPalette buildCenterEntries(StructureTemplateManager templateManager)
+	private static WFCData.EntryPalette buildCenterPalette(StructureTemplateManager templateManager)
 	{
 		WFCData.EntriesBuilder builder = new WFCData.EntriesBuilder(PIECE_SIZE, templateManager);
 		
@@ -203,7 +204,31 @@ public final class ProspitStructure
 		return builder.build();
 	}
 	
-	private static WFCData.EntryPalette buildBorderEntries(StructureTemplateManager templateManager)
+	private static WFCData.EntryPalette buildOpenZonePalette(StructureTemplateManager templateManager)
+	{
+		WFCData.EntriesBuilder builder = new WFCData.EntriesBuilder(PIECE_SIZE, templateManager);
+		
+		Connectors.addConnections(builder.connections());
+		
+		builder.add(Entries.EMPTY, 200);
+		builder.add(Entries.SOLID, 1);
+		builder.add(Entries.SUPPORT, 8);
+		builder.add(Entries.PYRAMID_ROOF, 2);
+		builder.add(Entries.SPIKE, 1);
+		builder.add(Entries.BRIDGE, 10);
+		builder.add(Entries.LEDGE, 3);
+		builder.add(Entries.LEDGE_CORNER, 3);
+		builder.add(Entries.CORRIDOR, 1);
+		builder.add(Entries.CORRIDOR_WINDOW, 5);
+		builder.add(Entries.TURN_CORRIDOR, 3);
+		builder.add(Entries.T_CORRIDOR, 1);
+		builder.add(Entries.T_CORRIDOR_WINDOW, 5);
+		builder.add(Entries.INTERIOR_STAIRS, 4);
+		
+		return builder.build();
+	}
+	
+	private static WFCData.EntryPalette buildBorderPalette(StructureTemplateManager templateManager)
 	{
 		WFCData.EntriesBuilder builder = new WFCData.EntriesBuilder(PIECE_SIZE, templateManager);
 		
