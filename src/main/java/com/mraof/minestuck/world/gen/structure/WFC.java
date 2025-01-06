@@ -34,28 +34,28 @@ public final class WFC
 										  WFCData.EntriesData centerEntries, WFCData.EntriesData borderEntries,
 										  PositionalRandomFactory randomFactory, StructurePiecesBuilder piecesBuilder)
 		{
-			WFC.Template borderTemplate = new WFC.Template(dimensions, borderEntries);
+			EntryTemplate borderTemplate = new EntryTemplate(dimensions, borderEntries);
 			borderTemplate.setupFixedEdgeBounds(Direction.UP, Set.of(WFCData.ConnectorType.TOP_BORDER));
 			borderTemplate.setupFixedEdgeBounds(Direction.DOWN, Set.of(WFCData.ConnectorType.BOTTOM_BORDER));
 			
-			WFC.Template centerTemplate = new WFC.Template(dimensions, centerEntries);
+			EntryTemplate centerTemplate = new EntryTemplate(dimensions, centerEntries);
 			centerTemplate.setupFixedEdgeBounds(Direction.UP, Set.of(WFCData.ConnectorType.TOP_BORDER));
 			centerTemplate.setupFixedEdgeBounds(Direction.DOWN, Set.of(WFCData.ConnectorType.BOTTOM_BORDER));
 			
-			PositionTransform northWestTransform = middleTransform.offset(-dimensions.xAxisPieces() / 2, -dimensions.zAxisPieces() / 2);
+			PositionTransform northWestTransform = middleTransform.offset(-dimensions.xAxisCells() / 2, -dimensions.zAxisCells() / 2);
 			Generator northWestGenerator = cornerGenerator(borderTemplate, dimensions);
 			northWestGenerator.collapse(northWestTransform.random(randomFactory),
 					PiecePlacer.placeAt(northWestTransform, piecesBuilder));
 			
-			PositionTransform northEastTransform = northWestTransform.offset(dimensions.xAxisPieces(), 0);
+			PositionTransform northEastTransform = northWestTransform.offset(dimensions.xAxisCells(), 0);
 			Generator northEastGenerator = cornerGenerator(borderTemplate, dimensions);
 			northEastGenerator.collapse(northEastTransform.random(randomFactory), PiecePlacer.EMPTY);
 			
-			PositionTransform southWestTransform = northWestTransform.offset(0, dimensions.zAxisPieces());
+			PositionTransform southWestTransform = northWestTransform.offset(0, dimensions.zAxisCells());
 			Generator southWestGenerator = cornerGenerator(borderTemplate, dimensions);
 			southWestGenerator.collapse(southWestTransform.random(randomFactory), PiecePlacer.EMPTY);
 			
-			PositionTransform southEastTransform = northWestTransform.offset(dimensions.xAxisPieces(), dimensions.zAxisPieces());
+			PositionTransform southEastTransform = northWestTransform.offset(dimensions.xAxisCells(), dimensions.zAxisCells());
 			Generator southEastGenerator = cornerGenerator(borderTemplate, dimensions);
 			southEastGenerator.collapse(southEastTransform.random(randomFactory), PiecePlacer.EMPTY);
 			
@@ -70,11 +70,11 @@ public final class WFC
 			westGenerator.collapse(westTransform.random(randomFactory),
 					PiecePlacer.placeAt(westTransform, piecesBuilder));
 			
-			PositionTransform southTransform = northWestTransform.offset(1, dimensions.zAxisPieces());
+			PositionTransform southTransform = northWestTransform.offset(1, dimensions.zAxisCells());
 			Generator southGenerator = zEdgeGenerator(borderTemplate, dimensions, southWestGenerator, southEastGenerator);
 			southGenerator.collapse(southTransform.random(randomFactory), PiecePlacer.EMPTY);
 			
-			PositionTransform eastTransform = northWestTransform.offset(dimensions.xAxisPieces(), 1);
+			PositionTransform eastTransform = northWestTransform.offset(dimensions.xAxisCells(), 1);
 			Generator eastGenerator = xEdgeGenerator(borderTemplate, dimensions, northEastGenerator, southEastGenerator);
 			eastGenerator.collapse(eastTransform.random(randomFactory), PiecePlacer.EMPTY);
 			
@@ -86,33 +86,33 @@ public final class WFC
 					PiecePlacer.placeAt(centerTransform, piecesBuilder));
 		}
 		
-		private static Generator cornerGenerator(Template template, Dimensions fullDimensions)
+		private static Generator cornerGenerator(EntryTemplate template, Dimensions fullDimensions)
 		{
-			return new Generator(new Dimensions(1, fullDimensions.yAxisPieces(), 1),
+			return new Generator(new Dimensions(1, fullDimensions.yAxisCells(), 1),
 					template.grid.connectionTester, template::entriesFromTemplate);
 		}
 		
-		private static Generator xEdgeGenerator(Template template, Dimensions fullDimensions, Generator northCorner, Generator southCorner)
+		private static Generator xEdgeGenerator(EntryTemplate template, Dimensions fullDimensions, Generator northCorner, Generator southCorner)
 		{
-			Generator generator = new Generator(new Dimensions(1, fullDimensions.yAxisPieces(), fullDimensions.zAxisPieces() - 1),
+			Generator generator = new Generator(new Dimensions(1, fullDimensions.yAxisCells(), fullDimensions.zAxisCells() - 1),
 					template.grid.connectionTester, template::entriesFromTemplate);
 			generator.setupEdgeBounds(Direction.NORTH, northCorner);
 			generator.setupEdgeBounds(Direction.SOUTH, southCorner);
 			return generator;
 		}
 		
-		private static Generator zEdgeGenerator(Template template, Dimensions fullDimensions, Generator westCorner, Generator eastCorner)
+		private static Generator zEdgeGenerator(EntryTemplate template, Dimensions fullDimensions, Generator westCorner, Generator eastCorner)
 		{
-			Generator generator = new Generator(new Dimensions(fullDimensions.xAxisPieces() - 1, fullDimensions.yAxisPieces(), 1),
+			Generator generator = new Generator(new Dimensions(fullDimensions.xAxisCells() - 1, fullDimensions.yAxisCells(), 1),
 					template.grid.connectionTester, template::entriesFromTemplate);
 			generator.setupEdgeBounds(Direction.WEST, westCorner);
 			generator.setupEdgeBounds(Direction.EAST, eastCorner);
 			return generator;
 		}
 		
-		private static Generator centerGenerator(Template template, Dimensions fullDimensions, Generator northSide, Generator westSide, Generator southSide, Generator eastSide)
+		private static Generator centerGenerator(EntryTemplate template, Dimensions fullDimensions, Generator northSide, Generator westSide, Generator southSide, Generator eastSide)
 		{
-			Generator generator = new Generator(new Dimensions(fullDimensions.xAxisPieces() - 1, fullDimensions.yAxisPieces(), fullDimensions.zAxisPieces() - 1),
+			Generator generator = new Generator(new Dimensions(fullDimensions.xAxisCells() - 1, fullDimensions.yAxisCells(), fullDimensions.zAxisCells() - 1),
 					template.grid.connectionTester, template::entriesFromTemplate);
 			generator.setupEdgeBounds(Direction.NORTH, northSide);
 			generator.setupEdgeBounds(Direction.WEST, westSide);
@@ -122,27 +122,27 @@ public final class WFC
 		}
 	}
 	
-	public static final class Template
+	public static final class EntryTemplate
 	{
 		private final PieceEntryGrid grid;
 		
-		public Template(Dimensions dimensions, WFCData.EntriesData entriesData)
+		public EntryTemplate(Dimensions dimensions, WFCData.EntriesData entriesData)
 		{
-			this.grid = new PieceEntryGrid(new Dimensions(1, dimensions.yAxisPieces(), 1),
+			this.grid = new PieceEntryGrid(new Dimensions(1, dimensions.yAxisCells(), 1),
 					entriesData.connectionTester(), true, (ignored, list) -> list.addAll(entriesData.entries()));
 		}
 		
 		public void setupFixedEdgeBounds(Direction direction, Set<WFCData.ConnectorType> connections)
 		{
-			for(PiecePos pos : this.grid.dimensions.iterateEdge(direction))
+			for(CellPos pos : this.grid.dimensions.iterateEdge(direction))
 			{
-				this.grid.removeConflictsFromConnection(pos, direction, connections);
+				this.grid.removeUnsupportedEntriesForSide(pos, direction, connections);
 			}
 		}
 		
-		void entriesFromTemplate(PiecePos pos, List<WeightedEntry.Wrapper<WFCData.PieceEntry>> entryList)
+		void entriesFromTemplate(CellPos pos, List<WeightedEntry.Wrapper<WFCData.PieceEntry>> entryList)
 		{
-			entryList.addAll(this.grid.availablePiecesMap.get(new PiecePos(0, pos.y(), 0)));
+			entryList.addAll(this.grid.availableEntriesMap.get(new CellPos(0, pos.y(), 0)));
 		}
 	}
 	
@@ -150,7 +150,7 @@ public final class WFC
 	{
 		private final PieceEntryGrid grid;
 		
-		Generator(Dimensions dimensions, WFCData.ConnectionTester connectionTester, BiConsumer<PiecePos,
+		Generator(Dimensions dimensions, WFCData.ConnectionTester connectionTester, BiConsumer<CellPos,
 				List<WeightedEntry.Wrapper<WFCData.PieceEntry>>> dataInitializer)
 		{
 			this.grid = new PieceEntryGrid(dimensions, connectionTester, false, dataInitializer);
@@ -158,31 +158,31 @@ public final class WFC
 		
 		void setupEdgeBounds(Direction direction, Generator adjacentGenerator)
 		{
-			for(PiecePos pos : this.grid.dimensions.iterateEdge(direction))
+			for(CellPos pos : this.grid.dimensions.iterateEdge(direction))
 			{
-				PiecePos projectedPos = adjacentGenerator.grid.dimensions.projectOntoEdge(pos, direction.getOpposite());
-				Set<WFCData.ConnectorType> connections = adjacentGenerator.grid.availableConnections(projectedPos, direction.getOpposite());
-				this.grid.removeConflictsFromConnection(pos, direction, connections);
+				CellPos projectedPos = adjacentGenerator.grid.dimensions.projectOntoEdge(pos, direction.getOpposite());
+				Set<WFCData.ConnectorType> connections = adjacentGenerator.grid.availableConnectorsAt(projectedPos, direction.getOpposite());
+				this.grid.removeUnsupportedEntriesForSide(pos, direction, connections);
 			}
 		}
 		
 		public void collapse(RandomSource random, PiecePlacer piecePlacer)
 		{
-			Set<PiecePos> piecesToGenerate = new HashSet<>(this.grid.availablePiecesMap.keySet());
+			Set<CellPos> cellsToGenerate = new HashSet<>(this.grid.availableEntriesMap.keySet());
 			
-			while(!piecesToGenerate.isEmpty())
+			while(!cellsToGenerate.isEmpty())
 			{
-				MinValueSearchResult<PiecePos> leastEntropyResult = MinValueSearchResult.search(piecesToGenerate,
-						pos -> entropy(this.grid.availablePiecesMap.get(pos)));
+				MinValueSearchResult<CellPos> leastEntropyResult = MinValueSearchResult.search(cellsToGenerate,
+						pos -> entropy(this.grid.availableEntriesMap.get(pos)));
 				
 				if(leastEntropyResult.entries.isEmpty())
 					break;
 				
-				PiecePos pos = Util.getRandom(leastEntropyResult.entries, random);
-				piecesToGenerate.remove(pos);
+				CellPos pos = Util.getRandom(leastEntropyResult.entries, random);
+				cellsToGenerate.remove(pos);
 				
-				List<WeightedEntry.Wrapper<WFCData.PieceEntry>> availablePieces = this.grid.availablePiecesMap.get(pos);
-				var chosenEntry = WeightedRandom.getRandomItem(random, availablePieces);
+				List<WeightedEntry.Wrapper<WFCData.PieceEntry>> availableEntries = this.grid.availableEntriesMap.get(pos);
+				var chosenEntry = WeightedRandom.getRandomItem(random, availableEntries);
 				if(chosenEntry.isEmpty())
 				{
 					piecePlacer.logNoEntries(pos);
@@ -191,8 +191,8 @@ public final class WFC
 				
 				piecePlacer.place(pos, chosenEntry.get().data());
 				
-				if(availablePieces.removeIf(entry -> entry != chosenEntry.get()))
-					this.grid.removeConflictingPieces(pos, null);
+				if(availableEntries.removeIf(entry -> entry != chosenEntry.get()))
+					this.grid.removeAdjacentUnsupportedEntries(pos, null);
 			}
 		}
 	}
@@ -202,12 +202,12 @@ public final class WFC
 		PiecePlacer EMPTY = new PiecePlacer()
 		{
 			@Override
-			public void place(PiecePos piecePos, WFCData.PieceEntry entry)
+			public void place(CellPos cellPos, WFCData.PieceEntry entry)
 			{
 			}
 			
 			@Override
-			public void logNoEntries(PiecePos piecePos)
+			public void logNoEntries(CellPos cellPos)
 			{
 			}
 		};
@@ -217,26 +217,26 @@ public final class WFC
 			return new PiecePlacer()
 			{
 				@Override
-				public void place(PiecePos piecePos, WFCData.PieceEntry entry)
+				public void place(CellPos cellPos, WFCData.PieceEntry entry)
 				{
-					BlockPos pos = transform.toBlockPos(piecePos);
+					BlockPos pos = transform.toBlockPos(cellPos);
 					StructurePiece piece = entry.constructor().apply(pos);
 					if(piece != null)
 						piecesBuilder.addPiece(piece);
 				}
 				
 				@Override
-				public void logNoEntries(PiecePos piecePos)
+				public void logNoEntries(CellPos cellPos)
 				{
-					BlockPos pos = transform.toBlockPos(piecePos);
+					BlockPos pos = transform.toBlockPos(cellPos);
 					WFC.LOGGER.warn("No entries possible at {}!", pos);
 				}
 			};
 		}
 		
-		void place(PiecePos piecePos, WFCData.PieceEntry entry);
+		void place(CellPos cellPos, WFCData.PieceEntry entry);
 		
-		void logNoEntries(PiecePos piecePos);
+		void logNoEntries(CellPos cellPos);
 	}
 	
 	private static final class PieceEntryGrid
@@ -245,31 +245,31 @@ public final class WFC
 		final WFCData.ConnectionTester connectionTester;
 		final boolean loopHorizontally;
 		
-		private final Map<PiecePos, List<WeightedEntry.Wrapper<WFCData.PieceEntry>>> availablePiecesMap = new HashMap<>();
+		private final Map<CellPos, List<WeightedEntry.Wrapper<WFCData.PieceEntry>>> availableEntriesMap = new HashMap<>();
 		
 		public PieceEntryGrid(Dimensions dimensions, WFCData.ConnectionTester connectionTester, boolean loopHorizontally,
-							  BiConsumer<PiecePos, List<WeightedEntry.Wrapper<WFCData.PieceEntry>>> dataInitializer)
+							  BiConsumer<CellPos, List<WeightedEntry.Wrapper<WFCData.PieceEntry>>> dataInitializer)
 		{
 			this.dimensions = dimensions;
 			this.connectionTester = connectionTester;
 			this.loopHorizontally = loopHorizontally;
 			
-			for(PiecePos pos : this.dimensions.iterateAll())
+			for(CellPos pos : this.dimensions.iterateAll())
 			{
 				List<WeightedEntry.Wrapper<WFCData.PieceEntry>> list = new ArrayList<>();
 				dataInitializer.accept(pos, list);
-				this.availablePiecesMap.put(pos, list);
+				this.availableEntriesMap.put(pos, list);
 			}
 		}
 		
-		Set<WFCData.ConnectorType> availableConnections(PiecePos pos, Direction direction)
+		Set<WFCData.ConnectorType> availableConnectorsAt(CellPos pos, Direction direction)
 		{
-			return this.availablePiecesMap.get(pos).stream()
+			return this.availableEntriesMap.get(pos).stream()
 					.map(entry -> entry.data().connections().get(direction))
 					.collect(Collectors.toSet());
 		}
 		
-		void removeConflictingPieces(PiecePos pos, @Nullable Direction excluding)
+		void removeAdjacentUnsupportedEntries(CellPos pos, @Nullable Direction excluding)
 		{
 			for(Direction direction : Direction.values())
 			{
@@ -278,19 +278,20 @@ public final class WFC
 				
 				pos.tryOffset(direction, this.dimensions, this.loopHorizontally).ifPresent(adjacentPos ->
 				{
-					Set<WFCData.ConnectorType> connections = this.availableConnections(pos, direction);
+					Set<WFCData.ConnectorType> availableConnectors = this.availableConnectorsAt(pos, direction);
 					
-					this.removeConflictsFromConnection(adjacentPos, direction.getOpposite(), connections);
+					this.removeUnsupportedEntriesForSide(adjacentPos, direction.getOpposite(), availableConnectors);
 				});
 			}
 		}
 		
-		void removeConflictsFromConnection(PiecePos pos, Direction direction, Set<WFCData.ConnectorType> connections)
+		void removeUnsupportedEntriesForSide(CellPos pos, Direction direction, Set<WFCData.ConnectorType> availableConnectors)
 		{
-			if(connections.isEmpty())
+			if(availableConnectors.isEmpty())
 				return;
-			if(this.availablePiecesMap.get(pos).removeIf(entry -> !connectionTester.canConnect(entry.data().connections().get(direction), connections)))
-				this.removeConflictingPieces(pos, direction);
+			if(this.availableEntriesMap.get(pos).removeIf(entry ->
+					!connectionTester.canConnect(entry.data().connections().get(direction), availableConnectors)))
+				this.removeAdjacentUnsupportedEntries(pos, direction);
 		}
 	}
 	
@@ -343,42 +344,42 @@ public final class WFC
 		}
 	}
 	
-	public record Dimensions(int xAxisPieces, int yAxisPieces, int zAxisPieces)
+	public record Dimensions(int xAxisCells, int yAxisCells, int zAxisCells)
 	{
 		public Dimensions {
-			if(xAxisPieces <= 0)
-				throw new IllegalArgumentException("Nonpositive x size: " + xAxisPieces);
-			if(yAxisPieces <= 0)
-				throw new IllegalArgumentException("Nonpositive y size: " + xAxisPieces);
-			if(zAxisPieces <= 0)
-				throw new IllegalArgumentException("Nonpositive z size: " + xAxisPieces);
+			if(xAxisCells <= 0)
+				throw new IllegalArgumentException("Nonpositive x size: " + xAxisCells);
+			if(yAxisCells <= 0)
+				throw new IllegalArgumentException("Nonpositive y size: " + xAxisCells);
+			if(zAxisCells <= 0)
+				throw new IllegalArgumentException("Nonpositive z size: " + xAxisCells);
 		}
 		
 		public boolean isInBounds(int x, int y, int z)
 		{
-			return 0 <= x && x < this.xAxisPieces()
-					&& 0 <= y && y < this.yAxisPieces()
-					&& 0 <= z && z < this.zAxisPieces();
+			return 0 <= x && x < this.xAxisCells()
+					&& 0 <= y && y < this.yAxisCells()
+					&& 0 <= z && z < this.zAxisCells();
 		}
 		
-		public boolean isOnEdge(PiecePos piecePos, Direction edge)
+		public boolean isOnEdge(CellPos cellPos, Direction edge)
 		{
 			return switch(edge)
 			{
-				case DOWN -> piecePos.y() == 0;
-				case UP -> piecePos.y() == this.yAxisPieces() - 1;
-				case NORTH -> piecePos.z() == 0;
-				case SOUTH -> piecePos.z() == this.zAxisPieces() - 1;
-				case WEST -> piecePos.x() == 0;
-				case EAST -> piecePos.x() == this.xAxisPieces() - 1;
+				case DOWN -> cellPos.y() == 0;
+				case UP -> cellPos.y() == this.yAxisCells() - 1;
+				case NORTH -> cellPos.z() == 0;
+				case SOUTH -> cellPos.z() == this.zAxisCells() - 1;
+				case WEST -> cellPos.x() == 0;
+				case EAST -> cellPos.x() == this.xAxisCells() - 1;
 			};
 		}
 		
 		public int loopX(int x)
 		{
 			if(x < 0)
-				return this.xAxisPieces() - 1;
-			if(x >= this.xAxisPieces())
+				return this.xAxisCells() - 1;
+			if(x >= this.xAxisCells())
 				return 0;
 			return x;
 		}
@@ -386,65 +387,65 @@ public final class WFC
 		public int loopZ(int z)
 		{
 			if(z < 0)
-				return this.zAxisPieces() - 1;
-			if(z >= this.zAxisPieces())
+				return this.zAxisCells() - 1;
+			if(z >= this.zAxisCells())
 				return 0;
 			return z;
 		}
 		
-		public PiecePos projectOntoEdge(PiecePos pos, Direction edge)
+		public CellPos projectOntoEdge(CellPos pos, Direction edge)
 		{
 			int x, y, z;
 			if(edge == Direction.WEST)
 				x = 0;
 			else if(edge == Direction.EAST)
-				x = this.xAxisPieces() - 1;
+				x = this.xAxisCells() - 1;
 			else
 				x = pos.x;
 			
 			if(edge == Direction.DOWN)
 				y = 0;
 			else if(edge == Direction.UP)
-				y = this.yAxisPieces() - 1;
+				y = this.yAxisCells() - 1;
 			else
 				y = pos.y;
 			
 			if(edge == Direction.NORTH)
 				z = 0;
 			else if(edge == Direction.SOUTH)
-				z = this.zAxisPieces() - 1;
+				z = this.zAxisCells() - 1;
 			else
 				z = pos.z;
 			
 			if(!this.isInBounds(x, y, z))
 				throw new IllegalArgumentException("Unable to project pos " + pos + " on edge " + edge + " in dimensions " + this);
-			return new PiecePos(x, y, z);
+			return new CellPos(x, y, z);
 		}
 		
-		public Iterable<PiecePos> iterateAll()
+		public Iterable<CellPos> iterateAll()
 		{
-			return PiecePos.iterateBox(0, 0, 0,
-					this.xAxisPieces() - 1, this.yAxisPieces() - 1, this.zAxisPieces() - 1);
+			return CellPos.iterateBox(0, 0, 0,
+					this.xAxisCells() - 1, this.yAxisCells() - 1, this.zAxisCells() - 1);
 		}
 		
-		public Iterable<PiecePos> iterateEdge(Direction direction)
+		public Iterable<CellPos> iterateEdge(Direction direction)
 		{
-			int minX = direction != Direction.EAST ? 0 : this.xAxisPieces() - 1;
-			int minY = direction != Direction.UP ? 0 : this.yAxisPieces() - 1;
-			int minZ = direction != Direction.SOUTH ? 0 : this.zAxisPieces() - 1;
-			int maxX = direction != Direction.WEST ? this.xAxisPieces() - 1 : 0;
-			int maxY = direction != Direction.DOWN ? this.yAxisPieces() - 1 : 0;
-			int maxZ = direction != Direction.NORTH ? this.zAxisPieces() - 1 : 0;
-			return PiecePos.iterateBox(minX, minY, minZ, maxX, maxY, maxZ);
+			int minX = direction != Direction.EAST ? 0 : this.xAxisCells() - 1;
+			int minY = direction != Direction.UP ? 0 : this.yAxisCells() - 1;
+			int minZ = direction != Direction.SOUTH ? 0 : this.zAxisCells() - 1;
+			int maxX = direction != Direction.WEST ? this.xAxisCells() - 1 : 0;
+			int maxY = direction != Direction.DOWN ? this.yAxisCells() - 1 : 0;
+			int maxZ = direction != Direction.NORTH ? this.zAxisCells() - 1 : 0;
+			return CellPos.iterateBox(minX, minY, minZ, maxX, maxY, maxZ);
 		}
 	}
 	
-	public record PieceSize(int width, int height)
+	public record CellSize(int width, int height)
 	{}
 	
-	public record PiecePos(int x, int y, int z)
+	public record CellPos(int x, int y, int z)
 	{
-		public Optional<PiecePos> tryOffset(Direction direction, Dimensions dimensions, boolean loopHorizontalEdges)
+		public Optional<CellPos> tryOffset(Direction direction, Dimensions dimensions, boolean loopHorizontalEdges)
 		{
 			int newX = this.x + direction.getStepX();
 			int newY = this.y + direction.getStepY();
@@ -459,28 +460,28 @@ public final class WFC
 			if(!dimensions.isInBounds(newX, newY, newZ))
 				return Optional.empty();
 			
-			return Optional.of(new PiecePos(newX, newY, newZ));
+			return Optional.of(new CellPos(newX, newY, newZ));
 		}
 		
-		public static Iterable<PiecePos> iterateBox(int minX, int minY, int minZ, int maxX, int maxY, int maxZ)
+		public static Iterable<CellPos> iterateBox(int minX, int minY, int minZ, int maxX, int maxY, int maxZ)
 		{
 			return () -> new AbstractIterator<>()
 			{
 				@Nullable
-				PiecePos pos = null;
+				CellPos pos = null;
 				
 				@Nullable
 				@Override
-				protected PiecePos computeNext()
+				protected CellPos computeNext()
 				{
 					if(pos == null)
-						pos = new PiecePos(minX, minY, minZ);
+						pos = new CellPos(minX, minY, minZ);
 					else if(pos.y < maxY)
-						pos = new PiecePos(pos.x, pos.y + 1, pos.z);
+						pos = new CellPos(pos.x, pos.y + 1, pos.z);
 					else if(pos.z < maxZ)
-						pos = new PiecePos(pos.x, minY, pos.z + 1);
+						pos = new CellPos(pos.x, minY, pos.z + 1);
 					else if(pos.x < maxX)
-						pos = new PiecePos(pos.x + 1, minY, minZ);
+						pos = new CellPos(pos.x + 1, minY, minZ);
 					else
 						return this.endOfData();
 					
@@ -490,11 +491,11 @@ public final class WFC
 		}
 	}
 	
-	public record PositionTransform(BlockPos cornerPos, PieceSize pieceSize)
+	public record PositionTransform(BlockPos cornerPos, CellSize cellSize)
 	{
-		public BlockPos toBlockPos(PiecePos piecePos)
+		public BlockPos toBlockPos(CellPos cellPos)
 		{
-			return this.cornerPos.offset(piecePos.x * this.pieceSize.width(), piecePos.y * this.pieceSize.height(), piecePos.z * this.pieceSize.width());
+			return this.cornerPos.offset(cellPos.x * this.cellSize.width(), cellPos.y * this.cellSize.height(), cellPos.z * this.cellSize.width());
 		}
 		
 		public RandomSource random(PositionalRandomFactory randomFactory)
@@ -504,7 +505,7 @@ public final class WFC
 		
 		public PositionTransform offset(int x, int z)
 		{
-			return new PositionTransform(this.cornerPos.offset(x * this.pieceSize.width(), 0, z * this.pieceSize.width()), this.pieceSize);
+			return new PositionTransform(this.cornerPos.offset(x * this.cellSize.width(), 0, z * this.cellSize.width()), this.cellSize);
 		}
 	}
 }

@@ -88,9 +88,9 @@ public final class WFCData
 			StructureTemplate template = context.templateManager().getOrCreate(this.templateId);
 			
 			TemplateEntryBuilder
-					.init(this.templateId, template.getSize(), context.pieceSize())
+					.init(this.templateId, template.getSize(), context.cellSize())
 					.flatMap(builder -> {
-						loadConnectorsFromJigsaws(this.templateId, template, context.pieceSize(), builder);
+						loadConnectorsFromJigsaws(this.templateId, template, context.cellSize(), builder);
 						return builder.verify();
 					})
 					.ifPresent(loadedEntry -> {
@@ -99,7 +99,7 @@ public final class WFCData
 					});
 		}
 		
-		private static void loadConnectorsFromJigsaws(ResourceLocation templateId, StructureTemplate template, WFC.PieceSize pieceSize, TemplateEntryBuilder builder)
+		private static void loadConnectorsFromJigsaws(ResourceLocation templateId, StructureTemplate template, WFC.CellSize cellSize, TemplateEntryBuilder builder)
 		{
 			for(StructureTemplate.StructureBlockInfo blockInfo : template.filterBlocks(BlockPos.ZERO, new StructurePlaceSettings(), Blocks.JIGSAW, false))
 			{
@@ -117,8 +117,8 @@ public final class WFCData
 				}
 				
 				ConnectorType connectorType = new ConnectorType(connectorId);
-				WFC.PiecePos pos = new WFC.PiecePos(blockInfo.pos().getX() / pieceSize.width(),
-						blockInfo.pos().getY() / pieceSize.height(), blockInfo.pos().getZ() / pieceSize.width());
+				WFC.CellPos pos = new WFC.CellPos(blockInfo.pos().getX() / cellSize.width(),
+						blockInfo.pos().getY() / cellSize.height(), blockInfo.pos().getZ() / cellSize.width());
 				Direction direction = blockInfo.state().getValue(JigsawBlock.ORIENTATION).front();
 				
 				builder.put(pos, direction, connectorType);
@@ -131,7 +131,7 @@ public final class WFCData
 		private final ResourceLocation templateId;
 		private final WFC.Dimensions templateDimensions;
 		
-		final Map<WFC.PiecePos, Map<Direction, ConnectorType>> connectors = new HashMap<>();
+		final Map<WFC.CellPos, Map<Direction, ConnectorType>> connectors = new HashMap<>();
 		boolean failed = false;
 		
 		private TemplateEntryBuilder(ResourceLocation templateId, WFC.Dimensions templateDimensions)
@@ -140,19 +140,19 @@ public final class WFCData
 			this.templateDimensions = templateDimensions;
 		}
 		
-		static Optional<TemplateEntryBuilder> init(ResourceLocation templateId, Vec3i templateSize, WFC.PieceSize pieceSize)
+		static Optional<TemplateEntryBuilder> init(ResourceLocation templateId, Vec3i templateSize, WFC.CellSize cellSize)
 		{
-			if(templateSize.getX() % pieceSize.width() != 0 || templateSize.getY() % pieceSize.height() != 0 || templateSize.getZ() % pieceSize.width() != 0)
+			if(templateSize.getX() % cellSize.width() != 0 || templateSize.getY() % cellSize.height() != 0 || templateSize.getZ() % cellSize.width() != 0)
 			{
-				LOGGER.error("Template {} of size {} is not a multiple of {}", templateId, templateSize, pieceSize);
+				LOGGER.error("Template {} of size {} is not a multiple of {}", templateId, templateSize, cellSize);
 				return Optional.empty();
 			}
-			WFC.Dimensions dimensions = new WFC.Dimensions(templateSize.getX() / pieceSize.width(),
-					templateSize.getY() / pieceSize.height(), templateSize.getZ() / pieceSize.width());
+			WFC.Dimensions dimensions = new WFC.Dimensions(templateSize.getX() / cellSize.width(),
+					templateSize.getY() / cellSize.height(), templateSize.getZ() / cellSize.width());
 			return Optional.of(new TemplateEntryBuilder(templateId, dimensions));
 		}
 		
-		void put(WFC.PiecePos pos, Direction direction, ConnectorType connectorType)
+		void put(WFC.CellPos pos, Direction direction, ConnectorType connectorType)
 		{
 			if(!this.templateDimensions.isOnEdge(pos, direction))
 			{
@@ -191,43 +191,43 @@ public final class WFCData
 		}
 	}
 	
-	private record LoadedTemplateEntry(ResourceLocation templateId, WFC.Dimensions templateDimensions, Map<WFC.PiecePos, Map<Direction, ConnectorType>> edgeConnectors)
+	private record LoadedTemplateEntry(ResourceLocation templateId, WFC.Dimensions templateDimensions, Map<WFC.CellPos, Map<Direction, ConnectorType>> edgeConnectors)
 	{
 		void build(Rotation rotation, EntryBuilderContext context)
 		{
-			Map<Direction.Axis, Map<WFC.PiecePos, ConnectorType>> connectors = new EnumMap<>(Direction.Axis.class);
+			Map<Direction.Axis, Map<WFC.CellPos, ConnectorType>> connectors = new EnumMap<>(Direction.Axis.class);
 			
-			BiFunction<Direction.Axis, WFC.PiecePos, ConnectorType> innerConnectorGetter = (axis, piecePos) ->
+			BiFunction<Direction.Axis, WFC.CellPos, ConnectorType> innerConnectorGetter = (axis, cellPos) ->
 					connectors.computeIfAbsent(axis, ignored -> new HashMap<>())
-							.computeIfAbsent(piecePos, ignored -> addNewConnector(piecePos, axis, rotation, context.connectionsBuilder()));
+							.computeIfAbsent(cellPos, ignored -> addNewConnector(cellPos, axis, rotation, context.connectionsBuilder()));
 			
-			for(WFC.PiecePos piecePos : this.templateDimensions.iterateAll())
+			for(WFC.CellPos cellPos : this.templateDimensions.iterateAll())
 			{
 				Function<BlockPos, StructurePiece> constructor;
-				if(piecePos.x() == 0 && piecePos.y() == 0 && piecePos.z() == 0)
-					constructor = templateConstructor(context.pieceSize(), rotation, context.templateManager());
+				if(cellPos.x() == 0 && cellPos.y() == 0 && cellPos.z() == 0)
+					constructor = templateConstructor(context.cellSize(), rotation, context.templateManager());
 				else
 					constructor = pos -> null;
 				
 				Map<Direction, ConnectorType> entryConnectors = Map.of(
-						Direction.DOWN, templateDimensions.isOnEdge(piecePos, Direction.DOWN)
-								? edgeConnectors().get(piecePos).get(Direction.DOWN)
-								: innerConnectorGetter.apply(Direction.Axis.Y, new WFC.PiecePos(piecePos.x(), piecePos.y() - 1, piecePos.z())),
-						Direction.UP, templateDimensions.isOnEdge(piecePos, Direction.UP)
-								? edgeConnectors().get(piecePos).get(Direction.UP)
-								: innerConnectorGetter.apply(Direction.Axis.Y, piecePos),
-						Direction.NORTH, templateDimensions.isOnEdge(piecePos, Direction.NORTH)
-								? edgeConnectors().get(piecePos).get(Direction.NORTH)
-								: innerConnectorGetter.apply(Direction.Axis.Z, new WFC.PiecePos(piecePos.x(), piecePos.y(), piecePos.z() - 1)),
-						Direction.EAST, templateDimensions.isOnEdge(piecePos, Direction.EAST)
-								? edgeConnectors().get(piecePos).get(Direction.EAST)
-								: innerConnectorGetter.apply(Direction.Axis.X, piecePos),
-						Direction.SOUTH, templateDimensions.isOnEdge(piecePos, Direction.SOUTH)
-								? edgeConnectors().get(piecePos).get(Direction.SOUTH)
-								: innerConnectorGetter.apply(Direction.Axis.Z, piecePos),
-						Direction.WEST, templateDimensions.isOnEdge(piecePos, Direction.WEST)
-								? edgeConnectors().get(piecePos).get(Direction.WEST)
-								: innerConnectorGetter.apply(Direction.Axis.X, new WFC.PiecePos(piecePos.x() - 1, piecePos.y(), piecePos.z()))
+						Direction.DOWN, templateDimensions.isOnEdge(cellPos, Direction.DOWN)
+								? edgeConnectors().get(cellPos).get(Direction.DOWN)
+								: innerConnectorGetter.apply(Direction.Axis.Y, new WFC.CellPos(cellPos.x(), cellPos.y() - 1, cellPos.z())),
+						Direction.UP, templateDimensions.isOnEdge(cellPos, Direction.UP)
+								? edgeConnectors().get(cellPos).get(Direction.UP)
+								: innerConnectorGetter.apply(Direction.Axis.Y, cellPos),
+						Direction.NORTH, templateDimensions.isOnEdge(cellPos, Direction.NORTH)
+								? edgeConnectors().get(cellPos).get(Direction.NORTH)
+								: innerConnectorGetter.apply(Direction.Axis.Z, new WFC.CellPos(cellPos.x(), cellPos.y(), cellPos.z() - 1)),
+						Direction.EAST, templateDimensions.isOnEdge(cellPos, Direction.EAST)
+								? edgeConnectors().get(cellPos).get(Direction.EAST)
+								: innerConnectorGetter.apply(Direction.Axis.X, cellPos),
+						Direction.SOUTH, templateDimensions.isOnEdge(cellPos, Direction.SOUTH)
+								? edgeConnectors().get(cellPos).get(Direction.SOUTH)
+								: innerConnectorGetter.apply(Direction.Axis.Z, cellPos),
+						Direction.WEST, templateDimensions.isOnEdge(cellPos, Direction.WEST)
+								? edgeConnectors().get(cellPos).get(Direction.WEST)
+								: innerConnectorGetter.apply(Direction.Axis.X, new WFC.CellPos(cellPos.x() - 1, cellPos.y(), cellPos.z()))
 				);
 				
 				PieceEntry entry = new PieceEntry(constructor, rotateConnectors(entryConnectors, rotation));
@@ -235,7 +235,7 @@ public final class WFCData
 			}
 		}
 		
-		private ConnectorType addNewConnector(WFC.PiecePos pos, Direction.Axis axis, Rotation rotation, ConnectionsBuilder builder)
+		private ConnectorType addNewConnector(WFC.CellPos pos, Direction.Axis axis, Rotation rotation, ConnectionsBuilder builder)
 		{
 			ConnectorType newConnector = new ConnectorType(templateId.withSuffix("/" + pos.x() + "_" + pos.y() + "_" + pos.z()
 					+ "_" + axis.getSerializedName() + "_" + rotation.getSerializedName()));
@@ -243,9 +243,9 @@ public final class WFCData
 			return newConnector;
 		}
 		
-		private Function<BlockPos, StructurePiece> templateConstructor(WFC.PieceSize pieceSize, Rotation rotation, StructureTemplateManager templateManager)
+		private Function<BlockPos, StructurePiece> templateConstructor(WFC.CellSize cellSize, Rotation rotation, StructureTemplateManager templateManager)
 		{
-			BlockPos zeroPos = StructureTemplate.getZeroPositionWithTransform(BlockPos.ZERO, Mirror.NONE, rotation, pieceSize.width(), pieceSize.width());
+			BlockPos zeroPos = StructureTemplate.getZeroPositionWithTransform(BlockPos.ZERO, Mirror.NONE, rotation, cellSize.width(), cellSize.width());
 			return pos -> new SimpleTemplatePiece(templateManager, this.templateId, pos.offset(zeroPos), rotation);
 		}
 	}
@@ -267,7 +267,7 @@ public final class WFCData
 	}
 	
 	public record EntryBuilderContext(ConnectionsBuilder connectionsBuilder, WeightedEntriesBuilder entriesBuilder,
-									  WFC.PieceSize pieceSize, StructureTemplateManager templateManager)
+									  WFC.CellSize cellSize, StructureTemplateManager templateManager)
 	{
 	}
 	
@@ -328,15 +328,15 @@ public final class WFCData
 	
 	public static final class EntriesBuilder
 	{
-		private final WFC.PieceSize pieceSize;
+		private final WFC.CellSize cellSize;
 		private final StructureTemplateManager templateManager;
 		
 		private final ConnectionsBuilder connectionsBuilder = new ConnectionsBuilder();
 		private final ImmutableList.Builder<WeightedEntry.Wrapper<PieceEntry>> pieceEntries = ImmutableList.builder();
 		
-		public EntriesBuilder(WFC.PieceSize pieceSize, StructureTemplateManager templateManager)
+		public EntriesBuilder(WFC.CellSize cellSize, StructureTemplateManager templateManager)
 		{
-			this.pieceSize = pieceSize;
+			this.cellSize = cellSize;
 			this.templateManager = templateManager;
 		}
 		
@@ -347,7 +347,7 @@ public final class WFCData
 		
 		public void add(EntryProvider provider, int weight)
 		{
-			provider.build(new EntryBuilderContext(this.connectionsBuilder, pieceEntry -> this.pieceEntries.add(WeightedEntry.wrap(pieceEntry, weight)), this.pieceSize, this.templateManager));
+			provider.build(new EntryBuilderContext(this.connectionsBuilder, pieceEntry -> this.pieceEntries.add(WeightedEntry.wrap(pieceEntry, weight)), this.cellSize, this.templateManager));
 		}
 		
 		public EntriesData build()
