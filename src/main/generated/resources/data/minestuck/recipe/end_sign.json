@@ -1,0 +1,22 @@
+{
+  "type": "minecraft:crafting_shaped",
+  "category": "misc",
+  "group": "end_sign",
+  "key": {
+    "p": {
+      "item": "minestuck:end_planks"
+    },
+    "s": {
+      "item": "minecraft:stick"
+    }
+  },
+  "pattern": [
+    "ppp",
+    "ppp",
+    " s "
+  ],
+  "result": {
+    "count": 3,
+    "id": "minestuck:end_sign"
+  }
+}

@@ -4,5 +4,6 @@
     "land_type": "minestuck:thunder"
   },
   "dialogue": "minestuck:consort_food_merchant/lightning",
+  "dialogue_weight": 10,
   "keep_on_reset": true
 }

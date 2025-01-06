@@ -189,7 +189,7 @@ public final class WFC
 					continue;
 				}
 				
-				piecePlacer.place(pos, chosenEntry.get().getData());
+				piecePlacer.place(pos, chosenEntry.get().data());
 				
 				if(availablePieces.removeIf(entry -> entry != chosenEntry.get()))
 					this.grid.removeConflictingPieces(pos, null);
@@ -265,7 +265,7 @@ public final class WFC
 		Set<WFCData.ConnectorType> availableConnections(PiecePos pos, Direction direction)
 		{
 			return this.availablePiecesMap.get(pos).stream()
-					.map(entry -> entry.getData().connections().get(direction))
+					.map(entry -> entry.data().connections().get(direction))
 					.collect(Collectors.toSet());
 		}
 		
@@ -289,7 +289,7 @@ public final class WFC
 		{
 			if(connections.isEmpty())
 				return;
-			if(this.availablePiecesMap.get(pos).removeIf(entry -> !connectionTester.canConnect(entry.getData().connections().get(direction), connections)))
+			if(this.availablePiecesMap.get(pos).removeIf(entry -> !connectionTester.canConnect(entry.data().connections().get(direction), connections)))
 				this.removeConflictingPieces(pos, direction);
 		}
 	}

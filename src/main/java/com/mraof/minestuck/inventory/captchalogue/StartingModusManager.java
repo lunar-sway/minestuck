@@ -9,7 +9,7 @@ import net.minecraft.server.packs.resources.ResourceManager;
 import net.minecraft.server.packs.resources.SimplePreparableReloadListener;
 import net.minecraft.util.profiling.ProfilerFiller;
 import net.neoforged.bus.api.SubscribeEvent;
-import net.neoforged.fml.common.Mod;
+import net.neoforged.fml.common.EventBusSubscriber;
 import net.neoforged.neoforge.event.AddReloadListenerEvent;
 import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.Logger;
@@ -20,7 +20,7 @@ import java.util.ArrayList;
 import java.util.List;
 import java.util.stream.Collectors;
 
-@Mod.EventBusSubscriber(bus = Mod.EventBusSubscriber.Bus.FORGE)
+@EventBusSubscriber(bus = EventBusSubscriber.Bus.GAME)
 public final class StartingModusManager extends SimplePreparableReloadListener<List<String>>
 {
 	private static final Logger LOGGER = LogManager.getLogger();
@@ -38,7 +38,7 @@ public final class StartingModusManager extends SimplePreparableReloadListener<L
 		
 		for(String namespace : resourceManager.getNamespaces())
 		{
-			ResourceLocation location = new ResourceLocation(namespace, PATH);
+			ResourceLocation location = ResourceLocation.fromNamespaceAndPath(namespace, PATH);
 			resourceManager.getResource(location).ifPresent(resource -> {
 				try(Reader reader = resource.openAsReader();
 					JsonReader jsonreader = new JsonReader(reader))

@@ -1,0 +1,11 @@
+{
+  "type": "minestuck:combination",
+  "input1": {
+    "item": "minestuck:crop_chop"
+  },
+  "input2": {
+    "item": "minestuck:keyblade"
+  },
+  "mode": "or",
+  "output": "minestuck:natures_heart"
+}

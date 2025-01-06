@@ -5,6 +5,7 @@ import net.minecraft.core.Direction;
 import net.minecraft.world.item.Item;
 import net.minecraft.world.level.BlockGetter;
 import net.minecraft.world.level.ItemLike;
+import net.minecraft.world.level.Level;
 import net.minecraft.world.level.LevelAccessor;
 import net.minecraft.world.level.block.Block;
 import net.minecraft.world.level.block.Rotation;
@@ -14,7 +15,10 @@ import net.neoforged.neoforge.registries.DeferredBlock;
 import net.neoforged.neoforge.registries.DeferredRegister;
 
 import javax.annotation.Nonnull;
-import java.util.*;
+import java.util.ArrayList;
+import java.util.List;
+import java.util.Objects;
+import java.util.Optional;
 import java.util.function.BiPredicate;
 import java.util.function.Consumer;
 import java.util.function.Supplier;
@@ -27,7 +31,7 @@ public abstract class MachineMultiblock implements ItemLike    //An abstraction 
 	public static final BiPredicate<BlockState, BlockState> ROTATION_PREDICATE = BASE_PREDICATE.and((state1, state2) -> state1.getValue(MachineBlock.FACING) == state2.getValue(MachineBlock.FACING));
 	
 	private final DeferredRegister.Blocks register;
-	private final Set<Supplier<? extends Block>> registryEntries = new HashSet<>();
+	private final List<Supplier<? extends Block>> registryEntries = new ArrayList<>();
 	private final List<PlacementEntry> blockEntries = new ArrayList<>();
 	
 	protected MachineMultiblock(DeferredRegister.Blocks register)
@@ -96,7 +100,7 @@ public abstract class MachineMultiblock implements ItemLike    //An abstraction 
 	
 	public Block getMainBlock()
 	{
-		return !registryEntries.isEmpty() ? registryEntries.iterator().next().get() : null;
+		return !registryEntries.isEmpty() ? registryEntries.get(0).get() : null;
 	}
 	
 	public void forEachBlock(Consumer<Block> consumer)
@@ -107,6 +111,14 @@ public abstract class MachineMultiblock implements ItemLike    //An abstraction 
 	public void placeWithRotation(LevelAccessor level, Placement placement)
 	{
 		blockEntries.forEach(entry -> entry.placeWithRotation(level, placement));
+	}
+	
+	/**
+	 * Additional code to run after the multiblock has been placed.
+	 */
+	public void placeAdditional(Level level, Placement placement)
+	{
+	
 	}
 	
 	private boolean isInvalid(BlockGetter level, Placement placement)

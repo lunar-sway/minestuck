@@ -12,8 +12,8 @@ import java.util.function.Supplier;
 
 public class LandTypes
 {
-	public static final ResourceKey<Registry<TerrainLandType>> TERRAIN_KEY = ResourceKey.createRegistryKey(new ResourceLocation(Minestuck.MOD_ID, "terrain_land_type"));
-	public static final ResourceKey<Registry<TitleLandType>> TITLE_KEY = ResourceKey.createRegistryKey(new ResourceLocation(Minestuck.MOD_ID, "title_land_type"));
+	public static final ResourceKey<Registry<TerrainLandType>> TERRAIN_KEY = ResourceKey.createRegistryKey(ResourceLocation.fromNamespaceAndPath(Minestuck.MOD_ID, "terrain_land_type"));
+	public static final ResourceKey<Registry<TitleLandType>> TITLE_KEY = ResourceKey.createRegistryKey(ResourceLocation.fromNamespaceAndPath(Minestuck.MOD_ID, "title_land_type"));
 	
 	public static final DeferredRegister<TerrainLandType> TERRAIN_REGISTER = DeferredRegister.create(TERRAIN_KEY.location(), Minestuck.MOD_ID);
 	public static final DeferredRegister<TitleLandType> TITLE_REGISTER = DeferredRegister.create(TITLE_KEY.location(), Minestuck.MOD_ID);

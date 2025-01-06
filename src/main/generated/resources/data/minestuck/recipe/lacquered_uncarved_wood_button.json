@@ -1,0 +1,13 @@
+{
+  "type": "minecraft:crafting_shapeless",
+  "category": "building",
+  "ingredients": [
+    {
+      "item": "minestuck:lacquered_uncarved_wood"
+    }
+  ],
+  "result": {
+    "count": 1,
+    "id": "minestuck:lacquered_uncarved_wood_button"
+  }
+}

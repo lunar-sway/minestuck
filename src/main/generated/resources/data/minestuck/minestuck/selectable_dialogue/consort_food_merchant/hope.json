@@ -4,5 +4,6 @@
     "land_type": "minestuck:towers"
   },
   "dialogue": "minestuck:consort_food_merchant/hope",
+  "dialogue_weight": 10,
   "keep_on_reset": true
 }

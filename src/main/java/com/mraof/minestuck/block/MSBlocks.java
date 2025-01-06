@@ -10,7 +10,6 @@ import com.mraof.minestuck.blockentity.MSBlockEntityTypes;
 import com.mraof.minestuck.computer.theme.MSComputerThemes;
 import com.mraof.minestuck.fluid.MSFluids;
 import com.mraof.minestuck.item.MSItems;
-import com.mraof.minestuck.util.CustomVoxelShape;
 import com.mraof.minestuck.world.gen.feature.MSCFeatures;
 import net.minecraft.core.BlockPos;
 import net.minecraft.core.Direction;
@@ -118,7 +117,7 @@ public final class MSBlocks
 	
 	//Resource Blocks
 	public static final DeferredBlock<Block> CRUXITE_BLOCK = REGISTER.register("cruxite_block", () -> new Block(Block.Properties.of().mapColor(DyeColor.LIGHT_BLUE).instrument(NoteBlockInstrument.CHIME).strength(3.0F).requiresCorrectToolForDrops()));
-	public static final DeferredBlock<StairBlock> CRUXITE_STAIRS = REGISTER.register("cruxite_stairs", () -> new StairBlock(() -> MSBlocks.CRUXITE_BLOCK.get().defaultBlockState(), ofFullCopy(CRUXITE_BLOCK.get())));
+	public static final DeferredBlock<StairBlock> CRUXITE_STAIRS = REGISTER.register("cruxite_stairs", () -> new StairBlock(MSBlocks.CRUXITE_BLOCK.get().defaultBlockState(), ofFullCopy(CRUXITE_BLOCK.get())));
 	public static final DeferredBlock<SlabBlock> CRUXITE_SLAB = REGISTER.register("cruxite_slab", () -> new SlabBlock(ofFullCopy(CRUXITE_BLOCK.get())));
 	public static final DeferredBlock<WallBlock> CRUXITE_WALL = REGISTER.register("cruxite_wall", () -> new WallBlock(ofFullCopy(CRUXITE_BLOCK.get())));
 	public static final DeferredBlock<ButtonBlock> CRUXITE_BUTTON = REGISTER.register("cruxite_button", () -> new ButtonBlock(MSBlockSetType.CRUXITE, 10, ofFullCopy(CRUXITE_BLOCK.get())));
@@ -127,12 +126,12 @@ public final class MSBlocks
 	public static final DeferredBlock<TrapDoorBlock> CRUXITE_TRAPDOOR = REGISTER.register("cruxite_trapdoor", () -> new TrapDoorBlock(MSBlockSetType.CRUXITE, ofFullCopy(Blocks.OAK_TRAPDOOR)));
 	
 	public static final DeferredBlock<Block> POLISHED_CRUXITE_BLOCK = REGISTER.register("polished_cruxite_block", () -> new Block(Block.Properties.of().mapColor(DyeColor.LIGHT_BLUE).instrument(NoteBlockInstrument.CHIME).strength(3.0F).requiresCorrectToolForDrops()));
-	public static final DeferredBlock<StairBlock> POLISHED_CRUXITE_STAIRS = REGISTER.register("polished_cruxite_stairs", () -> new StairBlock(() -> MSBlocks.CRUXITE_BLOCK.get().defaultBlockState(), ofFullCopy(CRUXITE_BLOCK.get())));
+	public static final DeferredBlock<StairBlock> POLISHED_CRUXITE_STAIRS = REGISTER.register("polished_cruxite_stairs", () -> new StairBlock(MSBlocks.CRUXITE_BLOCK.get().defaultBlockState(), ofFullCopy(CRUXITE_BLOCK.get())));
 	public static final DeferredBlock<SlabBlock> POLISHED_CRUXITE_SLAB = REGISTER.register("polished_cruxite_slab", () -> new SlabBlock(ofFullCopy(CRUXITE_BLOCK.get())));
 	public static final DeferredBlock<WallBlock> POLISHED_CRUXITE_WALL = REGISTER.register("polished_cruxite_wall", () -> new WallBlock(ofFullCopy(CRUXITE_BLOCK.get())));
 	
 	public static final DeferredBlock<Block> CRUXITE_BRICKS = REGISTER.register("cruxite_bricks", () -> new Block(Block.Properties.of().mapColor(DyeColor.LIGHT_BLUE).instrument(NoteBlockInstrument.CHIME).strength(3.0F).requiresCorrectToolForDrops()));
-	public static final DeferredBlock<StairBlock> CRUXITE_BRICK_STAIRS = REGISTER.register("cruxite_brick_stairs", () -> new StairBlock(() -> MSBlocks.CRUXITE_BLOCK.get().defaultBlockState(), ofFullCopy(CRUXITE_BLOCK.get())));
+	public static final DeferredBlock<StairBlock> CRUXITE_BRICK_STAIRS = REGISTER.register("cruxite_brick_stairs", () -> new StairBlock(MSBlocks.CRUXITE_BLOCK.get().defaultBlockState(), ofFullCopy(CRUXITE_BLOCK.get())));
 	public static final DeferredBlock<SlabBlock> CRUXITE_BRICK_SLAB = REGISTER.register("cruxite_brick_slab", () -> new SlabBlock(ofFullCopy(CRUXITE_BLOCK.get())));
 	public static final DeferredBlock<WallBlock> CRUXITE_BRICK_WALL = REGISTER.register("cruxite_brick_wall", () -> new WallBlock(ofFullCopy(CRUXITE_BLOCK.get())));
 	
@@ -143,14 +142,14 @@ public final class MSBlocks
 			.strength(1f).lightLevel(state -> state.getValue(CustomLampBlock.CLICKED) ? 15 : 0)));
 	
 	public static final DeferredBlock<Block> URANIUM_BLOCK = REGISTER.register("uranium_block", () -> new Block(Block.Properties.of().mapColor(DyeColor.LIME).instrument(NoteBlockInstrument.BASEDRUM).strength(3.0F).requiresCorrectToolForDrops().lightLevel(state -> 7)));
-	public static final DeferredBlock<StairBlock> URANIUM_STAIRS = REGISTER.register("uranium_stairs", () -> new StairBlock(() -> MSBlocks.URANIUM_BLOCK.get().defaultBlockState(), ofFullCopy(URANIUM_BLOCK.get())));
+	public static final DeferredBlock<StairBlock> URANIUM_STAIRS = REGISTER.register("uranium_stairs", () -> new StairBlock(MSBlocks.URANIUM_BLOCK.get().defaultBlockState(), ofFullCopy(URANIUM_BLOCK.get())));
 	public static final DeferredBlock<SlabBlock> URANIUM_SLAB = REGISTER.register("uranium_slab", () -> new SlabBlock(ofFullCopy(URANIUM_BLOCK.get())));
 	public static final DeferredBlock<WallBlock> URANIUM_WALL = REGISTER.register("uranium_wall", () -> new WallBlock(ofFullCopy(URANIUM_BLOCK.get())));
 	public static final DeferredBlock<ButtonBlock> URANIUM_BUTTON = REGISTER.register("uranium_button", () -> new ButtonBlock(MSBlockSetType.URANIUM, 10, ofFullCopy(URANIUM_BLOCK.get())));
 	public static final DeferredBlock<PressurePlateBlock> URANIUM_PRESSURE_PLATE = REGISTER.register("uranium_pressure_plate", () -> new PressurePlateBlock(MSBlockSetType.URANIUM, ofFullCopy(URANIUM_BLOCK.get())));
 	
 	public static final DeferredBlock<Block> GENERIC_OBJECT = REGISTER.register("generic_object", () -> new Block(Block.Properties.of().mapColor(DyeColor.LIME).strength(1.0F).sound(SoundType.WOOD)));
-	public static final DeferredBlock<StairBlock> PERFECTLY_GENERIC_STAIRS = REGISTER.register("perfectly_generic_stairs", () -> new StairBlock(() -> MSBlocks.GENERIC_OBJECT.get().defaultBlockState(), ofFullCopy(GENERIC_OBJECT.get())));
+	public static final DeferredBlock<StairBlock> PERFECTLY_GENERIC_STAIRS = REGISTER.register("perfectly_generic_stairs", () -> new StairBlock(MSBlocks.GENERIC_OBJECT.get().defaultBlockState(), ofFullCopy(GENERIC_OBJECT.get())));
 	public static final DeferredBlock<SlabBlock> PERFECTLY_GENERIC_SLAB = REGISTER.register("perfectly_generic_slab", () -> new SlabBlock(ofFullCopy(GENERIC_OBJECT.get())));
 	public static final DeferredBlock<WallBlock> PERFECTLY_GENERIC_WALL = REGISTER.register("perfectly_generic_wall", () -> new WallBlock(ofFullCopy(GENERIC_OBJECT.get())));
 	public static final DeferredBlock<FenceBlock> PERFECTLY_GENERIC_FENCE = REGISTER.register("perfectly_generic_fence", () -> new FenceBlock(ofFullCopy(GENERIC_OBJECT.get())));
@@ -172,14 +171,14 @@ public final class MSBlocks
 	
 	//Coarse
 	public static final DeferredBlock<Block> COARSE_STONE = REGISTER.register("coarse_stone", () -> new Block(Block.Properties.of().mapColor(MapColor.STONE).instrument(NoteBlockInstrument.BASEDRUM).requiresCorrectToolForDrops().strength(2.0F, 6.0F)));
-	public static final DeferredBlock<StairBlock> COARSE_STONE_STAIRS = REGISTER.register("coarse_stone_stairs", () -> new StairBlock(() -> MSBlocks.COARSE_STONE.get().defaultBlockState(), ofFullCopy(COARSE_STONE.get())));
+	public static final DeferredBlock<StairBlock> COARSE_STONE_STAIRS = REGISTER.register("coarse_stone_stairs", () -> new StairBlock(MSBlocks.COARSE_STONE.get().defaultBlockState(), ofFullCopy(COARSE_STONE.get())));
 	public static final DeferredBlock<SlabBlock> COARSE_STONE_SLAB = REGISTER.register("coarse_stone_slab", () -> new SlabBlock(ofFullCopy(COARSE_STONE.get())));
 	public static final DeferredBlock<WallBlock> COARSE_STONE_WALL = REGISTER.register("coarse_stone_wall", () -> new WallBlock(ofFullCopy(COARSE_STONE.get())));
 	public static final DeferredBlock<ButtonBlock> COARSE_STONE_BUTTON = REGISTER.register("coarse_stone_button", () -> new ButtonBlock(MSBlockSetType.COARSE_STONE, 10, ofFullCopy(COARSE_STONE.get())));
 	public static final DeferredBlock<PressurePlateBlock> COARSE_STONE_PRESSURE_PLATE = REGISTER.register("coarse_stone_pressure_plate", () -> new PressurePlateBlock(MSBlockSetType.COARSE_STONE, ofFullCopy(COARSE_STONE.get())));
 	
 	public static final DeferredBlock<Block> COARSE_STONE_BRICKS = REGISTER.register("coarse_stone_bricks", () -> new Block(ofFullCopy(COARSE_STONE.get())));
-	public static final DeferredBlock<StairBlock> COARSE_STONE_BRICK_STAIRS = REGISTER.register("coarse_stone_brick_stairs", () -> new StairBlock(() -> MSBlocks.COARSE_STONE_BRICKS.get().defaultBlockState(), ofFullCopy(COARSE_STONE_BRICKS.get())));
+	public static final DeferredBlock<StairBlock> COARSE_STONE_BRICK_STAIRS = REGISTER.register("coarse_stone_brick_stairs", () -> new StairBlock(MSBlocks.COARSE_STONE_BRICKS.get().defaultBlockState(), ofFullCopy(COARSE_STONE_BRICKS.get())));
 	public static final DeferredBlock<SlabBlock> COARSE_STONE_BRICK_SLAB = REGISTER.register("coarse_stone_brick_slab", () -> new SlabBlock(ofFullCopy(COARSE_STONE_BRICKS.get())));
 	public static final DeferredBlock<WallBlock> COARSE_STONE_BRICK_WALL = REGISTER.register("coarse_stone_brick_wall", () -> new WallBlock(ofFullCopy(COARSE_STONE_BRICKS.get())));
 	
@@ -191,19 +190,19 @@ public final class MSBlocks
 	
 	//Shade
 	public static final DeferredBlock<Block> SHADE_STONE = REGISTER.register("shade_stone", () -> new Block(Block.Properties.of().mapColor(MapColor.COLOR_BLUE).instrument(NoteBlockInstrument.BASEDRUM).requiresCorrectToolForDrops().strength(1.5F, 6.0F)));
-	public static final DeferredBlock<StairBlock> SHADE_STAIRS = REGISTER.register("shade_stairs", () -> new StairBlock(() -> MSBlocks.SHADE_STONE.get().defaultBlockState(), ofFullCopy(SHADE_STONE.get())));
+	public static final DeferredBlock<StairBlock> SHADE_STAIRS = REGISTER.register("shade_stairs", () -> new StairBlock(MSBlocks.SHADE_STONE.get().defaultBlockState(), ofFullCopy(SHADE_STONE.get())));
 	public static final DeferredBlock<SlabBlock> SHADE_SLAB = REGISTER.register("shade_slab", () -> new SlabBlock(ofFullCopy(SHADE_STONE.get())));
 	public static final DeferredBlock<WallBlock> SHADE_WALL = REGISTER.register("shade_wall", () -> new WallBlock(ofFullCopy(SHADE_STONE.get())));
 	public static final DeferredBlock<ButtonBlock> SHADE_BUTTON = REGISTER.register("shade_button", () -> new ButtonBlock(MSBlockSetType.SHADE_STONE, 10, ofFullCopy(SHADE_STONE.get())));
 	public static final DeferredBlock<PressurePlateBlock> SHADE_PRESSURE_PLATE = REGISTER.register("shade_pressure_plate", () -> new PressurePlateBlock(MSBlockSetType.SHADE_STONE, ofFullCopy(SHADE_STONE.get())));
 	
 	public static final DeferredBlock<Block> SHADE_BRICKS = REGISTER.register("shade_bricks", () -> new Block(ofFullCopy(SHADE_STONE.get())));
-	public static final DeferredBlock<StairBlock> SHADE_BRICK_STAIRS = REGISTER.register("shade_brick_stairs", () -> new StairBlock(() -> MSBlocks.SHADE_BRICKS.get().defaultBlockState(), ofFullCopy(SHADE_BRICKS.get())));
+	public static final DeferredBlock<StairBlock> SHADE_BRICK_STAIRS = REGISTER.register("shade_brick_stairs", () -> new StairBlock(MSBlocks.SHADE_BRICKS.get().defaultBlockState(), ofFullCopy(SHADE_BRICKS.get())));
 	public static final DeferredBlock<SlabBlock> SHADE_BRICK_SLAB = REGISTER.register("shade_brick_slab", () -> new SlabBlock(ofFullCopy(SHADE_BRICKS.get())));
 	public static final DeferredBlock<WallBlock> SHADE_BRICK_WALL = REGISTER.register("shade_brick_wall", () -> new WallBlock(ofFullCopy(SHADE_BRICKS.get())));
 	
 	public static final DeferredBlock<Block> SMOOTH_SHADE_STONE = REGISTER.register("smooth_shade_stone", () -> new Block(ofFullCopy(SHADE_STONE.get())));
-	public static final DeferredBlock<StairBlock> SMOOTH_SHADE_STONE_STAIRS = REGISTER.register("smooth_shade_stone_stairs", () -> new StairBlock(() -> MSBlocks.SMOOTH_SHADE_STONE.get().defaultBlockState(), ofFullCopy(SMOOTH_SHADE_STONE.get())));
+	public static final DeferredBlock<StairBlock> SMOOTH_SHADE_STONE_STAIRS = REGISTER.register("smooth_shade_stone_stairs", () -> new StairBlock(MSBlocks.SMOOTH_SHADE_STONE.get().defaultBlockState(), ofFullCopy(SMOOTH_SHADE_STONE.get())));
 	public static final DeferredBlock<SlabBlock> SMOOTH_SHADE_STONE_SLAB = REGISTER.register("smooth_shade_stone_slab", () -> new SlabBlock(ofFullCopy(SMOOTH_SHADE_STONE.get())));
 	public static final DeferredBlock<WallBlock> SMOOTH_SHADE_STONE_WALL = REGISTER.register("smooth_shade_stone_wall", () -> new WallBlock(ofFullCopy(SMOOTH_SHADE_STONE.get())));
 	
@@ -212,28 +211,28 @@ public final class MSBlocks
 	public static final DeferredBlock<Block> CRACKED_SHADE_BRICKS = REGISTER.register("cracked_shade_bricks", () -> new Block(ofFullCopy(SHADE_BRICKS.get())));
 	
 	public static final DeferredBlock<Block> MOSSY_SHADE_BRICKS = REGISTER.register("mossy_shade_bricks", () -> new Block(ofFullCopy(SHADE_BRICKS.get())));
-	public static final DeferredBlock<StairBlock> MOSSY_SHADE_BRICK_STAIRS = REGISTER.register("mossy_shade_brick_stairs", () -> new StairBlock(() -> MSBlocks.MOSSY_SHADE_BRICKS.get().defaultBlockState(), ofFullCopy(MOSSY_SHADE_BRICKS.get())));
+	public static final DeferredBlock<StairBlock> MOSSY_SHADE_BRICK_STAIRS = REGISTER.register("mossy_shade_brick_stairs", () -> new StairBlock(MSBlocks.MOSSY_SHADE_BRICKS.get().defaultBlockState(), ofFullCopy(MOSSY_SHADE_BRICKS.get())));
 	public static final DeferredBlock<SlabBlock> MOSSY_SHADE_BRICK_SLAB = REGISTER.register("mossy_shade_brick_slab", () -> new SlabBlock(ofFullCopy(MOSSY_SHADE_BRICKS.get())));
 	public static final DeferredBlock<WallBlock> MOSSY_SHADE_BRICK_WALL = REGISTER.register("mossy_shade_brick_wall", () -> new WallBlock(ofFullCopy(MOSSY_SHADE_BRICKS.get())));
 	
 	public static final DeferredBlock<Block> BLOOD_SHADE_BRICKS = REGISTER.register("blood_shade_bricks", () -> new Block(ofFullCopy(SHADE_BRICKS.get())));
-	public static final DeferredBlock<StairBlock> BLOOD_SHADE_BRICK_STAIRS = REGISTER.register("blood_shade_brick_stairs", () -> new StairBlock(() -> MSBlocks.BLOOD_SHADE_BRICKS.get().defaultBlockState(), ofFullCopy(BLOOD_SHADE_BRICKS.get())));
+	public static final DeferredBlock<StairBlock> BLOOD_SHADE_BRICK_STAIRS = REGISTER.register("blood_shade_brick_stairs", () -> new StairBlock(MSBlocks.BLOOD_SHADE_BRICKS.get().defaultBlockState(), ofFullCopy(BLOOD_SHADE_BRICKS.get())));
 	public static final DeferredBlock<SlabBlock> BLOOD_SHADE_BRICK_SLAB = REGISTER.register("blood_shade_brick_slab", () -> new SlabBlock(ofFullCopy(BLOOD_SHADE_BRICKS.get())));
 	public static final DeferredBlock<WallBlock> BLOOD_SHADE_BRICK_WALL = REGISTER.register("blood_shade_brick_wall", () -> new WallBlock(ofFullCopy(BLOOD_SHADE_BRICKS.get())));
 	
 	public static final DeferredBlock<Block> TAR_SHADE_BRICKS = REGISTER.register("tar_shade_bricks", () -> new Block(ofFullCopy(SHADE_BRICKS.get())));
-	public static final DeferredBlock<StairBlock> TAR_SHADE_BRICK_STAIRS = REGISTER.register("tar_shade_brick_stairs", () -> new StairBlock(() -> MSBlocks.TAR_SHADE_BRICKS.get().defaultBlockState(), ofFullCopy(TAR_SHADE_BRICKS.get())));
+	public static final DeferredBlock<StairBlock> TAR_SHADE_BRICK_STAIRS = REGISTER.register("tar_shade_brick_stairs", () -> new StairBlock(MSBlocks.TAR_SHADE_BRICKS.get().defaultBlockState(), ofFullCopy(TAR_SHADE_BRICKS.get())));
 	public static final DeferredBlock<SlabBlock> TAR_SHADE_BRICK_SLAB = REGISTER.register("tar_shade_brick_slab", () -> new SlabBlock(ofFullCopy(TAR_SHADE_BRICKS.get())));
 	public static final DeferredBlock<WallBlock> TAR_SHADE_BRICK_WALL = REGISTER.register("tar_shade_brick_wall", () -> new WallBlock(ofFullCopy(TAR_SHADE_BRICKS.get())));
 	
 	//Frost
 	public static final DeferredBlock<Block> FROST_TILE = REGISTER.register("frost_tile", () -> new Block(Block.Properties.of().mapColor(MapColor.ICE).requiresCorrectToolForDrops().strength(1.5F, 6.0F)));
-	public static final DeferredBlock<StairBlock> FROST_TILE_STAIRS = REGISTER.register("frost_tile_stairs", () -> new StairBlock(() -> MSBlocks.FROST_TILE.get().defaultBlockState(), ofFullCopy(FROST_TILE.get())));
+	public static final DeferredBlock<StairBlock> FROST_TILE_STAIRS = REGISTER.register("frost_tile_stairs", () -> new StairBlock(MSBlocks.FROST_TILE.get().defaultBlockState(), ofFullCopy(FROST_TILE.get())));
 	public static final DeferredBlock<SlabBlock> FROST_TILE_SLAB = REGISTER.register("frost_tile_slab", () -> new SlabBlock(ofFullCopy(FROST_TILE.get())));
 	public static final DeferredBlock<WallBlock> FROST_TILE_WALL = REGISTER.register("frost_tile_wall", () -> new WallBlock(ofFullCopy(FROST_TILE.get())));
 	
 	public static final DeferredBlock<Block> FROST_BRICKS = REGISTER.register("frost_bricks", () -> new Block(ofFullCopy(FROST_TILE.get())));
-	public static final DeferredBlock<StairBlock> FROST_BRICK_STAIRS = REGISTER.register("frost_brick_stairs", () -> new StairBlock(() -> MSBlocks.FROST_BRICKS.get().defaultBlockState(), ofFullCopy(FROST_BRICKS.get())));
+	public static final DeferredBlock<StairBlock> FROST_BRICK_STAIRS = REGISTER.register("frost_brick_stairs", () -> new StairBlock(MSBlocks.FROST_BRICKS.get().defaultBlockState(), ofFullCopy(FROST_BRICKS.get())));
 	public static final DeferredBlock<SlabBlock> FROST_BRICK_SLAB = REGISTER.register("frost_brick_slab", () -> new SlabBlock(ofFullCopy(FROST_BRICKS.get())));
 	public static final DeferredBlock<WallBlock> FROST_BRICK_WALL = REGISTER.register("frost_brick_wall", () -> new WallBlock(ofFullCopy(FROST_BRICKS.get())));
 	
@@ -243,25 +242,25 @@ public final class MSBlocks
 	public static final DeferredBlock<Block> CRACKED_FROST_BRICKS = REGISTER.register("cracked_frost_bricks", () -> new Block(ofFullCopy(FROST_BRICKS.get())));
 	
 	public static final DeferredBlock<Block> FLOWERY_FROST_BRICKS = REGISTER.register("flowery_frost_bricks", () -> new Block(ofFullCopy(FROST_BRICKS.get())));
-	public static final DeferredBlock<StairBlock> FLOWERY_FROST_BRICK_STAIRS = REGISTER.register("flowery_frost_brick_stairs", () -> new StairBlock(() -> MSBlocks.FLOWERY_FROST_BRICKS.get().defaultBlockState(), ofFullCopy(FLOWERY_FROST_BRICKS.get())));
+	public static final DeferredBlock<StairBlock> FLOWERY_FROST_BRICK_STAIRS = REGISTER.register("flowery_frost_brick_stairs", () -> new StairBlock(MSBlocks.FLOWERY_FROST_BRICKS.get().defaultBlockState(), ofFullCopy(FLOWERY_FROST_BRICKS.get())));
 	public static final DeferredBlock<SlabBlock> FLOWERY_FROST_BRICK_SLAB = REGISTER.register("flowery_frost_brick_slab", () -> new SlabBlock(ofFullCopy(FLOWERY_FROST_BRICKS.get())));
 	public static final DeferredBlock<WallBlock> FLOWERY_FROST_BRICK_WALL = REGISTER.register("flowery_frost_brick_wall", () -> new WallBlock(ofFullCopy(FLOWERY_FROST_BRICKS.get())));
 	
 	
 	//Cast Iron
 	public static final DeferredBlock<Block> CAST_IRON = REGISTER.register("cast_iron", () -> new Block(Block.Properties.of().mapColor(MapColor.METAL).requiresCorrectToolForDrops().strength(3.0F, 9.0F)));
-	public static final DeferredBlock<StairBlock> CAST_IRON_STAIRS = REGISTER.register("cast_iron_stairs", () -> new StairBlock(() -> MSBlocks.CAST_IRON.get().defaultBlockState(), ofFullCopy(CAST_IRON.get())));
+	public static final DeferredBlock<StairBlock> CAST_IRON_STAIRS = REGISTER.register("cast_iron_stairs", () -> new StairBlock(MSBlocks.CAST_IRON.get().defaultBlockState(), ofFullCopy(CAST_IRON.get())));
 	public static final DeferredBlock<SlabBlock> CAST_IRON_SLAB = REGISTER.register("cast_iron_slab", () -> new SlabBlock(ofFullCopy(CAST_IRON.get())));
 	public static final DeferredBlock<WallBlock> CAST_IRON_WALL = REGISTER.register("cast_iron_wall", () -> new WallBlock(ofFullCopy(CAST_IRON.get())));
 	public static final DeferredBlock<ButtonBlock> CAST_IRON_BUTTON = REGISTER.register("cast_iron_button", () -> new ButtonBlock(MSBlockSetType.CAST_IRON, 10, ofFullCopy(CAST_IRON.get())));
 	public static final DeferredBlock<PressurePlateBlock> CAST_IRON_PRESSURE_PLATE = REGISTER.register("cast_iron_pressure_plate", () -> new PressurePlateBlock(MSBlockSetType.CAST_IRON, ofFullCopy(CAST_IRON.get())));
 	
 	public static final DeferredBlock<Block> CAST_IRON_TILE = REGISTER.register("cast_iron_tile", () -> new Block(ofFullCopy(CAST_IRON.get())));
-	public static final DeferredBlock<StairBlock> CAST_IRON_TILE_STAIRS = REGISTER.register("cast_iron_tile_stairs", () -> new StairBlock(() -> MSBlocks.CAST_IRON_TILE.get().defaultBlockState(), ofFullCopy(CAST_IRON_TILE.get())));
+	public static final DeferredBlock<StairBlock> CAST_IRON_TILE_STAIRS = REGISTER.register("cast_iron_tile_stairs", () -> new StairBlock(MSBlocks.CAST_IRON_TILE.get().defaultBlockState(), ofFullCopy(CAST_IRON_TILE.get())));
 	public static final DeferredBlock<SlabBlock> CAST_IRON_TILE_SLAB = REGISTER.register("cast_iron_tile_slab", () -> new SlabBlock(ofFullCopy(CAST_IRON_TILE.get())));
 	
 	public static final DeferredBlock<Block> CAST_IRON_SHEET = REGISTER.register("cast_iron_sheet", () -> new Block(ofFullCopy(CAST_IRON.get())));
-	public static final DeferredBlock<StairBlock> CAST_IRON_SHEET_STAIRS = REGISTER.register("cast_iron_sheet_stairs", () -> new StairBlock(() -> MSBlocks.CAST_IRON_SHEET.get().defaultBlockState(), ofFullCopy(CAST_IRON_SHEET.get())));
+	public static final DeferredBlock<StairBlock> CAST_IRON_SHEET_STAIRS = REGISTER.register("cast_iron_sheet_stairs", () -> new StairBlock(MSBlocks.CAST_IRON_SHEET.get().defaultBlockState(), ofFullCopy(CAST_IRON_SHEET.get())));
 	public static final DeferredBlock<SlabBlock> CAST_IRON_SHEET_SLAB = REGISTER.register("cast_iron_sheet_slab", () -> new SlabBlock(ofFullCopy(CAST_IRON_SHEET.get())));
 	
 	public static final DeferredBlock<Block> CHISELED_CAST_IRON = REGISTER.register("chiseled_cast_iron", () -> new Block(ofFullCopy(CAST_IRON.get())));
@@ -274,24 +273,24 @@ public final class MSBlocks
 	
 	//Mycelium
 	public static final DeferredBlock<Block> MYCELIUM_STONE = REGISTER.register("mycelium_stone", () -> new Block(Block.Properties.of().mapColor(MapColor.COLOR_MAGENTA).instrument(NoteBlockInstrument.BASEDRUM).requiresCorrectToolForDrops().strength(1.5F, 6.0F)));
-	public static final DeferredBlock<StairBlock> MYCELIUM_STAIRS = REGISTER.register("mycelium_stairs", () -> new StairBlock(() -> MSBlocks.MYCELIUM_STONE.get().defaultBlockState(), ofFullCopy(MYCELIUM_STONE.get())));
+	public static final DeferredBlock<StairBlock> MYCELIUM_STAIRS = REGISTER.register("mycelium_stairs", () -> new StairBlock(MSBlocks.MYCELIUM_STONE.get().defaultBlockState(), ofFullCopy(MYCELIUM_STONE.get())));
 	public static final DeferredBlock<SlabBlock> MYCELIUM_SLAB = REGISTER.register("mycelium_slab", () -> new SlabBlock(ofFullCopy(MYCELIUM_STONE.get())));
 	public static final DeferredBlock<WallBlock> MYCELIUM_STONE_WALL = REGISTER.register("mycelium_stone_wall", () -> new WallBlock(ofFullCopy(MYCELIUM_STONE.get())));
 	public static final DeferredBlock<ButtonBlock> MYCELIUM_STONE_BUTTON = REGISTER.register("mycelium_stone_button", () -> new ButtonBlock(MSBlockSetType.MYCELIUM_STONE, 10, ofFullCopy(MYCELIUM_STONE.get())));
 	public static final DeferredBlock<PressurePlateBlock> MYCELIUM_STONE_PRESSURE_PLATE = REGISTER.register("mycelium_stone_pressure_plate", () -> new PressurePlateBlock(MSBlockSetType.MYCELIUM_STONE, ofFullCopy(MYCELIUM_STONE.get())));
 	
 	public static final DeferredBlock<Block> MYCELIUM_COBBLESTONE = REGISTER.register("mycelium_cobblestone", () -> new Block(ofFullCopy(MYCELIUM_STONE.get())));
-	public static final DeferredBlock<StairBlock> MYCELIUM_COBBLESTONE_STAIRS = REGISTER.register("mycelium_cobblestone_stairs", () -> new StairBlock(() -> MSBlocks.MYCELIUM_COBBLESTONE.get().defaultBlockState(), ofFullCopy(MYCELIUM_COBBLESTONE.get())));
+	public static final DeferredBlock<StairBlock> MYCELIUM_COBBLESTONE_STAIRS = REGISTER.register("mycelium_cobblestone_stairs", () -> new StairBlock(MSBlocks.MYCELIUM_COBBLESTONE.get().defaultBlockState(), ofFullCopy(MYCELIUM_COBBLESTONE.get())));
 	public static final DeferredBlock<SlabBlock> MYCELIUM_COBBLESTONE_SLAB = REGISTER.register("mycelium_cobblestone_slab", () -> new SlabBlock(ofFullCopy(MYCELIUM_COBBLESTONE.get())));
 	public static final DeferredBlock<WallBlock> MYCELIUM_COBBLESTONE_WALL = REGISTER.register("mycelium_cobblestone_wall", () -> new WallBlock(ofFullCopy(MYCELIUM_COBBLESTONE.get())));
 	
 	public static final DeferredBlock<Block> POLISHED_MYCELIUM_STONE = REGISTER.register("polished_mycelium_stone", () -> new Block(ofFullCopy(MYCELIUM_STONE.get())));
-	public static final DeferredBlock<StairBlock> POLISHED_MYCELIUM_STONE_STAIRS = REGISTER.register("polished_mycelium_stone_stairs", () -> new StairBlock(() -> MSBlocks.POLISHED_MYCELIUM_STONE.get().defaultBlockState(), ofFullCopy(POLISHED_MYCELIUM_STONE.get())));
+	public static final DeferredBlock<StairBlock> POLISHED_MYCELIUM_STONE_STAIRS = REGISTER.register("polished_mycelium_stone_stairs", () -> new StairBlock(MSBlocks.POLISHED_MYCELIUM_STONE.get().defaultBlockState(), ofFullCopy(POLISHED_MYCELIUM_STONE.get())));
 	public static final DeferredBlock<SlabBlock> POLISHED_MYCELIUM_STONE_SLAB = REGISTER.register("polished_mycelium_stone_slab", () -> new SlabBlock(ofFullCopy(POLISHED_MYCELIUM_STONE.get())));
 	public static final DeferredBlock<WallBlock> POLISHED_MYCELIUM_STONE_WALL = REGISTER.register("polished_mycelium_stone_wall", () -> new WallBlock(ofFullCopy(POLISHED_MYCELIUM_STONE.get())));
 	
 	public static final DeferredBlock<Block> MYCELIUM_BRICKS = REGISTER.register("mycelium_bricks", () -> new Block(ofFullCopy(MYCELIUM_STONE.get())));
-	public static final DeferredBlock<StairBlock> MYCELIUM_BRICK_STAIRS = REGISTER.register("mycelium_brick_stairs", () -> new StairBlock(() -> MSBlocks.MYCELIUM_BRICKS.get().defaultBlockState(), ofFullCopy(MYCELIUM_BRICKS.get())));
+	public static final DeferredBlock<StairBlock> MYCELIUM_BRICK_STAIRS = REGISTER.register("mycelium_brick_stairs", () -> new StairBlock(MSBlocks.MYCELIUM_BRICKS.get().defaultBlockState(), ofFullCopy(MYCELIUM_BRICKS.get())));
 	public static final DeferredBlock<SlabBlock> MYCELIUM_BRICK_SLAB = REGISTER.register("mycelium_brick_slab", () -> new SlabBlock(ofFullCopy(MYCELIUM_BRICKS.get())));
 	public static final DeferredBlock<WallBlock> MYCELIUM_BRICK_WALL = REGISTER.register("mycelium_brick_wall", () -> new WallBlock(ofFullCopy(MYCELIUM_BRICKS.get())));
 	
@@ -301,12 +300,12 @@ public final class MSBlocks
 	public static final DeferredBlock<Block> CRACKED_MYCELIUM_BRICKS = REGISTER.register("cracked_mycelium_bricks", () -> new Block(ofFullCopy(MYCELIUM_BRICKS.get())));
 	
 	public static final DeferredBlock<Block> MOSSY_MYCELIUM_BRICKS = REGISTER.register("mossy_mycelium_bricks", () -> new Block(ofFullCopy(MYCELIUM_BRICKS.get())));
-	public static final DeferredBlock<StairBlock> MOSSY_MYCELIUM_BRICK_STAIRS = REGISTER.register("mossy_mycelium_brick_stairs", () -> new StairBlock(() -> MSBlocks.MOSSY_MYCELIUM_BRICKS.get().defaultBlockState(), ofFullCopy(MOSSY_MYCELIUM_BRICKS.get())));
+	public static final DeferredBlock<StairBlock> MOSSY_MYCELIUM_BRICK_STAIRS = REGISTER.register("mossy_mycelium_brick_stairs", () -> new StairBlock(MSBlocks.MOSSY_MYCELIUM_BRICKS.get().defaultBlockState(), ofFullCopy(MOSSY_MYCELIUM_BRICKS.get())));
 	public static final DeferredBlock<SlabBlock> MOSSY_MYCELIUM_BRICK_SLAB = REGISTER.register("mossy_mycelium_brick_slab", () -> new SlabBlock(ofFullCopy(MOSSY_MYCELIUM_BRICKS.get())));
 	public static final DeferredBlock<WallBlock> MOSSY_MYCELIUM_BRICK_WALL = REGISTER.register("mossy_mycelium_brick_wall", () -> new WallBlock(ofFullCopy(MOSSY_MYCELIUM_BRICKS.get())));
 	
 	public static final DeferredBlock<Block> FLOWERY_MYCELIUM_BRICKS = REGISTER.register("flowery_mycelium_bricks", () -> new Block(ofFullCopy(MYCELIUM_BRICKS.get())));
-	public static final DeferredBlock<StairBlock> FLOWERY_MYCELIUM_BRICK_STAIRS = REGISTER.register("flowery_mycelium_brick_stairs", () -> new StairBlock(() -> MSBlocks.FLOWERY_MYCELIUM_BRICKS.get().defaultBlockState(), ofFullCopy(FLOWERY_MYCELIUM_BRICKS.get())));
+	public static final DeferredBlock<StairBlock> FLOWERY_MYCELIUM_BRICK_STAIRS = REGISTER.register("flowery_mycelium_brick_stairs", () -> new StairBlock(MSBlocks.FLOWERY_MYCELIUM_BRICKS.get().defaultBlockState(), ofFullCopy(FLOWERY_MYCELIUM_BRICKS.get())));
 	public static final DeferredBlock<SlabBlock> FLOWERY_MYCELIUM_BRICK_SLAB = REGISTER.register("flowery_mycelium_brick_slab", () -> new SlabBlock(ofFullCopy(FLOWERY_MYCELIUM_BRICKS.get())));
 	public static final DeferredBlock<WallBlock> FLOWERY_MYCELIUM_BRICK_WALL = REGISTER.register("flowery_mycelium_brick_wall", () -> new WallBlock(ofFullCopy(FLOWERY_MYCELIUM_BRICKS.get())));
 	
@@ -314,24 +313,24 @@ public final class MSBlocks
 	public static final DeferredBlock<Block> BLACK_SAND = REGISTER.register("black_sand", () -> new ColoredFallingBlock(new ColorRGBA(0x181915), Block.Properties.of().mapColor(MapColor.COLOR_BLACK).instrument(NoteBlockInstrument.SNARE).strength(0.5F).sound(SoundType.SAND)));
 	
 	public static final DeferredBlock<Block> BLACK_STONE = REGISTER.register("black_stone", () -> new Block(Block.Properties.of().mapColor(MapColor.COLOR_BLACK).instrument(NoteBlockInstrument.BASEDRUM).requiresCorrectToolForDrops().strength(2.5F, 6.0F)));
-	public static final DeferredBlock<StairBlock> BLACK_STONE_STAIRS = REGISTER.register("black_stone_stairs", () -> new StairBlock(() -> MSBlocks.BLACK_STONE.get().defaultBlockState(), ofFullCopy(BLACK_STONE.get())));
+	public static final DeferredBlock<StairBlock> BLACK_STONE_STAIRS = REGISTER.register("black_stone_stairs", () -> new StairBlock(MSBlocks.BLACK_STONE.get().defaultBlockState(), ofFullCopy(BLACK_STONE.get())));
 	public static final DeferredBlock<SlabBlock> BLACK_STONE_SLAB = REGISTER.register("black_stone_slab", () -> new SlabBlock(ofFullCopy(BLACK_STONE.get())));
 	public static final DeferredBlock<WallBlock> BLACK_STONE_WALL = REGISTER.register("black_stone_wall", () -> new WallBlock(ofFullCopy(BLACK_STONE.get())));
 	public static final DeferredBlock<ButtonBlock> BLACK_STONE_BUTTON = REGISTER.register("black_stone_button", () -> new ButtonBlock(MSBlockSetType.BLACK_STONE, 10, ofFullCopy(BLACK_STONE.get())));
 	public static final DeferredBlock<PressurePlateBlock> BLACK_STONE_PRESSURE_PLATE = REGISTER.register("black_stone_pressure_plate", () -> new PressurePlateBlock(MSBlockSetType.BLACK_STONE, ofFullCopy(BLACK_STONE.get())));
 	
 	public static final DeferredBlock<Block> BLACK_COBBLESTONE = REGISTER.register("black_cobblestone", () -> new Block(ofFullCopy(BLACK_STONE.get())));
-	public static final DeferredBlock<StairBlock> BLACK_COBBLESTONE_STAIRS = REGISTER.register("black_cobblestone_stairs", () -> new StairBlock(() -> MSBlocks.BLACK_COBBLESTONE.get().defaultBlockState(), ofFullCopy(BLACK_COBBLESTONE.get())));
+	public static final DeferredBlock<StairBlock> BLACK_COBBLESTONE_STAIRS = REGISTER.register("black_cobblestone_stairs", () -> new StairBlock(MSBlocks.BLACK_COBBLESTONE.get().defaultBlockState(), ofFullCopy(BLACK_COBBLESTONE.get())));
 	public static final DeferredBlock<SlabBlock> BLACK_COBBLESTONE_SLAB = REGISTER.register("black_cobblestone_slab", () -> new SlabBlock(ofFullCopy(BLACK_COBBLESTONE.get())));
 	public static final DeferredBlock<WallBlock> BLACK_COBBLESTONE_WALL = REGISTER.register("black_cobblestone_wall", () -> new WallBlock(ofFullCopy(BLACK_COBBLESTONE.get())));
 	
 	public static final DeferredBlock<Block> POLISHED_BLACK_STONE = REGISTER.register("polished_black_stone", () -> new Block(ofFullCopy(BLACK_STONE.get())));
-	public static final DeferredBlock<StairBlock> POLISHED_BLACK_STONE_STAIRS = REGISTER.register("polished_black_stone_stairs", () -> new StairBlock(() -> MSBlocks.POLISHED_BLACK_STONE.get().defaultBlockState(), ofFullCopy(POLISHED_BLACK_STONE.get())));
+	public static final DeferredBlock<StairBlock> POLISHED_BLACK_STONE_STAIRS = REGISTER.register("polished_black_stone_stairs", () -> new StairBlock(MSBlocks.POLISHED_BLACK_STONE.get().defaultBlockState(), ofFullCopy(POLISHED_BLACK_STONE.get())));
 	public static final DeferredBlock<SlabBlock> POLISHED_BLACK_STONE_SLAB = REGISTER.register("polished_black_stone_slab", () -> new SlabBlock(ofFullCopy(POLISHED_BLACK_STONE.get())));
 	public static final DeferredBlock<WallBlock> POLISHED_BLACK_STONE_WALL = REGISTER.register("polished_black_stone_wall", () -> new WallBlock(ofFullCopy(POLISHED_BLACK_STONE.get())));
 	
 	public static final DeferredBlock<Block> BLACK_STONE_BRICKS = REGISTER.register("black_stone_bricks", () -> new Block(ofFullCopy(BLACK_STONE.get())));
-	public static final DeferredBlock<StairBlock> BLACK_STONE_BRICK_STAIRS = REGISTER.register("black_stone_brick_stairs", () -> new StairBlock(() -> MSBlocks.BLACK_STONE_BRICKS.get().defaultBlockState(), ofFullCopy(BLACK_STONE_BRICKS.get())));
+	public static final DeferredBlock<StairBlock> BLACK_STONE_BRICK_STAIRS = REGISTER.register("black_stone_brick_stairs", () -> new StairBlock(MSBlocks.BLACK_STONE_BRICKS.get().defaultBlockState(), ofFullCopy(BLACK_STONE_BRICKS.get())));
 	public static final DeferredBlock<SlabBlock> BLACK_STONE_BRICK_SLAB = REGISTER.register("black_stone_brick_slab", () -> new SlabBlock(ofFullCopy(BLACK_STONE_BRICKS.get())));
 	public static final DeferredBlock<WallBlock> BLACK_STONE_BRICK_WALL = REGISTER.register("black_stone_brick_wall", () -> new WallBlock(ofFullCopy(BLACK_STONE_BRICKS.get())));
 	
@@ -340,25 +339,25 @@ public final class MSBlocks
 	public static final DeferredBlock<Block> CRACKED_BLACK_STONE_BRICKS = REGISTER.register("cracked_black_stone_bricks", () -> new Block(ofFullCopy(BLACK_STONE_BRICKS.get())));
 	
 	public static final DeferredBlock<Block> MAGMATIC_BLACK_STONE_BRICKS = REGISTER.register("magmatic_black_stone_bricks", () -> new Block(ofFullCopy(BLACK_STONE_BRICKS.get())));
-	public static final DeferredBlock<StairBlock> MAGMATIC_BLACK_STONE_BRICK_STAIRS = REGISTER.register("magmatic_black_stone_brick_stairs", () -> new StairBlock(() -> MSBlocks.BLACK_STONE_BRICKS.get().defaultBlockState(), ofFullCopy(BLACK_STONE_BRICKS.get())));
+	public static final DeferredBlock<StairBlock> MAGMATIC_BLACK_STONE_BRICK_STAIRS = REGISTER.register("magmatic_black_stone_brick_stairs", () -> new StairBlock(MSBlocks.BLACK_STONE_BRICKS.get().defaultBlockState(), ofFullCopy(BLACK_STONE_BRICKS.get())));
 	public static final DeferredBlock<SlabBlock> MAGMATIC_BLACK_STONE_BRICK_SLAB = REGISTER.register("magmatic_black_stone_brick_slab", () -> new SlabBlock(ofFullCopy(BLACK_STONE_BRICKS.get())));
 	public static final DeferredBlock<WallBlock> MAGMATIC_BLACK_STONE_BRICK_WALL = REGISTER.register("magmatic_black_stone_brick_wall", () -> new WallBlock(ofFullCopy(BLACK_STONE_BRICKS.get())));
 	
 	//Igneous
 	public static final DeferredBlock<Block> IGNEOUS_STONE = REGISTER.register("igneous_stone", () -> new Block(BlockBehaviour.Properties.of().mapColor(MapColor.COLOR_BROWN).instrument(NoteBlockInstrument.GUITAR).requiresCorrectToolForDrops().strength(1.5F, 6.0F)));
-	public static final DeferredBlock<StairBlock> IGNEOUS_STONE_STAIRS = REGISTER.register("igneous_stone_stairs", () -> new StairBlock(() -> MSBlocks.IGNEOUS_STONE.get().defaultBlockState(), ofFullCopy(IGNEOUS_STONE.get())));
+	public static final DeferredBlock<StairBlock> IGNEOUS_STONE_STAIRS = REGISTER.register("igneous_stone_stairs", () -> new StairBlock(MSBlocks.IGNEOUS_STONE.get().defaultBlockState(), ofFullCopy(IGNEOUS_STONE.get())));
 	public static final DeferredBlock<SlabBlock> IGNEOUS_STONE_SLAB = REGISTER.register("igneous_stone_slab", () -> new SlabBlock(ofFullCopy(IGNEOUS_STONE.get())));
 	public static final DeferredBlock<WallBlock> IGNEOUS_STONE_WALL = REGISTER.register("igneous_stone_wall", () -> new WallBlock(ofFullCopy(IGNEOUS_STONE.get())));
 	public static final DeferredBlock<ButtonBlock> IGNEOUS_STONE_BUTTON = REGISTER.register("igneous_stone_button", () -> new ButtonBlock(MSBlockSetType.IGNEOUS_STONE, 10, ofFullCopy(IGNEOUS_STONE.get())));
 	public static final DeferredBlock<PressurePlateBlock> IGNEOUS_STONE_PRESSURE_PLATE = REGISTER.register("igneous_stone_pressure_plate", () -> new PressurePlateBlock(MSBlockSetType.IGNEOUS_STONE, ofFullCopy(IGNEOUS_STONE.get())));
 	
 	public static final DeferredBlock<Block> POLISHED_IGNEOUS_STONE = REGISTER.register("polished_igneous_stone", () -> new Block(ofFullCopy(IGNEOUS_STONE.get())));
-	public static final DeferredBlock<StairBlock> POLISHED_IGNEOUS_STAIRS = REGISTER.register("polished_igneous_stone_stairs", () -> new StairBlock(() -> MSBlocks.POLISHED_IGNEOUS_STONE.get().defaultBlockState(), ofFullCopy(POLISHED_IGNEOUS_STONE.get())));
+	public static final DeferredBlock<StairBlock> POLISHED_IGNEOUS_STAIRS = REGISTER.register("polished_igneous_stone_stairs", () -> new StairBlock(MSBlocks.POLISHED_IGNEOUS_STONE.get().defaultBlockState(), ofFullCopy(POLISHED_IGNEOUS_STONE.get())));
 	public static final DeferredBlock<SlabBlock> POLISHED_IGNEOUS_SLAB = REGISTER.register("polished_igneous_stone_slab", () -> new SlabBlock(ofFullCopy(POLISHED_IGNEOUS_STONE.get())));
 	public static final DeferredBlock<WallBlock> POLISHED_IGNEOUS_WALL = REGISTER.register("polished_igneous_stone_wall", () -> new WallBlock(ofFullCopy(POLISHED_IGNEOUS_STONE.get())));
 	
 	public static final DeferredBlock<Block> POLISHED_IGNEOUS_BRICKS = REGISTER.register("polished_igneous_bricks", () -> new Block(ofFullCopy(POLISHED_IGNEOUS_STONE.get())));
-	public static final DeferredBlock<StairBlock> POLISHED_IGNEOUS_BRICK_STAIRS = REGISTER.register("polished_igneous_brick_stairs", () -> new StairBlock(() -> MSBlocks.POLISHED_IGNEOUS_BRICKS.get().defaultBlockState(), ofFullCopy(POLISHED_IGNEOUS_BRICKS.get())));
+	public static final DeferredBlock<StairBlock> POLISHED_IGNEOUS_BRICK_STAIRS = REGISTER.register("polished_igneous_brick_stairs", () -> new StairBlock(MSBlocks.POLISHED_IGNEOUS_BRICKS.get().defaultBlockState(), ofFullCopy(POLISHED_IGNEOUS_BRICKS.get())));
 	public static final DeferredBlock<SlabBlock> POLISHED_IGNEOUS_BRICK_SLAB = REGISTER.register("polished_igneous_brick_slab", () -> new SlabBlock(ofFullCopy(POLISHED_IGNEOUS_BRICKS.get())));
 	public static final DeferredBlock<WallBlock> POLISHED_IGNEOUS_BRICK_WALL = REGISTER.register("polished_igneous_brick_wall", () -> new WallBlock(ofFullCopy(POLISHED_IGNEOUS_BRICKS.get())));
 	
@@ -367,7 +366,7 @@ public final class MSBlocks
 	public static final DeferredBlock<Block> CRACKED_POLISHED_IGNEOUS_BRICKS = REGISTER.register("cracked_polished_igneous_bricks", () -> new Block(ofFullCopy(POLISHED_IGNEOUS_BRICKS.get())));
 	
 	public static final DeferredBlock<Block> MAGMATIC_POLISHED_IGNEOUS_BRICKS = REGISTER.register("magmatic_polished_igneous_bricks", () -> new Block(ofFullCopy(POLISHED_IGNEOUS_BRICKS.get())));
-	public static final DeferredBlock<StairBlock> MAGMATIC_POLISHED_IGNEOUS_BRICK_STAIRS = REGISTER.register("magmatic_polished_igneous_brick_stairs", () -> new StairBlock(() -> MSBlocks.POLISHED_IGNEOUS_BRICKS.get().defaultBlockState(), ofFullCopy(POLISHED_IGNEOUS_BRICKS.get())));
+	public static final DeferredBlock<StairBlock> MAGMATIC_POLISHED_IGNEOUS_BRICK_STAIRS = REGISTER.register("magmatic_polished_igneous_brick_stairs", () -> new StairBlock(MSBlocks.POLISHED_IGNEOUS_BRICKS.get().defaultBlockState(), ofFullCopy(POLISHED_IGNEOUS_BRICKS.get())));
 	public static final DeferredBlock<SlabBlock> MAGMATIC_POLISHED_IGNEOUS_BRICK_SLAB = REGISTER.register("magmatic_polished_igneous_brick_slab", () -> new SlabBlock(ofFullCopy(POLISHED_IGNEOUS_BRICKS.get())));
 	public static final DeferredBlock<WallBlock> MAGMATIC_POLISHED_IGNEOUS_BRICK_WALL = REGISTER.register("magmatic_polished_igneous_brick_wall", () -> new WallBlock(ofFullCopy(POLISHED_IGNEOUS_BRICKS.get())));
 	
@@ -375,19 +374,19 @@ public final class MSBlocks
 	
 	//Pumice
 	public static final DeferredBlock<Block> PUMICE_STONE = REGISTER.register("pumice_stone", () -> new Block(Block.Properties.of().mapColor(MapColor.COLOR_GRAY).instrument(NoteBlockInstrument.GUITAR).requiresCorrectToolForDrops().strength(0.5F)));
-	public static final DeferredBlock<StairBlock> PUMICE_STONE_STAIRS = REGISTER.register("pumice_stone_stairs", () -> new StairBlock(() -> MSBlocks.PUMICE_STONE.get().defaultBlockState(), ofFullCopy(PUMICE_STONE.get())));
+	public static final DeferredBlock<StairBlock> PUMICE_STONE_STAIRS = REGISTER.register("pumice_stone_stairs", () -> new StairBlock(MSBlocks.PUMICE_STONE.get().defaultBlockState(), ofFullCopy(PUMICE_STONE.get())));
 	public static final DeferredBlock<SlabBlock> PUMICE_STONE_SLAB = REGISTER.register("pumice_stone_slab", () -> new SlabBlock(ofFullCopy(PUMICE_STONE.get())));
 	public static final DeferredBlock<WallBlock> PUMICE_STONE_WALL = REGISTER.register("pumice_stone_wall", () -> new WallBlock(ofFullCopy(PUMICE_STONE.get())));
 	public static final DeferredBlock<ButtonBlock> PUMICE_STONE_BUTTON = REGISTER.register("pumice_stone_button", () -> new ButtonBlock(MSBlockSetType.PUMICE_STONE, 10, ofFullCopy(PUMICE_STONE.get())));
 	public static final DeferredBlock<PressurePlateBlock> PUMICE_STONE_PRESSURE_PLATE = REGISTER.register("pumice_stone_pressure_plate", () -> new PressurePlateBlock(MSBlockSetType.PUMICE_STONE, ofFullCopy(PUMICE_STONE.get())));
 	
 	public static final DeferredBlock<Block> PUMICE_BRICKS = REGISTER.register("pumice_bricks", () -> new Block(ofFullCopy(PUMICE_STONE.get())));
-	public static final DeferredBlock<StairBlock> PUMICE_BRICK_STAIRS = REGISTER.register("pumice_brick_stairs", () -> new StairBlock(() -> MSBlocks.PUMICE_BRICKS.get().defaultBlockState(), ofFullCopy(PUMICE_BRICKS.get())));
+	public static final DeferredBlock<StairBlock> PUMICE_BRICK_STAIRS = REGISTER.register("pumice_brick_stairs", () -> new StairBlock(MSBlocks.PUMICE_BRICKS.get().defaultBlockState(), ofFullCopy(PUMICE_BRICKS.get())));
 	public static final DeferredBlock<SlabBlock> PUMICE_BRICK_SLAB = REGISTER.register("pumice_brick_slab", () -> new SlabBlock(ofFullCopy(PUMICE_BRICKS.get())));
 	public static final DeferredBlock<WallBlock> PUMICE_BRICK_WALL = REGISTER.register("pumice_brick_wall", () -> new WallBlock(ofFullCopy(PUMICE_BRICKS.get())));
 	
 	public static final DeferredBlock<Block> PUMICE_TILES = REGISTER.register("pumice_tiles", () -> new Block(ofFullCopy(PUMICE_STONE.get())));
-	public static final DeferredBlock<StairBlock> PUMICE_TILE_STAIRS = REGISTER.register("pumice_tile_stairs", () -> new StairBlock(() -> MSBlocks.PUMICE_TILES.get().defaultBlockState(), ofFullCopy(PUMICE_TILES.get())));
+	public static final DeferredBlock<StairBlock> PUMICE_TILE_STAIRS = REGISTER.register("pumice_tile_stairs", () -> new StairBlock(MSBlocks.PUMICE_TILES.get().defaultBlockState(), ofFullCopy(PUMICE_TILES.get())));
 	public static final DeferredBlock<SlabBlock> PUMICE_TILE_SLAB = REGISTER.register("pumice_tile_slab", () -> new SlabBlock(ofFullCopy(PUMICE_TILES.get())));
 	public static final DeferredBlock<WallBlock> PUMICE_TILE_WALL = REGISTER.register("pumice_tile_wall", () -> new WallBlock(ofFullCopy(PUMICE_TILES.get())));
 	
@@ -395,23 +394,23 @@ public final class MSBlocks
 	
 	//Flowery
 	public static final DeferredBlock<Block> FLOWERY_MOSSY_COBBLESTONE = REGISTER.register("flowery_mossy_cobblestone", () -> new Block(Block.Properties.of().mapColor(MapColor.COLOR_GRAY).instrument(NoteBlockInstrument.BASEDRUM).requiresCorrectToolForDrops().strength(1.5F, 6.0F)));
-	public static final DeferredBlock<StairBlock> FLOWERY_MOSSY_COBBLESTONE_STAIRS = REGISTER.register("flowery_mossy_cobblestone_stairs", () -> new StairBlock(() -> MSBlocks.FLOWERY_MOSSY_COBBLESTONE.get().defaultBlockState(), ofFullCopy(FLOWERY_MOSSY_COBBLESTONE.get())));
+	public static final DeferredBlock<StairBlock> FLOWERY_MOSSY_COBBLESTONE_STAIRS = REGISTER.register("flowery_mossy_cobblestone_stairs", () -> new StairBlock(MSBlocks.FLOWERY_MOSSY_COBBLESTONE.get().defaultBlockState(), ofFullCopy(FLOWERY_MOSSY_COBBLESTONE.get())));
 	public static final DeferredBlock<SlabBlock> FLOWERY_MOSSY_COBBLESTONE_SLAB = REGISTER.register("flowery_mossy_cobblestone_slab", () -> new SlabBlock(ofFullCopy(FLOWERY_MOSSY_COBBLESTONE.get())));
 	public static final DeferredBlock<WallBlock> FLOWERY_MOSSY_COBBLESTONE_WALL = REGISTER.register("flowery_mossy_cobblestone_wall", () -> new WallBlock(ofFullCopy(FLOWERY_MOSSY_COBBLESTONE.get())));
 	
 	public static final DeferredBlock<Block> FLOWERY_MOSSY_STONE_BRICKS = REGISTER.register("flowery_mossy_stone_bricks", () -> new Block(Block.Properties.of().mapColor(MapColor.COLOR_GRAY).instrument(NoteBlockInstrument.BASEDRUM).requiresCorrectToolForDrops().strength(1.5F, 6.0F)));
-	public static final DeferredBlock<StairBlock> FLOWERY_MOSSY_STONE_BRICK_STAIRS = REGISTER.register("flowery_mossy_stone_brick_stairs", () -> new StairBlock(() -> MSBlocks.FLOWERY_MOSSY_STONE_BRICKS.get().defaultBlockState(), ofFullCopy(FLOWERY_MOSSY_STONE_BRICKS.get())));
+	public static final DeferredBlock<StairBlock> FLOWERY_MOSSY_STONE_BRICK_STAIRS = REGISTER.register("flowery_mossy_stone_brick_stairs", () -> new StairBlock(MSBlocks.FLOWERY_MOSSY_STONE_BRICKS.get().defaultBlockState(), ofFullCopy(FLOWERY_MOSSY_STONE_BRICKS.get())));
 	public static final DeferredBlock<SlabBlock> FLOWERY_MOSSY_STONE_BRICK_SLAB = REGISTER.register("flowery_mossy_stone_brick_slab", () -> new SlabBlock(ofFullCopy(FLOWERY_MOSSY_STONE_BRICKS.get())));
 	public static final DeferredBlock<WallBlock> FLOWERY_MOSSY_STONE_BRICK_WALL = REGISTER.register("flowery_mossy_stone_brick_wall", () -> new WallBlock(ofFullCopy(FLOWERY_MOSSY_STONE_BRICKS.get())));
 	
 	//Decrepit
 	public static final DeferredBlock<Block> DECREPIT_STONE_BRICKS = REGISTER.register("decrepit_stone_bricks", () -> new Block(Block.Properties.of().mapColor(MapColor.COLOR_GRAY).instrument(NoteBlockInstrument.BASEDRUM).requiresCorrectToolForDrops().strength(1.5F, 6.0F)));
-	public static final DeferredBlock<StairBlock> DECREPIT_STONE_BRICK_STAIRS = REGISTER.register("decrepit_stone_brick_stairs", () -> new StairBlock(() -> MSBlocks.DECREPIT_STONE_BRICKS.get().defaultBlockState(), ofFullCopy(DECREPIT_STONE_BRICKS.get())));
+	public static final DeferredBlock<StairBlock> DECREPIT_STONE_BRICK_STAIRS = REGISTER.register("decrepit_stone_brick_stairs", () -> new StairBlock(MSBlocks.DECREPIT_STONE_BRICKS.get().defaultBlockState(), ofFullCopy(DECREPIT_STONE_BRICKS.get())));
 	public static final DeferredBlock<SlabBlock> DECREPIT_STONE_BRICK_SLAB = REGISTER.register("decrepit_stone_brick_slab", () -> new SlabBlock(ofFullCopy(DECREPIT_STONE_BRICKS.get())));
 	public static final DeferredBlock<WallBlock> DECREPIT_STONE_BRICK_WALL = REGISTER.register("decrepit_stone_brick_wall", () -> new WallBlock(ofFullCopy(DECREPIT_STONE_BRICKS.get())));
 	
 	public static final DeferredBlock<Block> MOSSY_DECREPIT_STONE_BRICKS = REGISTER.register("mossy_decrepit_stone_bricks", () -> new Block(ofFullCopy(DECREPIT_STONE_BRICKS.get())));
-	public static final DeferredBlock<StairBlock> MOSSY_DECREPIT_STONE_BRICK_STAIRS = REGISTER.register("mossy_decrepit_stone_brick_stairs", () -> new StairBlock(() -> MSBlocks.MOSSY_DECREPIT_STONE_BRICKS.get().defaultBlockState(), ofFullCopy(MOSSY_DECREPIT_STONE_BRICKS.get())));
+	public static final DeferredBlock<StairBlock> MOSSY_DECREPIT_STONE_BRICK_STAIRS = REGISTER.register("mossy_decrepit_stone_brick_stairs", () -> new StairBlock(MSBlocks.MOSSY_DECREPIT_STONE_BRICKS.get().defaultBlockState(), ofFullCopy(MOSSY_DECREPIT_STONE_BRICKS.get())));
 	public static final DeferredBlock<SlabBlock> MOSSY_DECREPIT_STONE_BRICK_SLAB = REGISTER.register("mossy_decrepit_stone_brick_slab", () -> new SlabBlock(ofFullCopy(MOSSY_DECREPIT_STONE_BRICKS.get())));
 	public static final DeferredBlock<WallBlock> MOSSY_DECREPIT_STONE_BRICK_WALL = REGISTER.register("mossy_decrepit_stone_brick_wall", () -> new WallBlock(ofFullCopy(MOSSY_DECREPIT_STONE_BRICKS.get())));
 	
@@ -420,19 +419,19 @@ public final class MSBlocks
 	
 	//Chalk
 	public static final DeferredBlock<Block> CHALK = REGISTER.register("chalk", () -> new Block(Block.Properties.of().mapColor(MapColor.SNOW).instrument(NoteBlockInstrument.BASEDRUM).requiresCorrectToolForDrops().strength(1.5F, 6.0F)));
-	public static final DeferredBlock<StairBlock> CHALK_STAIRS = REGISTER.register("chalk_stairs", () -> new StairBlock(() -> MSBlocks.CHALK.get().defaultBlockState(), ofFullCopy(CHALK.get())));
+	public static final DeferredBlock<StairBlock> CHALK_STAIRS = REGISTER.register("chalk_stairs", () -> new StairBlock(MSBlocks.CHALK.get().defaultBlockState(), ofFullCopy(CHALK.get())));
 	public static final DeferredBlock<SlabBlock> CHALK_SLAB = REGISTER.register("chalk_slab", () -> new SlabBlock(ofFullCopy(CHALK.get())));
 	public static final DeferredBlock<WallBlock> CHALK_WALL = REGISTER.register("chalk_wall", () -> new WallBlock(ofFullCopy(CHALK.get())));
 	public static final DeferredBlock<ButtonBlock> CHALK_BUTTON = REGISTER.register("chalk_button", () -> new ButtonBlock(MSBlockSetType.CHALK, 10, ofFullCopy(CHALK.get())));
 	public static final DeferredBlock<PressurePlateBlock> CHALK_PRESSURE_PLATE = REGISTER.register("chalk_pressure_plate", () -> new PressurePlateBlock(MSBlockSetType.CHALK, ofFullCopy(CHALK.get())));
 	
 	public static final DeferredBlock<Block> POLISHED_CHALK = REGISTER.register("polished_chalk", () -> new Block(ofFullCopy(CHALK.get())));
-	public static final DeferredBlock<StairBlock> POLISHED_CHALK_STAIRS = REGISTER.register("polished_chalk_stairs", () -> new StairBlock(() -> MSBlocks.POLISHED_CHALK.get().defaultBlockState(), ofFullCopy(POLISHED_CHALK.get())));
+	public static final DeferredBlock<StairBlock> POLISHED_CHALK_STAIRS = REGISTER.register("polished_chalk_stairs", () -> new StairBlock(MSBlocks.POLISHED_CHALK.get().defaultBlockState(), ofFullCopy(POLISHED_CHALK.get())));
 	public static final DeferredBlock<SlabBlock> POLISHED_CHALK_SLAB = REGISTER.register("polished_chalk_slab", () -> new SlabBlock(ofFullCopy(POLISHED_CHALK.get())));
 	public static final DeferredBlock<WallBlock> POLISHED_CHALK_WALL = REGISTER.register("polished_chalk_wall", () -> new WallBlock(ofFullCopy(POLISHED_CHALK.get())));
 	
 	public static final DeferredBlock<Block> CHALK_BRICKS = REGISTER.register("chalk_bricks", () -> new Block(ofFullCopy(CHALK.get())));
-	public static final DeferredBlock<StairBlock> CHALK_BRICK_STAIRS = REGISTER.register("chalk_brick_stairs", () -> new StairBlock(() -> MSBlocks.CHALK_BRICKS.get().defaultBlockState(), ofFullCopy(CHALK_BRICKS.get())));
+	public static final DeferredBlock<StairBlock> CHALK_BRICK_STAIRS = REGISTER.register("chalk_brick_stairs", () -> new StairBlock(MSBlocks.CHALK_BRICKS.get().defaultBlockState(), ofFullCopy(CHALK_BRICKS.get())));
 	public static final DeferredBlock<SlabBlock> CHALK_BRICK_SLAB = REGISTER.register("chalk_brick_slab", () -> new SlabBlock(ofFullCopy(CHALK_BRICKS.get())));
 	public static final DeferredBlock<WallBlock> CHALK_BRICK_WALL = REGISTER.register("chalk_brick_wall", () -> new WallBlock(ofFullCopy(CHALK_BRICKS.get())));
 	
@@ -440,30 +439,30 @@ public final class MSBlocks
 	public static final DeferredBlock<Block> CHISELED_CHALK_BRICKS = REGISTER.register("chiseled_chalk_bricks", () -> new Block(ofFullCopy(CHALK_BRICKS.get())));
 	
 	public static final DeferredBlock<Block> MOSSY_CHALK_BRICKS = REGISTER.register("mossy_chalk_bricks", () -> new Block(ofFullCopy(CHALK_BRICKS.get())));
-	public static final DeferredBlock<StairBlock> MOSSY_CHALK_BRICK_STAIRS = REGISTER.register("mossy_chalk_brick_stairs", () -> new StairBlock(() -> MSBlocks.MOSSY_CHALK_BRICKS.get().defaultBlockState(), ofFullCopy(MOSSY_CHALK_BRICKS.get())));
+	public static final DeferredBlock<StairBlock> MOSSY_CHALK_BRICK_STAIRS = REGISTER.register("mossy_chalk_brick_stairs", () -> new StairBlock(MSBlocks.MOSSY_CHALK_BRICKS.get().defaultBlockState(), ofFullCopy(MOSSY_CHALK_BRICKS.get())));
 	public static final DeferredBlock<SlabBlock> MOSSY_CHALK_BRICK_SLAB = REGISTER.register("mossy_chalk_brick_slab", () -> new SlabBlock(ofFullCopy(MOSSY_CHALK_BRICKS.get())));
 	public static final DeferredBlock<WallBlock> MOSSY_CHALK_BRICK_WALL = REGISTER.register("mossy_chalk_brick_wall", () -> new WallBlock(ofFullCopy(MOSSY_CHALK_BRICKS.get())));
 	
 	public static final DeferredBlock<Block> FLOWERY_CHALK_BRICKS = REGISTER.register("flowery_chalk_bricks", () -> new Block(ofFullCopy(CHALK_BRICKS.get())));
-	public static final DeferredBlock<StairBlock> FLOWERY_CHALK_BRICK_STAIRS = REGISTER.register("flowery_chalk_brick_stairs", () -> new StairBlock(() -> MSBlocks.FLOWERY_CHALK_BRICKS.get().defaultBlockState(), ofFullCopy(FLOWERY_CHALK_BRICKS.get())));
+	public static final DeferredBlock<StairBlock> FLOWERY_CHALK_BRICK_STAIRS = REGISTER.register("flowery_chalk_brick_stairs", () -> new StairBlock(MSBlocks.FLOWERY_CHALK_BRICKS.get().defaultBlockState(), ofFullCopy(FLOWERY_CHALK_BRICKS.get())));
 	public static final DeferredBlock<SlabBlock> FLOWERY_CHALK_BRICK_SLAB = REGISTER.register("flowery_chalk_brick_slab", () -> new SlabBlock(ofFullCopy(FLOWERY_CHALK_BRICKS.get())));
 	public static final DeferredBlock<WallBlock> FLOWERY_CHALK_BRICK_WALL = REGISTER.register("flowery_chalk_brick_wall", () -> new WallBlock(ofFullCopy(FLOWERY_CHALK_BRICKS.get())));
 	
 	//Pink
 	public static final DeferredBlock<Block> PINK_STONE = REGISTER.register("pink_stone", () -> new Block(Block.Properties.of().mapColor(MapColor.SNOW).instrument(NoteBlockInstrument.BASEDRUM).requiresCorrectToolForDrops().strength(1.5F, 6.0F)));
-	public static final DeferredBlock<StairBlock> PINK_STONE_STAIRS = REGISTER.register("pink_stone_stairs", () -> new StairBlock(() -> MSBlocks.PINK_STONE.get().defaultBlockState(), ofFullCopy(PINK_STONE.get())));
+	public static final DeferredBlock<StairBlock> PINK_STONE_STAIRS = REGISTER.register("pink_stone_stairs", () -> new StairBlock(MSBlocks.PINK_STONE.get().defaultBlockState(), ofFullCopy(PINK_STONE.get())));
 	public static final DeferredBlock<SlabBlock> PINK_STONE_SLAB = REGISTER.register("pink_stone_slab", () -> new SlabBlock(ofFullCopy(PINK_STONE.get())));
 	public static final DeferredBlock<WallBlock> PINK_STONE_WALL = REGISTER.register("pink_stone_wall", () -> new WallBlock(ofFullCopy(PINK_STONE.get())));
 	public static final DeferredBlock<ButtonBlock> PINK_STONE_BUTTON = REGISTER.register("pink_stone_button", () -> new ButtonBlock(MSBlockSetType.PINK_STONE, 10, ofFullCopy(PINK_STONE.get())));
 	public static final DeferredBlock<PressurePlateBlock> PINK_STONE_PRESSURE_PLATE = REGISTER.register("pink_stone_pressure_plate", () -> new PressurePlateBlock(MSBlockSetType.PINK_STONE, ofFullCopy(PINK_STONE.get())));
 	
 	public static final DeferredBlock<Block> POLISHED_PINK_STONE = REGISTER.register("polished_pink_stone", () -> new Block(ofFullCopy(PINK_STONE.get())));
-	public static final DeferredBlock<StairBlock> POLISHED_PINK_STONE_STAIRS = REGISTER.register("polished_pink_stone_stairs", () -> new StairBlock(() -> MSBlocks.POLISHED_PINK_STONE.get().defaultBlockState(), ofFullCopy(POLISHED_PINK_STONE.get())));
+	public static final DeferredBlock<StairBlock> POLISHED_PINK_STONE_STAIRS = REGISTER.register("polished_pink_stone_stairs", () -> new StairBlock(MSBlocks.POLISHED_PINK_STONE.get().defaultBlockState(), ofFullCopy(POLISHED_PINK_STONE.get())));
 	public static final DeferredBlock<SlabBlock> POLISHED_PINK_STONE_SLAB = REGISTER.register("polished_pink_stone_slab", () -> new SlabBlock(ofFullCopy(POLISHED_PINK_STONE.get())));
 	public static final DeferredBlock<WallBlock> POLISHED_PINK_STONE_WALL = REGISTER.register("polished_pink_stone_wall", () -> new WallBlock(ofFullCopy(POLISHED_PINK_STONE.get())));
 	
 	public static final DeferredBlock<Block> PINK_STONE_BRICKS = REGISTER.register("pink_stone_bricks", () -> new Block(ofFullCopy(PINK_STONE.get())));
-	public static final DeferredBlock<StairBlock> PINK_STONE_BRICK_STAIRS = REGISTER.register("pink_stone_brick_stairs", () -> new StairBlock(() -> MSBlocks.PINK_STONE_BRICKS.get().defaultBlockState(), ofFullCopy(PINK_STONE_BRICKS.get())));
+	public static final DeferredBlock<StairBlock> PINK_STONE_BRICK_STAIRS = REGISTER.register("pink_stone_brick_stairs", () -> new StairBlock(MSBlocks.PINK_STONE_BRICKS.get().defaultBlockState(), ofFullCopy(PINK_STONE_BRICKS.get())));
 	public static final DeferredBlock<SlabBlock> PINK_STONE_BRICK_SLAB = REGISTER.register("pink_stone_brick_slab", () -> new SlabBlock(ofFullCopy(PINK_STONE_BRICKS.get())));
 	public static final DeferredBlock<WallBlock> PINK_STONE_BRICK_WALL = REGISTER.register("pink_stone_brick_wall", () -> new WallBlock(ofFullCopy(PINK_STONE_BRICKS.get())));
 	
@@ -472,25 +471,25 @@ public final class MSBlocks
 	public static final DeferredBlock<Block> CRACKED_PINK_STONE_BRICKS = REGISTER.register("cracked_pink_stone_bricks", () -> new Block(ofFullCopy(PINK_STONE_BRICKS.get())));
 	
 	public static final DeferredBlock<Block> MOSSY_PINK_STONE_BRICKS = REGISTER.register("mossy_pink_stone_bricks", () -> new Block(ofFullCopy(PINK_STONE_BRICKS.get())));
-	public static final DeferredBlock<StairBlock> MOSSY_PINK_STONE_BRICK_STAIRS = REGISTER.register("mossy_pink_stone_brick_stairs", () -> new StairBlock(() -> MSBlocks.MOSSY_PINK_STONE_BRICKS.get().defaultBlockState(), ofFullCopy(MOSSY_PINK_STONE_BRICKS.get())));
+	public static final DeferredBlock<StairBlock> MOSSY_PINK_STONE_BRICK_STAIRS = REGISTER.register("mossy_pink_stone_brick_stairs", () -> new StairBlock(MSBlocks.MOSSY_PINK_STONE_BRICKS.get().defaultBlockState(), ofFullCopy(MOSSY_PINK_STONE_BRICKS.get())));
 	public static final DeferredBlock<SlabBlock> MOSSY_PINK_STONE_BRICK_SLAB = REGISTER.register("mossy_pink_stone_brick_slab", () -> new SlabBlock(ofFullCopy(MOSSY_PINK_STONE_BRICKS.get())));
 	public static final DeferredBlock<WallBlock> MOSSY_PINK_STONE_BRICK_WALL = REGISTER.register("mossy_pink_stone_brick_wall", () -> new WallBlock(ofFullCopy(MOSSY_PINK_STONE_BRICKS.get())));
 	
 	//Brown
 	public static final DeferredBlock<Block> BROWN_STONE = REGISTER.register("brown_stone", () -> new Block(Block.Properties.of().mapColor(MapColor.COLOR_BROWN).instrument(NoteBlockInstrument.BASEDRUM).requiresCorrectToolForDrops().strength(2.5F, 7.0F)));
-	public static final DeferredBlock<StairBlock> BROWN_STONE_STAIRS = REGISTER.register("brown_stone_stairs", () -> new StairBlock(() -> MSBlocks.BROWN_STONE.get().defaultBlockState(), ofFullCopy(BROWN_STONE.get())));
+	public static final DeferredBlock<StairBlock> BROWN_STONE_STAIRS = REGISTER.register("brown_stone_stairs", () -> new StairBlock(MSBlocks.BROWN_STONE.get().defaultBlockState(), ofFullCopy(BROWN_STONE.get())));
 	public static final DeferredBlock<SlabBlock> BROWN_STONE_SLAB = REGISTER.register("brown_stone_slab", () -> new SlabBlock(ofFullCopy(BROWN_STONE.get())));
 	public static final DeferredBlock<WallBlock> BROWN_STONE_WALL = REGISTER.register("brown_stone_wall", () -> new WallBlock(ofFullCopy(BROWN_STONE.get())));
 	public static final DeferredBlock<ButtonBlock> BROWN_STONE_BUTTON = REGISTER.register("brown_stone_button", () -> new ButtonBlock(MSBlockSetType.BROWN_STONE, 10, ofFullCopy(BROWN_STONE.get())));
 	public static final DeferredBlock<PressurePlateBlock> BROWN_STONE_PRESSURE_PLATE = REGISTER.register("brown_stone_pressure_plate", () -> new PressurePlateBlock(MSBlockSetType.BROWN_STONE, ofFullCopy(BROWN_STONE.get())));
 	
 	public static final DeferredBlock<Block> POLISHED_BROWN_STONE = REGISTER.register("polished_brown_stone", () -> new Block(ofFullCopy(BROWN_STONE.get())));
-	public static final DeferredBlock<StairBlock> POLISHED_BROWN_STONE_STAIRS = REGISTER.register("polished_brown_stone_stairs", () -> new StairBlock(() -> MSBlocks.POLISHED_BROWN_STONE.get().defaultBlockState(), ofFullCopy(POLISHED_BROWN_STONE.get())));
+	public static final DeferredBlock<StairBlock> POLISHED_BROWN_STONE_STAIRS = REGISTER.register("polished_brown_stone_stairs", () -> new StairBlock(MSBlocks.POLISHED_BROWN_STONE.get().defaultBlockState(), ofFullCopy(POLISHED_BROWN_STONE.get())));
 	public static final DeferredBlock<SlabBlock> POLISHED_BROWN_STONE_SLAB = REGISTER.register("polished_brown_stone_slab", () -> new SlabBlock(ofFullCopy(POLISHED_BROWN_STONE.get())));
 	public static final DeferredBlock<WallBlock> POLISHED_BROWN_STONE_WALL = REGISTER.register("polished_brown_stone_wall", () -> new WallBlock(ofFullCopy(POLISHED_BROWN_STONE.get())));
 	
 	public static final DeferredBlock<Block> BROWN_STONE_BRICKS = REGISTER.register("brown_stone_bricks", () -> new Block(ofFullCopy(BROWN_STONE.get())));
-	public static final DeferredBlock<StairBlock> BROWN_STONE_BRICK_STAIRS = REGISTER.register("brown_stone_brick_stairs", () -> new StairBlock(() -> MSBlocks.BROWN_STONE_BRICKS.get().defaultBlockState(), ofFullCopy(BROWN_STONE_BRICKS.get())));
+	public static final DeferredBlock<StairBlock> BROWN_STONE_BRICK_STAIRS = REGISTER.register("brown_stone_brick_stairs", () -> new StairBlock(MSBlocks.BROWN_STONE_BRICKS.get().defaultBlockState(), ofFullCopy(BROWN_STONE_BRICKS.get())));
 	public static final DeferredBlock<SlabBlock> BROWN_STONE_BRICK_SLAB = REGISTER.register("brown_stone_brick_slab", () -> new SlabBlock(ofFullCopy(BROWN_STONE_BRICKS.get())));
 	public static final DeferredBlock<WallBlock> BROWN_STONE_BRICK_WALL = REGISTER.register("brown_stone_brick_wall", () -> new WallBlock(ofFullCopy(BROWN_STONE_BRICKS.get())));
 	
@@ -499,19 +498,19 @@ public final class MSBlocks
 	
 	//Green
 	public static final DeferredBlock<Block> GREEN_STONE = REGISTER.register("green_stone", () -> new Block(Block.Properties.of().mapColor(MapColor.COLOR_GREEN).instrument(NoteBlockInstrument.BASEDRUM).requiresCorrectToolForDrops().strength(2.5F, 7.0F)));
-	public static final DeferredBlock<StairBlock> GREEN_STONE_STAIRS = REGISTER.register("green_stone_stairs", () -> new StairBlock(() -> MSBlocks.GREEN_STONE.get().defaultBlockState(), ofFullCopy(GREEN_STONE.get())));
+	public static final DeferredBlock<StairBlock> GREEN_STONE_STAIRS = REGISTER.register("green_stone_stairs", () -> new StairBlock(MSBlocks.GREEN_STONE.get().defaultBlockState(), ofFullCopy(GREEN_STONE.get())));
 	public static final DeferredBlock<SlabBlock> GREEN_STONE_SLAB = REGISTER.register("green_stone_slab", () -> new SlabBlock(ofFullCopy(GREEN_STONE.get())));
 	public static final DeferredBlock<WallBlock> GREEN_STONE_WALL = REGISTER.register("green_stone_wall", () -> new WallBlock(ofFullCopy(GREEN_STONE.get())));
 	public static final DeferredBlock<ButtonBlock> GREEN_STONE_BUTTON = REGISTER.register("green_stone_button", () -> new ButtonBlock(MSBlockSetType.GREEN_STONE, 10, ofFullCopy(GREEN_STONE.get())));
 	public static final DeferredBlock<PressurePlateBlock> GREEN_STONE_PRESSURE_PLATE = REGISTER.register("green_stone_pressure_plate", () -> new PressurePlateBlock(MSBlockSetType.GREEN_STONE, ofFullCopy(GREEN_STONE.get())));
 	
 	public static final DeferredBlock<Block> POLISHED_GREEN_STONE = REGISTER.register("polished_green_stone", () -> new Block(ofFullCopy(GREEN_STONE.get())));
-	public static final DeferredBlock<StairBlock> POLISHED_GREEN_STONE_STAIRS = REGISTER.register("polished_green_stone_stairs", () -> new StairBlock(() -> MSBlocks.POLISHED_GREEN_STONE.get().defaultBlockState(), ofFullCopy(POLISHED_GREEN_STONE.get())));
+	public static final DeferredBlock<StairBlock> POLISHED_GREEN_STONE_STAIRS = REGISTER.register("polished_green_stone_stairs", () -> new StairBlock(MSBlocks.POLISHED_GREEN_STONE.get().defaultBlockState(), ofFullCopy(POLISHED_GREEN_STONE.get())));
 	public static final DeferredBlock<SlabBlock> POLISHED_GREEN_STONE_SLAB = REGISTER.register("polished_green_stone_slab", () -> new SlabBlock(ofFullCopy(POLISHED_GREEN_STONE.get())));
 	public static final DeferredBlock<WallBlock> POLISHED_GREEN_STONE_WALL = REGISTER.register("polished_green_stone_wall", () -> new WallBlock(ofFullCopy(POLISHED_GREEN_STONE.get())));
 	
 	public static final DeferredBlock<Block> GREEN_STONE_BRICKS = REGISTER.register("green_stone_bricks", () -> new Block(ofFullCopy(GREEN_STONE.get())));
-	public static final DeferredBlock<StairBlock> GREEN_STONE_BRICK_STAIRS = REGISTER.register("green_stone_brick_stairs", () -> new StairBlock(() -> MSBlocks.GREEN_STONE_BRICKS.get().defaultBlockState(), ofFullCopy(GREEN_STONE_BRICKS.get())));
+	public static final DeferredBlock<StairBlock> GREEN_STONE_BRICK_STAIRS = REGISTER.register("green_stone_brick_stairs", () -> new StairBlock(MSBlocks.GREEN_STONE_BRICKS.get().defaultBlockState(), ofFullCopy(GREEN_STONE_BRICKS.get())));
 	public static final DeferredBlock<SlabBlock> GREEN_STONE_BRICK_SLAB = REGISTER.register("green_stone_brick_slab", () -> new SlabBlock(ofFullCopy(GREEN_STONE_BRICKS.get())));
 	public static final DeferredBlock<WallBlock> GREEN_STONE_BRICK_WALL = REGISTER.register("green_stone_brick_wall", () -> new WallBlock(ofFullCopy(GREEN_STONE_BRICKS.get())));
 	
@@ -519,12 +518,12 @@ public final class MSBlocks
 	public static final DeferredBlock<Block> CHISELED_GREEN_STONE_BRICKS = REGISTER.register("chiseled_green_stone_bricks", () -> new Block(ofFullCopy(GREEN_STONE_BRICKS.get())));
 	
 	public static final DeferredBlock<Block> HORIZONTAL_GREEN_STONE_BRICKS = REGISTER.register("horizontal_green_stone_bricks", () -> new Block(ofFullCopy(GREEN_STONE_BRICKS.get())));
-	public static final DeferredBlock<StairBlock> HORIZONTAL_GREEN_STONE_BRICK_STAIRS = REGISTER.register("horizontal_green_stone_brick_stairs", () -> new StairBlock(() -> MSBlocks.HORIZONTAL_GREEN_STONE_BRICKS.get().defaultBlockState(), ofFullCopy(HORIZONTAL_GREEN_STONE_BRICKS.get())));
+	public static final DeferredBlock<StairBlock> HORIZONTAL_GREEN_STONE_BRICK_STAIRS = REGISTER.register("horizontal_green_stone_brick_stairs", () -> new StairBlock(MSBlocks.HORIZONTAL_GREEN_STONE_BRICKS.get().defaultBlockState(), ofFullCopy(HORIZONTAL_GREEN_STONE_BRICKS.get())));
 	public static final DeferredBlock<SlabBlock> HORIZONTAL_GREEN_STONE_BRICK_SLAB = REGISTER.register("horizontal_green_stone_brick_slab", () -> new SlabBlock(ofFullCopy(HORIZONTAL_GREEN_STONE_BRICKS.get())));
 	public static final DeferredBlock<WallBlock> HORIZONTAL_GREEN_STONE_BRICK_WALL = REGISTER.register("horizontal_green_stone_brick_wall", () -> new WallBlock(ofFullCopy(HORIZONTAL_GREEN_STONE_BRICKS.get())));
 	
 	public static final DeferredBlock<Block> VERTICAL_GREEN_STONE_BRICKS = REGISTER.register("vertical_green_stone_bricks", () -> new Block(ofFullCopy(GREEN_STONE_BRICKS.get())));
-	public static final DeferredBlock<StairBlock> VERTICAL_GREEN_STONE_BRICK_STAIRS = REGISTER.register("vertical_green_stone_brick_stairs", () -> new StairBlock(() -> MSBlocks.VERTICAL_GREEN_STONE_BRICKS.get().defaultBlockState(), ofFullCopy(VERTICAL_GREEN_STONE_BRICKS.get())));
+	public static final DeferredBlock<StairBlock> VERTICAL_GREEN_STONE_BRICK_STAIRS = REGISTER.register("vertical_green_stone_brick_stairs", () -> new StairBlock(MSBlocks.VERTICAL_GREEN_STONE_BRICKS.get().defaultBlockState(), ofFullCopy(VERTICAL_GREEN_STONE_BRICKS.get())));
 	public static final DeferredBlock<SlabBlock> VERTICAL_GREEN_STONE_BRICK_SLAB = REGISTER.register("vertical_green_stone_brick_slab", () -> new SlabBlock(ofFullCopy(VERTICAL_GREEN_STONE_BRICKS.get())));
 	public static final DeferredBlock<WallBlock> VERTICAL_GREEN_STONE_BRICK_WALL = REGISTER.register("vertical_green_stone_brick_wall", () -> new WallBlock(ofFullCopy(VERTICAL_GREEN_STONE_BRICKS.get())));
 	
@@ -555,7 +554,7 @@ public final class MSBlocks
 	public static final DeferredBlock<Block> CARVED_WOODEN_LEAF = REGISTER.register("carved_wooden_leaf", () -> new CustomShapeBlock(Block.Properties.of().noOcclusion().mapColor(MapColor.WOOD).strength(0.4F).sound(SoundType.WOOD), MSBlockShapes.CARVED_WOODEN_LEAF));
 	
 	public static final DeferredBlock<Block> UNCARVED_WOOD = REGISTER.register("uncarved_wood", () -> new Block(Block.Properties.of().mapColor(MapColor.WOOD).ignitedByLava().instrument(NoteBlockInstrument.BASS).strength(2.0F).requiresCorrectToolForDrops().sound(SoundType.WOOD)));
-	public static final DeferredBlock<StairBlock> UNCARVED_WOOD_STAIRS = REGISTER.register("uncarved_wood_stairs", () -> new StairBlock(() -> MSBlocks.UNCARVED_WOOD.get().defaultBlockState(), ofFullCopy(UNCARVED_WOOD.get())));
+	public static final DeferredBlock<StairBlock> UNCARVED_WOOD_STAIRS = REGISTER.register("uncarved_wood_stairs", () -> new StairBlock(MSBlocks.UNCARVED_WOOD.get().defaultBlockState(), ofFullCopy(UNCARVED_WOOD.get())));
 	public static final DeferredBlock<SlabBlock> UNCARVED_WOOD_SLAB = REGISTER.register("uncarved_wood_slab", () -> new SlabBlock(ofFullCopy(UNCARVED_WOOD.get())));
 	public static final DeferredBlock<ButtonBlock> UNCARVED_WOOD_BUTTON = REGISTER.register("uncarved_wood_button", () -> new ButtonBlock(BlockSetType.OAK, 10, ofFullCopy(UNCARVED_WOOD.get())));
 	public static final DeferredBlock<PressurePlateBlock> UNCARVED_WOOD_PRESSURE_PLATE = REGISTER.register("uncarved_wood_pressure_plate", () -> new PressurePlateBlock(BlockSetType.OAK, ofFullCopy(UNCARVED_WOOD.get())));
@@ -563,7 +562,7 @@ public final class MSBlocks
 	public static final DeferredBlock<FenceGateBlock> UNCARVED_WOOD_FENCE_GATE = REGISTER.register("uncarved_wood_fence_gate", () -> new FenceGateBlock(ofFullCopy(UNCARVED_WOOD.get()), SoundEvents.FENCE_GATE_OPEN, SoundEvents.FENCE_GATE_CLOSE));
 	
 	public static final DeferredBlock<Block> CHIPBOARD = REGISTER.register("chipboard", () -> new Block(Block.Properties.of().mapColor(MapColor.WOOD).ignitedByLava().instrument(NoteBlockInstrument.BASS).strength(1.0F).requiresCorrectToolForDrops().sound(SoundType.SCAFFOLDING)));
-	public static final DeferredBlock<StairBlock> CHIPBOARD_STAIRS = REGISTER.register("chipboard_stairs", () -> new StairBlock(() -> MSBlocks.CHIPBOARD.get().defaultBlockState(), ofFullCopy(CHIPBOARD.get())));
+	public static final DeferredBlock<StairBlock> CHIPBOARD_STAIRS = REGISTER.register("chipboard_stairs", () -> new StairBlock(MSBlocks.CHIPBOARD.get().defaultBlockState(), ofFullCopy(CHIPBOARD.get())));
 	public static final DeferredBlock<SlabBlock> CHIPBOARD_SLAB = REGISTER.register("chipboard_slab", () -> new SlabBlock(ofFullCopy(CHIPBOARD.get())));
 	public static final DeferredBlock<ButtonBlock> CHIPBOARD_BUTTON = REGISTER.register("chipboard_button", () -> new ButtonBlock(BlockSetType.OAK, 10, ofFullCopy(CHIPBOARD.get())));
 	public static final DeferredBlock<PressurePlateBlock> CHIPBOARD_PRESSURE_PLATE = REGISTER.register("chipboard_pressure_plate", () -> new PressurePlateBlock(BlockSetType.OAK, ofFullCopy(CHIPBOARD.get())));
@@ -572,11 +571,11 @@ public final class MSBlocks
 	
 	public static final DeferredBlock<Block> WOOD_SHAVINGS = REGISTER.register("wood_shavings", () -> new Block(Block.Properties.of().mapColor(MapColor.WOOD).ignitedByLava().instrument(NoteBlockInstrument.BASS).strength(0.4F).sound(SoundType.SAND)));
 	public static final DeferredBlock<Block> CARVED_HEAVY_PLANKS = REGISTER.register("carved_heavy_planks", () -> new Block(Block.Properties.of().mapColor(MapColor.WOOD).ignitedByLava().instrument(NoteBlockInstrument.BASS).strength(2.0F).requiresCorrectToolForDrops().sound(SoundType.WOOD)));
-	public static final DeferredBlock<StairBlock> CARVED_HEAVY_PLANK_STAIRS = REGISTER.register("carved_heavy_plank_stairs", () -> new StairBlock(() -> MSBlocks.CARVED_HEAVY_PLANKS.get().defaultBlockState(), ofFullCopy(CARVED_HEAVY_PLANKS.get())));
+	public static final DeferredBlock<StairBlock> CARVED_HEAVY_PLANK_STAIRS = REGISTER.register("carved_heavy_plank_stairs", () -> new StairBlock(MSBlocks.CARVED_HEAVY_PLANKS.get().defaultBlockState(), ofFullCopy(CARVED_HEAVY_PLANKS.get())));
 	public static final DeferredBlock<SlabBlock> CARVED_HEAVY_PLANK_SLAB = REGISTER.register("carved_heavy_plank_slab", () -> new SlabBlock(ofFullCopy(CARVED_HEAVY_PLANKS.get())));
 	
 	public static final DeferredBlock<Block> CARVED_PLANKS = REGISTER.register("carved_planks", () -> new Block(Block.Properties.of().mapColor(MapColor.WOOD).ignitedByLava().instrument(NoteBlockInstrument.BASS).strength(2.0F).sound(SoundType.WOOD)));
-	public static final DeferredBlock<StairBlock> CARVED_STAIRS = REGISTER.register("carved_stairs", () -> new StairBlock(() -> MSBlocks.CARVED_PLANKS.get().defaultBlockState(), ofFullCopy(CARVED_PLANKS.get())));
+	public static final DeferredBlock<StairBlock> CARVED_STAIRS = REGISTER.register("carved_stairs", () -> new StairBlock(MSBlocks.CARVED_PLANKS.get().defaultBlockState(), ofFullCopy(CARVED_PLANKS.get())));
 	public static final DeferredBlock<SlabBlock> CARVED_SLAB = REGISTER.register("carved_slab", () -> new SlabBlock(ofFullCopy(CARVED_PLANKS.get())));
 	public static final DeferredBlock<ButtonBlock> CARVED_BUTTON = REGISTER.register("carved_button", () -> new ButtonBlock(MSBlockSetType.CARVED, 10, ofFullCopy(CARVED_PLANKS.get())));
 	public static final DeferredBlock<PressurePlateBlock> CARVED_PRESSURE_PLATE = REGISTER.register("carved_pressure_plate", () -> new PressurePlateBlock(MSBlockSetType.CARVED, ofFullCopy(CARVED_PLANKS.get())));
@@ -591,7 +590,7 @@ public final class MSBlocks
 	public static final DeferredBlock<Block> CARVED_WALL_HANGING_SIGN = REGISTER.register("carved_wall_hanging_sign", () -> new MSWallHangingSignBlock(MSWoodTypes.CARVED, ofFullCopy(Blocks.OAK_WALL_HANGING_SIGN)));
 	
 	public static final DeferredBlock<Block> POLISHED_UNCARVED_WOOD = REGISTER.register("polished_carved_wood", () -> new Block(Block.Properties.of().mapColor(MapColor.WOOD).ignitedByLava().instrument(NoteBlockInstrument.BASS).strength(2.0F).requiresCorrectToolForDrops().sound(SoundType.WOOD)));
-	public static final DeferredBlock<StairBlock> POLISHED_UNCARVED_STAIRS = REGISTER.register("polished_uncarved_stairs", () -> new StairBlock(() -> MSBlocks.POLISHED_UNCARVED_WOOD.get().defaultBlockState(), ofFullCopy(POLISHED_UNCARVED_WOOD.get())));
+	public static final DeferredBlock<StairBlock> POLISHED_UNCARVED_STAIRS = REGISTER.register("polished_uncarved_stairs", () -> new StairBlock(MSBlocks.POLISHED_UNCARVED_WOOD.get().defaultBlockState(), ofFullCopy(POLISHED_UNCARVED_WOOD.get())));
 	public static final DeferredBlock<SlabBlock> POLISHED_UNCARVED_SLAB = REGISTER.register("polished_uncarved_slab", () -> new SlabBlock(ofFullCopy(POLISHED_UNCARVED_WOOD.get())));
 	
 	public static final DeferredBlock<Block> CARVED_BUSH = REGISTER.register("carved_bush", () -> new WoodenFloraBlock(BlockBehaviour.Properties.of().mapColor(MapColor.WOOD).ignitedByLava().instrument(NoteBlockInstrument.BASEDRUM).strength(0.6F).sound(SoundType.WOOD).pushReaction(PushReaction.DESTROY).noCollission().offsetType(BlockBehaviour.OffsetType.XZ), WoodenFloraBlock.FLOWER_SHAPE));
@@ -599,7 +598,7 @@ public final class MSBlocks
 	public static final DeferredBlock<Block> WOODEN_GRASS = REGISTER.register("wooden_grass", () -> new WoodenFloraBlock(Block.Properties.of().mapColor(MapColor.WOOD).ignitedByLava().instrument(NoteBlockInstrument.BASS).noCollission().strength(0.1F, 2.5F).requiresCorrectToolForDrops().sound(SoundType.WOOD).offsetType(BlockBehaviour.OffsetType.XYZ), WoodenFloraBlock.GRASS_SHAPE));
 	
 	public static final DeferredBlock<Block> TREATED_UNCARVED_WOOD = REGISTER.register("treated_uncarved_wood", () -> new FlammableBlock(0, 0, Block.Properties.of().mapColor(MapColor.WOOD).instrument(NoteBlockInstrument.BASS).strength(2.0F).requiresCorrectToolForDrops().sound(SoundType.WOOD)));
-	public static final DeferredBlock<StairBlock> TREATED_UNCARVED_WOOD_STAIRS = REGISTER.register("treated_uncarved_wood_stairs", () -> new StairBlock(() -> MSBlocks.TREATED_UNCARVED_WOOD.get().defaultBlockState(), ofFullCopy(TREATED_UNCARVED_WOOD.get())));
+	public static final DeferredBlock<StairBlock> TREATED_UNCARVED_WOOD_STAIRS = REGISTER.register("treated_uncarved_wood_stairs", () -> new StairBlock(MSBlocks.TREATED_UNCARVED_WOOD.get().defaultBlockState(), ofFullCopy(TREATED_UNCARVED_WOOD.get())));
 	public static final DeferredBlock<SlabBlock> TREATED_UNCARVED_WOOD_SLAB = REGISTER.register("treated_uncarved_wood_slab", () -> new SlabBlock(ofFullCopy(TREATED_UNCARVED_WOOD.get())));
 	public static final DeferredBlock<ButtonBlock> TREATED_UNCARVED_WOOD_BUTTON = REGISTER.register("treated_uncarved_wood_button", () -> new ButtonBlock(BlockSetType.OAK, 10, ofFullCopy(TREATED_UNCARVED_WOOD.get())));
 	public static final DeferredBlock<PressurePlateBlock> TREATED_UNCARVED_WOOD_PRESSURE_PLATE = REGISTER.register("treated_uncarved_wood_pressure_plate", () -> new PressurePlateBlock(BlockSetType.OAK, ofFullCopy(TREATED_UNCARVED_WOOD.get())));
@@ -607,7 +606,7 @@ public final class MSBlocks
 	public static final DeferredBlock<FenceGateBlock> TREATED_UNCARVED_WOOD_FENCE_GATE = REGISTER.register("treated_uncarved_wood_fence_gate", () -> new FenceGateBlock(ofFullCopy(TREATED_UNCARVED_WOOD.get()), SoundEvents.FENCE_GATE_OPEN, SoundEvents.FENCE_GATE_CLOSE));
 	
 	public static final DeferredBlock<Block> TREATED_CHIPBOARD = REGISTER.register("treated_chipboard", () -> new FlammableBlock(0, 0, Block.Properties.of().mapColor(MapColor.WOOD).instrument(NoteBlockInstrument.BASS).strength(1.0F).requiresCorrectToolForDrops().sound(SoundType.SCAFFOLDING)));
-	public static final DeferredBlock<StairBlock> TREATED_CHIPBOARD_STAIRS = REGISTER.register("treated_chipboard_stairs", () -> new StairBlock(() -> MSBlocks.TREATED_CHIPBOARD.get().defaultBlockState(), ofFullCopy(TREATED_CHIPBOARD.get())));
+	public static final DeferredBlock<StairBlock> TREATED_CHIPBOARD_STAIRS = REGISTER.register("treated_chipboard_stairs", () -> new StairBlock(MSBlocks.TREATED_CHIPBOARD.get().defaultBlockState(), ofFullCopy(TREATED_CHIPBOARD.get())));
 	public static final DeferredBlock<SlabBlock> TREATED_CHIPBOARD_SLAB = REGISTER.register("treated_chipboard_slab", () -> new SlabBlock(ofFullCopy(TREATED_CHIPBOARD.get())));
 	public static final DeferredBlock<ButtonBlock> TREATED_CHIPBOARD_BUTTON = REGISTER.register("treated_chipboard_button", () -> new ButtonBlock(BlockSetType.OAK, 10, ofFullCopy(TREATED_CHIPBOARD.get())));
 	public static final DeferredBlock<PressurePlateBlock> TREATED_CHIPBOARD_PRESSURE_PLATE = REGISTER.register("treated_chipboard_pressure_plate", () -> new PressurePlateBlock(BlockSetType.OAK, ofFullCopy(TREATED_CHIPBOARD.get())));
@@ -616,11 +615,11 @@ public final class MSBlocks
 	
 	public static final DeferredBlock<Block> TREATED_WOOD_SHAVINGS = REGISTER.register("treated_wood_shavings", () -> new FlammableBlock(0, 0, Block.Properties.of().mapColor(MapColor.WOOD).instrument(NoteBlockInstrument.BASS).strength(0.4F).sound(SoundType.SAND)));
 	public static final DeferredBlock<Block> TREATED_HEAVY_PLANKS = REGISTER.register("treated_heavy_planks", () -> new FlammableBlock(0, 0, Block.Properties.of().mapColor(MapColor.WOOD).instrument(NoteBlockInstrument.BASS).strength(2.0F).requiresCorrectToolForDrops().sound(SoundType.WOOD)));
-	public static final DeferredBlock<StairBlock> TREATED_HEAVY_PLANK_STAIRS = REGISTER.register("treated_heavy_plank_stairs", () -> new StairBlock(() -> MSBlocks.TREATED_HEAVY_PLANKS.get().defaultBlockState(), ofFullCopy(TREATED_HEAVY_PLANKS.get())));
+	public static final DeferredBlock<StairBlock> TREATED_HEAVY_PLANK_STAIRS = REGISTER.register("treated_heavy_plank_stairs", () -> new StairBlock(MSBlocks.TREATED_HEAVY_PLANKS.get().defaultBlockState(), ofFullCopy(TREATED_HEAVY_PLANKS.get())));
 	public static final DeferredBlock<SlabBlock> TREATED_HEAVY_PLANK_SLAB = REGISTER.register("treated_heavy_plank_slab", () -> new SlabBlock(ofFullCopy(TREATED_HEAVY_PLANKS.get())));
 	
 	public static final DeferredBlock<Block> TREATED_PLANKS = REGISTER.register("treated_planks", () -> new FlammableBlock(0, 0, Block.Properties.of().mapColor(MapColor.WOOD).instrument(NoteBlockInstrument.BASS).strength(2.0F, 3.0F).sound(SoundType.WOOD)));
-	public static final DeferredBlock<StairBlock> TREATED_PLANKS_STAIRS = REGISTER.register("treated_planks_stairs", () -> new StairBlock(() -> MSBlocks.TREATED_PLANKS.get().defaultBlockState(), ofFullCopy(TREATED_PLANKS.get())));
+	public static final DeferredBlock<StairBlock> TREATED_PLANKS_STAIRS = REGISTER.register("treated_planks_stairs", () -> new StairBlock(MSBlocks.TREATED_PLANKS.get().defaultBlockState(), ofFullCopy(TREATED_PLANKS.get())));
 	public static final DeferredBlock<SlabBlock> TREATED_PLANKS_SLAB = REGISTER.register("treated_planks_slab", () -> new SlabBlock(ofFullCopy(TREATED_PLANKS.get())));
 	public static final DeferredBlock<Block> TREATED_BOOKSHELF = REGISTER.register("treated_bookshelf", () -> new FlammableBlock(0, 0, Block.Properties.of().mapColor(MapColor.WOOD).instrument(NoteBlockInstrument.BASS).strength(2.0F, 3.0F).sound(SoundType.WOOD)));
 	public static final DeferredBlock<Block> TREATED_LADDER = REGISTER.register("treated_ladder", () -> new LadderBlock(BlockBehaviour.Properties.of().mapColor(MapColor.WOOD).instrument(NoteBlockInstrument.BASS).strength(2.0F, 3.0F).sound(SoundType.WOOD).noOcclusion()));
@@ -638,14 +637,14 @@ public final class MSBlocks
 	
 	
 	public static final DeferredBlock<Block> POLISHED_TREATED_UNCARVED_WOOD = REGISTER.register("polished_treated_carved_wood", () -> new FlammableBlock(0, 0, Block.Properties.of().mapColor(MapColor.WOOD).instrument(NoteBlockInstrument.BASS).strength(2.0F).requiresCorrectToolForDrops().sound(SoundType.WOOD)));
-	public static final DeferredBlock<StairBlock> POLISHED_TREATED_UNCARVED_STAIRS = REGISTER.register("polished_treated_uncarved_stairs", () -> new StairBlock(() -> MSBlocks.POLISHED_TREATED_UNCARVED_WOOD.get().defaultBlockState(), ofFullCopy(POLISHED_TREATED_UNCARVED_WOOD.get())));
+	public static final DeferredBlock<StairBlock> POLISHED_TREATED_UNCARVED_STAIRS = REGISTER.register("polished_treated_uncarved_stairs", () -> new StairBlock(MSBlocks.POLISHED_TREATED_UNCARVED_WOOD.get().defaultBlockState(), ofFullCopy(POLISHED_TREATED_UNCARVED_WOOD.get())));
 	public static final DeferredBlock<SlabBlock> POLISHED_TREATED_UNCARVED_SLAB = REGISTER.register("polished_treated_uncarved_slab", () -> new SlabBlock(ofFullCopy(POLISHED_TREATED_UNCARVED_WOOD.get())));
 	
 	public static final DeferredBlock<Block> TREATED_CARVED_KNOTTED_WOOD = REGISTER.register("treated_carved_knotted_wood", () -> new MSHorizontalDirectionalBlock(Block.Properties.of().mapColor(MapColor.WOOD).instrument(NoteBlockInstrument.BASS).strength(2.0F).requiresCorrectToolForDrops().sound(SoundType.WOOD)));
 	public static final DeferredBlock<Block> TREATED_WOODEN_GRASS = REGISTER.register("treated_wooden_grass", () -> new WoodenFloraBlock(Block.Properties.of().mapColor(MapColor.WOOD).instrument(NoteBlockInstrument.BASS).noCollission().strength(0.1F, 2.5F).requiresCorrectToolForDrops().sound(SoundType.WOOD).offsetType(BlockBehaviour.OffsetType.XYZ), WoodenFloraBlock.GRASS_SHAPE));
 	
 	public static final DeferredBlock<Block> LACQUERED_UNCARVED_WOOD = REGISTER.register("lacquered_uncarved_wood", () -> new FlammableBlock(0, 0, Block.Properties.of().mapColor(MapColor.WOOD).instrument(NoteBlockInstrument.BASS).strength(2.0F).requiresCorrectToolForDrops().sound(SoundType.WOOD)));
-	public static final DeferredBlock<StairBlock> LACQUERED_UNCARVED_WOOD_STAIRS = REGISTER.register("lacquered_uncarved_wood_stairs", () -> new StairBlock(() -> MSBlocks.LACQUERED_UNCARVED_WOOD.get().defaultBlockState(), ofFullCopy(LACQUERED_UNCARVED_WOOD.get())));
+	public static final DeferredBlock<StairBlock> LACQUERED_UNCARVED_WOOD_STAIRS = REGISTER.register("lacquered_uncarved_wood_stairs", () -> new StairBlock(MSBlocks.LACQUERED_UNCARVED_WOOD.get().defaultBlockState(), ofFullCopy(LACQUERED_UNCARVED_WOOD.get())));
 	public static final DeferredBlock<SlabBlock> LACQUERED_UNCARVED_WOOD_SLAB = REGISTER.register("lacquered_uncarved_wood_slab", () -> new SlabBlock(ofFullCopy(LACQUERED_UNCARVED_WOOD.get())));
 	public static final DeferredBlock<ButtonBlock> LACQUERED_UNCARVED_WOOD_BUTTON = REGISTER.register("lacquered_uncarved_wood_button", () -> new ButtonBlock(BlockSetType.OAK, 10, ofFullCopy(LACQUERED_UNCARVED_WOOD.get())));
 	public static final DeferredBlock<PressurePlateBlock> LACQUERED_UNCARVED_WOOD_PRESSURE_PLATE = REGISTER.register("lacquered_uncarved_wood_pressure_plate", () -> new PressurePlateBlock(BlockSetType.OAK, ofFullCopy(LACQUERED_UNCARVED_WOOD.get())));
@@ -653,7 +652,7 @@ public final class MSBlocks
 	public static final DeferredBlock<FenceGateBlock> LACQUERED_UNCARVED_WOOD_FENCE_GATE = REGISTER.register("lacquered_uncarved_wood_fence_gate", () -> new FenceGateBlock(ofFullCopy(LACQUERED_UNCARVED_WOOD.get()), SoundEvents.FENCE_GATE_OPEN, SoundEvents.FENCE_GATE_CLOSE));
 	
 	public static final DeferredBlock<Block> LACQUERED_CHIPBOARD = REGISTER.register("lacquered_chipboard", () -> new FlammableBlock(0, 0, Block.Properties.of().mapColor(MapColor.WOOD).instrument(NoteBlockInstrument.BASS).strength(1.0F).requiresCorrectToolForDrops().sound(SoundType.SCAFFOLDING)));
-	public static final DeferredBlock<StairBlock> LACQUERED_CHIPBOARD_STAIRS = REGISTER.register("lacquered_chipboard_stairs", () -> new StairBlock(() -> MSBlocks.LACQUERED_CHIPBOARD.get().defaultBlockState(), ofFullCopy(LACQUERED_CHIPBOARD.get())));
+	public static final DeferredBlock<StairBlock> LACQUERED_CHIPBOARD_STAIRS = REGISTER.register("lacquered_chipboard_stairs", () -> new StairBlock(MSBlocks.LACQUERED_CHIPBOARD.get().defaultBlockState(), ofFullCopy(LACQUERED_CHIPBOARD.get())));
 	public static final DeferredBlock<SlabBlock> LACQUERED_CHIPBOARD_SLAB = REGISTER.register("lacquered_chipboard_slab", () -> new SlabBlock(ofFullCopy(LACQUERED_CHIPBOARD.get())));
 	public static final DeferredBlock<ButtonBlock> LACQUERED_CHIPBOARD_BUTTON = REGISTER.register("lacquered_chipboard_button", () -> new ButtonBlock(BlockSetType.OAK, 10, ofFullCopy(LACQUERED_CHIPBOARD.get())));
 	public static final DeferredBlock<PressurePlateBlock> LACQUERED_CHIPBOARD_PRESSURE_PLATE = REGISTER.register("lacquered_chipboard_pressure_plate", () -> new PressurePlateBlock(BlockSetType.OAK, ofFullCopy(LACQUERED_CHIPBOARD.get())));
@@ -662,11 +661,11 @@ public final class MSBlocks
 	
 	public static final DeferredBlock<Block> LACQUERED_WOOD_SHAVINGS = REGISTER.register("lacquered_wood_shavings", () -> new FlammableBlock(0, 0, Block.Properties.of().mapColor(MapColor.WOOD).instrument(NoteBlockInstrument.BASS).strength(0.4F).sound(SoundType.SAND)));
 	public static final DeferredBlock<Block> LACQUERED_HEAVY_PLANKS = REGISTER.register("lacquered_heavy_planks", () -> new FlammableBlock(0, 0, Block.Properties.of().mapColor(MapColor.WOOD).instrument(NoteBlockInstrument.BASS).strength(2.0F).requiresCorrectToolForDrops().sound(SoundType.WOOD)));
-	public static final DeferredBlock<StairBlock> LACQUERED_HEAVY_PLANK_STAIRS = REGISTER.register("lacquered_heavy_plank_stairs", () -> new StairBlock(() -> MSBlocks.LACQUERED_HEAVY_PLANKS.get().defaultBlockState(), ofFullCopy(LACQUERED_HEAVY_PLANKS.get())));
+	public static final DeferredBlock<StairBlock> LACQUERED_HEAVY_PLANK_STAIRS = REGISTER.register("lacquered_heavy_plank_stairs", () -> new StairBlock(MSBlocks.LACQUERED_HEAVY_PLANKS.get().defaultBlockState(), ofFullCopy(LACQUERED_HEAVY_PLANKS.get())));
 	public static final DeferredBlock<SlabBlock> LACQUERED_HEAVY_PLANK_SLAB = REGISTER.register("lacquered_heavy_plank_slab", () -> new SlabBlock(ofFullCopy(LACQUERED_HEAVY_PLANKS.get())));
 	
 	public static final DeferredBlock<Block> LACQUERED_PLANKS = REGISTER.register("lacquered_planks", () -> new FlammableBlock(0, 0, Block.Properties.of().mapColor(MapColor.WOOD).instrument(NoteBlockInstrument.BASS).strength(2.0F, 3.0F).sound(SoundType.WOOD)));
-	public static final DeferredBlock<StairBlock> LACQUERED_STAIRS = REGISTER.register("lacquered_stairs", () -> new StairBlock(() -> MSBlocks.LACQUERED_PLANKS.get().defaultBlockState(), ofFullCopy(LACQUERED_PLANKS.get())));
+	public static final DeferredBlock<StairBlock> LACQUERED_STAIRS = REGISTER.register("lacquered_stairs", () -> new StairBlock(MSBlocks.LACQUERED_PLANKS.get().defaultBlockState(), ofFullCopy(LACQUERED_PLANKS.get())));
 	public static final DeferredBlock<SlabBlock> LACQUERED_SLAB = REGISTER.register("lacquered_slab", () -> new SlabBlock(ofFullCopy(LACQUERED_PLANKS.get())));
 	public static final DeferredBlock<ButtonBlock> LACQUERED_BUTTON = REGISTER.register("lacquered_button", () -> new ButtonBlock(BlockSetType.OAK, 10, ofFullCopy(LACQUERED_PLANKS.get())));
 	public static final DeferredBlock<PressurePlateBlock> LACQUERED_PRESSURE_PLATE = REGISTER.register("lacquered_pressure_plate", () -> new PressurePlateBlock(BlockSetType.OAK, ofFullCopy(LACQUERED_PLANKS.get())));
@@ -681,7 +680,7 @@ public final class MSBlocks
 	public static final DeferredBlock<Block> LACQUERED_WALL_HANGING_SIGN = REGISTER.register("lacquered_wall_hanging_sign", () -> new MSWallHangingSignBlock(MSWoodTypes.LACQUERED, ofFullCopy(Blocks.OAK_WALL_HANGING_SIGN)));
 	
 	public static final DeferredBlock<Block> POLISHED_LACQUERED_UNCARVED_WOOD = REGISTER.register("polished_lacquered_carved_wood", () -> new FlammableBlock(0, 0, Block.Properties.of().mapColor(MapColor.WOOD).instrument(NoteBlockInstrument.BASS).strength(2.0F).requiresCorrectToolForDrops().sound(SoundType.WOOD)));
-	public static final DeferredBlock<StairBlock> POLISHED_LACQUERED_UNCARVED_STAIRS = REGISTER.register("polished_lacquered_uncarved_stairs", () -> new StairBlock(() -> MSBlocks.POLISHED_LACQUERED_UNCARVED_WOOD.get().defaultBlockState(), ofFullCopy(POLISHED_LACQUERED_UNCARVED_WOOD.get())));
+	public static final DeferredBlock<StairBlock> POLISHED_LACQUERED_UNCARVED_STAIRS = REGISTER.register("polished_lacquered_uncarved_stairs", () -> new StairBlock(MSBlocks.POLISHED_LACQUERED_UNCARVED_WOOD.get().defaultBlockState(), ofFullCopy(POLISHED_LACQUERED_UNCARVED_WOOD.get())));
 	public static final DeferredBlock<SlabBlock> POLISHED_LACQUERED_UNCARVED_SLAB = REGISTER.register("polished_lacquered_uncarved_slab", () -> new SlabBlock(ofFullCopy(POLISHED_LACQUERED_UNCARVED_WOOD.get())));
 	
 	public static final DeferredBlock<Block> LACQUERED_CARVED_KNOTTED_WOOD = REGISTER.register("lacquered_carved_knotted_wood", () -> new MSHorizontalDirectionalBlock(Block.Properties.of().mapColor(MapColor.WOOD).instrument(NoteBlockInstrument.BASS).strength(2.0F).requiresCorrectToolForDrops().sound(SoundType.WOOD)));
@@ -703,7 +702,7 @@ public final class MSBlocks
 	public static final DeferredBlock<Block> GLOWING_PLANKS = REGISTER.register("glowing_planks", () -> new FlammableBlock(5, 20, Block.Properties.of().mapColor(MapColor.COLOR_LIGHT_BLUE).ignitedByLava().instrument(NoteBlockInstrument.BASS).strength(2.0F, 3.0F).lightLevel(state -> 7).sound(SoundType.WOOD)));
 	public static final DeferredBlock<Block> GLOWING_BOOKSHELF = REGISTER.register("glowing_bookshelf", () -> new FlammableBlock(5, 20, Block.Properties.of().mapColor(MapColor.WOOD).ignitedByLava().instrument(NoteBlockInstrument.BASS).strength(2.0F, 3.0F).sound(SoundType.WOOD)));
 	public static final DeferredBlock<Block> GLOWING_LADDER = REGISTER.register("glowing_ladder", () -> new LadderBlock(BlockBehaviour.Properties.of().mapColor(MapColor.WOOD).ignitedByLava().instrument(NoteBlockInstrument.BASS).strength(2.0F, 3.0F).sound(SoundType.WOOD).noOcclusion()));
-	public static final DeferredBlock<StairBlock> GLOWING_STAIRS = REGISTER.register("glowing_stairs", () -> new StairBlock(() -> MSBlocks.GLOWING_PLANKS.get().defaultBlockState(), ofFullCopy(GLOWING_PLANKS.get())));
+	public static final DeferredBlock<StairBlock> GLOWING_STAIRS = REGISTER.register("glowing_stairs", () -> new StairBlock(MSBlocks.GLOWING_PLANKS.get().defaultBlockState(), ofFullCopy(GLOWING_PLANKS.get())));
 	public static final DeferredBlock<SlabBlock> GLOWING_SLAB = REGISTER.register("glowing_slab", () -> new SlabBlock(ofFullCopy(GLOWING_PLANKS.get())));
 	public static final DeferredBlock<ButtonBlock> GLOWING_BUTTON = REGISTER.register("glowing_button", () -> new ButtonBlock(BlockSetType.OAK, 10, ofFullCopy(GLOWING_PLANKS.get())));
 	public static final DeferredBlock<PressurePlateBlock> GLOWING_PRESSURE_PLATE = REGISTER.register("glowing_pressure_plate", () -> new PressurePlateBlock(BlockSetType.OAK, ofFullCopy(GLOWING_PLANKS.get())));
@@ -729,7 +728,7 @@ public final class MSBlocks
 	public static final DeferredBlock<Block> FROST_LEAVES_FLOWERING = REGISTER.register("frost_leaves_flowering", () -> new FlammableLeavesBlock(Block.Properties.of().mapColor(MapColor.PLANT).ignitedByLava().pushReaction(PushReaction.DESTROY).strength(0.2F).randomTicks().sound(SoundType.GRASS).noOcclusion().isValidSpawn(MSBlocks::leafSpawns).isSuffocating(MSBlocks::never).isViewBlocking(MSBlocks::never).isRedstoneConductor(MSBlocks::never)));
 	public static final DeferredBlock<Block> FROST_BOOKSHELF = REGISTER.register("frost_bookshelf", () -> new FlammableBlock(5, 5, Block.Properties.of().mapColor(MapColor.WOOD).ignitedByLava().instrument(NoteBlockInstrument.BASS).strength(2.0F, 3.0F).sound(SoundType.WOOD)));
 	public static final DeferredBlock<Block> FROST_LADDER = REGISTER.register("frost_ladder", () -> new LadderBlock(BlockBehaviour.Properties.of().mapColor(MapColor.WOOD).ignitedByLava().instrument(NoteBlockInstrument.BASS).strength(2.0F, 3.0F).sound(SoundType.WOOD).noOcclusion()));
-	public static final DeferredBlock<StairBlock> FROST_STAIRS = REGISTER.register("frost_stairs", () -> new StairBlock(() -> MSBlocks.FROST_PLANKS.get().defaultBlockState(), ofFullCopy(FROST_PLANKS.get())));
+	public static final DeferredBlock<StairBlock> FROST_STAIRS = REGISTER.register("frost_stairs", () -> new StairBlock(MSBlocks.FROST_PLANKS.get().defaultBlockState(), ofFullCopy(FROST_PLANKS.get())));
 	public static final DeferredBlock<SlabBlock> FROST_SLAB = REGISTER.register("frost_slab", () -> new SlabBlock(ofFullCopy(FROST_PLANKS.get())));
 	public static final DeferredBlock<ButtonBlock> FROST_BUTTON = REGISTER.register("frost_button", () -> new ButtonBlock(MSBlockSetType.FROST, 10, ofFullCopy(FROST_PLANKS.get())));
 	public static final DeferredBlock<PressurePlateBlock> FROST_PRESSURE_PLATE = REGISTER.register("frost_pressure_plate", () -> new PressurePlateBlock(MSBlockSetType.FROST, ofFullCopy(FROST_PLANKS.get())));
@@ -738,6 +737,7 @@ public final class MSBlocks
 	public static final DeferredBlock<DoorBlock> FROST_DOOR = REGISTER.register("frost_door", () -> new DoorBlock(MSBlockSetType.FROST, ofFullCopy(Blocks.OAK_TRAPDOOR)));
 	public static final DeferredBlock<TrapDoorBlock> FROST_TRAPDOOR = REGISTER.register("frost_trapdoor", () -> new TrapDoorBlock(MSBlockSetType.FROST, ofFullCopy(Blocks.OAK_TRAPDOOR)));
 	public static final DeferredBlock<Block> FROST_SAPLING = REGISTER.register("frost_sapling", () -> new FrostSaplingBlock(ofFullCopy(Blocks.OAK_SAPLING)));
+	public static final DeferredBlock<Block> POTTED_FROST_SAPLING = REGISTER.register("potted_frost_sapling", () -> new FlowerPotBlock(() -> (FlowerPotBlock) Blocks.FLOWER_POT, FROST_SAPLING, ofFullCopy(Blocks.POTTED_OAK_SAPLING)));
 	
 	public static final DeferredBlock<StandingSignBlock> FROST_SIGN = REGISTER.register("frost_sign", () -> new MSStandingSignBlock(MSWoodTypes.FROST, ofFullCopy(Blocks.OAK_SIGN)));
 	public static final DeferredBlock<WallSignBlock> FROST_WALL_SIGN = REGISTER.register("frost_wall_sign", () -> new MSWallSignBlock(MSWoodTypes.FROST, ofFullCopy(Blocks.OAK_WALL_SIGN)));
@@ -750,10 +750,11 @@ public final class MSBlocks
 	public static final DeferredBlock<Block> STRIPPED_RAINBOW_LOG = REGISTER.register("stripped_rainbow_log", () -> new FlammableLogBlock(BlockBehaviour.Properties.of().mapColor(logColors(MapColor.WOOD, MapColor.PODZOL)).ignitedByLava().instrument(NoteBlockInstrument.BASS).strength(2.0F).sound(SoundType.WOOD)));
 	public static final DeferredBlock<Block> STRIPPED_RAINBOW_WOOD = REGISTER.register("stripped_rainbow_wood", () -> new FlammableLogBlock(BlockBehaviour.Properties.of().mapColor(logColors(MapColor.WOOD, MapColor.PODZOL)).ignitedByLava().instrument(NoteBlockInstrument.BASS).strength(2.0F).sound(SoundType.WOOD)));
 	public static final DeferredBlock<Block> RAINBOW_PLANKS = REGISTER.register("rainbow_planks", () -> new FlammableBlock(5, 20, Block.Properties.of().mapColor(MapColor.WOOD).ignitedByLava().instrument(NoteBlockInstrument.BASS).strength(2.0F, 3.0F).sound(SoundType.WOOD)));
-	public static final DeferredBlock<StairBlock> RAINBOW_STAIRS = REGISTER.register("rainbow_planks_stairs", () -> new StairBlock(() -> MSBlocks.RAINBOW_PLANKS.get().defaultBlockState(), ofFullCopy(RAINBOW_PLANKS.get())));
+	public static final DeferredBlock<StairBlock> RAINBOW_STAIRS = REGISTER.register("rainbow_planks_stairs", () -> new StairBlock(MSBlocks.RAINBOW_PLANKS.get().defaultBlockState(), ofFullCopy(RAINBOW_PLANKS.get())));
 	public static final DeferredBlock<SlabBlock> RAINBOW_SLAB = REGISTER.register("rainbow_planks_slab", () -> new SlabBlock(ofFullCopy(RAINBOW_PLANKS.get())));
 	public static final DeferredBlock<Block> RAINBOW_LEAVES = REGISTER.register("rainbow_leaves", () -> new FlammableLeavesBlock(Block.Properties.of().mapColor(MapColor.PLANT).ignitedByLava().pushReaction(PushReaction.DESTROY).strength(0.2F).randomTicks().sound(SoundType.GRASS).noOcclusion().isValidSpawn(MSBlocks::leafSpawns).isSuffocating(MSBlocks::never).isViewBlocking(MSBlocks::never).isRedstoneConductor(MSBlocks::never)));
-	public static final DeferredBlock<BushBlock> RAINBOW_SAPLING = REGISTER.register("rainbow_sapling", () -> new RainbowSaplingBlock(Block.Properties.of().mapColor(MapColor.PLANT).pushReaction(PushReaction.DESTROY).noCollission().randomTicks().strength(0).sound(SoundType.GRASS)));
+	public static final DeferredBlock<Block> RAINBOW_SAPLING = REGISTER.register("rainbow_sapling", () -> new RainbowSaplingBlock(Block.Properties.of().mapColor(MapColor.PLANT).pushReaction(PushReaction.DESTROY).noCollission().randomTicks().strength(0).sound(SoundType.GRASS)));
+	public static final DeferredBlock<Block> POTTED_RAINBOW_SAPLING = REGISTER.register("potted_rainbow_sapling",() -> new FlowerPotBlock(() -> (FlowerPotBlock) Blocks.FLOWER_POT, RAINBOW_SAPLING, ofFullCopy(Blocks.POTTED_OAK_SAPLING)));
 	public static final DeferredBlock<Block> RAINBOW_BOOKSHELF = REGISTER.register("rainbow_bookshelf", () -> new FlammableBlock(5, 20, Block.Properties.of().mapColor(MapColor.WOOD).ignitedByLava().instrument(NoteBlockInstrument.BASS).strength(2.0F, 3.0F).sound(SoundType.WOOD)));
 	public static final DeferredBlock<Block> RAINBOW_LADDER = REGISTER.register("rainbow_ladder", () -> new LadderBlock(BlockBehaviour.Properties.of().mapColor(MapColor.WOOD).ignitedByLava().instrument(NoteBlockInstrument.BASS).strength(2.0F, 3.0F).sound(SoundType.WOOD).noOcclusion()));
 	public static final DeferredBlock<ButtonBlock> RAINBOW_BUTTON = REGISTER.register("rainbow_button", () -> new ButtonBlock(MSBlockSetType.RAINBOW, 10, ofFullCopy(RAINBOW_PLANKS.get())));
@@ -775,10 +776,11 @@ public final class MSBlocks
 	public static final DeferredBlock<Block> STRIPPED_END_LOG = REGISTER.register("stripped_end_log", () -> new DoubleLogBlock(BlockBehaviour.Properties.of().mapColor(logColors(MapColor.COLOR_MAGENTA, MapColor.PODZOL)).ignitedByLava().instrument(NoteBlockInstrument.BASS).strength(2.0F).sound(SoundType.WOOD)));
 	public static final DeferredBlock<Block> STRIPPED_END_WOOD = REGISTER.register("stripped_end_wood", () -> new FlammableLogBlock(BlockBehaviour.Properties.of().mapColor(logColors(MapColor.COLOR_MAGENTA, MapColor.PODZOL)).ignitedByLava().instrument(NoteBlockInstrument.BASS).strength(2.0F).sound(SoundType.WOOD)));
 	public static final DeferredBlock<Block> END_PLANKS = REGISTER.register("end_planks", () -> new FlammableBlock(1, 250, Block.Properties.of().mapColor(MapColor.SAND).ignitedByLava().instrument(NoteBlockInstrument.BASS).strength(2.0F, 3.0F).sound(SoundType.WOOD)));
-	public static final DeferredBlock<StairBlock> END_STAIRS = REGISTER.register("end_planks_stairs", () -> new StairBlock(() -> MSBlocks.END_PLANKS.get().defaultBlockState(), ofFullCopy(END_PLANKS.get())));
+	public static final DeferredBlock<StairBlock> END_STAIRS = REGISTER.register("end_planks_stairs", () -> new StairBlock(MSBlocks.END_PLANKS.get().defaultBlockState(), ofFullCopy(END_PLANKS.get())));
 	public static final DeferredBlock<SlabBlock> END_SLAB = REGISTER.register("end_planks_slab", () -> new SlabBlock(ofFullCopy(END_PLANKS.get())));
 	public static final DeferredBlock<Block> END_LEAVES = REGISTER.register("end_leaves", () -> new EndLeavesBlock(Block.Properties.of().mapColor(MapColor.PLANT).ignitedByLava().pushReaction(PushReaction.DESTROY).strength(0.2F).randomTicks().sound(SoundType.GRASS).noOcclusion().isValidSpawn(MSBlocks::leafSpawns).isSuffocating(MSBlocks::never).isViewBlocking(MSBlocks::never).isRedstoneConductor(MSBlocks::never)));
 	public static final DeferredBlock<BushBlock> END_SAPLING = REGISTER.register("end_sapling", () -> new EndSaplingBlock(Block.Properties.of().mapColor(MapColor.PLANT).pushReaction(PushReaction.DESTROY).noCollission().randomTicks().strength(0).sound(SoundType.GRASS)));
+	public static final DeferredBlock<Block> POTTED_END_SAPLING = REGISTER.register("potted_end_sapling", () -> new FlowerPotBlock(() -> (FlowerPotBlock) Blocks.FLOWER_POT, END_SAPLING, ofFullCopy(Blocks.POTTED_OAK_SAPLING)));
 	public static final DeferredBlock<Block> END_LADDER = REGISTER.register("end_ladder", () -> new LadderBlock(BlockBehaviour.Properties.of().mapColor(MapColor.WOOD).ignitedByLava().instrument(NoteBlockInstrument.BASS).strength(2.0F, 3.0F).sound(SoundType.WOOD).noOcclusion()));
 	public static final DeferredBlock<Block> END_BOOKSHELF = REGISTER.register("end_bookshelf", () -> new FlammableBlock(1, 250, Block.Properties.of().mapColor(MapColor.WOOD).ignitedByLava().instrument(NoteBlockInstrument.BASS).strength(2.0F, 3.0F).sound(SoundType.WOOD)));
 	public static final DeferredBlock<ButtonBlock> END_BUTTON = REGISTER.register("end_button", () -> new ButtonBlock(MSBlockSetType.END, 10, ofFullCopy(END_PLANKS.get())));
@@ -806,7 +808,7 @@ public final class MSBlocks
 	public static final DeferredBlock<Block> STRIPPED_DEAD_LOG = REGISTER.register("stripped_dead_log", () -> new FlammableLogBlock(BlockBehaviour.Properties.of().mapColor(logColors(MapColor.WOOD, MapColor.PODZOL)).ignitedByLava().instrument(NoteBlockInstrument.BASS).strength(2.0F).sound(SoundType.WOOD)));
 	public static final DeferredBlock<Block> STRIPPED_DEAD_WOOD = REGISTER.register("stripped_dead_wood", () -> new FlammableLogBlock(BlockBehaviour.Properties.of().mapColor(logColors(MapColor.WOOD, MapColor.PODZOL)).ignitedByLava().instrument(NoteBlockInstrument.BASS).strength(2.0F).sound(SoundType.WOOD)));
 	public static final DeferredBlock<Block> DEAD_PLANKS = REGISTER.register("dead_planks", () -> new FlammableBlock(5, 5, Block.Properties.of().mapColor(MapColor.WOOD).ignitedByLava().instrument(NoteBlockInstrument.BASS).strength(2.0F, 3.0F).sound(SoundType.WOOD)));
-	public static final DeferredBlock<StairBlock> DEAD_STAIRS = REGISTER.register("dead_planks_stairs", () -> new StairBlock(() -> MSBlocks.DEAD_PLANKS.get().defaultBlockState(), ofFullCopy(DEAD_PLANKS.get())));
+	public static final DeferredBlock<StairBlock> DEAD_STAIRS = REGISTER.register("dead_planks_stairs", () -> new StairBlock(MSBlocks.DEAD_PLANKS.get().defaultBlockState(), ofFullCopy(DEAD_PLANKS.get())));
 	public static final DeferredBlock<SlabBlock> DEAD_SLAB = REGISTER.register("dead_planks_slab", () -> new SlabBlock(ofFullCopy(DEAD_PLANKS.get())));
 	public static final DeferredBlock<Block> DEAD_BOOKSHELF = REGISTER.register("dead_bookshelf", () -> new FlammableBlock(5, 5, Block.Properties.of().mapColor(MapColor.WOOD).ignitedByLava().instrument(NoteBlockInstrument.BASS).strength(2.0F, 3.0F).sound(SoundType.WOOD)));
 	public static final DeferredBlock<Block> DEAD_LADDER = REGISTER.register("dead_ladder", () -> new LadderBlock(BlockBehaviour.Properties.of().mapColor(MapColor.WOOD).ignitedByLava().instrument(NoteBlockInstrument.BASS).strength(2.0F, 3.0F).sound(SoundType.WOOD).noOcclusion()));
@@ -832,7 +834,7 @@ public final class MSBlocks
 	public static final DeferredBlock<Block> STRIPPED_CINDERED_LOG = REGISTER.register("stripped_cindered_log", () -> new FlammableLogBlock(BlockBehaviour.Properties.of().mapColor(logColors(MapColor.WOOD, MapColor.PODZOL)).ignitedByLava().instrument(NoteBlockInstrument.BASS).strength(2.0F).sound(SoundType.WOOD)));
 	public static final DeferredBlock<Block> STRIPPED_CINDERED_WOOD = REGISTER.register("stripped_cindered_wood", () -> new FlammableLogBlock(BlockBehaviour.Properties.of().mapColor(logColors(MapColor.WOOD, MapColor.PODZOL)).ignitedByLava().instrument(NoteBlockInstrument.BASS).strength(2.0F).sound(SoundType.WOOD)));
 	public static final DeferredBlock<Block> CINDERED_PLANKS = REGISTER.register("cindered_planks", () -> new FlammableBlock(5, 20, Block.Properties.of().mapColor(MapColor.WOOD).ignitedByLava().instrument(NoteBlockInstrument.GUITAR).strength(2.0F, 3.0F).sound(SoundType.WOOD)));
-	public static final DeferredBlock<StairBlock> CINDERED_STAIRS = REGISTER.register("cindered_stairs", () -> new StairBlock(() -> MSBlocks.CINDERED_PLANKS.get().defaultBlockState(), ofFullCopy(CINDERED_PLANKS.get())));
+	public static final DeferredBlock<StairBlock> CINDERED_STAIRS = REGISTER.register("cindered_stairs", () -> new StairBlock(MSBlocks.CINDERED_PLANKS.get().defaultBlockState(), ofFullCopy(CINDERED_PLANKS.get())));
 	public static final DeferredBlock<SlabBlock> CINDERED_SLAB = REGISTER.register("cindered_slab", () -> new SlabBlock(ofFullCopy(CINDERED_PLANKS.get())));
 	public static final DeferredBlock<ButtonBlock> CINDERED_BUTTON = REGISTER.register("cindered_button", () -> new ButtonBlock(MSBlockSetType.CINDERED, 10, ofFullCopy(CINDERED_PLANKS.get())));
 	public static final DeferredBlock<PressurePlateBlock> CINDERED_PRESSURE_PLATE = REGISTER.register("cindered_pressure_plate", () -> new PressurePlateBlock(MSBlockSetType.CINDERED, ofFullCopy(CINDERED_PLANKS.get())));
@@ -840,6 +842,8 @@ public final class MSBlocks
 	public static final DeferredBlock<FenceGateBlock> CINDERED_FENCE_GATE = REGISTER.register("cindered_fence_gate", () -> new FenceGateBlock(ofFullCopy(CINDERED_PLANKS.get()), SoundEvents.FENCE_GATE_OPEN, SoundEvents.FENCE_GATE_CLOSE));
 	public static final DeferredBlock<DoorBlock> CINDERED_DOOR = REGISTER.register("cindered_door", () -> new DoorBlock(MSBlockSetType.CINDERED, ofFullCopy(Blocks.OAK_TRAPDOOR)));
 	public static final DeferredBlock<TrapDoorBlock> CINDERED_TRAPDOOR = REGISTER.register("cindered_trapdoor", () -> new TrapDoorBlock(MSBlockSetType.CINDERED, ofFullCopy(Blocks.OAK_TRAPDOOR)));
+	public static final DeferredBlock<Block> CINDERED_BOOKSHELF = REGISTER.register("cindered_bookshelf", () -> new FlammableBlock(0, 0, Block.Properties.of().mapColor(MapColor.WOOD).instrument(NoteBlockInstrument.BASS).strength(2.0F, 3.0F).sound(SoundType.WOOD)));
+	public static final DeferredBlock<Block> CINDERED_LADDER = REGISTER.register("cindered_ladder", () -> new LadderBlock(BlockBehaviour.Properties.of().mapColor(MapColor.WOOD).instrument(NoteBlockInstrument.BASS).strength(2.0F, 3.0F).sound(SoundType.WOOD).noOcclusion()));
 	
 	public static final DeferredBlock<StandingSignBlock> CINDERED_SIGN = REGISTER.register("cindered_sign", () -> new MSStandingSignBlock(MSWoodTypes.CINDERED, ofFullCopy(Blocks.OAK_SIGN)));
 	public static final DeferredBlock<WallSignBlock> CINDERED_WALL_SIGN = REGISTER.register("cindered_wall_sign", () -> new MSWallSignBlock(MSWoodTypes.CINDERED, ofFullCopy(Blocks.OAK_WALL_SIGN)));
@@ -850,7 +854,7 @@ public final class MSBlocks
 	public static final DeferredBlock<Block> SHADEWOOD_LOG = REGISTER.register("shadewood_log", () -> new StrippableFlammableLogBlock(Block.Properties.of().mapColor(MapColor.COLOR_LIGHT_BLUE).ignitedByLava().instrument(NoteBlockInstrument.BASS).strength(2.0F).sound(SoundType.WOOD), () -> MSBlocks.STRIPPED_SHADEWOOD_LOG.get().defaultBlockState()));
 	public static final DeferredBlock<Block> SHADEWOOD = REGISTER.register("shadewood", () -> new StrippableFlammableLogBlock(ofFullCopy(SHADEWOOD_LOG.get()), () -> MSBlocks.STRIPPED_SHADEWOOD.get().defaultBlockState()));
 	public static final DeferredBlock<Block> SHADEWOOD_PLANKS = REGISTER.register("shadewood_planks", () -> new FlammableBlock(5, 20, Block.Properties.of().mapColor(MapColor.COLOR_LIGHT_BLUE).ignitedByLava().instrument(NoteBlockInstrument.BASS).strength(2.0F, 3.0F).sound(SoundType.WOOD)));
-	public static final DeferredBlock<StairBlock> SHADEWOOD_STAIRS = REGISTER.register("shadewood_stairs", () -> new StairBlock(() -> MSBlocks.SHADEWOOD_PLANKS.get().defaultBlockState(), ofFullCopy(SHADEWOOD_PLANKS.get())));
+	public static final DeferredBlock<StairBlock> SHADEWOOD_STAIRS = REGISTER.register("shadewood_stairs", () -> new StairBlock(MSBlocks.SHADEWOOD_PLANKS.get().defaultBlockState(), ofFullCopy(SHADEWOOD_PLANKS.get())));
 	public static final DeferredBlock<SlabBlock> SHADEWOOD_SLAB = REGISTER.register("shadewood_slab", () -> new SlabBlock(ofFullCopy(SHADEWOOD_PLANKS.get())));
 	public static final DeferredBlock<ButtonBlock> SHADEWOOD_BUTTON = REGISTER.register("shadewood_button", () -> new ButtonBlock(MSBlockSetType.SHADEWOOD, 10, ofFullCopy(SHADEWOOD_PLANKS.get())));
 	public static final DeferredBlock<PressurePlateBlock> SHADEWOOD_PRESSURE_PLATE = REGISTER.register("shadewood_pressure_plate", () -> new PressurePlateBlock(MSBlockSetType.SHADEWOOD, ofFullCopy(SHADEWOOD_PLANKS.get())));
@@ -858,6 +862,8 @@ public final class MSBlocks
 	public static final DeferredBlock<FenceGateBlock> SHADEWOOD_FENCE_GATE = REGISTER.register("shadewood_fence_gate", () -> new FenceGateBlock(ofFullCopy(SHADEWOOD_PLANKS.get()), SoundEvents.FENCE_GATE_OPEN, SoundEvents.FENCE_GATE_CLOSE));
 	public static final DeferredBlock<DoorBlock> SHADEWOOD_DOOR = REGISTER.register("shadewood_door", () -> new DoorBlock(MSBlockSetType.SHADEWOOD, ofFullCopy(Blocks.OAK_TRAPDOOR)));
 	public static final DeferredBlock<TrapDoorBlock> SHADEWOOD_TRAPDOOR = REGISTER.register("shadewood_trapdoor", () -> new TrapDoorBlock(MSBlockSetType.SHADEWOOD, ofFullCopy(Blocks.OAK_TRAPDOOR)));
+	public static final DeferredBlock<Block> SHADEWOOD_BOOKSHELF = REGISTER.register("shadewood_bookshelf", () -> new FlammableBlock(0, 0, Block.Properties.of().mapColor(MapColor.WOOD).instrument(NoteBlockInstrument.BASS).strength(2.0F, 3.0F).sound(SoundType.WOOD)));
+	public static final DeferredBlock<Block> SHADEWOOD_LADDER = REGISTER.register("shadewood_ladder", () -> new LadderBlock(BlockBehaviour.Properties.of().mapColor(MapColor.WOOD).instrument(NoteBlockInstrument.BASS).strength(2.0F, 3.0F).sound(SoundType.WOOD).noOcclusion()));
 	
 	public static final DeferredBlock<StandingSignBlock> SHADEWOOD_SIGN = REGISTER.register("shadewood_sign", () -> new MSStandingSignBlock(MSWoodTypes.SHADEWOOD, ofFullCopy(Blocks.OAK_SIGN)));
 	public static final DeferredBlock<WallSignBlock> SHADEWOOD_WALL_SIGN = REGISTER.register("shadewood_wall_sign", () -> new MSWallSignBlock(MSWoodTypes.SHADEWOOD, ofFullCopy(Blocks.OAK_WALL_SIGN)));
@@ -868,11 +874,12 @@ public final class MSBlocks
 	public static final DeferredBlock<Block> SHADEWOOD_LEAVES = REGISTER.register("shadewood_leaves", () -> new FlammableLeavesBlock(Block.Properties.of().mapColor(MapColor.PLANT).ignitedByLava().pushReaction(PushReaction.DESTROY).strength(0.2F).randomTicks().sound(SoundType.GRASS).noOcclusion().isValidSpawn(MSBlocks::leafSpawns).isSuffocating(MSBlocks::never).isViewBlocking(MSBlocks::never).isRedstoneConductor(MSBlocks::never)));
 	public static final DeferredBlock<Block> SHROOMY_SHADEWOOD_LEAVES = REGISTER.register("shroomy_shadewood_leaves", () -> new FlammableLeavesBlock(Block.Properties.of().mapColor(MapColor.PLANT).ignitedByLava().pushReaction(PushReaction.DESTROY).strength(0.2F).randomTicks().lightLevel(state -> 11).sound(SoundType.GRASS).noOcclusion().isValidSpawn(MSBlocks::leafSpawns).isSuffocating(MSBlocks::never).isViewBlocking(MSBlocks::never).isRedstoneConductor(MSBlocks::never)));
 	
-	public static final DeferredBlock<BushBlock> SHADEWOOD_SAPLING = REGISTER.register("shadewood_sapling", () -> new SaplingBlock(
+	public static final DeferredBlock<Block> SHADEWOOD_SAPLING = REGISTER.register("shadewood_sapling", () -> new SaplingBlock(
 			//One should be careful where to create tree growers because they're getting added to an internal data structure.
 			// Doing it during item registration like here should be fine.
 			new TreeGrower(Minestuck.id("shadewood").toString(), 0.05F, Optional.empty(), Optional.empty(), Optional.of(MSCFeatures.SHADEWOOD_TREE), Optional.of(MSCFeatures.SCARRED_SHADEWOOD_TREE), Optional.empty(), Optional.empty()),
 			Block.Properties.of().mapColor(MapColor.PLANT).pushReaction(PushReaction.DESTROY).noCollission().randomTicks().lightLevel(state -> 8).strength(0).sound(SoundType.GRASS)));
+	public static final DeferredBlock<Block> POTTED_SHADEWOOD_SAPLING = REGISTER.register("potted_shadewood_sapling", () -> new FlowerPotBlock(() -> (FlowerPotBlock) Blocks.FLOWER_POT, SHADEWOOD_SAPLING, ofFullCopy(Blocks.POTTED_OAK_SAPLING)));
 	
 	public static final DeferredBlock<Block> SCARRED_SHADEWOOD_LOG = REGISTER.register("scarred_shadewood_log", () -> new StrippableFlammableLogBlock(Block.Properties.of().mapColor(MapColor.COLOR_LIGHT_BLUE).ignitedByLava().instrument(NoteBlockInstrument.BASS).strength(2.0F).lightLevel(state -> 6).sound(SoundType.WOOD), () -> MSBlocks.STRIPPED_SCARRED_SHADEWOOD_LOG.get().defaultBlockState()));
 	public static final DeferredBlock<Block> SCARRED_SHADEWOOD = REGISTER.register("scarred_shadewood", () -> new StrippableFlammableLogBlock(ofFullCopy(SCARRED_SHADEWOOD_LOG.get()), () -> MSBlocks.STRIPPED_SCARRED_SHADEWOOD.get().defaultBlockState()));
@@ -918,7 +925,7 @@ public final class MSBlocks
 					Block.Properties.of().mapColor(MapColor.PLANT).pushReaction(PushReaction.DESTROY).noCollission().randomTicks().strength(0).sound(SoundType.WOOD)));
 	public static final DeferredBlock<Block> END_GRASS = REGISTER.register("end_grass", () -> new EndGrassBlock(Block.Properties.of().mapColor(MapColor.COLOR_PURPLE).instrument(NoteBlockInstrument.BASEDRUM).requiresCorrectToolForDrops().strength(3.0F, 9.0F)));
 	public static final DeferredBlock<Block> TALL_END_GRASS = REGISTER.register("tall_end_grass", () -> new TallEndGrassBlock(Block.Properties.of().mapColor(DyeColor.GREEN).replaceable().ignitedByLava().pushReaction(PushReaction.DESTROY).noCollission().randomTicks().strength(0.1F).sound(SoundType.NETHER_WART).offsetType(BlockBehaviour.OffsetType.XYZ)));
-	public static final DeferredBlock<Block> GLOWFLOWER = REGISTER.register("glowflower", () -> new FlowerBlock(() -> MobEffects.GLOWING, 20, Block.Properties.of().mapColor(DyeColor.YELLOW).pushReaction(PushReaction.DESTROY).noCollission().strength(0).lightLevel(state -> 12).sound(SoundType.GRASS).offsetType(BlockBehaviour.OffsetType.XZ)));
+	public static final DeferredBlock<Block> GLOWFLOWER = REGISTER.register("glowflower", () -> new FlowerBlock(MobEffects.GLOWING, 20, Block.Properties.of().mapColor(DyeColor.YELLOW).pushReaction(PushReaction.DESTROY).noCollission().strength(0).lightLevel(state -> 12).sound(SoundType.GRASS).offsetType(BlockBehaviour.OffsetType.XZ)));
 	
 	
 	//Special Land Blocks
@@ -959,6 +966,7 @@ public final class MSBlocks
 	public static final DeferredBlock<Block> RETRACTABLE_SPIKES = REGISTER.register("retractable_spikes", () -> new RetractableSpikesBlock(Block.Properties.of().mapColor(MapColor.METAL).requiresCorrectToolForDrops().strength(1).sound(SoundType.METAL)));
 	public static final DeferredBlock<Block> BLOCK_PRESSURE_PLATE = REGISTER.register("block_pressure_plate", () -> new BlockPressurePlateBlock(Block.Properties.of().mapColor(MapColor.STONE).instrument(NoteBlockInstrument.BASEDRUM).requiresCorrectToolForDrops().strength(1).sound(SoundType.STONE)));
 	public static final DeferredBlock<Block> PUSHABLE_BLOCK = REGISTER.register("pushable_block", () -> new PushableBlock(Block.Properties.of().mapColor(MapColor.STONE).instrument(NoteBlockInstrument.BASEDRUM).requiresCorrectToolForDrops().strength(1).sound(SoundType.GILDED_BLACKSTONE), PushableBlock.Maneuverability.PUSH_AND_PULL));
+	public static final DeferredBlock<Block> BLOCK_TELEPORTER = REGISTER.register("block_teleporter", () -> new BlockTeleporterBlock(Block.Properties.of().mapColor(MapColor.METAL).requiresCorrectToolForDrops().strength(1).sound(SoundType.METAL)));
 	
 	public static final DeferredBlock<Block> AND_GATE_BLOCK = REGISTER.register("and_gate_block", () -> new LogicGateBlock(Block.Properties.of().mapColor(MapColor.METAL).requiresCorrectToolForDrops().strength(1).sound(SoundType.METAL), LogicGateBlock.State.AND));
 	public static final DeferredBlock<Block> OR_GATE_BLOCK = REGISTER.register("or_gate_block", () -> new LogicGateBlock(ofFullCopy(AND_GATE_BLOCK.get()), LogicGateBlock.State.OR));
@@ -1030,7 +1038,7 @@ public final class MSBlocks
 		player.addEffect(new MobEffectInstance(MobEffects.MOVEMENT_SLOWDOWN, 200, 1));
 	}));
 	public static final DeferredBlock<Block> RED_CAKE = REGISTER.register("red_cake", () -> new SimpleCakeBlock(ofFullCopy(Blocks.CAKE), 2, 0.1F, player -> player.heal(1)));
-	public static final DeferredBlock<Block> HOT_CAKE = REGISTER.register("hot_cake", () -> new SimpleCakeBlock(ofFullCopy(Blocks.CAKE), 2, 0.1F, player -> player.setSecondsOnFire(4)));
+	public static final DeferredBlock<Block> HOT_CAKE = REGISTER.register("hot_cake", () -> new SimpleCakeBlock(ofFullCopy(Blocks.CAKE), 2, 0.1F, player -> player.igniteForSeconds(4)));
 	public static final DeferredBlock<Block> REVERSE_CAKE = REGISTER.register("reverse_cake", () -> new SimpleCakeBlock(ofFullCopy(Blocks.CAKE), 2, 0.1F, null));
 	public static final DeferredBlock<Block> FUCHSIA_CAKE = REGISTER.register("fuchsia_cake", () -> new SimpleCakeBlock(ofFullCopy(Blocks.CAKE), 3, 0.5F, player -> {
 		player.addEffect(new MobEffectInstance(MobEffects.ABSORPTION, 350, 1));
@@ -1066,14 +1074,14 @@ public final class MSBlocks
 	public static final DeferredBlock<Block> GLOWYSTONE_DUST = REGISTER.register("glowystone_dust", () -> new GlowystoneWireBlock(Block.Properties.of().pushReaction(PushReaction.DESTROY).strength(0.0F).lightLevel(state -> 16).noCollission()));
 	public static final DeferredBlock<Block> MIRROR = REGISTER.register("mirror", () -> new CustomShapeBlock(ofFullCopy(Blocks.OAK_PLANKS), MSBlockShapes.MIRROR));
 	
-	public static final DeferredBlock<LiquidBlock> OIL = REGISTER.register("oil", () -> new MSLiquidBlock(MSFluids.OIL, new Vec3(0.0, 0.0, 0.0), 0.80f, false, Block.Properties.of().mapColor(MapColor.COLOR_BLACK).replaceable().pushReaction(PushReaction.DESTROY).liquid().noCollission().strength(100.0F).noLootTable().sound(SoundType.EMPTY)));
-	public static final DeferredBlock<LiquidBlock> BLOOD = REGISTER.register("blood", () -> new MSLiquidBlock(MSFluids.BLOOD, new Vec3(0.8, 0.0, 0.0), 0.35f, true, Block.Properties.of().mapColor(MapColor.COLOR_RED).replaceable().pushReaction(PushReaction.DESTROY).liquid().noCollission().strength(100.0F).noLootTable().sound(SoundType.EMPTY)));
-	public static final DeferredBlock<LiquidBlock> BRAIN_JUICE = REGISTER.register("brain_juice", () -> new MSLiquidBlock(MSFluids.BRAIN_JUICE, new Vec3(0.55, 0.25, 0.7), 0.25f, true, Block.Properties.of().mapColor(MapColor.COLOR_PURPLE).replaceable().pushReaction(PushReaction.DESTROY).liquid().noCollission().strength(100.0F).noLootTable().sound(SoundType.EMPTY)));
-	public static final DeferredBlock<LiquidBlock> WATER_COLORS = REGISTER.register("water_colors", () -> new WaterColorsBlock(MSFluids.WATER_COLORS, 0.20f, Block.Properties.of().mapColor(MapColor.WATER).replaceable().pushReaction(PushReaction.DESTROY).liquid().noCollission().strength(100.0F).noLootTable().sound(SoundType.EMPTY)));
-	public static final DeferredBlock<LiquidBlock> ENDER = REGISTER.register("ender", () -> new MSLiquidBlock(MSFluids.ENDER, new Vec3(0, 0.35, 0.35), (Float.MAX_VALUE), false, Block.Properties.of().mapColor(MapColor.COLOR_CYAN).replaceable().pushReaction(PushReaction.DESTROY).liquid().noCollission().strength(100.0F).noLootTable().sound(SoundType.EMPTY)));
-	public static final DeferredBlock<LiquidBlock> LIGHT_WATER = REGISTER.register("light_water", () -> new MSLiquidBlock(MSFluids.LIGHT_WATER, new Vec3(0.2, 0.3, 1.0), 0.20f, true, Block.Properties.of().mapColor(MapColor.WATER).replaceable().pushReaction(PushReaction.DESTROY).liquid().noCollission().strength(100.0F).lightLevel(state -> 8).noLootTable().sound(SoundType.EMPTY)));
-	public static final DeferredBlock<LiquidBlock> CAULK = REGISTER.register("caulk", () -> new MSLiquidBlock(MSFluids.CAULK, new Vec3(0.79, 0.74, 0.63), 0.80f, false, Block.Properties.of().mapColor(MapColor.COLOR_GRAY).replaceable().pushReaction(PushReaction.DESTROY).liquid().noCollission().strength(100.0F).noLootTable().sound(SoundType.EMPTY)));
-	public static final DeferredBlock<LiquidBlock> MOLTEN_AMBER = REGISTER.register("molten_amber", () -> new MSLiquidBlock(MSFluids.MOLTEN_AMBER, new Vec3(2.21, 1.29, 0.0), 0.90f, false, Block.Properties.of().mapColor(MapColor.FIRE).replaceable().pushReaction(PushReaction.DESTROY).liquid().noCollission().strength(100.0F).lightLevel(state -> 15).noLootTable().sound(SoundType.EMPTY)));
+	public static final DeferredBlock<LiquidBlock> OIL = REGISTER.register("oil", () -> new MSLiquidBlock(MSFluids.OIL.get(), new Vec3(0.0, 0.0, 0.0), 0.80f, false, Block.Properties.of().mapColor(MapColor.COLOR_BLACK).replaceable().pushReaction(PushReaction.DESTROY).liquid().noCollission().strength(100.0F).noLootTable().sound(SoundType.EMPTY)));
+	public static final DeferredBlock<LiquidBlock> BLOOD = REGISTER.register("blood", () -> new MSLiquidBlock(MSFluids.BLOOD.get(), new Vec3(0.8, 0.0, 0.0), 0.35f, true, Block.Properties.of().mapColor(MapColor.COLOR_RED).replaceable().pushReaction(PushReaction.DESTROY).liquid().noCollission().strength(100.0F).noLootTable().sound(SoundType.EMPTY)));
+	public static final DeferredBlock<LiquidBlock> BRAIN_JUICE = REGISTER.register("brain_juice", () -> new MSLiquidBlock(MSFluids.BRAIN_JUICE.get(), new Vec3(0.55, 0.25, 0.7), 0.25f, true, Block.Properties.of().mapColor(MapColor.COLOR_PURPLE).replaceable().pushReaction(PushReaction.DESTROY).liquid().noCollission().strength(100.0F).noLootTable().sound(SoundType.EMPTY)));
+	public static final DeferredBlock<LiquidBlock> WATER_COLORS = REGISTER.register("water_colors", () -> new WaterColorsBlock(MSFluids.WATER_COLORS.get(), 0.20f, Block.Properties.of().mapColor(MapColor.WATER).replaceable().pushReaction(PushReaction.DESTROY).liquid().noCollission().strength(100.0F).noLootTable().sound(SoundType.EMPTY)));
+	public static final DeferredBlock<LiquidBlock> ENDER = REGISTER.register("ender", () -> new MSLiquidBlock(MSFluids.ENDER.get(), new Vec3(0, 0.35, 0.35), (Float.MAX_VALUE), false, Block.Properties.of().mapColor(MapColor.COLOR_CYAN).replaceable().pushReaction(PushReaction.DESTROY).liquid().noCollission().strength(100.0F).noLootTable().sound(SoundType.EMPTY)));
+	public static final DeferredBlock<LiquidBlock> LIGHT_WATER = REGISTER.register("light_water", () -> new MSLiquidBlock(MSFluids.LIGHT_WATER.get(), new Vec3(0.2, 0.3, 1.0), 0.20f, true, Block.Properties.of().mapColor(MapColor.WATER).replaceable().pushReaction(PushReaction.DESTROY).liquid().noCollission().strength(100.0F).lightLevel(state -> 8).noLootTable().sound(SoundType.EMPTY)));
+	public static final DeferredBlock<LiquidBlock> CAULK = REGISTER.register("caulk", () -> new MSLiquidBlock(MSFluids.CAULK.get(), new Vec3(0.79, 0.74, 0.63), 0.80f, false, Block.Properties.of().mapColor(MapColor.COLOR_GRAY).replaceable().pushReaction(PushReaction.DESTROY).liquid().noCollission().strength(100.0F).noLootTable().sound(SoundType.EMPTY)));
+	public static final DeferredBlock<LiquidBlock> MOLTEN_AMBER = REGISTER.register("molten_amber", () -> new MSLiquidBlock(MSFluids.MOLTEN_AMBER.get(), new Vec3(2.21, 1.29, 0.0), 0.90f, false, Block.Properties.of().mapColor(MapColor.FIRE).replaceable().pushReaction(PushReaction.DESTROY).liquid().noCollission().strength(100.0F).lightLevel(state -> 15).noLootTable().sound(SoundType.EMPTY)));
 	
 	
 	protected static Function<BlockState, MapColor> logColors(MapColor topColor, MapColor barkColor)

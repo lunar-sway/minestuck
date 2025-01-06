@@ -1,0 +1,24 @@
+{
+  "type": "minecraft:crafting_shaped",
+  "category": "misc",
+  "key": {
+    "i": {
+      "tag": "c:ingots/iron"
+    },
+    "r": {
+      "tag": "c:rods/wooden"
+    },
+    "s": {
+      "tag": "c:stones"
+    }
+  },
+  "pattern": [
+    " rr",
+    "sss",
+    "iii"
+  ],
+  "result": {
+    "count": 1,
+    "id": "minestuck:clothes_iron"
+  }
+}

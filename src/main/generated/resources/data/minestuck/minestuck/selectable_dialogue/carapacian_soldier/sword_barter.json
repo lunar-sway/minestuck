@@ -4,5 +4,6 @@
     "item": "minestuck:regisword"
   },
   "dialogue": "minestuck:carapacian_soldier/sword_barter/start.1",
-  "dialogue_weight": 40
+  "dialogue_weight": 40,
+  "keep_on_reset": false
 }

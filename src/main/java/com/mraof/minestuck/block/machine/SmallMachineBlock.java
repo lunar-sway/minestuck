@@ -6,7 +6,6 @@ import com.mraof.minestuck.player.IdentifierHandler;
 import net.minecraft.core.BlockPos;
 import net.minecraft.core.Direction;
 import net.minecraft.server.level.ServerPlayer;
-import net.minecraft.world.InteractionHand;
 import net.minecraft.world.InteractionResult;
 import net.minecraft.world.MenuProvider;
 import net.minecraft.world.entity.player.Player;
@@ -22,9 +21,11 @@ import net.minecraft.world.phys.shapes.CollisionContext;
 import net.minecraft.world.phys.shapes.VoxelShape;
 
 import javax.annotation.Nullable;
+import javax.annotation.ParametersAreNonnullByDefault;
 import java.util.Map;
 import java.util.function.Supplier;
 
+@ParametersAreNonnullByDefault
 public class SmallMachineBlock<T extends MachineProcessBlockEntity> extends MachineProcessBlock implements EntityBlock
 {
 	private final Map<Direction, VoxelShape> shape;
@@ -38,15 +39,13 @@ public class SmallMachineBlock<T extends MachineProcessBlockEntity> extends Mach
 	}
 	
 	@Override
-	@SuppressWarnings("deprecation")
-	public VoxelShape getShape(BlockState state, BlockGetter level, BlockPos pos, CollisionContext context)
+	protected VoxelShape getShape(BlockState state, BlockGetter level, BlockPos pos, CollisionContext context)
 	{
 		return shape.get(state.getValue(FACING));
 	}
 	
 	@Override
-	@SuppressWarnings("deprecation")
-	public InteractionResult use(BlockState state, Level level, BlockPos pos, Player player, InteractionHand handIn, BlockHitResult hit)
+	protected InteractionResult useWithoutItem(BlockState state, Level level, BlockPos pos, Player player, BlockHitResult hit)
 	{
 		if(player instanceof ServerPlayer serverPlayer)
 		{

@@ -201,7 +201,7 @@ public final class MSPlacedFeatures
 	
 	private static ResourceKey<PlacedFeature> key(String name)
 	{
-		return ResourceKey.create(Registries.PLACED_FEATURE, new ResourceLocation(Minestuck.MOD_ID, name));
+		return ResourceKey.create(Registries.PLACED_FEATURE, ResourceLocation.fromNamespaceAndPath(Minestuck.MOD_ID, name));
 	}
 	
 	public static <T extends FeatureConfiguration> PlacedFeature inline(Feature<T> feature, T config, PlacementModifier... placements)

@@ -1,0 +1,11 @@
+{
+  "type": "minestuck:combination",
+  "input1": {
+    "item": "minestuck:raw_uranium"
+  },
+  "input2": {
+    "item": "minestuck:black_stone"
+  },
+  "mode": "and",
+  "output": "minestuck:black_stone_uranium_ore"
+}

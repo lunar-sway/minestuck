@@ -1,0 +1,43 @@
+{
+  "parent": "minecraft:recipes/root",
+  "criteria": {
+    "has_cruxite_bricks": {
+      "conditions": {
+        "items": [
+          {
+            "items": "minestuck:cruxite_bricks"
+          }
+        ]
+      },
+      "trigger": "minecraft:inventory_changed"
+    },
+    "has_raw_cruxite": {
+      "conditions": {
+        "items": [
+          {
+            "items": "minestuck:raw_cruxite"
+          }
+        ]
+      },
+      "trigger": "minecraft:inventory_changed"
+    },
+    "has_the_recipe": {
+      "conditions": {
+        "recipe": "minestuck:cruxite_brick_slab"
+      },
+      "trigger": "minecraft:recipe_unlocked"
+    }
+  },
+  "requirements": [
+    [
+      "has_the_recipe",
+      "has_cruxite_bricks",
+      "has_raw_cruxite"
+    ]
+  ],
+  "rewards": {
+    "recipes": [
+      "minestuck:cruxite_brick_slab"
+    ]
+  }
+}

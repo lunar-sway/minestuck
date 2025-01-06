@@ -1,6 +1,6 @@
 package com.mraof.minestuck.world.gen.structure;
 
-import com.mojang.serialization.Codec;
+import com.mojang.serialization.MapCodec;
 import com.mraof.minestuck.Minestuck;
 import net.minecraft.MethodsReturnNonnullByDefault;
 import net.minecraft.core.Direction;
@@ -22,7 +22,7 @@ import java.util.Map;
 import java.util.Optional;
 import java.util.function.Supplier;
 
-import static com.mraof.minestuck.world.gen.structure.MSStructureTypes.asType;
+import static com.mraof.minestuck.world.gen.structure.MSStructures.asType;
 
 @ParametersAreNonnullByDefault
 @MethodsReturnNonnullByDefault
@@ -40,12 +40,12 @@ public final class ProspitStructure
 	
 	public static final ResourceKey<Structure> STRUCTURE = ResourceKey.create(Registries.STRUCTURE, Minestuck.id("prospit_terrain"));
 	
-	public static final Supplier<StructurePlacementType<FixedPlacement>> FIXED_PLACEMENT_TYPE = MSStructurePlacements.REGISTER.register("fixed",
+	public static final Supplier<StructurePlacementType<FixedPlacement>> FIXED_PLACEMENT_TYPE = MSStructures.PLACEMENT_REGISTER.register("fixed",
 			() -> () -> FixedPlacement.CODEC);
 	
 	public static final class FixedPlacement extends StructurePlacement
 	{
-		public static final Codec<FixedPlacement> CODEC = Codec.unit(FixedPlacement::new);
+		public static final MapCodec<FixedPlacement> CODEC = MapCodec.unit(FixedPlacement::new);
 		
 		public FixedPlacement()
 		{
@@ -65,12 +65,12 @@ public final class ProspitStructure
 		}
 	}
 	
-	public static final Supplier<StructureType<TerrainStructure>> STRUCTURE_TYPE = MSStructureTypes.REGISTER.register("prospit_terrain",
+	public static final Supplier<StructureType<TerrainStructure>> STRUCTURE_TYPE = MSStructures.TYPE_REGISTER.register("prospit_terrain",
 			() -> asType(TerrainStructure.CODEC));
 	
 	public static final class TerrainStructure extends Structure
 	{
-		public static final Codec<TerrainStructure> CODEC = simpleCodec(TerrainStructure::new);
+		public static final MapCodec<TerrainStructure> CODEC = simpleCodec(TerrainStructure::new);
 		
 		public TerrainStructure(StructureSettings settings)
 		{

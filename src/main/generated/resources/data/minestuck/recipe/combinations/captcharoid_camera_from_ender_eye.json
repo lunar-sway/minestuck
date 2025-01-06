@@ -1,0 +1,11 @@
+{
+  "type": "minestuck:combination",
+  "input1": {
+    "item": "minestuck:captcha_card"
+  },
+  "input2": {
+    "item": "minecraft:ender_eye"
+  },
+  "mode": "or",
+  "output": "minestuck:captcharoid_camera"
+}

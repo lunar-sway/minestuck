@@ -1,10 +1,17 @@
 {
   "node": {
+    "animation": {},
+    "gui": "minestuck:textures/gui/dialogue/dialogue.png",
     "message": "minestuck.dialogue.consort.types_of_colors.3",
     "responses": [
       {
+        "condition": {
+          "type": "minestuck:always_true"
+        },
+        "hide_if_failed": true,
         "message": "minestuck.arrow",
-        "next_dialogue": "minestuck:consort/types_of_colors/4"
+        "next_dialogue": "minestuck:consort/types_of_colors/4",
+        "triggers": []
       }
     ]
   }

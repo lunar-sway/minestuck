@@ -2,10 +2,12 @@ package com.mraof.minestuck.entity.underling;
 
 import net.minecraft.MethodsReturnNonnullByDefault;
 import net.minecraft.nbt.CompoundTag;
+import net.minecraft.network.syncher.SynchedEntityData;
 import net.minecraft.world.damagesource.DamageSource;
 import net.minecraft.world.entity.Entity;
 import net.minecraft.world.entity.EntityDimensions;
 import net.minecraft.world.entity.Pose;
+import net.minecraft.world.level.Level;
 import net.neoforged.neoforge.entity.PartEntity;
 
 import javax.annotation.ParametersAreNonnullByDefault;
@@ -26,7 +28,7 @@ public class BasiliskPartEntity extends PartEntity<BasiliskEntity>
 	}
 	
 	@Override
-	protected void defineSynchedData()
+	protected void defineSynchedData(SynchedEntityData.Builder builder)
 	{
 	}
 	
@@ -47,7 +49,7 @@ public class BasiliskPartEntity extends PartEntity<BasiliskEntity>
 	}
 	
 	@Override
-	public boolean canChangeDimensions()
+	public boolean canChangeDimensions(Level oldLevel, Level newLevel)
 	{
 		return false;
 	}

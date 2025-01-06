@@ -2,14 +2,17 @@ package com.mraof.minestuck.entity;
 
 import com.mraof.minestuck.MinestuckConfig;
 import com.mraof.minestuck.item.loot.MSLootTables;
-import com.mraof.minestuck.network.LotusFlowerPacket;
+import com.mraof.minestuck.network.LotusFlowerAnimationPacket;
 import com.mraof.minestuck.util.MSSoundEvents;
 import net.minecraft.MethodsReturnNonnullByDefault;
+import net.minecraft.core.BlockPos;
 import net.minecraft.core.particles.ParticleTypes;
 import net.minecraft.nbt.CompoundTag;
 import net.minecraft.nbt.Tag;
 import net.minecraft.network.FriendlyByteBuf;
+import net.minecraft.network.RegistryFriendlyByteBuf;
 import net.minecraft.network.chat.Component;
+import net.minecraft.network.syncher.SynchedEntityData;
 import net.minecraft.server.level.ServerLevel;
 import net.minecraft.sounds.SoundSource;
 import net.minecraft.world.InteractionHand;
@@ -19,6 +22,7 @@ import net.minecraft.world.entity.player.Player;
 import net.minecraft.world.item.ItemStack;
 import net.minecraft.world.item.Items;
 import net.minecraft.world.level.Level;
+import net.minecraft.world.level.block.entity.DecoratedPotBlockEntity;
 import net.minecraft.world.level.storage.loot.LootParams;
 import net.minecraft.world.level.storage.loot.LootTable;
 import net.minecraft.world.level.storage.loot.parameters.LootContextParamSets;
@@ -28,13 +32,13 @@ import net.neoforged.neoforge.network.PacketDistributor;
 import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.Logger;
 import software.bernie.geckolib.animatable.GeoEntity;
-import software.bernie.geckolib.core.animatable.GeoAnimatable;
-import software.bernie.geckolib.core.animatable.instance.AnimatableInstanceCache;
-import software.bernie.geckolib.core.animation.AnimatableManager;
-import software.bernie.geckolib.core.animation.AnimationController;
-import software.bernie.geckolib.core.animation.AnimationState;
-import software.bernie.geckolib.core.animation.RawAnimation;
-import software.bernie.geckolib.core.object.PlayState;
+import software.bernie.geckolib.animatable.GeoAnimatable;
+import software.bernie.geckolib.animatable.instance.AnimatableInstanceCache;
+import software.bernie.geckolib.animation.AnimatableManager;
+import software.bernie.geckolib.animation.AnimationController;
+import software.bernie.geckolib.animation.AnimationState;
+import software.bernie.geckolib.animation.RawAnimation;
+import software.bernie.geckolib.animation.PlayState;
 import software.bernie.geckolib.util.GeckoLibUtil;
 
 import javax.annotation.Nonnull;
@@ -44,7 +48,7 @@ import java.util.List;
 
 @ParametersAreNonnullByDefault
 @MethodsReturnNonnullByDefault
-public class LotusFlowerEntity extends LivingEntity implements GeoEntity, IEntityWithComplexSpawn
+public class LotusFlowerEntity extends Entity implements GeoEntity, IEntityWithComplexSpawn
 {
 	private static final Logger LOGGER = LogManager.getLogger();
 	
@@ -104,6 +108,12 @@ public class LotusFlowerEntity extends LivingEntity implements GeoEntity, IEntit
 	}
 	
 	@Override
+	public boolean isPickable()
+	{
+		return true;
+	}
+	
+	@Override
 	public InteractionResult interact(Player player, InteractionHand hand)
 	{
 		if(isAlive() && !player.isShiftKeyDown() && animationType == Animation.IDLE)
@@ -129,9 +139,9 @@ public class LotusFlowerEntity extends LivingEntity implements GeoEntity, IEntit
 	}
 	
 	@Override
-	public void aiStep()
+	public void tick()
 	{
-		super.aiStep();
+		super.tick();
 		
 		if(!level().isClientSide)
 		{
@@ -199,8 +209,8 @@ public class LotusFlowerEntity extends LivingEntity implements GeoEntity, IEntit
 	protected void updateAndSendAnimation(Animation animation)
 	{
 		this.animationType = animation;
-		LotusFlowerPacket packet = LotusFlowerPacket.createPacket(this, animation); //this packet allows information to be exchanged between server and client where one side cant access the other easily or reliably
-		PacketDistributor.TRACKING_ENTITY.with(this).send(packet);
+		LotusFlowerAnimationPacket packet = LotusFlowerAnimationPacket.createPacket(this, animation); //this packet allows information to be exchanged between server and client where one side cant access the other easily or reliably
+		PacketDistributor.sendToPlayersTrackingEntity(this, packet);
 	}
 	
 	/**
@@ -212,7 +222,7 @@ public class LotusFlowerEntity extends LivingEntity implements GeoEntity, IEntit
 		{
 			ServerLevel serverLevel = (ServerLevel) level();
 			
-			LootTable lootTable = serverLevel.getServer().getLootData().getLootTable(MSLootTables.LOTUS_FLOWER_DEFAULT);
+			LootTable lootTable = serverLevel.getServer().reloadableRegistries().getLootTable(MSLootTables.LOTUS_FLOWER_DEFAULT);
 			List<ItemStack> loot = lootTable.getRandomItems(new LootParams.Builder(serverLevel).create(LootContextParamSets.EMPTY));
 			if(loot.isEmpty())
 				LOGGER.warn("Tried to generate loot for Lotus Flower, but no items were generated!");
@@ -227,16 +237,12 @@ public class LotusFlowerEntity extends LivingEntity implements GeoEntity, IEntit
 	@Override
 	public void addAdditionalSaveData(CompoundTag compound)
 	{
-		super.addAdditionalSaveData(compound);
-		
 		compound.putInt("EventTimer", eventTimer);
 	}
 	
 	@Override
 	public void readAdditionalSaveData(CompoundTag compound)
 	{
-		super.readAdditionalSaveData(compound);
-		
 		if(compound.contains("EventTimer", Tag.TAG_ANY_NUMERIC))
 		{
 			eventTimer = compound.getInt("EventTimer");
@@ -245,16 +251,17 @@ public class LotusFlowerEntity extends LivingEntity implements GeoEntity, IEntit
 	}
 	
 	@Override
-	public void writeSpawnData(FriendlyByteBuf buffer)
+	public void writeSpawnData(RegistryFriendlyByteBuf buffer)
 	{
-		buffer.writeInt(animationType.ordinal());
+		buffer.writeEnum(animationType);
 	}
 	
 	@Override
-	public void readSpawnData(FriendlyByteBuf additionalData)
+	public void readSpawnData(RegistryFriendlyByteBuf additionalData)
 	{
-		animationType = Animation.values()[additionalData.readInt()];
+		animationType = additionalData.readEnum(Animation.class);
 	}
+	
 	
 	public void setAnimationFromPacket(Animation newAnimation)
 	{
@@ -289,31 +296,14 @@ public class LotusFlowerEntity extends LivingEntity implements GeoEntity, IEntit
 	}
 	
 	@Override
+	protected void defineSynchedData(SynchedEntityData.Builder builder)
+	{
+	
+	}
+	
+	@Override
 	public void move(MoverType typeIn, Vec3 pos)
 	{
-	}
-	
-	@Override
-	public Iterable<ItemStack> getArmorSlots()
-	{
-		return Collections.emptyList();
-	}
-	
-	@Override
-	public ItemStack getItemBySlot(EquipmentSlot slotIn)
-	{
-		return ItemStack.EMPTY;
-	}
-	
-	@Override
-	public void setItemSlot(EquipmentSlot slotIn, ItemStack stack)
-	{
-	}
-	
-	@Override
-	public HumanoidArm getMainArm()
-	{
-		return HumanoidArm.RIGHT;
 	}
 	
 	public enum Animation //animationName set in assets/minestuck/animations/lotus_flower.animation.json. Animated blocks/entities also need a section in assets/minestuck/geo

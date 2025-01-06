@@ -13,5 +13,7 @@
     ],
     "list_type": "any"
   },
-  "dialogue": "minestuck:shady_consort/peppy_offer/start"
+  "dialogue": "minestuck:shady_consort/peppy_offer/start",
+  "dialogue_weight": 10,
+  "keep_on_reset": false
 }

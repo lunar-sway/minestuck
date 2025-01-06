@@ -14,7 +14,7 @@ import net.minecraft.world.level.levelgen.structure.templatesystem.StructureTemp
 
 public class CarvedLogFeature extends Feature<NoneFeatureConfiguration>
 {
-	private static final ResourceLocation CARVED_LOG = new ResourceLocation(Minestuck.MOD_ID, "carved_log");
+	private static final ResourceLocation CARVED_LOG = ResourceLocation.fromNamespaceAndPath(Minestuck.MOD_ID, "carved_log");
 	
 	public CarvedLogFeature(Codec<NoneFeatureConfiguration> codec)
 	{

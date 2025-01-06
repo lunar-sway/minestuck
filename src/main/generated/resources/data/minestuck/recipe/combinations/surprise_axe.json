@@ -1,0 +1,11 @@
+{
+  "type": "minestuck:combination",
+  "input1": {
+    "item": "minestuck:blacksmith_bane"
+  },
+  "input2": {
+    "item": "minestuck:surprise_embryo"
+  },
+  "mode": "and",
+  "output": "minestuck:surprise_axe"
+}

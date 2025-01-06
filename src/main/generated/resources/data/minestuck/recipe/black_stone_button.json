@@ -1,0 +1,13 @@
+{
+  "type": "minecraft:crafting_shapeless",
+  "category": "building",
+  "ingredients": [
+    {
+      "item": "minestuck:black_stone"
+    }
+  ],
+  "result": {
+    "count": 1,
+    "id": "minestuck:black_stone_button"
+  }
+}

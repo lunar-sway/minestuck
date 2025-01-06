@@ -1,0 +1,21 @@
+{
+  "type": "minecraft:crafting_shaped",
+  "category": "equipment",
+  "key": {
+    "P": {
+      "tag": "minecraft:planks"
+    },
+    "s": {
+      "tag": "c:rods/wooden"
+    }
+  },
+  "pattern": [
+    "  P",
+    " s ",
+    "s  "
+  ],
+  "result": {
+    "count": 1,
+    "id": "minestuck:deuce_club"
+  }
+}

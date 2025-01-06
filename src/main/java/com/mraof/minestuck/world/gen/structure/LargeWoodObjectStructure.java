@@ -1,6 +1,6 @@
 package com.mraof.minestuck.world.gen.structure;
 
-import com.mojang.serialization.Codec;
+import com.mojang.serialization.MapCodec;
 import com.mraof.minestuck.Minestuck;
 import com.mraof.minestuck.world.gen.feature.TemplatePlacement;
 import net.minecraft.Util;
@@ -18,7 +18,7 @@ import java.util.Optional;
 
 public class LargeWoodObjectStructure extends Structure
 {
-	public static final Codec<LargeWoodObjectStructure> CODEC = simpleCodec(LargeWoodObjectStructure::new);
+	public static final MapCodec<LargeWoodObjectStructure> CODEC = simpleCodec(LargeWoodObjectStructure::new);
 	
 	private static final List<ResourceLocation> TEMPLATES = List.of(Minestuck.id("large_unfinished_table"), Minestuck.id("massive_framing"), Minestuck.id("massive_table"));
 	
@@ -36,7 +36,7 @@ public class LargeWoodObjectStructure extends Structure
 	@Override
 	public StructureType<?> type()
 	{
-		return MSStructureTypes.LARGE_WOOD_OBJECT.get();
+		return MSStructures.LARGE_WOOD_OBJECT_TYPE.get();
 	}
 	
 	private static void generatePieces(StructurePiecesBuilder builder, GenerationContext context)

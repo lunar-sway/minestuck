@@ -2,13 +2,11 @@ package com.mraof.minestuck.alchemy;
 
 import com.mraof.minestuck.Minestuck;
 import com.mraof.minestuck.api.alchemy.*;
-import com.mraof.minestuck.player.IdentifierHandler;
-import com.mraof.minestuck.player.PlayerData;
-import com.mraof.minestuck.player.PlayerIdentifier;
-import com.mraof.minestuck.player.PlayerSavedData;
+import com.mraof.minestuck.player.*;
 import com.mraof.minestuck.skaianet.SburbPlayerData;
 import com.mraof.minestuck.skaianet.Session;
 import com.mraof.minestuck.skaianet.SessionHandler;
+import com.mraof.minestuck.util.MSAttachments;
 import net.minecraft.nbt.EndTag;
 import net.minecraft.nbt.NbtOps;
 import net.minecraft.nbt.Tag;
@@ -16,8 +14,8 @@ import net.minecraft.server.MinecraftServer;
 import net.minecraft.server.level.ServerPlayer;
 import net.minecraft.util.RandomSource;
 import net.neoforged.bus.api.SubscribeEvent;
-import net.neoforged.fml.common.Mod;
-import net.neoforged.neoforge.event.TickEvent;
+import net.neoforged.fml.common.EventBusSubscriber;
+import net.neoforged.neoforge.event.tick.ServerTickEvent;
 import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.Logger;
 
@@ -29,7 +27,7 @@ import java.util.stream.Stream;
  * A class that handles Grist overflow whenever you acquire too much grist.
  * @author Doro
  */
-@Mod.EventBusSubscriber(modid = Minestuck.MOD_ID, bus=Mod.EventBusSubscriber.Bus.FORGE)
+@EventBusSubscriber(modid = Minestuck.MOD_ID, bus = EventBusSubscriber.Bus.GAME)
 public class GristGutter
 {
 	private static final Logger LOGGER = LogManager.getLogger();
@@ -98,7 +96,7 @@ public class GristGutter
 		PlayerSavedData playerSavedData = PlayerSavedData.get(mcServer);
 		
 		return this.gutterPlayers()
-				.map(player -> playerSavedData.getData(player).getGutterMultipler())
+				.map(player -> playerSavedData.getOrCreateData(player).getData(MSAttachments.GUTTER_MULTIPLIER))
 				.reduce(0D, Double::sum);
 	}
 	
@@ -164,10 +162,10 @@ public class GristGutter
 	}
 	
 	@SubscribeEvent
-	public static void onServerTickEvent(TickEvent.ServerTickEvent event)
+	public static void onServerTickEvent(ServerTickEvent.Pre event)
 	{
 		//noinspection resource
-		if(event.phase == TickEvent.Phase.START && event.getServer().overworld().getGameTime() % 200 == 0)
+		if(event.getServer().overworld().getGameTime() % 200 == 0)
 		{
 			for(Session session : SessionHandler.get(event.getServer()).getSessions())
 				session.getGristGutter().distributeToPlayers();
@@ -188,13 +186,14 @@ public class GristGutter
 	
 	private void tickDistributionToPlayer(PlayerIdentifier player, RandomSource rand)
 	{
-		PlayerData data = PlayerSavedData.getData(player, mcServer);
+		PlayerData data = PlayerData.get(player, mcServer);
 		
-		long spliceAmount = (long) (data.getEcheladder().getGristCapacity() * getDistributionRateModifier());
+		long spliceAmount = (long) (Echeladder.get(data).getGristCapacity() * getDistributionRateModifier());
 		
-		NonNegativeGristSet capacity = data.getGristCache().getCapacitySet();
+		GristCache gristCache = GristCache.get(data);
+		NonNegativeGristSet capacity = gristCache.getCapacitySet();
 		GristSet gristToTransfer = this.takeWithinCapacity(spliceAmount, capacity, rand);
-		GristSet remainder = data.getGristCache().addWithinCapacity(gristToTransfer, null);
+		GristSet remainder = gristCache.addWithinCapacity(gristToTransfer, null);
 		if(!remainder.isEmpty())
 			throw new IllegalStateException("Took more grist than could be given to the player. Got back grist: " + remainder);
 	}

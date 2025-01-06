@@ -14,7 +14,7 @@ import net.minecraft.world.level.levelgen.structure.templatesystem.StructureTemp
 
 public class UnfinishedCarvedTreeFeature extends Feature<NoneFeatureConfiguration>
 {
-	private static final ResourceLocation UNFINISHED_CARVED_TREE = new ResourceLocation(Minestuck.MOD_ID, "unfinished_carved_tree");
+	private static final ResourceLocation UNFINISHED_CARVED_TREE = ResourceLocation.fromNamespaceAndPath(Minestuck.MOD_ID, "unfinished_carved_tree");
 	
 	public UnfinishedCarvedTreeFeature(Codec<NoneFeatureConfiguration> codec)
 	{

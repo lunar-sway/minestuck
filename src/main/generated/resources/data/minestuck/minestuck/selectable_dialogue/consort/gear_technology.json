@@ -23,5 +23,7 @@
     ],
     "list_type": "all"
   },
-  "dialogue": "minestuck:consort/gear_technology"
+  "dialogue": "minestuck:consort/gear_technology",
+  "dialogue_weight": 10,
+  "keep_on_reset": false
 }

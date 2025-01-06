@@ -1,23 +1,23 @@
 package com.mraof.minestuck.alchemy.recipe;
 
 import com.mojang.serialization.Codec;
+import com.mojang.serialization.MapCodec;
 import com.mojang.serialization.codecs.RecordCodecBuilder;
 import com.mraof.minestuck.api.alchemy.GristSet;
 import com.mraof.minestuck.api.alchemy.GristType;
-import com.mraof.minestuck.api.alchemy.ImmutableGristSet;
 import com.mraof.minestuck.api.alchemy.recipe.GristCostRecipe;
 import com.mraof.minestuck.api.alchemy.recipe.JeiGristCost;
 import com.mraof.minestuck.api.alchemy.recipe.generator.GeneratedCostProvider;
 import com.mraof.minestuck.item.crafting.MSRecipeTypes;
 import net.minecraft.MethodsReturnNonnullByDefault;
-import net.minecraft.network.FriendlyByteBuf;
+import net.minecraft.network.RegistryFriendlyByteBuf;
+import net.minecraft.network.codec.StreamCodec;
 import net.minecraft.resources.ResourceLocation;
-import net.minecraft.util.ExtraCodecs;
-import net.minecraft.world.Container;
 import net.minecraft.world.item.Item;
 import net.minecraft.world.item.ItemStack;
 import net.minecraft.world.item.crafting.Ingredient;
 import net.minecraft.world.item.crafting.RecipeSerializer;
+import net.minecraft.world.item.crafting.SingleRecipeInput;
 import net.minecraft.world.level.Level;
 
 import javax.annotation.Nullable;
@@ -35,10 +35,10 @@ public final class GristCost implements GristCostRecipe
 	private final Ingredient ingredient;
 	@Nullable
 	private final Integer priority;
-	private final ImmutableGristSet cost;
+	private final GristSet.Immutable cost;
 	
 	@SuppressWarnings("OptionalUsedAsFieldOrParameterType")
-	public GristCost(Ingredient ingredient, ImmutableGristSet cost, Optional<Integer> priority)
+	public GristCost(Ingredient ingredient, GristSet.Immutable cost, Optional<Integer> priority)
 	{
 		this.ingredient = ingredient;
 		this.priority = priority.orElse(null);
@@ -46,9 +46,9 @@ public final class GristCost implements GristCostRecipe
 	}
 	
 	@Override
-	public boolean matches(Container inv, Level level)
+	public boolean matches(SingleRecipeInput input, Level level)
 	{
-		return ingredient.test(inv.getItem(0));
+		return ingredient.test(input.item());
 	}
 	
 	@Override
@@ -83,33 +83,38 @@ public final class GristCost implements GristCostRecipe
 	
 	public static class Serializer implements RecipeSerializer<GristCost>
 	{
-		private static final Codec<GristCost> CODEC = RecordCodecBuilder.create(instance ->
+		private static final MapCodec<GristCost> CODEC = RecordCodecBuilder.mapCodec(instance ->
 				instance.group(
 						Ingredient.CODEC_NONEMPTY.fieldOf("ingredient").forGetter(recipe -> recipe.ingredient),
-						ImmutableGristSet.MAP_CODEC.fieldOf("grist_cost").forGetter(recipe -> recipe.cost),
-						ExtraCodecs.strictOptionalField(Codec.INT, "priority").forGetter(recipe -> Optional.ofNullable(recipe.priority))
+						GristSet.Codecs.MAP_CODEC.fieldOf("grist_cost").forGetter(recipe -> recipe.cost),
+						Codec.INT.optionalFieldOf("priority").forGetter(recipe -> Optional.ofNullable(recipe.priority))
 				).apply(instance, GristCost::new));
+		private static final StreamCodec<RegistryFriendlyByteBuf, GristCost> STREAM_CODEC = StreamCodec.of(Serializer::toNetwork, Serializer::fromNetwork);
 		
 		@Override
-		public Codec<GristCost> codec()
+		public MapCodec<GristCost> codec()
 		{
 			return CODEC;
 		}
 		
 		@Override
-		public void toNetwork(FriendlyByteBuf buffer, GristCost recipe)
+		public StreamCodec<RegistryFriendlyByteBuf, GristCost> streamCodec()
 		{
-			recipe.ingredient.toNetwork(buffer);
-			buffer.writeInt(recipe.getPriority());
-			GristSet.write(recipe.cost, buffer);
+			return STREAM_CODEC;
 		}
 		
-		@Override
-		public GristCost fromNetwork(FriendlyByteBuf buffer)
+		private static void toNetwork(RegistryFriendlyByteBuf buffer, GristCost recipe)
 		{
-			Ingredient ingredient = Ingredient.fromNetwork(buffer);
+			Ingredient.CONTENTS_STREAM_CODEC.encode(buffer, recipe.ingredient);
+			buffer.writeInt(recipe.getPriority());
+			GristSet.Codecs.STREAM_CODEC.encode(buffer, recipe.cost);
+		}
+		
+		private static GristCost fromNetwork(RegistryFriendlyByteBuf buffer)
+		{
+			Ingredient ingredient = Ingredient.CONTENTS_STREAM_CODEC.decode(buffer);
 			int priority = buffer.readInt();
-			ImmutableGristSet cost = GristSet.read(buffer);
+			GristSet.Immutable cost = GristSet.Codecs.STREAM_CODEC.decode(buffer);
 			
 			return new GristCost(ingredient, cost, Optional.of(priority));
 		}

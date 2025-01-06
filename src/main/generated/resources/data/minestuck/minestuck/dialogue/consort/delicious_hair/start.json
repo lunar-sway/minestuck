@@ -1,10 +1,17 @@
 {
   "node": {
+    "animation": {},
+    "gui": "minestuck:textures/gui/dialogue/dialogue.png",
     "message": "minestuck.dialogue.consort.delicious_hair.start",
     "responses": [
       {
+        "condition": {
+          "type": "minestuck:always_true"
+        },
+        "hide_if_failed": true,
         "message": "minestuck.dialogue.consort.delicious_hair.start.no",
-        "next_dialogue": "minestuck:consort/delicious_hair/disappointed"
+        "next_dialogue": "minestuck:consort/delicious_hair/disappointed",
+        "triggers": []
       },
       {
         "condition": {

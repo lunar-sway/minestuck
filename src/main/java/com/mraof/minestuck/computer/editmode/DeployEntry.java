@@ -2,7 +2,6 @@ package com.mraof.minestuck.computer.editmode;
 
 
 import com.mraof.minestuck.api.alchemy.GristSet;
-import com.mraof.minestuck.api.alchemy.ImmutableGristSet;
 import com.mraof.minestuck.skaianet.SburbPlayerData;
 import net.minecraft.nbt.CompoundTag;
 import net.minecraft.nbt.ListTag;
@@ -75,9 +74,9 @@ public class DeployEntry
 			ItemStack stack = getItemStack(playerData, level);
 			GristSet cost = getCurrentCost(playerData);
 			CompoundTag tag = new CompoundTag();
-			stack.save(tag);
+			tag.put("item", stack.save(level.registryAccess()));
 			tag.putInt("i", i);
-			tag.put("cost", ImmutableGristSet.LIST_CODEC.encodeStart(NbtOps.INSTANCE, cost.asImmutable()).getOrThrow(false, LOGGER::error));
+			tag.put("cost", GristSet.Codecs.LIST_CODEC.encodeStart(NbtOps.INSTANCE, cost.asImmutable()).getOrThrow());
 			tag.putInt("cat", category.ordinal());
 			list.add(tag);
 		}

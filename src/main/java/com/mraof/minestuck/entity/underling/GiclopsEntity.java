@@ -2,14 +2,13 @@ package com.mraof.minestuck.entity.underling;
 
 import com.mraof.minestuck.MinestuckConfig;
 import com.mraof.minestuck.alchemy.GristHelper;
-import com.mraof.minestuck.api.alchemy.MutableGristSet;
 import com.mraof.minestuck.api.alchemy.GristType;
+import com.mraof.minestuck.api.alchemy.MutableGristSet;
 import com.mraof.minestuck.entity.ai.attack.AnimatedAttackWhenInRangeGoal;
 import com.mraof.minestuck.entity.ai.attack.MoveToTargetGoal;
 import com.mraof.minestuck.entity.animation.MobAnimation;
 import com.mraof.minestuck.entity.animation.PhasedMobAnimation;
 import com.mraof.minestuck.player.EcheladderBonusType;
-import com.mraof.minestuck.util.AnimationControllerUtil;
 import com.mraof.minestuck.util.MSSoundEvents;
 import net.minecraft.sounds.SoundEvent;
 import net.minecraft.tags.TagKey;
@@ -23,18 +22,14 @@ import net.minecraft.world.level.Level;
 import net.minecraft.world.level.material.Fluid;
 import net.minecraft.world.phys.AABB;
 import software.bernie.geckolib.animatable.GeoEntity;
-import software.bernie.geckolib.core.animation.AnimatableManager;
-import software.bernie.geckolib.core.animation.Animation;
-import software.bernie.geckolib.core.animation.AnimationState;
-import software.bernie.geckolib.core.animation.RawAnimation;
-import software.bernie.geckolib.core.object.PlayState;
+import software.bernie.geckolib.animation.*;
 
 import javax.annotation.ParametersAreNonnullByDefault;
 
 @ParametersAreNonnullByDefault
 public class GiclopsEntity extends UnderlingEntity implements GeoEntity
 {
-	public static final PhasedMobAnimation KICK_PROPERTIES = new PhasedMobAnimation(new MobAnimation(MobAnimation.Action.KICK, 40, true, true), 18, 20, 22);
+	public static final PhasedMobAnimation KICK_PROPERTIES = new PhasedMobAnimation(new MobAnimation(MobAnimation.Action.KICK, 40, true, true), 18, 20, 22, 1);
 	private static final RawAnimation IDLE_ANIMATION = RawAnimation.begin().thenLoop("idle");
 	private static final RawAnimation WALK_ANIMATION = RawAnimation.begin().thenLoop("walk");
 	private static final RawAnimation KICK_ANIMATION = RawAnimation.begin().then("kick", Animation.LoopType.PLAY_ONCE);
@@ -43,14 +38,14 @@ public class GiclopsEntity extends UnderlingEntity implements GeoEntity
 	public GiclopsEntity(EntityType<? extends GiclopsEntity> type, Level level)
 	{
 		super(type, level, 7);
-		this.setMaxUpStep(2);
 	}
 	
 	public static AttributeSupplier.Builder giclopsAttributes()
 	{
 		return UnderlingEntity.underlingAttributes().add(Attributes.MAX_HEALTH, 210)
 				.add(Attributes.KNOCKBACK_RESISTANCE, 0.9).add(Attributes.MOVEMENT_SPEED, 0.20)
-				.add(Attributes.ATTACK_DAMAGE, 18);
+				.add(Attributes.ATTACK_DAMAGE, 18).add(Attributes.ATTACK_SPEED, 1)
+				.add(Attributes.STEP_HEIGHT, 2);
 	}
 	
 	@Override
@@ -95,8 +90,8 @@ public class GiclopsEntity extends UnderlingEntity implements GeoEntity
 	protected void onGristTypeUpdated(GristType type)
 	{
 		super.onGristTypeUpdated(type);
-		applyGristModifier(Attributes.MAX_HEALTH, 46 * type.getPower(), AttributeModifier.Operation.ADDITION);
-		applyGristModifier(Attributes.ATTACK_DAMAGE, 4.5 * type.getPower(), AttributeModifier.Operation.ADDITION);
+		applyGristModifier(Attributes.MAX_HEALTH, 46 * type.getPower(), AttributeModifier.Operation.ADD_VALUE);
+		applyGristModifier(Attributes.ATTACK_DAMAGE, 4.5 * type.getPower(), AttributeModifier.Operation.ADD_VALUE);
 		this.xpReward = (int) (7 * type.getPower() + 5);
 	}
 	
@@ -172,10 +167,11 @@ public class GiclopsEntity extends UnderlingEntity implements GeoEntity
 	@Override
 	public void registerControllers(AnimatableManager.ControllerRegistrar controllers)
 	{
-		controllers.add(AnimationControllerUtil.createAnimation(this, "idleAnimation", 1, GiclopsEntity::idleAnimation));
-		controllers.add(AnimationControllerUtil.createAnimation(this, "walkAnimation", 1, GiclopsEntity::walkAnimation));
-		controllers.add(AnimationControllerUtil.createAnimation(this, "attackAnimation", 1, GiclopsEntity::attackAnimation));
-		controllers.add(AnimationControllerUtil.createAnimation(this, "deathAnimation", 1, GiclopsEntity::deathAnimation));
+		controllers.add(new AnimationController<>(this, "idleAnimation", GiclopsEntity::idleAnimation));
+		controllers.add(new AnimationController<>(this, "walkAnimation", GiclopsEntity::walkAnimation)
+				.setAnimationSpeedHandler(entity -> MobAnimation.getAttributeAffectedSpeed(entity, Attributes.MOVEMENT_SPEED) * 5));
+		controllers.add(new AnimationController<>(this, "attackAnimation", GiclopsEntity::attackAnimation));
+		controllers.add(new AnimationController<>(this, "deathAnimation", GiclopsEntity::deathAnimation));
 	}
 	
 	private static PlayState idleAnimation(AnimationState<GiclopsEntity> state)
@@ -191,7 +187,7 @@ public class GiclopsEntity extends UnderlingEntity implements GeoEntity
 	
 	private static PlayState walkAnimation(AnimationState<GiclopsEntity> state)
 	{
-		if(state.isMoving())
+		if(MobAnimation.isEntityMovingHorizontally(state.getAnimatable()))
 		{
 			state.getController().setAnimation(WALK_ANIMATION);
 			return PlayState.CONTINUE;
@@ -210,6 +206,7 @@ public class GiclopsEntity extends UnderlingEntity implements GeoEntity
 		}
 		
 		state.getController().forceAnimationReset();
+		state.getController().setAnimationSpeed(MobAnimation.getAttributeAffectedSpeed(state.getAnimatable(), Attributes.ATTACK_SPEED)); //Setting animation speed on stop so it doesn't jump around when attack speed changes mid-attack
 		return PlayState.STOP;
 	}
 	

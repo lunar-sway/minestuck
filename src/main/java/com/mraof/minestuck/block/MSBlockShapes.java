@@ -1,6 +1,5 @@
 package com.mraof.minestuck.block;
 
-import com.mraof.minestuck.util.CustomVoxelShape;
 import net.minecraft.core.Direction;
 
 public class MSBlockShapes

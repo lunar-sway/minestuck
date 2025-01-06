@@ -1,0 +1,11 @@
+{
+  "type": "minestuck:combination",
+  "input1": {
+    "item": "minecraft:grass_block"
+  },
+  "input2": {
+    "tag": "c:mushrooms"
+  },
+  "mode": "and",
+  "output": "minecraft:mycelium"
+}

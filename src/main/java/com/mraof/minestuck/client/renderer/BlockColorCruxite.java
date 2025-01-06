@@ -32,7 +32,7 @@ public class BlockColorCruxite implements BlockColor
 				int i2 = (((color >> 16) & 255) + 255)/2;
 				color = i0 | (i1 << 8) | (i2 << 16);
 			}
-			return color;
+			return color | 0xFF000000;
 		}
 		return -1;
 	}

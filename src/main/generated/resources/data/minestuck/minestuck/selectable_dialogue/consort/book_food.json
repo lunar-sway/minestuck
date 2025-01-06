@@ -23,5 +23,7 @@
     ],
     "list_type": "all"
   },
-  "dialogue": "minestuck:consort/book_food"
+  "dialogue": "minestuck:consort/book_food",
+  "dialogue_weight": 10,
+  "keep_on_reset": false
 }

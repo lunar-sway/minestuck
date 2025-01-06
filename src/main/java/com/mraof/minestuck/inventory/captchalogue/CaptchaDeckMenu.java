@@ -2,8 +2,7 @@ package com.mraof.minestuck.inventory.captchalogue;
 
 import com.mraof.minestuck.inventory.ContainerHelper;
 import com.mraof.minestuck.inventory.MSMenuTypes;
-import com.mraof.minestuck.item.MSItems;
-import com.mraof.minestuck.alchemy.AlchemyHelper;
+import com.mraof.minestuck.item.CaptchaCardItem;
 import net.minecraft.world.Container;
 import net.minecraft.world.SimpleContainer;
 import net.minecraft.world.entity.player.Inventory;
@@ -43,7 +42,7 @@ public class CaptchaDeckMenu extends AbstractContainerMenu
 			@Override
 			public boolean mayPlace(ItemStack stack)
 			{
-				return ModusTypes.getTypeFromItem(stack.getItem()) != null || stack.getItem().equals(MSItems.CAPTCHA_CARD.get()) && !AlchemyHelper.isPunchedCard(stack);
+				return ModusTypes.getTypeFromItem(stack.getItem()) != null || CaptchaCardItem.isUnpunchedCard(stack);
 			}
 		});
 	}

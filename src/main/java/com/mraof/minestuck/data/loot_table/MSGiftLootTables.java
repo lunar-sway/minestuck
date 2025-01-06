@@ -1,5 +1,6 @@
 package com.mraof.minestuck.data.loot_table;
 
+import com.mraof.minestuck.Minestuck;
 import com.mraof.minestuck.block.MSBlocks;
 import com.mraof.minestuck.entity.consort.EnumConsort;
 import com.mraof.minestuck.item.MSItems;
@@ -8,25 +9,22 @@ import com.mraof.minestuck.item.loot.MSLootTables;
 import com.mraof.minestuck.item.loot.conditions.ConsortLootCondition;
 import com.mraof.minestuck.util.MSTags;
 import com.mraof.minestuck.world.lands.LandTypes;
+import net.minecraft.core.registries.Registries;
 import net.minecraft.data.loot.LootTableSubProvider;
-import net.minecraft.nbt.CompoundTag;
-import net.minecraft.resources.ResourceLocation;
-import net.minecraft.world.item.ItemStack;
+import net.minecraft.resources.ResourceKey;
 import net.minecraft.world.item.Items;
-import net.minecraft.world.item.alchemy.PotionUtils;
 import net.minecraft.world.item.alchemy.Potions;
 import net.minecraft.world.level.storage.loot.LootPool;
 import net.minecraft.world.level.storage.loot.LootTable;
 import net.minecraft.world.level.storage.loot.entries.LootItem;
-import net.minecraft.world.level.storage.loot.entries.LootTableReference;
+import net.minecraft.world.level.storage.loot.entries.NestedLootTable;
 import net.minecraft.world.level.storage.loot.entries.TagEntry;
 import net.minecraft.world.level.storage.loot.functions.SetItemCountFunction;
 import net.minecraft.world.level.storage.loot.functions.SetItemDamageFunction;
-import net.minecraft.world.level.storage.loot.functions.SetNbtFunction;
+import net.minecraft.world.level.storage.loot.functions.SetPotionFunction;
 import net.minecraft.world.level.storage.loot.providers.number.ConstantValue;
 import net.minecraft.world.level.storage.loot.providers.number.UniformGenerator;
 
-import java.util.Objects;
 import java.util.function.BiConsumer;
 
 import static com.mraof.minestuck.data.loot_table.MSChestLootTables.locationForTerrain;
@@ -34,15 +32,15 @@ import static com.mraof.minestuck.data.loot_table.MSChestLootTables.locationForT
 
 public class MSGiftLootTables implements LootTableSubProvider
 {
-	private static final ResourceLocation COLD_CAKE = new ResourceLocation("minestuck", "gameplay/special/cold_cake");
-	private static final ResourceLocation HOT_CAKE = new ResourceLocation("minestuck", "gameplay/special/hot_cake");
+	private static final ResourceKey<LootTable> COLD_CAKE = ResourceKey.create(Registries.LOOT_TABLE, Minestuck.id("gameplay/special/cold_cake"));
+	private static final ResourceKey<LootTable> HOT_CAKE = ResourceKey.create(Registries.LOOT_TABLE, Minestuck.id("gameplay/special/hot_cake"));
 	
 	//Pools in consort general stock
 	public static final String ITEM_POOL = "item", BLOCK_POOL = "block";
 	public static final String MAIN_POOL = "main", SPECIAL_POOL = "special";
 	
 	@Override
-	public void generate(BiConsumer<ResourceLocation, LootTable.Builder> lootProcessor)
+	public void generate(BiConsumer<ResourceKey<LootTable>, LootTable.Builder> lootProcessor)
 	{
 		lootProcessor.accept(COLD_CAKE, LootTable.lootTable()
 				.withPool(LootPool.lootPool().name("blue_cake").setRolls(ConstantValue.exactly(1))
@@ -380,7 +378,7 @@ public class MSGiftLootTables implements LootTableSubProvider
 						.add(LootItem.lootTableItem(MSItems.CHOCOLATE_BEETLE.get()).setWeight(8).apply(SetItemCountFunction.setCount(UniformGenerator.between(3, 10))))
 						.add(LootItem.lootTableItem(Items.WHEAT).setWeight(8).apply(SetItemCountFunction.setCount(UniformGenerator.between(3, 10))))
 						.add(LootItem.lootTableItem(Items.WHEAT_SEEDS).setWeight(8).apply(SetItemCountFunction.setCount(UniformGenerator.between(3, 10))))
-						.add(LootTableReference.lootTableReference(COLD_CAKE).setWeight(2)))
+						.add(NestedLootTable.lootTableReference(COLD_CAKE).setWeight(2)))
 				.withPool(LootPool.lootPool().name(SPECIAL_POOL).setRolls(ConstantValue.exactly(1))
 						.add(LootItem.lootTableItem(Items.COOKIE).setWeight(8).apply(SetItemCountFunction.setCount(UniformGenerator.between(1, 3))))
 						.add(LootItem.lootTableItem(MSBlocks.APPLE_CAKE.get()).setWeight(8).apply(SetItemCountFunction.setCount(UniformGenerator.between(1, 3))))));
@@ -445,7 +443,7 @@ public class MSGiftLootTables implements LootTableSubProvider
 						.add(LootItem.lootTableItem(Items.BEEF).setWeight(8).apply(SetItemCountFunction.setCount(UniformGenerator.between(3, 10))))
 						.add(LootItem.lootTableItem(MSItems.STEAK_SWORD.get()).setWeight(3))
 						.add(LootItem.lootTableItem(Items.BEETROOT).setWeight(8).apply(SetItemCountFunction.setCount(UniformGenerator.between(3, 10))))
-						.add(LootTableReference.lootTableReference(HOT_CAKE).setWeight(2)))
+						.add(NestedLootTable.lootTableReference(HOT_CAKE).setWeight(2)))
 				.withPool(LootPool.lootPool().name(SPECIAL_POOL).setRolls(ConstantValue.exactly(1))
 						.add(LootItem.lootTableItem(MSItems.TAB.get()).setWeight(8).apply(SetItemCountFunction.setCount(UniformGenerator.between(3, 6))))
 						.add(LootItem.lootTableItem(MSItems.IRRADIATED_STEAK.get()).setWeight(8).apply(SetItemCountFunction.setCount(UniformGenerator.between(1, 3))))));
@@ -494,7 +492,7 @@ public class MSGiftLootTables implements LootTableSubProvider
 						.add(LootItem.lootTableItem(Items.POTATO).setWeight(8).apply(SetItemCountFunction.setCount(UniformGenerator.between(3, 10))))
 						.add(LootItem.lootTableItem(MSItems.SALAD.get()).setWeight(8).apply(SetItemCountFunction.setCount(UniformGenerator.between(3, 10))))
 						.add(LootItem.lootTableItem(Items.CARROT).setWeight(8).apply(SetItemCountFunction.setCount(UniformGenerator.between(3, 10))))
-						.add(LootItem.lootTableItem(Items.POTION).setWeight(8).apply(SetItemCountFunction.setCount(UniformGenerator.between(3, 6))).apply(SetNbtFunction.setTag(waterNBT())))
+						.add(LootItem.lootTableItem(Items.POTION).setWeight(8).apply(SetItemCountFunction.setCount(UniformGenerator.between(3, 6))).apply(SetPotionFunction.setPotion(Potions.WATER)))
 						.add(LootItem.lootTableItem(MSItems.DESERT_FRUIT.get()).setWeight(8).apply(SetItemCountFunction.setCount(UniformGenerator.between(15, 20)))))
 				.withPool(LootPool.lootPool().name(SPECIAL_POOL).setRolls(ConstantValue.exactly(1))
 						.add(LootItem.lootTableItem(MSBlocks.GOLD_SEEDS.get()).setWeight(8).apply(SetItemCountFunction.setCount(UniformGenerator.between(1, 3))))
@@ -506,7 +504,7 @@ public class MSGiftLootTables implements LootTableSubProvider
 						.add(LootItem.lootTableItem(Items.POTATO).setWeight(8).apply(SetItemCountFunction.setCount(UniformGenerator.between(3, 10))))
 						.add(LootItem.lootTableItem(MSItems.SALAD.get()).setWeight(8).apply(SetItemCountFunction.setCount(UniformGenerator.between(3, 10))))
 						.add(LootItem.lootTableItem(Items.CARROT).setWeight(8).apply(SetItemCountFunction.setCount(UniformGenerator.between(3, 10))))
-						.add(LootItem.lootTableItem(Items.POTION).setWeight(8).apply(SetItemCountFunction.setCount(UniformGenerator.between(3, 6))).apply(SetNbtFunction.setTag(waterNBT())))
+						.add(LootItem.lootTableItem(Items.POTION).setWeight(8).apply(SetItemCountFunction.setCount(UniformGenerator.between(3, 6))).apply(SetPotionFunction.setPotion(Potions.WATER)))
 						.add(LootItem.lootTableItem(MSItems.DESERT_FRUIT.get()).setWeight(8).apply(SetItemCountFunction.setCount(UniformGenerator.between(15, 20)))))
 				.withPool(LootPool.lootPool().name(SPECIAL_POOL).setRolls(ConstantValue.exactly(1))
 						.add(LootItem.lootTableItem(MSBlocks.GOLD_SEEDS.get()).setWeight(8).apply(SetItemCountFunction.setCount(UniformGenerator.between(1, 3))))
@@ -518,7 +516,7 @@ public class MSGiftLootTables implements LootTableSubProvider
 						.add(LootItem.lootTableItem(Items.POTATO).setWeight(8).apply(SetItemCountFunction.setCount(UniformGenerator.between(3, 10))))
 						.add(LootItem.lootTableItem(MSItems.SALAD.get()).setWeight(8).apply(SetItemCountFunction.setCount(UniformGenerator.between(3, 10))))
 						.add(LootItem.lootTableItem(Items.CARROT).setWeight(8).apply(SetItemCountFunction.setCount(UniformGenerator.between(3, 10))))
-						.add(LootItem.lootTableItem(Items.POTION).setWeight(8).apply(SetItemCountFunction.setCount(UniformGenerator.between(3, 6))).apply(SetNbtFunction.setTag(waterNBT())))
+						.add(LootItem.lootTableItem(Items.POTION).setWeight(8).apply(SetItemCountFunction.setCount(UniformGenerator.between(3, 6))).apply(SetPotionFunction.setPotion(Potions.WATER)))
 						.add(LootItem.lootTableItem(MSItems.DESERT_FRUIT.get()).setWeight(8).apply(SetItemCountFunction.setCount(UniformGenerator.between(15, 20)))))
 				.withPool(LootPool.lootPool().name(SPECIAL_POOL).setRolls(ConstantValue.exactly(1))
 						.add(LootItem.lootTableItem(MSBlocks.GOLD_SEEDS.get()).setWeight(8).apply(SetItemCountFunction.setCount(UniformGenerator.between(1, 3))))
@@ -671,10 +669,5 @@ public class MSGiftLootTables implements LootTableSubProvider
 						.add(LootItem.lootTableItem(MSItems.JAR_OF_BUGS.get()).setWeight(5).when(ConsortLootCondition.builder(EnumConsort.TURTLE)))
 						.add(LootItem.lootTableItem(MSItems.GRASSHOPPER.get()).setWeight(5).when(ConsortLootCondition.builder(EnumConsort.IGUANA)))));
 		
-	}
-	
-	private static CompoundTag waterNBT()
-	{
-		return Objects.requireNonNull(PotionUtils.setPotion(new ItemStack(Items.POTION), Potions.WATER).getTag());
 	}
 }

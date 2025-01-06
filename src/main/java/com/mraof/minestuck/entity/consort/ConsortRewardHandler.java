@@ -1,11 +1,11 @@
 package com.mraof.minestuck.entity.consort;
 
-import com.mraof.minestuck.util.BoondollarPriceManager;
-import net.minecraft.resources.ResourceLocation;
+import net.minecraft.resources.ResourceKey;
 import net.minecraft.server.level.ServerLevel;
 import net.minecraft.util.RandomSource;
 import net.minecraft.world.item.ItemStack;
 import net.minecraft.world.level.storage.loot.LootParams;
+import net.minecraft.world.level.storage.loot.LootTable;
 import net.minecraft.world.level.storage.loot.parameters.LootContextParamSets;
 import net.minecraft.world.level.storage.loot.parameters.LootContextParams;
 import org.apache.commons.lang3.tuple.Pair;
@@ -21,11 +21,11 @@ public class ConsortRewardHandler
 {
 	private static final Logger LOGGER = LogManager.getLogger();
 	
-	public static List<Pair<ItemStack, Integer>> generateStock(ResourceLocation lootTable, ConsortEntity consort, RandomSource rand)
+	public static List<Pair<ItemStack, Integer>> generateStock(ResourceKey<LootTable> lootTable, ConsortEntity consort, RandomSource rand)
 	{
 		LootParams.Builder contextBuilder = new LootParams.Builder((ServerLevel) consort.level())
 				.withParameter(LootContextParams.THIS_ENTITY, consort).withParameter(LootContextParams.ORIGIN, consort.position());
-		List<ItemStack> itemStacks = Objects.requireNonNull(consort.getServer()).getLootData()
+		List<ItemStack> itemStacks = Objects.requireNonNull(consort.getServer()).reloadableRegistries()
 				.getLootTable(lootTable).getRandomItems(contextBuilder.create(LootContextParamSets.GIFT));
 		List<Pair<ItemStack, Integer>> itemPriceList = new ArrayList<>();
 		stackLoop:
@@ -33,14 +33,14 @@ public class ConsortRewardHandler
 		{
 			for (Pair<ItemStack, Integer> pair : itemPriceList)
 			{
-				if (ItemStack.isSameItemSameTags(pair.getKey(), stack))
+				if (ItemStack.isSameItemSameComponents(pair.getKey(), stack))
 				{
 					pair.getKey().grow(stack.getCount());
 					continue stackLoop;
 				}
 			}
 			
-			Optional<Integer> price = BoondollarPriceManager.getInstance().findPrice(stack, rand);
+			Optional<Integer> price = BoondollarPrices.getInstance().findPrice(stack, rand);
 			if (price.isPresent() && itemPriceList.size() < 9)
 				itemPriceList.add(Pair.of(stack, price.get()));
 			if (!price.isPresent())

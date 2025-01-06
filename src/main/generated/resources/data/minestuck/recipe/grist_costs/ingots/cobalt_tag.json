@@ -1,0 +1,10 @@
+{
+  "type": "minestuck:source_grist_cost",
+  "grist_cost": {},
+  "ingredient": {
+    "tag": "c:ingots/cobalt"
+  },
+  "sources": [
+    "#c:raw_materials/cobalt"
+  ]
+}

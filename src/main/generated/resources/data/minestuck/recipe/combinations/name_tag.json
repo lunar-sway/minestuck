@@ -1,0 +1,11 @@
+{
+  "type": "minestuck:combination",
+  "input1": {
+    "tag": "minecraft:signs"
+  },
+  "input2": {
+    "item": "minecraft:lead"
+  },
+  "mode": "and",
+  "output": "minecraft:name_tag"
+}

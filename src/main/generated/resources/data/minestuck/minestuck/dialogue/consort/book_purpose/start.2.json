@@ -1,18 +1,30 @@
 {
   "node": {
+    "animation": {},
+    "gui": "minestuck:textures/gui/dialogue/dialogue.png",
     "message": "minestuck.dialogue.consort.book_purpose.start.2",
     "responses": [
       {
+        "condition": {
+          "type": "minestuck:always_true"
+        },
+        "hide_if_failed": true,
         "message": "minestuck.dialogue.consort.book_purpose.start.2.disagree",
         "next_dialogue": {
           "id": "minestuck:consort/book_purpose/unenlightened",
           "player_message": "minestuck.dialogue.consort.book_purpose.start.2.disagree.reply",
           "set_as_entrypoint": false
-        }
+        },
+        "triggers": []
       },
       {
+        "condition": {
+          "type": "minestuck:always_true"
+        },
+        "hide_if_failed": true,
         "message": "minestuck.dialogue.consort.book_purpose.start.2.continue",
-        "next_dialogue": "minestuck:consort/book_purpose/fact_2"
+        "next_dialogue": "minestuck:consort/book_purpose/fact_2",
+        "triggers": []
       }
     ]
   }

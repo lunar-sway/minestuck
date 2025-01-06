@@ -1,0 +1,11 @@
+{
+  "type": "minestuck:combination",
+  "input1": {
+    "item": "minecraft:diamond_sword"
+  },
+  "input2": {
+    "item": "minecraft:emerald"
+  },
+  "mode": "or",
+  "output": "minestuck:emerald_sword"
+}

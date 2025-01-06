@@ -1,0 +1,32 @@
+{
+  "parent": "minecraft:recipes/root",
+  "criteria": {
+    "has_brown_stone_bricks": {
+      "conditions": {
+        "items": [
+          {
+            "items": "minestuck:brown_stone_bricks"
+          }
+        ]
+      },
+      "trigger": "minecraft:inventory_changed"
+    },
+    "has_the_recipe": {
+      "conditions": {
+        "recipe": "minestuck:brown_stone_brick_wall"
+      },
+      "trigger": "minecraft:recipe_unlocked"
+    }
+  },
+  "requirements": [
+    [
+      "has_the_recipe",
+      "has_brown_stone_bricks"
+    ]
+  ],
+  "rewards": {
+    "recipes": [
+      "minestuck:brown_stone_brick_wall"
+    ]
+  }
+}

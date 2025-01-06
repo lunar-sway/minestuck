@@ -118,7 +118,7 @@ public class DebugLandsCommand
 		return landTypes.stream().map(landType -> new LandEntry(IdentifierHandler.createNewFakeIdentifier(), landType)).toList();
 	}
 	
-	private static final ResourceLocation DEBUG_LAND_BASE_ID = new ResourceLocation(Minestuck.MOD_ID, "debug_land");
+	private static final ResourceLocation DEBUG_LAND_BASE_ID = ResourceLocation.fromNamespaceAndPath(Minestuck.MOD_ID, "debug_land");
 	
 	private static void createAndSetLand(LandTypePair landTypes, PlayerIdentifier player, MinecraftServer mcServer)
 	{

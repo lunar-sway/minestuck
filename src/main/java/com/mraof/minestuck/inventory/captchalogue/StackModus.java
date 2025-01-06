@@ -1,10 +1,12 @@
 package com.mraof.minestuck.inventory.captchalogue;
 
 import com.mraof.minestuck.MinestuckConfig;
-import com.mraof.minestuck.alchemy.AlchemyHelper;
+import com.mraof.minestuck.item.CaptchaCardItem;
 import com.mraof.minestuck.item.MSItems;
+import net.minecraft.core.HolderLookup;
 import net.minecraft.core.NonNullList;
 import net.minecraft.nbt.CompoundTag;
+import net.minecraft.nbt.Tag;
 import net.minecraft.server.level.ServerPlayer;
 import net.minecraft.world.item.ItemStack;
 import net.neoforged.fml.LogicalSide;
@@ -47,14 +49,14 @@ public class StackModus extends Modus
 	}
 	
 	@Override
-	public void readFromNBT(CompoundTag nbt)
+	public void readFromNBT(CompoundTag nbt, HolderLookup.Provider provider)
 	{
 		size = nbt.getInt("size");
 		list = new LinkedList<>();
 		
 		for(int i = 0; i < size; i++)
-			if(nbt.contains("item"+i))
-				list.add(ItemStack.of(nbt.getCompound("item"+i)));
+			if(nbt.contains("item"+i, Tag.TAG_COMPOUND))
+				list.add(ItemStack.parse(provider, nbt.getCompound("item"+i)).orElseThrow());
 			else break;
 		if(side == LogicalSide.CLIENT)
 		{
@@ -64,14 +66,14 @@ public class StackModus extends Modus
 	}
 	
 	@Override
-	public CompoundTag writeToNBT(CompoundTag nbt)
+	public CompoundTag writeToNBT(CompoundTag nbt, HolderLookup.Provider provider)
 	{
 		nbt.putInt("size", size);
 		Iterator<ItemStack> iter = list.iterator();
 		for(int i = 0; i < list.size(); i++)
 		{
 			ItemStack stack = iter.next();
-			nbt.put("item"+i, stack.save(new CompoundTag()));
+			nbt.put("item"+i, stack.save(provider));
 		}
 		return nbt;
 	}
@@ -82,8 +84,8 @@ public class StackModus extends Modus
 		if(size == 0 || item.isEmpty())
 			return false;
 		
-		ItemStack firstItem = list.size() > 0 ? list.getFirst() : ItemStack.EMPTY;
-		if(ItemStack.isSameItemSameTags(firstItem, item)
+		ItemStack firstItem = !list.isEmpty() ? list.getFirst() : ItemStack.EMPTY;
+		if(ItemStack.isSameItemSameComponents(firstItem, item)
 				&& firstItem.getCount() + item.getCount() <= firstItem.getMaxStackSize())
 			firstItem.grow(item.getCount());
 		else if(list.size() < size)
@@ -168,7 +170,7 @@ public class StackModus extends Modus
 		{
 			size--;
 			markDirty();
-			return AlchemyHelper.createCard(list.removeFirst(), player.server);
+			return CaptchaCardItem.createCardWithItem(list.removeFirst(), player.server);
 		}
 		else
 		{

@@ -4,11 +4,11 @@ import com.mraof.minestuck.block.machine.MachineMultiblock;
 import com.mraof.minestuck.block.machine.MultiMachineBlock;
 import com.mraof.minestuck.blockentity.HorseClockBlockEntity;
 import com.mraof.minestuck.blockentity.MSBlockEntityTypes;
+import net.minecraft.MethodsReturnNonnullByDefault;
 import net.minecraft.core.BlockPos;
 import net.minecraft.core.Direction;
 import net.minecraft.server.level.ServerLevel;
 import net.minecraft.util.RandomSource;
-import net.minecraft.world.InteractionHand;
 import net.minecraft.world.InteractionResult;
 import net.minecraft.world.entity.player.Player;
 import net.minecraft.world.level.BlockGetter;
@@ -26,13 +26,15 @@ import net.minecraft.world.level.block.state.properties.IntegerProperty;
 import net.minecraft.world.phys.BlockHitResult;
 
 import javax.annotation.Nullable;
-import java.util.Random;
+import javax.annotation.ParametersAreNonnullByDefault;
 
 /**
  * The horse clock is a multiblock clock that also gives off(all components) redstone power with a strength dependent on the clock sound it is making.
  * The bottom block has a block entity
  */
-public class HorseClockBlock extends MultiMachineBlock
+@ParametersAreNonnullByDefault
+@MethodsReturnNonnullByDefault
+public class HorseClockBlock extends MultiMachineBlock<MachineMultiblock>
 {
 	public static final IntegerProperty POWER = BlockStateProperties.POWER;
 	
@@ -42,6 +44,7 @@ public class HorseClockBlock extends MultiMachineBlock
 		registerDefaultState(stateDefinition.any().setValue(POWER, 0));
 	}
 	
+	@Override
 	public RenderShape getRenderShape(BlockState state)
 	{
 		return RenderShape.INVISIBLE; //The block itself does not have a texture but is dependent on the modeled block entity
@@ -66,9 +69,8 @@ public class HorseClockBlock extends MultiMachineBlock
 			level.destroyBlock(pos, true);
 	}
 	
-	@SuppressWarnings("deprecation")
 	@Override
-	public void tick(BlockState state, ServerLevel level, BlockPos pos, RandomSource rand)
+	protected void tick(BlockState state, ServerLevel level, BlockPos pos, RandomSource rand)
 	{
 		super.tick(state, level, pos, rand);
 		
@@ -78,16 +80,14 @@ public class HorseClockBlock extends MultiMachineBlock
 		}
 	}
 	
-	@SuppressWarnings("deprecation")
 	@Override
-	public boolean isSignalSource(BlockState state)
+	protected boolean isSignalSource(BlockState state)
 	{
 		return state.getValue(POWER) > 0;
 	}
 	
-	@SuppressWarnings("deprecation")
 	@Override
-	public int getSignal(BlockState blockState, BlockGetter level, BlockPos pos, Direction side)
+	protected int getSignal(BlockState blockState, BlockGetter level, BlockPos pos, Direction side)
 	{
 		return blockState.getValue(POWER);
 	}
@@ -113,7 +113,7 @@ public class HorseClockBlock extends MultiMachineBlock
 		}
 		
 		@Override
-		public InteractionResult use(BlockState state, Level level, BlockPos pos, Player player, InteractionHand hand, BlockHitResult hit)
+		protected InteractionResult useWithoutItem(BlockState state, Level level, BlockPos pos, Player player, BlockHitResult hit)
 		{
 			if(level.getBlockEntity(pos) instanceof HorseClockBlockEntity be)
 			{

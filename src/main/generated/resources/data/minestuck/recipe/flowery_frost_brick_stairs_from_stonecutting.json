@@ -1,0 +1,10 @@
+{
+  "type": "minecraft:stonecutting",
+  "ingredient": {
+    "item": "minestuck:flowery_frost_bricks"
+  },
+  "result": {
+    "count": 1,
+    "id": "minestuck:flowery_frost_brick_stairs"
+  }
+}

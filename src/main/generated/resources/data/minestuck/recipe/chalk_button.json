@@ -1,0 +1,13 @@
+{
+  "type": "minecraft:crafting_shapeless",
+  "category": "building",
+  "ingredients": [
+    {
+      "item": "minestuck:chalk"
+    }
+  ],
+  "result": {
+    "count": 1,
+    "id": "minestuck:chalk_button"
+  }
+}

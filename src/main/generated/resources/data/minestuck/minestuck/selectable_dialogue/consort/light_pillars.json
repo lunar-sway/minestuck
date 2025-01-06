@@ -23,5 +23,7 @@
     ],
     "list_type": "all"
   },
-  "dialogue": "minestuck:consort/light_pillars"
+  "dialogue": "minestuck:consort/light_pillars",
+  "dialogue_weight": 10,
+  "keep_on_reset": false
 }

@@ -31,8 +31,7 @@ public class SpecialTNTBlock extends TntBlock
 	}
 	
 	@Override
-	@SuppressWarnings("deprecation")
-	public void attack(BlockState state, Level level, BlockPos pos, Player player)
+	protected void attack(BlockState state, Level level, BlockPos pos, Player player)
 	{
 		if(primed)
 		{
@@ -73,8 +72,7 @@ public class SpecialTNTBlock extends TntBlock
 	}
 	
 	@Override
-	@SuppressWarnings("deprecation")
-	public void randomTick(BlockState state, ServerLevel level, BlockPos pos, RandomSource random)
+	protected void randomTick(BlockState state, ServerLevel level, BlockPos pos, RandomSource random)
 	{
 		if(unstable && random.nextDouble() < 0.1)
 		{

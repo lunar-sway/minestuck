@@ -355,7 +355,7 @@ public final class WFCData
 			ImmutableList<WeightedEntry.Wrapper<PieceEntry>> entriesList = this.pieceEntries.build();
 			ConnectionTester connectionTester = this.connectionsBuilder.buildConnectionTester();
 			
-			entriesList.stream().flatMap(entry -> entry.getData().connections.values().stream()).forEach(connector -> {
+			entriesList.stream().flatMap(entry -> entry.data().connections.values().stream()).forEach(connector -> {
 				if(!connectionTester.isKnown(connector))
 					LOGGER.warn("Found unknown connector: {}", connector.id());
 			});

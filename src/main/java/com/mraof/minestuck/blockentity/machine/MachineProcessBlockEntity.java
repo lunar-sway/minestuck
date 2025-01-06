@@ -1,6 +1,7 @@
 package com.mraof.minestuck.blockentity.machine;
 
 import net.minecraft.core.BlockPos;
+import net.minecraft.core.HolderLookup;
 import net.minecraft.nbt.CompoundTag;
 import net.minecraft.world.item.ItemStack;
 import net.minecraft.world.level.Level;
@@ -26,19 +27,19 @@ public abstract class MachineProcessBlockEntity extends BlockEntity
 	protected abstract ItemStackHandler createItemHandler();
 	
 	@Override
-	public void load(CompoundTag nbt)
+	protected void loadAdditional(CompoundTag nbt, HolderLookup.Provider pRegistries)
 	{
-		super.load(nbt);
+		super.loadAdditional(nbt, pRegistries);
 		
-		itemHandler.deserializeNBT(nbt.getCompound("inventory"));
+		itemHandler.deserializeNBT(pRegistries, nbt.getCompound("inventory"));
 	}
 	
 	@Override
-	protected void saveAdditional(CompoundTag compound)
+	protected void saveAdditional(CompoundTag compound, HolderLookup.Provider provider)
 	{
-		super.saveAdditional(compound);
+		super.saveAdditional(compound, provider);
 		
-		compound.put("inventory", itemHandler.serializeNBT());
+		compound.put("inventory", itemHandler.serializeNBT(provider));
 	}
 	
 	public static void serverTick(Level ignoredLevel, BlockPos ignoredPos, BlockState ignoredState, MachineProcessBlockEntity blockEntity)

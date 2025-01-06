@@ -1,8 +1,0 @@
-{
-  "type": "minecraft:stonecutting",
-  "count": 1,
-  "ingredient": {
-    "item": "minestuck:mossy_mycelium_bricks"
-  },
-  "result": "minestuck:mossy_mycelium_brick_stairs"
-}

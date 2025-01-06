@@ -3,6 +3,7 @@ package com.mraof.minestuck.world.lands.terrain;
 import com.mojang.serialization.Codec;
 import com.mraof.minestuck.entity.consort.ConsortEntity;
 import com.mraof.minestuck.util.MSSoundEvents;
+import com.mraof.minestuck.util.MSTags;
 import com.mraof.minestuck.world.biome.LandBiomeSetType;
 import com.mraof.minestuck.world.biome.MSBiomes;
 import com.mraof.minestuck.world.gen.structure.MSStructures;
@@ -12,10 +13,14 @@ import com.mraof.minestuck.world.lands.LandBiomeGenBuilder;
 import com.mraof.minestuck.world.lands.LandTypes;
 import net.minecraft.core.HolderGetter;
 import net.minecraft.core.HolderSet;
+import net.minecraft.network.RegistryFriendlyByteBuf;
+import net.minecraft.network.codec.ByteBufCodecs;
+import net.minecraft.network.codec.StreamCodec;
 import net.minecraft.resources.ResourceKey;
 import net.minecraft.sounds.SoundEvent;
 import net.minecraft.tags.TagKey;
 import net.minecraft.world.entity.EntityType;
+import net.minecraft.world.entity.animal.Cod;
 import net.minecraft.world.level.biome.Biome;
 import net.minecraft.world.level.levelgen.SurfaceRules;
 import net.minecraft.world.level.levelgen.structure.Structure;
@@ -34,6 +39,7 @@ import java.util.function.Supplier;
 public abstract class TerrainLandType implements ILandType
 {
 	public static final Codec<TerrainLandType> CODEC = LandTypes.TERRAIN_REGISTRY.byNameCodec();
+	public static final StreamCodec<RegistryFriendlyByteBuf, TerrainLandType> STREAM_CODEC = ByteBufCodecs.registry(LandTypes.TERRAIN_KEY);
 	
 	protected static final RandomSpreadStructurePlacement SMALL_RUIN_PLACEMENT = new RandomSpreadStructurePlacement(16, 4, RandomSpreadType.LINEAR, 59273643);
 	protected static final RandomSpreadStructurePlacement IMP_DUNGEON_PLACEMENT = new RandomSpreadStructurePlacement(16, 4, RandomSpreadType.LINEAR, 34527185);
@@ -120,8 +126,8 @@ public abstract class TerrainLandType implements ILandType
 	public void addStructureSets(Consumer<StructureSet> consumer, HolderGetter<Structure> structureLookup)
 	{
 		consumer.accept(new StructureSet(structureLookup.getOrThrow(MSStructures.SMALL_RUIN), SMALL_RUIN_PLACEMENT));
-		consumer.accept(new StructureSet(structureLookup.getOrThrow(MSStructures.IMP_DUNGEON), IMP_DUNGEON_PLACEMENT));
-		consumer.accept(new StructureSet(structureLookup.getOrThrow(MSStructures.CONSORT_VILLAGE), CONSORT_VILLAGE_PLACEMENT));
+		consumer.accept(new StructureSet(structureLookup.getOrThrow(MSStructures.ImpDungeon.KEY), IMP_DUNGEON_PLACEMENT));
+		consumer.accept(new StructureSet(structureLookup.getOrThrow(MSStructures.ConsortVillage.KEY), CONSORT_VILLAGE_PLACEMENT));
 	}
 	
 	public final boolean is(TagKey<TerrainLandType> tag)

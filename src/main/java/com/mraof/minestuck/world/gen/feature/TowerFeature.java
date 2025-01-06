@@ -20,12 +20,12 @@ import javax.annotation.Nonnull;
 
 public class TowerFeature extends Feature<NoneFeatureConfiguration>
 {
-	private static final ResourceLocation STRUCTURE_TOWER = new ResourceLocation(Minestuck.MOD_ID, "tower");
-	private static final ResourceLocation STRUCTURE_TOWER_WITH_CHEST = new ResourceLocation(Minestuck.MOD_ID, "tower_with_chest");
-	private static final ResourceLocation STRUCTURE_TOWER_WALL = new ResourceLocation(Minestuck.MOD_ID, "tower_wall");
-	private static final ResourceLocation STRUCTURE_ELEVATED_TOWER_DOOR = new ResourceLocation(Minestuck.MOD_ID, "elevated_tower_door");
-	private static final ResourceLocation STRUCTURE_TOWER_DOOR = new ResourceLocation(Minestuck.MOD_ID, "tower_door");
-	private static final ResourceLocation STRUCTURE_TOWER_BALCONY = new ResourceLocation(Minestuck.MOD_ID, "tower_balcony");
+	private static final ResourceLocation STRUCTURE_TOWER = ResourceLocation.fromNamespaceAndPath(Minestuck.MOD_ID, "tower");
+	private static final ResourceLocation STRUCTURE_TOWER_WITH_CHEST = ResourceLocation.fromNamespaceAndPath(Minestuck.MOD_ID, "tower_with_chest");
+	private static final ResourceLocation STRUCTURE_TOWER_WALL = ResourceLocation.fromNamespaceAndPath(Minestuck.MOD_ID, "tower_wall");
+	private static final ResourceLocation STRUCTURE_ELEVATED_TOWER_DOOR = ResourceLocation.fromNamespaceAndPath(Minestuck.MOD_ID, "elevated_tower_door");
+	private static final ResourceLocation STRUCTURE_TOWER_DOOR = ResourceLocation.fromNamespaceAndPath(Minestuck.MOD_ID, "tower_door");
+	private static final ResourceLocation STRUCTURE_TOWER_BALCONY = ResourceLocation.fromNamespaceAndPath(Minestuck.MOD_ID, "tower_balcony");
 	
 	public TowerFeature(Codec<NoneFeatureConfiguration> codec)
 	{

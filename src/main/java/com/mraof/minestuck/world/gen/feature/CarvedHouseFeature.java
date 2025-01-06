@@ -14,7 +14,7 @@ import net.minecraft.world.level.levelgen.structure.templatesystem.StructureTemp
 
 public class CarvedHouseFeature extends Feature<NoneFeatureConfiguration>
 {
-	private static final ResourceLocation CARVED_HOUSE = new ResourceLocation(Minestuck.MOD_ID, "carved_house");
+	private static final ResourceLocation CARVED_HOUSE = ResourceLocation.fromNamespaceAndPath(Minestuck.MOD_ID, "carved_house");
 	
 	public CarvedHouseFeature(Codec<NoneFeatureConfiguration> codec)
 	{

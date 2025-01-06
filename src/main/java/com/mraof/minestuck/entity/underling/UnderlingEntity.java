@@ -1,5 +1,6 @@
 package com.mraof.minestuck.entity.underling;
 
+import com.mraof.minestuck.Minestuck;
 import com.mraof.minestuck.alchemy.GristHelper;
 import com.mraof.minestuck.api.alchemy.GristAmount;
 import com.mraof.minestuck.api.alchemy.GristType;
@@ -8,12 +9,16 @@ import com.mraof.minestuck.api.alchemy.MutableGristSet;
 import com.mraof.minestuck.entity.AttackingAnimatedEntity;
 import com.mraof.minestuck.entity.EntityListFilter;
 import com.mraof.minestuck.entity.ai.HurtByTargetAlliedGoal;
+import com.mraof.minestuck.entity.consort.ConsortReputation;
 import com.mraof.minestuck.entity.item.GristEntity;
 import com.mraof.minestuck.entity.item.VitalityGelEntity;
-import com.mraof.minestuck.player.*;
-import com.mraof.minestuck.util.MSNBTUtil;
+import com.mraof.minestuck.player.Echeladder;
+import com.mraof.minestuck.player.EcheladderBonusType;
+import com.mraof.minestuck.player.IdentifierHandler;
+import com.mraof.minestuck.player.PlayerIdentifier;
 import com.mraof.minestuck.util.MSTags;
 import net.minecraft.core.BlockPos;
+import net.minecraft.core.Holder;
 import net.minecraft.nbt.CompoundTag;
 import net.minecraft.nbt.Tag;
 import net.minecraft.network.chat.Component;
@@ -45,21 +50,22 @@ import net.neoforged.neoforge.common.util.FakePlayer;
 import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.Logger;
 import software.bernie.geckolib.animatable.GeoEntity;
-import software.bernie.geckolib.core.animatable.instance.AnimatableInstanceCache;
+import software.bernie.geckolib.animatable.instance.AnimatableInstanceCache;
 import software.bernie.geckolib.util.GeckoLibUtil;
 
 import javax.annotation.Nonnull;
 import javax.annotation.Nullable;
+import javax.annotation.ParametersAreNonnullByDefault;
 import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.Map;
-import java.util.UUID;
 
+@ParametersAreNonnullByDefault
 public abstract class UnderlingEntity extends AttackingAnimatedEntity implements Enemy, GeoEntity
 {
 	private static final Logger LOGGER = LogManager.getLogger();
 	
-	public static final UUID GRIST_MODIFIER_ID = UUID.fromString("08B6DEFC-E3F4-11EA-87D0-0242AC130003");
+	public static final ResourceLocation GRIST_MODIFIER_ID = Minestuck.id("grist_type");
 	private static final EntityDataAccessor<String> GRIST_TYPE = SynchedEntityData.defineId(UnderlingEntity.class, EntityDataSerializers.STRING);
 	
 	private final AnimatableInstanceCache cache = GeckoLibUtil.createInstanceCache(this);
@@ -124,10 +130,10 @@ public abstract class UnderlingEntity extends AttackingAnimatedEntity implements
 	}
 	
 	@Override
-	protected void defineSynchedData()
+	protected void defineSynchedData(SynchedEntityData.Builder builder)
 	{
-		super.defineSynchedData();
-		entityData.define(GRIST_TYPE, String.valueOf(GristTypes.REGISTRY.getKey(GristTypes.ARTIFACT.get())));
+		super.defineSynchedData(builder);
+		builder.define(GRIST_TYPE, String.valueOf(GristTypes.REGISTRY.getKey(GristTypes.ARTIFACT.get())));
 	}
 	
 	protected void applyGristType(GristType type)
@@ -151,11 +157,11 @@ public abstract class UnderlingEntity extends AttackingAnimatedEntity implements
 	{
 	}
 	
-	protected void applyGristModifier(Attribute attribute, double modifier, AttributeModifier.Operation operation)
+	protected void applyGristModifier(Holder<Attribute> attribute, double modifier, AttributeModifier.Operation operation)
 	{
 		getAttribute(attribute).removeModifier(GRIST_MODIFIER_ID);
 		//Does not need to be saved because this bonus should already be applied when the grist type has been set
-		getAttribute(attribute).addTransientModifier(new AttributeModifier(GRIST_MODIFIER_ID, "Grist Bonus", modifier, operation));
+		getAttribute(attribute).addTransientModifier(new AttributeModifier(GRIST_MODIFIER_ID, modifier, operation));
 	}
 	
 	@Nonnull
@@ -233,7 +239,7 @@ public abstract class UnderlingEntity extends AttackingAnimatedEntity implements
 	{
 		LivingEntity entity = this.getKillCredit();
 		if(entity instanceof ServerPlayer player && (!(player instanceof FakePlayer)))
-			PlayerSavedData.getData(player).addConsortReputation(consortRep, level().dimension());
+			ConsortReputation.get(player).addConsortReputation(consortRep, level().dimension());
 		
 		super.die(cause);
 	}
@@ -278,7 +284,8 @@ public abstract class UnderlingEntity extends AttackingAnimatedEntity implements
 	public void addAdditionalSaveData(CompoundTag compound)
 	{
 		super.addAdditionalSaveData(compound);
-		MSNBTUtil.writeGristType(compound, "Type", getGristType());
+		GristType gristType = getGristType();
+		compound.put("Type", GristHelper.encodeGristType(gristType));
 		compound.putBoolean("Spawned", fromSpawner);
 		if(hasRestriction())
 		{
@@ -297,7 +304,7 @@ public abstract class UnderlingEntity extends AttackingAnimatedEntity implements
 	{
 		//Note: grist type should be read and applied before reading health due to the modifiers to max health
 		if(compound.contains("Type", Tag.TAG_STRING))
-			applyGristType(MSNBTUtil.readGristType(compound, "Type", GristTypes.ARTIFACT));
+			applyGristType(GristHelper.parseGristType(compound.get("Type")).orElseGet(GristTypes.ARTIFACT));
 		else applyGristType(GristHelper.getPrimaryGrist(this.getRandom()));
 		
 		super.readAdditionalSaveData(compound);
@@ -317,9 +324,10 @@ public abstract class UnderlingEntity extends AttackingAnimatedEntity implements
 		return worldIn.getDifficulty() != Difficulty.PEACEFUL && checkMobSpawnRules(type, worldIn, reason, pos, randomIn);
 	}
 	
+	@SuppressWarnings("deprecation") // Overriding is fine
 	@Nullable
 	@Override
-	public SpawnGroupData finalizeSpawn(ServerLevelAccessor worldIn, DifficultyInstance difficultyIn, MobSpawnType reason, @Nullable SpawnGroupData spawnDataIn, @Nullable CompoundTag dataTag)
+	public SpawnGroupData finalizeSpawn(ServerLevelAccessor worldIn, DifficultyInstance difficultyIn, MobSpawnType reason, @Nullable SpawnGroupData spawnDataIn)
 	{
 		if(!(spawnDataIn instanceof UnderlingData))
 		{
@@ -330,7 +338,7 @@ public abstract class UnderlingEntity extends AttackingAnimatedEntity implements
 			applyGristType(((UnderlingData) spawnDataIn).type);
 		}
 		
-		return super.finalizeSpawn(worldIn, difficultyIn, reason, spawnDataIn, dataTag);
+		return super.finalizeSpawn(worldIn, difficultyIn, reason, spawnDataIn);
 	}
 	
 	public void onEntityDamaged(DamageSource source, float amount)
@@ -376,18 +384,23 @@ public abstract class UnderlingEntity extends AttackingAnimatedEntity implements
 			LOGGER.debug("{} players are splitting on {} progress from {}", playerList.length, progress, getType());
 		
 		if(totalModifier > maxSharedProgress)
+		{
 			for(int i = 0; i < playerList.length; i++)
-				Echeladder.increaseProgress(playerList[i], level(), (int) (maxProgress * modifiers[i] / totalModifier));
-		else
+				Echeladder.get(playerList[i], level())
+						.increaseProgress((int) (maxProgress * modifiers[i] / totalModifier));
+		} else
+		{
 			for(int i = 0; i < playerList.length; i++)
-				Echeladder.increaseProgress(playerList[i], level(), (int) (progress * modifiers[i]));
+				Echeladder.get(playerList[i], level())
+						.increaseProgress((int) (progress * modifiers[i]));
+		}
 	}
 	
 	protected static void firstKillBonus(Entity killer, EcheladderBonusType type)
 	{
-		if(killer instanceof ServerPlayer && (!(killer instanceof FakePlayer)))
+		if(killer instanceof ServerPlayer player && (!(killer instanceof FakePlayer)))
 		{
-			Echeladder ladder = PlayerSavedData.getData((ServerPlayer) killer).getEcheladder();
+			Echeladder ladder = Echeladder.get(player);
 			ladder.checkBonus(type);
 		}
 	}

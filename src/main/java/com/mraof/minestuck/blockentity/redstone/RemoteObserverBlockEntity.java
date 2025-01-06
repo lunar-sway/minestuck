@@ -4,12 +4,15 @@ import com.mraof.minestuck.MinestuckConfig;
 import com.mraof.minestuck.block.redstone.RemoteObserverBlock;
 import com.mraof.minestuck.blockentity.MSBlockEntityTypes;
 import com.mraof.minestuck.entity.underling.UnderlingEntity;
+import com.mraof.minestuck.network.block.RemoteObserverSettingsPacket;
 import com.mraof.minestuck.util.MSTags;
 import net.minecraft.core.BlockPos;
+import net.minecraft.core.HolderLookup;
 import net.minecraft.nbt.CompoundTag;
 import net.minecraft.network.protocol.Packet;
 import net.minecraft.network.protocol.game.ClientGamePacketListener;
 import net.minecraft.network.protocol.game.ClientboundBlockEntityDataPacket;
+import net.minecraft.server.level.ServerLevel;
 import net.minecraft.world.entity.Entity;
 import net.minecraft.world.entity.EntityType;
 import net.minecraft.world.entity.LivingEntity;
@@ -111,11 +114,6 @@ public class RemoteObserverBlockEntity extends BlockEntity
 		else level.sendBlockUpdated(getBlockPos(), getBlockState(), getBlockState(), 2);
 	}
 	
-	public void setCurrentEntityType(EntityType<?> currentEntityType)
-	{
-		this.currentEntityType = currentEntityType;
-	}
-	
 	public EntityType<?> getCurrentEntityType()
 	{
 		if(currentEntityType != null)
@@ -132,20 +130,27 @@ public class RemoteObserverBlockEntity extends BlockEntity
 		return !currentEntityType.is(MSTags.EntityTypes.REMOTE_OBSERVER_BLACKLIST);
 	}
 	
-	public void setObservingRange(int rangeIn)
-	{
-		this.observingRange = rangeIn;
-	}
-	
 	public int getObservingRange()
 	{
 		return this.observingRange;
 	}
 	
-	@Override
-	public void load(CompoundTag compound)
+	public void handleSettingsPacket(RemoteObserverSettingsPacket packet)
 	{
-		super.load(compound);
+		activeType = Objects.requireNonNull(packet.activeType());
+		if(packet.entityType().isPresent())
+			this.currentEntityType = packet.entityType().get();
+		this.observingRange = packet.observingRange();
+		
+		setChanged();
+		if(getLevel() instanceof ServerLevel serverLevel)
+			serverLevel.getChunkSource().blockChanged(getBlockPos());
+	}
+	
+	@Override
+	public void loadAdditional(CompoundTag compound, HolderLookup.Provider provider)
+	{
+		super.loadAdditional(compound, provider);
 		
 		this.tickCycle = compound.getInt("tickCycle");
 		this.activeType = ActiveType.fromInt(compound.getInt("activeTypeOrdinal"));
@@ -158,9 +163,9 @@ public class RemoteObserverBlockEntity extends BlockEntity
 	}
 	
 	@Override
-	public void saveAdditional(CompoundTag compound)
+	public void saveAdditional(CompoundTag compound, HolderLookup.Provider provider)
 	{
-		super.saveAdditional(compound);
+		super.saveAdditional(compound, provider);
 		
 		compound.putInt("tickCycle", tickCycle);
 		compound.putInt("activeTypeOrdinal", getActiveType().ordinal());
@@ -173,15 +178,10 @@ public class RemoteObserverBlockEntity extends BlockEntity
 		return this.activeType;
 	}
 	
-	public void setActiveType(ActiveType activeTypeIn)
-	{
-		activeType = Objects.requireNonNull(activeTypeIn);
-	}
-	
 	@Override
-	public CompoundTag getUpdateTag()
+	public CompoundTag getUpdateTag(HolderLookup.Provider provider)
 	{
-		return this.saveWithoutMetadata();
+		return this.saveWithoutMetadata(provider);
 	}
 	
 	@Override

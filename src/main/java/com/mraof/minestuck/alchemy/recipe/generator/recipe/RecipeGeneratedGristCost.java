@@ -1,6 +1,7 @@
 package com.mraof.minestuck.alchemy.recipe.generator.recipe;
 
 import com.mojang.serialization.Codec;
+import com.mojang.serialization.MapCodec;
 import com.mraof.minestuck.api.alchemy.GristSet;
 import com.mraof.minestuck.api.alchemy.GristType;
 import com.mraof.minestuck.api.alchemy.recipe.GristCostRecipe;
@@ -9,11 +10,14 @@ import com.mraof.minestuck.api.alchemy.recipe.generator.GeneratedCostProvider;
 import com.mraof.minestuck.item.crafting.MSRecipeTypes;
 import net.minecraft.MethodsReturnNonnullByDefault;
 import net.minecraft.network.FriendlyByteBuf;
+import net.minecraft.network.RegistryFriendlyByteBuf;
+import net.minecraft.network.codec.StreamCodec;
 import net.minecraft.resources.ResourceLocation;
 import net.minecraft.world.Container;
 import net.minecraft.world.item.Item;
 import net.minecraft.world.item.ItemStack;
 import net.minecraft.world.item.crafting.RecipeSerializer;
+import net.minecraft.world.item.crafting.SingleRecipeInput;
 import net.minecraft.world.level.Level;
 
 import javax.annotation.Nullable;
@@ -51,7 +55,7 @@ public final class RecipeGeneratedGristCost implements GristCostRecipe
 	}
 	
 	@Override
-	public boolean matches(Container inv, Level level)
+	public boolean matches(SingleRecipeInput inv, Level level)
 	{
 		return getCost(inv.getItem(0).getItem()) != null;
 	}
@@ -93,25 +97,26 @@ public final class RecipeGeneratedGristCost implements GristCostRecipe
 	
 	public static class Serializer implements RecipeSerializer<RecipeGeneratedGristCost>
 	{
-		private static final Codec<RecipeGeneratedGristCost> CODEC = Codec.unit(RecipeGeneratedGristCost::new);
+		private static final MapCodec<RecipeGeneratedGristCost> CODEC = MapCodec.unit(RecipeGeneratedGristCost::new);
+		private static final StreamCodec<RegistryFriendlyByteBuf, RecipeGeneratedGristCost> STREAM_CODEC = StreamCodec.of(
+				(encode, recipe) ->
+				{
+					if(recipe.handler != null)
+						recipe.handler.write(encode);
+				},
+				(decode) -> new RecipeGeneratedGristCost(RecipeGeneratedCostHandler.read(decode))
+		);
 		
 		@Override
-		public Codec<RecipeGeneratedGristCost> codec()
+		public MapCodec<RecipeGeneratedGristCost> codec()
 		{
 			return CODEC;
 		}
 		
 		@Override
-		public RecipeGeneratedGristCost fromNetwork(FriendlyByteBuf buffer)
+		public StreamCodec<RegistryFriendlyByteBuf, RecipeGeneratedGristCost> streamCodec()
 		{
-			return new RecipeGeneratedGristCost(RecipeGeneratedCostHandler.read(buffer));
-		}
-		
-		@Override
-		public void toNetwork(FriendlyByteBuf buffer, RecipeGeneratedGristCost recipe)
-		{
-			if(recipe.handler != null)
-				recipe.handler.write(buffer);
+			return STREAM_CODEC;
 		}
 	}
 }

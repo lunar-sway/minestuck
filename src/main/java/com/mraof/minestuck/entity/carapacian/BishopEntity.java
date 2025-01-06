@@ -64,7 +64,7 @@ public class BishopEntity extends CarapacianEntity implements RangedAttackMob, E
 		double distanceY = target.getBoundingBox().minY + (double) (target.getBbHeight() / 2.0F) - (this.getY() + (double) (this.getBbHeight() / 2.0F));
 		double distanceZ = target.getZ() - this.getZ();
 		
-		LargeFireball fireball = new LargeFireball(this.level(), this, distanceX, distanceY, distanceZ, 1);
+		LargeFireball fireball = new LargeFireball(this.level(), this, new Vec3(distanceX, distanceY, distanceZ), 1);
 		double d8 = this.getBbHeight();
 		Vec3 vec3 = this.getViewVector(1.0F);
 		double x = (this.getBoundingBox().minX + this.getBoundingBox().maxX) / 2.0F + vec3.x * d8;

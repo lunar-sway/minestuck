@@ -1,0 +1,21 @@
+{
+  "type": "minecraft:crafting_shaped",
+  "category": "building",
+  "group": "wooden_fence_gate",
+  "key": {
+    "#": {
+      "item": "minestuck:shadewood_planks"
+    },
+    "$": {
+      "item": "minecraft:stick"
+    }
+  },
+  "pattern": [
+    "$#$",
+    "$#$"
+  ],
+  "result": {
+    "count": 1,
+    "id": "minestuck:shadewood_fence_gate"
+  }
+}

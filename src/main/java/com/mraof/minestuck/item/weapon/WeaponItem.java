@@ -1,33 +1,33 @@
 package com.mraof.minestuck.item.weapon;
 
 import com.google.common.collect.ImmutableList;
-import com.google.common.collect.ImmutableMultimap;
-import com.google.common.collect.Multimap;
+import com.google.common.collect.Streams;
+import net.minecraft.MethodsReturnNonnullByDefault;
 import net.minecraft.core.BlockPos;
+import net.minecraft.core.component.DataComponents;
+import net.minecraft.tags.TagKey;
 import net.minecraft.world.InteractionHand;
 import net.minecraft.world.InteractionResult;
 import net.minecraft.world.InteractionResultHolder;
 import net.minecraft.world.entity.Entity;
 import net.minecraft.world.entity.EquipmentSlot;
 import net.minecraft.world.entity.LivingEntity;
-import net.minecraft.world.entity.ai.attributes.Attribute;
-import net.minecraft.world.entity.ai.attributes.AttributeModifier;
-import net.minecraft.world.entity.ai.attributes.Attributes;
 import net.minecraft.world.entity.player.Player;
-import net.minecraft.world.item.ItemStack;
-import net.minecraft.world.item.Tier;
-import net.minecraft.world.item.TieredItem;
-import net.minecraft.world.item.UseAnim;
+import net.minecraft.world.item.*;
+import net.minecraft.world.item.component.Tool;
 import net.minecraft.world.item.context.UseOnContext;
-import net.minecraft.world.item.enchantment.Enchantment;
-import net.minecraft.world.item.enchantment.EnchantmentCategory;
 import net.minecraft.world.level.Level;
+import net.minecraft.world.level.block.Block;
 import net.minecraft.world.level.block.state.BlockState;
-import net.neoforged.neoforge.common.TierSortingRegistry;
-import net.neoforged.neoforge.common.ToolAction;
-import javax.annotation.Nullable;
-import java.util.*;
+import net.neoforged.neoforge.common.ItemAbility;
 
+import javax.annotation.Nullable;
+import javax.annotation.ParametersAreNonnullByDefault;
+import java.util.*;
+import java.util.stream.Stream;
+
+@ParametersAreNonnullByDefault
+@MethodsReturnNonnullByDefault
 public class WeaponItem extends TieredItem
 {
 	private final float efficiency;
@@ -35,8 +35,8 @@ public class WeaponItem extends TieredItem
 	//private static final HashMap<ToolType, Set<Material>> toolMaterials = new HashMap<>();
 	
 	@Nullable
-	private final MSToolType toolType;
-	private final Set<ToolAction> toolActions;
+	private final List<MSToolType> toolTypes;
+	private final Set<ItemAbility> toolActions;
 	private final List<OnHitEffect> onHitEffects;
 	@Nullable
 	private final DestroyBlockEffect destroyBlockEffect;
@@ -48,19 +48,11 @@ public class WeaponItem extends TieredItem
 	private final UseAnim useAction;
 	private final List<FinishUseItemEffect> itemUsageEffects;
 	private final List<InventoryTickEffect> tickEffects;
-	//Item attributes that are applied when the weapon is in the main hand.
-	private final Multimap<Attribute, AttributeModifier> attributeModifiers;
-	
-	@Deprecated
-	public WeaponItem(Tier tier, int attackDamage, float attackSpeed, float efficiency, @Nullable MSToolType toolType, Properties properties)
-	{
-		this(new Builder(tier, attackDamage, attackSpeed).efficiency(efficiency).set(toolType), properties);
-	}
 	
 	public WeaponItem(Builder builder, Properties properties)
 	{
 		super(builder.tier, properties);
-		toolType = builder.toolType;
+		toolTypes = builder.toolType;
 		toolActions = builder.toolActions;
 		efficiency = builder.efficiency;
 		disableShield = builder.disableShield;
@@ -73,62 +65,45 @@ public class WeaponItem extends TieredItem
 		itemUsageEffects = ImmutableList.copyOf(builder.itemUsageEffects);
 		tickEffects = ImmutableList.copyOf(builder.tickEffects);
 		
-		ImmutableMultimap.Builder<Attribute, AttributeModifier> modifiers = ImmutableMultimap.builder();
-		modifiers.put(Attributes.ATTACK_DAMAGE, new AttributeModifier(BASE_ATTACK_DAMAGE_UUID, "Weapon modifier", (double) builder.attackDamage + getTier().getAttackDamageBonus(), AttributeModifier.Operation.ADDITION));
-		modifiers.put(Attributes.ATTACK_SPEED, new AttributeModifier(BASE_ATTACK_SPEED_UUID, "Weapon modifier", builder.attackSpeed, AttributeModifier.Operation.ADDITION));
-		attributeModifiers = modifiers.build();
+		properties.attributes(DiggerItem.createAttributes(builder.tier, builder.attackDamage, builder.attackSpeed));
+		
+		ArrayList<TagKey<Block>> mineableBlocks = new ArrayList<>();
+		for(MSToolType toolType : toolTypes)
+		{
+			if(toolType.mineableBlocks() != null)
+				mineableBlocks.add(toolType.mineableBlocks());
+			toolActions.addAll(List.of(toolType.abilities()));
+		}
+		if(!mineableBlocks.isEmpty())
+			properties.component(DataComponents.TOOL, createToolProperties(builder.tier, mineableBlocks));
 	}
 	
-	@Override
-	public float getDestroySpeed(ItemStack stack, BlockState state)
-	{
-		if(toolType != null && toolType.canHarvest(state))
-			return efficiency;
+	public static Tool createToolProperties(Tier tier, List<TagKey<Block>> mineableBlocks) {
 		
-		return super.getDestroySpeed(stack, state);
+		return new Tool(Streams.concat(mineableBlocks.stream().map(tag -> Tool.Rule.minesAndDrops(tag, tier.getSpeed())), Stream.of(Tool.Rule.deniesDrops(tier.getIncorrectBlocksForDrops()))).toList(),
+				1.0F, 1);
 	}
 	
 	public boolean canAttackBlock(BlockState state, Level level, BlockPos pos, Player player)
 	{
-		if(this.toolType != null && this.toolType.canHarvest(state))
-		{
-			return true;
-		}
 		return !player.isCreative();
 	}
 	
-	//Thanks to Mraof for supplying the base for this method.
-	@Override
-	public boolean isCorrectToolForDrops(ItemStack item, BlockState blockIn)
-	{
-		return this.toolType != null && this.toolType.canHarvest(blockIn) && TierSortingRegistry.isCorrectTierForDrops(this.getTier(), blockIn);
-	}
 	
 	@Override
 	public boolean mineBlock(ItemStack stack, Level level, BlockState state, BlockPos pos, LivingEntity entityLiving)
 	{
 		if(destroyBlockEffect != null)
 			destroyBlockEffect.onDestroyBlock(stack, level, state, pos, entityLiving);
-		
-		if(state.getDestroySpeed(level, pos) != 0.0F)
-		{
-			int damage;
-			
-			if(toolType != null && toolType.canHarvest(state))
-				damage = 1;
-			else
-				damage = 2;
-			
-			stack.hurtAndBreak(damage, entityLiving, (entity) -> entity.broadcastBreakEvent(EquipmentSlot.MAINHAND));
-		}
-		
-		return true;
+		return super.mineBlock(stack, level, state, pos, entityLiving);
 	}
 	
+	
+	
 	@Override
-	public boolean canPerformAction(ItemStack stack, ToolAction toolAction)
+	public boolean canPerformAction(ItemStack stack, ItemAbility toolAction)
 	{
-		return this.toolActions.contains(toolAction) || this.toolType != null && this.toolType.hasAction(toolAction);
+		return this.toolActions.contains(toolAction);
 	}
 	
 	@Override
@@ -151,12 +126,6 @@ public class WeaponItem extends TieredItem
 		if(itemRightClickEffect != null)
 			return itemRightClickEffect.onRightClick(level, playerIn, handIn);
 		else return super.use(level, playerIn, handIn);
-	}
-	
-	@Override
-	public int getUseDuration(ItemStack stack)
-	{
-		return useDuration;
 	}
 	
 	@Override
@@ -183,38 +152,15 @@ public class WeaponItem extends TieredItem
 	@Override
 	public boolean hurtEnemy(ItemStack stack, LivingEntity target, LivingEntity attacker)
 	{
-		stack.hurtAndBreak(1, attacker, (PlayerEntity) -> PlayerEntity.broadcastBreakEvent(EquipmentSlot.MAINHAND));
+		stack.hurtAndBreak(1, attacker, EquipmentSlot.MAINHAND);
 		onHitEffects.forEach(effect -> effect.onHit(stack, target, attacker));
 		return true;
 	}
 	
-	@Override
-	public boolean isEnchantable(ItemStack stack)
-	{
-		return canBeDepleted() || (toolType != null && !toolType.getEnchantments().isEmpty());
-	}
-	
-	@Override
-	public boolean canApplyAtEnchantingTable(ItemStack stack, Enchantment enchantment)
-	{
-		if(canBeDepleted() && enchantment.category == EnchantmentCategory.BREAKABLE)
-			return true;
-		if(toolType == null)
-			return false;
-		
-		return toolType.getEnchantments().contains(enchantment);
-	}
-	
-	@Override
-	public Multimap<Attribute, AttributeModifier> getAttributeModifiers(EquipmentSlot slot, ItemStack stack)
-	{
-		return slot == EquipmentSlot.MAINHAND ? attributeModifiers : super.getAttributeModifiers(slot, stack);
-	}
-	
 	@Nullable
-	public MSToolType getToolType()
+	public List<MSToolType> getToolTypes()
 	{
-		return toolType;
+		return toolTypes;
 	}
 	
 	public float getEfficiency()
@@ -232,9 +178,8 @@ public class WeaponItem extends TieredItem
 		private final Tier tier;
 		private final int attackDamage;
 		private final float attackSpeed;
-		@Nullable
-		private MSToolType toolType;
-		private final Set<ToolAction> toolActions = new HashSet<>();
+		private List<MSToolType> toolType = List.of();
+		private final Set<ItemAbility> toolActions = new HashSet<>();
 		private float efficiency;
 		private boolean disableShield;
 		private final List<OnHitEffect> onHitEffects = new ArrayList<>();
@@ -257,9 +202,9 @@ public class WeaponItem extends TieredItem
 			efficiency = tier.getSpeed();
 		}
 		
-		public Builder set(@Nullable MSToolType toolType)
+		public Builder set(MSToolType... toolTypes)
 		{
-			this.toolType = toolType;
+			this.toolType = List.of(toolTypes);
 			return this;
 		}
 		
@@ -311,7 +256,7 @@ public class WeaponItem extends TieredItem
 			return this;
 		}
 		
-		public Builder add(ToolAction... actions)
+		public Builder add(ItemAbility... actions)
 		{
 			toolActions.addAll(List.of(actions));
 			return this;

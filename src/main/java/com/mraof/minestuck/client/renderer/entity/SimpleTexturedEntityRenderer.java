@@ -35,6 +35,6 @@ public class SimpleTexturedEntityRenderer<T extends Mob, M extends EntityModel<T
 	{
 		ResourceLocation entityName = Objects.requireNonNull(BuiltInRegistries.ENTITY_TYPE.getKey(entityType), () -> "Getting texture for entity type without a registry name! " + entityType);
 		
-		return new ResourceLocation(entityName.getNamespace(), "textures/entity/" + entityName.getPath() + ".png");
+		return ResourceLocation.fromNamespaceAndPath(entityName.getNamespace(), "textures/entity/" + entityName.getPath() + ".png");
 	}
 }

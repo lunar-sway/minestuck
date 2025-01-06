@@ -1,0 +1,11 @@
+{
+  "type": "minestuck:combination",
+  "input1": {
+    "item": "minestuck:makeshift_claws_drawn"
+  },
+  "input2": {
+    "tag": "c:ingots/iron"
+  },
+  "mode": "and",
+  "output": "minestuck:cat_claws_drawn"
+}

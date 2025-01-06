@@ -19,8 +19,7 @@ public class MiniAlchemiterBlock extends SmallMachineBlock<MiniAlchemiterBlockEn
 	}
 	
 	@Override
-	@SuppressWarnings("deprecation")
-	public boolean hasAnalogOutputSignal(BlockState state)
+	protected boolean hasAnalogOutputSignal(BlockState state)
 	{
 		return true;
 	}
@@ -28,8 +27,7 @@ public class MiniAlchemiterBlock extends SmallMachineBlock<MiniAlchemiterBlockEn
 	// Will provide a redstone signal through a comparator with the output level corresponding to how many items can be alchemized with the player's current grist cache.
 	// If no item can be alchemized, it will provide no signal to the comparator.
 	@Override
-	@SuppressWarnings("deprecation")
-	public int getAnalogOutputSignal(BlockState blockState, Level level, BlockPos pos)
+	protected int getAnalogOutputSignal(BlockState blockState, Level level, BlockPos pos)
 	{
 		if(level.getBlockEntity(pos) instanceof MiniAlchemiterBlockEntity alchemiter)
 			return alchemiter.comparatorValue();

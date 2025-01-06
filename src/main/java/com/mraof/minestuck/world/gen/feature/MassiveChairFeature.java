@@ -14,7 +14,7 @@ import net.minecraft.world.level.levelgen.structure.templatesystem.StructureTemp
 
 public class MassiveChairFeature extends Feature<NoneFeatureConfiguration>
 {
-	private static final ResourceLocation MASSIVE_CHAIR = new ResourceLocation(Minestuck.MOD_ID, "massive_chair");
+	private static final ResourceLocation MASSIVE_CHAIR = ResourceLocation.fromNamespaceAndPath(Minestuck.MOD_ID, "massive_chair");
 	
 	public MassiveChairFeature(Codec<NoneFeatureConfiguration> codec)
 	{

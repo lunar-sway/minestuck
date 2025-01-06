@@ -11,6 +11,6 @@ public class MSStructureProcessorTypes
 {
 	public static final DeferredRegister<StructureProcessorType<?>> REGISTER = DeferredRegister.create(Registries.STRUCTURE_PROCESSOR, Minestuck.MOD_ID);
 	
-	public static final Supplier<StructureProcessorType<StructureBlockRegistryProcessor>> BLOCK_REGISTRY = REGISTER.register("block_entity", () -> () -> StructureBlockRegistryProcessor.CODEC);
+	public static final Supplier<StructureProcessorType<StructureBlockRegistryProcessor>> BLOCK_REGISTRY = REGISTER.register("block_registry", () -> () -> StructureBlockRegistryProcessor.CODEC);
 	
 }

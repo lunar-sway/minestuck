@@ -4,17 +4,22 @@ import com.google.common.collect.ArrayListMultimap;
 import com.google.common.collect.Multimap;
 import com.mraof.minestuck.MinestuckConfig;
 import com.mraof.minestuck.blockentity.ComputerBlockEntity;
-import com.mraof.minestuck.network.data.EditmodeLocationsPacket;
+import com.mraof.minestuck.network.editmode.EditmodeLocationsPacket;
+import com.mraof.minestuck.player.PlayerData;
 import com.mraof.minestuck.player.PlayerIdentifier;
-import com.mraof.minestuck.player.PlayerSavedData;
 import com.mraof.minestuck.skaianet.SburbPlayerData;
+import com.mraof.minestuck.util.MSAttachments;
 import net.minecraft.core.BlockPos;
 import net.minecraft.core.Direction;
+import net.minecraft.core.HolderLookup;
 import net.minecraft.nbt.CompoundTag;
 import net.minecraft.nbt.ListTag;
 import net.minecraft.nbt.NbtOps;
 import net.minecraft.nbt.Tag;
+import net.minecraft.network.RegistryFriendlyByteBuf;
 import net.minecraft.network.chat.Component;
+import net.minecraft.network.codec.ByteBufCodecs;
+import net.minecraft.network.codec.StreamCodec;
 import net.minecraft.resources.ResourceKey;
 import net.minecraft.server.MinecraftServer;
 import net.minecraft.server.level.ServerLevel;
@@ -22,6 +27,7 @@ import net.minecraft.server.level.ServerPlayer;
 import net.minecraft.world.entity.player.Player;
 import net.minecraft.world.level.Level;
 import net.minecraft.world.phys.Vec3;
+import net.neoforged.neoforge.common.util.INBTSerializable;
 import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.Logger;
 
@@ -36,8 +42,12 @@ import java.util.stream.Stream;
 /**
  * Contains a list of block positions in a radius around which an editmode player can move freely.
  */
-public final class EditmodeLocations
+public final class EditmodeLocations implements INBTSerializable<CompoundTag>
 {
+	public static final StreamCodec<RegistryFriendlyByteBuf, EditmodeLocations> STREAM_CODEC = StreamCodec.of(
+			(encode, locations) -> encode.writeNbt(locations.serializeNBT(encode.registryAccess())),
+			(decode) -> new EditmodeLocations(decode.registryAccess(), decode.readNbt()));
+	
 	private static final Logger LOGGER = LogManager.getLogger();
 	
 	public static final String REMOVED_LOCATION_MESSAGE = "minestuck.editmode.removed_location";
@@ -60,7 +70,15 @@ public final class EditmodeLocations
 	public record Area(BlockPos center, int range)
 	{}
 	
-	public CompoundTag write()
+	public EditmodeLocations(HolderLookup.Provider provider, CompoundTag tag)
+	{
+		deserializeNBT(provider, tag);
+	}
+	
+	public EditmodeLocations() {}
+	
+	@Override
+	public CompoundTag serializeNBT(HolderLookup.Provider provider)
 	{
 		CompoundTag compoundTag = new CompoundTag();
 		
@@ -86,10 +104,9 @@ public final class EditmodeLocations
 		return compoundTag;
 	}
 	
-	public static EditmodeLocations read(CompoundTag compoundTag)
+	@Override
+	public void deserializeNBT(HolderLookup.Provider provider, CompoundTag compoundTag)
 	{
-		EditmodeLocations locations = new EditmodeLocations();
-		
 		ListTag locationsTag = compoundTag.getList("computers", Tag.TAG_COMPOUND);
 		
 		for(int i = 0; i < locationsTag.size(); i++)
@@ -102,10 +119,8 @@ public final class EditmodeLocations
 			int posY = nbt.getInt("y");
 			int posZ = nbt.getInt("z");
 			
-			locations.computers.put(dimension, new BlockPos(posX, posY, posZ));
+			this.computers.put(dimension, new BlockPos(posX, posY, posZ));
 		}
-		
-		return locations;
 	}
 	
 	public List<BlockPos> getSortedPositions(@Nonnull ResourceKey<Level> level, @Nullable ResourceKey<Level> land)
@@ -119,7 +134,7 @@ public final class EditmodeLocations
 	{
 		PlayerIdentifier owner = data.getTarget();
 		ResourceKey<Level> land = data.sburbData().getLandDimensionIfEntered();
-		EditmodeLocations locations = PlayerSavedData.getData(owner, data.getEditor().server).editmodeLocations;
+		EditmodeLocations locations = PlayerData.get(owner, data.getEditor().server).getData(MSAttachments.EDITMODE_LOCATIONS);
 		
 		if(level == land && ENTRY_POSITIONS.contains(pos))
 			return true;
@@ -160,7 +175,7 @@ public final class EditmodeLocations
 		if(computer.getOwner() == null)
 			return;
 		
-		var locations = PlayerSavedData.getData(computer.getOwner(), level).editmodeLocations;
+		var locations = PlayerData.get(computer.getOwner(), level).getData(MSAttachments.EDITMODE_LOCATIONS);
 		
 		if(locations.computers.containsEntry(level.dimension(), computer.getBlockPos()))
 			return;
@@ -173,7 +188,7 @@ public final class EditmodeLocations
 	
 	public static void removeBlockSource(MinecraftServer mcServer, PlayerIdentifier owner, ResourceKey<Level> level, BlockPos pos)
 	{
-		var locations = PlayerSavedData.getData(owner, mcServer).editmodeLocations;
+		var locations = PlayerData.get(owner, mcServer).getData(MSAttachments.EDITMODE_LOCATIONS);
 		
 		boolean wasRemoved = locations.computers.remove(level, pos);
 		if(wasRemoved)

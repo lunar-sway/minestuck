@@ -1,0 +1,11 @@
+{
+  "type": "minestuck:combination",
+  "input1": {
+    "item": "minecraft:ender_pearl"
+  },
+  "input2": {
+    "item": "minecraft:blaze_powder"
+  },
+  "mode": "and",
+  "output": "minecraft:ender_eye"
+}

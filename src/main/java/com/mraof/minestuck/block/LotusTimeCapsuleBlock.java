@@ -1,13 +1,16 @@
 package com.mraof.minestuck.block;
 
 import com.mraof.minestuck.block.machine.MultiMachineBlock;
-import com.mraof.minestuck.util.CustomVoxelShape;
+import com.mraof.minestuck.entity.LotusFlowerEntity;
 import net.minecraft.MethodsReturnNonnullByDefault;
 import net.minecraft.core.BlockPos;
 import net.minecraft.core.Direction;
+import net.minecraft.world.entity.Entity;
 import net.minecraft.world.level.BlockGetter;
+import net.minecraft.world.level.Level;
 import net.minecraft.world.level.block.Mirror;
 import net.minecraft.world.level.block.state.BlockState;
+import net.minecraft.world.phys.AABB;
 import net.minecraft.world.phys.shapes.CollisionContext;
 import net.minecraft.world.phys.shapes.VoxelShape;
 
@@ -27,8 +30,7 @@ public class LotusTimeCapsuleBlock extends MultiMachineBlock<LotusTimeCapsuleMul
 	}
 	
 	@Override
-	@SuppressWarnings("deprecation")
-	public VoxelShape getShape(BlockState state, BlockGetter level, BlockPos pos, CollisionContext context)
+	protected VoxelShape getShape(BlockState state, BlockGetter level, BlockPos pos, CollisionContext context)
 	{
 		return shape.get(state.getValue(FACING));
 	}
@@ -46,5 +48,13 @@ public class LotusTimeCapsuleBlock extends MultiMachineBlock<LotusTimeCapsuleMul
 				return state.setValue(FACING, direction.getCounterClockWise());
 		}
 		return state;
+	}
+	
+	@Override
+	public void onRemove(BlockState pState, Level pLevel, BlockPos pPos, BlockState pNewState, boolean pMovedByPiston)
+	{
+		super.onRemove(pState, pLevel, pPos, pNewState, pMovedByPiston);
+		
+		pLevel.getEntitiesOfClass(LotusFlowerEntity.class, new AABB(pPos.above())).forEach(Entity::discard); //not entirely content with this implementation, but it should do the trick. contact me if bugs somehow arise from it. -Ciber
 	}
 }

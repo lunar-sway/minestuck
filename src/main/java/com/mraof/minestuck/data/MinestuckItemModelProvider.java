@@ -659,7 +659,7 @@ public class MinestuckItemModelProvider extends ItemModelProvider
 	private ItemModelBuilder simpleItem(Supplier<? extends Item> item, String textureName)
 	{
 		return withExistingParent(id(item).getPath(),
-				new ResourceLocation("item/generated"))
+				ResourceLocation.withDefaultNamespace("item/generated"))
 				.texture("layer0", texture(textureName));
 	}
 	
@@ -671,7 +671,7 @@ public class MinestuckItemModelProvider extends ItemModelProvider
 	private ItemModelBuilder handheldItem(Supplier<? extends Item> item, String textureName)
 	{
 		return withExistingParent(id(item).getPath(),
-				new ResourceLocation("item/handheld"))
+				ResourceLocation.withDefaultNamespace("item/handheld"))
 				.texture("layer0", texture(textureName));
 	}
 	
@@ -727,7 +727,7 @@ public class MinestuckItemModelProvider extends ItemModelProvider
 	
 	private static ResourceLocation id(String path)
 	{
-		return new ResourceLocation(Minestuck.MOD_ID, path);
+		return ResourceLocation.fromNamespaceAndPath(Minestuck.MOD_ID, path);
 	}
 	
 	private static ResourceLocation id(Supplier<? extends Item> item)

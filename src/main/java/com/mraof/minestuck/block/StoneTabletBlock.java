@@ -2,7 +2,7 @@ package com.mraof.minestuck.block;
 
 import com.mraof.minestuck.blockentity.ItemStackBlockEntity;
 import com.mraof.minestuck.client.gui.MSScreenFactories;
-import com.mraof.minestuck.item.block.StoneTabletItem;
+import com.mraof.minestuck.item.components.StoneTabletTextComponent;
 import net.minecraft.MethodsReturnNonnullByDefault;
 import net.minecraft.core.BlockPos;
 import net.minecraft.core.Direction;
@@ -51,8 +51,7 @@ public class StoneTabletBlock extends CustomShapeBlock implements EntityBlock //
 	}
 	
 	@Override
-	@SuppressWarnings("deprecation")
-	public List<ItemStack> getDrops(BlockState state, LootParams.Builder builder)
+	protected List<ItemStack> getDrops(BlockState state, LootParams.Builder builder)
 	{
 		if(builder.getOptionalParameter(LootContextParams.BLOCK_ENTITY) instanceof ItemStackBlockEntity itemBE)
 		{
@@ -63,15 +62,14 @@ public class StoneTabletBlock extends CustomShapeBlock implements EntityBlock //
 	}
 	
 	@Override
-	@SuppressWarnings("deprecation")
-	public InteractionResult use(BlockState state, Level level, BlockPos pos, Player player, InteractionHand hand, BlockHitResult hit)
+	protected InteractionResult useWithoutItem(BlockState state, Level level, BlockPos pos, Player player, BlockHitResult hit)
 	{
 		if(!player.isShiftKeyDown())
 		{
 			if(level.isClientSide && level.getBlockEntity(pos) instanceof ItemStackBlockEntity itemStackBE)
 			{
-				String text = StoneTabletItem.hasText(itemStackBE.getStack()) ? itemStackBE.getStack().getTag().getString("text") : "";
-				MSScreenFactories.displayStoneTabletScreen(player, hand, text, false);
+				String text = StoneTabletTextComponent.getText(itemStackBE.getStack());
+				MSScreenFactories.displayStoneTabletScreen(player, InteractionHand.MAIN_HAND, text, false);
 			}
 		} else
 		{
@@ -82,6 +80,7 @@ public class StoneTabletBlock extends CustomShapeBlock implements EntityBlock //
 		return InteractionResult.SUCCESS;
 	}
 	
+	@Nullable
 	@Override
 	public BlockState getStateForPlacement(BlockPlaceContext context)
 	{

@@ -5,6 +5,8 @@
         "type": "minestuck:player_entered"
       },
       "node": {
+        "animation": {},
+        "gui": "minestuck:textures/gui/dialogue/dialogue.png",
         "messages": [
           {
             "type": "entity",
@@ -17,14 +19,21 @@
         ],
         "responses": [
           {
+            "condition": {
+              "type": "minestuck:always_true"
+            },
+            "hide_if_failed": true,
             "message": "minestuck.dialogue.carapacian_soldier.dreamer.start.who",
-            "next_dialogue": "minestuck:carapacian_soldier/dreamer/explain_dreamers.1"
+            "next_dialogue": "minestuck:carapacian_soldier/dreamer/explain_dreamers.1",
+            "triggers": []
           }
         ]
       }
     }
   ],
   "default_node": {
+    "animation": {},
+    "gui": "minestuck:textures/gui/dialogue/dialogue.png",
     "messages": [
       {
         "type": "entity",
@@ -34,6 +43,7 @@
         "type": "description",
         "message": "minestuck.dialogue.carapacian_soldier.dreamer.start.unfamiliar"
       }
-    ]
+    ],
+    "responses": []
   }
 }

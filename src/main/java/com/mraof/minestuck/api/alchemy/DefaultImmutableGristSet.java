@@ -9,7 +9,7 @@ import java.util.Map;
  * An immutable grist set that can hold any number of grist types.
  * Suitable when an immutable grist set is needed, but {@link GristAmount} is insufficient.
  */
-public final class DefaultImmutableGristSet implements ImmutableGristSet
+public final class DefaultImmutableGristSet implements GristSet.Immutable
 {
 	private final ImmutableMap<GristType, Long> map;
 	
@@ -28,7 +28,7 @@ public final class DefaultImmutableGristSet implements ImmutableGristSet
 		map = builder.build();
 	}
 	
-	public static ImmutableGristSet create(List<GristAmount> amounts)
+	public static GristSet.Immutable create(List<GristAmount> amounts)
 	{
 		ImmutableMap.Builder<GristType, Long> builder = ImmutableMap.builder();
 		for(GristAmount gristAmount : amounts)

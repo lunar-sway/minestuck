@@ -5,21 +5,24 @@ import com.mraof.minestuck.blockentity.ComputerBlockEntity;
 import com.mraof.minestuck.network.MSPacket;
 import net.minecraft.core.BlockPos;
 import net.minecraft.network.FriendlyByteBuf;
+import net.minecraft.network.RegistryFriendlyByteBuf;
+import net.minecraft.network.codec.ByteBufCodecs;
+import net.minecraft.network.codec.StreamCodec;
+import net.minecraft.network.protocol.common.custom.CustomPacketPayload;
 import net.minecraft.resources.ResourceLocation;
 import net.minecraft.server.level.ServerPlayer;
+import net.neoforged.neoforge.network.handling.IPayloadContext;
 
-public class BurnDiskPacket implements MSPacket.PlayToServer
+public record BurnDiskPacket(BlockPos computerPos, int programId) implements MSPacket.PlayToServer
 {
-	public static final ResourceLocation ID = Minestuck.id("burn_disk");
-	
-	private final BlockPos bePos;
-	private final int programId;
-	
-	public BurnDiskPacket(BlockPos pos, int programId)
-	{
-		this.bePos = pos;
-		this.programId = programId;
-	}
+	public static final Type<BurnDiskPacket> ID = new Type<>(Minestuck.id("burn_disk"));
+	public static final StreamCodec<FriendlyByteBuf, BurnDiskPacket> STREAM_CODEC = StreamCodec.composite(
+			BlockPos.STREAM_CODEC,
+			BurnDiskPacket::computerPos,
+			ByteBufCodecs.INT,
+			BurnDiskPacket::programId,
+			BurnDiskPacket::new
+	);
 	
 	public static BurnDiskPacket create(ComputerBlockEntity be, int programId)
 	{
@@ -27,29 +30,15 @@ public class BurnDiskPacket implements MSPacket.PlayToServer
 	}
 	
 	@Override
-	public ResourceLocation id()
+	public Type<? extends CustomPacketPayload> type()
 	{
 		return ID;
 	}
 	
 	@Override
-	public void write(FriendlyByteBuf buffer)
+	public void execute(IPayloadContext context, ServerPlayer player)
 	{
-		buffer.writeBlockPos(bePos);
-		buffer.writeInt(programId);
-	}
-	
-	public static BurnDiskPacket read(FriendlyByteBuf buffer)
-	{
-		BlockPos bePos = buffer.readBlockPos();
-		int programId = buffer.readInt();
-		return new BurnDiskPacket(bePos, programId);
-	}
-	
-	@Override
-	public void execute(ServerPlayer player)
-	{
-		ComputerBlockEntity.forNetworkIfPresent(player, bePos,
-				computer -> computer.burnDisk(programId));
+		ComputerBlockEntity.getAccessibleComputer(player, computerPos)
+				.ifPresent(computer -> computer.burnDisk(programId));
 	}
 }

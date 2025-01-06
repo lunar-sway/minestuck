@@ -4,6 +4,7 @@ import com.mraof.minestuck.MinestuckConfig;
 import com.mraof.minestuck.block.redstone.WirelessRedstoneReceiverBlock;
 import com.mraof.minestuck.blockentity.MSBlockEntityTypes;
 import net.minecraft.core.BlockPos;
+import net.minecraft.core.HolderLookup;
 import net.minecraft.nbt.CompoundTag;
 import net.minecraft.network.protocol.Packet;
 import net.minecraft.network.protocol.game.ClientGamePacketListener;
@@ -80,9 +81,9 @@ public class WirelessRedstoneReceiverBlockEntity extends BlockEntity
 	}
 	
 	@Override
-	public void load(CompoundTag compound)
+	public void loadAdditional(CompoundTag compound, HolderLookup.Provider provider)
 	{
-		super.load(compound);
+		super.loadAdditional(compound, provider);
 		
 		lastTransmission = compound.getInt("lastTransmission");
 		int transmitterX = compound.getInt("transmitterX");
@@ -92,9 +93,9 @@ public class WirelessRedstoneReceiverBlockEntity extends BlockEntity
 	}
 	
 	@Override
-	public void saveAdditional(CompoundTag compound)
+	public void saveAdditional(CompoundTag compound, HolderLookup.Provider provider)
 	{
-		super.saveAdditional(compound);
+		super.saveAdditional(compound, provider);
 		
 		compound.putInt("lastTransmission", lastTransmission);
 		
@@ -106,9 +107,9 @@ public class WirelessRedstoneReceiverBlockEntity extends BlockEntity
 	}
 	
 	@Override
-	public CompoundTag getUpdateTag()
+	public CompoundTag getUpdateTag(HolderLookup.Provider provider)
 	{
-		return this.saveWithoutMetadata();
+		return this.saveWithoutMetadata(provider);
 	}
 	
 	@Override

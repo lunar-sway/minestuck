@@ -2,7 +2,7 @@ package com.mraof.minestuck.data.worldgen;
 
 import com.mraof.minestuck.entity.MSEntityTypes;
 import com.mraof.minestuck.world.biome.MSBiomes;
-import net.minecraft.data.worldgen.BootstapContext;
+import net.minecraft.data.worldgen.BootstrapContext;
 import net.minecraft.world.entity.MobCategory;
 import net.minecraft.world.level.biome.Biome;
 import net.minecraft.world.level.biome.BiomeGenerationSettings;
@@ -11,7 +11,7 @@ import net.minecraft.world.level.biome.MobSpawnSettings;
 
 public final class MSBiomeProvider
 {
-	public static void register(BootstapContext<Biome> context)
+	public static void register(BootstrapContext<Biome> context)
 	{
 		context.register(MSBiomes.SKAIA, skaiaBiome());
 		context.register(MSBiomes.PROSPIT,

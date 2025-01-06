@@ -3,11 +3,12 @@ package com.mraof.minestuck.entity.dialogue;
 import com.mojang.serialization.Codec;
 import com.mojang.serialization.codecs.RecordCodecBuilder;
 import com.mraof.minestuck.Minestuck;
-import com.mraof.minestuck.util.PreservingOptionalFieldCodec;
 import net.minecraft.client.Minecraft;
 import net.minecraft.client.renderer.texture.AbstractTexture;
 import net.minecraft.client.renderer.texture.MissingTextureAtlasSprite;
-import net.minecraft.network.FriendlyByteBuf;
+import net.minecraft.network.RegistryFriendlyByteBuf;
+import net.minecraft.network.codec.ByteBufCodecs;
+import net.minecraft.network.codec.StreamCodec;
 import net.minecraft.resources.ResourceLocation;
 
 public record DialogueAnimationData(String emotion, int spriteHeight, int spriteWidth, int xOffset, int yOffset, float scale)
@@ -23,42 +24,36 @@ public record DialogueAnimationData(String emotion, int spriteHeight, int sprite
 	public static final DialogueAnimationData DEFAULT_ANIMATION = new DialogueAnimationData(GENERIC_EMOTION, DEFAULT_SPRITE_HEIGHT, DEFAULT_SPRITE_WIDTH, 0, 0, 1.0F);
 	
 	public static Codec<DialogueAnimationData> CODEC = RecordCodecBuilder.create(instance -> instance.group(
-			PreservingOptionalFieldCodec.withDefault(Codec.STRING, "emotion", GENERIC_EMOTION).forGetter(DialogueAnimationData::emotion),
-			PreservingOptionalFieldCodec.withDefault(Codec.INT, "height", DEFAULT_SPRITE_HEIGHT).forGetter(DialogueAnimationData::spriteHeight),
-			PreservingOptionalFieldCodec.withDefault(Codec.INT, "width", DEFAULT_SPRITE_WIDTH).forGetter(DialogueAnimationData::spriteWidth),
-			PreservingOptionalFieldCodec.withDefault(Codec.INT, "x_offset", 0).forGetter(DialogueAnimationData::xOffset),
-			PreservingOptionalFieldCodec.withDefault(Codec.INT, "y_offset", 0).forGetter(DialogueAnimationData::yOffset),
-			PreservingOptionalFieldCodec.withDefault(Codec.FLOAT, "scale", 1.0F).forGetter(DialogueAnimationData::scale)
+			Codec.STRING.optionalFieldOf("emotion", GENERIC_EMOTION).forGetter(DialogueAnimationData::emotion),
+			Codec.INT.optionalFieldOf("height", DEFAULT_SPRITE_HEIGHT).forGetter(DialogueAnimationData::spriteHeight),
+			Codec.INT.optionalFieldOf("width", DEFAULT_SPRITE_WIDTH).forGetter(DialogueAnimationData::spriteWidth),
+			Codec.INT.optionalFieldOf("x_offset", 0).forGetter(DialogueAnimationData::xOffset),
+			Codec.INT.optionalFieldOf("y_offset", 0).forGetter(DialogueAnimationData::yOffset),
+			Codec.FLOAT.optionalFieldOf("scale", 1.0F).forGetter(DialogueAnimationData::scale)
 	).apply(instance, DialogueAnimationData::new));
 	
-	public static DialogueAnimationData read(FriendlyByteBuf buffer)
-	{
-		String emotion = buffer.readUtf(25);
-		int height = buffer.readInt();
-		int width = buffer.readInt();
-		int xOffset = buffer.readInt();
-		int yOffset = buffer.readInt();
-		float scale = buffer.readFloat();
-		
-		return new DialogueAnimationData(emotion, height, width, xOffset, yOffset, scale);
-	}
-	
-	public void write(FriendlyByteBuf buffer)
-	{
-		buffer.writeUtf(this.emotion, 25);
-		buffer.writeInt(this.spriteHeight);
-		buffer.writeInt(this.spriteWidth);
-		buffer.writeInt(this.xOffset);
-		buffer.writeInt(this.yOffset);
-		buffer.writeFloat(this.scale);
-	}
+	public static final StreamCodec<RegistryFriendlyByteBuf, DialogueAnimationData> STREAM_CODEC = StreamCodec.composite(
+			ByteBufCodecs.STRING_UTF8,
+			DialogueAnimationData::emotion,
+			ByteBufCodecs.INT,
+			DialogueAnimationData::spriteHeight,
+			ByteBufCodecs.INT,
+			DialogueAnimationData::spriteWidth,
+			ByteBufCodecs.INT,
+			DialogueAnimationData::xOffset,
+			ByteBufCodecs.INT,
+			DialogueAnimationData::yOffset,
+			ByteBufCodecs.FLOAT,
+			DialogueAnimationData::scale,
+			DialogueAnimationData::new
+	);
 	
 	/**
 	 * Returns the animatable sprite corresponding to the entities sprite type
 	 */
 	public ResourceLocation getRenderPath(String spriteType)
 	{
-		ResourceLocation spritePath = new ResourceLocation(Minestuck.MOD_ID, "textures/gui/dialogue/entity/" + spriteType + "/" + emotion + ".png");
+		ResourceLocation spritePath = ResourceLocation.fromNamespaceAndPath(Minestuck.MOD_ID, "textures/gui/dialogue/entity/" + spriteType + "/" + emotion + ".png");
 		
 		//TODO the first time this is run using an invalid path, an error message is printed in chat before fallback system activates. The Minecraft missing texture sprite may show briefly
 		AbstractTexture abstractTexture = Minecraft.getInstance().getTextureManager().getTexture(spritePath);
@@ -66,7 +61,7 @@ public record DialogueAnimationData(String emotion, int spriteHeight, int sprite
 		//if the sprite for the given emotion cannot be found, it will try to render the generic sprite instead. If the generic sprite cannot be found, the invalid texture is allowed to proceed
 		if(abstractTexture == MissingTextureAtlasSprite.getTexture())
 		{
-			return new ResourceLocation(Minestuck.MOD_ID, "textures/gui/dialogue/entity/" + spriteType + "/" + GENERIC_EMOTION + ".png");
+			return ResourceLocation.fromNamespaceAndPath(Minestuck.MOD_ID, "textures/gui/dialogue/entity/" + spriteType + "/" + GENERIC_EMOTION + ".png");
 		}
 		
 		return spritePath;

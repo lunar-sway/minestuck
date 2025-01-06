@@ -55,7 +55,7 @@ public final class SimpleTemplateFeature extends Feature<SimpleTemplateFeature.C
 		
 		StructurePlaceSettings settings = new StructurePlaceSettings();
 		if(config.useLandBlocks)
-			settings.addProcessor(StructureBlockRegistryProcessor.from(context));
+			settings.addProcessor(StructureBlockRegistryProcessor.INSTANCE);
 		
 		if(config.heightPlacement.isPresent())
 		{

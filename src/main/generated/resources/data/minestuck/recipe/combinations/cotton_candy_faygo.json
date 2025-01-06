@@ -1,0 +1,11 @@
+{
+  "type": "minestuck:combination",
+  "input1": {
+    "item": "minestuck:orange_faygo"
+  },
+  "input2": {
+    "item": "minecraft:light_blue_wool"
+  },
+  "mode": "or",
+  "output": "minestuck:cotton_candy_faygo"
+}

@@ -153,7 +153,7 @@ public record TemplatePlacement(StructureTemplate template, BlockPos zeroPos, Mi
 	
 	public void placeWithStructureBlockRegistry(FeaturePlaceContext<?> context, StructurePlaceSettings settings)
 	{
-		this.place(context, settings.addProcessor(StructureBlockRegistryProcessor.from(context)));
+		this.place(context, settings.addProcessor(StructureBlockRegistryProcessor.INSTANCE));
 	}
 	
 	public void place(FeaturePlaceContext<?> context)
@@ -173,7 +173,7 @@ public record TemplatePlacement(StructureTemplate template, BlockPos zeroPos, Mi
 	
 	public void placeWithStructureBlockRegistryAt(int y, FeaturePlaceContext<?> context, StructurePlaceSettings settings)
 	{
-		this.placeAt(y, context, settings.addProcessor(StructureBlockRegistryProcessor.from(context)));
+		this.placeAt(y, context, settings.addProcessor(StructureBlockRegistryProcessor.INSTANCE));
 	}
 	
 	public void placeAt(int y, FeaturePlaceContext<?> context)

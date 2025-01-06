@@ -1,0 +1,11 @@
+{
+  "type": "minestuck:combination",
+  "input1": {
+    "tag": "minecraft:leaves"
+  },
+  "input2": {
+    "item": "minecraft:water_bucket"
+  },
+  "mode": "or",
+  "output": "minecraft:lily_pad"
+}

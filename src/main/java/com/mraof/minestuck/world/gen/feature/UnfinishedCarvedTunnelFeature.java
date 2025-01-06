@@ -14,7 +14,7 @@ import net.minecraft.world.level.levelgen.structure.templatesystem.StructureTemp
 
 public class UnfinishedCarvedTunnelFeature extends Feature<NoneFeatureConfiguration>
 {
-	private static final ResourceLocation UNFINISHED_CARVED_TUNNEL = new ResourceLocation(Minestuck.MOD_ID, "unfinished_carved_tunnel");
+	private static final ResourceLocation UNFINISHED_CARVED_TUNNEL = ResourceLocation.fromNamespaceAndPath(Minestuck.MOD_ID, "unfinished_carved_tunnel");
 	
 	public UnfinishedCarvedTunnelFeature(Codec<NoneFeatureConfiguration> codec)
 	{

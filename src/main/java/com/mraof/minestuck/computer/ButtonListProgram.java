@@ -52,7 +52,7 @@ public abstract class ButtonListProgram extends ComputerProgram
 		if(data != null)
 		{
 			if(!screen.be.latestmessage.get(this.getId()).isEmpty())
-				PacketDistributor.SERVER.noArg().send(new ClearMessagePacket(screen.be.getBlockPos(), this.getId()));
+				PacketDistributor.sendToServer(new ClearMessagePacket(screen.be.getBlockPos(), this.getId()));
 			onButtonPressed(screen.be, data.string, data.formatData);
 		}
 		screen.updateGui();

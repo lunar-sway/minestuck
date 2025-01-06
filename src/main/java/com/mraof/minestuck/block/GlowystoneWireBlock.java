@@ -50,7 +50,7 @@ public class GlowystoneWireBlock extends Block
 	}
 	
 	@Override
-	public VoxelShape getShape(BlockState state, BlockGetter level, BlockPos pos, CollisionContext context)
+	protected VoxelShape getShape(BlockState state, BlockGetter level, BlockPos pos, CollisionContext context)
 	{
 		return SHAPES[getAABBIndex(state)];
 	}
@@ -274,8 +274,7 @@ public class GlowystoneWireBlock extends Block
 	}
 	
 	@Override
-	@SuppressWarnings("deprecation")
-	public BlockState rotate(BlockState state, Rotation rot)
+	protected BlockState rotate(BlockState state, Rotation rot)
 	{
 		switch(rot)
 		{
@@ -291,8 +290,7 @@ public class GlowystoneWireBlock extends Block
 	}
 	
 	@Override
-	@SuppressWarnings("deprecation")
-	public BlockState mirror(BlockState state, Mirror mirrorIn)
+	protected BlockState mirror(BlockState state, Mirror mirrorIn)
 	{
 		switch(mirrorIn)
 		{

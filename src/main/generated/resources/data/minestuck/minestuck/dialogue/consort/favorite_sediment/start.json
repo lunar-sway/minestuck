@@ -1,26 +1,53 @@
 {
   "node": {
+    "animation": {},
+    "gui": "minestuck:textures/gui/dialogue/dialogue.png",
     "message": "minestuck.dialogue.consort.favorite_sediment.start",
     "responses": [
       {
+        "condition": {
+          "type": "minestuck:always_true"
+        },
+        "hide_if_failed": true,
         "message": "minestuck.dialogue.consort.favorite_sediment.start.sand",
-        "next_dialogue": "minestuck:consort/favorite_sediment/consort_favorite"
+        "next_dialogue": "minestuck:consort/favorite_sediment/consort_favorite",
+        "triggers": []
       },
       {
+        "condition": {
+          "type": "minestuck:always_true"
+        },
+        "hide_if_failed": true,
         "message": "minestuck.dialogue.consort.favorite_sediment.start.silt",
-        "next_dialogue": "minestuck:consort/favorite_sediment/consort_favorite"
+        "next_dialogue": "minestuck:consort/favorite_sediment/consort_favorite",
+        "triggers": []
       },
       {
+        "condition": {
+          "type": "minestuck:always_true"
+        },
+        "hide_if_failed": true,
         "message": "minestuck.dialogue.consort.favorite_sediment.start.clay",
-        "next_dialogue": "minestuck:consort/favorite_sediment/consort_favorite"
+        "next_dialogue": "minestuck:consort/favorite_sediment/consort_favorite",
+        "triggers": []
       },
       {
+        "condition": {
+          "type": "minestuck:always_true"
+        },
+        "hide_if_failed": true,
         "message": "minestuck.dialogue.consort.favorite_sediment.start.dirt",
-        "next_dialogue": "minestuck:consort/favorite_sediment/consort_favorite"
+        "next_dialogue": "minestuck:consort/favorite_sediment/consort_favorite",
+        "triggers": []
       },
       {
+        "condition": {
+          "type": "minestuck:always_true"
+        },
+        "hide_if_failed": true,
         "message": "minestuck.dialogue.consort.favorite_sediment.start.question",
-        "next_dialogue": "minestuck:consort/favorite_sediment/start.worried"
+        "next_dialogue": "minestuck:consort/favorite_sediment/start.worried",
+        "triggers": []
       }
     ]
   }

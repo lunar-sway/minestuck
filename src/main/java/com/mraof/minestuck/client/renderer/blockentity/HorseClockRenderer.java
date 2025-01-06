@@ -21,6 +21,6 @@ public class HorseClockRenderer extends GeoBlockRenderer<HorseClockBlockEntity>
 	@Override
 	public AABB getRenderBoundingBox(HorseClockBlockEntity blockEntity)
 	{
-		return INFINITE_EXTENT_AABB; //keeps the model rendered even when the blockpos is no longer viewed by the camera
+		return AABB.INFINITE; //keeps the model rendered even when the blockpos is no longer viewed by the camera
 	}
 }

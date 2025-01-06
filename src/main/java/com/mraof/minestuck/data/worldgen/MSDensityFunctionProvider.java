@@ -4,7 +4,8 @@ import com.mraof.minestuck.world.gen.MSNoiseParameters;
 import net.minecraft.core.Holder;
 import net.minecraft.core.HolderGetter;
 import net.minecraft.core.registries.Registries;
-import net.minecraft.data.worldgen.BootstapContext;
+import net.minecraft.data.worldgen.BootstrapContext;
+import net.minecraft.data.worldgen.BootstrapContext;
 import net.minecraft.resources.ResourceKey;
 import net.minecraft.util.CubicSpline;
 import net.minecraft.world.level.levelgen.DensityFunction;
@@ -16,7 +17,7 @@ import static com.mraof.minestuck.world.gen.MSDensityFunctions.*;
 
 public final class MSDensityFunctionProvider
 {
-	public static void register(BootstapContext<DensityFunction> context)
+	public static void register(BootstrapContext<DensityFunction> context)
 	{
 		HolderGetter<NormalNoise.NoiseParameters> noise = context.lookup(Registries.NOISE);
 		
@@ -36,7 +37,7 @@ public final class MSDensityFunctionProvider
 		context.register(LAND_EROSION, base2dNoise(shiftX, shiftZ, noise.getOrThrow(MSNoiseParameters.LAND_EROSION)));
 	}
 	
-	private static DensityFunction registerAndGet(BootstapContext<DensityFunction> context, ResourceKey<DensityFunction> key, DensityFunction function)
+	private static DensityFunction registerAndGet(BootstrapContext<DensityFunction> context, ResourceKey<DensityFunction> key, DensityFunction function)
 	{
 		return new DensityFunctions.HolderHolder(context.register(key, function));
 	}

@@ -102,13 +102,13 @@ public final class CombinationRecipeBuilder
 	public void build(RecipeOutput recipeOutput)
 	{
 		ResourceLocation name = Objects.requireNonNull(BuiltInRegistries.ITEM.getKey(output.getItem()));
-		build(recipeOutput, new ResourceLocation(name.getNamespace(), name.getPath() + suffix));
+		build(recipeOutput, ResourceLocation.fromNamespaceAndPath(name.getNamespace(), name.getPath() + suffix));
 	}
 	
 	public void buildFor(RecipeOutput recipeOutput, String modId)
 	{
 		ResourceLocation name = Objects.requireNonNull(BuiltInRegistries.ITEM.getKey(output.getItem()));
-		build(recipeOutput, new ResourceLocation(modId, name.getPath() + suffix));
+		build(recipeOutput, ResourceLocation.fromNamespaceAndPath(modId, name.getPath() + suffix));
 	}
 	
 	public void build(RecipeOutput recipeOutput, ResourceLocation id)

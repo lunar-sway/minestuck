@@ -2,21 +2,24 @@ package com.mraof.minestuck.entity.dialogue;
 
 import com.mojang.serialization.Codec;
 import com.mojang.serialization.DataResult;
+import com.mojang.serialization.MapCodec;
 import com.mojang.serialization.codecs.RecordCodecBuilder;
 import com.mraof.minestuck.advancements.MSCriteriaTriggers;
 import com.mraof.minestuck.entity.consort.ConsortEntity;
+import com.mraof.minestuck.entity.consort.ConsortReputation;
 import com.mraof.minestuck.entity.consort.ConsortRewardHandler;
 import com.mraof.minestuck.entity.dialogue.condition.Condition;
 import com.mraof.minestuck.inventory.ConsortMerchantInventory;
+import com.mraof.minestuck.player.PlayerBoondollars;
 import com.mraof.minestuck.player.PlayerData;
-import com.mraof.minestuck.player.PlayerSavedData;
-import com.mraof.minestuck.util.PreservingOptionalFieldCodec;
 import net.minecraft.MethodsReturnNonnullByDefault;
 import net.minecraft.Util;
 import net.minecraft.commands.CommandSourceStack;
 import net.minecraft.commands.Commands;
 import net.minecraft.core.registries.BuiltInRegistries;
+import net.minecraft.core.registries.Registries;
 import net.minecraft.network.chat.Component;
+import net.minecraft.resources.ResourceKey;
 import net.minecraft.resources.ResourceLocation;
 import net.minecraft.server.level.ServerLevel;
 import net.minecraft.server.level.ServerPlayer;
@@ -26,6 +29,7 @@ import net.minecraft.world.entity.LivingEntity;
 import net.minecraft.world.item.Item;
 import net.minecraft.world.item.ItemStack;
 import net.minecraft.world.level.storage.loot.LootParams;
+import net.minecraft.world.level.storage.loot.LootTable;
 import net.minecraft.world.level.storage.loot.parameters.LootContextParamSets;
 import net.minecraft.world.level.storage.loot.parameters.LootContextParams;
 import org.apache.logging.log4j.LogManager;
@@ -45,18 +49,18 @@ public sealed interface Trigger
 	Codec<Trigger> CODEC = Triggers.REGISTRY.byNameCodec().dispatch(Trigger::codec, Function.identity());
 	Codec<List<Trigger>> LIST_CODEC = Trigger.CODEC.listOf();
 	
-	Codec<? extends Trigger> codec();
+	MapCodec<? extends Trigger> codec();
 	
 	void triggerEffect(LivingEntity entity, ServerPlayer player);
 	
 	record SetDialogue(ResourceLocation newPath) implements Trigger
 	{
-		static final Codec<SetDialogue> CODEC = RecordCodecBuilder.create(instance -> instance.group(
+		static final MapCodec<SetDialogue> CODEC = RecordCodecBuilder.mapCodec(instance -> instance.group(
 				ResourceLocation.CODEC.fieldOf("new_path").forGetter(SetDialogue::newPath)
 		).apply(instance, SetDialogue::new));
 		
 		@Override
-		public Codec<SetDialogue> codec()
+		public MapCodec<SetDialogue> codec()
 		{
 			return CODEC;
 		}
@@ -71,12 +75,12 @@ public sealed interface Trigger
 	
 	record SetDialogueFromList(List<ResourceLocation> newPaths) implements Trigger
 	{
-		static final Codec<SetDialogueFromList> CODEC = RecordCodecBuilder.create(instance -> instance.group(
+		static final MapCodec<SetDialogueFromList> CODEC = RecordCodecBuilder.mapCodec(instance -> instance.group(
 				Codec.list(ResourceLocation.CODEC).fieldOf("new_paths").forGetter(SetDialogueFromList::newPaths)
 		).apply(instance, SetDialogueFromList::new));
 		
 		@Override
-		public Codec<SetDialogueFromList> codec()
+		public MapCodec<SetDialogueFromList> codec()
 		{
 			return CODEC;
 		}
@@ -93,12 +97,12 @@ public sealed interface Trigger
 	
 	record SetPlayerDialogue(ResourceLocation dialogueId) implements Trigger
 	{
-		static final Codec<SetPlayerDialogue> CODEC = RecordCodecBuilder.create(instance -> instance.group(
+		static final MapCodec<SetPlayerDialogue> CODEC = RecordCodecBuilder.mapCodec(instance -> instance.group(
 				ResourceLocation.CODEC.fieldOf("dialogue").forGetter(SetPlayerDialogue::dialogueId)
 		).apply(instance, SetPlayerDialogue::new));
 		
 		@Override
-		public Codec<SetPlayerDialogue> codec()
+		public MapCodec<SetPlayerDialogue> codec()
 		{
 			return CODEC;
 		}
@@ -110,14 +114,14 @@ public sealed interface Trigger
 		}
 	}
 	
-	record OpenConsortMerchantGui(ResourceLocation lootTable) implements Trigger
+	record OpenConsortMerchantGui(ResourceKey<LootTable> lootTable) implements Trigger
 	{
-		static final Codec<OpenConsortMerchantGui> CODEC = RecordCodecBuilder.create(instance -> instance.group(
-				ResourceLocation.CODEC.fieldOf("loot_table").forGetter(OpenConsortMerchantGui::lootTable)
+		static final MapCodec<OpenConsortMerchantGui> CODEC = RecordCodecBuilder.mapCodec(instance -> instance.group(
+				ResourceKey.codec(Registries.LOOT_TABLE).fieldOf("loot_table").forGetter(OpenConsortMerchantGui::lootTable)
 		).apply(instance, OpenConsortMerchantGui::new));
 		
 		@Override
-		public Codec<OpenConsortMerchantGui> codec()
+		public MapCodec<OpenConsortMerchantGui> codec()
 		{
 			return CODEC;
 		}
@@ -139,12 +143,12 @@ public sealed interface Trigger
 	
 	record Command(String commandText) implements Trigger
 	{
-		static final Codec<Command> CODEC = RecordCodecBuilder.create(instance -> instance.group(
+		static final MapCodec<Command> CODEC = RecordCodecBuilder.mapCodec(instance -> instance.group(
 				Codec.STRING.fieldOf("command").forGetter(Command::commandText)
 		).apply(instance, Command::new));
 		
 		@Override
-		public Codec<Command> codec()
+		public MapCodec<Command> codec()
 		{
 			return CODEC;
 		}
@@ -163,9 +167,9 @@ public sealed interface Trigger
 	
 	record TakeItem(Item item, int amount) implements Trigger
 	{
-		static final Codec<TakeItem> CODEC = RecordCodecBuilder.create(instance -> instance.group(
+		static final MapCodec<TakeItem> CODEC = RecordCodecBuilder.mapCodec(instance -> instance.group(
 				BuiltInRegistries.ITEM.byNameCodec().fieldOf("item").forGetter(TakeItem::item),
-				PreservingOptionalFieldCodec.withDefault(Codec.INT, "amount", 1).forGetter(TakeItem::amount)
+				Codec.INT.optionalFieldOf("amount", 1).forGetter(TakeItem::amount)
 		).apply(instance, TakeItem::new));
 		
 		public TakeItem(Item item)
@@ -174,7 +178,7 @@ public sealed interface Trigger
 		}
 		
 		@Override
-		public Codec<TakeItem> codec()
+		public MapCodec<TakeItem> codec()
 		{
 			return CODEC;
 		}
@@ -197,10 +201,10 @@ public sealed interface Trigger
 	enum TakeMatchedItem implements Trigger
 	{
 		INSTANCE;
-		static final Codec<TakeMatchedItem> CODEC = Codec.unit(INSTANCE);
+		static final MapCodec<TakeMatchedItem> CODEC = MapCodec.unit(INSTANCE);
 		
 		@Override
-		public Codec<TakeMatchedItem> codec()
+		public MapCodec<TakeMatchedItem> codec()
 		{
 			return CODEC;
 		}
@@ -236,13 +240,13 @@ public sealed interface Trigger
 	
 	record SetNPCItem(Item item, EquipmentSlot slot) implements Trigger
 	{
-		static final Codec<SetNPCItem> CODEC = RecordCodecBuilder.create(instance -> instance.group(
+		static final MapCodec<SetNPCItem> CODEC = RecordCodecBuilder.mapCodec(instance -> instance.group(
 				BuiltInRegistries.ITEM.byNameCodec().fieldOf("item").forGetter(SetNPCItem::item),
-				PreservingOptionalFieldCodec.withDefault(EQUIPMENT_CODEC, "slot", EquipmentSlot.MAINHAND).forGetter(SetNPCItem::slot)
+				EQUIPMENT_CODEC.optionalFieldOf("slot", EquipmentSlot.MAINHAND).forGetter(SetNPCItem::slot)
 		).apply(instance, SetNPCItem::new));
 		
 		@Override
-		public Codec<SetNPCItem> codec()
+		public MapCodec<SetNPCItem> codec()
 		{
 			return CODEC;
 		}
@@ -259,12 +263,12 @@ public sealed interface Trigger
 	 */
 	record SetNPCMatchedItem(EquipmentSlot slot) implements Trigger
 	{
-		static final Codec<SetNPCMatchedItem> CODEC = RecordCodecBuilder.create(instance -> instance.group(
-				PreservingOptionalFieldCodec.withDefault(EQUIPMENT_CODEC, "slot", EquipmentSlot.MAINHAND).forGetter(SetNPCMatchedItem::slot)
+		static final MapCodec<SetNPCMatchedItem> CODEC = RecordCodecBuilder.mapCodec(instance -> instance.group(
+				EQUIPMENT_CODEC.optionalFieldOf("slot", EquipmentSlot.MAINHAND).forGetter(SetNPCMatchedItem::slot)
 		).apply(instance, SetNPCMatchedItem::new));
 		
 		@Override
-		public Codec<SetNPCMatchedItem> codec()
+		public MapCodec<SetNPCMatchedItem> codec()
 		{
 			return CODEC;
 		}
@@ -287,9 +291,9 @@ public sealed interface Trigger
 	
 	record GiveItem(Item item, int amount) implements Trigger
 	{
-		static final Codec<GiveItem> CODEC = RecordCodecBuilder.create(instance -> instance.group(
+		static final MapCodec<GiveItem> CODEC = RecordCodecBuilder.mapCodec(instance -> instance.group(
 				BuiltInRegistries.ITEM.byNameCodec().fieldOf("item").forGetter(GiveItem::item),
-				PreservingOptionalFieldCodec.withDefault(Codec.INT, "amount", 1).forGetter(GiveItem::amount)
+				Codec.INT.optionalFieldOf("amount", 1).forGetter(GiveItem::amount)
 		).apply(instance, GiveItem::new));
 		
 		public GiveItem(Item item)
@@ -298,7 +302,7 @@ public sealed interface Trigger
 		}
 		
 		@Override
-		public Codec<GiveItem> codec()
+		public MapCodec<GiveItem> codec()
 		{
 			return CODEC;
 		}
@@ -313,15 +317,15 @@ public sealed interface Trigger
 		}
 	}
 	
-	record GiveFromLootTable(ResourceLocation lootTable) implements Trigger
+	record GiveFromLootTable(ResourceKey<LootTable> lootTable) implements Trigger
 	{
 		private static final Logger LOGGER = LogManager.getLogger();
-		static final Codec<GiveFromLootTable> CODEC = RecordCodecBuilder.create(instance -> instance.group(
-				ResourceLocation.CODEC.fieldOf("loot_table").forGetter(GiveFromLootTable::lootTable)
+		static final MapCodec<GiveFromLootTable> CODEC = RecordCodecBuilder.mapCodec(instance -> instance.group(
+				ResourceKey.codec(Registries.LOOT_TABLE).fieldOf("loot_table").forGetter(GiveFromLootTable::lootTable)
 		).apply(instance, GiveFromLootTable::new));
 		
 		@Override
-		public Codec<GiveFromLootTable> codec()
+		public MapCodec<GiveFromLootTable> codec()
 		{
 			return CODEC;
 		}
@@ -334,7 +338,7 @@ public sealed interface Trigger
 			
 			LootParams.Builder builder = new LootParams.Builder((ServerLevel) entity.level())
 					.withParameter(LootContextParams.THIS_ENTITY, entity).withParameter(LootContextParams.ORIGIN, entity.position());
-			List<ItemStack> loot = entity.getServer().getLootData().getLootTable(lootTable)
+			List<ItemStack> loot = entity.getServer().reloadableRegistries().getLootTable(lootTable)
 					.getRandomItems(builder.create(LootContextParamSets.GIFT));
 			
 			if(loot.isEmpty())
@@ -351,12 +355,12 @@ public sealed interface Trigger
 	
 	record AddConsortReputation(int reputation) implements Trigger
 	{
-		static final Codec<AddConsortReputation> CODEC = RecordCodecBuilder.create(instance -> instance.group(
+		static final MapCodec<AddConsortReputation> CODEC = RecordCodecBuilder.mapCodec(instance -> instance.group(
 				Codec.INT.fieldOf("reputation").forGetter(AddConsortReputation::reputation)
 		).apply(instance, AddConsortReputation::new));
 		
 		@Override
-		public Codec<AddConsortReputation> codec()
+		public MapCodec<AddConsortReputation> codec()
 		{
 			return CODEC;
 		}
@@ -367,20 +371,20 @@ public sealed interface Trigger
 			if(!(entity instanceof ConsortEntity consortEntity))
 				return;
 			
-			PlayerData data = PlayerSavedData.getData(player);
-			if(data != null)
-				data.addConsortReputation(this.reputation, consortEntity.getHomeDimension());
+			PlayerData.get(player).ifPresent(playerData ->
+					ConsortReputation.get(playerData).addConsortReputation(this.reputation, consortEntity.getHomeDimension())
+			);
 		}
 	}
 	
 	record AddBoondollars(int boondollars) implements Trigger
 	{
-		static final Codec<AddBoondollars> CODEC = RecordCodecBuilder.create(instance -> instance.group(
+		static final MapCodec<AddBoondollars> CODEC = RecordCodecBuilder.mapCodec(instance -> instance.group(
 				Codec.INT.fieldOf("boondollars").forGetter(AddBoondollars::boondollars)
 		).apply(instance, AddBoondollars::new));
 		
 		@Override
-		public Codec<AddBoondollars> codec()
+		public MapCodec<AddBoondollars> codec()
 		{
 			return CODEC;
 		}
@@ -388,23 +392,23 @@ public sealed interface Trigger
 		@Override
 		public void triggerEffect(LivingEntity entity, ServerPlayer player)
 		{
-			PlayerData data = PlayerSavedData.getData(player);
-			if(data != null && boondollars != 0)
+			Optional<PlayerData> data = PlayerData.get(player);
+			if(data.isPresent() && boondollars != 0)
 			{
 				if(boondollars > 0)
-					data.addBoondollars(boondollars);
+					PlayerBoondollars.addBoondollars(data.get(), boondollars);
 				else
-					data.takeBoondollars(-boondollars);
+					PlayerBoondollars.takeBoondollars(data.get(), -boondollars);
 			}
 		}
 	}
 	
 	record Explode() implements Trigger
 	{
-		static final Codec<Explode> CODEC = Codec.unit(Explode::new);
+		static final MapCodec<Explode> CODEC = MapCodec.unit(Explode::new);
 		
 		@Override
-		public Codec<Explode> codec()
+		public MapCodec<Explode> codec()
 		{
 			return CODEC;
 		}
@@ -419,13 +423,13 @@ public sealed interface Trigger
 	
 	record SetFlag(String flag, boolean isPlayerSpecific) implements Trigger
 	{
-		static final Codec<SetFlag> CODEC = RecordCodecBuilder.create(instance -> instance.group(
+		static final MapCodec<SetFlag> CODEC = RecordCodecBuilder.mapCodec(instance -> instance.group(
 				Codec.STRING.fieldOf("flag").forGetter(SetFlag::flag),
 				Codec.BOOL.fieldOf("player_specific").forGetter(SetFlag::isPlayerSpecific)
 		).apply(instance, SetFlag::new));
 		
 		@Override
-		public Codec<SetFlag> codec()
+		public MapCodec<SetFlag> codec()
 		{
 			return CODEC;
 		}
@@ -444,13 +448,13 @@ public sealed interface Trigger
 	
 	record SetRandomFlag(List<String> flags, boolean isPlayerSpecific) implements Trigger
 	{
-		static final Codec<SetRandomFlag> CODEC = RecordCodecBuilder.create(instance -> instance.group(
+		static final MapCodec<SetRandomFlag> CODEC = RecordCodecBuilder.mapCodec(instance -> instance.group(
 				Codec.STRING.listOf().fieldOf("flags").forGetter(SetRandomFlag::flags),
 				Codec.BOOL.fieldOf("player_specific").forGetter(SetRandomFlag::isPlayerSpecific)
 		).apply(instance, SetRandomFlag::new));
 		
 		@Override
-		public Codec<SetRandomFlag> codec()
+		public MapCodec<SetRandomFlag> codec()
 		{
 			return CODEC;
 		}

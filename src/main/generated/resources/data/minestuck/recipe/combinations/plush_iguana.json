@@ -1,0 +1,11 @@
+{
+  "type": "minestuck:combination",
+  "input1": {
+    "item": "minecraft:blue_wool"
+  },
+  "input2": {
+    "item": "minecraft:mangrove_roots"
+  },
+  "mode": "and",
+  "output": "minestuck:plush_iguana"
+}

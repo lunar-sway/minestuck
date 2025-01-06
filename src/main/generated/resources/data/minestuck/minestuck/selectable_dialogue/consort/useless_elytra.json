@@ -3,5 +3,7 @@
     "type": "minestuck:terrain_land_type",
     "land_type": "minestuck:end"
   },
-  "dialogue": "minestuck:consort/useless_elytra"
+  "dialogue": "minestuck:consort/useless_elytra",
+  "dialogue_weight": 10,
+  "keep_on_reset": false
 }

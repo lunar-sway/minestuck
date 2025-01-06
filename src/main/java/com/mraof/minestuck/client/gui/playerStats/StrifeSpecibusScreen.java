@@ -14,7 +14,7 @@ public class StrifeSpecibusScreen extends PlayerStatsScreen
 	public static final String TITLE = "minestuck.strife_specibus";
 	public static final String KIND_ABSTRATUS = "minestuck.kind_abstratus";
 	
-	private static final ResourceLocation guiStrifeSelector = new ResourceLocation("minestuck", "textures/gui/strife_selector.png");
+	private static final ResourceLocation guiStrifeSelector = ResourceLocation.fromNamespaceAndPath("minestuck", "textures/gui/strife_selector.png");
 	
 	private static final int columnWidth = 70, columns = 3;
 	

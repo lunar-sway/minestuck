@@ -2,7 +2,7 @@ package com.mraof.minestuck.entity.dialogue;
 
 import com.mojang.datafixers.util.Pair;
 import com.mraof.minestuck.network.DialoguePackets;
-import com.mraof.minestuck.util.MSCapabilities;
+import com.mraof.minestuck.util.MSAttachments;
 import net.minecraft.core.registries.BuiltInRegistries;
 import net.minecraft.nbt.*;
 import net.minecraft.resources.ResourceLocation;
@@ -252,8 +252,8 @@ public final class DialogueComponent
 		if(player == null)
 			return;
 		
-		if(player.getData(MSCapabilities.CURRENT_DIALOGUE_ATTACHMENT.get()).lastTalkedTo(this.entity))
-			PacketDistributor.PLAYER.with(player).send(new DialoguePackets.CloseScreen());
+		if(player.getData(MSAttachments.CURRENT_DIALOGUE).lastTalkedTo(this.entity))
+			PacketDistributor.sendToPlayer(player, new DialoguePackets.CloseScreen());
 	}
 	
 	public void tryStartDialogue(ServerPlayer player)
@@ -282,7 +282,7 @@ public final class DialogueComponent
 	
 	public void openScreenForDialogue(ServerPlayer player, ResourceLocation dialogueId, Dialogue.NodeSelector dialogue, @Nullable Dialogue.NextDialogue source)
 	{
-		CurrentDialogue dialogueData = player.getData(MSCapabilities.CURRENT_DIALOGUE_ATTACHMENT.get());
+		CurrentDialogue dialogueData = player.getData(MSAttachments.CURRENT_DIALOGUE);
 		dialogueData.getComponent(player.level()).ifPresent(oldComponent -> oldComponent.clearOngoingDialogue(player));
 		
 		Pair<Dialogue.Node, Integer> node = dialogue.pickNode(this.entity, player);
@@ -291,7 +291,7 @@ public final class DialogueComponent
 		
 		this.ongoingDialogue.put(player.getUUID(), new OngoingDialogue(nodeReference, player.position()));
 		DialoguePackets.OpenScreen packet = new DialoguePackets.OpenScreen(dialogueData.newDialogue(this.entity), data);
-		PacketDistributor.PLAYER.with(player).send(packet);
+		PacketDistributor.sendToPlayer(player, packet);
 	}
 	
 	public Optional<Dialogue.Node> validateAndGetCurrentNode(ServerPlayer player)

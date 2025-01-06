@@ -1,0 +1,14 @@
+{
+  "type": "minecraft:crafting_shapeless",
+  "category": "misc",
+  "group": "planks",
+  "ingredients": [
+    {
+      "item": "minestuck:wooden_cactus"
+    }
+  ],
+  "result": {
+    "count": 1,
+    "id": "minecraft:spruce_planks"
+  }
+}

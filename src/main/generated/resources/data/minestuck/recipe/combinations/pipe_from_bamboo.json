@@ -1,0 +1,11 @@
+{
+  "type": "minestuck:combination",
+  "input1": {
+    "item": "minecraft:hopper"
+  },
+  "input2": {
+    "item": "minecraft:bamboo"
+  },
+  "mode": "or",
+  "output": "minestuck:pipe"
+}

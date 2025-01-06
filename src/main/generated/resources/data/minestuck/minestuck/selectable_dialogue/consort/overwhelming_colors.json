@@ -13,5 +13,7 @@
     ],
     "list_type": "all"
   },
-  "dialogue": "minestuck:consort/overwhelming_colors"
+  "dialogue": "minestuck:consort/overwhelming_colors",
+  "dialogue_weight": 10,
+  "keep_on_reset": false
 }

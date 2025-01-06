@@ -1,19 +1,18 @@
 package com.mraof.minestuck.block.redstone;
 
 import com.mraof.minestuck.block.BlockUtil;
+import com.mraof.minestuck.block.CustomVoxelShape;
 import com.mraof.minestuck.block.DirectionalCustomShapeBlock;
 import com.mraof.minestuck.block.MSProperties;
 import com.mraof.minestuck.blockentity.MSBlockEntityTypes;
 import com.mraof.minestuck.blockentity.redstone.ItemMagnetBlockEntity;
 import com.mraof.minestuck.effects.CreativeShockEffect;
-import com.mraof.minestuck.util.CustomVoxelShape;
 import net.minecraft.core.BlockPos;
 import net.minecraft.core.Direction;
 import net.minecraft.core.particles.DustParticleOptions;
 import net.minecraft.sounds.SoundEvents;
 import net.minecraft.sounds.SoundSource;
 import net.minecraft.util.RandomSource;
-import net.minecraft.world.InteractionHand;
 import net.minecraft.world.InteractionResult;
 import net.minecraft.world.entity.player.Player;
 import net.minecraft.world.level.Level;
@@ -30,10 +29,12 @@ import net.minecraft.world.level.block.state.properties.IntegerProperty;
 import net.minecraft.world.phys.BlockHitResult;
 
 import javax.annotation.Nullable;
+import javax.annotation.ParametersAreNonnullByDefault;
 
 /**
  * When powered, the block entity for this block pulls item entities towards it(or pushes item entities if REVERSE_POLARITY is true)
  */
+@ParametersAreNonnullByDefault
 public class ItemMagnetBlock extends DirectionalCustomShapeBlock implements EntityBlock
 {
 	public static final IntegerProperty POWER = BlockStateProperties.POWER;
@@ -45,9 +46,8 @@ public class ItemMagnetBlock extends DirectionalCustomShapeBlock implements Enti
 		registerDefaultState(stateDefinition.any().setValue(FACING, Direction.UP).setValue(POWER, 0).setValue(REVERSE_POLARITY, false));
 	}
 	
-	@SuppressWarnings("deprecation")
 	@Override
-	public InteractionResult use(BlockState state, Level level, BlockPos pos, Player player, InteractionHand hand, BlockHitResult hit)
+	protected InteractionResult useWithoutItem(BlockState state, Level level, BlockPos pos, Player player, BlockHitResult hit)
 	{
 		if(!CreativeShockEffect.doesCreativeShockLimit(player, CreativeShockEffect.LIMIT_MACHINE_INTERACTIONS))
 		{
@@ -76,17 +76,15 @@ public class ItemMagnetBlock extends DirectionalCustomShapeBlock implements Enti
 		return BlockUtil.checkTypeForTicker(placedType, MSBlockEntityTypes.ITEM_MAGNET.get(), ItemMagnetBlockEntity::tick);
 	}
 	
-	@SuppressWarnings("deprecation")
 	@Override
-	public void neighborChanged(BlockState state, Level level, BlockPos pos, Block blockIn, BlockPos fromPos, boolean isMoving)
+	protected void neighborChanged(BlockState state, Level level, BlockPos pos, Block blockIn, BlockPos fromPos, boolean isMoving)
 	{
 		super.neighborChanged(state, level, pos, blockIn, fromPos, isMoving);
 		updatePower(level, pos);
 	}
 	
-	@SuppressWarnings("deprecation")
 	@Override
-	public void onPlace(BlockState state, Level level, BlockPos pos, BlockState oldState, boolean isMoving)
+	protected void onPlace(BlockState state, Level level, BlockPos pos, BlockState oldState, boolean isMoving)
 	{
 		super.onPlace(state, level, pos, oldState, isMoving);
 		updatePower(level, pos);

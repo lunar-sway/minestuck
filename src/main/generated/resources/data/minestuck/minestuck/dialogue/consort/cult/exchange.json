@@ -6,6 +6,8 @@
         "flag": "has_sulfur"
       },
       "node": {
+        "animation": {},
+        "gui": "minestuck:textures/gui/dialogue/dialogue.png",
         "message": "minestuck.dialogue.consort.cult.exchange.exchange.proceed",
         "responses": [
           {
@@ -52,6 +54,9 @@
     }
   ],
   "default_node": {
-    "message": "minestuck.dialogue.consort.cult.exchange.exchange.decline"
+    "animation": {},
+    "gui": "minestuck:textures/gui/dialogue/dialogue.png",
+    "message": "minestuck.dialogue.consort.cult.exchange.exchange.decline",
+    "responses": []
   }
 }

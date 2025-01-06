@@ -1,7 +1,6 @@
 package com.mraof.minestuck.block;
 
 import net.minecraft.core.BlockPos;
-import net.minecraft.world.InteractionHand;
 import net.minecraft.world.InteractionResult;
 import net.minecraft.world.entity.player.Player;
 import net.minecraft.world.level.Level;
@@ -11,6 +10,9 @@ import net.minecraft.world.level.block.state.StateDefinition;
 import net.minecraft.world.level.block.state.properties.BooleanProperty;
 import net.minecraft.world.phys.BlockHitResult;
 
+import javax.annotation.ParametersAreNonnullByDefault;
+
+@ParametersAreNonnullByDefault
 public class CustomLampBlock extends Block
 {
 	public static final BooleanProperty CLICKED = MSProperties.CLICKED;
@@ -21,10 +23,10 @@ public class CustomLampBlock extends Block
 	}
 	
 	@Override
-	public InteractionResult use(BlockState pState, Level pLevel, BlockPos pPos, Player pPlayer, InteractionHand pHand, BlockHitResult pHit) {
-		if(!pLevel.isClientSide() && pHand == InteractionHand.MAIN_HAND) {
+	protected InteractionResult useWithoutItem(BlockState state, Level level, BlockPos pos, Player player, BlockHitResult hit) {
+		if(!level.isClientSide()) {
 			
-			pLevel.setBlock(pPos, pState.cycle(CLICKED), Block.UPDATE_ALL);
+			level.setBlock(pos, state.cycle(CLICKED), Block.UPDATE_ALL);
 		}
 		
 		return InteractionResult.SUCCESS;
