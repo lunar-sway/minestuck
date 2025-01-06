@@ -42,6 +42,7 @@ public final class WFC
 			centerTemplate.setupFixedEdgeBounds(Direction.UP, Set.of(WFCData.ConnectorType.TOP_BORDER));
 			centerTemplate.setupFixedEdgeBounds(Direction.DOWN, Set.of(WFCData.ConnectorType.BOTTOM_BORDER));
 			
+			long time1 = System.currentTimeMillis();
 			PositionTransform northWestTransform = middleTransform.offset(-dimensions.xAxisCells() / 2, -dimensions.zAxisCells() / 2);
 			Generator northWestGenerator = cornerGenerator(borderTemplate, dimensions);
 			northWestGenerator.collapse(northWestTransform.random(randomFactory),
@@ -78,12 +79,17 @@ public final class WFC
 			Generator eastGenerator = xEdgeGenerator(borderTemplate, dimensions, northEastGenerator, southEastGenerator);
 			eastGenerator.collapse(eastTransform.random(randomFactory), PiecePlacer.EMPTY);
 			
+			long time2 = System.currentTimeMillis();
+			System.out.println("Border generation took " + (time2 - time1) + "ms");
 			
 			PositionTransform centerTransform = northWestTransform.offset(1, 1);
 			Generator centerGenerator = centerGenerator(centerTemplate, dimensions,
 					northGenerator, westGenerator, southGenerator, eastGenerator);
 			centerGenerator.collapse(centerTransform.random(randomFactory),
 					PiecePlacer.placeAt(centerTransform, piecesBuilder));
+			
+			long time3 = System.currentTimeMillis();
+			System.out.println("Center generation took " + (time3 - time2) + "ms");
 		}
 		
 		private static Generator cornerGenerator(GridTemplate template, Dimensions fullDimensions)
@@ -168,12 +174,16 @@ public final class WFC
 		
 		public void collapse(RandomSource random, PiecePlacer piecePlacer)
 		{
+			long entropySearchTime = 0;
+			long adjacencyUpdateTime = 0;
 			Set<CellPos> cellsToGenerate = new HashSet<>(this.grid.availableEntriesMap.keySet());
 			
 			while(!cellsToGenerate.isEmpty())
 			{
+				long time1 = System.currentTimeMillis();
 				MinValueSearchResult<CellPos> leastEntropyResult = MinValueSearchResult.search(cellsToGenerate,
 						pos -> entropy(this.grid.availableEntriesMap.get(pos)));
+				entropySearchTime += System.currentTimeMillis() - time1;
 				
 				if(leastEntropyResult.entries.isEmpty())
 					break;
@@ -191,9 +201,13 @@ public final class WFC
 				
 				piecePlacer.place(pos, chosenEntry.get().data());
 				
+				long time2 = System.currentTimeMillis();
 				if(availableEntries.removeIf(entry -> entry != chosenEntry.get()))
 					this.grid.removeAdjacentUnsupportedEntries(pos, null);
+				adjacencyUpdateTime += System.currentTimeMillis() - time2;
 			}
+			
+			System.out.println("Grid with " + this.grid.dimensions + " took " + entropySearchTime + "ms for entropy search and " + adjacencyUpdateTime + "ms for adjacency updates.");
 		}
 	}
 	

@@ -96,9 +96,17 @@ public final class ProspitStructure
 			
 			WFC.PositionTransform middleTransform = new WFC.PositionTransform(context.chunkPos().getMiddleBlockPosition(BOTTOM_Y), PIECE_SIZE);
 			
+			long time1 = System.currentTimeMillis();
 			WFCData.EntryPalette centerPalette = context.random().nextBoolean() ? buildCenterPalette(templateManager) : buildOpenZonePalette(templateManager);
+			WFCData.EntryPalette borderPalette = buildBorderPalette(templateManager);
+			
+			long time2 = System.currentTimeMillis();
+			System.out.println("Palette prep took " + (time2 - time1) + "ms");
+			
 			WFC.InfiniteModularGeneration.generateModule(middleTransform, ProspitStructure.WFC_DIMENSIONS,
-					centerPalette, buildBorderPalette(templateManager), randomFactory, piecesBuilder);
+					centerPalette, borderPalette, randomFactory, piecesBuilder);
+			long time3 = System.currentTimeMillis();
+			System.out.println("Generation took " + (time3 - time2) + "ms");
 		}
 	}
 	
