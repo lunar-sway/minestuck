@@ -15,6 +15,7 @@ import org.apache.logging.log4j.Logger;
 
 import javax.annotation.Nullable;
 import java.util.*;
+import java.util.concurrent.atomic.AtomicLong;
 import java.util.function.BiConsumer;
 import java.util.function.ToDoubleFunction;
 import java.util.stream.Collectors;
@@ -175,6 +176,7 @@ public final class WFC
 		public void collapse(RandomSource random, PiecePlacer piecePlacer)
 		{
 			long entropySearchTime = 0;
+			AtomicLong entropyCalcTime = new AtomicLong(0);
 			long adjacencyUpdateTime = 0;
 			Set<CellPos> cellsToGenerate = new HashSet<>(this.grid.availableEntriesMap.keySet());
 			
@@ -182,7 +184,12 @@ public final class WFC
 			{
 				long time1 = System.currentTimeMillis();
 				MinValueSearchResult<CellPos> leastEntropyResult = MinValueSearchResult.search(cellsToGenerate,
-						pos -> entropy(this.grid.availableEntriesMap.get(pos)));
+						pos -> {
+							long time = System.currentTimeMillis();
+							var entropy = entropy(this.grid.availableEntriesMap.get(pos));
+							entropyCalcTime.addAndGet(System.currentTimeMillis() - time);
+							return entropy;
+						});
 				entropySearchTime += System.currentTimeMillis() - time1;
 				
 				if(leastEntropyResult.entries.isEmpty())
@@ -207,7 +214,7 @@ public final class WFC
 				adjacencyUpdateTime += System.currentTimeMillis() - time2;
 			}
 			
-			System.out.println("Grid with " + this.grid.dimensions + " took " + entropySearchTime + "ms for entropy search and " + adjacencyUpdateTime + "ms for adjacency updates.");
+			System.out.println("Grid with " + this.grid.dimensions + " took " + entropySearchTime + "ms for entropy search (" + entropyCalcTime.get() + "ms for calc) and " + adjacencyUpdateTime + "ms for adjacency updates.");
 		}
 	}
 	
