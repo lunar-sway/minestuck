@@ -126,7 +126,9 @@ public final class ProspitStructure
 				LEDGE_RIGHT = new WFCData.ConnectorType(Minestuck.id("ledge/right")),
 				LEDGE_BACK = new WFCData.ConnectorType(Minestuck.id("ledge/back")),
 				CORRIDOR = new WFCData.ConnectorType(Minestuck.id("corridor")),
-				WINDOW = new WFCData.ConnectorType(Minestuck.id("window"));
+				WINDOW = new WFCData.ConnectorType(Minestuck.id("window")),
+				STAIRS_END = new WFCData.ConnectorType(Minestuck.id("stairs_end")),
+				STAIRS_SIDE = new WFCData.ConnectorType(Minestuck.id("stairs_side"));
 		
 		public static void addConnections(WFCData.ConnectionsBuilder builder)
 		{
@@ -155,6 +157,18 @@ public final class ProspitStructure
 			builder.connect(CORRIDOR, LEDGE_RIGHT);
 			builder.connect(CORRIDOR, LEDGE_BACK);
 			builder.connect(WINDOW, AIR);
+			builder.connectSelf(STAIRS_END);
+			builder.connect(STAIRS_END, CORRIDOR);
+			builder.connect(STAIRS_END, LEDGE_BACK);
+			builder.connect(STAIRS_END, LEDGE_LEFT);
+			builder.connect(STAIRS_END, LEDGE_RIGHT);
+			builder.connectSelf(STAIRS_SIDE);
+			builder.connect(STAIRS_SIDE, AIR);
+			builder.connect(STAIRS_SIDE, WALL);
+			builder.connect(STAIRS_SIDE, ROOF_SIDE);
+			builder.connect(STAIRS_SIDE, LEDGE_BACK);
+			builder.connect(STAIRS_SIDE, LEDGE_LEFT);
+			builder.connect(STAIRS_SIDE, LEDGE_RIGHT);
 			
 			builder.connect(WFCData.ConnectorType.TOP_BORDER, AIR);
 			builder.connect(WFCData.ConnectorType.BOTTOM_BORDER, SOLID);
@@ -185,6 +199,7 @@ public final class ProspitStructure
 		public static final WFCData.EntryProvider T_CORRIDOR_WINDOW = WFCData.TemplateEntry.rotatable(Minestuck.id("prospit/t_corridor_window"));
 		public static final WFCData.EntryProvider ROOM = WFCData.TemplateEntry.rotatable(Minestuck.id("prospit/room"));
 		public static final WFCData.EntryProvider INTERIOR_STAIRS = WFCData.TemplateEntry.rotatable(Minestuck.id("prospit/interior_stairs"));
+		public static final WFCData.EntryProvider OUTDOOR_STAIRS = WFCData.TemplateEntry.rotatable(Minestuck.id("prospit/outdoor_stairs"));
 	}
 	
 	private static WFCData.EntryPalette buildCenterPalette(StructureTemplateManager templateManager)
@@ -208,6 +223,7 @@ public final class ProspitStructure
 		builder.add(Entries.T_CORRIDOR_WINDOW, 5);
 		builder.add(Entries.ROOM, 1);
 		builder.add(Entries.INTERIOR_STAIRS, 4);
+		builder.add(Entries.OUTDOOR_STAIRS, 4);
 		
 		return builder.build();
 	}
@@ -231,7 +247,8 @@ public final class ProspitStructure
 		builder.add(Entries.TURN_CORRIDOR, 3);
 		builder.add(Entries.T_CORRIDOR, 1);
 		builder.add(Entries.T_CORRIDOR_WINDOW, 5);
-		builder.add(Entries.INTERIOR_STAIRS, 4);
+		builder.add(Entries.INTERIOR_STAIRS, 2);
+		builder.add(Entries.OUTDOOR_STAIRS, 7);
 		
 		return builder.build();
 	}
