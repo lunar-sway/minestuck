@@ -17,12 +17,15 @@ import javax.annotation.Nullable;
 import java.util.*;
 import java.util.concurrent.atomic.AtomicLong;
 import java.util.function.BiConsumer;
+import java.util.function.Predicate;
 import java.util.function.ToDoubleFunction;
 import java.util.stream.Collectors;
+import java.util.stream.Stream;
 
 /**
  * Contains components for an implementation of Wave Function Collapse.
  * The main component for running WFC is {@link Generator}.
+ *
  * @see WFCData
  */
 public final class WFC
@@ -149,7 +152,7 @@ public final class WFC
 		
 		void entriesFromTemplate(CellPos pos, List<WeightedEntry.Wrapper<WFCData.PieceEntry>> entryList)
 		{
-			entryList.addAll(this.grid.availableEntriesMap.get(new CellPos(0, pos.y(), 0)));
+			entryList.addAll(this.grid.availableEntriesMap.get(new CellPos(0, pos.y(), 0)).entries);
 		}
 	}
 	
@@ -186,7 +189,7 @@ public final class WFC
 				MinValueSearchResult<CellPos> leastEntropyResult = MinValueSearchResult.search(cellsToGenerate,
 						pos -> {
 							long time = System.currentTimeMillis();
-							var entropy = entropy(this.grid.availableEntriesMap.get(pos));
+							var entropy = this.grid.availableEntriesMap.get(pos).getEntropy();
 							entropyCalcTime.addAndGet(System.currentTimeMillis() - time);
 							return entropy;
 						});
@@ -198,8 +201,8 @@ public final class WFC
 				CellPos pos = Util.getRandom(leastEntropyResult.entries, random);
 				cellsToGenerate.remove(pos);
 				
-				List<WeightedEntry.Wrapper<WFCData.PieceEntry>> availableEntries = this.grid.availableEntriesMap.get(pos);
-				var chosenEntry = WeightedRandom.getRandomItem(random, availableEntries);
+				EntropyList<WeightedEntry.Wrapper<WFCData.PieceEntry>> availableEntries = this.grid.availableEntriesMap.get(pos);
+				var chosenEntry = WeightedRandom.getRandomItem(random, availableEntries.entries);
 				if(chosenEntry.isEmpty())
 				{
 					piecePlacer.logNoEntries(pos);
@@ -266,7 +269,7 @@ public final class WFC
 		final WFCData.ConnectionTester connectionTester;
 		final boolean loopHorizontally;
 		
-		private final Map<CellPos, List<WeightedEntry.Wrapper<WFCData.PieceEntry>>> availableEntriesMap = new HashMap<>();
+		private final Map<CellPos, EntropyList<WeightedEntry.Wrapper<WFCData.PieceEntry>>> availableEntriesMap = new HashMap<>();
 		
 		public PieceEntryGrid(Dimensions dimensions, WFCData.ConnectionTester connectionTester, boolean loopHorizontally,
 							  BiConsumer<CellPos, List<WeightedEntry.Wrapper<WFCData.PieceEntry>>> dataInitializer)
@@ -279,7 +282,7 @@ public final class WFC
 			{
 				List<WeightedEntry.Wrapper<WFCData.PieceEntry>> list = new ArrayList<>();
 				dataInitializer.accept(pos, list);
-				this.availableEntriesMap.put(pos, list);
+				this.availableEntriesMap.put(pos, new EntropyList<>(list));
 			}
 		}
 		
@@ -310,13 +313,44 @@ public final class WFC
 		{
 			if(availableConnectors.isEmpty())
 				return;
-			if(this.availableEntriesMap.get(pos).removeIf(entry ->
+			if(this.availableEntriesMap.get(pos).entries.removeIf(entry ->
 					!connectionTester.canConnect(entry.data().connections().get(direction), availableConnectors)))
 				this.removeAdjacentUnsupportedEntries(pos, direction);
 		}
 	}
 	
-	private static double entropy(List<? extends WeightedEntry> entries)
+	private static final class EntropyList<T extends WeightedEntry>
+	{
+		private final List<T> entries;
+		private double cachedEntropy = -1;
+		
+		EntropyList(List<T> entries)
+		{
+			this.entries = entries;
+		}
+		
+		double getEntropy()
+		{
+			if(this.cachedEntropy == -1)
+				this.cachedEntropy = calculateEntropy(this.entries);
+			return this.cachedEntropy;
+		}
+		
+		Stream<T> stream()
+		{
+			return this.entries.stream();
+		}
+		
+		boolean removeIf(Predicate<? super T> predicate)
+		{
+			boolean removed = this.entries.removeIf(predicate);
+			if(removed)
+				this.cachedEntropy = -1;
+			return removed;
+		}
+	}
+	
+	private static double calculateEntropy(List<? extends WeightedEntry> entries)
 	{
 		int totalWeight = WeightedRandom.getTotalWeight(entries);
 		double entropy = 0;
@@ -367,7 +401,8 @@ public final class WFC
 	
 	public record Dimensions(int xAxisCells, int yAxisCells, int zAxisCells)
 	{
-		public Dimensions {
+		public Dimensions
+		{
 			if(xAxisCells <= 0)
 				throw new IllegalArgumentException("Nonpositive x size: " + xAxisCells);
 			if(yAxisCells <= 0)
@@ -462,7 +497,8 @@ public final class WFC
 	}
 	
 	public record CellSize(int width, int height)
-	{}
+	{
+	}
 	
 	public record CellPos(int x, int y, int z)
 	{
