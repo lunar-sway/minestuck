@@ -9,13 +9,12 @@ import net.minecraft.util.random.WeightedEntry;
 import net.minecraft.util.random.WeightedRandom;
 import net.minecraft.world.level.levelgen.PositionalRandomFactory;
 import net.minecraft.world.level.levelgen.structure.StructurePiece;
-import net.minecraft.world.level.levelgen.structure.pieces.StructurePiecesBuilder;
+import net.minecraft.world.level.levelgen.structure.StructurePieceAccessor;
 import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.Logger;
 
 import javax.annotation.Nullable;
 import java.util.*;
-import java.util.concurrent.atomic.AtomicLong;
 import java.util.function.BiConsumer;
 import java.util.function.Predicate;
 import java.util.function.ToDoubleFunction;
@@ -36,7 +35,8 @@ public final class WFC
 	{
 		public static void generateModule(PositionTransform middleTransform, Dimensions dimensions,
 										  WFCData.EntryPalette centerPalette, WFCData.EntryPalette borderPalette,
-										  PositionalRandomFactory randomFactory, StructurePiecesBuilder piecesBuilder)
+										  PositionalRandomFactory randomFactory, StructurePieceAccessor pieceAccessor,
+										  @Nullable PerformanceMeasurer performanceMeasurer)
 		{
 			GridTemplate borderTemplate = new GridTemplate(dimensions, borderPalette);
 			borderTemplate.setupFixedEdgeBounds(Direction.UP, Set.of(WFCData.ConnectorType.TOP_BORDER));
@@ -46,11 +46,10 @@ public final class WFC
 			centerTemplate.setupFixedEdgeBounds(Direction.UP, Set.of(WFCData.ConnectorType.TOP_BORDER));
 			centerTemplate.setupFixedEdgeBounds(Direction.DOWN, Set.of(WFCData.ConnectorType.BOTTOM_BORDER));
 			
-			long time1 = System.currentTimeMillis();
 			PositionTransform northWestTransform = middleTransform.offset(-dimensions.xAxisCells() / 2, -dimensions.zAxisCells() / 2);
 			Generator northWestGenerator = cornerGenerator(borderTemplate, dimensions);
 			northWestGenerator.collapse(northWestTransform.random(randomFactory),
-					PiecePlacer.placeAt(northWestTransform, piecesBuilder));
+					PiecePlacer.placeAt(northWestTransform, pieceAccessor));
 			
 			PositionTransform northEastTransform = northWestTransform.offset(dimensions.xAxisCells(), 0);
 			Generator northEastGenerator = cornerGenerator(borderTemplate, dimensions);
@@ -68,12 +67,12 @@ public final class WFC
 			Generator northGenerator = zEdgeGenerator(borderTemplate, dimensions, northWestGenerator, northEastGenerator);
 			PositionTransform northTransform = northWestTransform.offset(1, 0);
 			northGenerator.collapse(northTransform.random(randomFactory),
-					PiecePlacer.placeAt(northTransform, piecesBuilder));
+					PiecePlacer.placeAt(northTransform, pieceAccessor));
 			
 			Generator westGenerator = xEdgeGenerator(borderTemplate, dimensions, northWestGenerator, southWestGenerator);
 			PositionTransform westTransform = northWestTransform.offset(0, 1);
 			westGenerator.collapse(westTransform.random(randomFactory),
-					PiecePlacer.placeAt(westTransform, piecesBuilder));
+					PiecePlacer.placeAt(westTransform, pieceAccessor));
 			
 			PositionTransform southTransform = northWestTransform.offset(1, dimensions.zAxisCells());
 			Generator southGenerator = zEdgeGenerator(borderTemplate, dimensions, southWestGenerator, southEastGenerator);
@@ -83,17 +82,15 @@ public final class WFC
 			Generator eastGenerator = xEdgeGenerator(borderTemplate, dimensions, northEastGenerator, southEastGenerator);
 			eastGenerator.collapse(eastTransform.random(randomFactory), PiecePlacer.EMPTY);
 			
-			long time2 = System.currentTimeMillis();
-			System.out.println("Border generation took " + (time2 - time1) + "ms");
-			
+			if(performanceMeasurer != null)
+				performanceMeasurer.start(PerformanceMeasurer.Type.CENTER);
 			PositionTransform centerTransform = northWestTransform.offset(1, 1);
 			Generator centerGenerator = centerGenerator(centerTemplate, dimensions,
 					northGenerator, westGenerator, southGenerator, eastGenerator);
 			centerGenerator.collapse(centerTransform.random(randomFactory),
-					PiecePlacer.placeAt(centerTransform, piecesBuilder));
-			
-			long time3 = System.currentTimeMillis();
-			System.out.println("Center generation took " + (time3 - time2) + "ms");
+					PiecePlacer.placeAt(centerTransform, pieceAccessor), performanceMeasurer);
+			if(performanceMeasurer != null)
+				performanceMeasurer.end(PerformanceMeasurer.Type.CENTER);
 		}
 		
 		private static Generator cornerGenerator(GridTemplate template, Dimensions fullDimensions)
@@ -178,22 +175,28 @@ public final class WFC
 		
 		public void collapse(RandomSource random, PiecePlacer piecePlacer)
 		{
-			long entropySearchTime = 0;
-			AtomicLong entropyCalcTime = new AtomicLong(0);
-			long adjacencyUpdateTime = 0;
+			collapse(random, piecePlacer, null);
+		}
+		
+		public void collapse(RandomSource random, PiecePlacer piecePlacer, @Nullable PerformanceMeasurer performanceMeasurer)
+		{
 			Set<CellPos> cellsToGenerate = new HashSet<>(this.grid.availableEntriesMap.keySet());
 			
 			while(!cellsToGenerate.isEmpty())
 			{
-				long time1 = System.currentTimeMillis();
+				if(performanceMeasurer != null)
+					performanceMeasurer.start(PerformanceMeasurer.Type.ENTROPY_SEARCH);
 				MinValueSearchResult<CellPos> leastEntropyResult = MinValueSearchResult.search(cellsToGenerate,
 						pos -> {
-							long time = System.currentTimeMillis();
+							if(performanceMeasurer != null)
+								performanceMeasurer.start(PerformanceMeasurer.Type.ENTROPY_CALC);
 							var entropy = this.grid.availableEntriesMap.get(pos).getEntropy();
-							entropyCalcTime.addAndGet(System.currentTimeMillis() - time);
+							if(performanceMeasurer != null)
+								performanceMeasurer.end(PerformanceMeasurer.Type.ENTROPY_CALC);
 							return entropy;
 						});
-				entropySearchTime += System.currentTimeMillis() - time1;
+				if(performanceMeasurer != null)
+					performanceMeasurer.end(PerformanceMeasurer.Type.ENTROPY_SEARCH);
 				
 				if(leastEntropyResult.entries.isEmpty())
 					break;
@@ -211,13 +214,13 @@ public final class WFC
 				
 				piecePlacer.place(pos, chosenEntry.get().data());
 				
-				long time2 = System.currentTimeMillis();
+				if(performanceMeasurer != null)
+					performanceMeasurer.start(PerformanceMeasurer.Type.ADJACENCY_UPDATE);
 				if(availableEntries.removeIf(entry -> entry != chosenEntry.get()))
 					this.grid.removeAdjacentUnsupportedEntries(pos, null);
-				adjacencyUpdateTime += System.currentTimeMillis() - time2;
+				if(performanceMeasurer != null)
+					performanceMeasurer.end(PerformanceMeasurer.Type.ADJACENCY_UPDATE);
 			}
-			
-			System.out.println("Grid with " + this.grid.dimensions + " took " + entropySearchTime + "ms for entropy search (" + entropyCalcTime.get() + "ms for calc) and " + adjacencyUpdateTime + "ms for adjacency updates.");
 		}
 	}
 	
@@ -236,7 +239,7 @@ public final class WFC
 			}
 		};
 		
-		static PiecePlacer placeAt(PositionTransform transform, StructurePiecesBuilder piecesBuilder)
+		static PiecePlacer placeAt(PositionTransform transform, StructurePieceAccessor pieceAccessor)
 		{
 			return new PiecePlacer()
 			{
@@ -246,7 +249,7 @@ public final class WFC
 					BlockPos pos = transform.toBlockPos(cellPos);
 					StructurePiece piece = entry.constructor().apply(pos);
 					if(piece != null)
-						piecesBuilder.addPiece(piece);
+						pieceAccessor.addPiece(piece);
 				}
 				
 				@Override
@@ -563,6 +566,37 @@ public final class WFC
 		public PositionTransform offset(int x, int z)
 		{
 			return new PositionTransform(this.cornerPos.offset(x * this.cellSize.width(), 0, z * this.cellSize.width()), this.cellSize);
+		}
+	}
+	
+	public static final class PerformanceMeasurer
+	{
+		private final Map<Type, Long> measuredTimes = new EnumMap<>(Type.class);
+		private final Map<Type, Long> measurementStarts = new EnumMap<>(Type.class);
+		
+		void start(Type type)
+		{
+			this.measurementStarts.put(type, System.currentTimeMillis());
+		}
+		
+		void end(Type type)
+		{
+			long measuredTime = System.currentTimeMillis() - this.measurementStarts.remove(type);
+			this.measuredTimes.merge(type, measuredTime, Long::sum);
+		}
+		
+		@Override
+		public String toString()
+		{
+			return this.measuredTimes.toString();
+		}
+		
+		enum Type
+		{
+			CENTER,
+			ENTROPY_SEARCH,
+			ENTROPY_CALC,
+			ADJACENCY_UPDATE,
 		}
 	}
 }
