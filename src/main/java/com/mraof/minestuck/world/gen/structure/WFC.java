@@ -313,7 +313,7 @@ public final class WFC
 		{
 			if(availableConnectors.isEmpty())
 				return;
-			if(this.availableEntriesMap.get(pos).entries.removeIf(entry ->
+			if(this.availableEntriesMap.get(pos).removeIf(entry ->
 					!connectionTester.canConnect(entry.data().connections().get(direction), availableConnectors)))
 				this.removeAdjacentUnsupportedEntries(pos, direction);
 		}
