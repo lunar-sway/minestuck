@@ -13,8 +13,10 @@ import com.mraof.minestuck.item.loot.MSLootTables;
 import com.mraof.minestuck.util.MSTags;
 import net.minecraft.data.DataProvider;
 import net.minecraft.data.PackOutput;
+import net.minecraft.world.item.Item;
 import net.minecraft.world.item.Items;
 import net.neoforged.neoforge.common.data.LanguageProvider;
+import net.neoforged.neoforge.registries.DeferredItem;
 
 import java.util.List;
 
@@ -385,6 +387,7 @@ public final class ConsortDialogue
 				new NodeBuilder(l.defaultKeyMsg("Sometimes I wonder whether a purely mushroom diet is the cause of my dwindling mental capacity. In those moments, I think 'Ooh! mushroom!'... speaking of mushrooms, Sometimes I wonder...")));
 		provider.addRandomlySelectable("lazy_king", defaultWeight(isInTerrainLand(SHADE)),
 				new NodeBuilder(l.defaultKeyMsg("I feel like our king just sits around doing nothing but eating weird glowing mushrooms! So lazy!")));
+		terrainFaygoDialogue(provider, l, MSItems.ORANGE_FAYGO, "Orange", MSItems.SCALEMATE_LEMONSNOUT, "Lemonsnout", isInTerrainLand(SHADE));
 		
 		//Heat
 		provider.addRandomlySelectable("getting_hot", defaultWeight(isInTerrainLand(HEAT)),
@@ -397,6 +400,7 @@ public final class ConsortDialogue
 				new NodeBuilder(l.defaultKeyMsg("Man this shop is packed tighter then my tummy tunnel when I gotta make brown on the john after eating one too many of them incandescent pies what be popping around.")));
 		provider.addRandomlySelectable("the_water_is_molten", defaultWeight(isInTerrainLand(HEAT)),
 				new NodeBuilder(l.defaultKeyMsg("You know the water is fucking molten goo? Who thought it would be a good idea to make water out of lava or some shit? How do we even stay hydrated in this place dude?")).animation(ANGRY_EMOTION));
+		terrainFaygoDialogue(provider, l, MSItems.CANDY_APPLE_FAYGO, "Candy Apple", MSItems.SCALEMATE_APPLESCAB, "Applescab", isInTerrainLand(HEAT));
 		
 		
 		//Wood
@@ -425,6 +429,7 @@ public final class ConsortDialogue
 								.addPlayerMessage(l.subMsg("no.reply", "Not at all!"))
 								.nextDialogue(builder.add("dancing_camel", new NodeBuilder(l.defaultKeyMsg("Are you sure? Too bad! The camel knew how to dance, too!"))))))
 		));
+		terrainFaygoDialogue(provider, l, MSItems.COTTON_CANDY_FAYGO, "Cotton Candy", MSItems.SCALEMATE_BERRYBREATH, "Berrybreath", isInTerrainLand(MSTags.TerrainLandTypes.SAND));
 		
 		
 		//Sandstone
@@ -433,6 +438,7 @@ public final class ConsortDialogue
 		provider.addRandomlySelectable("sandless", defaultWeight(isInTerrainLand(MSTags.TerrainLandTypes.SANDSTONE)), new ChainBuilder()
 				.node(new NodeBuilder(l.defaultKeyMsg("According to legend, %s ate all the sand here leaving nothing but sandstone!", Argument.LAND_DENIZEN)))
 				.node(new NodeBuilder(l.defaultKeyMsg("I'm kidding, I made that up on the spot. I had no other dialogue."))));
+		terrainFaygoDialogue(provider, l, MSItems.CREME_SODA_FAYGO, "Creme Soda", MSItems.SCALEMATE_HONEYTONGUE, "Honeytongue", isInTerrainLand(MSTags.TerrainLandTypes.SANDSTONE));
 		
 		
 		//Frost
@@ -494,6 +500,7 @@ public final class ConsortDialogue
 							.nextDialogue("worried", new NodeBuilder(l.defaultKeyMsg("Oh this is not a safe space suddenly"))))
 			);
 		}));
+		terrainFaygoDialogue(provider, l, MSItems.MOON_MIST_FAYGO, "Moon Mist", MSItems.SCALEMATE_PUMPKINSNUFFLE, "Pumpkinsnuffle", isInTerrainLand(MSTags.TerrainLandTypes.ROCK));
 		
 		
 		//Forest
@@ -506,6 +513,7 @@ public final class ConsortDialogue
 				.node(new NodeBuilder(l.defaultKeyMsg("Worst part is, we never find a body.")).animation(ANXIOUS_EMOTION)));
 		provider.addRandomlySelectable("deep_roots", defaultWeight(isInTerrainLand(MSTags.TerrainLandTypes.FOREST)),
 				new NodeBuilder(l.defaultKeyMsg("The trees are always trying to grow and expand. Bet that's why their roots travel so deep!")));
+		terrainFaygoDialogue(provider, l, MSItems.PEACH_FAYGO, "Peach", MSItems.SCALEMATE_CINNAMONWHIFF, "Cinnamonwhiff", isInTerrainLand(MSTags.TerrainLandTypes.FOREST));
 		
 		
 		//Fungi
@@ -558,6 +566,7 @@ public final class ConsortDialogue
 				.node(new NodeBuilder(l.defaultKeyMsg("Dye is weird like that.")))
 				.node(new NodeBuilder(l.defaultKeyMsg("...what, you're still listening to me? Wow. No one's ever listened to the whole thing before. Would you like to hear it again?")))
 				.loop());
+		terrainFaygoDialogue(provider, l, MSItems.GRAPE_FAYGO, "Grape", MSItems.SCALEMATE_WITNESS, "The Witness", isInTerrainLand(RAINBOW));
 		
 		
 		//End
@@ -573,6 +582,7 @@ public final class ConsortDialogue
 				new NodeBuilder(l.defaultKeyMsg("The taller grass is so disorienting to walk through! Unless you are careful it will just move you around.")).animation(ANXIOUS_EMOTION));
 		provider.addRandomlySelectable("useless_elytra", defaultWeight(isInTerrainLand(END)),
 				new NodeBuilder(l.defaultKeyMsg("One time, I saw a guy with some weird wing-looking things on his back. He could glide with them, but without being able to stay in the air, what's the point?")));
+		terrainFaygoDialogue(provider, l, MSItems.REDPOP_FAYGO, "Redpop", MSItems.SCALEMATE_PYRALSPITE, "Pyralspite", isInTerrainLand(END));
 		
 		
 		//Rain
@@ -607,6 +617,7 @@ public final class ConsortDialogue
 		provider.addRandomlySelectable("spices", defaultWeight(isInTerrainLand(FLORA)), new ChainBuilder()
 				.node(new NodeBuilder(l.defaultKeyMsg("A good chef cooks with the spices found throughout the land.")))
 				.node(new NodeBuilder(l.defaultKeyMsg("Other chefs are envious that they don't live in %s.", Argument.LAND_NAME))));
+		terrainFaygoDialogue(provider, l, MSItems.GRAPE_FAYGO, "Grape", MSItems.SCALEMATE_PUCEFOOT, "Pucefoot", isInTerrainLand(FLORA));
 		
 		
 		//Mixed
@@ -614,6 +625,7 @@ public final class ConsortDialogue
 				new NodeBuilder(l.defaultKeyMsg("Red is much better than yellow, don't you think?")));
 		provider.addRandomlySelectable("yellow_better", defaultWeight(any(isInTerrainLand(SAND), isInTerrainLand(SANDSTONE))),
 				new NodeBuilder(l.defaultKeyMsg("In our village, we have tales of monsters that are attracted to red. That's why everything is yellow!")));
+		terrainFaygoDialogue(provider, l, MSItems.FAYGO_COLA, "Cola", MSItems.SCALEMATE_PYRALSPITE, "Pyralspite", any(isInTerrainLand(WOOD), isInTerrainLand(FROST), isInTerrainLand(FUNGI), isInTerrainLand(RAIN)));
 		
 		
 		//Misc
@@ -906,5 +918,44 @@ public final class ConsortDialogue
 							.nextDialogue(builder.add("deny", new NodeBuilder(l.defaultKeyMsg("Maybe one day I will find a challenger worthy of my greatness...."))))));
 		}));
 		
+	}
+	
+	private static void terrainFaygoDialogue(SelectableDialogueProvider provider, DialogueLangHelper l, DeferredItem<Item> drink, String capitalizedDrinkName, DeferredItem<Item> scalemateItem, String scalemateCapitalizedName, Condition terrain)
+	{
+		String drinkRegistryName = drink.getId().getPath();
+		String dialogueId = drinkRegistryName + "_" + scalemateItem.getId().getPath();
+		Item drinkItem = drink.asItem();
+		Condition faygoCondition = new Condition.PlayerHasItem(drinkItem, 1);
+		
+		provider.addRandomlySelectable(dialogueId, defaultWeight(terrain), new FolderedDialogue(builder ->
+		{
+			var satisfied = builder.add("satisfied", new NodeBuilder(l.defaultKeyMsg("I drank my faygo too fast to cherish it, but at least I have the dye stains to remember it by.")));
+			
+			var scalemate = builder.add("explain_scalemate", new NodeBuilder(l.defaultKeyMsg("Because I'm willing to be the bigger consort about this, I will refrain from commenting on your ignorance. Scalemates are highly collectable designer dragon stuffed animals."))
+					.addResponse(new ResponseBuilder(l.subMsg("return", "Lets talk about the drink again."))
+							.nextDialogue(provider.dialogue().dialogueId(dialogueId + "/ask_drink"))));
+			
+			var afterInvitation = builder.add("ask_drink", new NodeBuilder(l.defaultKeyMsg("I would give you my first born child for that, if I had one. Since I don't, could I exchange it for my scalemate " + scalemateCapitalizedName + "?"))
+					.addResponse(new ResponseBuilder(l.subMsg("scalemate_confused", "What is a scalemate?"))
+							.nextDialogue(scalemate))
+					.addResponse(new ResponseBuilder(l.subMsg("exchange", "[Hand over the faygo for scalemate]"))
+							.visibleCondition(faygoCondition)
+							.addPlayerMessage(l.subMsg("yes.reply", "Sure here you go"))
+							.nextDialogue(builder.add("happy", new NodeBuilder(l.defaultKeyMsg("Ohhhh yeah that's the stuff. Straight up ambrosia."))))
+							.addTrigger(new Trigger.TakeItem(drinkItem))
+							.addTrigger(new Trigger.GiveItem(scalemateItem.asItem()))
+							.addTrigger(new Trigger.SetDialogue(satisfied)))
+					.addResponse(new ResponseBuilder(l.subMsg("no", "No"))));
+			
+			builder.addStart(new NodeBuilder(l.defaultKeyMsg("Everyone knows that the best flavor of faygo is " + capitalizedDrinkName + ". There is literally nothing else that can top it."))
+					.addResponse(new ResponseBuilder(l.subMsg("bye", "Oh, good to know. Bye.")))
+					.addResponse(new ResponseBuilder(l.subMsg("different_better", "I prefer another flavor"))
+							.nextDialogue(builder.add("scoundrel", new NodeBuilder(l.defaultKeyMsg("You are a liar and a scoundrel.")))))
+					.addResponse(new ResponseBuilder(l.subMsg("dont_drink", "I don't drink faygo"))
+							.nextDialogue(builder.add("foul", new NodeBuilder(l.defaultKeyMsg("Begone foul beast.")))))
+					.addResponse(new ResponseBuilder(l.subMsg("possess", "I have some with me"))
+							.visibleCondition(faygoCondition)
+							.nextDialogue(afterInvitation)));
+		}));
 	}
 }

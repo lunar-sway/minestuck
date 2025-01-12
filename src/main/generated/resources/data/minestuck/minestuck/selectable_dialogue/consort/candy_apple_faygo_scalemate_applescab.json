@@ -1,0 +1,9 @@
+{
+  "condition": {
+    "type": "minestuck:terrain_land_type",
+    "land_type": "minestuck:heat"
+  },
+  "dialogue": "minestuck:consort/candy_apple_faygo_scalemate_applescab/start",
+  "dialogue_weight": 10,
+  "keep_on_reset": false
+}
