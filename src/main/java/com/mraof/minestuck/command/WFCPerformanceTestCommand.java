@@ -1,9 +1,9 @@
 package com.mraof.minestuck.command;
 
 import com.mojang.brigadier.CommandDispatcher;
-import com.mraof.minestuck.world.gen.structure.ProspitStructure;
-import com.mraof.minestuck.world.gen.structure.WFC;
-import com.mraof.minestuck.world.gen.structure.WFCData;
+import com.mraof.minestuck.world.gen.structure.wfc.ProspitStructure;
+import com.mraof.minestuck.world.gen.structure.wfc.WFC;
+import com.mraof.minestuck.world.gen.structure.wfc.WFCData;
 import net.minecraft.commands.CommandSourceStack;
 import net.minecraft.commands.Commands;
 import net.minecraft.core.BlockPos;

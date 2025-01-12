@@ -1,7 +1,8 @@
-package com.mraof.minestuck.world.gen.structure;
+package com.mraof.minestuck.world.gen.structure.wfc;
 
 import com.mojang.serialization.MapCodec;
 import com.mraof.minestuck.Minestuck;
+import com.mraof.minestuck.world.gen.structure.MSStructures;
 import net.minecraft.MethodsReturnNonnullByDefault;
 import net.minecraft.core.Direction;
 import net.minecraft.core.Vec3i;

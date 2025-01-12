@@ -1,4 +1,4 @@
-package com.mraof.minestuck.world.gen.structure;
+package com.mraof.minestuck.world.gen.structure.wfc;
 
 import com.google.common.collect.AbstractIterator;
 import net.minecraft.Util;

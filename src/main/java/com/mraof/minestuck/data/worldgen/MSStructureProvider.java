@@ -8,6 +8,7 @@ import com.mraof.minestuck.world.gen.structure.castle.CastleStructure;
 import com.mraof.minestuck.world.gen.structure.gate.GateStructure;
 import com.mraof.minestuck.world.gen.structure.gate.LandGatePlacement;
 import com.mraof.minestuck.world.gen.structure.village.ConsortVillageStructure;
+import com.mraof.minestuck.world.gen.structure.wfc.ProspitStructure;
 import net.minecraft.core.HolderGetter;
 import net.minecraft.core.HolderSet;
 import net.minecraft.core.registries.Registries;

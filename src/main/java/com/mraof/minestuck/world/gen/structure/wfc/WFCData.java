@@ -1,10 +1,11 @@
-package com.mraof.minestuck.world.gen.structure;
+package com.mraof.minestuck.world.gen.structure.wfc;
 
 import com.google.common.collect.ImmutableList;
 import com.google.common.collect.ImmutableMap;
 import com.google.common.collect.ImmutableSet;
 import com.google.common.collect.Streams;
 import com.mraof.minestuck.Minestuck;
+import com.mraof.minestuck.world.gen.structure.SimpleTemplatePiece;
 import net.minecraft.core.BlockPos;
 import net.minecraft.core.Direction;
 import net.minecraft.core.Vec3i;
