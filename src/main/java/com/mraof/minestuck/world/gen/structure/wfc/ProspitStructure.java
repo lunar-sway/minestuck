@@ -29,9 +29,9 @@ import static com.mraof.minestuck.world.gen.structure.MSStructures.asType;
 @MethodsReturnNonnullByDefault
 public final class ProspitStructure
 {
-	public static final WFC.CellSize PIECE_SIZE = new WFC.CellSize(8, 8);
+	public static final WFCUtil.CellSize PIECE_SIZE = new WFCUtil.CellSize(8, 8);
 	public static final int WIDTH_IN_PIECES = 16, HEIGHT_IN_PIECES = 14;
-	public static final WFC.Dimensions WFC_DIMENSIONS = new WFC.Dimensions(WIDTH_IN_PIECES, HEIGHT_IN_PIECES, WIDTH_IN_PIECES);
+	public static final WFCUtil.Dimensions WFC_DIMENSIONS = new WFCUtil.Dimensions(WIDTH_IN_PIECES, HEIGHT_IN_PIECES, WIDTH_IN_PIECES);
 	public static final int WIDTH_IN_CHUNKS = (PIECE_SIZE.width() * WIDTH_IN_PIECES) / 16;
 	public static final int BOTTOM_Y = 1;
 	
@@ -95,7 +95,7 @@ public final class ProspitStructure
 			StructureTemplateManager templateManager = context.structureTemplateManager();
 			PositionalRandomFactory randomFactory = RandomSource.create(context.seed()).forkPositional().fromHashOf(Minestuck.id("prospit")).forkPositional();
 			
-			WFC.PositionTransform middleTransform = new WFC.PositionTransform(context.chunkPos().getMiddleBlockPosition(BOTTOM_Y), PIECE_SIZE);
+			WFCUtil.PositionTransform middleTransform = new WFCUtil.PositionTransform(context.chunkPos().getMiddleBlockPosition(BOTTOM_Y), PIECE_SIZE);
 			
 			WFCData.EntryPalette centerPalette = context.random().nextBoolean() ? buildCenterPalette(templateManager) : buildOpenZonePalette(templateManager);
 			WFCData.EntryPalette borderPalette = buildBorderPalette(templateManager);

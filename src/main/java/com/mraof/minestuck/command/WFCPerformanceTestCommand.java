@@ -4,6 +4,7 @@ import com.mojang.brigadier.CommandDispatcher;
 import com.mraof.minestuck.world.gen.structure.wfc.ProspitStructure;
 import com.mraof.minestuck.world.gen.structure.wfc.WFC;
 import com.mraof.minestuck.world.gen.structure.wfc.WFCData;
+import com.mraof.minestuck.world.gen.structure.wfc.WFCUtil;
 import net.minecraft.commands.CommandSourceStack;
 import net.minecraft.commands.Commands;
 import net.minecraft.core.BlockPos;
@@ -44,10 +45,10 @@ public final class WFCPerformanceTestCommand
 	
 	private static void run(StructureTemplateManager templateManager)
 	{
-		WFC.PerformanceMeasurer performanceMeasurer = new WFC.PerformanceMeasurer();
+		WFCUtil.PerformanceMeasurer performanceMeasurer = new WFCUtil.PerformanceMeasurer();
 		
 		PositionalRandomFactory randomFactory = RandomSource.create(1L).forkPositional();
-		WFC.PositionTransform middleTransform = new WFC.PositionTransform(BlockPos.ZERO, ProspitStructure.PIECE_SIZE);
+		WFCUtil.PositionTransform middleTransform = new WFCUtil.PositionTransform(BlockPos.ZERO, ProspitStructure.PIECE_SIZE);
 		
 		WFCData.EntryPalette centerPalette = ProspitStructure.buildCenterPalette(templateManager);
 		WFCData.EntryPalette borderPalette = ProspitStructure.buildBorderPalette(templateManager);
