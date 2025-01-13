@@ -2,7 +2,7 @@
   "conditioned_nodes": [
     {
       "condition": {
-        "type": "minestuck:has_player_entered"
+        "type": "minestuck:player_entered"
       },
       "node": {
         "animation": {
