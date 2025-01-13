@@ -9,6 +9,8 @@ import com.mraof.minestuck.world.gen.structure.wfc.WFCUtil;
 import net.minecraft.commands.CommandSourceStack;
 import net.minecraft.commands.Commands;
 import net.minecraft.core.BlockPos;
+import net.minecraft.core.Holder;
+import net.minecraft.core.RegistryAccess;
 import net.minecraft.util.RandomSource;
 import net.minecraft.world.level.levelgen.PositionalRandomFactory;
 import net.minecraft.world.level.levelgen.structure.BoundingBox;
@@ -33,7 +35,7 @@ public final class WFCPerformanceTestCommand
 							return 1;
 						}))
 				.executes(context -> {
-					run(context.getSource().getLevel().getStructureManager());
+					run(context.getSource().getServer().registryAccess(), context.getSource().getLevel().getStructureManager());
 					return 1;
 				}));
 	}
@@ -51,7 +53,7 @@ public final class WFCPerformanceTestCommand
 		if(timesToRun > 0 && event.hasTime() && event.getServer().getTickCount() % 40 == 0)
 		{
 			timesToRun--;
-			run(event.getServer().getStructureManager());
+			run(event.getServer().registryAccess(), event.getServer().getStructureManager());
 		}
 	}
 	
@@ -70,15 +72,16 @@ public final class WFCPerformanceTestCommand
 		}
 	};
 	
-	private static void run(StructureTemplateManager templateManager)
+	private static void run(RegistryAccess registryAccess, StructureTemplateManager templateManager)
 	{
 		WFCUtil.PerformanceMeasurer performanceMeasurer = new WFCUtil.PerformanceMeasurer();
 		
 		PositionalRandomFactory randomFactory = RandomSource.create(1L).forkPositional();
 		WFCUtil.PositionTransform middleTransform = new WFCUtil.PositionTransform(BlockPos.ZERO, ProspitStructure.PIECE_SIZE);
 		
-		WFCData.EntryPalette centerPalette = ProspitStructure.buildCenterPalette(templateManager);
-		WFCData.EntryPalette borderPalette = ProspitStructure.buildBorderPalette(templateManager);
+		Holder<WFCData.ConnectionSet> connectionSet = registryAccess.lookupOrThrow(WFCData.ConnectionSet.REGISTRY_KEY).getOrThrow(ProspitStructure.PROSPIT_CONNECTIONS);
+		WFCData.EntryPalette centerPalette = ProspitStructure.buildCenterPalette(connectionSet, templateManager);
+		WFCData.EntryPalette borderPalette = ProspitStructure.buildBorderPalette(connectionSet, templateManager);
 		
 		WFC.InfiniteModularGeneration.generateModule(middleTransform, ProspitStructure.WFC_DIMENSIONS,
 				centerPalette, borderPalette, randomFactory, DUMMY_PIECE_ACCESSOR, performanceMeasurer);

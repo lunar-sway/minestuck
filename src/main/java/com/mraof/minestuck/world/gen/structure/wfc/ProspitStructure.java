@@ -5,6 +5,7 @@ import com.mraof.minestuck.Minestuck;
 import com.mraof.minestuck.world.gen.structure.MSStructures;
 import net.minecraft.MethodsReturnNonnullByDefault;
 import net.minecraft.core.Direction;
+import net.minecraft.core.Holder;
 import net.minecraft.core.Vec3i;
 import net.minecraft.core.registries.Registries;
 import net.minecraft.resources.ResourceKey;
@@ -97,88 +98,28 @@ public final class ProspitStructure
 			
 			WFCUtil.PositionTransform middleTransform = new WFCUtil.PositionTransform(context.chunkPos().getMiddleBlockPosition(BOTTOM_Y), PIECE_SIZE);
 			
-			WFCData.EntryPalette centerPalette = context.random().nextBoolean() ? buildCenterPalette(templateManager) : buildOpenZonePalette(templateManager);
-			WFCData.EntryPalette borderPalette = buildBorderPalette(templateManager);
+			Holder<WFCData.ConnectionSet> connectionSet = context.registryAccess().lookupOrThrow(WFCData.ConnectionSet.REGISTRY_KEY).getOrThrow(PROSPIT_CONNECTIONS);
+			WFCData.EntryPalette centerPalette = context.random().nextBoolean() ? buildCenterPalette(connectionSet, templateManager) : buildOpenZonePalette(connectionSet, templateManager);
+			WFCData.EntryPalette borderPalette = buildBorderPalette(connectionSet, templateManager);
 			
 			WFC.InfiniteModularGeneration.generateModule(middleTransform, ProspitStructure.WFC_DIMENSIONS,
 					centerPalette, borderPalette, randomFactory, piecesBuilder, null);
 		}
 	}
 	
-	private static final class Connectors
-	{
-		public static final WFCData.ConnectorType
-				AIR = new WFCData.ConnectorType(Minestuck.id("air")),
-				SOLID = new WFCData.ConnectorType(Minestuck.id("solid")),
-				ROOF_BOTTOM = new WFCData.ConnectorType(Minestuck.id("roof_bottom")),
-				SUPPORT_TOP = new WFCData.ConnectorType(Minestuck.id("support_top")),
-				WALL = new WFCData.ConnectorType(Minestuck.id("wall")),
-				WALL_ATTACHMENT = new WFCData.ConnectorType(Minestuck.id("wall_attachment")),
-				ROOF_SIDE = new WFCData.ConnectorType(Minestuck.id("roof_side")),
-				BRIDGE = new WFCData.ConnectorType(Minestuck.id("bridge")),
-				LEDGE_FRONT = new WFCData.ConnectorType(Minestuck.id("ledge/front")),
-				LEDGE_LEFT = new WFCData.ConnectorType(Minestuck.id("ledge/left")),
-				LEDGE_RIGHT = new WFCData.ConnectorType(Minestuck.id("ledge/right")),
-				LEDGE_BACK = new WFCData.ConnectorType(Minestuck.id("ledge/back")),
-				CORRIDOR = new WFCData.ConnectorType(Minestuck.id("corridor")),
-				WINDOW = new WFCData.ConnectorType(Minestuck.id("window")),
-				STAIRS_END = new WFCData.ConnectorType(Minestuck.id("stairs_end")),
-				STAIRS_SIDE = new WFCData.ConnectorType(Minestuck.id("stairs_side"));
-		
-		public static void addConnections(WFCData.ConnectionsBuilder builder)
-		{
-			builder.connectSelf(AIR);
-			builder.connectSelf(SOLID);
-			builder.connect(ROOF_BOTTOM, SOLID);
-			builder.connect(SUPPORT_TOP, SOLID);
-			builder.connect(AIR, WALL);
-			builder.connectSelf(WALL);
-			builder.connect(WALL_ATTACHMENT, WALL);
-			builder.connect(ROOF_SIDE, WALL);
-			builder.connect(ROOF_SIDE, AIR);
-			builder.connectSelf(BRIDGE);
-			builder.connect(BRIDGE, WALL);
-			builder.connect(LEDGE_FRONT, AIR);
-			builder.connect(LEDGE_FRONT, BRIDGE);
-			builder.connect(LEDGE_LEFT, LEDGE_RIGHT);
-			builder.connectSelf(LEDGE_BACK);
-			builder.connect(LEDGE_LEFT, WALL);
-			builder.connect(LEDGE_RIGHT, WALL);
-			builder.connect(LEDGE_BACK, WALL);
-			builder.connect(LEDGE_BACK, ROOF_SIDE);
-			builder.connectSelf(CORRIDOR);
-			builder.connect(CORRIDOR, BRIDGE);
-			builder.connect(CORRIDOR, LEDGE_LEFT);
-			builder.connect(CORRIDOR, LEDGE_RIGHT);
-			builder.connect(CORRIDOR, LEDGE_BACK);
-			builder.connect(WINDOW, AIR);
-			builder.connectSelf(STAIRS_END);
-			builder.connect(STAIRS_END, CORRIDOR);
-			builder.connect(STAIRS_END, LEDGE_BACK);
-			builder.connect(STAIRS_END, LEDGE_LEFT);
-			builder.connect(STAIRS_END, LEDGE_RIGHT);
-			builder.connectSelf(STAIRS_SIDE);
-			builder.connect(STAIRS_SIDE, AIR);
-			builder.connect(STAIRS_SIDE, WALL);
-			builder.connect(STAIRS_SIDE, ROOF_SIDE);
-			builder.connect(STAIRS_SIDE, LEDGE_BACK);
-			builder.connect(STAIRS_SIDE, LEDGE_LEFT);
-			builder.connect(STAIRS_SIDE, LEDGE_RIGHT);
-			
-			builder.connect(WFCData.ConnectorType.TOP_BORDER, AIR);
-			builder.connect(WFCData.ConnectorType.BOTTOM_BORDER, SOLID);
-		}
-	}
+	public static final ResourceKey<WFCData.ConnectionSet> PROSPIT_CONNECTIONS = ResourceKey.create(WFCData.ConnectionSet.REGISTRY_KEY, Minestuck.id("prospit"));
+	
+	private static final WFCData.ConnectorType AIR_CONNECTOR = new WFCData.ConnectorType(Minestuck.id("air"));
 	
 	public static final class Entries
 	{
 		public static final WFCData.EntryProvider EMPTY = new WFCData.PieceEntry(pos -> null, Map.of(
-				Direction.DOWN, Connectors.AIR,
-				Direction.UP, Connectors.AIR,
-				Direction.NORTH, Connectors.AIR,
-				Direction.EAST, Connectors.AIR,
-				Direction.SOUTH, Connectors.AIR,
-				Direction.WEST, Connectors.AIR
+				Direction.DOWN, AIR_CONNECTOR,
+				Direction.UP, AIR_CONNECTOR,
+				Direction.NORTH, AIR_CONNECTOR,
+				Direction.EAST, AIR_CONNECTOR,
+				Direction.SOUTH, AIR_CONNECTOR,
+				Direction.WEST, AIR_CONNECTOR
 		));
 		public static final WFCData.EntryProvider SOLID = WFCData.TemplateEntry.symmetric(Minestuck.id("prospit/solid"));
 		public static final WFCData.EntryProvider PYRAMID_ROOF = WFCData.TemplateEntry.symmetric(Minestuck.id("prospit/pyramid_roof"));
@@ -197,11 +138,11 @@ public final class ProspitStructure
 		public static final WFCData.EntryProvider OUTDOOR_STAIRS = WFCData.TemplateEntry.rotatable(Minestuck.id("prospit/outdoor_stairs"));
 	}
 	
-	public static WFCData.EntryPalette buildCenterPalette(StructureTemplateManager templateManager)
+	public static WFCData.EntryPalette buildCenterPalette(Holder<WFCData.ConnectionSet> connectionSet, StructureTemplateManager templateManager)
 	{
 		WFCData.EntriesBuilder builder = new WFCData.EntriesBuilder(PIECE_SIZE, templateManager);
 		
-		Connectors.addConnections(builder.connections());
+		builder.add(connectionSet);
 		
 		builder.add(Entries.EMPTY, 30);
 		builder.add(Entries.SOLID, 10);
@@ -223,11 +164,11 @@ public final class ProspitStructure
 		return builder.build();
 	}
 	
-	private static WFCData.EntryPalette buildOpenZonePalette(StructureTemplateManager templateManager)
+	private static WFCData.EntryPalette buildOpenZonePalette(Holder<WFCData.ConnectionSet> connectionSet, StructureTemplateManager templateManager)
 	{
 		WFCData.EntriesBuilder builder = new WFCData.EntriesBuilder(PIECE_SIZE, templateManager);
 		
-		Connectors.addConnections(builder.connections());
+		builder.add(connectionSet);
 		
 		builder.add(Entries.EMPTY, 200);
 		builder.add(Entries.SOLID, 1);
@@ -248,11 +189,11 @@ public final class ProspitStructure
 		return builder.build();
 	}
 	
-	public static WFCData.EntryPalette buildBorderPalette(StructureTemplateManager templateManager)
+	public static WFCData.EntryPalette buildBorderPalette(Holder<WFCData.ConnectionSet> connectionSet, StructureTemplateManager templateManager)
 	{
 		WFCData.EntriesBuilder builder = new WFCData.EntriesBuilder(PIECE_SIZE, templateManager);
 		
-		Connectors.addConnections(builder.connections());
+		builder.add(connectionSet);
 		
 		builder.add(Entries.EMPTY, 10);
 		builder.add(Entries.SOLID, 10);

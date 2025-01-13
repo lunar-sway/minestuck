@@ -4,11 +4,12 @@ import com.google.common.collect.ImmutableList;
 import com.google.common.collect.ImmutableMap;
 import com.google.common.collect.ImmutableSet;
 import com.google.common.collect.Streams;
+import com.mojang.datafixers.util.Pair;
+import com.mojang.serialization.Codec;
 import com.mraof.minestuck.Minestuck;
 import com.mraof.minestuck.world.gen.structure.SimpleTemplatePiece;
-import net.minecraft.core.BlockPos;
-import net.minecraft.core.Direction;
-import net.minecraft.core.Vec3i;
+import net.minecraft.core.*;
+import net.minecraft.resources.ResourceKey;
 import net.minecraft.resources.ResourceLocation;
 import net.minecraft.util.random.WeightedEntry;
 import net.minecraft.world.level.block.Blocks;
@@ -20,6 +21,9 @@ import net.minecraft.world.level.levelgen.structure.StructurePiece;
 import net.minecraft.world.level.levelgen.structure.templatesystem.StructurePlaceSettings;
 import net.minecraft.world.level.levelgen.structure.templatesystem.StructureTemplate;
 import net.minecraft.world.level.levelgen.structure.templatesystem.StructureTemplateManager;
+import net.neoforged.bus.api.SubscribeEvent;
+import net.neoforged.fml.common.EventBusSubscriber;
+import net.neoforged.neoforge.registries.DataPackRegistryEvent;
 import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.Logger;
 
@@ -51,6 +55,8 @@ public final class WFCData
 	
 	public record ConnectorType(ResourceLocation id)
 	{
+		public static final Codec<ConnectorType> CODEC = ResourceLocation.CODEC.xmap(ConnectorType::new, ConnectorType::id);
+		
 		public static final ConnectorType
 				TOP_BORDER = new ConnectorType(Minestuck.id("top_border")),
 				BOTTOM_BORDER = new ConnectorType(Minestuck.id("bottom_border"));
@@ -347,6 +353,11 @@ public final class WFCData
 			return this.connectionsBuilder;
 		}
 		
+		public void add(Holder<ConnectionSet> connectionSet)
+		{
+			connectionSet.value().connections().forEach(pair -> this.connectionsBuilder.connect(pair.getFirst(), pair.getSecond()));
+		}
+		
 		public void add(EntryProvider provider, int weight)
 		{
 			provider.build(new EntryBuilderContext(this.connectionsBuilder, pieceEntry -> this.pieceEntries.add(WeightedEntry.wrap(pieceEntry, weight)), this.cellSize, this.templateManager));
@@ -363,6 +374,22 @@ public final class WFCData
 			});
 			
 			return new EntryPalette(entriesList, connectionTester);
+		}
+	}
+	
+	@EventBusSubscriber(modid = Minestuck.MOD_ID, bus = EventBusSubscriber.Bus.MOD)
+	public static record ConnectionSet(List<Pair<ConnectorType, ConnectorType>> connections)
+	{
+		private static final Codec<Pair<ConnectorType, ConnectorType>> CONNECTION_CODEC = ConnectorType.CODEC.listOf(2, 2)
+				.xmap(list -> Pair.of(list.getFirst(), list.get(1)), pair -> List.of(pair.getFirst(), pair.getSecond()));
+		private static final Codec<ConnectionSet> DIRECT_CODEC = CONNECTION_CODEC.listOf().xmap(ConnectionSet::new, ConnectionSet::connections);
+		
+		public static final ResourceKey<Registry<ConnectionSet>> REGISTRY_KEY = ResourceKey.createRegistryKey(Minestuck.id("wfc_connection_set"));
+		
+		@SubscribeEvent
+		private static void onDatapackNewRegistryEvent(DataPackRegistryEvent.NewRegistry event)
+		{
+			event.dataPackRegistry(REGISTRY_KEY, DIRECT_CODEC);
 		}
 	}
 }
