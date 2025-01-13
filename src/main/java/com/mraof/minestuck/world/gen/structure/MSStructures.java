@@ -153,7 +153,7 @@ public final class MSStructures
 			PIECE_REGISTER.register("pink_tower", () -> template(PinkTowerPiece::new));
 	
 	// Skaia
-	public static final ResourceKey<Structure> SKAIAN_CATHEDRAL = key("skaiancathedral");
+	public static final ResourceKey<Structure> SKAIAN_CATHEDRAL = key("skaian_cathedral");
 	
 	public static final class SkaiaCastle
 	{

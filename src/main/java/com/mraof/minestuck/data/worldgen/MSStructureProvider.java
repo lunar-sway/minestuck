@@ -62,7 +62,7 @@ public final class MSStructureProvider
 		
 		context.register(SKAIAN_CATHEDRAL, new JigsawStructure(Structures.structure(biomes.getOrThrow(MSTags.Biomes.SKAIA),
 						Map.of(), GenerationStep.Decoration.SURFACE_STRUCTURES, TerrainAdjustment.NONE), pools.getOrThrow(ResourceKey.create(Registries.TEMPLATE_POOL,
-						Minestuck.id("skaiancathedral/front"))), 7, ConstantHeight.of(VerticalAnchor.absolute(-6)),
+						Minestuck.id("skaian_cathedral/front"))), 7, ConstantHeight.of(VerticalAnchor.absolute(-6)),
 		false, Heightmap.Types.WORLD_SURFACE_WG));
 	}
 	
@@ -82,7 +82,7 @@ public final class MSStructureProvider
 		context.register(key("skaia_castle"), new StructureSet(structures.getOrThrow(SkaiaCastle.KEY),
 				new RandomSpreadStructurePlacement(50, 40, RandomSpreadType.LINEAR, 6729346)));
 		
-		context.register(key("skaiancathedral"), new StructureSet(structures.getOrThrow(SKAIAN_CATHEDRAL),
+		context.register(key("skaian_cathedral"), new StructureSet(structures.getOrThrow(SKAIAN_CATHEDRAL),
 				new RandomSpreadStructurePlacement(20, 10, RandomSpreadType.LINEAR, 1481098009)));
 	}
 	

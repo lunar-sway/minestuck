@@ -6,7 +6,7 @@
       "element": {
         "element_type": "minecraft:single_pool_element",
         "projection": "rigid",
-        "location": "minestuck:skaiancathedral/cathedral_entrance",
+        "location": "minestuck:skaian_cathedral/cathedral_back",
         "processors": "minecraft:empty"
       }
     }
