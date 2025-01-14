@@ -211,6 +211,10 @@
       {
         "name": "minestuck:music/lands/endless_chasm",
         "stream": true
+      },
+      {
+        "name": "minestuck:music/lands/the_note_desolation_plays",
+        "stream": true
       }
     ]
   },
