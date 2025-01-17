@@ -51,6 +51,7 @@ public final class Conditions
 		REGISTER.register("player_advancement", () -> Condition.PlayerHasAdvancement.CODEC);
 		REGISTER.register("custom_score", () -> Condition.CustomHasScore.CODEC);
 		REGISTER.register("custom_tag", () -> Condition.CustomHasTag.CODEC);
+		REGISTER.register("dialogue_exists", () -> Condition.DialogueExists.CODEC);
 		REGISTER.register("move_restriction", () -> Condition.HasMoveRestriction.CODEC);
 		REGISTER.register("flag", () -> Condition.Flag.CODEC);
 		REGISTER.register("near_spawn", () -> Condition.NearSpawn.CODEC);

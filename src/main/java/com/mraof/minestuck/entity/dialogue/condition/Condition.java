@@ -11,6 +11,7 @@ import com.mraof.minestuck.entity.consort.ConsortReputation;
 import com.mraof.minestuck.entity.consort.EnumConsort;
 import com.mraof.minestuck.entity.dialogue.DialogueComponent;
 import com.mraof.minestuck.entity.dialogue.DialogueEntity;
+import com.mraof.minestuck.entity.dialogue.DialogueNodes;
 import com.mraof.minestuck.player.*;
 import com.mraof.minestuck.skaianet.SburbPlayerData;
 import com.mraof.minestuck.world.MSDimensions;
@@ -920,6 +921,25 @@ public interface Condition
 		public Component getFailureTooltip()
 		{
 			return Component.literal("The target does not have the correct tag");
+		}
+	}
+	
+	record DialogueExists(ResourceLocation dialogueId) implements Condition
+	{
+		static final MapCodec<DialogueExists> CODEC = RecordCodecBuilder.mapCodec(instance -> instance.group(
+				ResourceLocation.CODEC.fieldOf("dialogue_id").forGetter(DialogueExists::dialogueId)
+		).apply(instance, DialogueExists::new));
+		
+		@Override
+		public MapCodec<DialogueExists> codec()
+		{
+			return CODEC;
+		}
+		
+		@Override
+		public boolean test(LivingEntity entity, ServerPlayer player)
+		{
+			return DialogueNodes.getInstance().getDialogue(dialogueId) != null;
 		}
 	}
 	
