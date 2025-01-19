@@ -10,6 +10,7 @@ import net.minecraft.commands.CommandSourceStack;
 import net.minecraft.commands.Commands;
 import net.minecraft.core.BlockPos;
 import net.minecraft.core.Holder;
+import net.minecraft.core.HolderGetter;
 import net.minecraft.core.RegistryAccess;
 import net.minecraft.util.RandomSource;
 import net.minecraft.world.level.levelgen.PositionalRandomFactory;
@@ -74,14 +75,16 @@ public final class WFCPerformanceTestCommand
 	
 	private static void run(RegistryAccess registryAccess, StructureTemplateManager templateManager)
 	{
+		HolderGetter<WFCData.EntryPrototype> prototypeLookup = registryAccess.lookupOrThrow(WFCData.EntryPrototype.REGISTRY_KEY);
+		
 		WFCUtil.PerformanceMeasurer performanceMeasurer = new WFCUtil.PerformanceMeasurer();
 		
 		PositionalRandomFactory randomFactory = RandomSource.create(1L).forkPositional();
 		WFCUtil.PositionTransform middleTransform = new WFCUtil.PositionTransform(BlockPos.ZERO, ProspitStructure.PIECE_SIZE);
 		
 		Holder<WFCData.ConnectionSet> connectionSet = registryAccess.lookupOrThrow(WFCData.ConnectionSet.REGISTRY_KEY).getOrThrow(ProspitStructure.PROSPIT_CONNECTIONS);
-		WFCData.EntryPalette centerPalette = ProspitStructure.buildCenterPalette(connectionSet, templateManager);
-		WFCData.EntryPalette borderPalette = ProspitStructure.buildBorderPalette(connectionSet, templateManager);
+		WFCData.EntryPalette centerPalette = ProspitStructure.buildCenterPalette(connectionSet, prototypeLookup, templateManager);
+		WFCData.EntryPalette borderPalette = ProspitStructure.buildBorderPalette(connectionSet, prototypeLookup, templateManager);
 		
 		WFC.InfiniteModularGeneration.generateModule(middleTransform, ProspitStructure.WFC_DIMENSIONS,
 				centerPalette, borderPalette, randomFactory, DUMMY_PIECE_ACCESSOR, performanceMeasurer);

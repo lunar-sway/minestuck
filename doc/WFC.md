@@ -37,18 +37,18 @@ Is built by pairing connector types that should connect together.
 
 Consists of a list of piece entries weighted for random selection, as well as a connection tester.
 
-### Entry Provider
+### Entry Prototype
 
 A helper for generating piece entries for the entries data.
 
-An entry provider can create piece entries for a structure template,
+An entry prototype can create piece entries for a structure template,
 where it will look for marker blocks inside the template to determine the connector types of the created piece entries.
 
 It can handle templates meant to span multiple cells, creating multiple piece entries accordingly.
 But currently it only supports templates covering a rectangular shape of cells
 (that is, all cells fit within the size of the template must be covered by the template).
 
-An entry provider will also create the rotated variants of piece entries based on how the entry provider is configured.
+An entry prototype will also create the rotated variants of piece entries based on how the entry prototype is configured.
 (Rotation is supported, but mirroring is currently not supported.)
 
 ### Module

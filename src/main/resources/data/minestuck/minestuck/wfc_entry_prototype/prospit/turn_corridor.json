@@ -1,0 +1,5 @@
+{
+  "type": "template",
+  "template": "minestuck:prospit/turn_corridor",
+  "symmetry": "rotatable"
+}

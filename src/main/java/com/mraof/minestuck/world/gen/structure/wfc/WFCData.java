@@ -6,11 +6,14 @@ import com.google.common.collect.ImmutableSet;
 import com.google.common.collect.Streams;
 import com.mojang.datafixers.util.Pair;
 import com.mojang.serialization.Codec;
+import com.mojang.serialization.MapCodec;
+import com.mojang.serialization.codecs.RecordCodecBuilder;
 import com.mraof.minestuck.Minestuck;
 import com.mraof.minestuck.world.gen.structure.SimpleTemplatePiece;
 import net.minecraft.core.*;
 import net.minecraft.resources.ResourceKey;
 import net.minecraft.resources.ResourceLocation;
+import net.minecraft.util.StringRepresentable;
 import net.minecraft.util.random.WeightedEntry;
 import net.minecraft.world.level.block.Blocks;
 import net.minecraft.world.level.block.JigsawBlock;
@@ -34,6 +37,7 @@ import java.util.function.Function;
 /**
  * Contains types for describing pieces and how they connect, as well as builders for defining data of these types.
  */
+@EventBusSubscriber(modid = Minestuck.MOD_ID, bus = EventBusSubscriber.Bus.MOD)
 public final class WFCData
 {
 	private static final Logger LOGGER = LogManager.getLogger();
@@ -63,30 +67,104 @@ public final class WFCData
 	}
 	
 	public record PieceEntry(Function<BlockPos, StructurePiece> constructor,
-							 Map<Direction, ConnectorType> connections) implements EntryProvider
+							 Map<Direction, ConnectorType> connections)
 	{
-		@Override
-		public void build(EntryBuilderContext context)
+	}
+	
+	public enum PrototypeType implements StringRepresentable
+	{
+		EMPTY(EmptyEntryPrototype.CODEC),
+		TEMPLATE(TemplateEntryPrototype.CODEC);
+		
+		public static final Codec<PrototypeType> CODEC = StringRepresentable.fromEnum(PrototypeType::values);
+		
+		private final MapCodec<? extends EntryPrototype> prototypeCodec;
+		
+		PrototypeType(MapCodec<? extends EntryPrototype> prototypeCodec)
 		{
-			context.entriesBuilder().add(this);
+			this.prototypeCodec = prototypeCodec;
+		}
+		
+		@Override
+		public String getSerializedName()
+		{
+			return this.name().toLowerCase(Locale.ROOT);
 		}
 	}
 	
-	public record TemplateEntry(ResourceLocation templateId, List<Rotation> rotations) implements EntryProvider
+	public sealed interface EntryPrototype
 	{
-		public static EntryProvider symmetric(ResourceLocation templateId)
+		static final ResourceKey<Registry<EntryPrototype>> REGISTRY_KEY = ResourceKey.createRegistryKey(Minestuck.id("wfc_entry_prototype"));
+		
+		PrototypeType type();
+		
+		void build(EntryBuilderContext context);
+	}
+	
+	@SubscribeEvent
+	private static void onDatapackNewRegistryEvent(DataPackRegistryEvent.NewRegistry event)
+	{
+		event.dataPackRegistry(EntryPrototype.REGISTRY_KEY, PrototypeType.CODEC.dispatch(EntryPrototype::type, type -> type.prototypeCodec));
+	}
+	
+	public record EmptyEntryPrototype(ConnectorType connector) implements EntryPrototype
+	{
+		public static final MapCodec<EmptyEntryPrototype> CODEC = ConnectorType.CODEC.fieldOf("connector")
+				.xmap(EmptyEntryPrototype::new, EmptyEntryPrototype::connector);
+		
+		@Override
+		public PrototypeType type()
 		{
-			return new TemplateEntry(templateId, List.of(Rotation.NONE));
+			return PrototypeType.EMPTY;
 		}
 		
-		public static EntryProvider axisSymmetric(ResourceLocation templateId)
+		@Override
+		public void build(EntryBuilderContext context)
 		{
-			return new TemplateEntry(templateId, List.of(Rotation.NONE, Rotation.CLOCKWISE_90));
+			context.entriesBuilder().add(new PieceEntry(pos -> null, Map.of(
+					Direction.DOWN, this.connector,
+					Direction.UP, this.connector,
+					Direction.NORTH, this.connector,
+					Direction.EAST, this.connector,
+					Direction.SOUTH, this.connector,
+					Direction.WEST, this.connector
+			)));
+		}
+	}
+	
+	public enum Symmetry implements StringRepresentable
+	{
+		SYMMETRIC(List.of(Rotation.NONE)),
+		AXIS_SYMMETRIC(List.of(Rotation.NONE, Rotation.CLOCKWISE_90)),
+		ROTATABLE(List.of(Rotation.values()));
+		
+		public static final Codec<Symmetry> CODEC = StringRepresentable.fromEnum(Symmetry::values);
+		
+		private final List<Rotation> rotations;
+		
+		Symmetry(List<Rotation> rotations)
+		{
+			this.rotations = rotations;
 		}
 		
-		public static EntryProvider rotatable(ResourceLocation templateId)
+		@Override
+		public String getSerializedName()
 		{
-			return new TemplateEntry(templateId, List.of(Rotation.values()));
+			return this.name().toLowerCase(Locale.ROOT);
+		}
+	}
+	
+	public record TemplateEntryPrototype(ResourceLocation templateId, Symmetry symmetry) implements EntryPrototype
+	{
+		public static final MapCodec<TemplateEntryPrototype> CODEC = RecordCodecBuilder.mapCodec(instance -> instance.group(
+				ResourceLocation.CODEC.fieldOf("template").forGetter(TemplateEntryPrototype::templateId),
+				Symmetry.CODEC.fieldOf("symmetry").forGetter(TemplateEntryPrototype::symmetry)
+		).apply(instance, TemplateEntryPrototype::new));
+		
+		@Override
+		public PrototypeType type()
+		{
+			return PrototypeType.TEMPLATE;
 		}
 		
 		@Override
@@ -101,7 +179,7 @@ public final class WFCData
 						return builder.verify();
 					})
 					.ifPresent(loadedEntry -> {
-						for(Rotation rotation : this.rotations)
+						for(Rotation rotation : this.symmetry.rotations)
 							loadedEntry.build(rotation, context);
 					});
 		}
@@ -279,11 +357,6 @@ public final class WFCData
 	{
 	}
 	
-	public interface EntryProvider
-	{
-		void build(EntryBuilderContext context);
-	}
-	
 	public static final class ConnectionTester
 	{
 		private final Map<ConnectorType, Set<ConnectorType>> connectionMap;
@@ -358,9 +431,9 @@ public final class WFCData
 			connectionSet.value().connections().forEach(pair -> this.connectionsBuilder.connect(pair.getFirst(), pair.getSecond()));
 		}
 		
-		public void add(EntryProvider provider, int weight)
+		public void add(Holder<EntryPrototype> provider, int weight)
 		{
-			provider.build(new EntryBuilderContext(this.connectionsBuilder, pieceEntry -> this.pieceEntries.add(WeightedEntry.wrap(pieceEntry, weight)), this.cellSize, this.templateManager));
+			provider.value().build(new EntryBuilderContext(this.connectionsBuilder, pieceEntry -> this.pieceEntries.add(WeightedEntry.wrap(pieceEntry, weight)), this.cellSize, this.templateManager));
 		}
 		
 		public EntryPalette build()

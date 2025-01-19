@@ -4,8 +4,8 @@ import com.mojang.serialization.MapCodec;
 import com.mraof.minestuck.Minestuck;
 import com.mraof.minestuck.world.gen.structure.MSStructures;
 import net.minecraft.MethodsReturnNonnullByDefault;
-import net.minecraft.core.Direction;
 import net.minecraft.core.Holder;
+import net.minecraft.core.HolderGetter;
 import net.minecraft.core.Vec3i;
 import net.minecraft.core.registries.Registries;
 import net.minecraft.resources.ResourceKey;
@@ -20,7 +20,6 @@ import net.minecraft.world.level.levelgen.structure.placement.StructurePlacement
 import net.minecraft.world.level.levelgen.structure.templatesystem.StructureTemplateManager;
 
 import javax.annotation.ParametersAreNonnullByDefault;
-import java.util.Map;
 import java.util.Optional;
 import java.util.function.Supplier;
 
@@ -94,13 +93,16 @@ public final class ProspitStructure
 		private void generatePieces(StructurePiecesBuilder piecesBuilder, GenerationContext context)
 		{
 			StructureTemplateManager templateManager = context.structureTemplateManager();
+			HolderGetter<WFCData.EntryPrototype> prototypeLookup = context.registryAccess().lookupOrThrow(WFCData.EntryPrototype.REGISTRY_KEY);
 			PositionalRandomFactory randomFactory = RandomSource.create(context.seed()).forkPositional().fromHashOf(Minestuck.id("prospit")).forkPositional();
 			
 			WFCUtil.PositionTransform middleTransform = new WFCUtil.PositionTransform(context.chunkPos().getMiddleBlockPosition(BOTTOM_Y), PIECE_SIZE);
 			
 			Holder<WFCData.ConnectionSet> connectionSet = context.registryAccess().lookupOrThrow(WFCData.ConnectionSet.REGISTRY_KEY).getOrThrow(PROSPIT_CONNECTIONS);
-			WFCData.EntryPalette centerPalette = context.random().nextBoolean() ? buildCenterPalette(connectionSet, templateManager) : buildOpenZonePalette(connectionSet, templateManager);
-			WFCData.EntryPalette borderPalette = buildBorderPalette(connectionSet, templateManager);
+			WFCData.EntryPalette centerPalette = context.random().nextBoolean()
+					? buildCenterPalette(connectionSet, prototypeLookup, templateManager)
+					: buildOpenZonePalette(connectionSet, prototypeLookup, templateManager);
+			WFCData.EntryPalette borderPalette = buildBorderPalette(connectionSet, prototypeLookup, templateManager);
 			
 			WFC.InfiniteModularGeneration.generateModule(middleTransform, ProspitStructure.WFC_DIMENSIONS,
 					centerPalette, borderPalette, randomFactory, piecesBuilder, null);
@@ -113,96 +115,96 @@ public final class ProspitStructure
 	
 	public static final class Entries
 	{
-		public static final WFCData.EntryProvider EMPTY = new WFCData.PieceEntry(pos -> null, Map.of(
-				Direction.DOWN, AIR_CONNECTOR,
-				Direction.UP, AIR_CONNECTOR,
-				Direction.NORTH, AIR_CONNECTOR,
-				Direction.EAST, AIR_CONNECTOR,
-				Direction.SOUTH, AIR_CONNECTOR,
-				Direction.WEST, AIR_CONNECTOR
-		));
-		public static final WFCData.EntryProvider SOLID = WFCData.TemplateEntry.symmetric(Minestuck.id("prospit/solid"));
-		public static final WFCData.EntryProvider PYRAMID_ROOF = WFCData.TemplateEntry.symmetric(Minestuck.id("prospit/pyramid_roof"));
-		public static final WFCData.EntryProvider SPIKE = WFCData.TemplateEntry.symmetric(Minestuck.id("prospit/spike"));
-		public static final WFCData.EntryProvider BRIDGE = WFCData.TemplateEntry.axisSymmetric(Minestuck.id("prospit/bridge"));
-		public static final WFCData.EntryProvider LEDGE = WFCData.TemplateEntry.rotatable(Minestuck.id("prospit/ledge"));
-		public static final WFCData.EntryProvider LEDGE_CORNER = WFCData.TemplateEntry.rotatable(Minestuck.id("prospit/ledge_corner"));
-		public static final WFCData.EntryProvider SUPPORT = WFCData.TemplateEntry.rotatable(Minestuck.id("prospit/support"));
-		public static final WFCData.EntryProvider CORRIDOR = WFCData.TemplateEntry.axisSymmetric(Minestuck.id("prospit/corridor"));
-		public static final WFCData.EntryProvider CORRIDOR_WINDOW = WFCData.TemplateEntry.rotatable(Minestuck.id("prospit/corridor_window"));
-		public static final WFCData.EntryProvider TURN_CORRIDOR = WFCData.TemplateEntry.rotatable(Minestuck.id("prospit/turn_corridor"));
-		public static final WFCData.EntryProvider T_CORRIDOR = WFCData.TemplateEntry.rotatable(Minestuck.id("prospit/t_corridor"));
-		public static final WFCData.EntryProvider T_CORRIDOR_WINDOW = WFCData.TemplateEntry.rotatable(Minestuck.id("prospit/t_corridor_window"));
-		public static final WFCData.EntryProvider ROOM = WFCData.TemplateEntry.rotatable(Minestuck.id("prospit/room"));
-		public static final WFCData.EntryProvider INTERIOR_STAIRS = WFCData.TemplateEntry.rotatable(Minestuck.id("prospit/interior_stairs"));
-		public static final WFCData.EntryProvider OUTDOOR_STAIRS = WFCData.TemplateEntry.rotatable(Minestuck.id("prospit/outdoor_stairs"));
+		public static final ResourceKey<WFCData.EntryPrototype> EMPTY = key("empty");
+		public static final ResourceKey<WFCData.EntryPrototype> SOLID = key("solid");
+		public static final ResourceKey<WFCData.EntryPrototype> PYRAMID_ROOF = key("pyramid_roof");
+		public static final ResourceKey<WFCData.EntryPrototype> SPIKE = key("spike");
+		public static final ResourceKey<WFCData.EntryPrototype> BRIDGE = key("bridge");
+		public static final ResourceKey<WFCData.EntryPrototype> LEDGE = key("ledge");
+		public static final ResourceKey<WFCData.EntryPrototype> LEDGE_CORNER = key("ledge_corner");
+		public static final ResourceKey<WFCData.EntryPrototype> SUPPORT = key("support");
+		public static final ResourceKey<WFCData.EntryPrototype> CORRIDOR = key("corridor");
+		public static final ResourceKey<WFCData.EntryPrototype> CORRIDOR_WINDOW = key("corridor_window");
+		public static final ResourceKey<WFCData.EntryPrototype> TURN_CORRIDOR = key("turn_corridor");
+		public static final ResourceKey<WFCData.EntryPrototype> T_CORRIDOR = key("t_corridor");
+		public static final ResourceKey<WFCData.EntryPrototype> T_CORRIDOR_WINDOW = key("t_corridor_window");
+		public static final ResourceKey<WFCData.EntryPrototype> INTERIOR_STAIRS = key("interior_stairs");
+		public static final ResourceKey<WFCData.EntryPrototype> OUTDOOR_STAIRS = key("outdoor_stairs");
+		
+		private static ResourceKey<WFCData.EntryPrototype> key(String name)
+		{
+			return ResourceKey.create(WFCData.EntryPrototype.REGISTRY_KEY, Minestuck.id("prospit/" + name));
+		}
 	}
 	
-	public static WFCData.EntryPalette buildCenterPalette(Holder<WFCData.ConnectionSet> connectionSet, StructureTemplateManager templateManager)
+	public static WFCData.EntryPalette buildCenterPalette(Holder<WFCData.ConnectionSet> connectionSet, HolderGetter<WFCData.EntryPrototype> prototypeLookup,
+														  StructureTemplateManager templateManager)
 	{
 		WFCData.EntriesBuilder builder = new WFCData.EntriesBuilder(PIECE_SIZE, templateManager);
 		
 		builder.add(connectionSet);
 		
-		builder.add(Entries.EMPTY, 30);
-		builder.add(Entries.SOLID, 10);
-		builder.add(Entries.SUPPORT, 4);
-		builder.add(Entries.PYRAMID_ROOF, 2);
-		builder.add(Entries.SPIKE, 1);
-		builder.add(Entries.BRIDGE, 3);
-		builder.add(Entries.LEDGE, 2);
-		builder.add(Entries.LEDGE_CORNER, 2);
-		builder.add(Entries.CORRIDOR, 5);
-		builder.add(Entries.CORRIDOR_WINDOW, 3);
-		builder.add(Entries.TURN_CORRIDOR, 3);
-		builder.add(Entries.T_CORRIDOR, 4);
-		builder.add(Entries.T_CORRIDOR_WINDOW, 5);
-		builder.add(Entries.ROOM, 1);
-		builder.add(Entries.INTERIOR_STAIRS, 4);
-		builder.add(Entries.OUTDOOR_STAIRS, 4);
+		builder.add(prototypeLookup.getOrThrow(Entries.EMPTY), 30);
+		builder.add(prototypeLookup.getOrThrow(Entries.SOLID), 10);
+		builder.add(prototypeLookup.getOrThrow(Entries.SUPPORT), 4);
+		builder.add(prototypeLookup.getOrThrow(Entries.PYRAMID_ROOF), 2);
+		builder.add(prototypeLookup.getOrThrow(Entries.SPIKE), 1);
+		builder.add(prototypeLookup.getOrThrow(Entries.BRIDGE), 3);
+		builder.add(prototypeLookup.getOrThrow(Entries.LEDGE), 2);
+		builder.add(prototypeLookup.getOrThrow(Entries.LEDGE_CORNER), 2);
+		builder.add(prototypeLookup.getOrThrow(Entries.CORRIDOR), 5);
+		builder.add(prototypeLookup.getOrThrow(Entries.CORRIDOR_WINDOW), 3);
+		builder.add(prototypeLookup.getOrThrow(Entries.TURN_CORRIDOR), 3);
+		builder.add(prototypeLookup.getOrThrow(Entries.T_CORRIDOR), 4);
+		builder.add(prototypeLookup.getOrThrow(Entries.T_CORRIDOR_WINDOW), 5);
+		builder.add(Holder.direct(new WFCData.TemplateEntryPrototype(Minestuck.id("prospit/room"), WFCData.Symmetry.ROTATABLE)), 1);
+		builder.add(prototypeLookup.getOrThrow(Entries.INTERIOR_STAIRS), 4);
+		builder.add(prototypeLookup.getOrThrow(Entries.OUTDOOR_STAIRS), 4);
 		
 		return builder.build();
 	}
 	
-	private static WFCData.EntryPalette buildOpenZonePalette(Holder<WFCData.ConnectionSet> connectionSet, StructureTemplateManager templateManager)
+	private static WFCData.EntryPalette buildOpenZonePalette(Holder<WFCData.ConnectionSet> connectionSet, HolderGetter<WFCData.EntryPrototype> prototypeLookup,
+															 StructureTemplateManager templateManager)
 	{
 		WFCData.EntriesBuilder builder = new WFCData.EntriesBuilder(PIECE_SIZE, templateManager);
 		
 		builder.add(connectionSet);
 		
-		builder.add(Entries.EMPTY, 200);
-		builder.add(Entries.SOLID, 1);
-		builder.add(Entries.SUPPORT, 8);
-		builder.add(Entries.PYRAMID_ROOF, 2);
-		builder.add(Entries.SPIKE, 1);
-		builder.add(Entries.BRIDGE, 10);
-		builder.add(Entries.LEDGE, 3);
-		builder.add(Entries.LEDGE_CORNER, 3);
-		builder.add(Entries.CORRIDOR, 1);
-		builder.add(Entries.CORRIDOR_WINDOW, 5);
-		builder.add(Entries.TURN_CORRIDOR, 3);
-		builder.add(Entries.T_CORRIDOR, 1);
-		builder.add(Entries.T_CORRIDOR_WINDOW, 5);
-		builder.add(Entries.INTERIOR_STAIRS, 2);
-		builder.add(Entries.OUTDOOR_STAIRS, 7);
+		builder.add(prototypeLookup.getOrThrow(Entries.EMPTY), 200);
+		builder.add(prototypeLookup.getOrThrow(Entries.SOLID), 1);
+		builder.add(prototypeLookup.getOrThrow(Entries.SUPPORT), 8);
+		builder.add(prototypeLookup.getOrThrow(Entries.PYRAMID_ROOF), 2);
+		builder.add(prototypeLookup.getOrThrow(Entries.SPIKE), 1);
+		builder.add(prototypeLookup.getOrThrow(Entries.BRIDGE), 10);
+		builder.add(prototypeLookup.getOrThrow(Entries.LEDGE), 3);
+		builder.add(prototypeLookup.getOrThrow(Entries.LEDGE_CORNER), 3);
+		builder.add(prototypeLookup.getOrThrow(Entries.CORRIDOR), 1);
+		builder.add(prototypeLookup.getOrThrow(Entries.CORRIDOR_WINDOW), 5);
+		builder.add(prototypeLookup.getOrThrow(Entries.TURN_CORRIDOR), 3);
+		builder.add(prototypeLookup.getOrThrow(Entries.T_CORRIDOR), 1);
+		builder.add(prototypeLookup.getOrThrow(Entries.T_CORRIDOR_WINDOW), 5);
+		builder.add(prototypeLookup.getOrThrow(Entries.INTERIOR_STAIRS), 2);
+		builder.add(prototypeLookup.getOrThrow(Entries.OUTDOOR_STAIRS), 7);
 		
 		return builder.build();
 	}
 	
-	public static WFCData.EntryPalette buildBorderPalette(Holder<WFCData.ConnectionSet> connectionSet, StructureTemplateManager templateManager)
+	public static WFCData.EntryPalette buildBorderPalette(Holder<WFCData.ConnectionSet> connectionSet, HolderGetter<WFCData.EntryPrototype> prototypeLookup,
+														  StructureTemplateManager templateManager)
 	{
 		WFCData.EntriesBuilder builder = new WFCData.EntriesBuilder(PIECE_SIZE, templateManager);
 		
 		builder.add(connectionSet);
 		
-		builder.add(Entries.EMPTY, 10);
-		builder.add(Entries.SOLID, 10);
-		builder.add(Entries.SUPPORT, 1);
-		builder.add(Entries.PYRAMID_ROOF, 3);
-		builder.add(Entries.SPIKE, 1);
-		builder.add(Entries.CORRIDOR, 3);
-		builder.add(Entries.T_CORRIDOR, 5);
-		builder.add(Entries.INTERIOR_STAIRS, 4);
+		builder.add(prototypeLookup.getOrThrow(Entries.EMPTY), 10);
+		builder.add(prototypeLookup.getOrThrow(Entries.SOLID), 10);
+		builder.add(prototypeLookup.getOrThrow(Entries.SUPPORT), 1);
+		builder.add(prototypeLookup.getOrThrow(Entries.PYRAMID_ROOF), 3);
+		builder.add(prototypeLookup.getOrThrow(Entries.SPIKE), 1);
+		builder.add(prototypeLookup.getOrThrow(Entries.CORRIDOR), 3);
+		builder.add(prototypeLookup.getOrThrow(Entries.T_CORRIDOR), 5);
+		builder.add(prototypeLookup.getOrThrow(Entries.INTERIOR_STAIRS), 4);
 		
 		return builder.build();
 	}
