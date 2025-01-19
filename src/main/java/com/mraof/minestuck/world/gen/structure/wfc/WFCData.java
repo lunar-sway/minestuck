@@ -11,9 +11,11 @@ import com.mojang.serialization.codecs.RecordCodecBuilder;
 import com.mraof.minestuck.Minestuck;
 import com.mraof.minestuck.world.gen.structure.SimpleTemplatePiece;
 import net.minecraft.core.*;
+import net.minecraft.resources.RegistryFileCodec;
 import net.minecraft.resources.ResourceKey;
 import net.minecraft.resources.ResourceLocation;
 import net.minecraft.util.StringRepresentable;
+import net.minecraft.util.random.Weight;
 import net.minecraft.util.random.WeightedEntry;
 import net.minecraft.world.level.block.Blocks;
 import net.minecraft.world.level.block.JigsawBlock;
@@ -101,10 +103,13 @@ public final class WFCData
 		void build(EntryBuilderContext context);
 	}
 	
+	private static final Codec<EntryPrototype> ENTRY_PROTOTYPE_DIRECT_CODEC = PrototypeType.CODEC.dispatch(EntryPrototype::type, type -> type.prototypeCodec);
+	private static final Codec<Holder<EntryPrototype>> ENTRY_PROTOTYPE_HOLDER_CODEC = RegistryFileCodec.create(EntryPrototype.REGISTRY_KEY, ENTRY_PROTOTYPE_DIRECT_CODEC);
+	
 	@SubscribeEvent
 	private static void onDatapackNewRegistryEvent(DataPackRegistryEvent.NewRegistry event)
 	{
-		event.dataPackRegistry(EntryPrototype.REGISTRY_KEY, PrototypeType.CODEC.dispatch(EntryPrototype::type, type -> type.prototypeCodec));
+		event.dataPackRegistry(EntryPrototype.REGISTRY_KEY, ENTRY_PROTOTYPE_DIRECT_CODEC);
 	}
 	
 	public record EmptyEntryPrototype(ConnectorType connector) implements EntryPrototype
@@ -433,7 +438,12 @@ public final class WFCData
 		
 		public void add(Holder<EntryPrototype> provider, int weight)
 		{
-			provider.value().build(new EntryBuilderContext(this.connectionsBuilder, pieceEntry -> this.pieceEntries.add(WeightedEntry.wrap(pieceEntry, weight)), this.cellSize, this.templateManager));
+			add(provider, Weight.of(weight));
+		}
+		
+		public void add(Holder<EntryPrototype> provider, Weight weight)
+		{
+			provider.value().build(new EntryBuilderContext(this.connectionsBuilder, pieceEntry -> this.pieceEntries.add(new WeightedEntry.Wrapper<>(pieceEntry, weight)), this.cellSize, this.templateManager));
 		}
 		
 		public EntryPalette build()
@@ -453,16 +463,50 @@ public final class WFCData
 	@EventBusSubscriber(modid = Minestuck.MOD_ID, bus = EventBusSubscriber.Bus.MOD)
 	public static record ConnectionSet(List<Pair<ConnectorType, ConnectorType>> connections)
 	{
+		public static final ResourceKey<Registry<ConnectionSet>> REGISTRY_KEY = ResourceKey.createRegistryKey(Minestuck.id("wfc_connection_set"));
+		
 		private static final Codec<Pair<ConnectorType, ConnectorType>> CONNECTION_CODEC = ConnectorType.CODEC.listOf(2, 2)
 				.xmap(list -> Pair.of(list.getFirst(), list.get(1)), pair -> List.of(pair.getFirst(), pair.getSecond()));
 		private static final Codec<ConnectionSet> DIRECT_CODEC = CONNECTION_CODEC.listOf().xmap(ConnectionSet::new, ConnectionSet::connections);
-		
-		public static final ResourceKey<Registry<ConnectionSet>> REGISTRY_KEY = ResourceKey.createRegistryKey(Minestuck.id("wfc_connection_set"));
+		static final Codec<Holder<ConnectionSet>> HOLDER_CODEC = RegistryFileCodec.create(REGISTRY_KEY, DIRECT_CODEC);
 		
 		@SubscribeEvent
 		private static void onDatapackNewRegistryEvent(DataPackRegistryEvent.NewRegistry event)
 		{
 			event.dataPackRegistry(REGISTRY_KEY, DIRECT_CODEC);
+		}
+	}
+	
+	@EventBusSubscriber(modid = Minestuck.MOD_ID, bus = EventBusSubscriber.Bus.MOD)
+	public static record PaletteData(Holder<ConnectionSet> connectionSet, List<WeightedEntry.Wrapper<Holder<EntryPrototype>>> entries)
+	{
+		public static final ResourceKey<Registry<PaletteData>> REGISTRY_KEY = ResourceKey.createRegistryKey(Minestuck.id("wfc_palette"));
+		
+		private static final Codec<WeightedEntry.Wrapper<Holder<EntryPrototype>>> ENTRY_CODEC = RecordCodecBuilder.create(instance -> instance.group(
+				ENTRY_PROTOTYPE_HOLDER_CODEC.fieldOf("prototype").forGetter(WeightedEntry.Wrapper::data),
+				Weight.CODEC.fieldOf("weight").forGetter(WeightedEntry.Wrapper::weight)
+		).apply(instance, WeightedEntry.Wrapper::new));
+		private static final Codec<PaletteData> DIRECT_CODEC = RecordCodecBuilder.create(instance -> instance.group(
+				ConnectionSet.HOLDER_CODEC.fieldOf("connection_set").forGetter(PaletteData::connectionSet),
+				ENTRY_CODEC.listOf().fieldOf("entries").forGetter(PaletteData::entries)
+		).apply(instance, PaletteData::new));
+		
+		@SubscribeEvent
+		private static void onDatapackNewRegistryEvent(DataPackRegistryEvent.NewRegistry event)
+		{
+			event.dataPackRegistry(REGISTRY_KEY, DIRECT_CODEC);
+		}
+		
+		public EntryPalette build(WFCUtil.CellSize cellSize, StructureTemplateManager templateManager)
+		{
+			WFCData.EntriesBuilder builder = new WFCData.EntriesBuilder(cellSize, templateManager);
+			
+			builder.add(this.connectionSet);
+			
+			for (var entry : this.entries)
+				builder.add(entry.data(), entry.getWeight());
+			
+			return builder.build();
 		}
 	}
 }

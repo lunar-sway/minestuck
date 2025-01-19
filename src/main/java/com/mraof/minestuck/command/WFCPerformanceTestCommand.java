@@ -9,7 +9,6 @@ import com.mraof.minestuck.world.gen.structure.wfc.WFCUtil;
 import net.minecraft.commands.CommandSourceStack;
 import net.minecraft.commands.Commands;
 import net.minecraft.core.BlockPos;
-import net.minecraft.core.Holder;
 import net.minecraft.core.HolderGetter;
 import net.minecraft.core.RegistryAccess;
 import net.minecraft.util.RandomSource;
@@ -75,16 +74,15 @@ public final class WFCPerformanceTestCommand
 	
 	private static void run(RegistryAccess registryAccess, StructureTemplateManager templateManager)
 	{
-		HolderGetter<WFCData.EntryPrototype> prototypeLookup = registryAccess.lookupOrThrow(WFCData.EntryPrototype.REGISTRY_KEY);
+		HolderGetter<WFCData.PaletteData> paletteLookup = registryAccess.lookupOrThrow(WFCData.PaletteData.REGISTRY_KEY);
 		
 		WFCUtil.PerformanceMeasurer performanceMeasurer = new WFCUtil.PerformanceMeasurer();
 		
 		PositionalRandomFactory randomFactory = RandomSource.create(1L).forkPositional();
-		WFCUtil.PositionTransform middleTransform = new WFCUtil.PositionTransform(BlockPos.ZERO, ProspitStructure.PIECE_SIZE);
+		WFCUtil.PositionTransform middleTransform = new WFCUtil.PositionTransform(BlockPos.ZERO, ProspitStructure.CELL_SIZE);
 		
-		Holder<WFCData.ConnectionSet> connectionSet = registryAccess.lookupOrThrow(WFCData.ConnectionSet.REGISTRY_KEY).getOrThrow(ProspitStructure.PROSPIT_CONNECTIONS);
-		WFCData.EntryPalette centerPalette = ProspitStructure.buildCenterPalette(connectionSet, prototypeLookup, templateManager);
-		WFCData.EntryPalette borderPalette = ProspitStructure.buildBorderPalette(connectionSet, prototypeLookup, templateManager);
+		WFCData.EntryPalette centerPalette = paletteLookup.getOrThrow(ProspitStructure.Palettes.NORMAL).value().build(ProspitStructure.CELL_SIZE, templateManager);
+		WFCData.EntryPalette borderPalette = paletteLookup.getOrThrow(ProspitStructure.Palettes.BORDER).value().build(ProspitStructure.CELL_SIZE, templateManager);
 		
 		WFC.InfiniteModularGeneration.generateModule(middleTransform, ProspitStructure.WFC_DIMENSIONS,
 				centerPalette, borderPalette, randomFactory, DUMMY_PIECE_ACCESSOR, performanceMeasurer);
