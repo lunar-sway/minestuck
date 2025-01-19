@@ -1,5 +1,4 @@
 {
   "type": "template",
-  "template": "minestuck:prospit/ledge",
-  "symmetry": "rotatable"
+  "template": "minestuck:prospit/ledge"
 }

@@ -1,5 +1,4 @@
 {
   "type": "template",
-  "template": "minestuck:prospit/corridor_window",
-  "symmetry": "rotatable"
+  "template": "minestuck:prospit/corridor_window"
 }

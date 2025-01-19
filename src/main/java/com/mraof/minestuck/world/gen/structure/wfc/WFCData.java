@@ -158,7 +158,7 @@ public final class WFCData
 	{
 		public static final MapCodec<TemplateEntryPrototype> CODEC = RecordCodecBuilder.mapCodec(instance -> instance.group(
 				ResourceLocation.CODEC.fieldOf("template").forGetter(TemplateEntryPrototype::templateId),
-				Symmetry.CODEC.fieldOf("symmetry").forGetter(TemplateEntryPrototype::symmetry)
+				Symmetry.CODEC.optionalFieldOf("symmetry", Symmetry.ROTATABLE).forGetter(TemplateEntryPrototype::symmetry)
 		).apply(instance, TemplateEntryPrototype::new));
 		
 		@Override
