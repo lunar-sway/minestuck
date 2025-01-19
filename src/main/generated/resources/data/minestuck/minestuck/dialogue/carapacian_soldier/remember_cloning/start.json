@@ -1,0 +1,37 @@
+{
+  "node": {
+    "animation": {
+      "emotion": "anxious"
+    },
+    "gui": "minestuck:textures/gui/dialogue/dialogue.png",
+    "messages": [
+      {
+        "type": "entity",
+        "message": "minestuck.dots"
+      },
+      {
+        "type": "description",
+        "message": "minestuck.dialogue.carapacian_soldier.remember_cloning.start"
+      }
+    ],
+    "responses": [
+      {
+        "condition": {
+          "type": "minestuck:always_true"
+        },
+        "hide_if_failed": true,
+        "message": "minestuck.dialogue.carapacian_soldier.remember_cloning.start.go_where",
+        "next_dialogue": "minestuck:carapacian_soldier/remember_cloning/veil.1",
+        "triggers": []
+      },
+      {
+        "condition": {
+          "type": "minestuck:always_true"
+        },
+        "hide_if_failed": true,
+        "message": "minestuck.dialogue.carapacian_soldier.remember_cloning.start.bye",
+        "triggers": []
+      }
+    ]
+  }
+}
