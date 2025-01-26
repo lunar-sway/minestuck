@@ -30,6 +30,7 @@ import com.mraof.minestuck.item.MSItems;
 import com.mraof.minestuck.item.components.MSItemComponents;
 import com.mraof.minestuck.item.crafting.MSRecipeTypes;
 import com.mraof.minestuck.item.loot.MSLootTables;
+import com.mraof.minestuck.player.EcheladderExpSources;
 import com.mraof.minestuck.player.KindAbstratusList;
 import com.mraof.minestuck.util.MSAttachments;
 import com.mraof.minestuck.util.MSParticleType;
@@ -99,6 +100,8 @@ public class Minestuck
 		ModusTypes.REGISTER.register(eventBus);
 		Conditions.REGISTER.register(eventBus);
 		Triggers.REGISTER.register(eventBus);
+		
+		EcheladderExpSources.REGISTER.register(eventBus);
 		
 		MSFeatures.REGISTER.register(eventBus);
 		

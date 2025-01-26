@@ -76,24 +76,6 @@ public class ServerEventHandler
 	@SubscribeEvent(priority=EventPriority.LOWEST, receiveCanceled=false)
 	public static void onEntityDeath(LivingDeathEvent event)
 	{
-		if(event.getEntity() instanceof Enemy && event.getSource().getEntity() instanceof ServerPlayer player)
-		{
-			if(!(player instanceof FakePlayer))
-			{
-				int exp = 0;
-				if(event.getEntity() instanceof Zombie || event.getEntity() instanceof Skeleton)
-					exp = 1;
-				else if(event.getEntity() instanceof Creeper || event.getEntity() instanceof Spider || event.getEntity() instanceof Silverfish)
-					exp = 2;
-				else if(event.getEntity() instanceof EnderMan || event.getEntity() instanceof Blaze || event.getEntity() instanceof Witch || event.getEntity() instanceof Guardian)
-					exp = 3;
-				else if(event.getEntity() instanceof Slime)
-					exp = Math.min(((Slime) event.getEntity()).getSize() - 1, 9);
-				
-				if(exp > 0)
-					Echeladder.get(player).increaseProgress(exp);
-			}
-		}
 		if(event.getEntity() instanceof ServerPlayer)
 		{
 			TitleSelectionHook.cancelSelection((ServerPlayer) event.getEntity());

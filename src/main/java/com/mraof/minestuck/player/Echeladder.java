@@ -20,6 +20,7 @@ import net.minecraft.server.MinecraftServer;
 import net.minecraft.server.level.ServerPlayer;
 import net.minecraft.sounds.SoundSource;
 import net.minecraft.util.Mth;
+import net.minecraft.util.RandomSource;
 import net.minecraft.world.entity.ai.attributes.AttributeInstance;
 import net.minecraft.world.entity.ai.attributes.AttributeModifier;
 import net.minecraft.world.entity.ai.attributes.Attributes;
@@ -49,10 +50,10 @@ public final class Echeladder implements INBTSerializable<CompoundTag>
 	private static final int[] BOONDOLLARS = new int[]{0, 50, 75, 105, 140, 170, 200, 250, 320, 425, 575, 790, 1140, 1630, 2230, 2980, 3850, 4800, 6000, 7500, 9500, 11900, 15200, 19300, 24400, 45000, 68000, 95500, 124000, 180000, 260000, 425000, 632000, 880000, 1000000};
 	
 	private static final long[] GRIST_CAPACITY =
-			{60, 75, 93, 116, 145, 181, 226, 282, 352, 440, 550, 687, 858, 1072, 1340, 1675, 2093, 2616, 3270, 4087, 
-			5108, 6385, 7981, 9976, 12470, 15587, 19483, 24353, 30441, 38051, 47563, 59453, 74316, 92895, 116118, 
-			145147, 181433, 226791, 283488, 354360, 442950, 553687, 692108, 865135, 1081418, 1351772, 1689715, 2112143, 2640178, 3300222};
-			//each value is achieved by multiplying the previous by 1.25 and then rounding the result down to get an integer number
+			{60, 75, 93, 116, 145, 181, 226, 282, 352, 440, 550, 687, 858, 1072, 1340, 1675, 2093, 2616, 3270, 4087,
+					5108, 6385, 7981, 9976, 12470, 15587, 19483, 24353, 30441, 38051, 47563, 59453, 74316, 92895, 116118,
+					145147, 181433, 226791, 283488, 354360, 442950, 553687, 692108, 865135, 1081418, 1351772, 1689715, 2112143, 2640178, 3300222};
+	//each value is achieved by multiplying the previous by 1.25 and then rounding the result down to get an integer number
 	
 	public static Echeladder get(PlayerIdentifier player, Level level)
 	{
@@ -107,10 +108,10 @@ public final class Echeladder implements INBTSerializable<CompoundTag>
 		return 15 * rung + 10;
 	}
 	
-	public void increaseProgress(int exp)
+	public void increaseProgress(double exp)
 	{
 		//for each rung, the experience is divided and approaches 0(at infinity). That means there is a certain rung for each experience amount where it becomes less than one and no longer capable of contributing
-		exp = (int) ((exp / (rung + 1) * 2) + .5D);
+		exp = (exp / (rung + 1) * 2) + .5D;
 		boolean hasEntered = SburbPlayerData.get(identifier, mcServer).hasEntered();
 		int topRung = hasEntered ? RUNG_COUNT - 1 : MinestuckConfig.SERVER.preEntryRungLimit.get();
 		int expReq = getRungProgressReq();
@@ -119,7 +120,6 @@ public final class Echeladder implements INBTSerializable<CompoundTag>
 			return;
 		
 		int prevRung = rung;
-		int prevExp = exp;
 		LOGGER.debug("Adding {} exp(modified) to player {}'s echeladder (previously at rung {} progress {}/{})", exp, identifier.getUsername(), rung, progress, expReq);
 		long boondollarsGained = 0;
 		
@@ -140,10 +140,18 @@ public final class Echeladder implements INBTSerializable<CompoundTag>
 			}
 			if(exp >= 1)
 			{
-				progress += exp;
+				progress += (int) exp;
 				LOGGER.debug("Added remainder exp to progress, which is now at {}", progress);
 			} else
-				LOGGER.debug("Remaining exp {} is below 1, and will therefore be ignored", exp);
+			{
+				int bound = (int) (1 / exp);
+				if(RandomSource.create().nextInt(bound) == 1) //there is a 1 in 1/exp chance that progress will be iterated
+				{
+					progress++;
+					LOGGER.debug("Remaining exp {} is below 1, added 1 exp to progress with 1 in {} chance", exp, bound);
+				} else
+					LOGGER.debug("Remaining exp {} is below 1, failed to add 1 exp to progress with 1 in {} chance", exp, bound);
+			}
 		}
 		
 		PlayerBoondollars.addBoondollars(PlayerData.get(identifier, mcServer), boondollarsGained);
@@ -171,9 +179,9 @@ public final class Echeladder implements INBTSerializable<CompoundTag>
 	
 	/**
 	 * Check if the bonus has already been given to the player, give it if it hasn't.
+	 *
 	 * @param type
 	 */
-	
 	public void checkBonus(EcheladderBonusType type)
 	{
 		if(!usedBonuses.contains(type))

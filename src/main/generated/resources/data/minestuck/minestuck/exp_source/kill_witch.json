@@ -1,0 +1,5 @@
+{
+  "type": "minestuck:kill_entity",
+  "amount": 3,
+  "entity_type": "minecraft:witch"
+}
