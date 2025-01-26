@@ -8,6 +8,7 @@ import net.minecraft.MethodsReturnNonnullByDefault;
 import net.minecraft.data.CachedOutput;
 import net.minecraft.data.DataProvider;
 import net.minecraft.data.PackOutput;
+import net.minecraft.resources.ResourceLocation;
 import net.minecraft.tags.EntityTypeTags;
 import net.minecraft.tags.TagKey;
 import net.minecraft.world.entity.EntityType;
@@ -62,6 +63,11 @@ public class EcheladderExpSourceProvider implements DataProvider
 		add(EntityType.WARDEN, 200);
 		add(EntityType.WITHER, 300);
 		add(EntityType.ENDER_DRAGON, 400);
+		
+		add(Minestuck.MOD_ID, MSAdvancementProvider.LEGENDARY_WEAPON, 400);
+		add("minecraft", "husbandry/obtain_netherite_hoe", 300);
+		add("minecraft", "story/enter_the_nether", 200);
+		add("minecraft", "story/enter_the_end", 800);
 	}
 	
 	private void add(EntityType<?> entityType, int amount)
@@ -72,6 +78,12 @@ public class EcheladderExpSourceProvider implements DataProvider
 	private void add(TagKey<EntityType<?>> entityTypeTag, int amount)
 	{
 		expSources.put("kill_" + entityTypeTag.location().getPath(), new EcheladderExpSource.KillEntityTag(entityTypeTag, amount));
+	}
+	
+	private void add(String namespace, String name, int amount)
+	{
+		name = name.replace(".", "/");
+		expSources.put("advancement_" + name.replace("/", "_"), new EcheladderExpSource.AdvancementEarned(ResourceLocation.fromNamespaceAndPath(namespace, name), amount));
 	}
 	
 	@Override
