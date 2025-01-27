@@ -38,7 +38,6 @@ public class EcheladderScreen extends PlayerStatsScreen
 	
 	private static final ResourceLocation guiEcheladder = ResourceLocation.fromNamespaceAndPath("minestuck", "textures/gui/echeladder.png");
 	
-	private static final int MAX_SCROLL = Rungs.RUNG_COUNT * 14 - 154;
 														//0			1			2			3			4			5			6			7			8			9			10			11			12			13			14			15			16			17			18			19			20			21			22			23			24			25			26			27			28			29			30			31			32			33			34			35			36			37			38			39			40			41			42			43			44			45			46			47			48			49
 	private static final int[] backgrounds = new int[] {0xFF4FD400, 0xFFFF0000, 0xFF956C4C, 0xFF7DB037, 0xFFD8A600, 0xFF7F0000, 0xFF007F0E, 0xFF808080, 0xFF00FF21, 0xFF4800FF, 0xFF404040, 0xFFE4FF00, 0xFFDFBB6C, 0xFFCECECE, 0xFFFF0000, 0xFFC68E4D, 0xFF60E554, 0xFF88CE88, 0xFF006EBC, 0xFFF12B26, 0xFFC11000, 0xFFBA8B34, 0xFF5134A8, 0xFF92CC00, 0xFF93613B, 0xFF111121, 0xFFD61B28, 0xFFEF8181, 0xFFED5C1A, 0xFFDBDBDB, 0xFFEFC300, 0xFF3529A5, 0xFF634021, 0xFFBCBCBC, 0xFFBA1500, 0xFF42A3B5, 0xFF3C6354, 0xFFC4B681, 0xFF969696, 0xFF6B6B6B, 0xFFAD1BA3, 0xFF0021FF, 0xFF000000, 0xFF294F9B, 0xFFADA87B, 0xFF439E35, 0xFF8E583E, 0xFF606060, 0xFFDDC852, 0xFFFFFFFF};
 	private static final int[] textColors  = new int[] {  0xFDFF2B,   0x404040,   0xB6FF00,   0x775716,   0xFFFFFF,   0xFF6A00,   0x0094FF,   0x3F3F3F,   0x007F7F,   0xB200FF,   0x7B9CB5,   0x6D9A00,   0x219621,   0x7F743F,   0xFF7F7F,   0xAF0A8C,   0x2A9659,   0xFFD8F2,   0xFFFFFF,   0xDAFF7F,   0x3459BC,   0xDFE868,   0x2AA3D3,   0x4C4C4C,   0x00D318,   0x6F22A5,   0xC4AA29,   0x237C00,   0x2D2D2D,   0xFF6721,   0x8487E0,   0x000000,   0xADADAD,   0xE24400,   0xE27609,   0x0A08A0,   0xC6A623,   0x38C151,   0xF9A640,   0x368E4A,   0xFFFFFF,   0x00A1C1,   0x6B699E,   0x2D2D2D,   0x18117A,   0xFF9028,   0x1F7C8E,   0xE25012,   0x9721E0,   0x000000};
@@ -48,6 +47,7 @@ public class EcheladderScreen extends PlayerStatsScreen
 	
 	private static final int timeBeforeAnimation = 10, timeBeforeNext = 16, timeForRung = 4, timeForShowOnly = 65;
 	
+	private final int maxScroll;
 	private int scrollIndex;
 	private boolean isScrolling;
 	
@@ -62,13 +62,15 @@ public class EcheladderScreen extends PlayerStatsScreen
 		super(Component.translatable(TITLE));
 		guiWidth = 250;
 		guiHeight = 202;
+		
+		maxScroll = (Rungs.finalRung() + 1) * 14 - 154;
 	}
 	
 	@Override
 	public void init()
 	{
 		super.init();
-		scrollIndex = Mth.clamp((ClientPlayerData.getRung() - 8)*14, 0, MAX_SCROLL);
+		scrollIndex = Mth.clamp((ClientPlayerData.getRung() - 8) * 14, 0, maxScroll);
 		animatedRung = Math.max(animatedRung, lastRung);	//If you gain a rung while the gui is open, the animated rung might get higher than the lastRung. Otherwise they're always the same value.
 		fromRung = lastRung;
 		lastRung = ClientPlayerData.getRung();
@@ -106,7 +108,6 @@ public class EcheladderScreen extends PlayerStatsScreen
 						showLastRung = (animationCycle/speedFactor + timeBeforeNext)%(timeForRung + timeBeforeNext) - timeBeforeNext >= timeForRung/2;
 				} else	//The animation type where the animation just goes through all rungs
 				{
-					currentRung = animatedRung;
 					int rung = animationCycle*animatedRungs/(timeForShowOnly*speedFactor) + 1;
 					currentRung = animatedRung - rung;
 				}
@@ -123,7 +124,7 @@ public class EcheladderScreen extends PlayerStatsScreen
 		
 		guiGraphics.blit(guiEcheladder, xOffset, yOffset, 0, 0, guiWidth, guiHeight);
 		
-		guiGraphics.blit(guiEcheladder, xOffset + 80, yOffset + 42 + (int) (130*(1 - scrollIndex/(float) MAX_SCROLL)), 0, 243, 7, 13);
+		guiGraphics.blit(guiEcheladder, xOffset + 80, yOffset + 42 + (int) (130*(1 - scrollIndex/(float) maxScroll)), 0, 243, 7, 13);
 		
 		List<Component> tooltip = drawEffectIconsAndText(guiGraphics, currentRung, mouseX, mouseY);
 		
@@ -162,7 +163,7 @@ public class EcheladderScreen extends PlayerStatsScreen
 		{
 			int y = yOffset + 177 + scroll - i*14;
 			int rung = scrollIndex/14 + i;
-			if(rung > Rungs.RUNG_COUNT)
+			if(rung > (Rungs.finalRung() + 1))
 				break;
 			
 			int textColor = 0xFFFFFF;
@@ -275,8 +276,8 @@ public class EcheladderScreen extends PlayerStatsScreen
 	{
 		if(isScrolling)
 		{
-			scrollIndex = (int) (MAX_SCROLL*(ycor - yOffset - 179)/-130F);
-			scrollIndex = Mth.clamp(scrollIndex, 0, MAX_SCROLL);
+			scrollIndex = (int) (maxScroll *(ycor - yOffset - 179)/-130F);
+			scrollIndex = Mth.clamp(scrollIndex, 0, maxScroll);
 		}
 		
 		if(animationCycle > 0)
@@ -311,7 +312,7 @@ public class EcheladderScreen extends PlayerStatsScreen
 			if(scrollY > 0)
 				scrollIndex += 14;
 			else scrollIndex -= 14;
-			scrollIndex = Mth.clamp(scrollIndex, 0, MAX_SCROLL);
+			scrollIndex = Mth.clamp(scrollIndex, 0, maxScroll);
 			return true;
 		}
 		else return super.mouseScrolled(mouseX, mouseY, scrollX, scrollY);
@@ -324,12 +325,12 @@ public class EcheladderScreen extends PlayerStatsScreen
 		{
 			if(ycor >= yOffset + 35 && ycor < yOffset + 42)
 			{
-				scrollIndex = Mth.clamp(scrollIndex + 14, 0, MAX_SCROLL);
+				scrollIndex = Mth.clamp(scrollIndex + 14, 0, maxScroll);
 				isScrolling = true;
 				return true;
 			} else if(ycor >= yOffset + 185 && ycor < yOffset + 192)
 			{
-				scrollIndex = Mth.clamp(scrollIndex - 14, 0, MAX_SCROLL);
+				scrollIndex = Mth.clamp(scrollIndex - 14, 0, maxScroll);
 				isScrolling = true;
 				return true;
 			}

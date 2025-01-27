@@ -97,8 +97,8 @@ public final class Echeladder implements INBTSerializable<CompoundTag>
 	
 	public void increaseProgress(double exp)
 	{
-		//for each rung, the experience is divided and approaches 0(at infinity). That means there is a certain rung for each experience amount where it becomes less than one and no longer capable of contributing
-		exp = (exp / (rung + 1) * 2) + .5D;
+		//for each rung, the experience is divided and approaches 0. If exp is smaller than 1, there is only a percent chance of contribution
+		exp = (exp / (rung + 1) * 2);
 		boolean hasEntered = SburbPlayerData.get(identifier, mcServer).hasEntered();
 		int topRung = hasEntered ? Rungs.finalRung() : MinestuckConfig.SERVER.preEntryRungLimit.get();
 		long expReq = Rungs.getProgressReq(rung);
@@ -131,8 +131,8 @@ public final class Echeladder implements INBTSerializable<CompoundTag>
 				LOGGER.debug("Added remainder exp to progress, which is now at {}", progress);
 			} else
 			{
-				int bound = (int) (1 / exp);
-				if(RandomSource.create().nextInt(bound) == 1) //there is a 1 in 1/exp chance that progress will be iterated
+				int bound = (int) (2 / exp);
+				if(RandomSource.create().nextInt(bound) == 1) //there is a 1 in 2/exp chance that progress will be iterated
 				{
 					progress++;
 					LOGGER.debug("Remaining exp {} is below 1, added 1 exp to progress with 1 in {} chance", exp, bound);

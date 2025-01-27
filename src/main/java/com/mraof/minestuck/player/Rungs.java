@@ -32,7 +32,6 @@ public class Rungs
 	private static final Logger LOGGER = LogManager.getLogger();
 	public static final String PATH = "minestuck/config/rungs.json";
 	
-	public static final int RUNG_COUNT = 50;
 	private static final List<Rung> RUNGS = new ArrayList<>(); //sorted upon creation
 	
 	public static long getGristCapacity(int rung)
@@ -73,7 +72,7 @@ public class Rungs
 	
 	public static int finalRung()
 	{
-		return RUNG_COUNT - 1;
+		return RUNGS.size() - 1;
 	}
 	
 	public List<Rung> getRungs()

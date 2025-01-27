@@ -49,7 +49,7 @@ public class RungCommand
 	{
 		return Commands.literal("set")
 				.then(Commands.argument("target", EntityArgument.players())
-						.then(Commands.argument("rung", IntegerArgumentType.integer(0, Rungs.finalRung()))
+						.then(Commands.argument("rung", IntegerArgumentType.integer(0, Integer.MAX_VALUE)) //TODO provide new validation after world load
 								.executes(context ->
 										setRung(context, EntityArgument.getPlayers(context, "target"),
 												IntegerArgumentType.getInteger(context, "rung"), 0)
