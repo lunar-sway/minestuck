@@ -33,7 +33,7 @@ import net.neoforged.neoforge.network.PacketDistributor;
 import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.Logger;
 
-import java.util.EnumSet;
+import java.util.*;
 
 @MethodsReturnNonnullByDefault
 @EventBusSubscriber(modid = Minestuck.MOD_ID, bus = EventBusSubscriber.Bus.GAME)
@@ -43,17 +43,9 @@ public final class Echeladder implements INBTSerializable<CompoundTag>
 	
 	public static final String NEW_RUNG = "echeladder.new_rung";
 	
-	public static final int RUNG_COUNT = 50;
-	
 	private static final ResourceLocation echeladderHealthBoostModifierID = Minestuck.id("echeladder_health_boost");    //TODO Might be so that only one is needed, as we only add one modifier for each attribute.
 	private static final ResourceLocation echeladderDamageBoostModifierID = Minestuck.id("echeladder_damage_boost");
-	private static final int[] BOONDOLLARS = new int[]{0, 50, 75, 105, 140, 170, 200, 250, 320, 425, 575, 790, 1140, 1630, 2230, 2980, 3850, 4800, 6000, 7500, 9500, 11900, 15200, 19300, 24400, 45000, 68000, 95500, 124000, 180000, 260000, 425000, 632000, 880000, 1000000};
 	
-	private static final long[] GRIST_CAPACITY =
-			{60, 75, 93, 116, 145, 181, 226, 282, 352, 440, 550, 687, 858, 1072, 1340, 1675, 2093, 2616, 3270, 4087,
-					5108, 6385, 7981, 9976, 12470, 15587, 19483, 24353, 30441, 38051, 47563, 59453, 74316, 92895, 116118,
-					145147, 181433, 226791, 283488, 354360, 442950, 553687, 692108, 865135, 1081418, 1351772, 1689715, 2112143, 2640178, 3300222};
-	//each value is achieved by multiplying the previous by 1.25 and then rounding the result down to get an integer number
 	
 	public static Echeladder get(PlayerIdentifier player, Level level)
 	{
@@ -103,18 +95,13 @@ public final class Echeladder implements INBTSerializable<CompoundTag>
 		this.identifier = playerData.identifier;
 	}
 	
-	private int getRungProgressReq()
-	{
-		return 15 * rung + 10;
-	}
-	
 	public void increaseProgress(double exp)
 	{
 		//for each rung, the experience is divided and approaches 0(at infinity). That means there is a certain rung for each experience amount where it becomes less than one and no longer capable of contributing
 		exp = (exp / (rung + 1) * 2) + .5D;
 		boolean hasEntered = SburbPlayerData.get(identifier, mcServer).hasEntered();
-		int topRung = hasEntered ? RUNG_COUNT - 1 : MinestuckConfig.SERVER.preEntryRungLimit.get();
-		int expReq = getRungProgressReq();
+		int topRung = hasEntered ? Rungs.finalRung() : MinestuckConfig.SERVER.preEntryRungLimit.get();
+		long expReq = Rungs.getProgressReq(rung);
 		
 		if(rung >= topRung)
 			return;
@@ -128,10 +115,10 @@ public final class Echeladder implements INBTSerializable<CompoundTag>
 			while(progress + exp >= expReq)
 			{
 				rung++;
-				boondollarsGained += BOONDOLLARS[Math.min(rung, BOONDOLLARS.length - 1)];
+				boondollarsGained += Rungs.getBoondollarsGained(rung);
 				exp -= (expReq - progress);
 				progress = 0;
-				expReq = getRungProgressReq();
+				expReq = Rungs.getProgressReq(rung);
 				if(rung >= topRung)
 					break increment;
 				if(rung > prevRung + 1)
@@ -198,7 +185,7 @@ public final class Echeladder implements INBTSerializable<CompoundTag>
 	
 	public float getProgress()
 	{
-		return ((float) progress) / getRungProgressReq();
+		return ((float) progress) / Rungs.getProgressReq(rung);
 	}
 	
 	public double getUnderlingDamageModifier()
@@ -260,7 +247,7 @@ public final class Echeladder implements INBTSerializable<CompoundTag>
 	
 	public static int healthBoost(int rung)
 	{
-		return (int) (40 * (rung / (float) (Echeladder.RUNG_COUNT - 1)));    //At max rung, the player will have three rows of hearts
+		return (int) (40 * (rung / (float) (Rungs.finalRung())));    //At max rung, the player will have three rows of hearts
 	}
 	
 	public static double getUnderlingDamageModifier(int rung)
@@ -273,14 +260,9 @@ public final class Echeladder implements INBTSerializable<CompoundTag>
 		return 1 / (rung * 0.06D + 1);
 	}
 	
-	public static long getGristCapacity(int rung)
-	{
-		return GRIST_CAPACITY[rung];
-	}
-	
 	public long getGristCapacity()
 	{
-		return getGristCapacity(this.rung);
+		return Rungs.getGristCapacity(this.rung);
 	}
 	
 	public void setByCommand(int rung, double progress)
@@ -288,12 +270,13 @@ public final class Echeladder implements INBTSerializable<CompoundTag>
 		int prevRung = this.rung;
 		int prevProgress = this.progress;
 		
-		this.rung = Mth.clamp(rung, 0, RUNG_COUNT - 1);
+		this.rung = Mth.clamp(rung, 0, Rungs.finalRung());
 		
-		if(rung != RUNG_COUNT - 1)
+		if(rung != Rungs.finalRung())
 		{
-			this.progress = (int) (getRungProgressReq() * progress);
-			if(this.progress >= getRungProgressReq())
+			long progressReq = Rungs.getProgressReq(rung);
+			this.progress = (int) (progressReq * progress);
+			if(this.progress >= progressReq)
 				this.progress--;
 		} else this.progress = 0;
 		

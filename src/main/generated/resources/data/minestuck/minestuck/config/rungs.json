@@ -1,0 +1,539 @@
+[
+  {
+    "aspect_effects": [],
+    "boondollars": 0,
+    "exp_requirement": 10,
+    "grist_capacity": 60,
+    "rung": 0
+  },
+  {
+    "aspect_effects": [],
+    "boondollars": 50,
+    "exp_requirement": 25,
+    "grist_capacity": 75,
+    "rung": 1
+  },
+  {
+    "aspect_effects": [],
+    "boondollars": 75,
+    "exp_requirement": 40,
+    "grist_capacity": 93,
+    "rung": 2
+  },
+  {
+    "aspect_effects": [],
+    "boondollars": 105,
+    "exp_requirement": 55,
+    "grist_capacity": 116,
+    "rung": 3
+  },
+  {
+    "aspect_effects": [],
+    "boondollars": 140,
+    "exp_requirement": 70,
+    "grist_capacity": 145,
+    "rung": 4
+  },
+  {
+    "aspect_effects": [],
+    "boondollars": 170,
+    "exp_requirement": 85,
+    "grist_capacity": 181,
+    "rung": 5
+  },
+  {
+    "aspect_effects": [],
+    "boondollars": 200,
+    "exp_requirement": 100,
+    "grist_capacity": 226,
+    "rung": 6
+  },
+  {
+    "aspect_effects": [],
+    "boondollars": 250,
+    "exp_requirement": 115,
+    "grist_capacity": 282,
+    "rung": 7
+  },
+  {
+    "aspect_effects": [],
+    "boondollars": 320,
+    "exp_requirement": 130,
+    "grist_capacity": 352,
+    "rung": 8
+  },
+  {
+    "aspect_effects": [],
+    "boondollars": 425,
+    "exp_requirement": 145,
+    "grist_capacity": 440,
+    "rung": 9
+  },
+  {
+    "aspect_effects": [
+      {
+        "amplifier": 0,
+        "aspect": "light",
+        "effect": "minecraft:luck"
+      },
+      {
+        "amplifier": 0,
+        "aspect": "space",
+        "effect": "minecraft:jump_boost"
+      }
+    ],
+    "boondollars": 575,
+    "exp_requirement": 160,
+    "grist_capacity": 550,
+    "rung": 10
+  },
+  {
+    "aspect_effects": [],
+    "boondollars": 790,
+    "exp_requirement": 175,
+    "grist_capacity": 687,
+    "rung": 11
+  },
+  {
+    "aspect_effects": [
+      {
+        "amplifier": 0,
+        "aspect": "mind",
+        "effect": "minecraft:night_vision"
+      },
+      {
+        "amplifier": 0,
+        "aspect": "void",
+        "effect": "minecraft:invisibility"
+      }
+    ],
+    "boondollars": 1140,
+    "exp_requirement": 190,
+    "grist_capacity": 858,
+    "rung": 12
+  },
+  {
+    "aspect_effects": [
+      {
+        "amplifier": 0,
+        "aspect": "time",
+        "effect": "minecraft:haste"
+      }
+    ],
+    "boondollars": 1630,
+    "exp_requirement": 205,
+    "grist_capacity": 1072,
+    "rung": 13
+  },
+  {
+    "aspect_effects": [
+      {
+        "amplifier": 0,
+        "aspect": "blood",
+        "effect": "minecraft:absorption"
+      },
+      {
+        "amplifier": 0,
+        "aspect": "heart",
+        "effect": "minecraft:absorption"
+      }
+    ],
+    "boondollars": 2230,
+    "exp_requirement": 220,
+    "grist_capacity": 1340,
+    "rung": 14
+  },
+  {
+    "aspect_effects": [
+      {
+        "amplifier": 0,
+        "aspect": "breath",
+        "effect": "minecraft:speed"
+      }
+    ],
+    "boondollars": 2980,
+    "exp_requirement": 235,
+    "grist_capacity": 1675,
+    "rung": 15
+  },
+  {
+    "aspect_effects": [],
+    "boondollars": 3850,
+    "exp_requirement": 250,
+    "grist_capacity": 2093,
+    "rung": 16
+  },
+  {
+    "aspect_effects": [],
+    "boondollars": 4800,
+    "exp_requirement": 265,
+    "grist_capacity": 2616,
+    "rung": 17
+  },
+  {
+    "aspect_effects": [
+      {
+        "amplifier": 0,
+        "aspect": "hope",
+        "effect": "minecraft:fire_resistance"
+      }
+    ],
+    "boondollars": 6000,
+    "exp_requirement": 280,
+    "grist_capacity": 3270,
+    "rung": 18
+  },
+  {
+    "aspect_effects": [],
+    "boondollars": 7500,
+    "exp_requirement": 295,
+    "grist_capacity": 4087,
+    "rung": 19
+  },
+  {
+    "aspect_effects": [
+      {
+        "amplifier": 0,
+        "aspect": "life",
+        "effect": "minecraft:regeneration"
+      },
+      {
+        "amplifier": 1,
+        "aspect": "light",
+        "effect": "minecraft:luck"
+      },
+      {
+        "amplifier": 1,
+        "aspect": "space",
+        "effect": "minecraft:jump_boost"
+      }
+    ],
+    "boondollars": 9500,
+    "exp_requirement": 310,
+    "grist_capacity": 5108,
+    "rung": 20
+  },
+  {
+    "aspect_effects": [],
+    "boondollars": 11900,
+    "exp_requirement": 325,
+    "grist_capacity": 6385,
+    "rung": 21
+  },
+  {
+    "aspect_effects": [],
+    "boondollars": 15200,
+    "exp_requirement": 340,
+    "grist_capacity": 7981,
+    "rung": 22
+  },
+  {
+    "aspect_effects": [],
+    "boondollars": 19300,
+    "exp_requirement": 355,
+    "grist_capacity": 9976,
+    "rung": 23
+  },
+  {
+    "aspect_effects": [
+      {
+        "amplifier": 1,
+        "aspect": "mind",
+        "effect": "minecraft:night_vision"
+      },
+      {
+        "amplifier": 1,
+        "aspect": "void",
+        "effect": "minecraft:invisibility"
+      }
+    ],
+    "boondollars": 24400,
+    "exp_requirement": 370,
+    "grist_capacity": 12470,
+    "rung": 24
+  },
+  {
+    "aspect_effects": [
+      {
+        "amplifier": 0,
+        "aspect": "hope",
+        "effect": "minecraft:water_breathing"
+      },
+      {
+        "amplifier": 0,
+        "aspect": "rage",
+        "effect": "minecraft:strength"
+      }
+    ],
+    "boondollars": 45000,
+    "exp_requirement": 385,
+    "grist_capacity": 15587,
+    "rung": 25
+  },
+  {
+    "aspect_effects": [
+      {
+        "amplifier": 1,
+        "aspect": "time",
+        "effect": "minecraft:haste"
+      }
+    ],
+    "boondollars": 68000,
+    "exp_requirement": 400,
+    "grist_capacity": 19483,
+    "rung": 26
+  },
+  {
+    "aspect_effects": [],
+    "boondollars": 95500,
+    "exp_requirement": 415,
+    "grist_capacity": 24353,
+    "rung": 27
+  },
+  {
+    "aspect_effects": [
+      {
+        "amplifier": 1,
+        "aspect": "blood",
+        "effect": "minecraft:absorption"
+      },
+      {
+        "amplifier": 0,
+        "aspect": "doom",
+        "effect": "minecraft:resistance"
+      },
+      {
+        "amplifier": 0,
+        "aspect": "heart",
+        "effect": "minecraft:absorption"
+      }
+    ],
+    "boondollars": 124000,
+    "exp_requirement": 430,
+    "grist_capacity": 30441,
+    "rung": 28
+  },
+  {
+    "aspect_effects": [],
+    "boondollars": 180000,
+    "exp_requirement": 445,
+    "grist_capacity": 38051,
+    "rung": 29
+  },
+  {
+    "aspect_effects": [
+      {
+        "amplifier": 1,
+        "aspect": "breath",
+        "effect": "minecraft:speed"
+      },
+      {
+        "amplifier": 2,
+        "aspect": "light",
+        "effect": "minecraft:luck"
+      },
+      {
+        "amplifier": 2,
+        "aspect": "space",
+        "effect": "minecraft:jump_boost"
+      }
+    ],
+    "boondollars": 260000,
+    "exp_requirement": 460,
+    "grist_capacity": 47563,
+    "rung": 30
+  },
+  {
+    "aspect_effects": [],
+    "boondollars": 425000,
+    "exp_requirement": 475,
+    "grist_capacity": 59453,
+    "rung": 31
+  },
+  {
+    "aspect_effects": [],
+    "boondollars": 632000,
+    "exp_requirement": 490,
+    "grist_capacity": 74316,
+    "rung": 32
+  },
+  {
+    "aspect_effects": [],
+    "boondollars": 880000,
+    "exp_requirement": 505,
+    "grist_capacity": 92895,
+    "rung": 33
+  },
+  {
+    "aspect_effects": [],
+    "boondollars": 1000000,
+    "exp_requirement": 520,
+    "grist_capacity": 116118,
+    "rung": 34
+  },
+  {
+    "aspect_effects": [],
+    "boondollars": 1000000,
+    "exp_requirement": 535,
+    "grist_capacity": 145147,
+    "rung": 35
+  },
+  {
+    "aspect_effects": [
+      {
+        "amplifier": 1,
+        "aspect": "hope",
+        "effect": "minecraft:fire_resistance"
+      },
+      {
+        "amplifier": 2,
+        "aspect": "mind",
+        "effect": "minecraft:night_vision"
+      },
+      {
+        "amplifier": 2,
+        "aspect": "void",
+        "effect": "minecraft:invisibility"
+      }
+    ],
+    "boondollars": 1000000,
+    "exp_requirement": 550,
+    "grist_capacity": 181433,
+    "rung": 36
+  },
+  {
+    "aspect_effects": [],
+    "boondollars": 1000000,
+    "exp_requirement": 565,
+    "grist_capacity": 226791,
+    "rung": 37
+  },
+  {
+    "aspect_effects": [],
+    "boondollars": 1000000,
+    "exp_requirement": 580,
+    "grist_capacity": 283488,
+    "rung": 38
+  },
+  {
+    "aspect_effects": [],
+    "boondollars": 1000000,
+    "exp_requirement": 595,
+    "grist_capacity": 354360,
+    "rung": 39
+  },
+  {
+    "aspect_effects": [
+      {
+        "amplifier": 1,
+        "aspect": "life",
+        "effect": "minecraft:regeneration"
+      },
+      {
+        "amplifier": 3,
+        "aspect": "light",
+        "effect": "minecraft:luck"
+      },
+      {
+        "amplifier": 3,
+        "aspect": "space",
+        "effect": "minecraft:jump_boost"
+      }
+    ],
+    "boondollars": 1000000,
+    "exp_requirement": 610,
+    "grist_capacity": 442950,
+    "rung": 40
+  },
+  {
+    "aspect_effects": [],
+    "boondollars": 1000000,
+    "exp_requirement": 625,
+    "grist_capacity": 553687,
+    "rung": 41
+  },
+  {
+    "aspect_effects": [
+      {
+        "amplifier": 2,
+        "aspect": "blood",
+        "effect": "minecraft:absorption"
+      },
+      {
+        "amplifier": 1,
+        "aspect": "heart",
+        "effect": "minecraft:absorption"
+      }
+    ],
+    "boondollars": 1000000,
+    "exp_requirement": 640,
+    "grist_capacity": 692108,
+    "rung": 42
+  },
+  {
+    "aspect_effects": [],
+    "boondollars": 1000000,
+    "exp_requirement": 655,
+    "grist_capacity": 865135,
+    "rung": 43
+  },
+  {
+    "aspect_effects": [],
+    "boondollars": 1000000,
+    "exp_requirement": 670,
+    "grist_capacity": 1081418,
+    "rung": 44
+  },
+  {
+    "aspect_effects": [
+      {
+        "amplifier": 2,
+        "aspect": "breath",
+        "effect": "minecraft:speed"
+      }
+    ],
+    "boondollars": 1000000,
+    "exp_requirement": 685,
+    "grist_capacity": 1351772,
+    "rung": 45
+  },
+  {
+    "aspect_effects": [],
+    "boondollars": 1000000,
+    "exp_requirement": 700,
+    "grist_capacity": 1689715,
+    "rung": 46
+  },
+  {
+    "aspect_effects": [],
+    "boondollars": 1000000,
+    "exp_requirement": 715,
+    "grist_capacity": 2112143,
+    "rung": 47
+  },
+  {
+    "aspect_effects": [
+      {
+        "amplifier": 3,
+        "aspect": "mind",
+        "effect": "minecraft:night_vision"
+      },
+      {
+        "amplifier": 3,
+        "aspect": "void",
+        "effect": "minecraft:invisibility"
+      }
+    ],
+    "boondollars": 1000000,
+    "exp_requirement": 730,
+    "grist_capacity": 2640178,
+    "rung": 48
+  },
+  {
+    "aspect_effects": [],
+    "boondollars": 1000000,
+    "exp_requirement": 745,
+    "grist_capacity": 3300222,
+    "rung": 49
+  }
+]

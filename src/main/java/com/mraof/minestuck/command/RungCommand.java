@@ -7,6 +7,7 @@ import com.mojang.brigadier.builder.ArgumentBuilder;
 import com.mojang.brigadier.context.CommandContext;
 import com.mraof.minestuck.advancements.MSCriteriaTriggers;
 import com.mraof.minestuck.player.Echeladder;
+import com.mraof.minestuck.player.Rungs;
 import net.minecraft.commands.CommandSourceStack;
 import net.minecraft.commands.Commands;
 import net.minecraft.commands.arguments.EntityArgument;
@@ -48,7 +49,7 @@ public class RungCommand
 	{
 		return Commands.literal("set")
 				.then(Commands.argument("target", EntityArgument.players())
-						.then(Commands.argument("rung", IntegerArgumentType.integer(0, Echeladder.RUNG_COUNT - 1))
+						.then(Commands.argument("rung", IntegerArgumentType.integer(0, Rungs.finalRung()))
 								.executes(context ->
 										setRung(context, EntityArgument.getPlayers(context, "target"),
 												IntegerArgumentType.getInteger(context, "rung"), 0)

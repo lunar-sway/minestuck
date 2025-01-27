@@ -61,6 +61,7 @@ public final class MinestuckData
 		
 		gen.addProvider(event.includeServer(), new StartingModusProvider(output, Minestuck.MOD_ID));
 		gen.addProvider(event.includeServer(), new EcheladderExpSourceProvider(output));
+		gen.addProvider(event.includeServer(), new RungsProvider(output));
 		
 		gen.addProvider(event.includeClient(), new MSBlockStateProvider(output, fileHelper));
 		gen.addProvider(event.includeClient(), new MinestuckItemModelProvider(output, fileHelper));
