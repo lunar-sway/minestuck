@@ -36,17 +36,17 @@ public class Rungs
 	
 	public static long getGristCapacity(int rung)
 	{
-		return RUNGS.get(rung).gristCapacity();
+		return getRung(rung).gristCapacity();
 	}
 	
 	public static long getBoondollarsGained(int rung)
 	{
-		return RUNGS.get(rung).boondollars();
+		return getRung(rung).boondollars();
 	}
 	
 	public static long getProgressReq(int rung)
 	{
-		return RUNGS.get(rung).expRequirement();
+		return getRung(rung).expRequirement();
 	}
 	
 	public static List<MobEffectInstance> getRelevantEffects(EnumAspect aspect, int rung)
@@ -70,6 +70,16 @@ public class Rungs
 		return instances;
 	}
 	
+	public static List<Rung.EcheladderAttribute> getRelevantAttributes(int rung)
+	{
+		List<Rung.EcheladderAttribute> attributes = new ArrayList<>();
+		
+		for(Rung rungIterate : RUNGS.subList(0, rung))
+			attributes.addAll(rungIterate.attributes());
+		
+		return attributes;
+	}
+	
 	public static int finalRung()
 	{
 		return RUNGS.size() - 1;
@@ -80,9 +90,12 @@ public class Rungs
 		return RUNGS;
 	}
 	
-	public Rung getRung(int rung)
+	public static Rung getRung(int rung)
 	{
-		return RUNGS.get(rung);
+		if(RUNGS.size() > rung)
+			return RUNGS.get(rung);
+		else
+			return RUNGS.getLast();
 	}
 	
 	@SubscribeEvent

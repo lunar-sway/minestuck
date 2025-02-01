@@ -1,69 +1,75 @@
 [
   {
-    "aspect_effects": [],
+    "attributes": [
+      {
+        "attribute": "minecraft:generic.max_health",
+        "id": "minestuck:echeladder_health_boost",
+        "operation": "add_value",
+        "rung_multiplier": 0.8163265306,
+        "starting_value": 0.0
+      },
+      {
+        "attribute": "minecraft:generic.attack_damage",
+        "id": "minestuck:echeladder_damage_boost",
+        "operation": "add_multiplied_base",
+        "rung_multiplier": 0.02040816326530612,
+        "starting_value": 0.0
+      }
+    ],
     "boondollars": 0,
     "exp_requirement": 10,
     "grist_capacity": 60,
     "rung": 0
   },
   {
-    "aspect_effects": [],
     "boondollars": 50,
     "exp_requirement": 25,
     "grist_capacity": 75,
     "rung": 1
   },
   {
-    "aspect_effects": [],
     "boondollars": 75,
     "exp_requirement": 40,
     "grist_capacity": 93,
     "rung": 2
   },
   {
-    "aspect_effects": [],
     "boondollars": 105,
     "exp_requirement": 55,
     "grist_capacity": 116,
     "rung": 3
   },
   {
-    "aspect_effects": [],
     "boondollars": 140,
     "exp_requirement": 70,
     "grist_capacity": 145,
     "rung": 4
   },
   {
-    "aspect_effects": [],
     "boondollars": 170,
     "exp_requirement": 85,
     "grist_capacity": 181,
     "rung": 5
   },
   {
-    "aspect_effects": [],
     "boondollars": 200,
     "exp_requirement": 100,
     "grist_capacity": 226,
     "rung": 6
   },
   {
-    "aspect_effects": [],
     "boondollars": 250,
     "exp_requirement": 115,
     "grist_capacity": 282,
     "rung": 7
   },
   {
-    "aspect_effects": [],
     "boondollars": 320,
     "exp_requirement": 130,
     "grist_capacity": 352,
     "rung": 8
   },
   {
-    "aspect_effects": [],
     "boondollars": 425,
     "exp_requirement": 145,
     "grist_capacity": 440,
@@ -88,7 +94,6 @@
     "rung": 10
   },
   {
-    "aspect_effects": [],
     "boondollars": 790,
     "exp_requirement": 175,
     "grist_capacity": 687,
@@ -157,14 +162,12 @@
     "rung": 15
   },
   {
-    "aspect_effects": [],
     "boondollars": 3850,
     "exp_requirement": 250,
     "grist_capacity": 2093,
     "rung": 16
   },
   {
-    "aspect_effects": [],
     "boondollars": 4800,
     "exp_requirement": 265,
     "grist_capacity": 2616,
@@ -184,7 +187,6 @@
     "rung": 18
   },
   {
-    "aspect_effects": [],
     "boondollars": 7500,
     "exp_requirement": 295,
     "grist_capacity": 4087,
@@ -214,21 +216,18 @@
     "rung": 20
   },
   {
-    "aspect_effects": [],
     "boondollars": 11900,
     "exp_requirement": 325,
     "grist_capacity": 6385,
     "rung": 21
   },
   {
-    "aspect_effects": [],
     "boondollars": 15200,
     "exp_requirement": 340,
     "grist_capacity": 7981,
     "rung": 22
   },
   {
-    "aspect_effects": [],
     "boondollars": 19300,
     "exp_requirement": 355,
     "grist_capacity": 9976,
@@ -284,7 +283,6 @@
     "rung": 26
   },
   {
-    "aspect_effects": [],
     "boondollars": 95500,
     "exp_requirement": 415,
     "grist_capacity": 24353,
@@ -314,7 +312,6 @@
     "rung": 28
   },
   {
-    "aspect_effects": [],
     "boondollars": 180000,
     "exp_requirement": 445,
     "grist_capacity": 38051,
@@ -344,35 +341,30 @@
     "rung": 30
   },
   {
-    "aspect_effects": [],
     "boondollars": 425000,
     "exp_requirement": 475,
     "grist_capacity": 59453,
     "rung": 31
   },
   {
-    "aspect_effects": [],
     "boondollars": 632000,
     "exp_requirement": 490,
     "grist_capacity": 74316,
     "rung": 32
   },
   {
-    "aspect_effects": [],
     "boondollars": 880000,
     "exp_requirement": 505,
     "grist_capacity": 92895,
     "rung": 33
   },
   {
-    "aspect_effects": [],
     "boondollars": 1000000,
     "exp_requirement": 520,
     "grist_capacity": 116118,
     "rung": 34
   },
   {
-    "aspect_effects": [],
     "boondollars": 1000000,
     "exp_requirement": 535,
     "grist_capacity": 145147,
@@ -402,21 +394,18 @@
     "rung": 36
   },
   {
-    "aspect_effects": [],
     "boondollars": 1000000,
     "exp_requirement": 565,
     "grist_capacity": 226791,
     "rung": 37
   },
   {
-    "aspect_effects": [],
     "boondollars": 1000000,
     "exp_requirement": 580,
     "grist_capacity": 283488,
     "rung": 38
   },
   {
-    "aspect_effects": [],
     "boondollars": 1000000,
     "exp_requirement": 595,
     "grist_capacity": 354360,
@@ -446,7 +435,6 @@
     "rung": 40
   },
   {
-    "aspect_effects": [],
     "boondollars": 1000000,
     "exp_requirement": 625,
     "grist_capacity": 553687,
@@ -471,14 +459,12 @@
     "rung": 42
   },
   {
-    "aspect_effects": [],
     "boondollars": 1000000,
     "exp_requirement": 655,
     "grist_capacity": 865135,
     "rung": 43
   },
   {
-    "aspect_effects": [],
     "boondollars": 1000000,
     "exp_requirement": 670,
     "grist_capacity": 1081418,
@@ -498,14 +484,12 @@
     "rung": 45
   },
   {
-    "aspect_effects": [],
     "boondollars": 1000000,
     "exp_requirement": 700,
     "grist_capacity": 1689715,
     "rung": 46
   },
   {
-    "aspect_effects": [],
     "boondollars": 1000000,
     "exp_requirement": 715,
     "grist_capacity": 2112143,
@@ -530,7 +514,6 @@
     "rung": 48
   },
   {
-    "aspect_effects": [],
     "boondollars": 1000000,
     "exp_requirement": 745,
     "grist_capacity": 3300222,

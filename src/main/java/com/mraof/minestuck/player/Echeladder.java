@@ -5,6 +5,7 @@ import com.mraof.minestuck.MinestuckConfig;
 import com.mraof.minestuck.advancements.MSCriteriaTriggers;
 import com.mraof.minestuck.computer.editmode.EditData;
 import com.mraof.minestuck.computer.editmode.ServerEditHandler;
+import com.mraof.minestuck.data.RungsProvider;
 import com.mraof.minestuck.network.EcheladderDataPacket;
 import com.mraof.minestuck.skaianet.SburbPlayerData;
 import com.mraof.minestuck.util.MSAttachments;
@@ -42,10 +43,6 @@ public final class Echeladder implements INBTSerializable<CompoundTag>
 	private static final Logger LOGGER = LogManager.getLogger();
 	
 	public static final String NEW_RUNG = "echeladder.new_rung";
-	
-	private static final ResourceLocation echeladderHealthBoostModifierID = Minestuck.id("echeladder_health_boost");    //TODO Might be so that only one is needed, as we only add one modifier for each attribute.
-	private static final ResourceLocation echeladderDamageBoostModifierID = Minestuck.id("echeladder_damage_boost");
-	
 	
 	public static Echeladder get(PlayerIdentifier player, Level level)
 	{
@@ -200,18 +197,7 @@ public final class Echeladder implements INBTSerializable<CompoundTag>
 	
 	public void updateEcheladderBonuses(ServerPlayer player)
 	{
-		int healthBonus = healthBoost(rung);
-		double damageBonus = attackBonus(rung);
-		
-		updateAttribute(player.getAttribute(Attributes.MAX_HEALTH), new AttributeModifier(echeladderHealthBoostModifierID, healthBonus, AttributeModifier.Operation.ADD_VALUE));    //If this isn't saved, your health goes to 10 hearts (if it was higher before) when loading the save file.
-		updateAttribute(player.getAttribute(Attributes.ATTACK_DAMAGE), new AttributeModifier(echeladderDamageBoostModifierID, damageBonus, AttributeModifier.Operation.ADD_MULTIPLIED_BASE));
-	}
-	
-	public void updateAttribute(AttributeInstance attribute, AttributeModifier modifier)
-	{
-		if(attribute.hasModifier(modifier.id()))
-			attribute.removeModifier(modifier.id());
-		attribute.addPermanentModifier(modifier);
+		Rungs.getRelevantAttributes(rung).forEach(attribute -> attribute.updateAttribute(player, rung));
 	}
 	
 	@Override
@@ -242,12 +228,24 @@ public final class Echeladder implements INBTSerializable<CompoundTag>
 	
 	public static double attackBonus(int rung)
 	{
-		return Math.pow(1.015, rung) - 1;
+		for(Rung.EcheladderAttribute echeladderAttribute : Rungs.getRelevantAttributes(rung))
+		{
+			if(echeladderAttribute.id().equals(RungsProvider.DAMAGE_BOOST_ID))
+				return echeladderAttribute.getAmount(rung);
+		}
+		
+		return 0;
 	}
 	
 	public static int healthBoost(int rung)
 	{
-		return (int) (40 * (rung / (float) (Rungs.finalRung())));    //At max rung, the player will have three rows of hearts
+		for(Rung.EcheladderAttribute echeladderAttribute : Rungs.getRelevantAttributes(rung))
+		{
+			if(echeladderAttribute.id().equals(RungsProvider.HEALTH_BOOST_ID))
+				return (int) echeladderAttribute.getAmount(rung);
+		}
+		
+		return 0;
 	}
 	
 	public static double getUnderlingDamageModifier(int rung)

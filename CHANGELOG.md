@@ -11,11 +11,16 @@ The format is based on [Keep a Changelog](https://keepachangelog.com/en/1.1.0/).
 ### Changed
 
 - Knitting needle crafting recipe now produces one item instead of two
+- Echeladder damage boost now scales linearly, with a slightly lower max value
 
 ### Fixed
 
 - Signs now mineable with axe
 - Non-color data will now be preserved on dowels going through a totem lathe 
+
+### Removed
+
+- Removed "aspectEffects" config option as it is redundant to modifying rungs.json
 
 ### Contributors for this release
 

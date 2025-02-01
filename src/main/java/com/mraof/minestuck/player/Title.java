@@ -104,7 +104,7 @@ public record Title(EnumClass heroClass, EnumAspect heroAspect)
 	
 	private void handleAspectEffects(ServerPlayer player)
 	{
-		if(!MinestuckConfig.SERVER.aspectEffects.get() || !player.getData(MSAttachments.EFFECT_TOGGLE))
+		if(!player.getData(MSAttachments.EFFECT_TOGGLE))
 			return;
 		if(player.getCommandSenderWorld().getGameTime() % 380 != 0)
 			return;

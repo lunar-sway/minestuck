@@ -11,7 +11,10 @@ import net.minecraft.core.Holder;
 import net.minecraft.data.CachedOutput;
 import net.minecraft.data.DataProvider;
 import net.minecraft.data.PackOutput;
+import net.minecraft.resources.ResourceLocation;
 import net.minecraft.world.effect.MobEffect;
+import net.minecraft.world.entity.ai.attributes.AttributeModifier;
+import net.minecraft.world.entity.ai.attributes.Attributes;
 
 import javax.annotation.ParametersAreNonnullByDefault;
 import java.nio.file.Path;
@@ -25,8 +28,9 @@ import static net.minecraft.world.effect.MobEffects.*;
 @MethodsReturnNonnullByDefault
 public class RungsProvider implements DataProvider
 {
+	public static final ResourceLocation HEALTH_BOOST_ID = Minestuck.id("echeladder_health_boost");
+	public static final ResourceLocation DAMAGE_BOOST_ID = Minestuck.id("echeladder_damage_boost");
 	private final PackOutput output;
-	
 	
 	public RungsProvider(PackOutput output)
 	{
@@ -38,8 +42,11 @@ public class RungsProvider implements DataProvider
 	
 	protected void createRungs()
 	{
-		//grist capacity is achieved by multiplying the previous by 1.25 and then rounding the result down to get an integer number
-		add(0, 60); //0
+		//Grist capacity is achieved by multiplying the previous by 1.25 and then rounding the result down to get an integer number
+		//At max rung, the player will have three rows of hearts and 200% damage
+		add(0, 60,
+				new Rung.EcheladderAttribute(Attributes.MAX_HEALTH, HEALTH_BOOST_ID, 0.8163265306D, 0, AttributeModifier.Operation.ADD_VALUE),
+				new Rung.EcheladderAttribute(Attributes.ATTACK_DAMAGE, DAMAGE_BOOST_ID, 0.02040816326530612D, 0, AttributeModifier.Operation.ADD_MULTIPLIED_BASE)); //0
 		add(50, 75);
 		add(75, 93);
 		add(105, 116);
@@ -122,13 +129,19 @@ public class RungsProvider implements DataProvider
 	
 	private void add(long boondollars, long gristCapacity)
 	{
-		rungs.add(new Rung(rungIterate, rungRequirement(rungIterate), boondollars, gristCapacity, List.of()));
+		rungs.add(new Rung(rungIterate, rungRequirement(rungIterate), boondollars, gristCapacity, List.of(), List.of()));
 		rungIterate++;
 	}
 	
 	private void add(long boondollars, long gristCapacity, Rung.AspectEffect... aspectEffects)
 	{
-		rungs.add(new Rung(rungIterate, rungRequirement(rungIterate), boondollars, gristCapacity, List.of(aspectEffects)));
+		rungs.add(new Rung(rungIterate, rungRequirement(rungIterate), boondollars, gristCapacity, List.of(aspectEffects), List.of()));
+		rungIterate++;
+	}
+	
+	private void add(long boondollars, long gristCapacity, Rung.EcheladderAttribute... attributes)
+	{
+		rungs.add(new Rung(rungIterate, rungRequirement(rungIterate), boondollars, gristCapacity, List.of(), List.of(attributes)));
 		rungIterate++;
 	}
 	
