@@ -8,6 +8,10 @@ The format is based on [Keep a Changelog](https://keepachangelog.com/en/1.1.0/).
 
 - Updated to run with Minecraft 1.21 / Neoforge 21.0
 
+### Added
+
+- Rung progress bar is now white when it would otherwise be too dark to see progress clearly
+
 ### Changed
 
 - Knitting needle crafting recipe now produces one item instead of two

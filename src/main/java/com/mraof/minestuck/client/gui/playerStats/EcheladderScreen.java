@@ -173,13 +173,17 @@ public class EcheladderScreen extends PlayerStatsScreen
 			
 			//TODO broke the animation for previous rung flashing
 			int textColor = currentRung >= rung ? textColor(rung) : 0xFFFFFF;
+			int backgroundColor = backgroundColor(rung, textColor);
 			if(rung <= currentRung - (showLastRung ? 0 : 1))
 			{
-				guiGraphics.fill(xOffset + 90, y, xOffset + 236, y + 12, backgroundColor(rung, textColor));
+				//full bar
+				guiGraphics.fill(xOffset + 90, y, xOffset + 236, y + 12, backgroundColor);
 			} else if(rung == currentRung + 1 && animationCycle == 0)
 			{
-				int bg = backgroundColor(rung, textColor);
-				guiGraphics.fill(xOffset + 90, y + 10, xOffset + 90 + (int) (146 * ClientPlayerData.getRungProgress()), y + 12, bg);
+				//progress bar
+				float brightness = (((backgroundColor >> 16) & 0xFF) + ((backgroundColor >> 8) & 0xFF) + (backgroundColor & 0xFF)) / 765F;
+				boolean isDark = brightness < 0.2;
+				guiGraphics.fill(xOffset + 90, y + 10, xOffset + 90 + (int) (146 * ClientPlayerData.getRungProgress()), y + 12, isDark ? 0xFFFFFFFF : backgroundColor);
 			}
 			
 			String s = I18n.exists("echeladder.rung." + rung) ? I18n.get("echeladder.rung." + rung) : "Rung " + (rung + 1);
