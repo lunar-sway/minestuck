@@ -49,6 +49,16 @@ public class Rungs
 		return getRung(rung).expRequirement();
 	}
 	
+	public static int getBackgroundColor(int rung)
+	{
+		return getRung(rung).backgroundColor();
+	}
+	
+	public static int getTextColor(int rung)
+	{
+		return getRung(rung).textColor();
+	}
+	
 	public static List<MobEffectInstance> getRelevantEffects(EnumAspect aspect, int rung)
 	{
 		List<MobEffectInstance> instances = new ArrayList<>();

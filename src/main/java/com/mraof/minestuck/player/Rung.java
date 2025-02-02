@@ -12,12 +12,13 @@ import net.minecraft.world.entity.ai.attributes.AttributeModifier;
 
 import java.util.List;
 
-public record Rung(int rung, long expRequirement, long boondollars, long gristCapacity, List<AspectEffect> aspectEffects, List<EcheladderAttribute> attributes)
+public record Rung(int rung, int backgroundColor, int textColor, long expRequirement, long boondollars, long gristCapacity, List<AspectEffect> aspectEffects, List<EcheladderAttribute> attributes)
 {
-	//TODO add the rung names
 	//TODO add underling aggro
 	public static final Codec<Rung> CODEC = RecordCodecBuilder.create(instance -> instance.group(
 			Codec.INT.fieldOf("rung").forGetter(Rung::rung),
+			Codec.INT.fieldOf("background_color").forGetter(Rung::backgroundColor),
+			Codec.INT.fieldOf("text_color").forGetter(Rung::textColor),
 			Codec.LONG.fieldOf("exp_requirement").forGetter(Rung::expRequirement),
 			Codec.LONG.fieldOf("boondollars").forGetter(Rung::boondollars),
 			Codec.LONG.fieldOf("grist_capacity").forGetter(Rung::gristCapacity),
