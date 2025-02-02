@@ -14,6 +14,20 @@
         "operation": "add_multiplied_base",
         "rung_multiplier": 0.02040816326530612,
         "starting_value": 0.0
+      },
+      {
+        "attribute": "minestuck:player.underling_protection_modifier",
+        "id": "minestuck:echeladder_underling_protection",
+        "operation": "add_value",
+        "rung_multiplier": -0.015306122448979,
+        "starting_value": 1.0
+      },
+      {
+        "attribute": "minestuck:player.underling_damage_modifier",
+        "id": "minestuck:echeladder_underling_damage",
+        "operation": "add_value",
+        "rung_multiplier": 0.04,
+        "starting_value": 1.0
       }
     ],
     "background_color": -11545600,

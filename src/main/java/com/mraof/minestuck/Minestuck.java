@@ -13,6 +13,7 @@ import com.mraof.minestuck.command.argument.MSArgumentTypes;
 import com.mraof.minestuck.computer.ProgramData;
 import com.mraof.minestuck.computer.editmode.DeployList;
 import com.mraof.minestuck.effects.MSEffects;
+import com.mraof.minestuck.entity.MSAttributes;
 import com.mraof.minestuck.entity.MSEntityTypes;
 import com.mraof.minestuck.entity.dialogue.Triggers;
 import com.mraof.minestuck.entity.dialogue.condition.Conditions;
@@ -118,6 +119,7 @@ public class Minestuck
 		MSCreativeTabs.REGISTER.register(eventBus);
 		
 		MSAttachments.REGISTER.register(eventBus);
+		MSAttributes.REGISTER.register(eventBus);
 		
 		SkaiaBlocks.init();
 		AspectTreeBlocks.init();

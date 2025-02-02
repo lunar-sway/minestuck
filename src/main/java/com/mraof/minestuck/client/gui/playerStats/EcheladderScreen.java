@@ -213,7 +213,7 @@ public class EcheladderScreen extends PlayerStatsScreen
 		guiGraphics.drawString(font, I18n.get(ATTACK), textOffset, yOffset + 30, GREY, false);
 		guiGraphics.drawString(font, attack + "%", textOffset + 2, yOffset + 39, BLUE, false);
 		
-		double health = mc.player.getMaxHealth() / 2;    //10 + Echeladder.healthBoost(currentRung)/2.0;
+		double health = Echeladder.healthBoost(currentRung) / 2D;
 		guiGraphics.drawString(font, I18n.get(HEALTH), textOffset, yOffset + 84, GREY, false);
 		guiGraphics.drawString(font, "+" + String.format(Locale.ROOT, "%.1f", health), textOffset + 2, yOffset + 93, BLUE, false);
 		

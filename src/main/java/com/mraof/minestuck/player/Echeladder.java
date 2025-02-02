@@ -228,34 +228,33 @@ public final class Echeladder implements INBTSerializable<CompoundTag>
 	
 	public static double attackBonus(int rung)
 	{
-		for(Rung.EcheladderAttribute echeladderAttribute : Rungs.getRelevantAttributes(rung))
-		{
-			if(echeladderAttribute.id().equals(RungsProvider.DAMAGE_BOOST_ID))
-				return echeladderAttribute.getAmount(rung);
-		}
-		
-		return 0;
+		return getAttributeAmount(rung, RungsProvider.DAMAGE_BOOST_ID);
 	}
 	
-	public static int healthBoost(int rung)
+	public static double healthBoost(int rung)
 	{
-		for(Rung.EcheladderAttribute echeladderAttribute : Rungs.getRelevantAttributes(rung))
-		{
-			if(echeladderAttribute.id().equals(RungsProvider.HEALTH_BOOST_ID))
-				return (int) echeladderAttribute.getAmount(rung);
-		}
-		
-		return 0;
+		return getAttributeAmount(rung, RungsProvider.HEALTH_BOOST_ID);
 	}
 	
 	public static double getUnderlingDamageModifier(int rung)
 	{
-		return 1 + rung * 0.04D;
+		return getAttributeAmount(rung, RungsProvider.UNDERLING_DAMAGE_ID);
 	}
 	
 	public static double getUnderlingProtectionModifier(int rung)
 	{
-		return 1 / (rung * 0.06D + 1);
+		return getAttributeAmount(rung, RungsProvider.UNDERLING_PROTECTION_ID);
+	}
+	
+	private static double getAttributeAmount(int rung, ResourceLocation id)
+	{
+		for(Rung.EcheladderAttribute echeladderAttribute : Rungs.getRelevantAttributes(rung))
+		{
+			if(echeladderAttribute.id().equals(id))
+				return echeladderAttribute.getAmount(rung);
+		}
+		
+		return 0;
 	}
 	
 	public long getGristCapacity()
