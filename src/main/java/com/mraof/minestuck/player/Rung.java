@@ -12,9 +12,9 @@ import net.minecraft.world.entity.ai.attributes.AttributeModifier;
 
 import java.util.List;
 
-public record Rung(int rung, int backgroundColor, int textColor, long expRequirement, long boondollars, long gristCapacity, List<AspectEffect> aspectEffects, List<EcheladderAttribute> attributes)
+public record Rung(int rung, int backgroundColor, int textColor, long expRequirement, long boondollars,
+				   long gristCapacity, List<AspectEffect> aspectEffects, List<EcheladderAttribute> attributes)
 {
-	//TODO add underling aggro
 	public static final Codec<Rung> CODEC = RecordCodecBuilder.create(instance -> instance.group(
 			Codec.INT.fieldOf("rung").forGetter(Rung::rung),
 			Codec.INT.fieldOf("background_color").forGetter(Rung::backgroundColor),
@@ -38,7 +38,8 @@ public record Rung(int rung, int backgroundColor, int textColor, long expRequire
 		public static final Codec<List<AspectEffect>> LIST_CODEC = CODEC.listOf();
 	}
 	
-	public record EcheladderAttribute(Holder<Attribute> attribute, ResourceLocation id, double rungMultiplier, float startingValue, AttributeModifier.Operation operation)
+	public record EcheladderAttribute(Holder<Attribute> attribute, ResourceLocation id, double rungMultiplier,
+									  float startingValue, AttributeModifier.Operation operation)
 	{
 		public static final Codec<EcheladderAttribute> CODEC = RecordCodecBuilder.create(instance -> instance.group(
 				Attribute.CODEC.fieldOf("attribute").forGetter(EcheladderAttribute::attribute),

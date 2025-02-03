@@ -28,6 +28,13 @@
         "operation": "add_value",
         "rung_multiplier": 0.04,
         "starting_value": 1.0
+      },
+      {
+        "attribute": "minecraft:generic.fall_damage_multiplier",
+        "id": "minestuck:echeladder_fall_damage_reduction",
+        "operation": "add_value",
+        "rung_multiplier": -0.01275,
+        "starting_value": 0.0
       }
     ],
     "background_color": -11545600,

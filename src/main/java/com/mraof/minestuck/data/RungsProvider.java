@@ -34,6 +34,7 @@ public class RungsProvider implements DataProvider
 	public static final ResourceLocation DAMAGE_BOOST_ID = Minestuck.id("echeladder_damage_boost");
 	public static final ResourceLocation UNDERLING_PROTECTION_ID = Minestuck.id("echeladder_underling_protection");
 	public static final ResourceLocation UNDERLING_DAMAGE_ID = Minestuck.id("echeladder_underling_damage");
+	public static final ResourceLocation FALL_DAMAGE_REDUCTION_ID = Minestuck.id("echeladder_fall_damage_reduction");
 	private final PackOutput output;
 	
 	public RungsProvider(PackOutput output)
@@ -47,12 +48,13 @@ public class RungsProvider implements DataProvider
 	protected void createRungs()
 	{
 		//Grist capacity is achieved by multiplying the previous by 1.25 and then rounding the result down to get an integer number
-		//At max rung, the player will have three rows of hearts, 200% damage, 75% damage reduction from underlings, and 592% additional damage towards underlings
+		//At max rung, the player will have three rows of hearts, 200% damage, 75% damage reduction from underlings, 592% additional damage towards underlings, and 62.5% fall damage reduction
 		add(0xFF4FD400, 0xFDFF2B, 0, 60,
 				new Rung.EcheladderAttribute(Attributes.MAX_HEALTH, HEALTH_BOOST_ID, 0.8163265306D, 0, AttributeModifier.Operation.ADD_VALUE),
 				new Rung.EcheladderAttribute(Attributes.ATTACK_DAMAGE, DAMAGE_BOOST_ID, 0.02040816326530612D, 0, AttributeModifier.Operation.ADD_MULTIPLIED_BASE),
 				new Rung.EcheladderAttribute(MSAttributes.UNDERLING_PROTECTION_MODIFIER, UNDERLING_PROTECTION_ID, -0.015306122448979D, 1, AttributeModifier.Operation.ADD_VALUE),
-				new Rung.EcheladderAttribute(MSAttributes.UNDERLING_DAMAGE_MODIFIER, UNDERLING_DAMAGE_ID, 0.04D, 1, AttributeModifier.Operation.ADD_VALUE)); //0
+				new Rung.EcheladderAttribute(MSAttributes.UNDERLING_DAMAGE_MODIFIER, UNDERLING_DAMAGE_ID, 0.04D, 1, AttributeModifier.Operation.ADD_VALUE),
+				new Rung.EcheladderAttribute(Attributes.FALL_DAMAGE_MULTIPLIER, FALL_DAMAGE_REDUCTION_ID, -0.01275D, 0, AttributeModifier.Operation.ADD_VALUE)); //0
 		add(0xFFFF0000, 0x404040, 50, 75);
 		add(0xFF956C4C, 0xB6FF00, 75, 93);
 		add(0xFF7DB037, 0x775716, 105, 116);

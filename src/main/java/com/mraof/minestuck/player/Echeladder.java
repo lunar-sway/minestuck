@@ -22,9 +22,6 @@ import net.minecraft.server.level.ServerPlayer;
 import net.minecraft.sounds.SoundSource;
 import net.minecraft.util.Mth;
 import net.minecraft.util.RandomSource;
-import net.minecraft.world.entity.ai.attributes.AttributeInstance;
-import net.minecraft.world.entity.ai.attributes.AttributeModifier;
-import net.minecraft.world.entity.ai.attributes.Attributes;
 import net.minecraft.world.level.Level;
 import net.neoforged.bus.api.SubscribeEvent;
 import net.neoforged.fml.common.EventBusSubscriber;
@@ -34,7 +31,7 @@ import net.neoforged.neoforge.network.PacketDistributor;
 import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.Logger;
 
-import java.util.*;
+import java.util.EnumSet;
 
 @MethodsReturnNonnullByDefault
 @EventBusSubscriber(modid = Minestuck.MOD_ID, bus = EventBusSubscriber.Bus.GAME)
@@ -103,6 +100,7 @@ public final class Echeladder implements INBTSerializable<CompoundTag>
 		if(rung >= topRung)
 			return;
 		
+		//TODO try cleaning up structure of the below, also making the logger output more concise
 		int prevRung = rung;
 		LOGGER.debug("Adding {} exp(modified) to player {}'s echeladder (previously at rung {} progress {}/{})", exp, identifier.getUsername(), rung, progress, expReq);
 		long boondollarsGained = 0;
