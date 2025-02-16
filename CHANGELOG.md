@@ -15,11 +15,12 @@ The format is based on [Keep a Changelog](https://keepachangelog.com/en/1.1.0/).
 ### Fixed
 
 - Signs now mineable with axe
-- Non-color data will now be preserved on dowels going through a totem lathe 
+- Non-color data will now be preserved on dowels going through a totem lathe
+- Carved totems in alchemiter model now have correct uv mapping
 
 ### Contributors for this release
 
-- Cibernet, Dweblenod, kirderf1, glubtier
+- Cibernet, Dweblenod, kirderf1, glubtier, blankMushroom
 
 ## [1.20.4-1.12.2.0] - 2024-10-06
 
