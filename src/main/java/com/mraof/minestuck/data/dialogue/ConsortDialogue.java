@@ -990,10 +990,10 @@ public final class ConsortDialogue
 							.addTrigger(new Trigger.TakeItem(drinkItem))
 							.addTrigger(new Trigger.GiveItem(scalemateItem.asItem()))
 							.addTrigger(new Trigger.SetDialogue(satisfied)))
-					.addResponse(new ResponseBuilder(l.subMsg("no", "No"))));
+					.addClosingResponse(l.subMsg("no", "No")));
 			
 			builder.addStart(new NodeBuilder(l.defaultKeyMsg("Everyone knows that the best flavor of faygo is " + capitalizedDrinkName + ". There is literally nothing else that can top it."))
-					.addResponse(new ResponseBuilder(l.subMsg("bye", "Oh, good to know. Bye.")))
+					.addClosingResponse(l.subMsg("bye", "Oh, good to know. Bye."))
 					.addResponse(new ResponseBuilder(l.subMsg("different_better", "I prefer another flavor"))
 							.nextDialogue(builder.add("scoundrel", new NodeBuilder(l.defaultKeyMsg("You are a liar and a scoundrel.")))))
 					.addResponse(new ResponseBuilder(l.subMsg("dont_drink", "I don't drink faygo"))

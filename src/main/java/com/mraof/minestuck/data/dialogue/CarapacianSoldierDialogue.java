@@ -100,9 +100,6 @@ public final class CarapacianSoldierDialogue
 		provider.addRandomlySelectable("skaia_dense", defaultWeight(alwaysTrue()),
 				descriptionNode(l.defaultKeyMsg("They comment on how you can't really see the Battlefield from beyond Skaia. And when you are on the Battlefield you can't see much of the Medium.")));
 		
-		provider.addRandomlySelectable("shuttles", defaultWeight(alwaysTrue()),
-				descriptionNode(l.defaultKeyMsg("They find it curious that certain carapacians have sharp jagged teeth when the vast majority have rounded ones.")));
-		
 		provider.addRandomlySelectable("remember_cloning", defaultWeight(alwaysTrue()), new FolderedDialogue(builder ->
 		{
 			var goodToKnow = l.subMsg("good_to_know", "Oh, good to know.");
@@ -124,7 +121,7 @@ public final class CarapacianSoldierDialogue
 							.animation(DialogueAnimationData.ANXIOUS_EMOTION)
 							.addResponse(new ResponseBuilder(l.subMsg("go_where", "Go back to where?"))
 									.nextDialogue(veil))
-							.addResponse(new ResponseBuilder(l.subMsg("bye", "Goodbye.")))
+							.addClosingResponse(l.subMsg("bye", "Goodbye."))
 			);
 		}));
 		

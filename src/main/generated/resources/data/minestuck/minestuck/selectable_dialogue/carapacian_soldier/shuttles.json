@@ -1,8 +1,0 @@
-{
-  "condition": {
-    "type": "minestuck:always_true"
-  },
-  "dialogue": "minestuck:carapacian_soldier/shuttles",
-  "dialogue_weight": 10,
-  "keep_on_reset": false
-}
