@@ -1,0 +1,10 @@
+{
+  "type": "minestuck:grist_cost",
+  "grist_cost": {
+    "minestuck:quartz": 2,
+    "minestuck:iodine": 4
+  },
+  "ingredient": {
+    "item": "culturaldelights:cucumber"
+  }
+}

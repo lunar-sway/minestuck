@@ -1,0 +1,11 @@
+{
+  "type": "minestuck:grist_cost",
+  "grist_cost": {
+    "minestuck:build": 2,
+    "minestuck:cobalt": 1,
+    "minestuck:chalk": 2
+  },
+  "ingredient": {
+    "item": "create:builders_tea"
+  }
+}

@@ -1,0 +1,9 @@
+{
+  "type": "minestuck:grist_cost",
+  "grist_cost": {
+    "minestuck:build": 1
+  },
+  "ingredient": {
+    "item": "farmersdelight:sandy_shrub"
+  }
+}

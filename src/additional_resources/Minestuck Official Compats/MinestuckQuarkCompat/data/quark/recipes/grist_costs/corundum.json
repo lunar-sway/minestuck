@@ -1,0 +1,9 @@
+{
+  "type": "minestuck:grist_cost",
+  "grist_cost": {
+    "minestuck:quartz": 8
+  },
+  "ingredient": {
+    "tag": "quark:quark_corundum"
+  }
+}

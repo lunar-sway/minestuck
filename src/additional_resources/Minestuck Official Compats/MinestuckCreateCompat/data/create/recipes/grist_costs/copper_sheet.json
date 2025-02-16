@@ -1,0 +1,12 @@
+{
+  "type": "minestuck:source_grist_cost",
+  "grist_cost": {
+    "minestuck:build": 5
+  },
+  "ingredient": {
+    "item": "create:copper_sheet"
+  },
+  "sources": [
+    "minecraft:copper_ingot"
+  ]
+}

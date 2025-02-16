@@ -1,0 +1,12 @@
+{
+  "type": "minestuck:grist_cost",
+  "grist_cost": {
+    "minestuck:rust": 27,
+    "minestuck:iodine": 20,
+    "minestuck:amber": 12,
+    "minestuck:chalk": 8
+  },
+  "ingredient": {
+    "item": "create:chocolate_bucket"
+  }
+}

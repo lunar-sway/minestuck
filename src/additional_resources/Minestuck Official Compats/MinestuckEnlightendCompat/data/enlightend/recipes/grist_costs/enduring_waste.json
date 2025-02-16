@@ -1,0 +1,11 @@
+{
+  "type": "minestuck:grist_cost",
+  "grist_cost": {
+    "minestuck:uranium": 500,
+    "minestuck:shale": 1000,
+    "minestuck:rust": 500
+  },
+  "ingredient": {
+    "item": "enlightened_end:enduring_waste"
+  }
+}

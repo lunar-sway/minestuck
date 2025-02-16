@@ -1,0 +1,11 @@
+{
+  "type": "minestuck:grist_cost",
+  "grist_cost": {
+    "minestuck:build": 250,
+    "minestuck:gold": 10,
+    "minestuck:rust": 15
+  },
+  "ingredient": {
+    "item": "create:precision_mechanism"
+  }
+}

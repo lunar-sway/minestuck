@@ -1,0 +1,20 @@
+{
+  "type": "minecraft:crafting_shapeless",
+  "ingredients": [
+    {
+      "item": "minestuck:raw_cruxite"
+    },
+    {
+      "item": "create:electron_tube"
+    },
+    {
+      "item": "minestuck:computer_parts"
+    },
+    {
+      "item": "minestuck:energy_core"
+    }
+  ],
+  "result": {
+    "item": "minestuck:computer"
+  }
+}
