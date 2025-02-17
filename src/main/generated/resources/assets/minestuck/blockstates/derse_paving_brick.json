@@ -1,7 +1,20 @@
 {
   "variants": {
-    "": {
-      "model": "minestuck:block/derse_paving_brick"
-    }
+    "": [
+      {
+        "model": "minestuck:block/derse_paving_brick0",
+        "weight": 12
+      },
+      {
+        "model": "minestuck:block/derse_paving_brick1",
+        "weight": 6
+      },
+      {
+        "model": "minestuck:block/derse_paving_brick2"
+      },
+      {
+        "model": "minestuck:block/derse_paving_brick3"
+      }
+    ]
   }
 }

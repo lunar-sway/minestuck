@@ -1,6 +1,7 @@
 {
-  "parent": "minecraft:block/cube_all",
+  "parent": "minecraft:block/cube_column",
   "textures": {
-    "all": "minestuck:block/derse_pillar"
+    "end": "minestuck:block/derse_pillar_top",
+    "side": "minestuck:block/derse_pillar"
   }
 }

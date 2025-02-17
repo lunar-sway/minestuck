@@ -1,7 +1,18 @@
 {
   "variants": {
-    "": {
-      "model": "minestuck:block/derse_metallith"
-    }
+    "": [
+      {
+        "model": "minestuck:block/derse_metallith_0"
+      },
+      {
+        "model": "minestuck:block/derse_metallith_1"
+      },
+      {
+        "model": "minestuck:block/derse_metallith_2"
+      },
+      {
+        "model": "minestuck:block/derse_metallith_3"
+      }
+    ]
   }
 }

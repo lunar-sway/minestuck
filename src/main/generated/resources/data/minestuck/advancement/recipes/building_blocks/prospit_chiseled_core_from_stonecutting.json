@@ -1,0 +1,32 @@
+{
+  "parent": "minecraft:recipes/root",
+  "criteria": {
+    "has_prospit_core_brick": {
+      "conditions": {
+        "items": [
+          {
+            "items": "minestuck:prospit_core_brick"
+          }
+        ]
+      },
+      "trigger": "minecraft:inventory_changed"
+    },
+    "has_the_recipe": {
+      "conditions": {
+        "recipe": "minestuck:prospit_chiseled_core_from_stonecutting"
+      },
+      "trigger": "minecraft:recipe_unlocked"
+    }
+  },
+  "requirements": [
+    [
+      "has_the_recipe",
+      "has_prospit_core_brick"
+    ]
+  ],
+  "rewards": {
+    "recipes": [
+      "minestuck:prospit_chiseled_core_from_stonecutting"
+    ]
+  }
+}

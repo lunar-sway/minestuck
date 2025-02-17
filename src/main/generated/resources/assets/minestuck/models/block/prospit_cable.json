@@ -1,6 +1,7 @@
 {
-  "parent": "minecraft:block/cube_all",
+  "parent": "minecraft:block/cube_column",
   "textures": {
-    "all": "minestuck:block/prospit_cable"
+    "end": "minestuck:block/prospit_cable_top",
+    "side": "minestuck:block/prospit_cable"
   }
 }

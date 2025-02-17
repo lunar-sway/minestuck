@@ -1,13 +1,13 @@
 {
   "variants": {
     "type=bottom": {
-      "model": "minestuck:block/derse_metallith_slab"
+      "model": "minestuck:block/derse_metallith_0_slab"
     },
     "type=double": {
-      "model": "minestuck:block/derse_metallith"
+      "model": "minestuck:block/derse_metallith_0"
     },
     "type=top": {
-      "model": "minestuck:block/derse_metallith_slab_top"
+      "model": "minestuck:block/derse_metallith_0_slab_top"
     }
   }
 }

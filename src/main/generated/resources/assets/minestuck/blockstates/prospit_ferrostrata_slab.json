@@ -1,13 +1,13 @@
 {
   "variants": {
     "type=bottom": {
-      "model": "minestuck:block/prospit_ferrostrata_slab"
+      "model": "minestuck:block/prospit_ferrostrata_0_slab"
     },
     "type=double": {
-      "model": "minestuck:block/prospit_ferrostrata"
+      "model": "minestuck:block/prospit_ferrostrata_0"
     },
     "type=top": {
-      "model": "minestuck:block/prospit_ferrostrata_slab_top"
+      "model": "minestuck:block/prospit_ferrostrata_0_slab_top"
     }
   }
 }
