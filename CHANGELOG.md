@@ -6,6 +6,11 @@ The format is based on [Keep a Changelog](https://keepachangelog.com/en/1.1.0/).
 
 ## [Unreleased dream-moons]
 
+## Added
+- Prospit and Derse dimensions and block sets
+- "golden garrison" music track (Prospit theme)
+- "voidal sandbox" music track (Derse theme)
+
 ## [Unreleased 1.21]
 
 - Updated to run with Minecraft 1.21 / Neoforge 21.0
@@ -16,7 +21,7 @@ The format is based on [Keep a Changelog](https://keepachangelog.com/en/1.1.0/).
 
 ### Contributors for this release
 
-- Cibernet, Dweblenod, kirderf1
+- Cibernet, Dweblenod, kirderf1, aorticCurative, glubtier
 
 ## [1.20.4-1.12.2.0] - 2024-10-06
 
