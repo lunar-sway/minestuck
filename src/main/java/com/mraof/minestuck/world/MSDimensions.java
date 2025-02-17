@@ -20,6 +20,8 @@ public class MSDimensions
 {
 	
 	public static ResourceKey<Level> SKAIA = ResourceKey.create(Registries.DIMENSION, ResourceLocation.fromNamespaceAndPath(Minestuck.MOD_ID, "skaia"));
+	public static ResourceKey<Level> PROSPIT = ResourceKey.create(Registries.DIMENSION, ResourceLocation.fromNamespaceAndPath(Minestuck.MOD_ID, "prospit"));
+	public static ResourceKey<Level> DERSE = ResourceKey.create(Registries.DIMENSION, ResourceLocation.fromNamespaceAndPath(Minestuck.MOD_ID, "derse"));
 	public static final ResourceLocation LAND_EFFECTS = ResourceLocation.fromNamespaceAndPath(Minestuck.MOD_ID, "land");
 	
 	public static boolean isLandDimension(MinecraftServer server, ResourceKey<Level> levelKey)
@@ -33,6 +35,16 @@ public class MSDimensions
 	public static boolean isSkaia(ResourceKey<Level> dimension)
 	{
 		return dimension == SKAIA;
+	}
+	
+	public static boolean isProspit(ResourceKey<Level> dimension)
+	{
+		return dimension == PROSPIT;
+	}
+	
+	public static boolean isDerse(ResourceKey<Level> dimension)
+	{
+		return dimension == DERSE;
 	}
 	
 	public static boolean isInMedium(MinecraftServer server, ResourceKey<Level> dimension)
