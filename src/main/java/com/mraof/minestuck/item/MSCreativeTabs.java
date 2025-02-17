@@ -1437,13 +1437,8 @@ public final class MSCreativeTabs
 		
 		//Dreamer moons
 		//Items
-		output.accept(MSItems.PROSPIT_RAW_ORE.get());
-		output.accept(MSItems.PROSPIT_INGOT.get());
-		output.accept(MSItems.PROSPIT_NUGGET.get());
-		
-		output.accept(MSItems.DERSE_RAW_ORE.get());
-		output.accept(MSItems.DERSE_INGOT.get());
-		output.accept(MSItems.DERSE_NUGGET.get());
+		output.accept(DreamerMoonBlocks.PROSPIT_DROSS.get());
+		output.accept(DreamerMoonBlocks.DERSE_RESIDUE.get());
 		
 		//Blocks
 		output.accept(DreamerMoonBlocks.PROSPIT_GILDING.asItem());
@@ -1474,12 +1469,8 @@ public final class MSCreativeTabs
 		output.accept(DreamerMoonBlocks.PROSPIT_REFINED_CORE_WALL.asItem());
 		output.accept(DreamerMoonBlocks.PROSPIT_FERROSTRATA_CRUXITE_ORE.asItem());
 		output.accept(DreamerMoonBlocks.PROSPIT_FERROSTRATA_URANIUM_ORE.asItem());
-		output.accept(DreamerMoonBlocks.PROSPIT_FERROSTRATA_PROSPIT_ORE.asItem());
 		output.accept(DreamerMoonBlocks.PROSPIT_CORE_CRUXITE_ORE.asItem());
 		output.accept(DreamerMoonBlocks.PROSPIT_CORE_URANIUM_ORE.asItem());
-		output.accept(DreamerMoonBlocks.PROSPIT_CORE_PROSPIT_ORE.asItem());
-		output.accept(DreamerMoonBlocks.PROSPIT_INGOT_BLOCK.asItem());
-		output.accept(DreamerMoonBlocks.PROSPIT_ORE_BLOCK.asItem());
 		output.accept(DreamerMoonBlocks.PROSPIT_CABLE.asItem());
 		output.accept(DreamerMoonBlocks.PROSPIT_THICK_CABLE.asItem());
 		output.accept(DreamerMoonBlocks.PROSPIT_PILLAR.asItem());
@@ -1487,7 +1478,6 @@ public final class MSCreativeTabs
 		output.accept(DreamerMoonBlocks.PROSPIT_TRAPDOOR.asItem());
 		output.accept(DreamerMoonBlocks.PROSPIT_BRICK.asItem());
 		output.accept(DreamerMoonBlocks.PROSPIT_CRACKED_BRICK.asItem());
-		output.accept(DreamerMoonBlocks.PROSPIT_BIG_BRICK.asItem());
 		output.accept(DreamerMoonBlocks.PROSPIT_CHISELED_BRICK.asItem());
 		output.accept(DreamerMoonBlocks.PROSPIT_PAVING_BRICK.asItem());
 		output.accept(DreamerMoonBlocks.PROSPIT_FANCY_BRICK.asItem());
@@ -1546,12 +1536,8 @@ public final class MSCreativeTabs
 		output.accept(DreamerMoonBlocks.DERSE_REFINED_CORE_WALL.asItem());
 		output.accept(DreamerMoonBlocks.DERSE_METALLITH_CRUXITE_ORE.asItem());
 		output.accept(DreamerMoonBlocks.DERSE_METALLITH_URANIUM_ORE.asItem());
-		output.accept(DreamerMoonBlocks.DERSE_METALLITH_DERSE_ORE.asItem());
 		output.accept(DreamerMoonBlocks.DERSE_CORE_CRUXITE_ORE.asItem());
 		output.accept(DreamerMoonBlocks.DERSE_CORE_URANIUM_ORE.asItem());
-		output.accept(DreamerMoonBlocks.DERSE_CORE_DERSE_ORE.asItem());
-		output.accept(DreamerMoonBlocks.DERSE_INGOT_BLOCK.asItem());
-		output.accept(DreamerMoonBlocks.DERSE_ORE_BLOCK.asItem());
 		output.accept(DreamerMoonBlocks.DERSE_CABLE.asItem());
 		output.accept(DreamerMoonBlocks.DERSE_THICK_CABLE.asItem());
 		output.accept(DreamerMoonBlocks.DERSE_PILLAR.asItem());
@@ -1559,7 +1545,6 @@ public final class MSCreativeTabs
 		output.accept(DreamerMoonBlocks.DERSE_TRAPDOOR.asItem());
 		output.accept(DreamerMoonBlocks.DERSE_BRICK.asItem());
 		output.accept(DreamerMoonBlocks.DERSE_CRACKED_BRICK.asItem());
-		output.accept(DreamerMoonBlocks.DERSE_BIG_BRICK.asItem());
 		output.accept(DreamerMoonBlocks.DERSE_CHISELED_BRICK.asItem());
 		output.accept(DreamerMoonBlocks.DERSE_PAVING_BRICK.asItem());
 		output.accept(DreamerMoonBlocks.DERSE_FANCY_BRICK.asItem());
