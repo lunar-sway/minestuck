@@ -16,12 +16,14 @@ import net.minecraft.world.flag.FeatureFlags;
 import net.minecraft.world.item.Items;
 import net.minecraft.world.item.enchantment.Enchantment;
 import net.minecraft.world.item.enchantment.Enchantments;
+import net.minecraft.world.level.ItemLike;
 import net.minecraft.world.level.block.Block;
 import net.minecraft.world.level.block.Blocks;
 import net.minecraft.world.level.storage.loot.LootPool;
 import net.minecraft.world.level.storage.loot.LootTable;
 import net.minecraft.world.level.storage.loot.entries.DynamicLoot;
 import net.minecraft.world.level.storage.loot.entries.LootItem;
+import net.minecraft.world.level.storage.loot.entries.LootPoolEntryContainer;
 import net.minecraft.world.level.storage.loot.functions.ApplyBonusCount;
 import net.minecraft.world.level.storage.loot.functions.CopyComponentsFunction;
 import net.minecraft.world.level.storage.loot.functions.SetItemCountFunction;
@@ -1049,7 +1051,7 @@ public final class MSBlockLootTables extends BlockLootSubProvider
 		super.dropPottedContents(pFlowerPot);
 	}
 	
-	private LootTable.Builder cruxiteOreDrop(Block block)
+	public LootTable.Builder cruxiteOreDrop(Block block)
 	{
 		HolderLookup.RegistryLookup<Enchantment> registrylookup = this.registries.lookupOrThrow(Registries.ENCHANTMENT);
 		return createSilkTouchDispatchTable(block, applyExplosionDecay(block,
@@ -1058,7 +1060,7 @@ public final class MSBlockLootTables extends BlockLootSubProvider
 						.apply(ApplyBonusCount.addOreBonusCount(registrylookup.getOrThrow(Enchantments.FORTUNE)))));
 	}
 	
-	private LootTable.Builder uraniumOreDrop(Block block)
+	public LootTable.Builder uraniumOreDrop(Block block)
 	{
 		return createOreDrop(block, MSItems.RAW_URANIUM.get());
 	}
@@ -1106,6 +1108,12 @@ public final class MSBlockLootTables extends BlockLootSubProvider
 	}
 	
 	private LootTable.Builder emeraldOreDrop(Block block) { return createOreDrop(block, Items.EMERALD); }
+	
+	
+	public LootTable.Builder stoneSilktouchDrop(Block withSilkTouch, ItemLike withoutSilkTouch) {
+		return createSilkTouchDispatchTable(withSilkTouch, LootItem.lootTableItem(withoutSilkTouch));
+		
+	}
 	
 	private LootTable.Builder endGrassDrop(Block block)
 	{

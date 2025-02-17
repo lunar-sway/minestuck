@@ -1712,14 +1712,14 @@ public class MSBlockStateProvider extends BlockStateProvider
 	}
 	
 	@SuppressWarnings("SameParameterValue")
-	private void variantsWithItem(DeferredBlock<?> block, int count, IntFunction<ModelFile> modelProvider)
+	public void variantsWithItem(DeferredBlock<?> block, int count, IntFunction<ModelFile> modelProvider)
 	{
 		ConfiguredModel[] models = variantModels(count, modelProvider);
 		getVariantBuilder(block.get()).partialState().setModels(models);
 		simpleBlockItem(block.get(), models[0].model);
 	}
 	
-	private void weightedVariantsWithItem(DeferredBlock<?> block, int[] weights, IntFunction<ModelFile> modelProvider)
+	public void weightedVariantsWithItem(DeferredBlock<?> block, int[] weights, IntFunction<ModelFile> modelProvider)
 	{
 		ConfiguredModel[] models = weightedVariantModels(weights, modelProvider);
 		getVariantBuilder(block.get()).partialState().setModels(models);
@@ -1846,7 +1846,7 @@ public class MSBlockStateProvider extends BlockStateProvider
 	 * While the standard directional block (with {@link MSBlockStateProvider#directionalUp(DeferredBlock, Function, Property[])}) has the down-facing state rotated 180 degrees along the y-axis,
 	 * blocks with this function are instead not rotated in both the up-facing state and the down-facing state.
 	 */
-	private void unflippedColumnWithItem(DeferredBlock<?> block, Function<ResourceLocation, ModelFile> modelProvider)
+	public void unflippedColumnWithItem(DeferredBlock<?> block, Function<ResourceLocation, ModelFile> modelProvider)
 	{
 		var model = modelProvider.apply(block.getId());
 		getVariantBuilder(block.get())
@@ -1909,7 +1909,7 @@ public class MSBlockStateProvider extends BlockStateProvider
 		slabWithItem(block, sourceBlock.getId().getPath(), texture(sourceBlock));
 	}
 	
-	private void slabWithItem(Supplier<SlabBlock> block, String baseName, ResourceLocation texture)
+	public void slabWithItem(Supplier<SlabBlock> block, String baseName, ResourceLocation texture)
 	{
 		slabWithItem(block, baseName, texture, texture);
 	}
@@ -1928,7 +1928,7 @@ public class MSBlockStateProvider extends BlockStateProvider
 		wallWithItem(block, sourceBlock.getId().getPath(), texture(sourceBlock));
 	}
 	
-	private void wallWithItem(Supplier<WallBlock> block, String baseName, ResourceLocation texture)
+	public void wallWithItem(Supplier<WallBlock> block, String baseName, ResourceLocation texture)
 	{
 		wallBlock(block.get(), texture);
 		
@@ -2002,7 +2002,7 @@ public class MSBlockStateProvider extends BlockStateProvider
 		buttonWithItem(block, sourceBlock.getId().getPath(), texture(sourceBlock));
 	}
 	
-	private void buttonWithItem(Supplier<ButtonBlock> block, String baseName, ResourceLocation texture)
+	public void buttonWithItem(Supplier<ButtonBlock> block, String baseName, ResourceLocation texture)
 	{
 		ModelFile buttonInventory = models().buttonInventory(baseName + "_button_inventory", texture);
 		buttonBlock(block.get(), texture);
@@ -2014,7 +2014,7 @@ public class MSBlockStateProvider extends BlockStateProvider
 		pressurePlateWithItem(block, sourceBlock.getId().getPath(), texture(sourceBlock));
 	}
 	
-	private void pressurePlateWithItem(Supplier<PressurePlateBlock> block, String baseName, ResourceLocation texture)
+	public void pressurePlateWithItem(Supplier<PressurePlateBlock> block, String baseName, ResourceLocation texture)
 	{
 		ModelFile pressurePlateInventory = models().pressurePlate(baseName + "_pressure_plate", texture);
 		pressurePlateBlock(block.get(), texture);
