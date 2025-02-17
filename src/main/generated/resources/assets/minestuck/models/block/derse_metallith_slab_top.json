@@ -1,8 +1,0 @@
-{
-  "parent": "minecraft:block/slab_top",
-  "textures": {
-    "bottom": "minestuck:block/derse_metallith",
-    "side": "minestuck:block/derse_metallith",
-    "top": "minestuck:block/derse_metallith"
-  }
-}
