@@ -418,6 +418,22 @@
       }
     ]
   },
+  "music.prospit": {
+    "sounds": [
+      {
+        "name": "minestuck:music/miscellaneous/golden_garrison",
+        "stream": true
+      }
+    ]
+  },
+  "music.derse": {
+    "sounds": [
+      {
+        "name": "minestuck:music/miscellaneous/voidal_sandbox",
+        "stream": true
+      }
+    ]
+  },
   "entity.swoosh": {
     "category": "hostile",
     "subtitle": "subtitles.minestuck.swoosh",
