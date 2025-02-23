@@ -48,11 +48,13 @@ public final class Conditions
 		REGISTER.register("player_reputation", () -> Condition.PlayerHasReputation.CODEC);
 		REGISTER.register("player_boondollars", () -> Condition.PlayerHasBoondollars.CODEC);
 		REGISTER.register("player_entered", () -> Condition.PlayerHasEntered.CODEC);
+		REGISTER.register("player_advancement", () -> Condition.PlayerHasAdvancement.CODEC);
 		REGISTER.register("custom_score", () -> Condition.CustomHasScore.CODEC);
+		REGISTER.register("custom_tag", () -> Condition.CustomHasTag.CODEC);
+		REGISTER.register("dialogue_exists", () -> Condition.DialogueExists.CODEC);
 		REGISTER.register("move_restriction", () -> Condition.HasMoveRestriction.CODEC);
 		REGISTER.register("flag", () -> Condition.Flag.CODEC);
 		REGISTER.register("near_spawn", () -> Condition.NearSpawn.CODEC);
-		REGISTER.register("has_player_entered", () -> Condition.HasPlayerEntered.CODEC);
 		REGISTER.register("is_in_skaia", () -> Condition.IsInSkaia.CODEC);
 		REGISTER.register("consort_visited_skaia", () -> Condition.ConsortVisitedSkaia.CODEC);
 	}
@@ -140,6 +142,10 @@ public final class Conditions
 	public static Condition hasEntered()
 	{
 		return Condition.PlayerHasEntered.INSTANCE;
+	}
+	public static Condition hasAdvancement(String name)
+	{
+		return new Condition.PlayerHasAdvancement(Minestuck.id(name.replace(".", "/")));
 	}
 	
 	public static Condition isHolding(Item item)

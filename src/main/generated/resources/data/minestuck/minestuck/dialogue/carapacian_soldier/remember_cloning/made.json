@@ -1,0 +1,23 @@
+{
+  "node": {
+    "animation": {
+      "emotion": "angry"
+    },
+    "gui": "minestuck:textures/gui/dialogue/dialogue.png",
+    "messages": [
+      {
+        "type": "entity",
+        "message": "minestuck.dots"
+      },
+      {
+        "type": "description",
+        "message": "minestuck.dialogue.carapacian_soldier.remember_cloning.made"
+      },
+      {
+        "type": "description",
+        "message": "minestuck.dialogue.carapacian_soldier.remember_cloning.made.made.desc"
+      }
+    ],
+    "responses": []
+  }
+}

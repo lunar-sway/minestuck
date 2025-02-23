@@ -8,6 +8,11 @@ The format is based on [Keep a Changelog](https://keepachangelog.com/en/1.1.0/).
 
 - Updated to run with Minecraft 1.21 / Neoforge 21.0
 
+### Added
+
+- New consort dialogue
+- New carapacian dialogue
+
 ### Changed
 
 - Knitting needle crafting recipe now produces one item instead of two
@@ -18,10 +23,11 @@ The format is based on [Keep a Changelog](https://keepachangelog.com/en/1.1.0/).
 - Non-color data will now be preserved on dowels going through a totem lathe
 - Item stack data will now be preserved on disks inserted into a computer
 - Fix disk insertion and computer screen for computer easter egg
+- Carved totems in alchemiter model now have correct uv mapping
 
 ### Contributors for this release
 
-- Cibernet, Dweblenod, kirderf1, glubtier
+- Cibernet, Dweblenod, kirderf1, glubtier, blankMushroom
 
 ## [1.20.4-1.12.2.0] - 2024-10-06
 

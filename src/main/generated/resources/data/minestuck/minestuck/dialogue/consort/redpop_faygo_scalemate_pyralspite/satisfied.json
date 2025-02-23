@@ -1,0 +1,8 @@
+{
+  "node": {
+    "animation": {},
+    "gui": "minestuck:textures/gui/dialogue/dialogue.png",
+    "message": "minestuck.dialogue.consort.redpop_faygo_scalemate_pyralspite.satisfied",
+    "responses": []
+  }
+}
