@@ -74,7 +74,7 @@ public abstract class UnderlingEntity extends AttackingAnimatedEntity implements
 	public boolean dropCandy;
 	private int consortRep;
 	
-	private static final float maxSharedProgress = 2;    //The multiplier for the maximum amount progress that can be gathered from each enemy with the group fight bonus
+	private static final float MAX_SHARED_PROGRESS = 2;    //The multiplier for the maximum amount progress that can be gathered from each enemy with the group fight bonus
 	
 	protected Map<PlayerIdentifier, Double> damageMap = new HashMap<>();    //Map that stores how much damage each player did to this to this underling. Null is used for environmental or other non-player damage
 	
@@ -367,7 +367,7 @@ public abstract class UnderlingEntity extends AttackingAnimatedEntity implements
 		if(totalDamage < this.getMaxHealth())
 			totalDamage = this.getMaxHealth();
 		
-		int maxProgress = (int) (progress * maxSharedProgress);
+		int maxProgress = (int) (progress * MAX_SHARED_PROGRESS);
 		damageMap.remove(null);
 		PlayerIdentifier[] playerList = damageMap.keySet().toArray(new PlayerIdentifier[0]);
 		double[] modifiers = new double[playerList.length];
@@ -383,7 +383,7 @@ public abstract class UnderlingEntity extends AttackingAnimatedEntity implements
 		if(playerList.length > 0)
 			LOGGER.debug("{} players are splitting on {} progress from {}", playerList.length, progress, getType());
 		
-		if(totalModifier > maxSharedProgress)
+		if(totalModifier > MAX_SHARED_PROGRESS)
 		{
 			for(int i = 0; i < playerList.length; i++)
 				Echeladder.get(playerList[i], level())

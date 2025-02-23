@@ -8,15 +8,29 @@ The format is based on [Keep a Changelog](https://keepachangelog.com/en/1.1.0/).
 
 - Updated to run with Minecraft 1.21 / Neoforge 21.0
 
+### Added
+
+- Rung progress bar is now white when it would otherwise be too dark to see progress clearly
+- Most vanilla enemy mobs now provide Echeladder exp
+- Echeladder exp is provided when gaining the advancements for obtaining a legendary weapon/obtaining a netherite hoe/entering the Nether/entering the End
+- Echeladder now provides fall damage resistance
+
 ### Changed
 
 - Knitting needle crafting recipe now produces one item instead of two
+- There is no longer a threshold under which certain experience sources will stop contributing. After the incoming exp has been modified for the given rung, there is a 1 in 2/exp chance that 1 exp will be added.
+- Echeladder related attributes now scale linearly instead of exponentially, with minor tweaks to values on each rung
+- Tweaks to Echeladder GUI
 
 ### Fixed
 
 - Signs now mineable with axe
 - Non-color data will now be preserved on dowels going through a totem lathe
 - Carved totems in alchemiter model now have correct uv mapping
+
+### Removed
+
+- Removed "aspectEffects" config option as it is redundant to modifying rungs.json
 
 ### Contributors for this release
 

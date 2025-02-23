@@ -80,7 +80,7 @@ public final class ClientPlayerData
 	{
 		return switch(cacheSource)
 		{
-			case PLAYER -> new ClientCache(ClientPlayerData.playerGrist, Echeladder.getGristCapacity(ClientPlayerData.getRung()));
+			case PLAYER -> new ClientCache(ClientPlayerData.playerGrist, Rungs.getGristCapacity(ClientPlayerData.getRung()));
 			case EDITMODE -> new ClientCache(ClientPlayerData.targetGrist, targetCacheLimit);
 		};
 	}

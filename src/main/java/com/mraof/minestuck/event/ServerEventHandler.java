@@ -76,24 +76,6 @@ public class ServerEventHandler
 	@SubscribeEvent(priority=EventPriority.LOWEST, receiveCanceled=false)
 	public static void onEntityDeath(LivingDeathEvent event)
 	{
-		if(event.getEntity() instanceof Enemy && event.getSource().getEntity() instanceof ServerPlayer player)
-		{
-			if(!(player instanceof FakePlayer))
-			{
-				int exp = 0;
-				if(event.getEntity() instanceof Zombie || event.getEntity() instanceof Skeleton)
-					exp = 1;
-				else if(event.getEntity() instanceof Creeper || event.getEntity() instanceof Spider || event.getEntity() instanceof Silverfish)
-					exp = 2;
-				else if(event.getEntity() instanceof EnderMan || event.getEntity() instanceof Blaze || event.getEntity() instanceof Witch || event.getEntity() instanceof Guardian)
-					exp = 3;
-				else if(event.getEntity() instanceof Slime)
-					exp = Math.min(((Slime) event.getEntity()).getSize() - 1, 9);
-				
-				if(exp > 0)
-					Echeladder.get(player).increaseProgress(exp);
-			}
-		}
 		if(event.getEntity() instanceof ServerPlayer)
 		{
 			TitleSelectionHook.cancelSelection((ServerPlayer) event.getEntity());
@@ -124,22 +106,19 @@ public class ServerEventHandler
 			Entity attacker = event.getSource().getEntity();
 			Entity injured = event.getEntity();
 			
-			if(injured != null)
+			boolean attackerIsRealPlayer = attacker instanceof ServerPlayer && !(attacker instanceof FakePlayer);
+			boolean injuredIsRealPlayer = injured instanceof ServerPlayer && !(injured instanceof FakePlayer);
+			
+			if(attackerIsRealPlayer && injured instanceof UnderlingEntity)
 			{
-				boolean attackerIsRealPlayer = attacker instanceof ServerPlayer && !(attacker instanceof FakePlayer);
-				boolean injuredIsRealPlayer = injured instanceof ServerPlayer && !(injured instanceof FakePlayer);
-				
-				if(attackerIsRealPlayer && injured instanceof UnderlingEntity)
-				{
-					//Increase damage to underling
-					double modifier = Echeladder.get((ServerPlayer) attacker).getUnderlingDamageModifier();
-					event.setAmount((float) (event.getAmount() * modifier));
-				} else if (injuredIsRealPlayer && attacker instanceof UnderlingEntity)
-				{
-					//Decrease damage to player
-					double modifier = Echeladder.get((ServerPlayer) injured).getUnderlingProtectionModifier();
-					event.setAmount((float) (event.getAmount() * modifier));
-				}
+				//Increase damage to underling
+				double modifier = Echeladder.get((ServerPlayer) attacker).getUnderlingDamageModifier();
+				event.setAmount((float) (event.getAmount() * modifier));
+			} else if (injuredIsRealPlayer && attacker instanceof UnderlingEntity)
+			{
+				//Decrease damage to player
+				double modifier = Echeladder.get((ServerPlayer) injured).getUnderlingProtectionModifier();
+				event.setAmount((float) (event.getAmount() * modifier));
 			}
 		}
 		
