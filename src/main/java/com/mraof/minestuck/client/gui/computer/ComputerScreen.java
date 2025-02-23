@@ -1,9 +1,10 @@
-package com.mraof.minestuck.client.gui;
+package com.mraof.minestuck.client.gui.computer;
 
 import com.mojang.blaze3d.systems.RenderSystem;
 import com.mraof.minestuck.Minestuck;
 import com.mraof.minestuck.blockentity.ComputerBlockEntity;
-import com.mraof.minestuck.computer.ComputerProgram;
+import com.mraof.minestuck.computer.ProgramType;
+import com.mraof.minestuck.computer.ProgramTypes;
 import com.mraof.minestuck.computer.theme.ComputerTheme;
 import com.mraof.minestuck.computer.theme.ComputerThemes;
 import net.minecraft.client.Minecraft;
@@ -21,12 +22,13 @@ import org.lwjgl.glfw.GLFW;
 import javax.annotation.ParametersAreNonnullByDefault;
 import java.util.ArrayList;
 import java.util.List;
+import java.util.Objects;
+import java.util.Optional;
 
 //TODO continually check that player is in reach of the computer
 @ParametersAreNonnullByDefault
 public class ComputerScreen extends Screen
 {
-	
 	public static final String TITLE = "minestuck.computer";
 	public static final ResourceLocation guiMain = ResourceLocation.fromNamespaceAndPath(Minestuck.MOD_ID, "textures/gui/sburb.png");
 	public static final ResourceLocation guiBsod = ResourceLocation.fromNamespaceAndPath(Minestuck.MOD_ID, "textures/gui/bsod_message.png");
@@ -37,10 +39,10 @@ public class ComputerScreen extends Screen
 	public final ComputerBlockEntity be;
 	private final List<ComputerIcon> icons;
 	private PowerButton powerButton;
-	private ComputerProgram program;
+	private TypedProgramGui<?> program;
 	private ComputerTheme cachedTheme;
 	
-	ComputerScreen(Minecraft mc, ComputerBlockEntity be)
+	public ComputerScreen(Minecraft mc, ComputerBlockEntity be)
 	{
 		super(Component.translatable(TITLE));
 		
@@ -49,7 +51,7 @@ public class ComputerScreen extends Screen
 		this.be = be;
 		this.icons = new ArrayList<>();
 		this.cachedTheme = ComputerThemes.instance().lookup(be.getTheme());
-		be.gui = this;
+		be.setGuiCallback(this::updateGui);
 	}
 	
 	@Override
@@ -57,7 +59,7 @@ public class ComputerScreen extends Screen
 	{
 		genIcons();
 		powerButton = addRenderableWidget(new PowerButton());
-		setProgram(be.programSelected);
+		updateGui();
 	}
 	
 	@Override
@@ -91,7 +93,8 @@ public class ComputerScreen extends Screen
 		if(!bsod)
 		{
 			//program and widgets
-			if(program != null) program.paintGui(guiGraphics, this, be);
+			if(program != null)
+				program.gui.render(guiGraphics, this);
 		}
 		
 		//corner bits (goes on top of computer screen slightly)
@@ -108,22 +111,21 @@ public class ComputerScreen extends Screen
 	{
 		if(!this.cachedTheme.id().equals(be.getTheme()))
 			this.cachedTheme = ComputerThemes.instance().lookup(be.getTheme());
-		if(program!=null) program.onUpdateGui(this);
+		
+		if(program != null)
+			program.updateGui(this);
+		
+		boolean shouldShowIcons = this.program == null && !this.be.isBroken();
+		this.icons.forEach(icon -> icon.visible = shouldShowIcons);
 	}
 	
-	protected void setProgram(int id)
+	protected void setProgram(ProgramType<?> programType)
 	{
-		if(be.isBroken() || id == -1 || id == -2)
+		if(be.isBroken())
 			return;
 		
-		program = ComputerProgram.getProgram(id);
-		if(program==null) return;
-		
-		be.programSelected = id;
-		program.onInitGui(this);
-		
-		for(ComputerIcon icon : icons)
-			icon.visible = false;
+		program = new TypedProgramGui<>(programType);
+		program.gui.onInit(this);
 		
 		updateGui();
 	}
@@ -131,31 +133,29 @@ public class ComputerScreen extends Screen
 	protected void exitProgram()
 	{
 		program = null;
-		be.programSelected = -1;
 		
 		clearWidgets();
 		icons.forEach(this::addRenderableWidget);
-		icons.forEach(icon -> icon.visible = true);
 		addRenderableWidget(powerButton);
 		
 		updateGui();
 	}
 	
-	protected void genIcons()
+	private void genIcons()
 	{
 		var xOffset = (width-xSize)/2;
 		var yOffset = (height-ySize)/2;
 		
 		icons.clear();
 		
-		int programCount = be.installedPrograms.size();
-		for(int id : be.installedPrograms.stream().sorted().toList())
+		int programCount = 0;
+		for(ProgramType<?> programType : be.installedPrograms().sorted(ProgramTypes.DISPLAY_ORDER_SORTER).toList())
 		{
 			icons.add(addRenderableWidget(new ComputerIcon(
 					xOffset + 15 + Math.floorDiv(programCount, 5) * 20,
-					yOffset + 24 + programCount % 5 * 20, id)
+					yOffset + 44 + programCount % 5 * 20, programType)
 			));
-			programCount--;
+			programCount++;
 		}
 	}
 	
@@ -188,16 +188,38 @@ public class ComputerScreen extends Screen
 		return false;
 	}
 	
+	private static final class TypedProgramGui<D extends ProgramType.Data>
+	{
+		private final ProgramType<D> type;
+		private final ProgramGui<D> gui;
+		
+		TypedProgramGui(ProgramType<D> type)
+		{
+			this.type = type;
+			this.gui = ProgramGui.Registry.createGuiInstance(type);
+		}
+		
+		void updateGui(ComputerScreen screen)
+		{
+			Optional<D> programData = screen.be.getProgramData(this.type);
+			if(programData.isPresent())
+				this.gui.onUpdate(screen, programData.get());
+			else
+				screen.exitProgram();
+		}
+	}
+	
 	private class ComputerIcon extends ExtendedButton
 	{
-		private final ComputerProgram program;
+		private final ResourceLocation icon;
 		private static final int WIDTH = 16, HEIGHT = 16;
 		
-		public ComputerIcon(int xPos, int yPos, int id)
+		public ComputerIcon(int xPos, int yPos, ProgramType<?> programType)
 		{
-			super(xPos, yPos, WIDTH, HEIGHT, Component.empty(), button -> setProgram(id));
+			super(xPos, yPos, WIDTH, HEIGHT, Component.empty(), button -> setProgram(programType));
 			
-			this.program = ComputerProgram.getProgram(id);
+			ResourceLocation programKey = Objects.requireNonNullElse(ProgramTypes.REGISTRY.getKey(programType), Minestuck.id("invalid"));
+			this.icon = programKey.withPath(name -> "textures/gui/desktop_icon/" + name + ".png");
 		}
 		
 		@Override
@@ -206,7 +228,7 @@ public class ComputerScreen extends Screen
 			if(!visible) return;
 			RenderSystem.setShaderColor(1, 1, 1, 1);
 			
-			guiGraphics.blit(this.program.getIcon(), getX(), getY(), WIDTH, HEIGHT, 0, 0, WIDTH, HEIGHT, WIDTH, HEIGHT);
+			guiGraphics.blit(this.icon, getX(), getY(), WIDTH, HEIGHT, 0, 0, WIDTH, HEIGHT, WIDTH, HEIGHT);
 		}
 	}
 	

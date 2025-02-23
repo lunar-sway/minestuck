@@ -1,6 +1,6 @@
 package com.mraof.minestuck.item;
 
-import com.mraof.minestuck.blockentity.ComputerBlockEntity;
+import com.mraof.minestuck.computer.DiskBurnerData;
 import com.mraof.minestuck.item.components.HieroglyphCode;
 import com.mraof.minestuck.item.components.MSItemComponents;
 import com.mraof.minestuck.util.MSTags;
@@ -50,20 +50,20 @@ public class IncompleteSburbCodeItem extends ReadableSburbCodeItem
 	}
 	
 	@Override
-	protected boolean useOnComputer(ItemStack heldStack, Player player, InteractionHand hand, ComputerBlockEntity blockEntity)
+	protected boolean useOnComputer(ItemStack heldStack, Player player, InteractionHand hand, DiskBurnerData diskBurnerData)
 	{
-		boolean success = super.useOnComputer(heldStack, player, hand, blockEntity);
+		boolean success = super.useOnComputer(heldStack, player, hand, diskBurnerData);
 		boolean changedItem = false;
 		
 		// adds any new hieroglyph and paradox info from the computer to the item
 		
-		if(blockEntity.hasParadoxInfoStored && !getParadoxInfo(heldStack))
+		if(diskBurnerData.isHasParadoxInfoStored() && !getParadoxInfo(heldStack))
 		{
 			heldStack.set(MSItemComponents.PARADOX_CODE, Unit.INSTANCE);
 			changedItem = true;
 		}
 		
-		for(Block iterateBlock : blockEntity.hieroglyphsStored)
+		for(Block iterateBlock : diskBurnerData.getHieroglyphsStored())
 		{
 			if(iterateBlock.defaultBlockState().is(MSTags.Blocks.GREEN_HIEROGLYPHS))
 				changedItem |= HieroglyphCode.addBlock(heldStack, iterateBlock);

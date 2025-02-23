@@ -6,6 +6,8 @@ import com.mraof.minestuck.block.GateBlock;
 import com.mraof.minestuck.block.MSBlocks;
 import com.mraof.minestuck.blockentity.ComputerBlockEntity;
 import com.mraof.minestuck.blockentity.TransportalizerBlockEntity;
+import com.mraof.minestuck.computer.SburbClientData;
+import com.mraof.minestuck.computer.SburbServerData;
 import com.mraof.minestuck.computer.editmode.ServerEditHandler;
 import com.mraof.minestuck.network.EntryEffectPackets;
 import com.mraof.minestuck.player.IdentifierHandler;
@@ -19,7 +21,6 @@ import com.mraof.minestuck.world.MSDimensions;
 import com.mraof.minestuck.world.storage.MSExtraData;
 import net.minecraft.ChatFormatting;
 import net.minecraft.core.BlockPos;
-import net.minecraft.nbt.CompoundTag;
 import net.minecraft.network.chat.Component;
 import net.minecraft.resources.ResourceKey;
 import net.minecraft.server.level.ServerLevel;
@@ -253,7 +254,7 @@ public class EntryProcess
 				return true;
 			} else if(be instanceof ComputerBlockEntity computer)
 			{
-				if(!computer.owner.appliesTo(player))
+				if(computer.getOwner() == null || !computer.getOwner().appliesTo(player))
 				{
 					player.displayClientMessage(Component.translatable(NOT_YOUR_COMPUTER), false);
 					return true;
@@ -429,8 +430,12 @@ public class EntryProcess
 				}
 			} else
 			{
-				if(blockEntity instanceof ComputerBlockEntity)    //Avoid duplicating computer data when a computer is kept in the overworld
-					((ComputerBlockEntity) blockEntity).programData = new CompoundTag();
+				//Avoid duplicating computer data when a computer is kept in the overworld
+				if(blockEntity instanceof ComputerBlockEntity computer)
+				{
+					computer.getSburbClientData().ifPresent(SburbClientData::handleBeingDuplicated);
+					computer.getSburbServerData().ifPresent(SburbServerData::handleBeingDuplicated);
+				}
 				else if(blockEntity instanceof TransportalizerBlockEntity)
 					level.removeBlockEntity(pos);
 			}
