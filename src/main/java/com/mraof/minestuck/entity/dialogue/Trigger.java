@@ -10,6 +10,7 @@ import com.mraof.minestuck.entity.consort.ConsortReputation;
 import com.mraof.minestuck.entity.consort.ConsortRewardHandler;
 import com.mraof.minestuck.entity.dialogue.condition.Condition;
 import com.mraof.minestuck.inventory.ConsortMerchantInventory;
+import com.mraof.minestuck.player.Echeladder;
 import com.mraof.minestuck.player.PlayerBoondollars;
 import com.mraof.minestuck.player.PlayerData;
 import net.minecraft.MethodsReturnNonnullByDefault;
@@ -400,6 +401,28 @@ public sealed interface Trigger
 				else
 					PlayerBoondollars.takeBoondollars(data.get(), -boondollars);
 			}
+		}
+	}
+	
+	record AddEcheladderExperience(int xp) implements Trigger
+	{
+		static final MapCodec<AddEcheladderExperience> CODEC = RecordCodecBuilder.mapCodec(instance -> instance.group(
+				Codec.INT.fieldOf("xp").forGetter(AddEcheladderExperience::xp)
+		).apply(instance, AddEcheladderExperience::new));
+		
+		@Override
+		public MapCodec<AddEcheladderExperience> codec()
+		{
+			return CODEC;
+		}
+		
+		@Override
+		public void triggerEffect(LivingEntity entity, ServerPlayer player)
+		{
+			if(player == null)
+				return;
+			
+			Echeladder.get(player).increaseProgress(xp);
 		}
 	}
 	

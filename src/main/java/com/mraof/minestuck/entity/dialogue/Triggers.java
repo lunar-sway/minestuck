@@ -24,6 +24,7 @@ public final class Triggers
 		REGISTER.register("give_from_loot_table", () -> Trigger.GiveFromLootTable.CODEC);
 		REGISTER.register("add_consort_reputation", () -> Trigger.AddConsortReputation.CODEC);
 		REGISTER.register("add_boondollars", () -> Trigger.AddBoondollars.CODEC);
+		REGISTER.register("add_echeladder", () -> Trigger.AddEcheladderExperience.CODEC);
 		REGISTER.register("explode", () -> Trigger.Explode.CODEC);
 		REGISTER.register("set_flag", () -> Trigger.SetFlag.CODEC);
 		REGISTER.register("set_random_flag", () -> Trigger.SetRandomFlag.CODEC);

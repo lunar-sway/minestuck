@@ -1,0 +1,39 @@
+{
+  "node": {
+    "animation": {},
+    "gui": "minestuck:textures/gui/dialogue/dialogue.png",
+    "message": "minestuck.dialogue.consort.echeladder_progress.explain_echeladder",
+    "responses": [
+      {
+        "condition": {
+          "type": "minestuck:always_true"
+        },
+        "hide_if_failed": true,
+        "message": "minestuck.dialogue.consort.echeladder_progress.explain_echeladder.leveling",
+        "next_dialogue": "minestuck:consort/echeladder_progress/explain_leveling.1",
+        "triggers": []
+      },
+      {
+        "condition": {
+          "type": "minestuck:always_true"
+        },
+        "hide_if_failed": true,
+        "message": "minestuck.dialogue.meta",
+        "next_dialogue": {
+          "id": "minestuck:consort/echeladder_progress/smartass",
+          "player_message": "minestuck.dialogue.meta",
+          "set_as_entrypoint": false
+        },
+        "triggers": []
+      },
+      {
+        "condition": {
+          "type": "minestuck:always_true"
+        },
+        "hide_if_failed": true,
+        "message": "minestuck.dialogue.goodbye",
+        "triggers": []
+      }
+    ]
+  }
+}
