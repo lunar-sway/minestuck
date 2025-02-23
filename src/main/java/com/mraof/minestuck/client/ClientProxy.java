@@ -254,7 +254,7 @@ public class ClientProxy
 			public void modifyFogRender(Camera camera, FogRenderer.FogMode mode, float renderDistance, float partialTick, float nearDistance, float farDistance, FogShape shape)
 			{
 				RenderSystem.setShaderFogStart(-8);
-				RenderSystem.setShaderFogEnd(48F / 0.2F);
+				RenderSystem.setShaderFogEnd(4.8F / 0.2F);
 				RenderSystem.setShaderFogShape(FogShape.SPHERE);
 			}
 		}, MSFluids.WATER_COLORS_TYPE);
