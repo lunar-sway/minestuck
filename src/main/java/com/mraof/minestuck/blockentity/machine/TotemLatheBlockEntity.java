@@ -185,7 +185,7 @@ public class TotemLatheBlockEntity extends BlockEntity
 		return false;
 	}
 	
-	private boolean setCarvedItem(ItemStack output)
+	private void setCarvedItem(ItemStack output)
 	{
 		Objects.requireNonNull(this.level);
 		
@@ -194,27 +194,24 @@ public class TotemLatheBlockEntity extends BlockEntity
 		BlockState oldState = level.getBlockState(pos);
 		
 		if(!isValidDowelRod(oldState, facing))
-			return false;	// This is not our dowel rod block!
+			return;	// This is not our dowel rod block!
 		
 		BlockEntity be = level.getBlockEntity(pos);
-		if(be instanceof ItemStackBlockEntity beItem)
-		{
-			ItemStack oldDowel = beItem.getStack();
-			ItemStack newDowel = EncodedItemComponent.setEncodedUnlessBlank(oldDowel.copy().split(1), output.getItem());
-			beItem.setStack(newDowel);
-			
-			BlockState newState = MSBlocks.TOTEM_LATHE.DOWEL_ROD.get()
-					.defaultBlockState().setValue(TotemLatheBlock.FACING, facing)
-					.setValue(TotemLatheBlock.DowelRod.DOWEL, EnumDowelType.getForDowel(newDowel));
-			
-			if(!oldState.equals(newState))
-				level.setBlockAndUpdate(pos, newState);
-			else
-				level.sendBlockUpdated(pos, oldState, newState, 2);	// Make sure the new dowel item is synced to client
-			
-			return true;
-		} else
-			return false;
+		if(!(be instanceof ItemStackBlockEntity beItem))
+			return;
+		
+		ItemStack oldDowel = beItem.getStack();
+		ItemStack newDowel = EncodedItemComponent.setEncodedUnlessBlank(oldDowel.copy().split(1), output.getItem());
+		beItem.setStack(newDowel);
+		
+		BlockState newState = MSBlocks.TOTEM_LATHE.DOWEL_ROD.get()
+				.defaultBlockState().setValue(TotemLatheBlock.FACING, facing)
+				.setValue(TotemLatheBlock.DowelRod.DOWEL, EnumDowelType.getForDowel(newDowel));
+		
+		if(!oldState.equals(newState))
+			level.setBlockAndUpdate(pos, newState);
+		else
+			level.sendBlockUpdated(pos, oldState, newState, 2);	// Make sure the new dowel item is synced to client
 	}
 	
 	public ItemStack getDowel()
@@ -383,7 +380,6 @@ public class TotemLatheBlockEntity extends BlockEntity
 	{
 		ItemStack dowel = getDowel();
 		ItemStack output;
-		boolean success = false;
 		if(!dowel.isEmpty() && !dowel.has(MSItemComponents.ENCODED_ITEM) && (!card1.isEmpty() || !card2.isEmpty()))
 		{
 			if(!card1.isEmpty() && !card2.isEmpty())
@@ -401,10 +397,8 @@ public class TotemLatheBlockEntity extends BlockEntity
 			}
 			
 			if(!output.isEmpty())
-				success = setCarvedItem(output);
+				setCarvedItem(output);
 		}
-		
-		//effects(success); FIXME?
 	}
 	
 	public static void tick(Level level, BlockPos pos, BlockState state, TotemLatheBlockEntity blockEntity)

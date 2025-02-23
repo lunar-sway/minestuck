@@ -41,7 +41,7 @@ public class MagicRangedRightClickEffect implements ItemRightClickEffect
 	@Nullable
 	private final MagicEffect.RangedType type;
 	
-	private static final TargetingConditions visiblePredicate = TargetingConditions.forCombat();//.setLineOfSiteRequired(); TODO should something else be done with the predicate?
+	private static final TargetingConditions visiblePredicate = TargetingConditions.forCombat();
 	
 	public static final MagicRangedRightClickEffect SBAHJ_AIMBOT_MAGIC = new SbahjMagicEffect(10, 1, null, null, 1.0F, MagicEffect.RangedType.GREEN);
 	public static final MagicRangedRightClickEffect AIMBOT_MAGIC = new AimbotMagicEffect(14, 2, null, null, 1.0F, MagicEffect.RangedType.CRIT);

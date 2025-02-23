@@ -20,7 +20,6 @@ import org.jetbrains.annotations.NotNull;
  * The Suspicion effect causes mobs to forcibly move away from other entities.
  *
  * @see #onMount(net.neoforged.neoforge.event.entity.EntityMountEvent) Cancels out attempts to ride affected entities
- * @see #summonAttempt(ZombieEvent.SummonAidEvent) Cancels out attempts to spawn reinforcements
  */
 @EventBusSubscriber(modid = Minestuck.MOD_ID, bus = EventBusSubscriber.Bus.GAME)
 public class SuspicionEffect extends MobEffect
@@ -79,17 +78,6 @@ public class SuspicionEffect extends MobEffect
 			event.setCanceled(true);
 	}
 	
-	/* * FIXME
-	 * Cancels out attempts to call for reinforcements.
-	 * Examples: {@link net.minecraft.world.entity.monster.Zombie#hurt(DamageSource, float)}, {@link net.minecraft.world.entity.monster.ZombifiedPiglin#hurt(DamageSource, float)})
-	 * /
-	@SubscribeEvent
-	public static void summonAttempt(ZombieEvent.SummonAidEvent event)
-	{
-		if(event.getEntity().hasEffect(MSEffects.SUSPICION.get()))
-			event.setResult(Event.Result.DENY);
-	}
-	*/
 	@Override
 	public boolean shouldApplyEffectTickThisTick(int duration, int amplifier)
 	{

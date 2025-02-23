@@ -352,7 +352,7 @@ public final class MinestuckGristCostsProvider
 		ContainerGristCostBuilder.of(Items.WATER_BUCKET).grist(COBALT, 4).buildFor(recipeSaver, Minestuck.MOD_ID);
 		ContainerGristCostBuilder.of(Items.LAVA_BUCKET).grist(TAR, 16).buildFor(recipeSaver, Minestuck.MOD_ID);
 		ContainerGristCostBuilder.of(Items.MILK_BUCKET).grist(CHALK, 8).buildFor(recipeSaver, Minestuck.MOD_ID);
-		GristCostRecipeBuilder.of(Items.POWDER_SNOW_BUCKET).grist(RUST, 27).grist(CHALK, 4).buildFor(recipeSaver, Minestuck.MOD_ID); //TODO find way to handle SolidBucketItem instances like BucketItem
+		SourceGristCostBuilder.of(Items.POWDER_SNOW_BUCKET).source(Items.BUCKET).grist(CHALK, 4).buildFor(recipeSaver, Minestuck.MOD_ID);
 		
 		//------------------------MINESTUCK------------------------\\
 		

@@ -660,7 +660,7 @@ public interface Condition
 	record PlayerIsClass(EnumClass enumClass) implements Condition
 	{
 		static final MapCodec<PlayerIsClass> CODEC = RecordCodecBuilder.mapCodec(instance -> instance.group(
-				Title.CLASS_CODEC.fieldOf("class").forGetter(PlayerIsClass::enumClass)
+				EnumClass.CODEC.fieldOf("class").forGetter(PlayerIsClass::enumClass)
 		).apply(instance, PlayerIsClass::new));
 		
 		@Override
@@ -691,7 +691,7 @@ public interface Condition
 	record PlayerIsAspect(EnumAspect enumAspect) implements Condition
 	{
 		static final MapCodec<PlayerIsAspect> CODEC = RecordCodecBuilder.mapCodec(instance -> instance.group(
-				Title.ASPECT_CODEC.fieldOf("aspect").forGetter(PlayerIsAspect::enumAspect)
+				EnumAspect.CODEC.fieldOf("aspect").forGetter(PlayerIsAspect::enumAspect)
 		).apply(instance, PlayerIsAspect::new));
 		
 		@Override

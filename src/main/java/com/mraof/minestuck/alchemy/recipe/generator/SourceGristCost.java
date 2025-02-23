@@ -155,7 +155,6 @@ public final class SourceGristCost implements GristCostRecipe
 	
 	public sealed interface Source
 	{
-		//todo handle resource location parse errors
 		Codec<Source> CODEC = Codec.STRING.comapFlatMap(
 				name -> name.startsWith("#")
 						? ResourceLocation.read(name.substring(1)).map(TagSource::new)

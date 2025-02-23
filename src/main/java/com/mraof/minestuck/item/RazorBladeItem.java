@@ -10,6 +10,9 @@ import net.minecraft.world.item.ItemStack;
 import net.minecraft.world.level.Level;
 import net.minecraft.world.level.block.state.BlockState;
 
+import javax.annotation.ParametersAreNonnullByDefault;
+
+@ParametersAreNonnullByDefault
 public class RazorBladeItem extends Item
 {
 	
@@ -32,7 +35,7 @@ public class RazorBladeItem extends Item
 					razor.setPickUpDelay(40);
 					attacker.level().addFreshEntity(razor);
 					stack.shrink(1);
-					attacker.sendSystemMessage(Component.literal("While you handle the razor blade, you accidentally cut yourself and drop it.")); //TODO translation key
+					attacker.sendSystemMessage(Component.translatable(this.getDescriptionId() + ".cut_self"));
 				}
 				attacker.setHealth(attacker.getHealth() - 1);
 				return true;
@@ -44,21 +47,18 @@ public class RazorBladeItem extends Item
 	@Override
 	public boolean mineBlock(ItemStack stack, Level level, BlockState state, BlockPos pos, LivingEntity entityLiving)
 	{
-		if(entityLiving instanceof Player player)
+		if(entityLiving instanceof Player player && !player.isCreative())
 		{
-			if(!player.isCreative())
+			if(!level.isClientSide)
 			{
 				ItemEntity razor = new ItemEntity(entityLiving.level(), entityLiving.getX(), entityLiving.getY(), entityLiving.getZ(), stack.copy());
-				if(!level.isClientSide)
-				{
-					razor.getItem().setCount(1);
-					razor.setPickUpDelay(40);
-					level.addFreshEntity(razor);
-					stack.shrink(1);
-					entityLiving.sendSystemMessage(Component.literal("While you handle the razor blade, you accidentally cut yourself and drop it."));	//TODO translation key
-				}
-				entityLiving.hurt(level.damageSources().generic(), 1);
+				razor.getItem().setCount(1);
+				razor.setPickUpDelay(40);
+				level.addFreshEntity(razor);
+				stack.shrink(1);
+				entityLiving.sendSystemMessage(Component.translatable(this.getDescriptionId() + ".cut_self"));
 			}
+			entityLiving.hurt(level.damageSources().generic(), 1);
 		}
 		return super.mineBlock(stack, level, state, pos, entityLiving);
 	}

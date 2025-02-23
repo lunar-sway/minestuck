@@ -24,15 +24,17 @@ import java.util.Map;
 
 @ParametersAreNonnullByDefault
 @MethodsReturnNonnullByDefault
-public class CruxtruderBlock extends MultiMachineBlock<CruxtruderMultiblock> implements EntityBlock, EditmodeDestroyable
+public class CruxtruderBlock extends MachineBlock implements EntityBlock, EditmodeDestroyable
 {
 	protected final Map<Direction, VoxelShape> shape;
 	protected final boolean hasBlockEntity;
 	protected final BlockPos mainPos;
+	protected final CruxtruderMultiblock multiblock;
 	
-	public CruxtruderBlock(CruxtruderMultiblock machine, CustomVoxelShape shape, boolean blockEntity, BlockPos mainPos, Properties properties)
+	public CruxtruderBlock(CruxtruderMultiblock multiblock, CustomVoxelShape shape, boolean blockEntity, BlockPos mainPos, Properties properties)
 	{
-		super(machine, properties);
+		super(properties);
+		this.multiblock = multiblock;
 		this.shape = shape.createRotatedShapes();
 		this.hasBlockEntity = blockEntity;
 		this.mainPos = mainPos;
@@ -85,13 +87,13 @@ public class CruxtruderBlock extends MultiMachineBlock<CruxtruderMultiblock> imp
 	@Override
 	public void destroyFull(BlockState state, Level level, BlockPos pos)
 	{
-		var placement = this.machine.findPlacementFromTube(level, this.getMainPos(state, pos));
+		var placement = this.multiblock.findPlacementFromTube(level, this.getMainPos(state, pos));
 		if(placement.isPresent())
-			this.machine.removeAt(level, placement.get());
+			this.multiblock.removeAt(level, placement.get());
 		else
 		{
-			for(var placementGuess : this.machine.guessPlacement(pos, state))
-				this.machine.removeAt(level, placementGuess);
+			for(var placementGuess : this.multiblock.guessPlacement(pos, state))
+				this.multiblock.removeAt(level, placementGuess);
 		}
 	}
 	

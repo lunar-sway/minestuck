@@ -2,7 +2,6 @@ package com.mraof.minestuck.block;
 
 import com.mraof.minestuck.Minestuck;
 import com.mraof.minestuck.block.fluid.MSLiquidBlock;
-import com.mraof.minestuck.block.fluid.WaterColorsBlock;
 import com.mraof.minestuck.block.machine.*;
 import com.mraof.minestuck.block.plant.*;
 import com.mraof.minestuck.block.redstone.*;
@@ -30,7 +29,6 @@ import net.minecraft.world.level.block.state.properties.BlockSetType;
 import net.minecraft.world.level.block.state.properties.NoteBlockInstrument;
 import net.minecraft.world.level.material.MapColor;
 import net.minecraft.world.level.material.PushReaction;
-import net.minecraft.world.phys.Vec3;
 import net.neoforged.neoforge.registries.DeferredBlock;
 import net.neoforged.neoforge.registries.DeferredRegister;
 
@@ -1074,14 +1072,14 @@ public final class MSBlocks
 	public static final DeferredBlock<Block> GLOWYSTONE_DUST = REGISTER.register("glowystone_dust", () -> new GlowystoneWireBlock(Block.Properties.of().pushReaction(PushReaction.DESTROY).strength(0.0F).lightLevel(state -> 16).noCollission()));
 	public static final DeferredBlock<Block> MIRROR = REGISTER.register("mirror", () -> new CustomShapeBlock(ofFullCopy(Blocks.OAK_PLANKS), MSBlockShapes.MIRROR));
 	
-	public static final DeferredBlock<LiquidBlock> OIL = REGISTER.register("oil", () -> new MSLiquidBlock(MSFluids.OIL.get(), new Vec3(0.0, 0.0, 0.0), 0.80f, false, Block.Properties.of().mapColor(MapColor.COLOR_BLACK).replaceable().pushReaction(PushReaction.DESTROY).liquid().noCollission().strength(100.0F).noLootTable().sound(SoundType.EMPTY)));
-	public static final DeferredBlock<LiquidBlock> BLOOD = REGISTER.register("blood", () -> new MSLiquidBlock(MSFluids.BLOOD.get(), new Vec3(0.8, 0.0, 0.0), 0.35f, true, Block.Properties.of().mapColor(MapColor.COLOR_RED).replaceable().pushReaction(PushReaction.DESTROY).liquid().noCollission().strength(100.0F).noLootTable().sound(SoundType.EMPTY)));
-	public static final DeferredBlock<LiquidBlock> BRAIN_JUICE = REGISTER.register("brain_juice", () -> new MSLiquidBlock(MSFluids.BRAIN_JUICE.get(), new Vec3(0.55, 0.25, 0.7), 0.25f, true, Block.Properties.of().mapColor(MapColor.COLOR_PURPLE).replaceable().pushReaction(PushReaction.DESTROY).liquid().noCollission().strength(100.0F).noLootTable().sound(SoundType.EMPTY)));
-	public static final DeferredBlock<LiquidBlock> WATER_COLORS = REGISTER.register("water_colors", () -> new WaterColorsBlock(MSFluids.WATER_COLORS.get(), 0.20f, Block.Properties.of().mapColor(MapColor.WATER).replaceable().pushReaction(PushReaction.DESTROY).liquid().noCollission().strength(100.0F).noLootTable().sound(SoundType.EMPTY)));
-	public static final DeferredBlock<LiquidBlock> ENDER = REGISTER.register("ender", () -> new MSLiquidBlock(MSFluids.ENDER.get(), new Vec3(0, 0.35, 0.35), (Float.MAX_VALUE), false, Block.Properties.of().mapColor(MapColor.COLOR_CYAN).replaceable().pushReaction(PushReaction.DESTROY).liquid().noCollission().strength(100.0F).noLootTable().sound(SoundType.EMPTY)));
-	public static final DeferredBlock<LiquidBlock> LIGHT_WATER = REGISTER.register("light_water", () -> new MSLiquidBlock(MSFluids.LIGHT_WATER.get(), new Vec3(0.2, 0.3, 1.0), 0.20f, true, Block.Properties.of().mapColor(MapColor.WATER).replaceable().pushReaction(PushReaction.DESTROY).liquid().noCollission().strength(100.0F).lightLevel(state -> 8).noLootTable().sound(SoundType.EMPTY)));
-	public static final DeferredBlock<LiquidBlock> CAULK = REGISTER.register("caulk", () -> new MSLiquidBlock(MSFluids.CAULK.get(), new Vec3(0.79, 0.74, 0.63), 0.80f, false, Block.Properties.of().mapColor(MapColor.COLOR_GRAY).replaceable().pushReaction(PushReaction.DESTROY).liquid().noCollission().strength(100.0F).noLootTable().sound(SoundType.EMPTY)));
-	public static final DeferredBlock<LiquidBlock> MOLTEN_AMBER = REGISTER.register("molten_amber", () -> new MSLiquidBlock(MSFluids.MOLTEN_AMBER.get(), new Vec3(2.21, 1.29, 0.0), 0.90f, false, Block.Properties.of().mapColor(MapColor.FIRE).replaceable().pushReaction(PushReaction.DESTROY).liquid().noCollission().strength(100.0F).lightLevel(state -> 15).noLootTable().sound(SoundType.EMPTY)));
+	public static final DeferredBlock<LiquidBlock> OIL = REGISTER.register("oil", () -> new MSLiquidBlock(MSFluids.OIL.get(), false, Block.Properties.of().mapColor(MapColor.COLOR_BLACK).replaceable().pushReaction(PushReaction.DESTROY).liquid().noCollission().strength(100.0F).noLootTable().sound(SoundType.EMPTY)));
+	public static final DeferredBlock<LiquidBlock> BLOOD = REGISTER.register("blood", () -> new MSLiquidBlock(MSFluids.BLOOD.get(), true, Block.Properties.of().mapColor(MapColor.COLOR_RED).replaceable().pushReaction(PushReaction.DESTROY).liquid().noCollission().strength(100.0F).noLootTable().sound(SoundType.EMPTY)));
+	public static final DeferredBlock<LiquidBlock> BRAIN_JUICE = REGISTER.register("brain_juice", () -> new MSLiquidBlock(MSFluids.BRAIN_JUICE.get(), true, Block.Properties.of().mapColor(MapColor.COLOR_PURPLE).replaceable().pushReaction(PushReaction.DESTROY).liquid().noCollission().strength(100.0F).noLootTable().sound(SoundType.EMPTY)));
+	public static final DeferredBlock<LiquidBlock> WATER_COLORS = REGISTER.register("water_colors", () -> new LiquidBlock(MSFluids.WATER_COLORS.get(), Block.Properties.of().mapColor(MapColor.WATER).replaceable().pushReaction(PushReaction.DESTROY).liquid().noCollission().strength(100.0F).noLootTable().sound(SoundType.EMPTY)));
+	public static final DeferredBlock<LiquidBlock> ENDER = REGISTER.register("ender", () -> new MSLiquidBlock(MSFluids.ENDER.get(), false, Block.Properties.of().mapColor(MapColor.COLOR_CYAN).replaceable().pushReaction(PushReaction.DESTROY).liquid().noCollission().strength(100.0F).noLootTable().sound(SoundType.EMPTY)));
+	public static final DeferredBlock<LiquidBlock> LIGHT_WATER = REGISTER.register("light_water", () -> new MSLiquidBlock(MSFluids.LIGHT_WATER.get(), true, Block.Properties.of().mapColor(MapColor.WATER).replaceable().pushReaction(PushReaction.DESTROY).liquid().noCollission().strength(100.0F).lightLevel(state -> 8).noLootTable().sound(SoundType.EMPTY)));
+	public static final DeferredBlock<LiquidBlock> CAULK = REGISTER.register("caulk", () -> new MSLiquidBlock(MSFluids.CAULK.get(), false, Block.Properties.of().mapColor(MapColor.COLOR_GRAY).replaceable().pushReaction(PushReaction.DESTROY).liquid().noCollission().strength(100.0F).noLootTable().sound(SoundType.EMPTY)));
+	public static final DeferredBlock<LiquidBlock> MOLTEN_AMBER = REGISTER.register("molten_amber", () -> new MSLiquidBlock(MSFluids.MOLTEN_AMBER.get(), false, Block.Properties.of().mapColor(MapColor.FIRE).replaceable().pushReaction(PushReaction.DESTROY).liquid().noCollission().strength(100.0F).lightLevel(state -> 15).noLootTable().sound(SoundType.EMPTY)));
 	
 	
 	protected static Function<BlockState, MapColor> logColors(MapColor topColor, MapColor barkColor)
