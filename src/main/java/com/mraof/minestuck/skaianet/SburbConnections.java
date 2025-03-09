@@ -5,6 +5,7 @@ import com.mojang.serialization.DataResult;
 import com.mraof.minestuck.MinestuckConfig;
 import com.mraof.minestuck.computer.ComputerReference;
 import com.mraof.minestuck.computer.ISburbComputer;
+import com.mraof.minestuck.computer.SburbClientData;
 import com.mraof.minestuck.event.SburbEvent;
 import com.mraof.minestuck.player.IdentifierHandler;
 import com.mraof.minestuck.player.PlayerIdentifier;
@@ -131,7 +132,8 @@ public final class SburbConnections
 	Optional<ISburbComputer> clientComputerIfValid(ActiveConnection connection)
 	{
 		return Optional.ofNullable(connection.clientComputer().getComputer(skaianetData.mcServer))
-				.filter(computer -> connection.client().equals(computer.getOwner()) && computer.getClientBoolean("connectedToServer"));
+				.filter(computer -> connection.client().equals(computer.getOwner())
+						&& computer.getSburbClientData().map(SburbClientData::isConnectedToServer).orElse(false));
 	}
 	
 	Optional<ISburbComputer> serverComputerIfValid(ActiveConnection connection)
@@ -214,9 +216,9 @@ public final class SburbConnections
 				&& skaianetData.sessionHandler.isInSameSession(client, server);
 	}
 	
-	boolean tryConnect(ISburbComputer clientComputer, ISburbComputer serverComputer)
+	boolean tryConnect(ClientAccess client, ServerAccess server)
 	{
-		PlayerIdentifier clientPlayer = clientComputer.getOwner(), serverPlayer = serverComputer.getOwner();
+		PlayerIdentifier clientPlayer = client.computer().getOwner(), serverPlayer = server.computer().getOwner();
 		
 		if(this.getActiveConnection(clientPlayer).isPresent())
 			return false;
@@ -226,7 +228,7 @@ public final class SburbConnections
 			if(!this.canMakeNewRegularConnectionAsServer(serverPlayer))
 				return false;
 			
-			this.newActiveConnection(clientComputer, serverComputer, SburbEvent.ConnectionType.REGULAR);
+			this.newActiveConnection(client, server, SburbEvent.ConnectionType.REGULAR);
 			return true;
 		}
 		
@@ -237,39 +239,39 @@ public final class SburbConnections
 				return false;
 			
 			this.setPrimaryConnection(clientPlayer, serverPlayer);
-			this.newActiveConnection(clientComputer, serverComputer, SburbEvent.ConnectionType.NEW_SERVER);
+			this.newActiveConnection(client, server, SburbEvent.ConnectionType.NEW_SERVER);
 			return true;
 		}
 		
 		if(primaryServer.get().equals(serverPlayer))
 		{
-			this.newActiveConnection(clientComputer, serverComputer, SburbEvent.ConnectionType.RESUME);
+			this.newActiveConnection(client, server, SburbEvent.ConnectionType.RESUME);
 			return true;
 		}
 		if(this.canMakeSecondaryConnection(clientPlayer, serverPlayer))
 		{
-			this.newActiveConnection(clientComputer, serverComputer, SburbEvent.ConnectionType.SECONDARY);
+			this.newActiveConnection(client, server, SburbEvent.ConnectionType.SECONDARY);
 			return true;
 		}
 		return false;
 	}
 	
-	private void newActiveConnection(ISburbComputer client, ISburbComputer server,
-									 SburbEvent.ConnectionType type)
+	private void newActiveConnection(ClientAccess client, ServerAccess server, SburbEvent.ConnectionType type)
 	{
 		Objects.requireNonNull(client);
 		Objects.requireNonNull(server);
 		
-		if(this.getActiveConnection(client.getOwner()).isPresent())
+		if(this.getActiveConnection(client.computer().getOwner()).isPresent())
 			throw new IllegalStateException("Should not activate sburb connection when already active");
 		
-		ActiveConnection activeConnection = new ActiveConnection(client, server);
+		ActiveConnection activeConnection = new ActiveConnection(client.computer(), server.computer());
 		this.activeConnections.add(activeConnection);
 		skaianetData.sessionHandler.onConnect(activeConnection.client(), activeConnection.server());
 		skaianetData.infoTracker.markDirty(activeConnection);
 		
-		client.connected(server.getOwner(), true);
-		server.connected(client.getOwner(), false);
+		client.data().setIsResuming(false);
+		client.data().setIsConnectedToServer(true);
+		server.data().setIsOpen(false);
 		
 		NeoForge.EVENT_BUS.post(new SburbEvent.ConnectionCreated(skaianetData.mcServer, activeConnection, type));
 	}
@@ -297,13 +299,17 @@ public final class SburbConnections
 		
 		if(clientComputer != null)
 		{
-			clientComputer.putClientBoolean("connectedToServer", false);
-			clientComputer.putClientMessage(CLOSED);
+			clientComputer.getSburbClientData().ifPresent(sburbClientData -> {
+				sburbClientData.setIsConnectedToServer(false);
+				sburbClientData.setEventMessage(CLOSED);
+			});
 		}
 		if(serverComputer != null)
 		{
-			serverComputer.clearConnectedClient();
-			serverComputer.putServerMessage(CLOSED);
+			serverComputer.getSburbServerData().ifPresent(sburbServerData -> {
+				sburbServerData.setIsConnected();
+				sburbServerData.setEventMessage(CLOSED);
+			});
 		}
 		
 		NeoForge.EVENT_BUS.post(new SburbEvent.ConnectionClosed(skaianetData.mcServer, connection));

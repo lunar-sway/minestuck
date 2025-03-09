@@ -5,9 +5,8 @@ import com.mraof.minestuck.block.MSBlockShapes;
 import com.mraof.minestuck.block.MSProperties;
 import com.mraof.minestuck.blockentity.ComputerBlockEntity;
 import com.mraof.minestuck.client.gui.MSScreenFactories;
-import com.mraof.minestuck.computer.ProgramData;
 import com.mraof.minestuck.computer.theme.MSComputerThemes;
-import com.mraof.minestuck.item.MSItems;
+import com.mraof.minestuck.item.components.MSItemComponents;
 import com.mraof.minestuck.player.IdentifierHandler;
 import com.mraof.minestuck.skaianet.client.SkaiaClient;
 import net.minecraft.MethodsReturnNonnullByDefault;
@@ -15,13 +14,11 @@ import net.minecraft.core.BlockPos;
 import net.minecraft.core.Direction;
 import net.minecraft.resources.ResourceLocation;
 import net.minecraft.util.StringRepresentable;
-import net.minecraft.world.Containers;
 import net.minecraft.world.InteractionHand;
 import net.minecraft.world.InteractionResult;
 import net.minecraft.world.ItemInteractionResult;
 import net.minecraft.world.entity.player.Player;
 import net.minecraft.world.item.ItemStack;
-import net.minecraft.world.item.Items;
 import net.minecraft.world.level.BlockGetter;
 import net.minecraft.world.level.Level;
 import net.minecraft.world.level.block.Block;
@@ -37,7 +34,7 @@ import net.minecraft.world.phys.shapes.VoxelShape;
 import javax.annotation.Nullable;
 import javax.annotation.ParametersAreNonnullByDefault;
 import java.util.Map;
-import java.util.OptionalInt;
+import java.util.Objects;
 
 @ParametersAreNonnullByDefault
 @MethodsReturnNonnullByDefault
@@ -86,7 +83,7 @@ public class ComputerBlock extends MachineBlock implements EntityBlock
 		ItemStack heldItem = player.getItemInHand(hand);
 		if(state.getValue(STATE) == State.OFF)
 		{
-			if(ProgramData.getProgramID(heldItem).isEmpty())
+			if(!heldItem.has(MSItemComponents.PROGRAM_TYPE))
 				return ItemInteractionResult.SKIP_DEFAULT_BLOCK_INTERACTION;
 			
 			turnOn(state, level, pos, player);
@@ -95,7 +92,7 @@ public class ComputerBlock extends MachineBlock implements EntityBlock
 		if(!(level.getBlockEntity(pos) instanceof ComputerBlockEntity blockEntity))
 			return ItemInteractionResult.FAIL;
 		
-		if(insertDisk(blockEntity, state, level, pos, player, hand))
+		if(blockEntity.tryInsertDisk(player.getItemInHand(hand)))
 			return ItemInteractionResult.SUCCESS;
 		//insertion of code handled in ReadableSburbCodeItem onItemUseFirst()
 		
@@ -133,57 +130,10 @@ public class ComputerBlock extends MachineBlock implements EntityBlock
 		
 		if(level.getBlockEntity(pos) instanceof ComputerBlockEntity computer)
 		{
-			computer.owner = IdentifierHandler.encode(player);
+			computer.initializeOwner(Objects.requireNonNull(IdentifierHandler.encode(player)));
 			
 			computer.setTheme(defaultTheme);
 		}
-	}
-	
-	private boolean insertDisk(ComputerBlockEntity blockEntity, BlockState state, Level level, BlockPos pos, Player player, InteractionHand handIn)
-	{
-		if(blockEntity.isBroken())
-			return false;
-		
-		ItemStack stackInHand = player.getItemInHand(handIn);
-		OptionalInt optionalId = ProgramData.getProgramID(stackInHand);
-		
-		if(stackInHand.is(MSItems.BLANK_DISK.get()))
-		{
-			if(blockEntity.blankDisksStored < 2) //only allow two blank disks to be burned at a time
-			{
-				stackInHand.shrink(1);
-				blockEntity.blankDisksStored++;
-				blockEntity.setChanged();
-				level.sendBlockUpdated(pos, state, state, 3);
-				return true;
-			}
-		} else if(stackInHand.is(Items.MUSIC_DISC_11))
-		{
-			if(!level.isClientSide && blockEntity.installedPrograms.size() < 3)
-			{
-				stackInHand.shrink(1);
-				blockEntity.closeAll();
-				level.setBlock(pos, state.setValue(STATE, State.BROKEN), Block.UPDATE_CLIENTS);
-				blockEntity.setChanged();
-				level.sendBlockUpdated(pos, state, state, 3);
-			}
-			return true;
-		} else if(optionalId.isPresent())
-		{
-			int id = optionalId.getAsInt();
-			if(!level.isClientSide && !blockEntity.hasProgram(id))
-			{
-				stackInHand.shrink(1);
-				blockEntity.installedPrograms.add(id);
-				level.setBlock(pos, state.setValue(STATE, State.GAME_LOADED), Block.UPDATE_CLIENTS);
-				blockEntity.setChanged();
-				level.sendBlockUpdated(pos, state, state, 3);
-				ProgramData.getHandler(id).ifPresent(handler -> handler.onDiskInserted(blockEntity));
-			}
-			return true;
-		}
-		
-		return false;
 	}
 	
 	@Nullable
@@ -197,29 +147,17 @@ public class ComputerBlock extends MachineBlock implements EntityBlock
 	protected void onRemove(BlockState state, Level level, BlockPos pos, BlockState newState, boolean isMoving)
 	{
 		if(!newState.is(state.getBlock()))
-			dropItems(level, pos.getX(), pos.getY(), pos.getZ(), state);
+			dropItems(level, pos, state);
 		super.onRemove(state, level, pos, newState, isMoving);
 	}
 	
-	private void dropItems(Level level, int x, int y, int z, BlockState state)
+	private void dropItems(Level level, BlockPos pos, BlockState state)
 	{
-		ComputerBlockEntity be = (ComputerBlockEntity) level.getBlockEntity(new BlockPos(x, y, z));
-		if(be == null)
+		if(level.getBlockEntity(pos) instanceof ComputerBlockEntity computer)
 		{
-			return;
+			computer.closeAll();
+			computer.dropItems();
 		}
-		be.closeAll();
-		
-		//program disks
-		for(int id : be.installedPrograms)
-			Containers.dropItemStack(level, x, y, z, ProgramData.getItem(id));
-		
-		//blank disks
-		Containers.dropItemStack(level, x, y, z, new ItemStack(MSItems.BLANK_DISK.get(), be.blankDisksStored));
-		
-		//music disc
-		if(state.getValue(STATE) == State.BROKEN)
-			Containers.dropItemStack(level, x, y, z, new ItemStack(Items.MUSIC_DISC_11));
 	}
 	
 	@Override
