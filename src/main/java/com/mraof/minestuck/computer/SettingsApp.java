@@ -31,7 +31,6 @@ public class SettingsApp extends ButtonListProgram
 		if(be.getLevel() == null)
 			return;
 		
-		//TODO ADD MORE SETTINGS
 		switch(buttonName)
 		{
 			case THEME -> {
