@@ -477,7 +477,7 @@ public class MSItems
 	public static final DeferredItem<Item> RAW_URANIUM = REGISTER.register("raw_uranium", () -> new Item(new Item.Properties()));
 	public static final DeferredItem<Item> ENERGY_CORE = REGISTER.register("energy_core", () -> new Item(new Item.Properties()));
 	
-	public static final DeferredItem<Item> CRUXITE_APPLE = REGISTER.register("cruxite_apple", () -> new CruxiteAppleItem(new Item.Properties().stacksTo(1).rarity(Rarity.UNCOMMON))); //TODO have to fix Cruxite artifact classes
+	public static final DeferredItem<Item> CRUXITE_APPLE = REGISTER.register("cruxite_apple", () -> new CruxiteAppleItem(new Item.Properties().stacksTo(1).rarity(Rarity.UNCOMMON)));
 	public static final DeferredItem<Item> CRUXITE_POTION = REGISTER.register("cruxite_potion", () -> new CruxitePotionItem(new Item.Properties().stacksTo(1).rarity(Rarity.UNCOMMON)));
 	
 	public static final DeferredItem<Item> SBURB_CODE = REGISTER.register("sburb_code", () -> new IncompleteSburbCodeItem(new Item.Properties().stacksTo(1)));

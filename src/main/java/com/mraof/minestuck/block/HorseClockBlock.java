@@ -1,7 +1,7 @@
 package com.mraof.minestuck.block;
 
+import com.mraof.minestuck.block.machine.MachineBlock;
 import com.mraof.minestuck.block.machine.MachineMultiblock;
-import com.mraof.minestuck.block.machine.MultiMachineBlock;
 import com.mraof.minestuck.blockentity.HorseClockBlockEntity;
 import com.mraof.minestuck.blockentity.MSBlockEntityTypes;
 import net.minecraft.MethodsReturnNonnullByDefault;
@@ -34,13 +34,13 @@ import javax.annotation.ParametersAreNonnullByDefault;
  */
 @ParametersAreNonnullByDefault
 @MethodsReturnNonnullByDefault
-public class HorseClockBlock extends MultiMachineBlock<MachineMultiblock>
+public class HorseClockBlock extends MachineBlock
 {
 	public static final IntegerProperty POWER = BlockStateProperties.POWER;
 	
-	public HorseClockBlock(MachineMultiblock machine, Properties properties)
+	public HorseClockBlock(Properties properties)
 	{
-		super(machine, properties);
+		super(properties);
 		registerDefaultState(stateDefinition.any().setValue(POWER, 0));
 	}
 	
@@ -109,7 +109,7 @@ public class HorseClockBlock extends MultiMachineBlock<MachineMultiblock>
 	{
 		public Bottom(MachineMultiblock machine, Properties properties)
 		{
-			super(machine, properties);
+			super(properties);
 		}
 		
 		@Override

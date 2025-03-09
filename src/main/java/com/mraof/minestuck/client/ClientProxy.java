@@ -1,5 +1,7 @@
 package com.mraof.minestuck.client;
 
+import com.mojang.blaze3d.shaders.FogShape;
+import com.mojang.blaze3d.systems.RenderSystem;
 import com.mraof.minestuck.Minestuck;
 import com.mraof.minestuck.block.MSBlocks;
 import com.mraof.minestuck.blockentity.MSBlockEntityTypes;
@@ -32,9 +34,12 @@ import com.mraof.minestuck.item.weapon.MusicPlayerWeapon;
 import com.mraof.minestuck.util.MSParticleType;
 import com.mraof.minestuck.world.MSDimensions;
 import net.minecraft.MethodsReturnNonnullByDefault;
+import net.minecraft.client.Camera;
 import net.minecraft.client.Minecraft;
 import net.minecraft.client.model.HumanoidModel;
+import net.minecraft.client.multiplayer.ClientLevel;
 import net.minecraft.client.particle.ParticleEngine;
+import net.minecraft.client.renderer.FogRenderer;
 import net.minecraft.client.renderer.ItemBlockRenderTypes;
 import net.minecraft.client.renderer.RenderType;
 import net.minecraft.client.renderer.blockentity.HangingSignRenderer;
@@ -65,10 +70,9 @@ import net.neoforged.neoforge.client.extensions.common.IClientBlockExtensions;
 import net.neoforged.neoforge.client.extensions.common.IClientFluidTypeExtensions;
 import net.neoforged.neoforge.client.extensions.common.IClientItemExtensions;
 import net.neoforged.neoforge.client.extensions.common.RegisterClientExtensionsEvent;
-import net.neoforged.neoforge.fluids.FluidType;
-import net.neoforged.neoforge.registries.DeferredHolder;
 import net.neoforged.neoforge.registries.DeferredItem;
 import org.jetbrains.annotations.NotNull;
+import org.joml.Vector3f;
 import software.bernie.geckolib.renderer.GeoArmorRenderer;
 
 import javax.annotation.Nullable;
@@ -214,28 +218,50 @@ public class ClientProxy
 			}
 		}, MSBlocks.GATE, MSBlocks.GATE_MAIN, MSBlocks.RETURN_NODE, MSBlocks.RETURN_NODE_MAIN);
 		
-		for(DeferredHolder<FluidType, FluidType> fluidType : Arrays.asList(MSFluids.OIL_TYPE, MSFluids.LIGHT_WATER_TYPE,
-				MSFluids.BLOOD_TYPE, MSFluids.BRAIN_JUICE_TYPE, MSFluids.WATER_COLORS_TYPE, MSFluids.ENDER_TYPE,
-				MSFluids.CAULK_TYPE, MSFluids.MOLTEN_AMBER_TYPE))
+		event.registerFluidType(commonFluidExtension(MSFluids.OIL_TYPE.getId(), new Vector3f(0F, 0F, 0F), 0.8F), MSFluids.OIL_TYPE);
+		event.registerFluidType(commonFluidExtension(MSFluids.LIGHT_WATER_TYPE.getId(), new Vector3f(0.2F, 0.3F, 1F), 0.2F), MSFluids.LIGHT_WATER_TYPE);
+		event.registerFluidType(commonFluidExtension(MSFluids.BLOOD_TYPE.getId(), new Vector3f(0.8F, 0F, 0F), 0.35F), MSFluids.BLOOD_TYPE);
+		event.registerFluidType(commonFluidExtension(MSFluids.BRAIN_JUICE_TYPE.getId(), new Vector3f(0.55F, 0.25F, 0.7F), 0.25F), MSFluids.BRAIN_JUICE_TYPE);
+		event.registerFluidType(new IClientFluidTypeExtensions()
 		{
-			event.registerFluidType(new IClientFluidTypeExtensions()
+			private final ResourceLocation stillTexture = MSFluids.WATER_COLORS_TYPE.getId().withPrefix("block/still_");
+			private final ResourceLocation flowingTexture = MSFluids.WATER_COLORS_TYPE.getId().withPrefix("block/flowing_");
+			
+			@Override
+			public ResourceLocation getStillTexture()
 			{
-				private final ResourceLocation stillTexture = fluidType.getId().withPrefix("block/still_");
-				private final ResourceLocation flowingTexture = fluidType.getId().withPrefix("block/flowing_");
+				return stillTexture;
+			}
+			
+			@Override
+			public ResourceLocation getFlowingTexture()
+			{
+				return flowingTexture;
+			}
+			
+			@Override
+			public Vector3f modifyFogColor(Camera camera, float partialTick, ClientLevel level, int renderDistance, float darkenWorldAmount, Vector3f fluidFogColor)
+			{
+				Vector3f colorValue = new Vector3f(0F, 20F, 30F)
+						.rotateY((float) (camera.getEntity().getX() / 2))
+						.rotateX((float) (camera.getEntity().getZ() / 2))
+						.rotateY((float) (camera.getEntity().getY()))
+						.normalize();
 				
-				@Override
-				public ResourceLocation getStillTexture()
-				{
-					return stillTexture;
-				}
-				
-				@Override
-				public ResourceLocation getFlowingTexture()
-				{
-					return flowingTexture;
-				}
-			}, fluidType);
-		}
+				return new Vector3f(colorValue.x % 1F, colorValue.y % 1F, colorValue.z % 1F);
+			}
+			
+			@Override
+			public void modifyFogRender(Camera camera, FogRenderer.FogMode mode, float renderDistance, float partialTick, float nearDistance, float farDistance, FogShape shape)
+			{
+				RenderSystem.setShaderFogStart(-8);
+				RenderSystem.setShaderFogEnd(4.8F / 0.2F);
+				RenderSystem.setShaderFogShape(FogShape.SPHERE);
+			}
+		}, MSFluids.WATER_COLORS_TYPE);
+		event.registerFluidType(commonFluidExtension(MSFluids.ENDER_TYPE.getId(), new Vector3f(0F, 0.35F, 0.35F), Float.MAX_VALUE), MSFluids.ENDER_TYPE);
+		event.registerFluidType(commonFluidExtension(MSFluids.CAULK_TYPE.getId(), new Vector3f(0.79F, 0.74F, 0.63F), 0.8F), MSFluids.CAULK_TYPE);
+		event.registerFluidType(commonFluidExtension(MSFluids.MOLTEN_AMBER_TYPE.getId(), new Vector3f(2.21F, 1.29F, 0F), 0.9F), MSFluids.MOLTEN_AMBER_TYPE);
 		
 		for(DeferredItem<MSArmorItem> armorItem : Arrays.asList(
 				MSItems.PROSPIT_CIRCLET, MSItems.PROSPIT_SHIRT, MSItems.PROSPIT_PANTS, MSItems.PROSPIT_SHOES,
@@ -311,6 +337,41 @@ public class ClientProxy
 				return this.renderer;
 			}
 		}, MSItems.IRON_LASS_GLASSES, MSItems.IRON_LASS_CHESTPLATE, MSItems.IRON_LASS_SKIRT, MSItems.IRON_LASS_SHOES);
+	}
+	
+	private static IClientFluidTypeExtensions commonFluidExtension(ResourceLocation baseId, Vector3f fogColor, float fogDensity)
+	{
+		return new IClientFluidTypeExtensions()
+		{
+			private final ResourceLocation stillTexture = baseId.withPrefix("block/still_");
+			private final ResourceLocation flowingTexture = baseId.withPrefix("block/flowing_");
+			
+			@Override
+			public ResourceLocation getStillTexture()
+			{
+				return stillTexture;
+			}
+			
+			@Override
+			public ResourceLocation getFlowingTexture()
+			{
+				return flowingTexture;
+			}
+			
+			@Override
+			public Vector3f modifyFogColor(Camera camera, float partialTick, ClientLevel level, int renderDistance, float darkenWorldAmount, Vector3f fluidFogColor)
+			{
+				return fogColor;
+			}
+			
+			@Override
+			public void modifyFogRender(Camera camera, FogRenderer.FogMode mode, float renderDistance, float partialTick, float nearDistance, float farDistance, FogShape shape)
+			{
+				RenderSystem.setShaderFogStart(-8);
+				RenderSystem.setShaderFogEnd(4.8F / fogDensity);
+				RenderSystem.setShaderFogShape(FogShape.SPHERE);
+			}
+		};
 	}
 	
 	/**

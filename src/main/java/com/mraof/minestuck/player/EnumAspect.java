@@ -1,28 +1,25 @@
 package com.mraof.minestuck.player;
 
 import com.mojang.serialization.Codec;
-import com.mojang.serialization.DataResult;
 import net.minecraft.network.chat.Component;
 import net.minecraft.util.RandomSource;
+import net.minecraft.util.StringRepresentable;
 
 import java.util.EnumSet;
 import java.util.Locale;
-import java.util.Optional;
 import java.util.Set;
 
 /**
  * An aspect version of <code>EnumClass</code> that works pretty much the same way as the <code>EnumClass</code> except
  * that it doesn't have any special types.
- * The <code>toString()</code> method is overridden and returns a better cased version of the aspect name.
+ * The <code>toString()</code> method is overridden and returns a lower cased version of the aspect name.
  * @author kirderf1
  */
-public enum EnumAspect	//TODO This could potentially be changed to a registry. However note difficulties with the title land aspect registry
+public enum EnumAspect implements StringRepresentable    //TODO This could potentially be changed to a registry. However note difficulties with the title land aspect registry
 {
 	BLOOD,BREATH,DOOM,HEART,HOPE,LIFE,LIGHT,MIND,RAGE,SPACE,TIME,VOID;
 	
-	public static final Codec<EnumAspect> CODEC = Codec.STRING.comapFlatMap(
-			str -> Optional.ofNullable(fromString(str)).map(DataResult::success).orElseGet(() -> DataResult.error(() -> "Couldn't parse aspect: " + str)),
-			EnumAspect::toString);
+	public static final Codec<EnumAspect> CODEC = StringRepresentable.fromEnum(EnumAspect::values);
 	
 	/**
 	 * This method generates one of the 12 aspects that is not specified in the
@@ -76,21 +73,25 @@ public enum EnumAspect	//TODO This could potentially be changed to a registry. H
 	
 	/**
 	 * Takes the enum name for this title-aspect and returns a lowercase version.
-	 * Aside from regular use of the method, it is useful for producing
-	 * the unlocalized name of the title-aspect using <code>"title." + titleAspect.toString()</code>
 	 * @return the name of this title-aspect
 	 */
 	@Override
-	public String toString()
+	public String getSerializedName()
 	{
 		return this.name().toLowerCase(Locale.ROOT);
+	}
+	
+	@Override
+	public String toString()
+	{
+		return this.getSerializedName();
 	}
 	
 	public static EnumAspect fromString(String string)
 	{
 		for(EnumAspect a : values())
 		{
-			if(a.toString().equalsIgnoreCase(string))
+			if(a.getSerializedName().equalsIgnoreCase(string))
 				return a;
 		}
 		return null;
@@ -108,7 +109,7 @@ public enum EnumAspect	//TODO This could potentially be changed to a registry. H
 	
 	public String getTranslationKey()
 	{
-		return "title.aspect." + this.toString();
+		return "title.aspect." + this.getSerializedName();
 	}
 	
 	public static Set<EnumAspect> valuesSet()

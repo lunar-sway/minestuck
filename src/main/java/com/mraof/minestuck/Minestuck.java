@@ -69,8 +69,6 @@ public class Minestuck
 		modContainer.registerConfig(ModConfig.Type.CLIENT, MinestuckConfig.clientSpec);
 		modContainer.registerConfig(ModConfig.Type.SERVER, MinestuckConfig.serverSpec);
 		
-		//GeckoLib.initialize(eventBus); FIXME
-		
 		MSItemComponents.REGISTRY.register(eventBus);
 		MSItemTypes.ARMOR_MATERIAL_REGISTRY.register(eventBus);
 		MSBlocks.REGISTER.register(eventBus);
