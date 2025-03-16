@@ -36,6 +36,14 @@ The format is based on [Keep a Changelog](https://keepachangelog.com/en/1.1.0/).
 ### Contributed
 - ThalliumSulfate, triagegremlin, caldw3ll
 
+### Added
+
+- Added 2 tracks october and endless chasm by triagegremlin
+- Added 2 tracks the note desolation plays and desolate strife by caldw3ll
+
+### Contributed
+- ThalliumSulfate, triagegremlin, caldw3ll
+
 ## [1.20.4-1.12.2.0] - 2024-10-06
 
 - Updated to run with Minecraft 1.20.4 / Neoforge 20.4
