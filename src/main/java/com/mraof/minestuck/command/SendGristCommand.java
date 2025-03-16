@@ -42,7 +42,7 @@ public class SendGristCommand
 				source.sendSuccess(() -> Component.translatable(SUCCESS, target.getDisplayName(), grist.asTextComponent()), true);
 				target.sendSystemMessage(Component.translatable(RECEIVE, player.getDisplayName(), grist.asTextComponent()));
 				return 1;
-			} else throw CANT_AFFORD_EXCEPTION.create(grist);
+			} else throw CANT_AFFORD_EXCEPTION.create(grist.asTextComponent());
 		} else throw PERMISSION_EXCEPTION.create(target.getDisplayName());
 	}
 	
