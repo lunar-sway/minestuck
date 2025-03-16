@@ -13,6 +13,8 @@ The format is based on [Keep a Changelog](https://keepachangelog.com/en/1.1.0/).
 - New consort dialogue
 - New carapacian dialogue
 - Message when entering edit mode to remind players of the exit keybind
+- Added 2 tracks october and endless chasm by triagegremlin
+- Added 2 tracks the note desolation plays and desolate strife by Caldw3ll
 
 ### Changed
 
@@ -26,23 +28,7 @@ The format is based on [Keep a Changelog](https://keepachangelog.com/en/1.1.0/).
 
 ### Contributors for this release
 
-- Cibernet, Dweblenod, kirderf1, glubtier, blankMushroom, hadean
-
-### Added
-
-- Added 2 tracks october and endless chasm by triagegremlin
-- Added 2 tracks the note desolation plays and desolate strife by caldw3ll
-
-### Contributed
-- ThalliumSulfate, triagegremlin, caldw3ll
-
-### Added
-
-- Added 2 tracks october and endless chasm by triagegremlin
-- Added 2 tracks the note desolation plays and desolate strife by caldw3ll
-
-### Contributed
-- ThalliumSulfate, triagegremlin, caldw3ll
+- Cibernet, Dweblenod, kirderf1, glubtier, blankMushroom, hadean, ThalliumSulfate, triagegremlin, Caldw3ll
 
 ## [1.20.4-1.12.2.0] - 2024-10-06
 
