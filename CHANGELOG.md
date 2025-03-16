@@ -6,6 +6,8 @@ The format is based on [Keep a Changelog](https://keepachangelog.com/en/1.1.0/).
 
 ## [Unreleased]
 
+## [1.20.4-1.12.2.1] - 2025-03-16
+
 ### Fixed
 
 - Shade stone no longer has texture of shade stone cruxite ore
