@@ -6,6 +6,19 @@ The format is based on [Keep a Changelog](https://keepachangelog.com/en/1.1.0/).
 
 ## [Unreleased]
 
+### Fixed
+
+- Shade stone no longer has texture of shade stone cruxite ore
+- Carved totems in alchemiter model now have correct uv mapping
+- Removed collision from buttons
+- Black stone/black stone brick stairs/slabs now use a wooden pickaxe as the correct tool
+- Color selection button is available in the SBURB Client program before connection again instead of after
+- Fixed untranslated key when using /gutter show command
+
+### Contributors for this release
+
+- Dweblenod, blankMushroom, kirderf1
+
 ## [1.20.4-1.12.2.0] - 2024-10-06
 
 - Updated to run with Minecraft 1.20.4 / Neoforge 20.4
