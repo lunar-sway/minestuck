@@ -71,6 +71,7 @@ public class DialogueButton extends Button
 		
 		if(hoveredOrFocused && !wasHoveredOrFocused && this.active)
 			Minecraft.getInstance().player.playSound(SoundEvents.UI_BUTTON_CLICK.value(), 0.2F, 2.0F);
+		wasHoveredOrFocused = isMouseOver(mouseX, mouseY) || isFocused();
 		
 		guiGraphics.blitWithBorder(gui, this.getX() + hoverFocusShift, this.getY(), 0, 176 + k * 20, this.width, trueHeight, 200, 20, 3, 3, 3, 3);
 		
@@ -92,7 +93,6 @@ public class DialogueButton extends Button
 			guiGraphics.drawString(mc.font, messageLines.get(i), textX , pY, getFGColor(), false);
 			pY += TEXT_SPACING;
 		}
-		
-		wasHoveredOrFocused = isMouseOver(mouseX, mouseY) || isFocused();
 	}
+	
 }

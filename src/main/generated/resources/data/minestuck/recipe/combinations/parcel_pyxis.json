@@ -1,0 +1,11 @@
+{
+  "type": "minestuck:combination",
+  "input1": {
+    "item": "minestuck:pipe"
+  },
+  "input2": {
+    "item": "minestuck:mailbox"
+  },
+  "mode": "or",
+  "output": "minestuck:parcel_pyxis"
+}

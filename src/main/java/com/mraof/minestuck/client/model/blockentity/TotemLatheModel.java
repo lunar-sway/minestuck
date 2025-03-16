@@ -9,16 +9,16 @@ public class TotemLatheModel extends GeoModel<TotemLatheDowelBlockEntity>
 {
     @Override
     public ResourceLocation getModelResource(TotemLatheDowelBlockEntity object) {
-        return new ResourceLocation(Minestuck.MOD_ID, "geo/blockentity/totemlathe.geo.json");
+        return ResourceLocation.fromNamespaceAndPath(Minestuck.MOD_ID, "geo/blockentity/totemlathe.geo.json");
     }
 
     @Override
     public ResourceLocation getTextureResource(TotemLatheDowelBlockEntity object) {
-        return new ResourceLocation(Minestuck.MOD_ID, "textures/block/machine/totemlathe.png");
+        return ResourceLocation.fromNamespaceAndPath(Minestuck.MOD_ID, "textures/block/machine/totemlathe.png");
     }
 
     @Override
     public ResourceLocation getAnimationResource(TotemLatheDowelBlockEntity animatable) {
-        return new ResourceLocation(Minestuck.MOD_ID, "animations/blockentity/totemlathe.animation.json");
+        return ResourceLocation.fromNamespaceAndPath(Minestuck.MOD_ID, "animations/blockentity/totemlathe.animation.json");
     }
 }

@@ -1,0 +1,11 @@
+{
+  "type": "minestuck:combination",
+  "input1": {
+    "item": "minecraft:stick"
+  },
+  "input2": {
+    "item": "minecraft:lava_bucket"
+  },
+  "mode": "and",
+  "output": "minecraft:blaze_rod"
+}

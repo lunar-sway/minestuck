@@ -2,7 +2,7 @@ package com.mraof.minestuck.item;
 
 import net.minecraft.core.BlockPos;
 import net.minecraft.util.RandomSource;
-import net.minecraft.world.InteractionHand;
+import net.minecraft.world.entity.EquipmentSlot;
 import net.minecraft.world.entity.LivingEntity;
 import net.minecraft.world.entity.item.ItemEntity;
 import net.minecraft.world.entity.player.Player;
@@ -12,6 +12,9 @@ import net.minecraft.world.level.Level;
 import net.minecraft.world.level.block.Blocks;
 import net.minecraft.world.level.block.state.BlockState;
 
+import javax.annotation.ParametersAreNonnullByDefault;
+
+@ParametersAreNonnullByDefault
 public class BugNetItem extends Item
 {
 	public BugNetItem(Properties properties)
@@ -23,9 +26,8 @@ public class BugNetItem extends Item
 	public boolean mineBlock(ItemStack stack, Level level, BlockState state, BlockPos pos,
 							 LivingEntity entityLiving) {
 		
-		if(entityLiving instanceof Player)
+		if(entityLiving instanceof Player playerIn)
 		{
-			Player playerIn = (Player) entityLiving;
 			if(!playerIn.isCreative() && level.getBlockState(pos).getBlock() == Blocks.TALL_GRASS)
 			{
 				RandomSource rand = playerIn.getRandom();
@@ -36,7 +38,7 @@ public class BugNetItem extends Item
 					{
 						ItemEntity item = new ItemEntity(level, pos.getX(), pos.getY() + 0.5, pos.getZ(), new ItemStack(MSItems.GOLDEN_GRASSHOPPER.get(), 1));
 						level.addFreshEntity(item);
-						playerIn.getMainHandItem().hurtAndBreak(1, playerIn, PlayerIn -> playerIn.broadcastBreakEvent(InteractionHand.MAIN_HAND));
+						playerIn.getMainHandItem().hurtAndBreak(1, playerIn, EquipmentSlot.MAINHAND);
 						
 						return true;
 					}
@@ -44,7 +46,7 @@ public class BugNetItem extends Item
 					{
 						ItemEntity item = new ItemEntity(level, pos.getX(), pos.getY() + 0.5, pos.getZ(), new ItemStack(MSItems.GRASSHOPPER.get(), 1));
 						level.addFreshEntity(item);
-						playerIn.getMainHandItem().hurtAndBreak(1, playerIn, PlayerIn -> playerIn.broadcastBreakEvent(InteractionHand.MAIN_HAND));
+						playerIn.getMainHandItem().hurtAndBreak(1, playerIn, EquipmentSlot.MAINHAND);
 						
 						return true;
 					}

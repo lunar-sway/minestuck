@@ -1,6 +1,6 @@
 package com.mraof.minestuck.world.gen.structure.gate;
 
-import com.mraof.minestuck.world.gen.structure.MSStructurePieces;
+import com.mraof.minestuck.world.gen.structure.MSStructures;
 import com.mraof.minestuck.world.gen.structure.blocks.StructureBlockRegistry;
 import net.minecraft.core.BlockPos;
 import net.minecraft.nbt.CompoundTag;
@@ -18,12 +18,12 @@ public class GatePillarPiece extends GatePiece
 {
 	public GatePillarPiece(ChunkGenerator generator, LevelHeightAccessor level, RandomState randomState, RandomSource random, int minX, int minZ)
 	{
-		super(MSStructurePieces.GATE_PILLAR.get(), level, randomState, generator, random, minX, minZ, 3, 25, 3, -3);
+		super(MSStructures.GATE_PILLAR_PIECE.get(), level, randomState, generator, random, minX, minZ, 3, 25, 3, -3);
 	}
 	
 	public GatePillarPiece(CompoundTag nbt)
 	{
-		super(MSStructurePieces.GATE_PILLAR.get(), nbt);
+		super(MSStructures.GATE_PILLAR_PIECE.get(), nbt);
 	}
 	
 	@Override

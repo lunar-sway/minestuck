@@ -3,5 +3,7 @@
     "type": "minestuck:terrain_land_type",
     "land_type": "minestuck:rainbow"
   },
-  "dialogue": "minestuck:consort/sunglasses"
+  "dialogue": "minestuck:consort/sunglasses",
+  "dialogue_weight": 10,
+  "keep_on_reset": false
 }

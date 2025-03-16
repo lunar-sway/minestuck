@@ -13,8 +13,8 @@ import net.minecraft.world.level.levelgen.structure.templatesystem.StructureTemp
 
 public class FloorCogFeature extends Feature<NoneFeatureConfiguration>
 {
-	private static final ResourceLocation STRUCTURE_LARGE_FLOOR_COG_1 = new ResourceLocation(Minestuck.MOD_ID, "large_floor_cog_1");
-	private static final ResourceLocation STRUCTURE_LARGE_FLOOR_COG_2 = new ResourceLocation(Minestuck.MOD_ID, "large_floor_cog_2");
+	private static final ResourceLocation STRUCTURE_LARGE_FLOOR_COG_1 = ResourceLocation.fromNamespaceAndPath(Minestuck.MOD_ID, "large_floor_cog_1");
+	private static final ResourceLocation STRUCTURE_LARGE_FLOOR_COG_2 = ResourceLocation.fromNamespaceAndPath(Minestuck.MOD_ID, "large_floor_cog_2");
 	
 	public FloorCogFeature(Codec<NoneFeatureConfiguration> codec)
 	{

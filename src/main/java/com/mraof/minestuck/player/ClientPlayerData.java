@@ -1,19 +1,23 @@
 package com.mraof.minestuck.player;
 
 import com.mraof.minestuck.Minestuck;
+import com.mraof.minestuck.MinestuckConfig;
 import com.mraof.minestuck.api.alchemy.GristSet;
+import com.mraof.minestuck.client.gui.ColorSelectorScreen;
 import com.mraof.minestuck.client.gui.MSScreenFactories;
 import com.mraof.minestuck.inventory.captchalogue.CaptchaDeckHandler;
 import com.mraof.minestuck.inventory.captchalogue.Modus;
-import com.mraof.minestuck.network.ColorSelectPacket;
-import com.mraof.minestuck.network.RGBColorSelectPacket;
-import com.mraof.minestuck.network.data.*;
+import com.mraof.minestuck.network.*;
+import com.mraof.minestuck.network.editmode.EditmodeCacheLimitPacket;
 import com.mraof.minestuck.util.ColorHandler;
+import net.minecraft.client.Minecraft;
+import net.minecraft.core.HolderLookup;
 import net.neoforged.api.distmarker.Dist;
 import net.neoforged.bus.api.SubscribeEvent;
 import net.neoforged.fml.LogicalSide;
-import net.neoforged.fml.common.Mod;
+import net.neoforged.fml.common.EventBusSubscriber;
 import net.neoforged.neoforge.client.event.ClientPlayerNetworkEvent;
+import net.neoforged.neoforge.client.event.ClientTickEvent;
 import net.neoforged.neoforge.network.PacketDistributor;
 import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.Logger;
@@ -22,7 +26,7 @@ import org.apache.logging.log4j.Logger;
  * Contains static field for any {@link PlayerData} fields that also need client access.
  * @author kirderf1
  */
-@Mod.EventBusSubscriber(modid = Minestuck.MOD_ID, bus = Mod.EventBusSubscriber.Bus.FORGE, value = Dist.CLIENT)
+@EventBusSubscriber(modid = Minestuck.MOD_ID, bus = EventBusSubscriber.Bus.GAME, value = Dist.CLIENT)
 public final class ClientPlayerData
 {
 	private static final Logger LOGGER = LogManager.getLogger();
@@ -32,7 +36,6 @@ public final class ClientPlayerData
 	private static int rung;
 	private static float rungProgress;
 	private static long boondollars;
-	private static int consortReputation;
 	private static GristSet playerGrist, targetGrist;
 	private static long targetCacheLimit;
 	private static int playerColor;
@@ -40,7 +43,7 @@ public final class ClientPlayerData
 	private static boolean dataCheckerAccess;
 	
 	@SubscribeEvent
-	public static void onLoggedIn(ClientPlayerNetworkEvent.LoggingIn event)
+	private static void onLoggedIn(ClientPlayerNetworkEvent.LoggingIn event)
 	{
 		modus = null;
 		title = null;
@@ -77,11 +80,6 @@ public final class ClientPlayerData
 		return boondollars;
 	}
 	
-	public static int getConsortReputation()
-	{
-		return consortReputation;
-	}
-	
 	public static ClientCache getGristCache(CacheSource cacheSource)
 	{
 		return switch(cacheSource)
@@ -112,26 +110,16 @@ public final class ClientPlayerData
 	
 	public static void selectColor(int colorIndex)
 	{
-		PacketDistributor.SERVER.noArg().send(new ColorSelectPacket(colorIndex));
-		playerColor = ColorHandler.getColor(colorIndex);
+		PacketDistributor.sendToServer(new PlayerColorPackets.SelectIndex(colorIndex));
+		playerColor = ColorHandler.BuiltinColors.getColor(colorIndex);
 	}
 	
 	public static void selectColorRGB(int color)
 	{
 		if (color < 0 || color > 256*256*256) return;
 		
-		PacketDistributor.SERVER.noArg().send(new RGBColorSelectPacket(color));
+		PacketDistributor.sendToServer(new PlayerColorPackets.SelectRGB(color));
 		playerColor = color;
-	}
-	
-	public static boolean shouDisplayColorSelection()
-	{
-		return displaySelectionGui;
-	}
-	
-	public static void clearDisplayColorSelection()
-	{
-		displaySelectionGui = false;
 	}
 	
 	public static boolean hasDataCheckerAccess()
@@ -139,9 +127,9 @@ public final class ClientPlayerData
 		return dataCheckerAccess;
 	}
 	
-	public static void handleDataPacket(ModusDataPacket packet)
+	public static void handleDataPacket(CaptchaDeckPackets.ModusData packet, HolderLookup.Provider provider)
 	{
-		modus = CaptchaDeckHandler.readFromNBT(packet.nbt(), LogicalSide.CLIENT);
+		modus = CaptchaDeckHandler.readFromNBT(packet.nbt(), LogicalSide.CLIENT, provider);
 		if(modus != null)
 			MSScreenFactories.updateSylladexScreen();
 		else LOGGER.debug("Player lost their modus after update packet");
@@ -160,20 +148,16 @@ public final class ClientPlayerData
 	
 	public static void handleDataPacket(BoondollarDataPacket packet)
 	{
-		boondollars = packet.getBoondollars();
-	}
-	
-	public static void handleDataPacket(ConsortReputationDataPacket packet)
-	{
-		consortReputation = packet.getCount();
+		boondollars = packet.amount();
 	}
 	
 	public static void handleDataPacket(GristCachePacket packet)
 	{
-		if(packet.isEditmode())
-			targetGrist = packet.gristCache();
-		else
-			playerGrist = packet.gristCache();
+		switch(packet.cacheSource())
+		{
+			case PLAYER -> playerGrist = packet.gristCache();
+			case EDITMODE -> targetGrist = packet.gristCache();
+		}
 	}
 	
 	public static void handleDataPacket(EditmodeCacheLimitPacket packet)
@@ -181,17 +165,30 @@ public final class ClientPlayerData
 		targetCacheLimit = packet.limit();
 	}
 	
-	public static void handleDataPacket(ColorDataPacket packet)
+	public static void handleDataPacket(PlayerColorPackets.OpenSelection packet)
 	{
-		if(packet.hasNoColor())
-		{
-			ClientPlayerData.playerColor = ColorHandler.DEFAULT_COLOR;
-			ClientPlayerData.displaySelectionGui = true;
-		} else ClientPlayerData.playerColor = packet.getColor();
+		ClientPlayerData.playerColor = ColorHandler.BuiltinColors.DEFAULT_COLOR;
+		ClientPlayerData.displaySelectionGui = true;
 	}
 	
-	public static void handleDataPacket(DataCheckerPermissionPacket packet)
+	public static void handleDataPacket(PlayerColorPackets.Data packet)
 	{
-		dataCheckerAccess = packet.isDataCheckerAvailable();
+		ClientPlayerData.playerColor = packet.color();
+	}
+	
+	public static void handleDataPacket(DataCheckerPackets.Permission packet)
+	{
+		dataCheckerAccess = packet.isAvailable();
+	}
+	
+	@SubscribeEvent
+	private static void onClientTick(ClientTickEvent.Post event)
+	{
+		if(displaySelectionGui && Minecraft.getInstance().screen == null)
+		{
+			displaySelectionGui = false;
+			if(MinestuckConfig.CLIENT.loginColorSelector.get())
+				Minecraft.getInstance().setScreen(new ColorSelectorScreen(true));
+		}
 	}
 }

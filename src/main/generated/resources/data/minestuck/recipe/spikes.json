@@ -1,0 +1,21 @@
+{
+  "type": "minecraft:crafting_shaped",
+  "category": "redstone",
+  "key": {
+    "#": {
+      "item": "minecraft:iron_ingot"
+    },
+    "n": {
+      "item": "minecraft:iron_nugget"
+    }
+  },
+  "pattern": [
+    "n n",
+    "# #",
+    "###"
+  ],
+  "result": {
+    "count": 1,
+    "id": "minestuck:spikes"
+  }
+}

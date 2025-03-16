@@ -10,7 +10,6 @@ import net.minecraft.client.renderer.entity.EntityRenderer;
 import net.minecraft.client.renderer.entity.EntityRendererProvider;
 import net.minecraft.client.renderer.texture.OverlayTexture;
 import net.minecraft.resources.ResourceLocation;
-import org.joml.Matrix3f;
 import org.joml.Matrix4f;
 
 public class GristRenderer extends EntityRenderer<GristEntity>
@@ -39,29 +38,28 @@ public class GristRenderer extends EntityRenderer<GristEntity>
 		
 		PoseStack.Pose matrixstack = poseStack.last();
 		Matrix4f matrix4f = matrixstack.pose();
-		Matrix3f matrix3f = matrixstack.normal();
 		VertexConsumer ivertexbuilder = bufferIn.getBuffer(RenderType.entityCutoutNoCull(this.getTextureLocation(grist)));
 		
 		float gbColor = 1 - grist.getShakeFactor();
-		ivertexbuilder.vertex(matrix4f, 0.0F - 0.5F, 0 - 0.25F, 0.0F)
-				.color(1, gbColor, gbColor, 1)
-				.uv(0, 1)
-				.overlayCoords(OverlayTexture.NO_OVERLAY).uv2(packedLightIn).normal(matrix3f, 0.0F, 1.0F, 0.0F).endVertex();
+		ivertexbuilder.addVertex(matrix4f, 0.0F - 0.5F, 0 - 0.25F, 0.0F)
+				.setColor(1, gbColor, gbColor, 1)
+				.setUv(0, 1)
+				.setOverlay(OverlayTexture.NO_OVERLAY).setLight(packedLightIn).setNormal(matrixstack, 0.0F, 1.0F, 0.0F);
 		
-		ivertexbuilder.vertex(matrix4f, 1.0F - 0.5F, 0 - 0.25F, 0.0F)
-				.color(1, gbColor, gbColor, 1)
-				.uv(1, 1)
-				.overlayCoords(OverlayTexture.NO_OVERLAY).uv2(packedLightIn).normal(matrix3f, 0.0F, 1.0F, 0.0F).endVertex();
+		ivertexbuilder.addVertex(matrix4f, 1.0F - 0.5F, 0 - 0.25F, 0.0F)
+				.setColor(1, gbColor, gbColor, 1)
+				.setUv(1, 1)
+				.setOverlay(OverlayTexture.NO_OVERLAY).setLight(packedLightIn).setNormal(matrixstack, 0.0F, 1.0F, 0.0F);
 		
-		ivertexbuilder.vertex(matrix4f, 1.0F - 0.5F, 1 - 0.25F, 0.0F)
-				.color(1, gbColor, gbColor, 1)
-				.uv(1, 0)
-				.overlayCoords(OverlayTexture.NO_OVERLAY).uv2(packedLightIn).normal(matrix3f, 0.0F, 1.0F, 0.0F).endVertex();
+		ivertexbuilder.addVertex(matrix4f, 1.0F - 0.5F, 1 - 0.25F, 0.0F)
+				.setColor(1, gbColor, gbColor, 1)
+				.setUv(1, 0)
+				.setOverlay(OverlayTexture.NO_OVERLAY).setLight(packedLightIn).setNormal(matrixstack, 0.0F, 1.0F, 0.0F);
 		
-		ivertexbuilder.vertex(matrix4f, 0.0F - 0.5F, 1 - 0.25F, 0.0F)
-				.color(1, gbColor, gbColor, 1)
-				.uv(0, 0)
-				.overlayCoords(OverlayTexture.NO_OVERLAY).uv2(packedLightIn).normal(matrix3f, 0.0F, 1.0F, 0.0F).endVertex();
+		ivertexbuilder.addVertex(matrix4f, 0.0F - 0.5F, 1 - 0.25F, 0.0F)
+				.setColor(1, gbColor, gbColor, 1)
+				.setUv(0, 0)
+				.setOverlay(OverlayTexture.NO_OVERLAY).setLight(packedLightIn).setNormal(matrixstack, 0.0F, 1.0F, 0.0F);
 		
 		
 		poseStack.popPose();

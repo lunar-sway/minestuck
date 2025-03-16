@@ -1,0 +1,11 @@
+{
+  "type": "minestuck:combination",
+  "input1": {
+    "item": "minecraft:minecart"
+  },
+  "input2": {
+    "item": "minecraft:tnt"
+  },
+  "mode": "and",
+  "output": "minecraft:tnt_minecart"
+}

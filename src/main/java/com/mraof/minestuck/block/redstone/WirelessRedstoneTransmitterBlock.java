@@ -10,7 +10,6 @@ import net.minecraft.core.BlockPos;
 import net.minecraft.core.Direction;
 import net.minecraft.core.particles.DustParticleOptions;
 import net.minecraft.util.RandomSource;
-import net.minecraft.world.InteractionHand;
 import net.minecraft.world.InteractionResult;
 import net.minecraft.world.entity.player.Player;
 import net.minecraft.world.item.context.BlockPlaceContext;
@@ -29,11 +28,13 @@ import net.minecraft.world.level.block.state.properties.IntegerProperty;
 import net.minecraft.world.phys.BlockHitResult;
 
 import javax.annotation.Nullable;
+import javax.annotation.ParametersAreNonnullByDefault;
 
 /**
  * Checks for redstone power inputs and transmits that signal to any wireless redstone receiver present at the location stored in the block entity
  * GUI is limited by creative shock
  */
+@ParametersAreNonnullByDefault
 public class WirelessRedstoneTransmitterBlock extends HorizontalDirectionalBlock implements EntityBlock
 {
 	public static final IntegerProperty POWER = BlockStateProperties.POWER;
@@ -66,23 +67,20 @@ public class WirelessRedstoneTransmitterBlock extends HorizontalDirectionalBlock
 	}
 	
 	@Override
-	@SuppressWarnings("deprecation")
-	public InteractionResult use(BlockState state, Level level, BlockPos pos, Player player, InteractionHand hand, BlockHitResult hit)
+	protected InteractionResult useWithoutItem(BlockState state, Level level, BlockPos pos, Player player, BlockHitResult hit)
 	{
-		if(!CreativeShockEffect.doesCreativeShockLimit(player, CreativeShockEffect.LIMIT_MACHINE_INTERACTIONS))
-		{
-			if(level.getBlockEntity(pos) instanceof WirelessRedstoneTransmitterBlockEntity transmitter)
-			{
-				if(level.isClientSide)
-				{
-					MSScreenFactories.displayWirelessRedstoneTransmitterScreen(transmitter);
-				}
-				
-				return InteractionResult.SUCCESS;
-			}
-		}
+		if(!canInteract(player) || !(level.getBlockEntity(pos) instanceof WirelessRedstoneTransmitterBlockEntity transmitter))
+			return InteractionResult.PASS;
 		
-		return InteractionResult.PASS;
+		if(level.isClientSide)
+			MSScreenFactories.displayWirelessRedstoneTransmitterScreen(transmitter);
+		
+		return InteractionResult.SUCCESS;
+	}
+	
+	public static boolean canInteract(Player player)
+	{
+		return !CreativeShockEffect.doesCreativeShockLimit(player, CreativeShockEffect.LIMIT_MACHINE_INTERACTIONS);
 	}
 	
 	@Nullable
@@ -92,17 +90,15 @@ public class WirelessRedstoneTransmitterBlock extends HorizontalDirectionalBlock
 		return this.defaultBlockState().setValue(FACING, context.getHorizontalDirection().getOpposite());
 	}
 	
-	@SuppressWarnings("deprecation")
 	@Override
-	public void neighborChanged(BlockState state, Level level, BlockPos pos, Block blockIn, BlockPos fromPos, boolean isMoving)
+	protected void neighborChanged(BlockState state, Level level, BlockPos pos, Block blockIn, BlockPos fromPos, boolean isMoving)
 	{
 		super.neighborChanged(state, level, pos, blockIn, fromPos, isMoving);
 		updatePower(level, pos);
 	}
 	
-	@SuppressWarnings("deprecation")
 	@Override
-	public void onPlace(BlockState state, Level level, BlockPos pos, BlockState oldState, boolean isMoving)
+	protected void onPlace(BlockState state, Level level, BlockPos pos, BlockState oldState, boolean isMoving)
 	{
 		super.onPlace(state, level, pos, oldState, isMoving);
 		updatePower(level, pos);

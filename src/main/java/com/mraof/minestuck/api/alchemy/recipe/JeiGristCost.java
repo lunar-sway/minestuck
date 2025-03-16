@@ -1,6 +1,6 @@
 package com.mraof.minestuck.api.alchemy.recipe;
 
-import com.mraof.minestuck.api.alchemy.ImmutableGristSet;
+import com.mraof.minestuck.api.alchemy.GristSet;
 import net.minecraft.FieldsAreNonnullByDefault;
 import net.minecraft.world.item.crafting.Ingredient;
 
@@ -13,7 +13,7 @@ public sealed interface JeiGristCost permits JeiGristCost.Set, JeiGristCost.Wild
 	
 	Ingredient ingredient();
 	
-	record Set(Ingredient ingredient, ImmutableGristSet gristSet) implements JeiGristCost
+	record Set(Ingredient ingredient, GristSet.Immutable gristSet) implements JeiGristCost
 	{
 		public Set
 		{

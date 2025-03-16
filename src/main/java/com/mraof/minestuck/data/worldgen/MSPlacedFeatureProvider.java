@@ -8,7 +8,7 @@ import com.mraof.minestuck.world.gen.feature.OreGeneration;
 import net.minecraft.core.Direction;
 import net.minecraft.core.HolderGetter;
 import net.minecraft.core.registries.Registries;
-import net.minecraft.data.worldgen.BootstapContext;
+import net.minecraft.data.worldgen.BootstrapContext;
 import net.minecraft.data.worldgen.features.CaveFeatures;
 import net.minecraft.data.worldgen.features.MiscOverworldFeatures;
 import net.minecraft.data.worldgen.features.TreeFeatures;
@@ -30,7 +30,7 @@ import static com.mraof.minestuck.world.gen.feature.MSPlacedFeatures.*;
 
 public final class MSPlacedFeatureProvider
 {
-	public static void register(BootstapContext<PlacedFeature> context)
+	public static void register(BootstrapContext<PlacedFeature> context)
 	{
 		HolderGetter<ConfiguredFeature<?, ?>> features = context.lookup(Registries.CONFIGURED_FEATURE);
 		
@@ -274,40 +274,40 @@ public final class MSPlacedFeatureProvider
 				worldGenModifiers(RarityFilter.onAverageOnceEvery(5), PlacementUtils.HEIGHTMAP, PlacementUtils.filteredByBlockSurvival(MSBlocks.FROST_SAPLING.get()))));
 		
 		context.register(BLOOD_TREE, placed(features, MSCFeatures.BLOOD_TREE,
-				worldGenModifiers(RarityFilter.onAverageOnceEvery(350), PlacementUtils.HEIGHTMAP, PlacementUtils.filteredByBlockSurvival(AspectTreeBlocks.BLOOD_ASPECT_SAPLING.get()))));
+				worldGenModifiers(RarityFilter.onAverageOnceEvery(350), PlacementUtils.HEIGHTMAP, PlacementUtils.filteredByBlockSurvival(AspectTreeBlocks.BLOOD_ASPECT_SAPLING.asBlock()))));
 		
 		context.register(BREATH_TREE, placed(features, MSCFeatures.BREATH_TREE,
-				worldGenModifiers(RarityFilter.onAverageOnceEvery(350), PlacementUtils.HEIGHTMAP, PlacementUtils.filteredByBlockSurvival(AspectTreeBlocks.BREATH_ASPECT_SAPLING.get()))));
+				worldGenModifiers(RarityFilter.onAverageOnceEvery(350), PlacementUtils.HEIGHTMAP, PlacementUtils.filteredByBlockSurvival(AspectTreeBlocks.BREATH_ASPECT_SAPLING.asBlock()))));
 		
 		context.register(DOOM_TREE, placed(features, MSCFeatures.DOOM_TREE,
-				worldGenModifiers(RarityFilter.onAverageOnceEvery(350), PlacementUtils.HEIGHTMAP, PlacementUtils.filteredByBlockSurvival(AspectTreeBlocks.DOOM_ASPECT_SAPLING.get()))));
+				worldGenModifiers(RarityFilter.onAverageOnceEvery(350), PlacementUtils.HEIGHTMAP, PlacementUtils.filteredByBlockSurvival(AspectTreeBlocks.DOOM_ASPECT_SAPLING.asBlock()))));
 		
 		context.register(HEART_TREE, placed(features, MSCFeatures.HEART_TREE,
-				worldGenModifiers(RarityFilter.onAverageOnceEvery(350), PlacementUtils.HEIGHTMAP, PlacementUtils.filteredByBlockSurvival(AspectTreeBlocks.HEART_ASPECT_SAPLING.get()))));
+				worldGenModifiers(RarityFilter.onAverageOnceEvery(350), PlacementUtils.HEIGHTMAP, PlacementUtils.filteredByBlockSurvival(AspectTreeBlocks.HEART_ASPECT_SAPLING.asBlock()))));
 		
 		context.register(HOPE_TREE, placed(features, MSCFeatures.HOPE_TREE,
-				worldGenModifiers(RarityFilter.onAverageOnceEvery(350), PlacementUtils.HEIGHTMAP, PlacementUtils.filteredByBlockSurvival(AspectTreeBlocks.HOPE_ASPECT_SAPLING.get()))));
+				worldGenModifiers(RarityFilter.onAverageOnceEvery(350), PlacementUtils.HEIGHTMAP, PlacementUtils.filteredByBlockSurvival(AspectTreeBlocks.HOPE_ASPECT_SAPLING.asBlock()))));
 		
 		context.register(LIFE_TREE, placed(features, MSCFeatures.LIFE_TREE,
-				worldGenModifiers(RarityFilter.onAverageOnceEvery(350), PlacementUtils.HEIGHTMAP, PlacementUtils.filteredByBlockSurvival(AspectTreeBlocks.LIFE_ASPECT_SAPLING.get()))));
+				worldGenModifiers(RarityFilter.onAverageOnceEvery(350), PlacementUtils.HEIGHTMAP, PlacementUtils.filteredByBlockSurvival(AspectTreeBlocks.LIFE_ASPECT_SAPLING.asBlock()))));
 		
 		context.register(LIGHT_TREE, placed(features, MSCFeatures.LIGHT_TREE,
-				worldGenModifiers(RarityFilter.onAverageOnceEvery(350), PlacementUtils.HEIGHTMAP, PlacementUtils.filteredByBlockSurvival(AspectTreeBlocks.LIGHT_ASPECT_SAPLING.get()))));
+				worldGenModifiers(RarityFilter.onAverageOnceEvery(350), PlacementUtils.HEIGHTMAP, PlacementUtils.filteredByBlockSurvival(AspectTreeBlocks.LIGHT_ASPECT_SAPLING.asBlock()))));
 		
 		context.register(MIND_TREE, placed(features, MSCFeatures.MIND_TREE,
-				worldGenModifiers(RarityFilter.onAverageOnceEvery(350), PlacementUtils.HEIGHTMAP, PlacementUtils.filteredByBlockSurvival(AspectTreeBlocks.MIND_ASPECT_SAPLING.get()))));
+				worldGenModifiers(RarityFilter.onAverageOnceEvery(350), PlacementUtils.HEIGHTMAP, PlacementUtils.filteredByBlockSurvival(AspectTreeBlocks.MIND_ASPECT_SAPLING.asBlock()))));
 		
 		context.register(RAGE_TREE, placed(features, MSCFeatures.RAGE_TREE,
-				worldGenModifiers(RarityFilter.onAverageOnceEvery(350), PlacementUtils.HEIGHTMAP, PlacementUtils.filteredByBlockSurvival(AspectTreeBlocks.RAGE_ASPECT_SAPLING.get()))));
+				worldGenModifiers(RarityFilter.onAverageOnceEvery(350), PlacementUtils.HEIGHTMAP, PlacementUtils.filteredByBlockSurvival(AspectTreeBlocks.RAGE_ASPECT_SAPLING.asBlock()))));
 		
 		context.register(SPACE_TREE, placed(features, MSCFeatures.SPACE_TREE,
-				worldGenModifiers(RarityFilter.onAverageOnceEvery(350), PlacementUtils.HEIGHTMAP, PlacementUtils.filteredByBlockSurvival(AspectTreeBlocks.SPACE_ASPECT_SAPLING.get()))));
+				worldGenModifiers(RarityFilter.onAverageOnceEvery(350), PlacementUtils.HEIGHTMAP, PlacementUtils.filteredByBlockSurvival(AspectTreeBlocks.SPACE_ASPECT_SAPLING.asBlock()))));
 		
 		context.register(TIME_TREE, placed(features, MSCFeatures.TIME_TREE,
-				worldGenModifiers(RarityFilter.onAverageOnceEvery(350), PlacementUtils.HEIGHTMAP, PlacementUtils.filteredByBlockSurvival(AspectTreeBlocks.TIME_ASPECT_SAPLING.get()))));
+				worldGenModifiers(RarityFilter.onAverageOnceEvery(350), PlacementUtils.HEIGHTMAP, PlacementUtils.filteredByBlockSurvival(AspectTreeBlocks.TIME_ASPECT_SAPLING.asBlock()))));
 		
 		context.register(VOID_TREE, placed(features, MSCFeatures.VOID_TREE,
-				worldGenModifiers(RarityFilter.onAverageOnceEvery(350), PlacementUtils.HEIGHTMAP, PlacementUtils.filteredByBlockSurvival(AspectTreeBlocks.VOID_ASPECT_SAPLING.get()))));
+				worldGenModifiers(RarityFilter.onAverageOnceEvery(350), PlacementUtils.HEIGHTMAP, PlacementUtils.filteredByBlockSurvival(AspectTreeBlocks.VOID_ASPECT_SAPLING.asBlock()))));
 		
 		
 		context.register(FOREST_LAND_TREES, placed(features, MSCFeatures.FOREST_LAND_TREES,

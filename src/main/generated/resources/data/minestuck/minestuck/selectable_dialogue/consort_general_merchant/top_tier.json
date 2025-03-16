@@ -3,5 +3,6 @@
     "type": "minestuck:always_true"
   },
   "dialogue": "minestuck:consort_general_merchant/top_tier",
+  "dialogue_weight": 10,
   "keep_on_reset": true
 }

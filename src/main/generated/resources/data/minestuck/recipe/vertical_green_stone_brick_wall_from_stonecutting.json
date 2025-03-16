@@ -1,0 +1,10 @@
+{
+  "type": "minecraft:stonecutting",
+  "ingredient": {
+    "item": "minestuck:vertical_green_stone_bricks"
+  },
+  "result": {
+    "count": 2,
+    "id": "minestuck:vertical_green_stone_brick_wall"
+  }
+}

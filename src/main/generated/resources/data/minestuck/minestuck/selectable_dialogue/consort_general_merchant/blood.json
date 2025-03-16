@@ -4,5 +4,6 @@
     "land_type": "minestuck:pulse"
   },
   "dialogue": "minestuck:consort_general_merchant/blood",
+  "dialogue_weight": 10,
   "keep_on_reset": true
 }

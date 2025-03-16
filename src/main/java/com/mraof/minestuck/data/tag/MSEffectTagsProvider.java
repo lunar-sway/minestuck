@@ -3,6 +3,7 @@ package com.mraof.minestuck.data.tag;
 import com.mraof.minestuck.Minestuck;
 import com.mraof.minestuck.util.MSTags;
 import net.minecraft.MethodsReturnNonnullByDefault;
+import net.minecraft.core.Holder;
 import net.minecraft.core.HolderLookup;
 import net.minecraft.core.registries.BuiltInRegistries;
 import net.minecraft.core.registries.Registries;
@@ -33,11 +34,10 @@ public class MSEffectTagsProvider extends IntrinsicHolderTagsProvider<MobEffect>
 		return BuiltInRegistries.MOB_EFFECT.getResourceKey(landType).orElseThrow();
 	}
 	
-	@SuppressWarnings("DataFlowIssue")
 	@Override
 	protected void addTags(HolderLookup.Provider provider)
 	{
-		List<MobEffect> ignoredEffects = new ArrayList<>();
+		List<Holder<MobEffect>> ignoredEffects = new ArrayList<>();
 		ignoredEffects.add(MobEffects.HERO_OF_THE_VILLAGE);
 		ignoredEffects.add(MobEffects.BAD_OMEN);
 		ignoredEffects.add(MobEffects.CONDUIT_POWER);
@@ -46,10 +46,10 @@ public class MSEffectTagsProvider extends IntrinsicHolderTagsProvider<MobEffect>
 		ignoredEffects.add(MobEffects.UNLUCK);
 		
 		//includes all Vanilla potion effects except ones in list above
-		BuiltInRegistries.MOB_EFFECT.forEach(mobEffect ->
+		BuiltInRegistries.MOB_EFFECT.holders().forEach(mobEffect ->
 		{
-			if(BuiltInRegistries.MOB_EFFECT.getKey(mobEffect).getNamespace().equals("minecraft") && !ignoredEffects.contains(mobEffect))
-				this.tag(MSTags.Effects.SOPOR_SICKNESS_WHITELIST).add(mobEffect);
+			if(mobEffect.key().location().getNamespace().equals("minecraft") && !ignoredEffects.contains(mobEffect))
+				this.tag(MSTags.Effects.SOPOR_SICKNESS_WHITELIST).add(mobEffect.key());
 		});
 	}
 	

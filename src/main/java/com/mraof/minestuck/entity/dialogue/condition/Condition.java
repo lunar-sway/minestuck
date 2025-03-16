@@ -2,30 +2,33 @@ package com.mraof.minestuck.entity.dialogue.condition;
 
 import com.mojang.serialization.Codec;
 import com.mojang.serialization.DataResult;
+import com.mojang.serialization.MapCodec;
 import com.mojang.serialization.codecs.RecordCodecBuilder;
 import com.mraof.minestuck.entity.carapacian.CarapacianEntity;
 import com.mraof.minestuck.entity.carapacian.EnumEntityKingdom;
 import com.mraof.minestuck.entity.consort.ConsortEntity;
+import com.mraof.minestuck.entity.consort.ConsortReputation;
 import com.mraof.minestuck.entity.consort.EnumConsort;
 import com.mraof.minestuck.entity.dialogue.DialogueComponent;
 import com.mraof.minestuck.entity.dialogue.DialogueEntity;
+import com.mraof.minestuck.entity.dialogue.DialogueNodes;
 import com.mraof.minestuck.player.*;
 import com.mraof.minestuck.skaianet.SburbPlayerData;
-import com.mraof.minestuck.util.PreservingOptionalFieldCodec;
 import com.mraof.minestuck.world.MSDimensions;
 import com.mraof.minestuck.world.lands.LandTypePair;
 import com.mraof.minestuck.world.lands.LandTypes;
 import com.mraof.minestuck.world.lands.terrain.TerrainLandType;
 import com.mraof.minestuck.world.lands.title.TitleLandType;
+import net.minecraft.advancements.AdvancementHolder;
 import net.minecraft.core.Holder;
 import net.minecraft.core.HolderSet;
 import net.minecraft.core.registries.BuiltInRegistries;
 import net.minecraft.core.registries.Registries;
 import net.minecraft.network.chat.Component;
+import net.minecraft.resources.ResourceLocation;
 import net.minecraft.server.level.ServerLevel;
 import net.minecraft.server.level.ServerPlayer;
 import net.minecraft.tags.TagKey;
-import net.minecraft.util.ExtraCodecs;
 import net.minecraft.world.entity.EntityType;
 import net.minecraft.world.entity.LivingEntity;
 import net.minecraft.world.entity.Mob;
@@ -53,10 +56,10 @@ import java.util.stream.Collectors;
 public interface Condition
 {
 	Codec<Condition> CODEC = Conditions.REGISTRY.byNameCodec().dispatch(Condition::codec, Function.identity());
-	Codec<Condition> NPC_ONLY_CODEC = ExtraCodecs.validate(Condition.CODEC,
+	Codec<Condition> NPC_ONLY_CODEC = Condition.CODEC.validate(
 			condition -> condition.isNpcOnly() ? DataResult.success(condition) : DataResult.error(() -> "Player condition not supported here"));
 	
-	Codec<? extends Condition> codec();
+	MapCodec<? extends Condition> codec();
 	
 	boolean test(LivingEntity entity, ServerPlayer player);
 	
@@ -96,10 +99,10 @@ public interface Condition
 	{
 		INSTANCE;
 		
-		static final Codec<AlwaysTrue> CODEC = Codec.unit(INSTANCE);
+		static final MapCodec<AlwaysTrue> CODEC = MapCodec.unit(INSTANCE);
 		
 		@Override
-		public Codec<AlwaysTrue> codec()
+		public MapCodec<AlwaysTrue> codec()
 		{
 			return CODEC;
 		}
@@ -115,10 +118,10 @@ public interface Condition
 	{
 		INSTANCE;
 		
-		static final Codec<FirstTimeGenerating> CODEC = Codec.unit(INSTANCE);
+		static final MapCodec<FirstTimeGenerating> CODEC = MapCodec.unit(INSTANCE);
 		
 		@Override
-		public Codec<FirstTimeGenerating> codec()
+		public MapCodec<FirstTimeGenerating> codec()
 		{
 			return CODEC;
 		}
@@ -135,10 +138,10 @@ public interface Condition
 	
 	record IsCarapacian() implements NpcOnlyCondition
 	{
-		static final Codec<IsCarapacian> CODEC = Codec.unit(IsCarapacian::new);
+		static final MapCodec<IsCarapacian> CODEC = MapCodec.unit(IsCarapacian::new);
 		
 		@Override
-		public Codec<IsCarapacian> codec()
+		public MapCodec<IsCarapacian> codec()
 		{
 			return CODEC;
 		}
@@ -158,12 +161,12 @@ public interface Condition
 	
 	record IsFromKingdom(EnumEntityKingdom kingdom) implements NpcOnlyCondition
 	{
-		static final Codec<IsFromKingdom> CODEC = RecordCodecBuilder.create(instance -> instance.group(
+		static final MapCodec<IsFromKingdom> CODEC = RecordCodecBuilder.mapCodec(instance -> instance.group(
 				EnumEntityKingdom.CODEC.fieldOf("kingdom").forGetter(IsFromKingdom::kingdom)
 		).apply(instance, IsFromKingdom::new));
 		
 		@Override
-		public Codec<IsFromKingdom> codec()
+		public MapCodec<IsFromKingdom> codec()
 		{
 			return CODEC;
 		}
@@ -183,12 +186,12 @@ public interface Condition
 	
 	record IsEntityType(EntityType<?> entityType) implements NpcOnlyCondition
 	{
-		static final Codec<IsEntityType> CODEC = RecordCodecBuilder.create(instance -> instance.group(
+		static final MapCodec<IsEntityType> CODEC = RecordCodecBuilder.mapCodec(instance -> instance.group(
 				BuiltInRegistries.ENTITY_TYPE.byNameCodec().fieldOf("entity_type").forGetter(IsEntityType::entityType)
 		).apply(instance, IsEntityType::new));
 		
 		@Override
-		public Codec<IsEntityType> codec()
+		public MapCodec<IsEntityType> codec()
 		{
 			return CODEC;
 		}
@@ -210,10 +213,10 @@ public interface Condition
 	{
 		INSTANCE;
 		
-		static final Codec<IsInLand> CODEC = Codec.unit(INSTANCE);
+		static final MapCodec<IsInLand> CODEC = MapCodec.unit(INSTANCE);
 		
 		@Override
-		public Codec<IsInLand> codec()
+		public MapCodec<IsInLand> codec()
 		{
 			return CODEC;
 		}
@@ -235,10 +238,10 @@ public interface Condition
 	{
 		INSTANCE;
 		
-		static final Codec<IsConsortFromLand> CODEC = Codec.unit(INSTANCE);
+		static final MapCodec<IsConsortFromLand> CODEC = MapCodec.unit(INSTANCE);
 		
 		@Override
-		public Codec<IsConsortFromLand> codec()
+		public MapCodec<IsConsortFromLand> codec()
 		{
 			return CODEC;
 		}
@@ -261,10 +264,10 @@ public interface Condition
 	{
 		INSTANCE;
 		
-		static final Codec<IsConsortInHomeLand> CODEC = Codec.unit(INSTANCE);
+		static final MapCodec<IsConsortInHomeLand> CODEC = MapCodec.unit(INSTANCE);
 		
 		@Override
-		public Codec<IsConsortInHomeLand> codec()
+		public MapCodec<IsConsortInHomeLand> codec()
 		{
 			return CODEC;
 		}
@@ -286,12 +289,12 @@ public interface Condition
 	
 	record InTerrainLandType(TerrainLandType landType) implements NpcOnlyCondition
 	{
-		static final Codec<InTerrainLandType> CODEC = RecordCodecBuilder.create(instance -> instance.group(
+		static final MapCodec<InTerrainLandType> CODEC = RecordCodecBuilder.mapCodec(instance -> instance.group(
 				LandTypes.TERRAIN_REGISTRY.byNameCodec().fieldOf("land_type").forGetter(InTerrainLandType::landType)
 		).apply(instance, InTerrainLandType::new));
 		
 		@Override
-		public Codec<InTerrainLandType> codec()
+		public MapCodec<InTerrainLandType> codec()
 		{
 			return CODEC;
 		}
@@ -321,12 +324,12 @@ public interface Condition
 	
 	record InTerrainLandTypeTag(TagKey<TerrainLandType> landTypeTag) implements NpcOnlyCondition
 	{
-		static final Codec<InTerrainLandTypeTag> CODEC = RecordCodecBuilder.create(instance -> instance.group(
+		static final MapCodec<InTerrainLandTypeTag> CODEC = RecordCodecBuilder.mapCodec(instance -> instance.group(
 				TagKey.codec(LandTypes.TERRAIN_REGISTRY.key()).fieldOf("land_type_tag").forGetter(InTerrainLandTypeTag::landTypeTag)
 		).apply(instance, InTerrainLandTypeTag::new));
 		
 		@Override
-		public Codec<InTerrainLandTypeTag> codec()
+		public MapCodec<InTerrainLandTypeTag> codec()
 		{
 			return CODEC;
 		}
@@ -356,12 +359,12 @@ public interface Condition
 	
 	record InConsortTerrainLandType(EnumConsort consort) implements NpcOnlyCondition
 	{
-		static final Codec<InConsortTerrainLandType> CODEC = RecordCodecBuilder.create(instance -> instance.group(
+		static final MapCodec<InConsortTerrainLandType> CODEC = RecordCodecBuilder.mapCodec(instance -> instance.group(
 				EnumConsort.CODEC.fieldOf("consort").forGetter(InConsortTerrainLandType::consort)
 		).apply(instance, InConsortTerrainLandType::new));
 		
 		@Override
-		public Codec<InConsortTerrainLandType> codec()
+		public MapCodec<InConsortTerrainLandType> codec()
 		{
 			return CODEC;
 		}
@@ -390,12 +393,12 @@ public interface Condition
 	
 	record InTitleLandType(TitleLandType landType) implements NpcOnlyCondition
 	{
-		static final Codec<InTitleLandType> CODEC = RecordCodecBuilder.create(instance -> instance.group(
+		static final MapCodec<InTitleLandType> CODEC = RecordCodecBuilder.mapCodec(instance -> instance.group(
 				LandTypes.TITLE_REGISTRY.byNameCodec().fieldOf("land_type").forGetter(InTitleLandType::landType)
 		).apply(instance, InTitleLandType::new));
 		
 		@Override
-		public Codec<InTitleLandType> codec()
+		public MapCodec<InTitleLandType> codec()
 		{
 			return CODEC;
 		}
@@ -425,12 +428,12 @@ public interface Condition
 	
 	record InTitleLandTypeTag(TagKey<TitleLandType> landTypeTag) implements NpcOnlyCondition
 	{
-		static final Codec<InTitleLandTypeTag> CODEC = RecordCodecBuilder.create(instance -> instance.group(
+		static final MapCodec<InTitleLandTypeTag> CODEC = RecordCodecBuilder.mapCodec(instance -> instance.group(
 				TagKey.codec(LandTypes.TITLE_REGISTRY.key()).fieldOf("land_type_tag").forGetter(InTitleLandTypeTag::landTypeTag)
 		).apply(instance, InTitleLandTypeTag::new));
 		
 		@Override
-		public Codec<InTitleLandTypeTag> codec()
+		public MapCodec<InTitleLandTypeTag> codec()
 		{
 			return CODEC;
 		}
@@ -460,11 +463,11 @@ public interface Condition
 	
 	record AtOrAboveY(double y) implements NpcOnlyCondition
 	{
-		static final Codec<AtOrAboveY> CODEC = RecordCodecBuilder.create(instance -> instance.group(
+		static final MapCodec<AtOrAboveY> CODEC = RecordCodecBuilder.mapCodec(instance -> instance.group(
 				Codec.DOUBLE.fieldOf("y").forGetter(AtOrAboveY::y)
 		).apply(instance, AtOrAboveY::new));
 		@Override
-		public Codec<AtOrAboveY> codec()
+		public MapCodec<AtOrAboveY> codec()
 		{
 			return CODEC;
 		}
@@ -484,12 +487,12 @@ public interface Condition
 	
 	record NPCIsHoldingItem(Item item) implements NpcOnlyCondition
 	{
-		static final Codec<NPCIsHoldingItem> CODEC = RecordCodecBuilder.create(instance -> instance.group(
+		static final MapCodec<NPCIsHoldingItem> CODEC = RecordCodecBuilder.mapCodec(instance -> instance.group(
 				BuiltInRegistries.ITEM.byNameCodec().fieldOf("item").forGetter(NPCIsHoldingItem::item)
 		).apply(instance, NPCIsHoldingItem::new));
 		
 		@Override
-		public Codec<NPCIsHoldingItem> codec()
+		public MapCodec<NPCIsHoldingItem> codec()
 		{
 			return CODEC;
 		}
@@ -509,13 +512,13 @@ public interface Condition
 	
 	record PlayerHasItem(Item item, int amount) implements Condition
 	{
-		static final Codec<PlayerHasItem> CODEC = RecordCodecBuilder.create(instance -> instance.group(
+		static final MapCodec<PlayerHasItem> CODEC = RecordCodecBuilder.mapCodec(instance -> instance.group(
 				BuiltInRegistries.ITEM.byNameCodec().fieldOf("item").forGetter(PlayerHasItem::item),
-				PreservingOptionalFieldCodec.withDefault(Codec.INT, "amount", 1).forGetter(PlayerHasItem::amount)
+				Codec.INT.optionalFieldOf("amount", 1).forGetter(PlayerHasItem::amount)
 		).apply(instance, PlayerHasItem::new));
 		
 		@Override
-		public Codec<PlayerHasItem> codec()
+		public MapCodec<PlayerHasItem> codec()
 		{
 			return CODEC;
 		}
@@ -557,11 +560,11 @@ public interface Condition
 	 */
 	record ItemTagMatch(TagKey<Item> itemTag) implements Condition
 	{
-		static final Codec<ItemTagMatch> CODEC = RecordCodecBuilder.create(instance -> instance.group(
+		static final MapCodec<ItemTagMatch> CODEC = RecordCodecBuilder.mapCodec(instance -> instance.group(
 				TagKey.codec(Registries.ITEM).fieldOf("tag").forGetter(ItemTagMatch::itemTag)
 		).apply(instance, ItemTagMatch::new));
 		@Override
-		public Codec<ItemTagMatch> codec()
+		public MapCodec<ItemTagMatch> codec()
 		{
 			return CODEC;
 		}
@@ -594,13 +597,13 @@ public interface Condition
 	
 	record ItemTagMatchExclude(TagKey<Item> itemTag, Item exclusionItem) implements Condition
 	{
-		static final Codec<ItemTagMatchExclude> CODEC = RecordCodecBuilder.create(instance -> instance.group(
+		static final MapCodec<ItemTagMatchExclude> CODEC = RecordCodecBuilder.mapCodec(instance -> instance.group(
 				TagKey.codec(Registries.ITEM).fieldOf("tag").forGetter(ItemTagMatchExclude::itemTag),
 				BuiltInRegistries.ITEM.byNameCodec().fieldOf("exclusion_item").forGetter(ItemTagMatchExclude::exclusionItem)
 		).apply(instance, ItemTagMatchExclude::new));
 		
 		@Override
-		public Codec<ItemTagMatchExclude> codec()
+		public MapCodec<ItemTagMatchExclude> codec()
 		{
 			return CODEC;
 		}
@@ -637,10 +640,10 @@ public interface Condition
 	enum HasMatchedItem implements Condition
 	{
 		INSTANCE;
-		static final Codec<HasMatchedItem> CODEC = Codec.unit(INSTANCE);
+		static final MapCodec<HasMatchedItem> CODEC = MapCodec.unit(INSTANCE);
 		
 		@Override
-		public Codec<HasMatchedItem> codec()
+		public MapCodec<HasMatchedItem> codec()
 		{
 			return CODEC;
 		}
@@ -656,12 +659,12 @@ public interface Condition
 	
 	record PlayerIsClass(EnumClass enumClass) implements Condition
 	{
-		static final Codec<PlayerIsClass> CODEC = RecordCodecBuilder.create(instance -> instance.group(
-				Title.CLASS_CODEC.fieldOf("class").forGetter(PlayerIsClass::enumClass)
+		static final MapCodec<PlayerIsClass> CODEC = RecordCodecBuilder.mapCodec(instance -> instance.group(
+				EnumClass.CODEC.fieldOf("class").forGetter(PlayerIsClass::enumClass)
 		).apply(instance, PlayerIsClass::new));
 		
 		@Override
-		public Codec<PlayerIsClass> codec()
+		public MapCodec<PlayerIsClass> codec()
 		{
 			return CODEC;
 		}
@@ -672,11 +675,10 @@ public interface Condition
 			if(player == null)
 				return false;
 			
-			PlayerData data = PlayerSavedData.getData(player);
-			if(data != null && data.getTitle() != null)
-				return data.getTitle().getHeroClass().equals(enumClass);
+			return Title.getTitle(player)
+					.map(value -> value.heroClass().equals(enumClass))
+					.orElse(false);
 			
-			return false;
 		}
 		
 		@Override
@@ -688,12 +690,12 @@ public interface Condition
 	
 	record PlayerIsAspect(EnumAspect enumAspect) implements Condition
 	{
-		static final Codec<PlayerIsAspect> CODEC = RecordCodecBuilder.create(instance -> instance.group(
-				Title.ASPECT_CODEC.fieldOf("aspect").forGetter(PlayerIsAspect::enumAspect)
+		static final MapCodec<PlayerIsAspect> CODEC = RecordCodecBuilder.mapCodec(instance -> instance.group(
+				EnumAspect.CODEC.fieldOf("aspect").forGetter(PlayerIsAspect::enumAspect)
 		).apply(instance, PlayerIsAspect::new));
 		
 		@Override
-		public Codec<PlayerIsAspect> codec()
+		public MapCodec<PlayerIsAspect> codec()
 		{
 			return CODEC;
 		}
@@ -704,11 +706,7 @@ public interface Condition
 			if(player == null)
 				return false;
 			
-			PlayerData data = PlayerSavedData.getData(player);
-			if(data != null && data.getTitle() != null)
-				return data.getTitle().getHeroAspect().equals(enumAspect);
-			
-			return false;
+			return Title.isPlayerOfAspect(player, this.enumAspect);
 		}
 		
 		@Override
@@ -720,13 +718,13 @@ public interface Condition
 	
 	record PlayerHasReputation(int amount, boolean greaterThan) implements Condition
 	{
-		static final Codec<PlayerHasReputation> CODEC = RecordCodecBuilder.create(instance -> instance.group(
-				PreservingOptionalFieldCodec.withDefault(Codec.INT, "amount", 1).forGetter(PlayerHasReputation::amount),
-				PreservingOptionalFieldCodec.withDefault(Codec.BOOL, "greater_than", true).forGetter(PlayerHasReputation::greaterThan)
+		static final MapCodec<PlayerHasReputation> CODEC = RecordCodecBuilder.mapCodec(instance -> instance.group(
+				Codec.INT.optionalFieldOf("amount", 1).forGetter(PlayerHasReputation::amount),
+				Codec.BOOL.optionalFieldOf("greater_than", true).forGetter(PlayerHasReputation::greaterThan)
 		).apply(instance, PlayerHasReputation::new));
 		
 		@Override
-		public Codec<PlayerHasReputation> codec()
+		public MapCodec<PlayerHasReputation> codec()
 		{
 			return CODEC;
 		}
@@ -739,11 +737,13 @@ public interface Condition
 			
 			Level level = player.level();
 			
-			PlayerData data = PlayerSavedData.getData(player);
-			if(data != null)
-				return greaterThan ? data.getConsortReputation(level.dimension()) > amount : data.getConsortReputation(level.dimension()) < amount;
+			Optional<ConsortReputation> reputation = PlayerData.get(player).map(ConsortReputation::get);
+			if(reputation.isEmpty())
+				return false;
 			
-			return false;
+			return greaterThan
+					? reputation.get().getConsortReputation(level.dimension()) > amount
+					: reputation.get().getConsortReputation(level.dimension()) < amount;
 		}
 		
 		@Override
@@ -755,12 +755,12 @@ public interface Condition
 	
 	record PlayerHasBoondollars(int amount) implements Condition
 	{
-		static final Codec<PlayerHasBoondollars> CODEC = RecordCodecBuilder.create(instance -> instance.group(
-				PreservingOptionalFieldCodec.withDefault(Codec.INT, "amount", 1).forGetter(PlayerHasBoondollars::amount)
+		static final MapCodec<PlayerHasBoondollars> CODEC = RecordCodecBuilder.mapCodec(instance -> instance.group(
+				Codec.INT.optionalFieldOf("amount", 1).forGetter(PlayerHasBoondollars::amount)
 		).apply(instance, PlayerHasBoondollars::new));
 		
 		@Override
-		public Codec<PlayerHasBoondollars> codec()
+		public MapCodec<PlayerHasBoondollars> codec()
 		{
 			return CODEC;
 		}
@@ -771,9 +771,9 @@ public interface Condition
 			if(player == null)
 				return false;
 			
-			PlayerData data = PlayerSavedData.getData(player);
-			if(data != null)
-				return data.getBoondollars() >= amount;
+			Optional<PlayerData> data = PlayerData.get(player);
+			if(data.isPresent())
+				return PlayerBoondollars.getBoondollars(data.get()) >= amount;
 			
 			return false;
 		}
@@ -789,10 +789,10 @@ public interface Condition
 	{
 		INSTANCE;
 		
-		static final Codec<PlayerHasEntered> CODEC = Codec.unit(INSTANCE);
+		static final MapCodec<PlayerHasEntered> CODEC = MapCodec.unit(INSTANCE);
 		
 		@Override
-		public Codec<PlayerHasEntered> codec()
+		public MapCodec<PlayerHasEntered> codec()
 		{
 			return CODEC;
 		}
@@ -813,16 +813,49 @@ public interface Condition
 		}
 	}
 	
+	record PlayerHasAdvancement(ResourceLocation advancementId) implements Condition
+	{
+		static final MapCodec<PlayerHasAdvancement> CODEC = RecordCodecBuilder.mapCodec(instance -> instance.group(
+				ResourceLocation.CODEC.fieldOf("advancement_id").forGetter(PlayerHasAdvancement::advancementId)
+		).apply(instance, PlayerHasAdvancement::new));
+		
+		@Override
+		public MapCodec<PlayerHasAdvancement> codec()
+		{
+			return CODEC;
+		}
+		
+		@Override
+		public boolean test(LivingEntity entity, ServerPlayer player)
+		{
+			if(player == null)
+				return false;
+			
+			AdvancementHolder holder = player.server.getAdvancements().get(advancementId);
+			
+			if(holder == null)
+				return false;
+			
+			return player.getAdvancements().getOrStartProgress(holder).isDone();
+		}
+		
+		@Override
+		public Component getFailureTooltip()
+		{
+			return Component.literal("Player has not completed advancement");
+		}
+	}
+	
 	record CustomHasScore(int value, String ownerName, String objectiveName) implements Condition
 	{
-		static final Codec<CustomHasScore> CODEC = RecordCodecBuilder.create(instance -> instance.group(
-				PreservingOptionalFieldCodec.withDefault(Codec.INT, "value", 0).forGetter(CustomHasScore::value),
+		static final MapCodec<CustomHasScore> CODEC = RecordCodecBuilder.mapCodec(instance -> instance.group(
+				Codec.INT.optionalFieldOf("value", 0).forGetter(CustomHasScore::value),
 				Codec.STRING.fieldOf("owner_name").forGetter(CustomHasScore::ownerName),
 				Codec.STRING.fieldOf("objective_name").forGetter(CustomHasScore::objectiveName)
 		).apply(instance, CustomHasScore::new));
 		
 		@Override
-		public Codec<CustomHasScore> codec()
+		public MapCodec<CustomHasScore> codec()
 		{
 			return CODEC;
 		}
@@ -859,14 +892,65 @@ public interface Condition
 		}
 	}
 	
+	record CustomHasTag(boolean checkPlayer, String tagName) implements Condition
+	{
+		static final MapCodec<CustomHasTag> CODEC = RecordCodecBuilder.mapCodec(instance -> instance.group(
+				Codec.BOOL.optionalFieldOf("check_player", true).forGetter(CustomHasTag::checkPlayer),
+				Codec.STRING.fieldOf("tag_name").forGetter(CustomHasTag::tagName)
+		).apply(instance, CustomHasTag::new));
+		
+		@Override
+		public MapCodec<CustomHasTag> codec()
+		{
+			return CODEC;
+		}
+		
+		@Override
+		public boolean test(LivingEntity entity, ServerPlayer player)
+		{
+			if(player == null)
+				return false;
+			
+			if(checkPlayer)
+				return player.getTags().contains(tagName);
+			else
+				return entity.getTags().contains(tagName);
+		}
+		
+		@Override
+		public Component getFailureTooltip()
+		{
+			return Component.literal("The target does not have the correct tag");
+		}
+	}
+	
+	record DialogueExists(ResourceLocation dialogueId) implements Condition
+	{
+		static final MapCodec<DialogueExists> CODEC = RecordCodecBuilder.mapCodec(instance -> instance.group(
+				ResourceLocation.CODEC.fieldOf("dialogue_id").forGetter(DialogueExists::dialogueId)
+		).apply(instance, DialogueExists::new));
+		
+		@Override
+		public MapCodec<DialogueExists> codec()
+		{
+			return CODEC;
+		}
+		
+		@Override
+		public boolean test(LivingEntity entity, ServerPlayer player)
+		{
+			return DialogueNodes.getInstance().getDialogue(dialogueId) != null;
+		}
+	}
+	
 	enum HasMoveRestriction implements NpcOnlyCondition
 	{
 		INSTANCE;
 		
-		static final Codec<HasMoveRestriction> CODEC = Codec.unit(INSTANCE);
+		static final MapCodec<HasMoveRestriction> CODEC = MapCodec.unit(INSTANCE);
 		
 		@Override
-		public Codec<HasMoveRestriction> codec()
+		public MapCodec<HasMoveRestriction> codec()
 		{
 			return CODEC;
 		}
@@ -880,12 +964,12 @@ public interface Condition
 	
 	record Flag(String flag) implements Condition
 	{
-		static final Codec<Flag> CODEC = RecordCodecBuilder.create(instance -> instance.group(
+		static final MapCodec<Flag> CODEC = RecordCodecBuilder.mapCodec(instance -> instance.group(
 				Codec.STRING.fieldOf("flag").forGetter(Flag::flag)
 		).apply(instance, Flag::new));
 		
 		@Override
-		public Codec<Flag> codec()
+		public MapCodec<Flag> codec()
 		{
 			return CODEC;
 		}
@@ -904,12 +988,12 @@ public interface Condition
 	
 	record NearSpawn(int maxDistance) implements NpcOnlyCondition
 	{
-		static final Codec<NearSpawn> CODEC = RecordCodecBuilder.create(instance -> instance.group(
+		static final MapCodec<NearSpawn> CODEC = RecordCodecBuilder.mapCodec(instance -> instance.group(
 				Codec.INT.fieldOf("max_distance").forGetter(NearSpawn::maxDistance)
 		).apply(instance, NearSpawn::new));
 		
 		@Override
-		public Codec<NearSpawn> codec()
+		public MapCodec<NearSpawn> codec()
 		{
 			return CODEC;
 		}
@@ -918,38 +1002,19 @@ public interface Condition
 		public boolean test(LivingEntity entity)
 		{
 			LevelData levelData = entity.level().getLevelData();
-			Vec3 spawn = new Vec3(levelData.getXSpawn(), levelData.getYSpawn(), levelData.getZSpawn());
+			Vec3 spawn = Vec3.atCenterOf(levelData.getSpawnPos());
 			return entity.distanceToSqr(spawn) <= maxDistance * maxDistance;
-		}
-	}
-	
-	enum HasPlayerEntered implements Condition
-	{
-		INSTANCE;
-		static final Codec<HasPlayerEntered> CODEC = Codec.unit(INSTANCE);
-		
-		
-		@Override
-		public Codec<HasPlayerEntered> codec()
-		{
-			return CODEC;
-		}
-		
-		@Override
-		public boolean test(LivingEntity entity, ServerPlayer player)
-		{
-			return SburbPlayerData.get(player).hasEntered();
 		}
 	}
 	
 	enum IsInSkaia implements NpcOnlyCondition
 	{
 		INSTANCE;
-		static final Codec<IsInSkaia> CODEC = Codec.unit(INSTANCE);
+		static final MapCodec<IsInSkaia> CODEC = MapCodec.unit(INSTANCE);
 		
 		
 		@Override
-		public Codec<IsInSkaia> codec()
+		public MapCodec<IsInSkaia> codec()
 		{
 			return CODEC;
 		}
@@ -964,11 +1029,11 @@ public interface Condition
 	enum ConsortVisitedSkaia implements NpcOnlyCondition
 	{
 		INSTANCE;
-		static final Codec<ConsortVisitedSkaia> CODEC = Codec.unit(INSTANCE);
+		static final MapCodec<ConsortVisitedSkaia> CODEC = MapCodec.unit(INSTANCE);
 		
 		
 		@Override
-		public Codec<ConsortVisitedSkaia> codec()
+		public MapCodec<ConsortVisitedSkaia> codec()
 		{
 			return CODEC;
 		}

@@ -1,0 +1,21 @@
+{
+  "type": "minecraft:crafting_shaped",
+  "category": "equipment",
+  "key": {
+    "i": {
+      "tag": "c:ingots/iron"
+    },
+    "s": {
+      "tag": "c:rods/wooden"
+    }
+  },
+  "pattern": [
+    "s",
+    "i",
+    "i"
+  ],
+  "result": {
+    "count": 1,
+    "id": "minestuck:dagger"
+  }
+}

@@ -1,10 +1,8 @@
 package com.mraof.minestuck.skaianet;
 
-import com.mraof.minestuck.network.DataCheckerPacket;
+import com.mraof.minestuck.network.DataCheckerPackets;
 import com.mraof.minestuck.player.PlayerIdentifier;
-import com.mraof.minestuck.player.PlayerSavedData;
 import com.mraof.minestuck.player.Title;
-import com.mraof.minestuck.util.DataCheckerPermission;
 import com.mraof.minestuck.world.lands.LandTypePair;
 import com.mraof.minestuck.world.lands.LandTypes;
 import com.mraof.minestuck.world.lands.terrain.TerrainLandType;
@@ -31,7 +29,7 @@ public class DataCheckerManager
 		if(DataCheckerPermission.hasPermission(player))
 		{
 			CompoundTag data = createDataTag(player.server, SessionHandler.get(player.server));
-			PacketDistributor.PLAYER.with(player).send(DataCheckerPacket.data(index, data));
+			PacketDistributor.sendToPlayer(player, new DataCheckerPackets.Data(index, data));
 		}
 	}
 	/**
@@ -115,12 +113,11 @@ public class DataCheckerManager
 		landTypes.flatMap(named -> LandTypePair.Named.CODEC.encodeStart(NbtOps.INSTANCE, named).resultOrPartial(LOGGER::error))
 				.ifPresent(landPairTag -> tag.put("landTypes", landPairTag));
 		
-		Title title = PlayerSavedData.getData(player, mcServer).getTitle();
-		if(title != null)
+		Title.getTitle(player, mcServer).ifPresent(title ->
 		{
-			tag.putByte("class", (byte) title.getHeroClass().ordinal());
-			tag.putByte("aspect", (byte) title.getHeroAspect().ordinal());
-		}
+			tag.putByte("class", (byte) title.heroClass().ordinal());
+			tag.putByte("aspect", (byte) title.heroAspect().ordinal());
+		});
 	}
 	
 	private static void putPredefinedData(CompoundTag tag, PredefineData data)
@@ -128,8 +125,8 @@ public class DataCheckerManager
 		Title title = data.getTitle();
 		if(title != null)
 		{
-			tag.putByte("class", (byte) data.getTitle().getHeroClass().ordinal());
-			tag.putByte("aspect", (byte) data.getTitle().getHeroAspect().ordinal());
+			tag.putByte("class", (byte) data.getTitle().heroClass().ordinal());
+			tag.putByte("aspect", (byte) data.getTitle().heroAspect().ordinal());
 		}
 		
 		TerrainLandType terrainType = data.getTerrainLandType();

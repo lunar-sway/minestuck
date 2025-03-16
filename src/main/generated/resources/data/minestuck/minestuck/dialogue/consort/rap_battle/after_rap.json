@@ -1,5 +1,7 @@
 {
   "node": {
+    "animation": {},
+    "gui": "minestuck:textures/gui/dialogue/dialogue.png",
     "messages": [
       {
         "type": "description",
@@ -8,6 +10,10 @@
     ],
     "responses": [
       {
+        "condition": {
+          "type": "minestuck:always_true"
+        },
+        "hide_if_failed": true,
         "message": "minestuck.dialogue.consort.rap_battle.after_rap.school",
         "next_dialogue": {
           "id": "minestuck:consort/rap_battle/final",
@@ -28,15 +34,21 @@
             }
           ],
           "set_as_entrypoint": true
-        }
+        },
+        "triggers": []
       },
       {
+        "condition": {
+          "type": "minestuck:always_true"
+        },
+        "hide_if_failed": true,
         "message": "minestuck.dialogue.consort.rap_battle.after_rap.concede",
         "next_dialogue": {
           "id": "minestuck:consort/rap_battle/concede",
           "player_message": "minestuck.dialogue.consort.rap_battle.after_rap.concede.reply",
           "set_as_entrypoint": true
-        }
+        },
+        "triggers": []
       }
     ]
   }

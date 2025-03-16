@@ -1,5 +1,7 @@
 {
   "node": {
+    "animation": {},
+    "gui": "minestuck:textures/gui/dialogue/dialogue.png",
     "message": "minestuck.dialogue.consort.rabbit.food_shortage",
     "responses": [
       {
@@ -7,8 +9,10 @@
           "type": "minestuck:entity_type",
           "entity_type": "minestuck:nakagator"
         },
+        "hide_if_failed": true,
         "message": "minestuck.arrow",
-        "next_dialogue": "minestuck:consort/rabbit.food_shortage.other_way"
+        "next_dialogue": "minestuck:consort/rabbit.food_shortage.other_way",
+        "triggers": []
       }
     ]
   }

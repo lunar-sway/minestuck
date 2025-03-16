@@ -1,0 +1,32 @@
+{
+  "parent": "minecraft:recipes/root",
+  "criteria": {
+    "has_green_stone": {
+      "conditions": {
+        "items": [
+          {
+            "items": "minestuck:green_stone"
+          }
+        ]
+      },
+      "trigger": "minecraft:inventory_changed"
+    },
+    "has_the_recipe": {
+      "conditions": {
+        "recipe": "minestuck:green_stone_pressure_plate"
+      },
+      "trigger": "minecraft:recipe_unlocked"
+    }
+  },
+  "requirements": [
+    [
+      "has_the_recipe",
+      "has_green_stone"
+    ]
+  ],
+  "rewards": {
+    "recipes": [
+      "minestuck:green_stone_pressure_plate"
+    ]
+  }
+}

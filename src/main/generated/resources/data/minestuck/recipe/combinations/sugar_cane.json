@@ -1,0 +1,11 @@
+{
+  "type": "minestuck:combination",
+  "input1": {
+    "item": "minecraft:bamboo"
+  },
+  "input2": {
+    "item": "minecraft:sugar"
+  },
+  "mode": "and",
+  "output": "minecraft:sugar_cane"
+}

@@ -3,13 +3,13 @@ package com.mraof.minestuck.item.weapon;
 import com.mraof.minestuck.effects.CreativeShockEffect;
 import com.mraof.minestuck.player.ClientPlayerData;
 import com.mraof.minestuck.player.EnumAspect;
-import com.mraof.minestuck.player.PlayerSavedData;
 import com.mraof.minestuck.player.Title;
 import net.minecraft.server.level.ServerPlayer;
 import net.minecraft.sounds.SoundEvents;
 import net.minecraft.sounds.SoundSource;
 import net.minecraft.world.InteractionHand;
 import net.minecraft.world.InteractionResultHolder;
+import net.minecraft.world.entity.EquipmentSlot;
 import net.minecraft.world.entity.player.Player;
 import net.minecraft.world.item.ItemStack;
 import net.minecraft.world.level.Level;
@@ -48,18 +48,19 @@ public class PropelEffect implements ItemRightClickEffect
 		if(player instanceof FakePlayer)
 			return;
 		
-		Title title = null;
+		boolean hasAspect = false;
 		if(player.level().isClientSide)
 		{
-			title = ClientPlayerData.getTitle();
-		} else if(player instanceof ServerPlayer)
+			Title title = ClientPlayerData.getTitle();
+			hasAspect = title != null && title.heroAspect() == aspect;
+		} else if(player instanceof ServerPlayer serverPlayer)
 		{
-			title = PlayerSavedData.getData((ServerPlayer) player).getTitle();
-			if(player.getCooldowns().getCooldownPercent(stack.getItem(), 1F) <= 0 && ((title != null && title.getHeroAspect() == aspect) || player.isCreative()))
+			hasAspect = Title.isPlayerOfAspect(serverPlayer, aspect);
+			if(player.getCooldowns().getCooldownPercent(stack.getItem(), 1F) <= 0 && (hasAspect || player.isCreative()))
 				propelActionSound(player.level(), player);
 		}
 		
-		if((title != null && title.getHeroAspect() == aspect) || player.isCreative())
+		if(hasAspect || player.isCreative())
 		{
 			Vec3 lookVec = player.getLookAngle().scale(velocity);
 			if(player.isFallFlying())
@@ -70,7 +71,7 @@ public class PropelEffect implements ItemRightClickEffect
 			
 			player.swing(hand, true);
 			player.getCooldowns().addCooldown(stack.getItem(), 100);
-			stack.hurtAndBreak(4, player, playerEntity -> playerEntity.broadcastBreakEvent(InteractionHand.MAIN_HAND));
+			stack.hurtAndBreak(4, player, EquipmentSlot.MAINHAND);
 		}
 	}
 	

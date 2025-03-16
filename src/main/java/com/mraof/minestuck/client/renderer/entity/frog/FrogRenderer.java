@@ -23,14 +23,14 @@ public class FrogRenderer extends MobRenderer<FrogEntity, FrogModel<FrogEntity>>
 
 	@Override
 	public void render(FrogEntity frog, float entityYaw, float partialTicks, PoseStack poseStack, MultiBufferSource bufferIn, int packedLightIn) {
-		poseStack.scale(frog.getFrogSize(), frog.getFrogSize(), frog.getFrogSize());
+		//poseStack.scale(frog.getFrogSize(), frog.getFrogSize(), frog.getFrogSize());
 		super.render(frog, entityYaw, partialTicks, poseStack, bufferIn, packedLightIn);
 	}
 
 	@Override
 	public ResourceLocation getTextureLocation(FrogEntity entity)
 	{
-		return new ResourceLocation(Minestuck.MOD_ID, "textures/entity/frog/base.png");
+		return ResourceLocation.fromNamespaceAndPath(Minestuck.MOD_ID, "textures/entity/frog/base.png");
 	}
 	
 	protected boolean shouldShowName(FrogEntity entity)

@@ -43,6 +43,7 @@ public class MultiblockItem extends BlockItem
 		multiblock.forEachBlock(block -> blockToItemMap.put(block, itemIn));
 	}
 	
+	@SuppressWarnings("removal") // Just remove the method when it no longer exists
 	@Override
 	public void removeFromBlockToItemMap(Map<Block, Item> blockToItemMap, Item itemIn)
 	{
@@ -116,8 +117,10 @@ public class MultiblockItem extends BlockItem
 		{
 			BlockPos pos = getPlacementPos(context);
 			
-			multiblock.placeWithRotation(level, new MachineMultiblock.Placement(pos,
-					MSRotationUtil.fromDirection(context.getHorizontalDirection().getOpposite())));
+			MachineMultiblock.Placement placement = new MachineMultiblock.Placement(pos,
+					MSRotationUtil.fromDirection(context.getHorizontalDirection().getOpposite()));
+			multiblock.placeWithRotation(level, placement);
+			multiblock.placeAdditional(level, placement);
 			
 			if(context.getPlayer() instanceof ServerPlayer player)
 				CriteriaTriggers.PLACED_BLOCK.trigger(player, pos, context.getItemInHand());

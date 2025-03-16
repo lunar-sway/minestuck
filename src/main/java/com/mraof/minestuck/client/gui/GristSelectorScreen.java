@@ -3,7 +3,7 @@ package com.mraof.minestuck.client.gui;
 import com.mojang.blaze3d.systems.RenderSystem;
 import com.mraof.minestuck.api.alchemy.GristType;
 import com.mraof.minestuck.api.alchemy.GristTypes;
-import com.mraof.minestuck.network.GristWildcardPacket;
+import com.mraof.minestuck.network.block.SetWildcardGristPacket;
 import net.minecraft.client.gui.GuiGraphics;
 import net.minecraft.client.resources.language.I18n;
 import net.minecraft.core.BlockPos;
@@ -18,7 +18,7 @@ public class GristSelectorScreen extends MinestuckScreen
 {
 	public static final String TITLE = "minestuck.grist_selector";
 	public static final String SELECT_GRIST = "minestuck.select_grist";
-	private static final ResourceLocation guiGristcache = new ResourceLocation("minestuck", "textures/gui/grist_cache.png");
+	private static final ResourceLocation guiGristcache = ResourceLocation.fromNamespaceAndPath("minestuck", "textures/gui/grist_cache.png");
 
 	private static final int guiWidth = 226, guiHeight = 190;
 
@@ -104,7 +104,7 @@ public class GristSelectorScreen extends MinestuckScreen
 				if (isPointInRegion(gristXOffset, gristYOffset, 16, 16, xcor, ycor))
 				{
 					this.onClose();
-					PacketDistributor.SERVER.noArg().send(new GristWildcardPacket(gristHolderPos, type));
+					PacketDistributor.sendToServer(new SetWildcardGristPacket(gristHolderPos, type));
 					return true;
 				}
 				offset++;

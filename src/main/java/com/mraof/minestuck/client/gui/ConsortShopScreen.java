@@ -15,7 +15,7 @@ import javax.annotation.ParametersAreNonnullByDefault;
 @ParametersAreNonnullByDefault
 public class ConsortShopScreen extends AbstractContainerScreen<ConsortMerchantMenu>
 {
-	private final ResourceLocation guiBackground = new ResourceLocation("minestuck", "textures/gui/consort_shop.png");
+	private final ResourceLocation guiBackground = ResourceLocation.fromNamespaceAndPath("minestuck", "textures/gui/consort_shop.png");
 	private ResourceLocation portrait;
 	
 	public ConsortShopScreen(ConsortMerchantMenu screenContainer, Inventory inv, Component titleIn)
@@ -32,7 +32,7 @@ public class ConsortShopScreen extends AbstractContainerScreen<ConsortMerchantMe
 			return;
 		
 		if(portrait == null)
-			portrait = new ResourceLocation("minestuck",
+			portrait = ResourceLocation.fromNamespaceAndPath("minestuck",
 					"textures/gui/store/"+menu.getConsortType().name().toLowerCase()+"_"+menu.getMerchantType().name().toLowerCase()+".png");
 		
 		int x = (width - imageWidth) / 2;

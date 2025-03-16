@@ -8,7 +8,6 @@ import net.minecraft.server.level.ServerLevel;
 import net.minecraft.sounds.SoundEvents;
 import net.minecraft.sounds.SoundSource;
 import net.minecraft.util.RandomSource;
-import net.minecraft.world.InteractionHand;
 import net.minecraft.world.InteractionResult;
 import net.minecraft.world.entity.player.Player;
 import net.minecraft.world.level.BlockGetter;
@@ -21,10 +20,12 @@ import net.minecraft.world.level.block.state.properties.IntegerProperty;
 import net.minecraft.world.phys.BlockHitResult;
 
 import javax.annotation.Nullable;
+import javax.annotation.ParametersAreNonnullByDefault;
 
 /**
  * When right clicked without crouching(and is unpowered), the block turns to full power and brightness and then loses one value of power and light at a set rate of ticks determined by the "tickrate" of the block
  */
+@ParametersAreNonnullByDefault
 public class TimedSolidSwitchBlock extends Block
 {
 	public static final IntegerProperty POWER = BlockStateProperties.POWER;
@@ -39,8 +40,7 @@ public class TimedSolidSwitchBlock extends Block
 	}
 	
 	@Override
-	@SuppressWarnings("deprecation")
-	public InteractionResult use(BlockState state, Level level, BlockPos pos, Player player, InteractionHand hand, BlockHitResult hit)
+	protected InteractionResult useWithoutItem(BlockState state, Level level, BlockPos pos, Player player, BlockHitResult hit)
 	{
 		level.setBlock(pos, state.setValue(POWER, state.getValue(POWER) == 0 ? 15 : 0), Block.UPDATE_ALL);
 		if(state.getValue(POWER) > 0)
@@ -55,9 +55,8 @@ public class TimedSolidSwitchBlock extends Block
 		return InteractionResult.SUCCESS;
 	}
 	
-	@SuppressWarnings("deprecation")
 	@Override
-	public void tick(BlockState state, ServerLevel level, BlockPos pos, RandomSource rand)
+	protected void tick(BlockState state, ServerLevel level, BlockPos pos, RandomSource rand)
 	{
 		super.tick(state, level, pos, rand);
 		
@@ -75,22 +74,21 @@ public class TimedSolidSwitchBlock extends Block
 		}
 	}
 	
-	@SuppressWarnings("deprecation")
 	@Override
-	public void onPlace(BlockState state, Level level, BlockPos pos, BlockState oldState, boolean isMoving)
+	protected void onPlace(BlockState state, Level level, BlockPos pos, BlockState oldState, boolean isMoving)
 	{
 		super.onPlace(state, level, pos, oldState, isMoving);
 		level.scheduleTick(new BlockPos(pos), this, tickRate);
 	}
 	
 	@Override
-	public boolean isSignalSource(BlockState state)
+	protected boolean isSignalSource(BlockState state)
 	{
 		return state.getValue(POWER) > 0;
 	}
 	
 	@Override
-	public int getSignal(BlockState blockState, BlockGetter level, BlockPos pos, Direction side)
+	protected int getSignal(BlockState blockState, BlockGetter level, BlockPos pos, Direction side)
 	{
 		return blockState.getValue(POWER);
 	}

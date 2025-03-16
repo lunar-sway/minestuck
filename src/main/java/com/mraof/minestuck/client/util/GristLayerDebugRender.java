@@ -13,11 +13,11 @@ import net.minecraft.server.level.ServerLevel;
 import net.minecraft.world.entity.player.Player;
 import net.neoforged.api.distmarker.Dist;
 import net.neoforged.bus.api.SubscribeEvent;
-import net.neoforged.fml.common.Mod;
+import net.neoforged.fml.common.EventBusSubscriber;
 import net.neoforged.neoforge.client.event.RenderLevelStageEvent;
 import org.joml.Matrix4f;
 
-@Mod.EventBusSubscriber(Dist.CLIENT)
+@EventBusSubscriber(Dist.CLIENT)
 public class GristLayerDebugRender
 {
 	private static final boolean RENDER = false;
@@ -64,13 +64,12 @@ public class GristLayerDebugRender
 				stack.translate(x - camera.getPosition().x, y - camera.getPosition().y, z - camera.getPosition().z);
 				Matrix4f pose = stack.last().pose();
 				
-				BufferBuilder render = Tesselator.getInstance().getBuilder();
-				render.begin(VertexFormat.Mode.QUADS, DefaultVertexFormat.POSITION_TEX);
-				render.vertex(pose, 0, 0, 1).uv(0, 1).endVertex();
-				render.vertex(pose, 1, 0, 1).uv(1, 1).endVertex();
-				render.vertex(pose, 1, 0, 0).uv(1, 0).endVertex();
-				render.vertex(pose, 0, 0, 0).uv(0, 0).endVertex();
-				Tesselator.getInstance().end();
+				BufferBuilder buffer = Tesselator.getInstance().begin(VertexFormat.Mode.QUADS, DefaultVertexFormat.POSITION_TEX);
+				buffer.addVertex(pose, 0, 0, 1).setUv(0, 1);
+				buffer.addVertex(pose, 1, 0, 1).setUv(1, 1);
+				buffer.addVertex(pose, 1, 0, 0).setUv(1, 0);
+				buffer.addVertex(pose, 0, 0, 0).setUv(0, 0);
+				BufferUploader.drawWithShader(buffer.buildOrThrow());
 				stack.popPose();
 			}
 		}

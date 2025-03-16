@@ -2,15 +2,18 @@ package com.mraof.minestuck.blockentity.redstone;
 
 import com.mraof.minestuck.block.BlockUtil;
 import com.mraof.minestuck.blockentity.MSBlockEntityTypes;
+import com.mraof.minestuck.network.block.BlockTeleporterSettingsPacket;
 import com.mraof.minestuck.util.MSRotationUtil;
 import com.mraof.minestuck.util.MSSoundEvents;
 import net.minecraft.MethodsReturnNonnullByDefault;
 import net.minecraft.core.BlockPos;
 import net.minecraft.core.Direction;
+import net.minecraft.core.HolderLookup;
 import net.minecraft.nbt.CompoundTag;
 import net.minecraft.network.protocol.Packet;
 import net.minecraft.network.protocol.game.ClientGamePacketListener;
 import net.minecraft.network.protocol.game.ClientboundBlockEntityDataPacket;
+import net.minecraft.server.level.ServerLevel;
 import net.minecraft.sounds.SoundSource;
 import net.minecraft.util.Mth;
 import net.minecraft.world.level.block.Block;
@@ -75,15 +78,19 @@ public class BlockTeleporterBlockEntity extends BlockEntity
 		return this.teleportOffset;
 	}
 	
-	public void setTeleportOffset(BlockPos teleportOffset)
+	public void handleSettingsPacket(BlockTeleporterSettingsPacket packet)
 	{
-		this.teleportOffset = teleportOffset;
+		this.teleportOffset = packet.offsetPos();
+		
+		setChanged();
+		if(getLevel() instanceof ServerLevel serverLevel)
+			serverLevel.getChunkSource().blockChanged(getBlockPos());
 	}
 	
 	@Override
-	public void load(CompoundTag compound)
+	public void loadAdditional(CompoundTag compound, HolderLookup.Provider provider)
 	{
-		super.load(compound);
+		super.loadAdditional(compound, provider);
 		
 		int offsetX = compound.getInt("offsetX");
 		int offsetY = compound.getInt("offsetY");
@@ -92,9 +99,9 @@ public class BlockTeleporterBlockEntity extends BlockEntity
 	}
 	
 	@Override
-	public void saveAdditional(CompoundTag compound)
+	public void saveAdditional(CompoundTag compound, HolderLookup.Provider provider)
 	{
-		super.saveAdditional(compound);
+		super.saveAdditional(compound, provider);
 		
 		compound.putInt("offsetX", teleportOffset.getX());
 		compound.putInt("offsetY", teleportOffset.getY());
@@ -107,9 +114,9 @@ public class BlockTeleporterBlockEntity extends BlockEntity
 	}
 	
 	@Override
-	public CompoundTag getUpdateTag()
+	public CompoundTag getUpdateTag(HolderLookup.Provider provider)
 	{
-		return this.saveWithoutMetadata();
+		return this.saveWithoutMetadata(provider);
 	}
 	
 	@Override

@@ -5,13 +5,17 @@ import com.mraof.minestuck.MinestuckConfig;
 import com.mraof.minestuck.advancements.MSCriteriaTriggers;
 import com.mraof.minestuck.computer.editmode.EditData;
 import com.mraof.minestuck.computer.editmode.ServerEditHandler;
-import com.mraof.minestuck.network.data.EcheladderDataPacket;
+import com.mraof.minestuck.network.EcheladderDataPacket;
 import com.mraof.minestuck.skaianet.SburbPlayerData;
+import com.mraof.minestuck.util.MSAttachments;
 import com.mraof.minestuck.util.MSSoundEvents;
+import net.minecraft.MethodsReturnNonnullByDefault;
+import net.minecraft.core.HolderLookup;
 import net.minecraft.nbt.CompoundTag;
 import net.minecraft.nbt.ListTag;
 import net.minecraft.nbt.StringTag;
 import net.minecraft.nbt.Tag;
+import net.minecraft.resources.ResourceLocation;
 import net.minecraft.server.MinecraftServer;
 import net.minecraft.server.level.ServerPlayer;
 import net.minecraft.sounds.SoundSource;
@@ -21,17 +25,19 @@ import net.minecraft.world.entity.ai.attributes.AttributeModifier;
 import net.minecraft.world.entity.ai.attributes.Attributes;
 import net.minecraft.world.level.Level;
 import net.neoforged.bus.api.SubscribeEvent;
-import net.neoforged.fml.common.Mod;
+import net.neoforged.fml.common.EventBusSubscriber;
+import net.neoforged.neoforge.common.util.INBTSerializable;
 import net.neoforged.neoforge.event.entity.player.PlayerEvent;
 import net.neoforged.neoforge.network.PacketDistributor;
 import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.Logger;
 
+import javax.annotation.Nullable;
 import java.util.EnumSet;
-import java.util.UUID;
 
-@Mod.EventBusSubscriber(modid = Minestuck.MOD_ID, bus = Mod.EventBusSubscriber.Bus.FORGE)
-public class Echeladder
+@MethodsReturnNonnullByDefault
+@EventBusSubscriber(modid = Minestuck.MOD_ID, bus = EventBusSubscriber.Bus.GAME)
+public final class Echeladder implements INBTSerializable<CompoundTag>
 {
 	private static final Logger LOGGER = LogManager.getLogger();
 	
@@ -39,8 +45,8 @@ public class Echeladder
 	
 	public static final int RUNG_COUNT = 50;
 	
-	private static final UUID echeladderHealthBoostModifierUUID = UUID.fromString("5b49a45b-ff22-4720-8f10-dfd745c3abb8");    //TODO Might be so that only one is needed, as we only add one modifier for each attribute.
-	private static final UUID echeladderDamageBoostModifierUUID = UUID.fromString("a74176fd-bf4e-4153-bb68-197dbe4109b2");
+	private static final ResourceLocation HEALTH_BOOST_ID = Minestuck.id("echeladder_health_boost");
+	private static final ResourceLocation DAMAGE_BOOST_ID = Minestuck.id("echeladder_damage_boost");
 	private static final int[] BOONDOLLARS = new int[]{0, 50, 75, 105, 140, 170, 200, 250, 320, 425, 575, 790, 1140, 1630, 2230, 2980, 3850, 4800, 6000, 7500, 9500, 11900, 15200, 19300, 24400, 45000, 68000, 95500, 124000, 180000, 260000, 425000, 632000, 880000, 1000000};
 	
 	private static final long[] GRIST_CAPACITY =
@@ -49,21 +55,38 @@ public class Echeladder
 			145147, 181433, 226791, 283488, 354360, 442950, 553687, 692108, 865135, 1081418, 1351772, 1689715, 2112143, 2640178, 3300222};
 			//each value is achieved by multiplying the previous by 1.25 and then rounding the result down to get an integer number
 	
-	public static void increaseProgress(PlayerIdentifier player, Level level, int progress)
+	public static Echeladder get(PlayerIdentifier player, Level level)
 	{
-		PlayerSavedData.getData(player, level).getEcheladder().increaseProgress(progress);
+		return get(PlayerData.get(player, level));
 	}
 	
-	public static void increaseProgress(ServerPlayer player, int progress)
+	public static Echeladder get(ServerPlayer player)
 	{
-		PlayerSavedData.getData(player).getEcheladder().increaseProgress(progress);
+		PlayerData playerData = PlayerData.get(player).orElseThrow(() -> new IllegalArgumentException("Cannot get player data for player " + player));
+		return get(playerData);
+	}
+	
+	public static Echeladder get(PlayerData playerData)
+	{
+		return playerData.getData(MSAttachments.ECHELADDER);
 	}
 	
 	@SubscribeEvent
-	public static void onPlayerRespawn(PlayerEvent.PlayerRespawnEvent event)
+	private static void onPlayerLoggedIn(PlayerEvent.PlayerLoggedInEvent event)
 	{
-		Echeladder echeladder = PlayerSavedData.getData((ServerPlayer) event.getEntity()).getEcheladder();
-		echeladder.updateEcheladderBonuses((ServerPlayer) event.getEntity());
+		ServerPlayer player = (ServerPlayer) event.getEntity();
+		
+		Echeladder echeladder = get(player);
+		echeladder.updateEcheladderBonuses(player);
+		echeladder.sendInitialPacket(player);
+	}
+	
+	@SubscribeEvent
+	private static void onPlayerRespawn(PlayerEvent.PlayerRespawnEvent event)
+	{
+		ServerPlayer player = (ServerPlayer) event.getEntity();
+		Echeladder echeladder = get(player);
+		echeladder.updateEcheladderBonuses(player);
 		if(MinestuckConfig.SERVER.rungHealthOnRespawn.get())
 			event.getEntity().heal(event.getEntity().getMaxHealth());
 	}
@@ -74,10 +97,10 @@ public class Echeladder
 	private int progress;
 	private final EnumSet<EcheladderBonusType> usedBonuses = EnumSet.noneOf(EcheladderBonusType.class);
 	
-	public Echeladder(MinecraftServer mcServer, PlayerIdentifier identifier)
+	public Echeladder(PlayerData playerData)
 	{
-		this.mcServer = mcServer;
-		this.identifier = identifier;
+		this.mcServer = playerData.getMinecraftServer();
+		this.identifier = playerData.identifier;
 	}
 	
 	private int getRungProgressReq()
@@ -124,7 +147,7 @@ public class Echeladder
 				LOGGER.debug("Remaining exp {} is below 1, and will therefore be ignored", exp);
 		}
 		
-		PlayerSavedData.getData(identifier, mcServer).addBoondollars(boondollarsGained);
+		PlayerBoondollars.addBoondollars(PlayerData.get(identifier, mcServer), boondollarsGained);
 		
 		LOGGER.debug("Finished echeladder climbing for {} at {} with progress {}", identifier.getUsername(), rung, progress);
 		ServerPlayer player = identifier.getPlayer(mcServer);
@@ -186,41 +209,46 @@ public class Echeladder
 		int healthBonus = healthBoost(rung);
 		double damageBonus = attackBonus(rung);
 		
-		updateAttribute(player.getAttribute(Attributes.MAX_HEALTH), new AttributeModifier(echeladderHealthBoostModifierUUID, "Echeladder Health Boost", healthBonus, AttributeModifier.Operation.ADDITION));    //If this isn't saved, your health goes to 10 hearts (if it was higher before) when loading the save file.
-		updateAttribute(player.getAttribute(Attributes.ATTACK_DAMAGE), new AttributeModifier(echeladderDamageBoostModifierUUID, "Echeladder Damage Boost", damageBonus, AttributeModifier.Operation.MULTIPLY_BASE));
+		updateAttribute(player.getAttribute(Attributes.MAX_HEALTH),
+				new AttributeModifier(HEALTH_BOOST_ID, healthBonus, AttributeModifier.Operation.ADD_VALUE));
+		updateAttribute(player.getAttribute(Attributes.ATTACK_DAMAGE),
+				new AttributeModifier(DAMAGE_BOOST_ID, damageBonus, AttributeModifier.Operation.ADD_MULTIPLIED_BASE));
 	}
 	
-	public void updateAttribute(AttributeInstance attribute, AttributeModifier modifier)
+	public void updateAttribute(@Nullable AttributeInstance attribute, AttributeModifier modifier)
 	{
-		if(attribute.hasModifier(modifier))
-			attribute.removeModifier(modifier.getId());
-		attribute.addPermanentModifier(modifier);
+		if(attribute != null)
+		{
+			// Max health modifiers should be serialized (by being permanent),
+			// or else the health will be clamped without the max health modifier on player load.
+			attribute.addOrReplacePermanentModifier(modifier);
+		}
 	}
 	
-	public void saveEcheladder(CompoundTag nbt)
+	@Override
+	public CompoundTag serializeNBT(HolderLookup.Provider provider)
 	{
+		CompoundTag nbt = new CompoundTag();
+		
 		nbt.putInt("rung", rung);
 		nbt.putInt("rungProgress", progress);
 		
 		ListTag bonuses = new ListTag();
-		
 		for(EcheladderBonusType bonus : usedBonuses)
-		{
 			bonuses.add(StringTag.valueOf(bonus.toString()));
-		}
-		
 		nbt.put("rungBonuses", bonuses);
+		
+		return nbt;
 	}
 	
-	public void loadEcheladder(CompoundTag nbt)
+	@Override
+	public void deserializeNBT(HolderLookup.Provider provider, CompoundTag nbt)
 	{
 		rung = nbt.getInt("rung");
 		progress = nbt.getInt("rungProgress");
 		
 		for(Tag tag : nbt.getList("rungBonuses", Tag.TAG_STRING))
-		{
 			usedBonuses.add(EcheladderBonusType.fromString(tag.getAsString()));
-		}
 	}
 	
 	public static double attackBonus(int rung)
@@ -282,13 +310,13 @@ public class Echeladder
 	public void sendInitialPacket(ServerPlayer player)
 	{
 		EcheladderDataPacket packet = EcheladderDataPacket.init(getRung(), MinestuckConfig.SERVER.echeladderProgress.get() ? getProgress() : 0F);
-		PacketDistributor.PLAYER.with(player).send(packet);
+		PacketDistributor.sendToPlayer(player, packet);
 	}
 	
 	public void sendDataPacket(ServerPlayer player, boolean sendMessage)
 	{
 		EcheladderDataPacket packet = EcheladderDataPacket.create(getRung(), MinestuckConfig.SERVER.echeladderProgress.get() ? getProgress() : 0F, sendMessage);
-		PacketDistributor.PLAYER.with(player).send(packet);
+		PacketDistributor.sendToPlayer(player, packet);
 	}
 	
 	public static String translationKey(int rung)

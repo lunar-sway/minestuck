@@ -1,19 +1,23 @@
 package com.mraof.minestuck.blockentity.machine;
 
 import com.mraof.minestuck.advancements.MSCriteriaTriggers;
-import com.mraof.minestuck.alchemy.AlchemyHelper;
-import com.mraof.minestuck.alchemy.CardCaptchas;
 import com.mraof.minestuck.block.machine.IntellibeamLaserstationBlock;
 import com.mraof.minestuck.blockentity.MSBlockEntityTypes;
 import com.mraof.minestuck.item.MSItems;
+import com.mraof.minestuck.item.components.CaptchaCodeComponent;
+import com.mraof.minestuck.item.components.CardStoredItemComponent;
+import com.mraof.minestuck.item.components.MSItemComponents;
 import com.mraof.minestuck.util.MSSoundEvents;
 import com.mraof.minestuck.util.MSTags;
 import net.minecraft.core.BlockPos;
 import net.minecraft.core.Direction;
+import net.minecraft.core.HolderLookup;
 import net.minecraft.core.registries.BuiltInRegistries;
 import net.minecraft.nbt.CompoundTag;
 import net.minecraft.network.chat.Component;
 import net.minecraft.resources.ResourceLocation;
+import net.minecraft.server.MinecraftServer;
+import net.minecraft.server.level.ServerLevel;
 import net.minecraft.server.level.ServerPlayer;
 import net.minecraft.sounds.SoundSource;
 import net.minecraft.world.Containers;
@@ -63,47 +67,48 @@ public class IntellibeamLaserstationBlockEntity extends BlockEntity
 	
 	public void onRightClick(Player player)
 	{
-		if(level != null && !level.isClientSide)
+		if(!(level instanceof ServerLevel serverLevel))
+			return;
+		if(waitTimer > 0)
+			return;
+		waitTimer = 10;
+		
+		if(analyzedCard.isEmpty())
 		{
 			ItemStack heldCard = player.getMainHandItem();
-			ItemStack itemInHeldCard = AlchemyHelper.getDecodedItem(heldCard);
-			
-			if(waitTimer > 0)
-			{
-				return;
-			}
-			
-			if(!analyzedCard.isEmpty() && player.isShiftKeyDown())
-			{
-				takeCard(player);
-				waitTimer = 10;
-			} else if(AlchemyHelper.isReadableCard(analyzedCard))
-			{
-				this.level.playSound(null, this.worldPosition, MSSoundEvents.INTELLIBEAM_LASERSTATION_REMOVE_CARD.get(), SoundSource.BLOCKS, 0.5F, 0.1F);
-				player.displayClientMessage(Component.translatable(CAPTCHA_DECODED), true);
-				waitTimer = 10;
-			} else if(analyzedCard.isEmpty() && itemInHeldCard.is(MSTags.Items.UNREADABLE))
-			{
+			ItemStack itemInHeldCard = heldCard.getOrDefault(MSItemComponents.CARD_STORED_ITEM, CardStoredItemComponent.EMPTY).storedStack();
+			if(itemInHeldCard.is(MSTags.Items.UNREADABLE))
 				setCard(heldCard.split(1));
-				waitTimer = 10;
-			} else if(getCardItemExperience() >= EXP_LEVEL_CAPACITY)
-			{
-				MSCriteriaTriggers.INTELLIBEAM_LASERSTATION.get().trigger((ServerPlayer) player, AlchemyHelper.getDecodedItem(analyzedCard));
-				applyReadableNBT(analyzedCard);
-				takeCard(player);
-				
-				waitTimer = 10;
-			} else
-			{
-				addExperience(player);
-				waitTimer = 10;
-			}
+			return;
 		}
+		
+		if(player.isShiftKeyDown())
+		{
+			takeCard(player);
+			return;
+		}
+		
+		if(this.analyzedCard.has(MSItemComponents.CAPTCHA_CODE))
+		{
+			this.level.playSound(null, this.worldPosition, MSSoundEvents.INTELLIBEAM_LASERSTATION_REMOVE_CARD.get(), SoundSource.BLOCKS, 0.5F, 0.1F);
+			player.displayClientMessage(Component.translatable(CAPTCHA_DECODED), true);
+			return;
+		}
+		if(getCardItemExperience() < EXP_LEVEL_CAPACITY)
+		{
+			addExperience(player);
+			return;
+		}
+		
+		CardStoredItemComponent analyzedCardComponent = this.analyzedCard.getOrDefault(MSItemComponents.CARD_STORED_ITEM, CardStoredItemComponent.EMPTY);
+		MSCriteriaTriggers.INTELLIBEAM_LASERSTATION.get().trigger((ServerPlayer) player, analyzedCardComponent.storedStack());
+		setReadable(analyzedCard, serverLevel.getServer());
+		takeCard(player);
 	}
 	
 	private Integer getCardItemExperience()
 	{
-		return decodingProgress.getOrDefault(AlchemyHelper.getDecodedItem(analyzedCard).getItem(), 0);
+		return decodingProgress.getOrDefault(analyzedCard.getOrDefault(MSItemComponents.CARD_STORED_ITEM, CardStoredItemComponent.EMPTY).storedStack().getItem(), 0);
 	}
 	
 	public String processExperienceGuage()
@@ -160,10 +165,11 @@ public class IntellibeamLaserstationBlockEntity extends BlockEntity
 		}
 	}
 	
-	public void applyReadableNBT(ItemStack taggedCard)
+	public void setReadable(ItemStack taggedCard, MinecraftServer mcServer)
 	{
-		taggedCard.getOrCreateTag().putString("captcha_code",
-				CardCaptchas.getCaptcha(AlchemyHelper.getDecodedItem(taggedCard).getItem(), Objects.requireNonNull(level).getServer()));
+		CardStoredItemComponent storedItem = taggedCard.get(MSItemComponents.CARD_STORED_ITEM);
+		if(storedItem != null)
+			taggedCard.set(MSItemComponents.CAPTCHA_CODE, CaptchaCodeComponent.createFor(storedItem.storedStack(), mcServer));
 	}
 	
 	public void addExperience(Player player)
@@ -178,7 +184,7 @@ public class IntellibeamLaserstationBlockEntity extends BlockEntity
 			if(!player.isCreative())
 				player.giveExperienceLevels(-1);
 			
-			Item analyzedItem = AlchemyHelper.getDecodedItem(analyzedCard).getItem();
+			Item analyzedItem = analyzedCard.getOrDefault(MSItemComponents.CARD_STORED_ITEM, CardStoredItemComponent.EMPTY).storedStack().getItem();
 			int storedExperience = decodingProgress.getOrDefault(analyzedItem, 0);
 			decodingProgress.put(analyzedItem, storedExperience + 1);
 			
@@ -196,10 +202,10 @@ public class IntellibeamLaserstationBlockEntity extends BlockEntity
 	}
 	
 	@Override
-	public void load(CompoundTag nbt)
+	protected void loadAdditional(CompoundTag nbt, HolderLookup.Provider pRegistries)
 	{
-		super.load(nbt);
-		setCard(ItemStack.of(nbt.getCompound("card")));
+		super.loadAdditional(nbt, pRegistries);
+		setCard(ItemStack.parseOptional(pRegistries, nbt.getCompound("card")));
 		
 		CompoundTag progressData = nbt.getCompound("decoding_progress");
 		for(String itemName : progressData.getAllKeys())
@@ -215,10 +221,10 @@ public class IntellibeamLaserstationBlockEntity extends BlockEntity
 	}
 	
 	@Override
-	public void saveAdditional(CompoundTag compound)
+	public void saveAdditional(CompoundTag compound, HolderLookup.Provider provider)
 	{
-		super.saveAdditional(compound);
-		compound.put("card", analyzedCard.save(new CompoundTag()));
+		super.saveAdditional(compound, provider);
+		compound.put("card", analyzedCard.saveOptional(provider));
 		
 		CompoundTag progressData = new CompoundTag();
 		for(Map.Entry<Item, Integer> entry : decodingProgress.entrySet())

@@ -1,18 +1,27 @@
 package com.mraof.minestuck.entity;
 
+import com.mojang.datafixers.util.Pair;
+import com.mraof.minestuck.Minestuck;
 import com.mraof.minestuck.item.MSItems;
+import com.mraof.minestuck.item.components.FrogTraitsComponent;
+import com.mraof.minestuck.item.components.MSItemComponents;
 import com.mraof.minestuck.util.MSSoundEvents;
 import com.mraof.minestuck.util.MSTags;
 import net.minecraft.core.BlockPos;
+import net.minecraft.core.component.DataComponents;
 import net.minecraft.core.particles.ParticleTypes;
 import net.minecraft.nbt.CompoundTag;
+import net.minecraft.nbt.Tag;
 import net.minecraft.network.syncher.EntityDataAccessor;
+import net.minecraft.network.syncher.EntityDataSerializer;
 import net.minecraft.network.syncher.EntityDataSerializers;
 import net.minecraft.network.syncher.SynchedEntityData;
+import net.minecraft.resources.ResourceLocation;
 import net.minecraft.sounds.SoundEvent;
 import net.minecraft.sounds.SoundEvents;
 import net.minecraft.util.Mth;
 import net.minecraft.util.RandomSource;
+import net.minecraft.util.StringRepresentable;
 import net.minecraft.world.InteractionHand;
 import net.minecraft.world.InteractionResult;
 import net.minecraft.world.damagesource.DamageSource;
@@ -29,6 +38,7 @@ import net.minecraft.world.level.Level;
 import net.minecraft.world.level.LevelAccessor;
 import net.minecraft.world.level.pathfinder.Path;
 import net.minecraft.world.phys.Vec3;
+import net.neoforged.neoforge.network.codec.NeoForgeStreamCodecs;
 
 import java.util.Random;
 
@@ -41,13 +51,14 @@ public class FrogEntity extends PathfinderMob
 	private int jumpDuration;
 	private boolean wasOnGround;
 	private int currentMoveTypeDuration;
-	private static final EntityDataAccessor<Float> FROG_SIZE = SynchedEntityData.defineId(FrogEntity.class, EntityDataSerializers.FLOAT);
 	private static final EntityDataAccessor<Integer> SKIN_COLOR = SynchedEntityData.defineId(FrogEntity.class, EntityDataSerializers.INT);
 	private static final EntityDataAccessor<Integer> EYE_COLOR = SynchedEntityData.defineId(FrogEntity.class, EntityDataSerializers.INT);
 	private static final EntityDataAccessor<Integer> BELLY_COLOR = SynchedEntityData.defineId(FrogEntity.class, EntityDataSerializers.INT);
-	private static final EntityDataAccessor<Integer> EYE_TYPE = SynchedEntityData.defineId(FrogEntity.class, EntityDataSerializers.INT);
-	private static final EntityDataAccessor<Integer> BELLY_TYPE = SynchedEntityData.defineId(FrogEntity.class, EntityDataSerializers.INT);
-	private static final EntityDataAccessor<Integer> TYPE = SynchedEntityData.defineId(FrogEntity.class, EntityDataSerializers.INT);
+	private static final EntityDataAccessor<EyeTypes> EYE_TYPE = SynchedEntityData.defineId(FrogEntity.class, EntityDataSerializer.forValueType(NeoForgeStreamCodecs.enumCodec(EyeTypes.class)));
+	private static final EntityDataAccessor<BellyTypes> BELLY_TYPE = SynchedEntityData.defineId(FrogEntity.class, EntityDataSerializer.forValueType(NeoForgeStreamCodecs.enumCodec(BellyTypes.class)));
+	private static final EntityDataAccessor<FrogVariants> VARIANT = SynchedEntityData.defineId(FrogEntity.class, EntityDataSerializer.forValueType(NeoForgeStreamCodecs.enumCodec(FrogVariants.class)));
+	
+	private static final ResourceLocation GENETIC_SIZE_ATTRIBUTE_KEY = Minestuck.id("genetic_size");
 	
 	public FrogEntity(Level level)
 	{
@@ -63,16 +74,15 @@ public class FrogEntity extends PathfinderMob
 	}
 	
 	@Override
-	protected void defineSynchedData()
+	protected void defineSynchedData(SynchedEntityData.Builder builder)
 	{
-		super.defineSynchedData();
-		this.entityData.define(TYPE, getRandomFrogType());
-		this.entityData.define(FROG_SIZE, randomFloat(1) + 0.6F);
-		this.entityData.define(SKIN_COLOR, random(16777215));
-		this.entityData.define(EYE_COLOR, random(16777215));
-		this.entityData.define(BELLY_COLOR, random(16777215));
-		this.entityData.define(EYE_TYPE, random(maxEyes()));
-		this.entityData.define(BELLY_TYPE, random(maxBelly()));
+		super.defineSynchedData(builder);
+		builder.define(VARIANT, FrogVariants.DEFAULT);
+		builder.define(SKIN_COLOR, random(34277));
+		builder.define(EYE_COLOR, random(15967496));
+		builder.define(BELLY_COLOR, random(28350));
+		builder.define(EYE_TYPE, EyeTypes.LIGHT);
+		builder.define(BELLY_TYPE, BellyTypes.SOLID);
 	}
 	
 	@Override
@@ -84,39 +94,25 @@ public class FrogEntity extends PathfinderMob
 		{
 			if(itemstack.getItem() == MSItems.BUG_NET.get())
 			{
-				itemstack.hurtAndBreak(1, player, (entityPlayer) -> entityPlayer.broadcastBreakEvent(hand));
+				itemstack.hurtAndBreak(1, player, hand == InteractionHand.MAIN_HAND ? EquipmentSlot.MAINHAND : EquipmentSlot.OFFHAND);
 				ItemStack frogItem = new ItemStack(MSItems.FROG.get());
 				
-				frogItem.setTag(getFrogData());
-				if(this.hasCustomName()) frogItem.setHoverName(this.getCustomName());
+				frogItem.set(MSItemComponents.FROG_TRAITS, FrogTraitsComponent.fromFrogEntity(this));
+				if(this.hasCustomName())
+					frogItem.set(DataComponents.CUSTOM_NAME, this.getCustomName());
 				
 				spawnAtLocation(frogItem, 0);
 				this.discard();
-			} else if(itemstack.getItem() == MSItems.GOLDEN_GRASSHOPPER.get() && this.getFrogType() != 5)
+			} else if(itemstack.getItem() == MSItems.GOLDEN_GRASSHOPPER.get() && this.getFrogVariant() != FrogVariants.GOLDEN)
 			{
 				if(!player.isCreative()) itemstack.shrink(1);
 				
 				this.level().addParticle(ParticleTypes.EXPLOSION, this.getX(), this.getY() + (double) (this.getBbHeight() / 2.0F), this.getZ(), 0.0D, 0.0D, 0.0D);
 				this.playSound(SoundEvents.ANVIL_HIT, this.getSoundVolume(), ((this.random.nextFloat() - this.random.nextFloat()) * 0.2F + 1.0F) * 0.8F);
-				this.setType(5);
+				this.setFrogVariant(FrogVariants.GOLDEN);
 			}
 		}
 		return super.mobInteract(player, hand);
-	}
-	
-	protected CompoundTag getFrogData()
-	{
-		CompoundTag compound = new CompoundTag();
-		
-		compound.putInt("Type", this.getFrogType());
-		compound.putFloat("Size", this.getFrogSize() + 0.4f);
-		compound.putInt("SkinColor", this.getSkinColor());
-		compound.putInt("EyeColor", this.getEyeColor());
-		compound.putInt("BellyColor", this.getBellyColor());
-		compound.putInt("EyeType", this.getEyeType());
-		compound.putInt("BellyType", this.getBellyType());
-		
-		return compound;
 	}
 	
 	public static int maxTypes()
@@ -134,10 +130,69 @@ public class FrogEntity extends PathfinderMob
 		return 3;
 	}
 	
-	@Override
-	public EntityDimensions getDimensions(Pose poseIn)
+	public enum FrogVariants implements StringRepresentable
 	{
-		return super.getDimensions(poseIn).scale((this.getFrogType() == 6) ? 0.6F : this.getFrogSize());
+		DEFAULT("default"),
+		TOTALLY_NORMAL("totally_normal"),
+		RUBY_CONTRABAND("ruby_contraband"),
+		GENESIS("genesis"),
+		NULL("null"),
+		GOLDEN("golden"),
+		SUSAN("susan");
+		
+		private final String name;
+		
+		FrogVariants(String name)
+		{
+			this.name = name;
+		}
+		
+		@Override
+		public String getSerializedName()
+		{
+			return name;
+		}
+	}
+	
+	public enum EyeTypes implements StringRepresentable
+	{
+		LIGHT("light"),
+		DARK("dark"),
+		BLANK("blank");
+		
+		private final String name;
+		
+		EyeTypes(String name)
+		{
+			this.name = name;
+		}
+		
+		@Override
+		public String getSerializedName()
+		{
+			return name;
+		}
+	}
+	
+	public enum BellyTypes implements StringRepresentable
+	{
+		NONE("none"),
+		SOLID("solid"),
+		SPOTTED("spotted"),
+		STRIPED("striped");
+		
+		private final String name;
+		
+		BellyTypes(String name)
+		{
+			this.name = name;
+		}
+		
+		@Override
+		public String getSerializedName()
+		{
+			return name;
+		}
 	}
 	
 	public static AttributeSupplier.Builder frogAttributes()
@@ -184,7 +239,7 @@ public class FrogEntity extends PathfinderMob
 	}
 	
 	@Override
-	protected void jumpFromGround()
+	public void jumpFromGround()
 	{
 		super.jumpFromGround();
 		double d0 = this.moveControl.getSpeedModifier();
@@ -363,7 +418,13 @@ public class FrogEntity extends PathfinderMob
 	@Override
 	public float getVoicePitch()
 	{
-		return (this.random.nextFloat() - this.random.nextFloat()) / (this.getFrogSize() + 0.4f) * 0.2F + 1.0F;
+		return (this.random.nextFloat() - this.random.nextFloat()) / (this.getScale() + 0.4f) * 0.2F + 1.0F;
+	}
+	
+	@Override
+	protected EntityDimensions getDefaultDimensions(Pose pPose)
+	{
+		return super.getDefaultDimensions(pPose);
 	}
 	
 	//NBT
@@ -371,14 +432,12 @@ public class FrogEntity extends PathfinderMob
 	public void addAdditionalSaveData(CompoundTag compound)
 	{
 		super.addAdditionalSaveData(compound);
-		compound.putInt("Type", this.getFrogType());
-		if(getFrogType() != 6) compound.putFloat("Size", this.getFrogSize() + 0.4f);
-		else compound.putFloat("Size", 0.6f);
+		compound.putString("Variant", this.getFrogVariant().getSerializedName());
 		compound.putInt("SkinColor", this.getSkinColor());
 		compound.putInt("EyeColor", this.getEyeColor());
 		compound.putInt("BellyColor", this.getBellyColor());
-		compound.putInt("EyeType", this.getEyeType());
-		compound.putInt("BellyType", this.getBellyType());
+		compound.putString("EyeType", this.getEyeType().getSerializedName());
+		compound.putString("BellyType", this.getBellyType().getSerializedName());
 		compound.putBoolean("WasOnGround", this.wasOnGround);
 	}
 	
@@ -387,80 +446,24 @@ public class FrogEntity extends PathfinderMob
 	{
 		super.readAdditionalSaveData(compound);
 		
-		if(compound.contains("Type")) setType(compound.getInt("Type"));
-		else setType(getRandomFrogType());
+		if(compound.contains("Variant", Tag.TAG_STRING))
+			setFrogVariant(FrogVariants.valueOf(compound.getString("Type")));
+		if(compound.contains("EyeType", Tag.TAG_STRING))
+			setEyeType(EyeTypes.valueOf(compound.getString("EyeType")));
+		if(compound.contains("BellyType", Tag.TAG_STRING))
+			setBellyType(BellyTypes.valueOf(compound.getString("BellyType")));
 		
-		if(compound.contains("Size") && getFrogType() != 6)
-		{
-			float i = compound.getFloat("Size");
-			if(i <= 0.2f) i = 0.2f;
-			this.setFrogSize(i - 0.4f, false);
-		} else this.setFrogSize(0.6f, false);
-		if(compound.contains("SkinColor"))
-		{
-			if(compound.getInt("SkinColor") == 0)
-				this.setSkinColor(0);
-			
-			else this.setSkinColor(compound.getInt("SkinColor"));
-		} else this.setSkinColor(random(16777215));
-		
-		if(compound.contains("EyeColor"))
-		{
-			if(compound.getInt("EyeColor") == 0)
-				this.setEyeColor(0);
-			
-			else this.setEyeColor(compound.getInt("EyeColor"));
-		} else this.setEyeColor(random(16777215));
-		
-		if(compound.contains("EyeType"))
-		{
-			if(compound.getInt("EyeType") == 0)
-				this.setEyeType(0);
-			
-			else this.setEyeType(compound.getInt("EyeType"));
-		} else this.setEyeType(random(2));
-		
-		
-		if(compound.contains("BellyColor"))
-		{
-			if(compound.getInt("BellyColor") == 0)
-				this.setBellyColor(0);
-			
-			else this.setBellyColor(compound.getInt("BellyColor"));
-		} else this.setBellyColor(random(16777215));
-		
-		if(compound.contains("BellyType"))
-		{
-			if(compound.getInt("BellyType") == 0)
-				this.setBellyType(0);
-			
-			else this.setBellyType(compound.getInt("BellyType"));
-		} else this.setBellyType(random(3));
-		
+		if(compound.contains("SkinColor", Tag.TAG_INT))
+			this.setSkinColor(Math.clamp(compound.getInt("SkinColor"), 0, 0xFFFFFF));
+		if(compound.contains("EyeColor", Tag.TAG_INT))
+			this.setEyeColor(Math.clamp(compound.getInt("EyeColor"), 0, 0xFFFFFF));
+		if(compound.contains("BellyColor", Tag.TAG_INT))
+			this.setBellyColor(Math.clamp(compound.getInt("BellyColor"), 0, 0xFFFFFF));
 		
 		this.wasOnGround = compound.getBoolean("WasOnGround");
 	}
 	
-	@Override
-	public void onSyncedDataUpdated(EntityDataAccessor<?> key)
-	{
-		refreshDimensions();
-		if(FROG_SIZE.equals(key))
-		{
-			this.setYRot(this.yHeadRot);
-			this.yBodyRot = this.yHeadRot;
-			
-			if(this.isInWater() && this.random.nextInt(20) == 0)
-			{
-				this.doWaterSplashEffect();
-			}
-		}
-		
-		super.onSyncedDataUpdated(key);
-	}
-	
-	
-	private void setSkinColor(int i)
+	public void setSkinColor(int i)
 	{
 		this.entityData.set(SKIN_COLOR, i);
 	}
@@ -470,7 +473,7 @@ public class FrogEntity extends PathfinderMob
 		return this.entityData.get(SKIN_COLOR);
 	}
 	
-	private void setEyeColor(int i)
+	public void setEyeColor(int i)
 	{
 		this.entityData.set(EYE_COLOR, i);
 	}
@@ -480,7 +483,7 @@ public class FrogEntity extends PathfinderMob
 		return this.entityData.get(EYE_COLOR);
 	}
 	
-	private void setBellyColor(int i)
+	public void setBellyColor(int i)
 	{
 		this.entityData.set(BELLY_COLOR, i);
 	}
@@ -491,58 +494,53 @@ public class FrogEntity extends PathfinderMob
 	}
 	
 	
-	private void setEyeType(int i)
+	public void setEyeType(EyeTypes i)
 	{
 		this.entityData.set(EYE_TYPE, i);
 	}
 	
-	public int getEyeType()
+	public EyeTypes getEyeType()
 	{
 		return this.entityData.get(EYE_TYPE);
 	}
 	
-	private void setBellyType(int i)
+	public void setBellyType(BellyTypes i)
 	{
 		this.entityData.set(BELLY_TYPE, i);
 	}
 	
-	public int getBellyType()
+	public BellyTypes getBellyType()
 	{
 		return this.entityData.get(BELLY_TYPE);
 	}
 	
-	
-	protected void setFrogSize(float size, boolean p_70799_2_)
+	public void setFrogVariant(FrogVariants i)
 	{
-		if(this.entityData.get(TYPE) == 6) this.entityData.set(FROG_SIZE, 0.6f);
-		else this.entityData.set(FROG_SIZE, size);
+		this.entityData.set(VARIANT, i);
+	}
+	
+	public FrogVariants getFrogVariant()
+	{
+		return this.entityData.get(VARIANT);
+	}
+	
+	public void setFrogSize(double size, boolean regenHealth)
+	{
 		this.setPos(this.getX(), this.getY(), this.getZ());
+		this.getAttribute(Attributes.SCALE).setBaseValue(size);
 		this.getAttribute(Attributes.MAX_HEALTH).setBaseValue(BASE_HEALTH * size);
 		this.getAttribute(Attributes.MOVEMENT_SPEED).setBaseValue(BASE_SPEED * size);
 		
-		if(p_70799_2_)
-		{
+		if(regenHealth)
 			this.setHealth(this.getMaxHealth());
-		}
 		
 		this.xpReward = (int) size;
 	}
 	
-	public float getFrogSize()
+	public double getFrogSize()
 	{
-		return this.entityData.get(FROG_SIZE);
+		return getAttribute(Attributes.SCALE).getBaseValue();
 	}
-	
-	private void setType(int i)
-	{
-		this.entityData.set(TYPE, i);
-	}
-	
-	public int getFrogType()
-	{
-		return this.entityData.get(TYPE);
-	}
-	
 	
 	public int random(int max)
 	{
@@ -556,28 +554,24 @@ public class FrogEntity extends PathfinderMob
 		return (float) (rand.nextInt(max * 10)) / 10;
 	}
 	
-	public int getRandomFrogType(int chance1, int chance2, int chance3)
+	public FrogVariants getRandomFrogVariant(Pair<FrogVariants, Float>... odds)
 	{
-		Random rand = new Random();
-		int newType;
+		for(Pair<FrogVariants, Float> odd : odds)
+		{
+			if(random.nextFloat() <= odd.getSecond())
+				return odd.getFirst();
+		}
 		
-		if(rand.nextInt(chance1) == 1)
-		{
-			newType = 1;
-		} else if(rand.nextInt(chance2) == 1)
-		{
-			newType = 2;
-		} else if(rand.nextInt(chance3) == 1)
-		{
-			newType = 6;
-		} else newType = 0;
-		
-		return newType;
+		return FrogVariants.DEFAULT;
 	}
 	
-	public int getRandomFrogType()
+	public FrogVariants getRandomFrogVariant()
 	{
-		return getRandomFrogType(20, 50, 500);
+		return getRandomFrogVariant(
+				new Pair<>(FrogVariants.TOTALLY_NORMAL, 0.05f),
+				new Pair<>(FrogVariants.RUBY_CONTRABAND, 0.02f),
+				new Pair<>(FrogVariants.SUSAN, 0.002f)
+		);
 	}
 	
 	public static class JumpHelperController extends JumpControl

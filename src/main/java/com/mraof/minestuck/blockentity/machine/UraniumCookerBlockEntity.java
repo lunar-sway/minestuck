@@ -4,12 +4,12 @@ import com.mraof.minestuck.blockentity.MSBlockEntityTypes;
 import com.mraof.minestuck.inventory.UraniumCookerMenu;
 import com.mraof.minestuck.item.crafting.IrradiatingRecipe;
 import com.mraof.minestuck.item.crafting.MSRecipeTypes;
-import com.mraof.minestuck.util.ExtraForgeTags;
+import com.mraof.minestuck.util.ExtraModTags;
 import net.minecraft.core.BlockPos;
 import net.minecraft.core.Direction;
+import net.minecraft.core.HolderLookup;
 import net.minecraft.nbt.CompoundTag;
 import net.minecraft.network.chat.Component;
-import net.minecraft.world.Container;
 import net.minecraft.world.MenuProvider;
 import net.minecraft.world.entity.player.Inventory;
 import net.minecraft.world.entity.player.Player;
@@ -19,11 +19,11 @@ import net.minecraft.world.inventory.DataSlot;
 import net.minecraft.world.item.ItemStack;
 import net.minecraft.world.item.crafting.AbstractCookingRecipe;
 import net.minecraft.world.item.crafting.RecipeHolder;
+import net.minecraft.world.item.crafting.SingleRecipeInput;
 import net.minecraft.world.level.block.state.BlockState;
 import net.neoforged.neoforge.items.IItemHandler;
 import net.neoforged.neoforge.items.ItemStackHandler;
 import net.neoforged.neoforge.items.wrapper.RangedWrapper;
-import net.neoforged.neoforge.items.wrapper.RecipeWrapper;
 
 import javax.annotation.Nullable;
 import java.util.Comparator;
@@ -35,7 +35,6 @@ public class UraniumCookerBlockEntity extends MachineProcessBlockEntity implemen
 	public static final String TITLE = "container.minestuck.uranium_cooker";
 	
 	private final ProgressTracker progressTracker = new ProgressTracker(ProgressTracker.RunType.ONCE_OR_LOOPING, 0, this::setChanged, this::contentsValid);
-	private final Container recipeInventory = new RecipeWrapper(itemHandler);
 	
 	private final DataSlot fuelHolder = new DataSlot()
 	{
@@ -63,20 +62,20 @@ public class UraniumCookerBlockEntity extends MachineProcessBlockEntity implemen
 	@Override
 	protected ItemStackHandler createItemHandler()
 	{
-		return new CustomHandler(3, (index, stack) -> index == 1 ? stack.is(ExtraForgeTags.Items.URANIUM_CHUNKS) : index != 2);
+		return new CustomHandler(3, (index, stack) -> index == 1 ? stack.is(ExtraModTags.Items.URANIUM_CHUNKS) : index != 2);
 	}
 	
 	@Override
-	public void saveAdditional(CompoundTag compound)
+	public void saveAdditional(CompoundTag compound, HolderLookup.Provider provider)
 	{
-		super.saveAdditional(compound);
+		super.saveAdditional(compound, provider);
 		compound.putShort("fuel", fuel);
 	}
 	
 	@Override
-	public void load(CompoundTag nbt)
+	protected void loadAdditional(CompoundTag nbt, HolderLookup.Provider pRegistries)
 	{
-		super.load(nbt);
+		super.loadAdditional(nbt, pRegistries);
 		fuel = nbt.getShort("fuel");
 	}
 	
@@ -96,13 +95,15 @@ public class UraniumCookerBlockEntity extends MachineProcessBlockEntity implemen
 		ItemStack fuel = itemHandler.getStackInSlot(1);
 		ItemStack input = itemHandler.getStackInSlot(0);
 		ItemStack output = irradiate();
-		return canBeRefueled() && fuel.is(ExtraForgeTags.Items.URANIUM_CHUNKS) || !input.isEmpty() && !output.isEmpty();
+		return canBeRefueled() && fuel.is(ExtraModTags.Items.URANIUM_CHUNKS) || !input.isEmpty() && !output.isEmpty();
 	}
 	
 	private ItemStack irradiate()    //TODO Handle the recipe and make sure to use its exp/cooking time
 	{
 		if(level == null)
 			return ItemStack.EMPTY;
+		
+		SingleRecipeInput recipeInventory = new SingleRecipeInput(itemHandler.getStackInSlot(0));
 		
 		//List of all recipes that match to the current input
 		Stream<IrradiatingRecipe> stream = level.getRecipeManager().getRecipesFor(MSRecipeTypes.IRRADIATING_TYPE.get(), recipeInventory, level).stream().map(RecipeHolder::value);
@@ -116,7 +117,7 @@ public class UraniumCookerBlockEntity extends MachineProcessBlockEntity implemen
 	
 	private void processContents()
 	{
-		if(canBeRefueled() && itemHandler.getStackInSlot(1).is(ExtraForgeTags.Items.URANIUM_CHUNKS))
+		if(canBeRefueled() && itemHandler.getStackInSlot(1).is(ExtraModTags.Items.URANIUM_CHUNKS))
 		{
 			//Refill fuel
 			addFuel((short) FUEL_INCREASE);

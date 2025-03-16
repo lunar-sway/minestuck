@@ -1,0 +1,26 @@
+{
+  "parent": "minestuck:minestuck/commune",
+  "criteria": {
+    "buy_everything": {
+      "trigger": "minestuck:buy_out_shop"
+    }
+  },
+  "display": {
+    "description": {
+      "translate": "advancements.minestuck.buy_out_shop.description"
+    },
+    "icon": {
+      "count": 1,
+      "id": "minestuck:cone_of_flies"
+    },
+    "title": {
+      "translate": "advancements.minestuck.buy_out_shop.title"
+    }
+  },
+  "requirements": [
+    [
+      "buy_everything"
+    ]
+  ],
+  "sends_telemetry_event": true
+}

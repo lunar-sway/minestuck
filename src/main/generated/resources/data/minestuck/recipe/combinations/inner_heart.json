@@ -1,0 +1,11 @@
+{
+  "type": "minestuck:combination",
+  "input1": {
+    "item": "minestuck:gamegrl_magazine"
+  },
+  "input2": {
+    "item": "minestuck:keyblade"
+  },
+  "mode": "and",
+  "output": "minestuck:inner_heart"
+}

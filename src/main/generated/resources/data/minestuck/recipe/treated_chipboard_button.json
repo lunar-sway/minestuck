@@ -1,0 +1,13 @@
+{
+  "type": "minecraft:crafting_shapeless",
+  "category": "building",
+  "ingredients": [
+    {
+      "item": "minestuck:treated_chipboard"
+    }
+  ],
+  "result": {
+    "count": 1,
+    "id": "minestuck:treated_chipboard_button"
+  }
+}

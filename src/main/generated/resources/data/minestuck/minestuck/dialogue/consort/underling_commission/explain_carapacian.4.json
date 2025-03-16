@@ -1,13 +1,25 @@
 {
   "node": {
+    "animation": {},
+    "gui": "minestuck:textures/gui/dialogue/dialogue.png",
     "message": "minestuck.dialogue.consort.underling_commission.explain_carapacian.4",
     "responses": [
       {
+        "condition": {
+          "type": "minestuck:always_true"
+        },
+        "hide_if_failed": true,
         "message": "minestuck.dialogue.consort.underling_commission.explain_carapacian.4.why_fight",
-        "next_dialogue": "minestuck:consort/underling_commission/no_idea"
+        "next_dialogue": "minestuck:consort/underling_commission/no_idea",
+        "triggers": []
       },
       {
-        "message": "minestuck.dialogue.goodbye"
+        "condition": {
+          "type": "minestuck:always_true"
+        },
+        "hide_if_failed": true,
+        "message": "minestuck.dialogue.goodbye",
+        "triggers": []
       }
     ]
   }

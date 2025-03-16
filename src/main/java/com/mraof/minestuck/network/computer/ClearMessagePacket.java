@@ -5,8 +5,12 @@ import com.mraof.minestuck.blockentity.ComputerBlockEntity;
 import com.mraof.minestuck.network.MSPacket;
 import net.minecraft.core.BlockPos;
 import net.minecraft.network.FriendlyByteBuf;
+import net.minecraft.network.codec.ByteBufCodecs;
+import net.minecraft.network.codec.StreamCodec;
+import net.minecraft.network.protocol.common.custom.CustomPacketPayload;
 import net.minecraft.resources.ResourceLocation;
 import net.minecraft.server.level.ServerPlayer;
+import net.neoforged.neoforge.network.handling.IPayloadContext;
 
 /**
  * This packet tells the server to clear the message for the
@@ -16,44 +20,29 @@ import net.minecraft.server.level.ServerPlayer;
  * @author kirderf1
  *
  */
-public class ClearMessagePacket implements MSPacket.PlayToServer
+public record ClearMessagePacket(BlockPos computerPos, int program) implements MSPacket.PlayToServer
 {
-	public static final ResourceLocation ID = Minestuck.id("clear_message");
+	public static final Type<ClearMessagePacket> ID = new Type<>(Minestuck.id("clear_message"));
+	public static final StreamCodec<FriendlyByteBuf, ClearMessagePacket> STREAM_CODEC = StreamCodec.composite(
+			BlockPos.STREAM_CODEC,
+			ClearMessagePacket::computerPos,
+			ByteBufCodecs.INT,
+			ClearMessagePacket::program,
+			ClearMessagePacket::new
+	);
 	
-	private final BlockPos pos;
-	private final int program;
-	
-	public ClearMessagePacket(BlockPos pos, int program)
-	{
-		this.pos = pos;
-		this.program = program;
-	}
 	
 	@Override
-	public ResourceLocation id()
+	public Type<? extends CustomPacketPayload> type()
 	{
 		return ID;
 	}
 	
-	@Override
-	public void write(FriendlyByteBuf buffer)
-	{
-		buffer.writeBlockPos(pos);
-		buffer.writeInt(program);
-	}
-	
-	public static ClearMessagePacket read(FriendlyByteBuf buffer)
-	{
-		BlockPos computer = buffer.readBlockPos();
-		int program = buffer.readInt();
-		
-		return new ClearMessagePacket(computer, program);
-	}
 	
 	@Override
-	public void execute(ServerPlayer player)
+	public void execute(IPayloadContext context, ServerPlayer player)
 	{
-		ComputerBlockEntity.forNetworkIfPresent(player, pos, computer -> {
+		ComputerBlockEntity.getAccessibleComputer(player, computerPos).ifPresent(computer -> {
 			computer.latestmessage.put(program, "");
 			computer.markBlockForUpdate();
 		});

@@ -1,0 +1,12 @@
+{
+  "type": "minestuck:source_grist_cost",
+  "grist_cost": {
+    "minestuck:chalk": 4
+  },
+  "ingredient": {
+    "item": "minecraft:powder_snow_bucket"
+  },
+  "sources": [
+    "minecraft:bucket"
+  ]
+}

@@ -1,0 +1,10 @@
+{
+  "type": "minecraft:stonecutting",
+  "ingredient": {
+    "item": "minestuck:polished_igneous_stone"
+  },
+  "result": {
+    "count": 2,
+    "id": "minestuck:polished_igneous_stone_wall"
+  }
+}

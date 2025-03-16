@@ -9,7 +9,6 @@ import com.mojang.serialization.DynamicOps;
 import com.mojang.serialization.JsonOps;
 import com.mojang.serialization.codecs.RecordCodecBuilder;
 import com.mraof.minestuck.Minestuck;
-import com.mraof.minestuck.util.PreservingOptionalFieldCodec;
 import com.mraof.minestuck.world.biome.LandBiomeType;
 import com.mraof.minestuck.world.gen.LandChunkGenerator;
 import net.minecraft.MethodsReturnNonnullByDefault;
@@ -31,7 +30,7 @@ import net.minecraft.world.level.levelgen.GenerationStep;
 import net.minecraft.world.level.levelgen.carver.ConfiguredWorldCarver;
 import net.minecraft.world.level.levelgen.placement.PlacedFeature;
 import net.neoforged.bus.api.SubscribeEvent;
-import net.neoforged.fml.common.Mod;
+import net.neoforged.fml.common.EventBusSubscriber;
 import net.neoforged.neoforge.event.AddReloadListenerEvent;
 import net.neoforged.neoforge.event.server.ServerStoppedEvent;
 import org.apache.logging.log4j.LogManager;
@@ -50,7 +49,7 @@ import java.util.*;
  */
 @ParametersAreNonnullByDefault
 @MethodsReturnNonnullByDefault
-@Mod.EventBusSubscriber(modid = Minestuck.MOD_ID, bus = Mod.EventBusSubscriber.Bus.FORGE)
+@EventBusSubscriber(modid = Minestuck.MOD_ID, bus = EventBusSubscriber.Bus.GAME)
 public final class LandTypeExtensions
 {
 	private static final Logger LOGGER = LogManager.getLogger();
@@ -238,9 +237,9 @@ public final class LandTypeExtensions
 	{
 		public static Codec<ParsedExtension> CODEC = RecordCodecBuilder.create(instance ->
 				instance.group(
-						PreservingOptionalFieldCodec.forList(FeatureExtension.CODEC.listOf(), "features").forGetter(ParsedExtension::features),
-						PreservingOptionalFieldCodec.forList(CarverExtension.CODEC.listOf(), "carvers").forGetter(ParsedExtension::carvers),
-						PreservingOptionalFieldCodec.forList(MobSpawnExtension.CODEC.listOf(), "mob_spawns").forGetter(ParsedExtension::mobSpawns)
+						FeatureExtension.CODEC.listOf().optionalFieldOf("features", Collections.emptyList()).forGetter(ParsedExtension::features),
+						CarverExtension.CODEC.listOf().optionalFieldOf("carvers", Collections.emptyList()).forGetter(ParsedExtension::carvers),
+						MobSpawnExtension.CODEC.listOf().optionalFieldOf("mob_spawns", Collections.emptyList()).forGetter(ParsedExtension::mobSpawns)
 				).apply(instance, ParsedExtension::new));
 		
 		void addAllTo(ImmutableList.Builder<Extension> builder)

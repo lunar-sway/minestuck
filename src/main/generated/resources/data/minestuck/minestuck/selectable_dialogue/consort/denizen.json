@@ -26,5 +26,7 @@
     ],
     "list_type": "all"
   },
-  "dialogue": "minestuck:consort/denizen/start"
+  "dialogue": "minestuck:consort/denizen/start",
+  "dialogue_weight": 10,
+  "keep_on_reset": false
 }

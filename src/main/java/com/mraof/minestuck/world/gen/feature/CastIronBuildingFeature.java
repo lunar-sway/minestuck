@@ -14,8 +14,8 @@ import net.minecraft.world.level.levelgen.structure.templatesystem.StructureTemp
 
 public class CastIronBuildingFeature extends Feature<NoneFeatureConfiguration>
 {
-	private static final ResourceLocation SMALL_CAST_FRAME = new ResourceLocation(Minestuck.MOD_ID, "small_cast_frame");
-	private static final ResourceLocation TALL_CAST_FRAME = new ResourceLocation(Minestuck.MOD_ID, "tall_cast_frame");
+	private static final ResourceLocation SMALL_CAST_FRAME = ResourceLocation.fromNamespaceAndPath(Minestuck.MOD_ID, "small_cast_frame");
+	private static final ResourceLocation TALL_CAST_FRAME = ResourceLocation.fromNamespaceAndPath(Minestuck.MOD_ID, "tall_cast_frame");
 	
 	public CastIronBuildingFeature(Codec<NoneFeatureConfiguration> codec)
 	{

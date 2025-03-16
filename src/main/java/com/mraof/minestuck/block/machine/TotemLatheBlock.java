@@ -1,19 +1,18 @@
 package com.mraof.minestuck.block.machine;
 
 import com.mraof.minestuck.block.BlockUtil;
+import com.mraof.minestuck.block.CustomVoxelShape;
 import com.mraof.minestuck.block.EnumDowelType;
 import com.mraof.minestuck.block.MSProperties;
 import com.mraof.minestuck.blockentity.ItemStackBlockEntity;
 import com.mraof.minestuck.blockentity.MSBlockEntityTypes;
 import com.mraof.minestuck.blockentity.machine.TotemLatheBlockEntity;
 import com.mraof.minestuck.blockentity.machine.TotemLatheDowelBlockEntity;
-import com.mraof.minestuck.util.CustomVoxelShape;
 import com.mraof.minestuck.util.MSRotationUtil;
 import net.minecraft.MethodsReturnNonnullByDefault;
 import net.minecraft.core.BlockPos;
 import net.minecraft.core.Direction;
 import net.minecraft.world.Containers;
-import net.minecraft.world.InteractionHand;
 import net.minecraft.world.InteractionResult;
 import net.minecraft.world.entity.player.Player;
 import net.minecraft.world.item.ItemStack;
@@ -42,28 +41,28 @@ import java.util.Map;
  */
 @ParametersAreNonnullByDefault
 @MethodsReturnNonnullByDefault
-public class TotemLatheBlock extends MultiMachineBlock<TotemLatheMultiblock> implements EditmodeDestroyable
+public class TotemLatheBlock extends MachineBlock implements EditmodeDestroyable
 {
 	protected final Map<Direction, VoxelShape> shape;
 	protected final BlockPos mainPos;
+	protected final TotemLatheMultiblock multiblock;
 	
-	public TotemLatheBlock(TotemLatheMultiblock machine, CustomVoxelShape shape, BlockPos mainPos, Properties properties)
+	public TotemLatheBlock(TotemLatheMultiblock multiblock, CustomVoxelShape shape, BlockPos mainPos, Properties properties)
 	{
-		super(machine, properties);
+		super(properties);
+		this.multiblock = multiblock;
 		this.shape = shape.createRotatedShapes();
 		this.mainPos = mainPos;
 	}
 	
 	@Override
-	@SuppressWarnings("deprecation")
-	public VoxelShape getShape(BlockState state, BlockGetter worldIn, BlockPos pos, CollisionContext context)
+	protected VoxelShape getShape(BlockState state, BlockGetter worldIn, BlockPos pos, CollisionContext context)
 	{
 		return shape.get(state.getValue(FACING));
 	}
 	
 	@Override
-	@SuppressWarnings("deprecation")
-	public InteractionResult use(BlockState state, Level level, BlockPos pos, Player player, InteractionHand handIn, BlockHitResult hit)
+	protected InteractionResult useWithoutItem(BlockState state, Level level, BlockPos pos, Player player, BlockHitResult hit)
 	{
 		if(level.isClientSide)
 			return InteractionResult.SUCCESS;
@@ -75,8 +74,7 @@ public class TotemLatheBlock extends MultiMachineBlock<TotemLatheMultiblock> imp
 	}
 	
 	@Override
-	@SuppressWarnings("deprecation")
-	public void onRemove(BlockState state, Level level, BlockPos pos, BlockState newState, boolean isMoving)
+	protected void onRemove(BlockState state, Level level, BlockPos pos, BlockState newState, boolean isMoving)
 	{
 		BlockPos mainPos = getMainPos(state, pos);
 		BlockState otherState = level.getBlockState(mainPos);
@@ -93,19 +91,18 @@ public class TotemLatheBlock extends MultiMachineBlock<TotemLatheMultiblock> imp
 	@Override
 	public void destroyFull(BlockState state, Level level, BlockPos pos)
 	{
-		var placement = this.machine.findPlacementFromSlot(level, this.getMainPos(state, pos));
+		var placement = this.multiblock.findPlacementFromSlot(level, this.getMainPos(state, pos));
 		if(placement.isPresent())
-			this.machine.removeAt(level, placement.get());
+			this.multiblock.removeAt(level, placement.get());
 		else
 		{
-			for(var placementGuess : this.machine.guessPlacement(pos, state))
-				this.machine.removeAt(level, placementGuess);
+			for(var placementGuess : this.multiblock.guessPlacement(pos, state))
+				this.multiblock.removeAt(level, placementGuess);
 		}
 	}
 	
 	@Override
-	@SuppressWarnings("deprecation")
-	public void neighborChanged(BlockState state, Level level, BlockPos pos, Block blockIn, BlockPos fromPos, boolean isMoving)
+	protected void neighborChanged(BlockState state, Level level, BlockPos pos, Block blockIn, BlockPos fromPos, boolean isMoving)
 	{
 		if(level.getBlockEntity(pos) instanceof TotemLatheBlockEntity totemLathe)
 			totemLathe.checkStates();
@@ -139,7 +136,7 @@ public class TotemLatheBlock extends MultiMachineBlock<TotemLatheMultiblock> imp
 		}
 		
 		@Override
-		public VoxelShape getShape(BlockState state, BlockGetter worldIn, BlockPos pos, CollisionContext context)
+		protected VoxelShape getShape(BlockState state, BlockGetter worldIn, BlockPos pos, CollisionContext context)
 		{
 			if(state.getValue(DOWEL).equals(EnumDowelType.CARVED_DOWEL))
 			{

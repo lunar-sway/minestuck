@@ -15,7 +15,7 @@ import net.minecraft.world.level.levelgen.structure.templatesystem.*;
 
 public class SmallLibraryFeature extends Feature<NoneFeatureConfiguration>
 {
-	private static final ResourceLocation STRUCTURE_SMALL_LIBRARY = new ResourceLocation(Minestuck.MOD_ID, "small_library");
+	private static final ResourceLocation STRUCTURE_SMALL_LIBRARY = ResourceLocation.fromNamespaceAndPath(Minestuck.MOD_ID, "small_library");
 	
 	public SmallLibraryFeature(Codec<NoneFeatureConfiguration> codec)
 	{

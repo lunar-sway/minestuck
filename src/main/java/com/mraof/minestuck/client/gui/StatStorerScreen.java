@@ -1,7 +1,7 @@
 package com.mraof.minestuck.client.gui;
 
 import com.mraof.minestuck.blockentity.redstone.StatStorerBlockEntity;
-import com.mraof.minestuck.network.StatStorerPacket;
+import com.mraof.minestuck.network.block.StatStorerSettingsPacket;
 import net.minecraft.client.gui.GuiGraphics;
 import net.minecraft.client.gui.components.Button;
 import net.minecraft.client.gui.components.EditBox;
@@ -20,7 +20,7 @@ public class StatStorerScreen extends Screen
 	public static final String DIVIDE_VALUE_MESSAGE = "minestuck.stat_storer.divide_value";
 	public static final String DIVIDE_COMPARATOR_MESSAGE = "minestuck.stat_storer.divide_comparator";
 	public static final String DONE_MESSAGE = "minestuck.stat_storer.done";
-	private static final ResourceLocation GUI_BACKGROUND = new ResourceLocation("minestuck", "textures/gui/generic_medium.png");
+	private static final ResourceLocation GUI_BACKGROUND = ResourceLocation.fromNamespaceAndPath("minestuck", "textures/gui/generic_medium.png");
 	
 	private static final int GUI_WIDTH = 150;
 	private static final int GUI_HEIGHT = 98;
@@ -83,7 +83,7 @@ public class StatStorerScreen extends Screen
 	
 	private void finish()
 	{
-		PacketDistributor.SERVER.noArg().send(new StatStorerPacket(activeType, be.getBlockPos(), textToInt()));
+		PacketDistributor.sendToServer(new StatStorerSettingsPacket(activeType, textToInt(), be.getBlockPos()));
 		onClose();
 	}
 	

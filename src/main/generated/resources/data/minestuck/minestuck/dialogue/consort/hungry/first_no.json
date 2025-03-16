@@ -6,12 +6,15 @@
         "flag": "barter"
       },
       "node": {
+        "animation": {},
+        "gui": "minestuck:textures/gui/dialogue/dialogue.png",
         "message": "minestuck.dialogue.consort.hungry.first_no",
         "responses": [
           {
             "condition": {
               "type": "minestuck:has_matched_item"
             },
+            "hide_if_failed": true,
             "message": {
               "arguments": [
                 "matched_item"
@@ -57,12 +60,17 @@
             ]
           },
           {
+            "condition": {
+              "type": "minestuck:always_true"
+            },
+            "hide_if_failed": true,
             "message": "minestuck.dialogue.consort.hungry.first_no.no",
             "next_dialogue": {
               "id": "minestuck:consort/hungry/end",
               "player_message": "minestuck.dialogue.consort.hungry.first_no.no.reply",
               "set_as_entrypoint": true
-            }
+            },
+            "triggers": []
           }
         ]
       }
@@ -72,6 +80,8 @@
     "animation": {
       "emotion": "anxious"
     },
-    "message": "minestuck.dialogue.sad_face"
+    "gui": "minestuck:textures/gui/dialogue/dialogue.png",
+    "message": "minestuck.dialogue.sad_face",
+    "responses": []
   }
 }

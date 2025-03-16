@@ -52,8 +52,7 @@ public class GeneratedGristCostConfigProvider implements DataProvider
 		Path jsonPath = this.output.getOutputFolder(PackOutput.Target.DATA_PACK)
 				.resolve(modid).resolve(RecipeGeneratedCostHandler.PATH);
 		
-		JsonElement json = RecipeGeneratedCostHandler.SourceEntry.LIST_CODEC.encodeStart(JsonOps.INSTANCE, this.entries)
-				.getOrThrow(false, LOGGER::error);
+		JsonElement json = RecipeGeneratedCostHandler.SourceEntry.LIST_CODEC.encodeStart(JsonOps.INSTANCE, this.entries).getOrThrow();
 		
 		return DataProvider.saveStable(cache, json, jsonPath);
 	}

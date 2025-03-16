@@ -37,10 +37,10 @@ public class ReadableSburbCodeScreen extends Screen
 {
 	private static final Logger LOGGER = LogUtils.getLogger();
 	
-	private static final ResourceLocation BOOK_TEXTURES_01A = new ResourceLocation(Minestuck.MOD_ID, "textures/gui/sburb_book_01a.png");
-	private static final ResourceLocation BOOK_TEXTURES_01B = new ResourceLocation(Minestuck.MOD_ID, "textures/gui/sburb_book_01b.png");
-	private static final ResourceLocation BOOK_TEXTURES_02 = new ResourceLocation(Minestuck.MOD_ID, "textures/gui/sburb_book_02.png");
-	private static final ResourceLocation BOOK_TEXTURES_03 = new ResourceLocation(Minestuck.MOD_ID, "textures/gui/sburb_book_03.png");
+	private static final ResourceLocation BOOK_TEXTURES_01A = ResourceLocation.fromNamespaceAndPath(Minestuck.MOD_ID, "textures/gui/sburb_book_01a.png");
+	private static final ResourceLocation BOOK_TEXTURES_01B = ResourceLocation.fromNamespaceAndPath(Minestuck.MOD_ID, "textures/gui/sburb_book_01b.png");
+	private static final ResourceLocation BOOK_TEXTURES_02 = ResourceLocation.fromNamespaceAndPath(Minestuck.MOD_ID, "textures/gui/sburb_book_02.png");
+	private static final ResourceLocation BOOK_TEXTURES_03 = ResourceLocation.fromNamespaceAndPath(Minestuck.MOD_ID, "textures/gui/sburb_book_03.png");
 	private final boolean[] hieroglyphValidityArray; //same size as MAX_HIEROGLYPH_COUNT
 	private final List<List<String>> listOfPages = new ArrayList<>(); //each element of the outermost list is a different page, and each page is a collection of lines
 	
@@ -85,7 +85,7 @@ public class ReadableSburbCodeScreen extends Screen
 		
 		try
 		{
-			reader = this.minecraft.getResourceManager().openAsReader(new ResourceLocation(Minestuck.MOD_ID, "texts/rana_temporaria_sec22b.txt")); //The text is broken into lines 48 characters long to neatly fit within a block of text that avoids empty spaces
+			reader = this.minecraft.getResourceManager().openAsReader(ResourceLocation.fromNamespaceAndPath(Minestuck.MOD_ID, "texts/rana_temporaria_sec22b.txt")); //The text is broken into lines 48 characters long to neatly fit within a block of text that avoids empty spaces
 			BufferedReader bufferedReader = new BufferedReader(reader);
 			textList = bufferedReader.lines().collect(Collectors.toList());
 			

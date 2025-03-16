@@ -1,5 +1,7 @@
 {
   "node": {
+    "animation": {},
+    "gui": "minestuck:textures/gui/dialogue/dialogue.png",
     "message": {
       "arguments": [
         "land_name"
@@ -8,7 +10,12 @@
     },
     "responses": [
       {
-        "message": "minestuck.dots"
+        "condition": {
+          "type": "minestuck:always_true"
+        },
+        "hide_if_failed": true,
+        "message": "minestuck.dots",
+        "triggers": []
       }
     ]
   }

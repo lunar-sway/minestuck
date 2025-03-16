@@ -1,0 +1,10 @@
+{
+  "type": "minecraft:stonecutting",
+  "ingredient": {
+    "item": "minestuck:light_gray_chess_bricks"
+  },
+  "result": {
+    "count": 1,
+    "id": "minestuck:light_gray_chess_brick_stairs"
+  }
+}

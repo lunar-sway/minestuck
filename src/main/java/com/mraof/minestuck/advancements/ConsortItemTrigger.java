@@ -11,7 +11,6 @@ import net.minecraft.advancements.critereon.EntityPredicate;
 import net.minecraft.advancements.critereon.ItemPredicate;
 import net.minecraft.advancements.critereon.SimpleCriterionTrigger;
 import net.minecraft.server.level.ServerPlayer;
-import net.minecraft.util.ExtraCodecs;
 import net.minecraft.world.item.ItemStack;
 
 import javax.annotation.ParametersAreNonnullByDefault;
@@ -36,10 +35,10 @@ public class ConsortItemTrigger extends SimpleCriterionTrigger<ConsortItemTrigge
 						   Optional<ItemPredicate> item, Optional<EnumConsort.MerchantType> type) implements SimpleCriterionTrigger.SimpleInstance
 	{
 		private static final Codec<Instance> CODEC = RecordCodecBuilder.create(instance -> instance.group(
-				ExtraCodecs.strictOptionalField(EntityPredicate.ADVANCEMENT_CODEC, "player").forGetter(Instance::player),
-				ExtraCodecs.strictOptionalField(Codec.STRING, "table").forGetter(Instance::table),
-				ExtraCodecs.strictOptionalField(ItemPredicate.CODEC, "item").forGetter(Instance::item),
-				ExtraCodecs.strictOptionalField(EnumConsort.MerchantType.CODEC, "type").forGetter(Instance::type)
+				EntityPredicate.ADVANCEMENT_CODEC.optionalFieldOf("player").forGetter(Instance::player),
+				Codec.STRING.optionalFieldOf("table").forGetter(Instance::table),
+				ItemPredicate.CODEC.optionalFieldOf("item").forGetter(Instance::item),
+				EnumConsort.MerchantType.CODEC.optionalFieldOf("type").forGetter(Instance::type)
 		).apply(instance, Instance::new));
 		
 		public static Criterion<Instance> forType(EnumConsort.MerchantType type)
@@ -50,7 +49,7 @@ public class ConsortItemTrigger extends SimpleCriterionTrigger<ConsortItemTrigge
 		public boolean test(String table, ItemStack item, EnumConsort.MerchantType type)
 		{
 			return (this.table.isEmpty() || this.table.get().equals(table))
-					&& (this.item.isEmpty() || this.item.get().matches(item))
+					&& (this.item.isEmpty() || this.item.get().test(item))
 					&& (this.type.isEmpty() || this.type.get() == type);
 		}
 	}

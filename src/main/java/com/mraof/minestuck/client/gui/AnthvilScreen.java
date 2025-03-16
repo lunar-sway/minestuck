@@ -8,7 +8,7 @@ import com.mraof.minestuck.api.alchemy.recipe.GristCostRecipe;
 import com.mraof.minestuck.blockentity.machine.AnthvilBlockEntity;
 import com.mraof.minestuck.client.util.GuiUtil;
 import com.mraof.minestuck.inventory.AnthvilMenu;
-import com.mraof.minestuck.network.AnthvilPacket;
+import com.mraof.minestuck.network.block.TriggerAnthvilPacket;
 import net.minecraft.client.gui.GuiGraphics;
 import net.minecraft.client.gui.screens.inventory.AbstractContainerScreen;
 import net.minecraft.network.chat.Component;
@@ -23,8 +23,8 @@ import javax.annotation.ParametersAreNonnullByDefault;
 @ParametersAreNonnullByDefault
 public class AnthvilScreen extends AbstractContainerScreen<AnthvilMenu>
 {
-	private static final ResourceLocation BACKGROUND_TEXTURE = new ResourceLocation(Minestuck.MOD_ID, "textures/gui/anthvil.png");
-	private static final ResourceLocation FUEL_STATUS = new ResourceLocation(Minestuck.MOD_ID, "textures/gui/progress/uranium_level.png");
+	private static final ResourceLocation BACKGROUND_TEXTURE = ResourceLocation.fromNamespaceAndPath(Minestuck.MOD_ID, "textures/gui/anthvil.png");
+	private static final ResourceLocation FUEL_STATUS = ResourceLocation.fromNamespaceAndPath(Minestuck.MOD_ID, "textures/gui/progress/uranium_level.png");
 	
 	private static final int FUEL_STATUS_X = 133;
 	private static final int FUEL_STATUS_Y = 7;
@@ -54,7 +54,7 @@ public class AnthvilScreen extends AbstractContainerScreen<AnthvilMenu>
 	private void mend()
 	{
 		//sends a request to mend and refuel uranium
-		PacketDistributor.SERVER.noArg().send(new AnthvilPacket());
+		PacketDistributor.sendToServer(new TriggerAnthvilPacket());
 	}
 	
 	private void finish()

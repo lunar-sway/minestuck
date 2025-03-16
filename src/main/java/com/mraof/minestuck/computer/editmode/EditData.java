@@ -1,16 +1,14 @@
 package com.mraof.minestuck.computer.editmode;
 
 import com.mraof.minestuck.entity.DecoyEntity;
-import com.mraof.minestuck.network.ServerEditPacket;
-import com.mraof.minestuck.network.data.EditmodeCacheLimitPacket;
-import com.mraof.minestuck.network.data.GristCachePacket;
-import com.mraof.minestuck.player.GristCache;
-import com.mraof.minestuck.player.IdentifierHandler;
-import com.mraof.minestuck.player.PlayerIdentifier;
-import com.mraof.minestuck.player.PlayerSavedData;
+import com.mraof.minestuck.network.GristCachePacket;
+import com.mraof.minestuck.network.editmode.EditmodeCacheLimitPacket;
+import com.mraof.minestuck.network.editmode.ServerEditPackets;
+import com.mraof.minestuck.player.*;
 import com.mraof.minestuck.skaianet.ActiveConnection;
 import com.mraof.minestuck.skaianet.SburbConnections;
 import com.mraof.minestuck.skaianet.SburbPlayerData;
+import com.mraof.minestuck.util.MSAttachments;
 import com.mraof.minestuck.util.Teleport;
 import net.minecraft.nbt.CompoundTag;
 import net.minecraft.nbt.ListTag;
@@ -28,6 +26,7 @@ import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.Logger;
 
 import javax.annotation.Nullable;
+import java.util.Optional;
 
 /**
  * Data structure used by the server sided EditHandler
@@ -66,7 +65,7 @@ public class EditData
 	
 	public EditmodeLocations locations()
 	{
-		return PlayerSavedData.getData(this.getTarget(), player.server).editmodeLocations;
+		return PlayerData.get(this.getTarget(), player.server).getData(MSAttachments.EDITMODE_LOCATIONS);
 	}
 	
 	public GristCache getGristCache()
@@ -92,19 +91,19 @@ public class EditData
 	
 	public void sendGristCacheToEditor()
 	{
-		GristCachePacket packet = new GristCachePacket(this.getGristCache().getGristSet(), true);
-		PacketDistributor.PLAYER.with(this.getEditor()).send(packet);
+		GristCachePacket packet = new GristCachePacket(this.getGristCache().getGristSet(), ClientPlayerData.CacheSource.EDITMODE);
+		PacketDistributor.sendToPlayer(this.getEditor(), packet);
 	}
 	
 	public void sendCacheLimitToEditor()
 	{
-		long limit = PlayerSavedData.getData(this.getTarget(), player.server).getEcheladder().getGristCapacity();
-		PacketDistributor.PLAYER.with(this.getEditor()).send(new EditmodeCacheLimitPacket(limit));
+		long limit = Echeladder.get(this.getTarget(), player.level()).getGristCapacity();
+		PacketDistributor.sendToPlayer(this.getEditor(), new EditmodeCacheLimitPacket(limit));
 	}
 	
 	public void sendGivenItemsToEditor()
 	{
-		PacketDistributor.PLAYER.with(getEditor()).send(new ServerEditPacket.UpdateDeployList(DeployList.getDeployListTag(player.server, this.sburbData())));
+		PacketDistributor.sendToPlayer(getEditor(), new ServerEditPackets.UpdateDeployList(DeployList.getDeployListTag(player.server, this.sburbData())));
 	}
 	
 	public CompoundTag writeRecoveryData()
@@ -124,9 +123,12 @@ public class EditData
 	
 	public static ConnectionRecovery readExtraRecovery(CompoundTag nbt)
 	{
-		if(nbt.contains("edit_inv"))
-			return new ConnectionRecovery(nbt);
-		else return null;
+		if(!nbt.contains("edit_inv", Tag.TAG_LIST))
+			return null;
+		
+		Optional<PlayerIdentifier> clientResult = IdentifierHandler.load(nbt, "client").result();
+		
+		return clientResult.map(client -> new ConnectionRecovery(client, nbt.getList("edit_inv", Tag.TAG_COMPOUND))).orElse(null);
 	}
 	
 	void recover()
@@ -237,21 +239,20 @@ public class EditData
 		}
 	}
 	
-	public static class ConnectionRecovery
+	public static final class ConnectionRecovery
 	{
 		private final PlayerIdentifier clientPlayer;
 		private final ListTag inventory;
 		
 		private ConnectionRecovery(EditData data)
 		{
-			clientPlayer = data.getTarget();
-			inventory = data.player.getInventory().save(new ListTag());
+			this(data.getTarget(), data.player.getInventory().save(new ListTag()));
 		}
 		
-		private ConnectionRecovery(CompoundTag nbt)
+		private ConnectionRecovery(PlayerIdentifier client, ListTag editInv)
 		{
-			clientPlayer = IdentifierHandler.loadOrThrow(nbt, "client");
-			inventory = nbt.getList("edit_inv", Tag.TAG_COMPOUND);
+			this.clientPlayer = client;
+			this.inventory = editInv;
 		}
 		
 		private void write(CompoundTag nbt)

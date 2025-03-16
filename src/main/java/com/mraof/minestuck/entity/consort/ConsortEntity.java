@@ -14,8 +14,6 @@ import com.mraof.minestuck.inventory.ConsortMerchantMenu;
 import com.mraof.minestuck.player.IdentifierHandler;
 import com.mraof.minestuck.player.PlayerData;
 import com.mraof.minestuck.player.PlayerIdentifier;
-import com.mraof.minestuck.player.PlayerSavedData;
-import com.mraof.minestuck.util.AnimationControllerUtil;
 import com.mraof.minestuck.world.MSDimensions;
 import net.minecraft.ChatFormatting;
 import net.minecraft.MethodsReturnNonnullByDefault;
@@ -49,17 +47,15 @@ import net.minecraft.world.level.ServerLevelAccessor;
 import net.neoforged.neoforge.common.util.FakePlayer;
 import org.slf4j.Logger;
 import software.bernie.geckolib.animatable.GeoEntity;
-import software.bernie.geckolib.core.animatable.instance.AnimatableInstanceCache;
-import software.bernie.geckolib.core.animation.AnimatableManager;
-import software.bernie.geckolib.core.animation.Animation;
-import software.bernie.geckolib.core.animation.AnimationState;
-import software.bernie.geckolib.core.animation.RawAnimation;
-import software.bernie.geckolib.core.object.PlayState;
+import software.bernie.geckolib.animatable.instance.AnimatableInstanceCache;
+import software.bernie.geckolib.animation.AnimationState;
+import software.bernie.geckolib.animation.*;
 import software.bernie.geckolib.util.GeckoLibUtil;
 
 import javax.annotation.Nullable;
 import javax.annotation.ParametersAreNonnullByDefault;
 import java.util.HashSet;
+import java.util.Optional;
 import java.util.Set;
 
 @ParametersAreNonnullByDefault
@@ -122,7 +118,8 @@ public class ConsortEntity extends AnimatedPathfinderMob implements MenuProvider
 	
 	private boolean shouldFleeFrom(LivingEntity entity)
 	{
-		return entity instanceof ServerPlayer && EntitySelector.NO_CREATIVE_OR_SPECTATOR.test(entity) && PlayerSavedData.getData((ServerPlayer) entity).getConsortReputation(homeDimension) <= -1000;
+		return entity instanceof ServerPlayer player && EntitySelector.NO_CREATIVE_OR_SPECTATOR.test(entity)
+				&& ConsortReputation.get(player).getConsortReputation(homeDimension) <= -1000;
 	}
 	
 	protected void applyAdditionalAITasks()
@@ -152,8 +149,8 @@ public class ConsortEntity extends AnimatedPathfinderMob implements MenuProvider
 		if(this.dialogueComponent.hasAnyOngoingDialogue())	//todo do we want this? feel free to remove it if not
 			return InteractionResult.FAIL;
 		
-		PlayerData playerData = PlayerSavedData.getData(serverPlayer);
-		if(playerData == null || playerData.getConsortReputation(homeDimension) <= -1000)
+		Optional<PlayerData> playerData = PlayerData.get(serverPlayer);
+		if(playerData.isEmpty() || ConsortReputation.get(playerData.get()).getConsortReputation(homeDimension) <= -1000)
 			return InteractionResult.FAIL;
 		
 		handleConsortRepFromTalking(serverPlayer);
@@ -191,7 +188,7 @@ public class ConsortEntity extends AnimatedPathfinderMob implements MenuProvider
 		PlayerIdentifier identifier = IdentifierHandler.encode(player);
 		if(!talkRepPlayerList.contains(identifier))
 		{
-			PlayerSavedData.getData(player).addConsortReputation(1, homeDimension);
+			ConsortReputation.get(player).addConsortReputation(1, homeDimension);
 			talkRepPlayerList.add(identifier);
 		}
 	}
@@ -298,7 +295,7 @@ public class ConsortEntity extends AnimatedPathfinderMob implements MenuProvider
 		talkRepPlayerList.clear();
 		ListTag list = compound.getList("talkRepList", Tag.TAG_COMPOUND);
 		for(int i = 0; i < list.size(); i++)
-			talkRepPlayerList.add(IdentifierHandler.loadOrThrow(list.getCompound(i), "id"));
+			talkRepPlayerList.add(IdentifierHandler.load(list.getCompound(i), "id").getOrThrow());
 		
 		merchantType = EnumConsort.MerchantType.values()[Mth.clamp(compound.getInt("Type"), 0, EnumConsort.MerchantType.values().length - 1)];
 		
@@ -326,7 +323,7 @@ public class ConsortEntity extends AnimatedPathfinderMob implements MenuProvider
 	
 	@Nullable
 	@Override
-	public SpawnGroupData finalizeSpawn(ServerLevelAccessor worldIn, DifficultyInstance difficultyIn, MobSpawnType reason, @Nullable SpawnGroupData spawnDataIn, @Nullable CompoundTag dataTag)
+	public SpawnGroupData finalizeSpawn(ServerLevelAccessor worldIn, DifficultyInstance difficultyIn, MobSpawnType reason, @Nullable SpawnGroupData spawnDataIn)
 	{
 		if(merchantType == EnumConsort.MerchantType.NONE && this.random.nextInt(30) == 0)
 		{
@@ -340,14 +337,14 @@ public class ConsortEntity extends AnimatedPathfinderMob implements MenuProvider
 		
 		applyAdditionalAITasks();
 		
-		return super.finalizeSpawn(worldIn, difficultyIn, reason, spawnDataIn, dataTag);
+		return super.finalizeSpawn(worldIn, difficultyIn, reason, spawnDataIn);
 	}
 	
 	@Override
 	public boolean skipAttackInteraction(Entity entityIn)
 	{
 		if(!(entityIn instanceof FakePlayer) && entityIn instanceof ServerPlayer player)
-			PlayerSavedData.getData(player).addConsortReputation(-5, homeDimension);
+			ConsortReputation.get(player).addConsortReputation(-5, homeDimension);
 		return super.skipAttackInteraction(entityIn);
 	}
 	
@@ -356,7 +353,7 @@ public class ConsortEntity extends AnimatedPathfinderMob implements MenuProvider
 	{
 		LivingEntity livingEntity = this.getKillCredit();
 		if(livingEntity instanceof ServerPlayer player && (!(player instanceof FakePlayer)))
-			PlayerSavedData.getData(player).addConsortReputation(-100, homeDimension);
+			ConsortReputation.get(player).addConsortReputation(-100, homeDimension);
 		super.die(cause);
 	}
 	
@@ -443,11 +440,11 @@ public class ConsortEntity extends AnimatedPathfinderMob implements MenuProvider
 	@Override
 	public void registerControllers(AnimatableManager.ControllerRegistrar controllers)
 	{
-		controllers.add(AnimationControllerUtil.createAnimation(this, "idleAnimation", 1, ConsortEntity::idleAnimation));
-		controllers.add(AnimationControllerUtil.createAnimation(this, "walkAnimation", 1, ConsortEntity::walkAnimation));
-		controllers.add(AnimationControllerUtil.createAnimation(this, "armsAnimation", 1, ConsortEntity::armsAnimation));
-		controllers.add(AnimationControllerUtil.createAnimation(this, "deathAnimation", 1, ConsortEntity::deathAnimation));
-		controllers.add(AnimationControllerUtil.createAnimation(this, "actionAnimation", 1, ConsortEntity::actionAnimation));
+		controllers.add(new AnimationController<>(this, "idleAnimation", ConsortEntity::idleAnimation));
+		controllers.add(new AnimationController<>(this, "walkAnimation", ConsortEntity::walkAnimation));
+		controllers.add(new AnimationController<>(this, "armsAnimation", ConsortEntity::armsAnimation));
+		controllers.add(new AnimationController<>(this, "deathAnimation", ConsortEntity::deathAnimation));
+		controllers.add(new AnimationController<>(this, "actionAnimation", ConsortEntity::actionAnimation));
 	}
 	
 	private static PlayState idleAnimation(AnimationState<ConsortEntity> state)
@@ -522,3 +519,4 @@ public class ConsortEntity extends AnimatedPathfinderMob implements MenuProvider
 		return PlayState.STOP;
 	}
 }
+

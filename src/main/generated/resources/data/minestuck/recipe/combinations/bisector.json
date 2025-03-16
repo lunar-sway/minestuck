@@ -1,0 +1,11 @@
+{
+  "type": "minestuck:combination",
+  "input1": {
+    "item": "minestuck:bi_dye"
+  },
+  "input2": {
+    "item": "minecraft:iron_axe"
+  },
+  "mode": "and",
+  "output": "minestuck:bisector"
+}

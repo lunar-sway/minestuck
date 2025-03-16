@@ -13,7 +13,7 @@ import net.minecraft.core.registries.Registries;
 import net.minecraft.data.DataGenerator;
 import net.minecraft.data.PackOutput;
 import net.neoforged.bus.api.SubscribeEvent;
-import net.neoforged.fml.common.Mod;
+import net.neoforged.fml.common.EventBusSubscriber;
 import net.neoforged.neoforge.common.data.DatapackBuiltinEntriesProvider;
 import net.neoforged.neoforge.common.data.ExistingFileHelper;
 import net.neoforged.neoforge.data.event.GatherDataEvent;
@@ -22,7 +22,7 @@ import net.neoforged.neoforge.registries.NeoForgeRegistries;
 import java.util.Set;
 import java.util.concurrent.CompletableFuture;
 
-@Mod.EventBusSubscriber(modid = Minestuck.MOD_ID, bus = Mod.EventBusSubscriber.Bus.MOD)
+@EventBusSubscriber(modid = Minestuck.MOD_ID, bus = EventBusSubscriber.Bus.MOD)
 public final class MinestuckData
 {
 	@SubscribeEvent
@@ -47,14 +47,16 @@ public final class MinestuckData
 		gen.addProvider(event.includeServer(), new TitleLandTypeTagsProvider(output, lookupProvider, fileHelper));
 		gen.addProvider(event.includeServer(), new MSDamageTypeProvider.Tags(output, lookupProvider, fileHelper));
 		
-		gen.addProvider(event.includeServer(), new MinestuckRecipeProvider(output));
+		gen.addProvider(event.includeServer(), new DataMapGenerator(output, event.getLookupProvider()));
+		
+		gen.addProvider(event.includeServer(), new MinestuckRecipeProvider(output, event.getLookupProvider()));
 		gen.addProvider(event.includeServer(), new GeneratedGristCostConfigProvider(output, Minestuck.MOD_ID));
 		
 		gen.addProvider(event.includeServer(), new ComputerThemeProvider(output));
 		
-		gen.addProvider(event.includeServer(), new BoondollarPricingProvider(output, Minestuck.MOD_ID));
-		gen.addProvider(event.includeServer(), MinestuckLootTableProvider.create(output));
-		gen.addProvider(event.includeServer(), new MSLootModifiers(output));
+		gen.addProvider(event.includeServer(), new BoondollarPriceProvider(output, Minestuck.MOD_ID));
+		gen.addProvider(event.includeServer(), MinestuckLootTableProvider.create(output, event.getLookupProvider()));
+		gen.addProvider(event.includeServer(), new MSLootModifiers(output, event.getLookupProvider()));
 		gen.addProvider(event.includeServer(), MSAdvancementProvider.create(output, lookupProvider, fileHelper));
 		
 		gen.addProvider(event.includeServer(), new StartingModusProvider(output, Minestuck.MOD_ID));
@@ -68,6 +70,8 @@ public final class MinestuckData
 		gen.addProvider(event.includeServer(), ConsortFoodMerchantDialogue.create(output, enUsLanguageProvider));
 		gen.addProvider(event.includeServer(), ConsortGeneralMerchantDialogue.create(output, enUsLanguageProvider));
 		gen.addProvider(event.includeServer(), CarapacianSoldierDialogue.create(output, enUsLanguageProvider));
+		
+		gen.addProvider(event.includeServer(), new BetterCombatProvider(output));
 	}
 	
 	private static RegistrySetBuilder registrySetBuilder()
@@ -78,8 +82,8 @@ public final class MinestuckData
 				.add(Registries.CONFIGURED_FEATURE, MSConfiguredFeatureProvider::register)
 				.add(Registries.PLACED_FEATURE, MSPlacedFeatureProvider::register)
 				.add(Registries.BIOME, MSBiomeProvider::register)
-				.add(Registries.STRUCTURE, MSStructureProvider::register)
-				.add(Registries.STRUCTURE_SET, MSStructureSetProvider::register)
+				.add(Registries.STRUCTURE, MSStructureProvider::registerStructures)
+				.add(Registries.STRUCTURE_SET, MSStructureProvider::registerStructureSets)
 				.add(Registries.DAMAGE_TYPE, MSDamageTypeProvider::register)
 				.add(NeoForgeRegistries.Keys.BIOME_MODIFIERS, BiomeModifierProvider::register);
 	}

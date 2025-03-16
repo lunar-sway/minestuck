@@ -1,0 +1,11 @@
+{
+  "type": "minestuck:combination",
+  "input1": {
+    "item": "minecraft:lava_bucket"
+  },
+  "input2": {
+    "item": "minecraft:honey_bottle"
+  },
+  "mode": "and",
+  "output": "minestuck:molten_amber_bucket"
+}

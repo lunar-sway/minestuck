@@ -1,0 +1,11 @@
+{
+  "type": "minestuck:combination",
+  "input1": {
+    "item": "minestuck:firestarter"
+  },
+  "input2": {
+    "item": "minestuck:sunray_harvester"
+  },
+  "mode": "or",
+  "output": "minestuck:star_ray"
+}

@@ -14,7 +14,7 @@ import net.minecraft.world.level.levelgen.structure.templatesystem.StructureTemp
 
 public class UnfinishedCarvedSalamanderFeature extends Feature<NoneFeatureConfiguration>
 {
-	private static final ResourceLocation UNFINISHED_CARVED_SALAMANDER = new ResourceLocation(Minestuck.MOD_ID, "unfinished_carved_salamander");
+	private static final ResourceLocation UNFINISHED_CARVED_SALAMANDER = ResourceLocation.fromNamespaceAndPath(Minestuck.MOD_ID, "unfinished_carved_salamander");
 	
 	public UnfinishedCarvedSalamanderFeature(Codec<NoneFeatureConfiguration> codec)
 	{

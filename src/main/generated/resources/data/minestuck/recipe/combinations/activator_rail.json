@@ -1,0 +1,11 @@
+{
+  "type": "minestuck:combination",
+  "input1": {
+    "item": "minecraft:rail"
+  },
+  "input2": {
+    "item": "minecraft:redstone_torch"
+  },
+  "mode": "and",
+  "output": "minecraft:activator_rail"
+}

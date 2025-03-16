@@ -48,13 +48,13 @@ public final class ImpDungeonPieces
 		
 		private EntryCorridor(Direction orientation, int x, int y, int z)
 		{
-			super(MSStructurePieces.IMP_ENTRY_CORRIDOR.get(), 0, makeBoundingBox(x, y, z, orientation, 6, 7, 10));
+			super(MSStructures.ImpDungeon.ENTRY_CORRIDOR_PIECE.get(), 0, makeBoundingBox(x, y, z, orientation, 6, 7, 10));
 			setOrientation(orientation);
 		}
 		
 		public EntryCorridor(CompoundTag nbt)
 		{
-			super(MSStructurePieces.IMP_ENTRY_CORRIDOR.get(), nbt);
+			super(MSStructures.ImpDungeon.ENTRY_CORRIDOR_PIECE.get(), nbt);
 			this.isFrontBlocked = nbt.getBoolean("bl0");
 			this.isBackBlocked = nbt.getBoolean("bl1");
 		}
@@ -281,7 +281,7 @@ public final class ImpDungeonPieces
 		
 		StraightCorridor(Direction coordBaseMode, BlockPos pos, RandomSource rand)
 		{
-			super(MSStructurePieces.IMP_STRAIGHT_CORRIDOR.get(), 0, makeGridBoundingBox(3, 0, 0, 4, 5, 10, pos, coordBaseMode));
+			super(MSStructures.ImpDungeon.STRAIGHT_CORRIDOR_PIECE.get(), 0, makeGridBoundingBox(3, 0, 0, 4, 5, 10, pos, coordBaseMode));
 			setOrientation(coordBaseMode);
 			
 			light = rand.nextFloat() < 0.4F;
@@ -298,7 +298,7 @@ public final class ImpDungeonPieces
 		
 		public StraightCorridor(CompoundTag nbt)
 		{
-			super(MSStructurePieces.IMP_STRAIGHT_CORRIDOR.get(), nbt);
+			super(MSStructures.ImpDungeon.STRAIGHT_CORRIDOR_PIECE.get(), nbt);
 			this.isFrontBlocked = nbt.getBoolean("bl0");
 			light = nbt.getBoolean("l");
 			if(light)
@@ -357,7 +357,7 @@ public final class ImpDungeonPieces
 		
 		CrossCorridor(Direction direction, BlockPos pos, RandomSource rand)
 		{
-			super(MSStructurePieces.IMP_CROSS_CORRIDOR.get(), 0, makeGridBoundingBox(0, 0, 0, 10, 6, 10, pos, direction));
+			super(MSStructures.ImpDungeon.CROSS_CORRIDOR_PIECE.get(), 0, makeGridBoundingBox(0, 0, 0, 10, 6, 10, pos, direction));
 			setOrientation(direction);
 			
 			light = rand.nextFloat() < 0.3F;
@@ -381,7 +381,7 @@ public final class ImpDungeonPieces
 		
 		public CrossCorridor(CompoundTag nbt)
 		{
-			super(MSStructurePieces.IMP_CROSS_CORRIDOR.get(), nbt);
+			super(MSStructures.ImpDungeon.CROSS_CORRIDOR_PIECE.get(), nbt);
 			this.isRightBlocked = nbt.getBoolean("bl0");
 			this.isFrontBlocked = nbt.getBoolean("bl1");
 			this.isLeftBlocked = nbt.getBoolean("bl2");
@@ -477,7 +477,7 @@ public final class ImpDungeonPieces
 		
 		private TurnCorridor(boolean direction, Direction orientation, BlockPos pos, RandomSource rand)
 		{
-			super(MSStructurePieces.IMP_TURN_CORRIDOR.get(), 0, makeGridBoundingBox(0, 0, 0, 7, 5, 7, pos, orientation));
+			super(MSStructures.ImpDungeon.TURN_CORRIDOR_PIECE.get(), 0, makeGridBoundingBox(0, 0, 0, 7, 5, 7, pos, orientation));
 			
 			setOrientation(orientation);
 			this.direction = direction;
@@ -500,7 +500,7 @@ public final class ImpDungeonPieces
 		
 		public TurnCorridor(CompoundTag nbt)
 		{
-			super(MSStructurePieces.IMP_TURN_CORRIDOR.get(), nbt);
+			super(MSStructures.ImpDungeon.TURN_CORRIDOR_PIECE.get(), nbt);
 			this.isBackBlocked = nbt.getBoolean("bl0");
 			this.isRightBlocked = nbt.getBoolean("bl1");
 			light = nbt.getBoolean("l");
@@ -563,13 +563,13 @@ public final class ImpDungeonPieces
 	{
 		ReturnRoom(Direction orientation, BlockPos pos)
 		{
-			super(MSStructurePieces.IMP_RETURN_ROOM.get(), 0, makeGridBoundingBox(2, 0, 0, 6, 11, 8, pos, orientation));
+			super(MSStructures.ImpDungeon.RETURN_ROOM_PIECE.get(), 0, makeGridBoundingBox(2, 0, 0, 6, 11, 8, pos, orientation));
 			setOrientation(orientation);
 		}
 		
 		public ReturnRoom(CompoundTag nbt)
 		{
-			super(MSStructurePieces.IMP_RETURN_ROOM.get(), nbt);
+			super(MSStructures.ImpDungeon.RETURN_ROOM_PIECE.get(), nbt);
 		}
 		
 		@Override
@@ -626,13 +626,13 @@ public final class ImpDungeonPieces
 	{
 		ReturnRoomAlt(Direction coordBaseMode, BlockPos pos)
 		{
-			super(MSStructurePieces.IMP_ALT_RETURN_ROOM.get(), 0, makeGridBoundingBox(1, -1, 0, 8, 8, 10, pos, coordBaseMode));
+			super(MSStructures.ImpDungeon.ALT_RETURN_ROOM_PIECE.get(), 0, makeGridBoundingBox(1, -1, 0, 8, 8, 10, pos, coordBaseMode));
 			setOrientation(coordBaseMode);
 		}
 		
 		public ReturnRoomAlt(CompoundTag nbt)
 		{
-			super(MSStructurePieces.IMP_ALT_RETURN_ROOM.get(), nbt);
+			super(MSStructures.ImpDungeon.ALT_RETURN_ROOM_PIECE.get(), nbt);
 		}
 		
 		@Override
@@ -696,7 +696,7 @@ public final class ImpDungeonPieces
 		
 		SpawnerRoom(Direction orientation, BlockPos pos, RandomSource rand)
 		{
-			super(MSStructurePieces.IMP_SPAWNER_ROOM.get(), 0, makeGridBoundingBox(1, 0, 0, 8, 5, 7, pos, orientation));
+			super(MSStructures.ImpDungeon.SPAWNER_ROOM_PIECE.get(), 0, makeGridBoundingBox(1, 0, 0, 8, 5, 7, pos, orientation));
 			setOrientation(orientation);
 			
 			if(rand.nextBoolean())
@@ -712,7 +712,7 @@ public final class ImpDungeonPieces
 		
 		public SpawnerRoom(CompoundTag nbt)
 		{
-			super(MSStructurePieces.IMP_SPAWNER_ROOM.get(), nbt);
+			super(MSStructures.ImpDungeon.SPAWNER_ROOM_PIECE.get(), nbt);
 			spawner1 = nbt.getBoolean("sp1");
 			spawner2 = nbt.getBoolean("sp2");
 		}
@@ -788,7 +788,7 @@ public final class ImpDungeonPieces
 		
 		BookcaseRoom(Direction direction, BlockPos pos, RandomSource rand)
 		{
-			super(MSStructurePieces.IMP_BOOKCASE_ROOM.get(), 0, makeGridBoundingBox(1, 0, 0, 8, 5, 8, pos, direction));
+			super(MSStructures.ImpDungeon.BOOKCASE_ROOM_PIECE.get(), 0, makeGridBoundingBox(1, 0, 0, 8, 5, 8, pos, direction));
 			setOrientation(direction);
 			
 			light = rand.nextFloat() < 0.4F;
@@ -797,7 +797,7 @@ public final class ImpDungeonPieces
 		
 		public BookcaseRoom(CompoundTag nbt)
 		{
-			super(MSStructurePieces.IMP_BOOKCASE_ROOM.get(), nbt);
+			super(MSStructures.ImpDungeon.BOOKCASE_ROOM_PIECE.get(), nbt);
 			bookChance = nbt.getFloat("b");
 			light = nbt.getBoolean("l");
 		}
@@ -882,7 +882,7 @@ public final class ImpDungeonPieces
 		
 		SpawnerCorridor(Direction orientation, BlockPos pos, RandomSource rand)
 		{
-			super(MSStructurePieces.IMP_SPAWNER_CORRIDOR.get(), 0, makeGridBoundingBox(2, 0, 0, 6, 5, 10, pos, orientation));
+			super(MSStructures.ImpDungeon.SPAWNER_CORRIDOR_PIECE.get(), 0, makeGridBoundingBox(2, 0, 0, 6, 5, 10, pos, orientation));
 			
 			setOrientation(orientation);
 			
@@ -916,7 +916,7 @@ public final class ImpDungeonPieces
 		
 		public SpawnerCorridor(CompoundTag nbt)
 		{
-			super(MSStructurePieces.IMP_SPAWNER_CORRIDOR.get(), nbt);
+			super(MSStructures.ImpDungeon.SPAWNER_CORRIDOR_PIECE.get(), nbt);
 			this.isBackBlocked = nbt.getBoolean("bl0");
 			this.isFrontBlocked = nbt.getBoolean("bl1");
 			spawner1 = nbt.getBoolean("sp1");
@@ -1005,7 +1005,7 @@ public final class ImpDungeonPieces
 		
 		OgreCorridor(Direction orientation, BlockPos pos, RandomSource rand)
 		{
-			super(MSStructurePieces.IMP_OGRE_CORRIDOR.get(), 0, makeGridBoundingBox(1, 0, 0, 8, 5, 10, pos, orientation));
+			super(MSStructures.ImpDungeon.OGRE_CORRIDOR_PIECE.get(), 0, makeGridBoundingBox(1, 0, 0, 8, 5, 10, pos, orientation));
 			setOrientation(orientation);
 			
 			chestPos = rand.nextBoolean();
@@ -1020,7 +1020,7 @@ public final class ImpDungeonPieces
 		
 		public OgreCorridor(CompoundTag nbt)
 		{
-			super(MSStructurePieces.IMP_OGRE_CORRIDOR.get(), nbt);
+			super(MSStructures.ImpDungeon.OGRE_CORRIDOR_PIECE.get(), nbt);
 			isFrontBlocked = nbt.getBoolean("bl0");
 			chestPos = nbt.getBoolean("ch");
 			ogreSpawned = nbt.getBoolean("spwn");
@@ -1106,7 +1106,7 @@ public final class ImpDungeonPieces
 			BlockPos pos = new BlockPos(getWorldX(xPos, zPos), getWorldY(yPos), getWorldZ(xPos, zPos));
 			OgreEntity ogre = MSEntityTypes.OGRE.get().create(level.getLevel());
 			ogre.moveTo(pos.getX(), pos.getY(), pos.getZ(), rand.nextFloat() * 360F, 0);
-			ogre.finalizeSpawn(level, null, MobSpawnType.STRUCTURE, null, null);
+			ogre.finalizeSpawn(level, null, MobSpawnType.STRUCTURE, null);
 			ogre.restrictTo(pos, 2);
 			level.addFreshEntity(ogre);
 		}
@@ -1120,7 +1120,7 @@ public final class ImpDungeonPieces
 		
 		LargeSpawnerCorridor(Direction orientation, BlockPos pos, RandomSource rand)
 		{
-			super(MSStructurePieces.IMP_LARGE_SPAWNER_CORRIDOR.get(), 0, makeGridBoundingBox(0, 0, 0, 10, 5, 10, pos, orientation));
+			super(MSStructures.ImpDungeon.LARGE_SPAWNER_CORRIDOR_PIECE.get(), 0, makeGridBoundingBox(0, 0, 0, 10, 5, 10, pos, orientation));
 			
 			setOrientation(orientation);
 			
@@ -1154,7 +1154,7 @@ public final class ImpDungeonPieces
 		
 		public LargeSpawnerCorridor(CompoundTag nbt)
 		{
-			super(MSStructurePieces.IMP_LARGE_SPAWNER_CORRIDOR.get(), nbt);
+			super(MSStructures.ImpDungeon.LARGE_SPAWNER_CORRIDOR_PIECE.get(), nbt);
 			this.isBackBlocked = nbt.getBoolean("bl0");
 			this.isFrontBlocked = nbt.getBoolean("bl1");
 			spawner1 = nbt.getBoolean("sp1");

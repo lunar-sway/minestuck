@@ -1,0 +1,11 @@
+{
+  "type": "minestuck:combination",
+  "input1": {
+    "item": "minecraft:minecart"
+  },
+  "input2": {
+    "item": "minecraft:furnace"
+  },
+  "mode": "and",
+  "output": "minecraft:furnace_minecart"
+}

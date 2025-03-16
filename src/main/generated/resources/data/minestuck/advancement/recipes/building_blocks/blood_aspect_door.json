@@ -1,0 +1,32 @@
+{
+  "parent": "minecraft:recipes/root",
+  "criteria": {
+    "has_blood_aspect_planks": {
+      "conditions": {
+        "items": [
+          {
+            "items": "minestuck:blood_aspect_planks"
+          }
+        ]
+      },
+      "trigger": "minecraft:inventory_changed"
+    },
+    "has_the_recipe": {
+      "conditions": {
+        "recipe": "minestuck:blood_aspect_door"
+      },
+      "trigger": "minecraft:recipe_unlocked"
+    }
+  },
+  "requirements": [
+    [
+      "has_the_recipe",
+      "has_blood_aspect_planks"
+    ]
+  ],
+  "rewards": {
+    "recipes": [
+      "minestuck:blood_aspect_door"
+    ]
+  }
+}

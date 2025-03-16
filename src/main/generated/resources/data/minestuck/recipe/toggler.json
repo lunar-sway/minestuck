@@ -1,0 +1,24 @@
+{
+  "type": "minecraft:crafting_shaped",
+  "category": "redstone",
+  "key": {
+    "i": {
+      "item": "minecraft:iron_ingot"
+    },
+    "r": {
+      "item": "minecraft:redstone"
+    },
+    "t": {
+      "item": "minecraft:repeater"
+    }
+  },
+  "pattern": [
+    "iti",
+    "rir",
+    "iri"
+  ],
+  "result": {
+    "count": 1,
+    "id": "minestuck:toggler"
+  }
+}

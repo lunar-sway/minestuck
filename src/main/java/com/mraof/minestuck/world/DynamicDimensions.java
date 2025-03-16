@@ -22,8 +22,8 @@ import java.util.Objects;
 
 public class DynamicDimensions
 {
-	public static final ResourceKey<DimensionType> LAND_TYPE = ResourceKey.create(Registries.DIMENSION_TYPE, new ResourceLocation(Minestuck.MOD_ID, "land"));
-	private static final ResourceLocation LAND_BASE_ID = new ResourceLocation(Minestuck.MOD_ID, "land");
+	public static final ResourceKey<DimensionType> LAND_TYPE = ResourceKey.create(Registries.DIMENSION_TYPE, ResourceLocation.fromNamespaceAndPath(Minestuck.MOD_ID, "land"));
+	private static final ResourceLocation LAND_BASE_ID = ResourceLocation.fromNamespaceAndPath(Minestuck.MOD_ID, "land");
 	
 	public static ResourceLocation landIdBaseForPLayer(PlayerIdentifier player)
 	{
@@ -59,7 +59,7 @@ public class DynamicDimensions
 		for(int i = 0; server.getLevel(key) != null; i++)
 		{
 			key = ResourceKey.create(Registries.DIMENSION,
-					new ResourceLocation(baseName.getNamespace(), baseName.getPath() + "_" + i));
+					ResourceLocation.fromNamespaceAndPath(baseName.getNamespace(), baseName.getPath() + "_" + i));
 		}
 		
 		return key;

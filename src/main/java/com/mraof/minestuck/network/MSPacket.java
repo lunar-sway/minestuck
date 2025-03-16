@@ -1,46 +1,36 @@
 package com.mraof.minestuck.network;
 
+import net.minecraft.core.BlockPos;
 import net.minecraft.network.protocol.common.custom.CustomPacketPayload;
 import net.minecraft.server.level.ServerPlayer;
-import net.neoforged.neoforge.network.handling.IPlayPayloadHandler;
-import net.neoforged.neoforge.network.registration.IDirectionAwarePayloadHandlerBuilder;
+import net.minecraft.world.level.block.entity.BlockEntity;
+import net.minecraft.world.phys.Vec3;
+import net.neoforged.neoforge.network.handling.IPayloadContext;
+
+import java.util.Optional;
 
 public interface MSPacket
 {
-	@Deprecated	// Generally bad design to write multi-purpose packets. Such a packet should *generally* be written as several types of packets instead.
-	interface PlayToBoth extends PlayToClient, PlayToServer
-	{
-		void execute();
-		
-		void execute(ServerPlayer player);
-		
-		static <P extends PlayToBoth> void handlerBoth(IDirectionAwarePayloadHandlerBuilder<P, IPlayPayloadHandler<P>> builder)
-		{
-			PlayToClient.handler(builder);
-			PlayToServer.handler(builder);
-		}
-	}
-	
 	interface PlayToClient extends CustomPacketPayload
 	{
-		void execute();
-		
-		static <P extends PlayToClient> void handler(IDirectionAwarePayloadHandlerBuilder<P, IPlayPayloadHandler<P>> builder)
-		{
-			builder.client((payload, context) -> context.workHandler().execute(payload::execute));
-		}
+		void execute(IPayloadContext context);
 	}
 	
 	interface PlayToServer extends CustomPacketPayload
 	{
-		void execute(ServerPlayer player);
+		void execute(IPayloadContext context, ServerPlayer player);
+	}
+	
+	@SuppressWarnings("resource")
+	public static <T> Optional<T> getAccessibleBlockEntity(ServerPlayer player, BlockPos pos, Class<T> castClass)
+	{
+		if(!player.level().isAreaLoaded(pos, 0) || player.distanceToSqr(Vec3.atCenterOf(pos)) > 8 * 8)
+			return Optional.empty();
 		
-		static <P extends PlayToServer> void handler(IDirectionAwarePayloadHandlerBuilder<P, IPlayPayloadHandler<P>> builder)
-		{
-			builder.server((payload, context) -> context.workHandler().execute(() -> {
-				if(context.player().isPresent() && context.player().get() instanceof ServerPlayer serverPlayer)
-					payload.execute(serverPlayer);
-			}));
-		}
+		BlockEntity blockEntity = player.level().getBlockEntity(pos);
+		if(!castClass.isInstance(blockEntity))
+			return Optional.empty();
+		
+		return Optional.of(castClass.cast(blockEntity));
 	}
 }

@@ -1,0 +1,11 @@
+{
+  "type": "minestuck:combination",
+  "input1": {
+    "item": "minestuck:battery"
+  },
+  "input2": {
+    "item": "minestuck:horn"
+  },
+  "mode": "or",
+  "output": "minestuck:sopor_slime_pie"
+}

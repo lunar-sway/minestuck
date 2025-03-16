@@ -3,5 +3,7 @@
     "type": "minestuck:terrain_land_type_tag",
     "land_type_tag": "minestuck:sandstone"
   },
-  "dialogue": "minestuck:consort/sandless.1"
+  "dialogue": "minestuck:consort/sandless.1",
+  "dialogue_weight": 10,
+  "keep_on_reset": false
 }

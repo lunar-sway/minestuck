@@ -1,0 +1,86 @@
+{
+  "conditioned_nodes": [
+    {
+      "condition": {
+        "type": "minestuck:player_advancement",
+        "advancement_id": "minestuck:minestuck/big_one_mil"
+      },
+      "node": {
+        "animation": {},
+        "gui": "minestuck:textures/gui/dialogue/dialogue.png",
+        "message": "minestuck.dialogue.consort.echeladder_progress.start.one_mil",
+        "responses": [
+          {
+            "condition": {
+              "type": "minestuck:always_true"
+            },
+            "hide_if_failed": true,
+            "message": "minestuck.dialogue.what_is",
+            "next_dialogue": "minestuck:consort/echeladder_progress/explain_echeladder",
+            "triggers": []
+          }
+        ]
+      }
+    },
+    {
+      "condition": {
+        "type": "minestuck:player_advancement",
+        "advancement_id": "minestuck:minestuck/halfway_point"
+      },
+      "node": {
+        "animation": {},
+        "gui": "minestuck:textures/gui/dialogue/dialogue.png",
+        "message": "minestuck.dialogue.consort.echeladder_progress.start.halfway",
+        "responses": [
+          {
+            "condition": {
+              "type": "minestuck:always_true"
+            },
+            "hide_if_failed": true,
+            "message": "minestuck.dialogue.what_is",
+            "next_dialogue": "minestuck:consort/echeladder_progress/explain_echeladder",
+            "triggers": []
+          }
+        ]
+      }
+    },
+    {
+      "condition": {
+        "type": "minestuck:player_advancement",
+        "advancement_id": "minestuck:minestuck/double_digits"
+      },
+      "node": {
+        "animation": {},
+        "gui": "minestuck:textures/gui/dialogue/dialogue.png",
+        "message": "minestuck.dialogue.consort.echeladder_progress.start.double_digits",
+        "responses": [
+          {
+            "condition": {
+              "type": "minestuck:always_true"
+            },
+            "hide_if_failed": true,
+            "message": "minestuck.dialogue.what_is",
+            "next_dialogue": "minestuck:consort/echeladder_progress/explain_echeladder",
+            "triggers": []
+          }
+        ]
+      }
+    }
+  ],
+  "default_node": {
+    "animation": {},
+    "gui": "minestuck:textures/gui/dialogue/dialogue.png",
+    "message": "minestuck.dialogue.consort.echeladder_progress.start",
+    "responses": [
+      {
+        "condition": {
+          "type": "minestuck:always_true"
+        },
+        "hide_if_failed": true,
+        "message": "minestuck.dialogue.what_is",
+        "next_dialogue": "minestuck:consort/echeladder_progress/explain_echeladder",
+        "triggers": []
+      }
+    ]
+  }
+}

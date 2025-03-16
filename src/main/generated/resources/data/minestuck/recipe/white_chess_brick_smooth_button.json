@@ -1,0 +1,13 @@
+{
+  "type": "minecraft:crafting_shapeless",
+  "category": "building",
+  "ingredients": [
+    {
+      "item": "minestuck:white_chess_brick_smooth"
+    }
+  ],
+  "result": {
+    "count": 1,
+    "id": "minestuck:white_chess_brick_smooth_button"
+  }
+}

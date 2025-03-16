@@ -1,10 +1,17 @@
 {
   "node": {
+    "animation": {},
+    "gui": "minestuck:textures/gui/dialogue/dialogue.png",
     "message": "minestuck.dialogue.consort.book_purpose.unenlightened",
     "responses": [
       {
+        "condition": {
+          "type": "minestuck:always_true"
+        },
+        "hide_if_failed": true,
         "message": "minestuck.arrow",
-        "next_dialogue": "minestuck:consort/book_purpose/buy_my_products"
+        "next_dialogue": "minestuck:consort/book_purpose/buy_my_products",
+        "triggers": []
       }
     ]
   }

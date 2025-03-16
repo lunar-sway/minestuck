@@ -3,11 +3,13 @@
     "animation": {
       "emotion": "happy"
     },
+    "gui": "minestuck:textures/gui/dialogue/dialogue.png",
     "message": {
       "arguments": [
         "entity_sound"
       ],
       "key": "minestuck.dialogue.consort.delicious_hair.happy"
-    }
+    },
+    "responses": []
   }
 }

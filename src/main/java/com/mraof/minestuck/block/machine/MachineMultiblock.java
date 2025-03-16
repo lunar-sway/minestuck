@@ -5,6 +5,7 @@ import net.minecraft.core.Direction;
 import net.minecraft.world.item.Item;
 import net.minecraft.world.level.BlockGetter;
 import net.minecraft.world.level.ItemLike;
+import net.minecraft.world.level.Level;
 import net.minecraft.world.level.LevelAccessor;
 import net.minecraft.world.level.block.Block;
 import net.minecraft.world.level.block.Rotation;
@@ -110,6 +111,14 @@ public abstract class MachineMultiblock implements ItemLike    //An abstraction 
 	public void placeWithRotation(LevelAccessor level, Placement placement)
 	{
 		blockEntries.forEach(entry -> entry.placeWithRotation(level, placement));
+	}
+	
+	/**
+	 * Additional code to run after the multiblock has been placed.
+	 */
+	public void placeAdditional(Level level, Placement placement)
+	{
+	
 	}
 	
 	private boolean isInvalid(BlockGetter level, Placement placement)

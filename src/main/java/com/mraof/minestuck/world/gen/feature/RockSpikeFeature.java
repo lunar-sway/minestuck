@@ -143,7 +143,7 @@ public class RockSpikeFeature extends Feature<NoneFeatureConfiguration>
 				entry.spreadChance -= Math.min(0.5F, (2F*h)/height);
 				if(!heightMap.containsKey(coord))
 				{
-					BlockPos pos = new BlockPos(coord.x, rockPos.getY() - h, coord.z);
+					BlockPos pos = coord.atY(rockPos.getY() - h);
 					/*if(provider.villageHandler.isPositionInStructure(world, pos) || provider.structureHandler.isPositionInStructure(world, pos)) TODO
 					{
 						stomps=true;
@@ -155,13 +155,13 @@ public class RockSpikeFeature extends Feature<NoneFeatureConfiguration>
 				}
 			} else entry.spreadChance += 0.5F;
 			
-			if(!level.getBlockState(new BlockPos(entry.pos.x, rockPos.getY() - h - 1, entry.pos.z)).equals(ground))
+			if(!level.getBlockState(entry.pos.atY(rockPos.getY() - h - 1)).equals(ground))
 				toProcess2.add(entry);
 		}
 		
 		for(Map.Entry<CoordPair, Integer> entry : heightMap.entrySet())
 		{
-			BlockPos pos = new BlockPos(entry.getKey().x, entry.getValue(), entry.getKey().z);
+			BlockPos pos = entry.getKey().atY(entry.getValue());
 			do
 			{
 				/*if(provider.villageHandler.isPositionInStructure(world, pos) || provider.structureHandler.isPositionInStructure(world, pos) || stomps==true) TODO
@@ -183,7 +183,7 @@ public class RockSpikeFeature extends Feature<NoneFeatureConfiguration>
 			int blockCount = 0;
 			for(int i1 = 0; i1 < 4; i1++)
 			{
-				Integer coordsHeight = heightMap.get(new CoordPair(coords.x + (i1 % 2), coords.z + i1/2));
+				Integer coordsHeight = heightMap.get(new CoordPair(coords.x() + (i1 % 2), coords.z() + i1/2));
 				if(coordsHeight != null && coordsHeight == rockPos.getY())
 					blockCount++;
 			}
@@ -194,7 +194,7 @@ public class RockSpikeFeature extends Feature<NoneFeatureConfiguration>
 			}
 		}
 		
-		BlockPos corePosition = new BlockPos(nodePos.x, rockPos.getY() + 1, nodePos.z);
+		BlockPos corePosition = nodePos.atY(rockPos.getY() + 1);
 		
 		if(stomps)
 		{

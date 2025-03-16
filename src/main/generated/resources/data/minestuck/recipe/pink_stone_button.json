@@ -1,0 +1,13 @@
+{
+  "type": "minecraft:crafting_shapeless",
+  "category": "building",
+  "ingredients": [
+    {
+      "item": "minestuck:pink_stone"
+    }
+  ],
+  "result": {
+    "count": 1,
+    "id": "minestuck:pink_stone_button"
+  }
+}

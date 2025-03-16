@@ -1,16 +1,16 @@
 package com.mraof.minestuck.blockentity.machine;
 
-import com.mraof.minestuck.alchemy.AlchemyHelper;
+import com.mraof.minestuck.api.alchemy.recipe.combination.CombinationInput;
 import com.mraof.minestuck.api.alchemy.recipe.combination.CombinationMode;
 import com.mraof.minestuck.api.alchemy.recipe.combination.CombinationRecipe;
-import com.mraof.minestuck.api.alchemy.recipe.combination.CombinerContainer;
-import com.mraof.minestuck.block.MSBlocks;
 import com.mraof.minestuck.blockentity.MSBlockEntityTypes;
 import com.mraof.minestuck.inventory.MiniTotemLatheMenu;
 import com.mraof.minestuck.item.MSItems;
-import com.mraof.minestuck.util.ColorHandler;
+import com.mraof.minestuck.item.components.EncodedItemComponent;
+import com.mraof.minestuck.item.components.MSItemComponents;
 import net.minecraft.core.BlockPos;
 import net.minecraft.core.Direction;
+import net.minecraft.core.HolderLookup;
 import net.minecraft.nbt.CompoundTag;
 import net.minecraft.network.chat.Component;
 import net.minecraft.world.MenuProvider;
@@ -35,7 +35,6 @@ public class MiniTotemLatheBlockEntity extends MachineProcessBlockEntity impleme
 	public static final int MAX_PROGRESS = 100;
 	
 	private final ProgressTracker progressTracker = new ProgressTracker(ProgressTracker.RunType.ONCE, MAX_PROGRESS, this::setChanged, this::contentsValid);
-	private final CombinerContainer combinerInventory = new CombinerContainer.ItemHandlerWrapper(itemHandler, CombinationMode.AND);
 	
 	public MiniTotemLatheBlockEntity(BlockPos pos, BlockState state)
 	{
@@ -59,16 +58,16 @@ public class MiniTotemLatheBlockEntity extends MachineProcessBlockEntity impleme
 	}
 	
 	@Override
-	public void load(CompoundTag nbt)
+	protected void loadAdditional(CompoundTag nbt, HolderLookup.Provider pRegistries)
 	{
-		super.load(nbt);
+		super.loadAdditional(nbt, pRegistries);
 		this.progressTracker.load(nbt);
 	}
 	
 	@Override
-	protected void saveAdditional(CompoundTag compound)
+	protected void saveAdditional(CompoundTag compound, HolderLookup.Provider provider)
 	{
-		super.saveAdditional(compound);
+		super.saveAdditional(compound, provider);
 		this.progressTracker.save(compound);
 	}
 	
@@ -84,7 +83,7 @@ public class MiniTotemLatheBlockEntity extends MachineProcessBlockEntity impleme
 		
 		ItemStack currentOutput = itemHandler.getStackInSlot(3);
 		if(!output.isEmpty())
-			return currentOutput.isEmpty() || ItemStack.isSameItemSameTags(output, currentOutput);
+			return currentOutput.isEmpty() || ItemStack.isSameItemSameComponents(output, currentOutput);
 		else return false;
 	}
 	
@@ -105,31 +104,29 @@ public class MiniTotemLatheBlockEntity extends MachineProcessBlockEntity impleme
 	
 	private ItemStack createResult()
 	{
-		ItemStack input1 = itemHandler.getStackInSlot(0), input2 = itemHandler.getStackInSlot(1), dowelInput = itemHandler.getStackInSlot(2);
-		if(input1.isEmpty() && input2.isEmpty() || dowelInput.isEmpty() || AlchemyHelper.hasDecodedItem(dowelInput))
+		ItemStack cardInput1 = itemHandler.getStackInSlot(0), cardInput2 = itemHandler.getStackInSlot(1), dowelInput = itemHandler.getStackInSlot(2);
+		if(cardInput1.isEmpty() && cardInput2.isEmpty() || dowelInput.isEmpty() || dowelInput.has(MSItemComponents.ENCODED_ITEM))
 			return ItemStack.EMPTY;
 		
 		ItemStack output;
-		if (!input1.isEmpty() && !input2.isEmpty())
-			if (!AlchemyHelper.isPunchedCard(input1) || !AlchemyHelper.isPunchedCard(input2))
-				output = new ItemStack(MSBlocks.GENERIC_OBJECT.get());
-			else
-				output = CombinationRecipe.findResult(combinerInventory, level);
-		else
+		if(!cardInput1.isEmpty() && !cardInput2.isEmpty())
 		{
-			ItemStack input = input1.isEmpty() ? input2 : input1;
-			if (!AlchemyHelper.isPunchedCard(input))
-				output = new ItemStack(MSBlocks.GENERIC_OBJECT.get());
-			else output = AlchemyHelper.getDecodedItem(input);
+			ItemStack input1 = EncodedItemComponent.getEncodedOrBlank(cardInput1),
+					input2 = EncodedItemComponent.getEncodedOrBlank(cardInput2);
+			if(input1.is(MSItems.GENERIC_OBJECT.get()) || input2.is(MSItems.GENERIC_OBJECT.get()))
+				output = new ItemStack(MSItems.GENERIC_OBJECT.get());
+			else
+				output = CombinationRecipe.findResult(new CombinationInput(input1, input2, CombinationMode.AND), level);
+		} else
+		{
+			ItemStack input = cardInput1.isEmpty() ? cardInput2 : cardInput1;
+			output = EncodedItemComponent.getEncodedOrBlank(input);
 		}
 		
 		if(output.isEmpty())
 			return ItemStack.EMPTY;
 		
-		ItemStack outputDowel = output.getItem().equals(MSBlocks.GENERIC_OBJECT.get().asItem())
-				? new ItemStack(MSBlocks.CRUXITE_DOWEL.get()) : AlchemyHelper.createEncodedItem(output, false);
-		ColorHandler.setColor(outputDowel, ColorHandler.getColorFromStack(dowelInput));	//Setting color
-		return outputDowel;
+		return EncodedItemComponent.setEncodedUnlessBlank(dowelInput.copy().split(1), output.getItem());
 	}
 	
 	@Override

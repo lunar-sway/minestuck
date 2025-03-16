@@ -1,11 +1,11 @@
 package com.mraof.minestuck.inventory;
 
-import com.mraof.minestuck.alchemy.AlchemyHelper;
 import com.mraof.minestuck.computer.editmode.DeployEntry;
 import com.mraof.minestuck.computer.editmode.DeployList;
 import com.mraof.minestuck.computer.editmode.EditData;
 import com.mraof.minestuck.computer.editmode.ServerEditHandler;
-import com.mraof.minestuck.network.AtheneumPacket;
+import com.mraof.minestuck.item.CaptchaCardItem;
+import com.mraof.minestuck.network.editmode.AtheneumPackets;
 import com.mraof.minestuck.skaianet.SburbPlayerData;
 import net.minecraft.server.level.ServerPlayer;
 import net.minecraft.util.Mth;
@@ -142,11 +142,11 @@ public class AtheneumMenu extends AbstractContainerMenu
 			this.inventory.setItem(i, itemList.get(i));
 		}
 		
-		AtheneumPacket.Update packet = new AtheneumPacket.Update(scroll > 0, INVENTORY_SIZE + (scroll * INVENTORY_COLUMNS) < items.size(), itemList);
-		PacketDistributor.PLAYER.with(serverPlayer).send(packet);
+		AtheneumPackets.Update packet = new AtheneumPackets.Update(scroll > 0, INVENTORY_SIZE + (scroll * INVENTORY_COLUMNS) < items.size(), itemList);
+		PacketDistributor.sendToPlayer(serverPlayer, packet);
 	}
 	
-	public void receiveUpdatePacket(AtheneumPacket.Update packet)
+	public void receiveUpdatePacket(AtheneumPackets.Update packet)
 	{
 		if(!player.level().isClientSide)
 			throw new IllegalStateException("Should not receive update packet here for server-side menu");
@@ -163,7 +163,7 @@ public class AtheneumMenu extends AbstractContainerMenu
 		
 		if(pClickType == ClickType.PICKUP && pButton == 1 && pSlotId >= 0)
 		{
-			this.setCarried(AlchemyHelper.createPunchedCard(this.slots.get(pSlotId).getItem()));
+			this.setCarried(CaptchaCardItem.createPunchedCard(this.slots.get(pSlotId).getItem().getItem()));
 		}
 		
 	}

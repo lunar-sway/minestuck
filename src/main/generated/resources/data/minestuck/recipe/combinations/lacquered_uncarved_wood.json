@@ -1,0 +1,11 @@
+{
+  "type": "minestuck:combination",
+  "input1": {
+    "item": "minestuck:treated_uncarved_wood"
+  },
+  "input2": {
+    "item": "minecraft:honeycomb_block"
+  },
+  "mode": "or",
+  "output": "minestuck:lacquered_uncarved_wood"
+}

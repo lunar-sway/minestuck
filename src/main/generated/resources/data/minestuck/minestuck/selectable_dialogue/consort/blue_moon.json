@@ -23,5 +23,7 @@
     ],
     "list_type": "all"
   },
-  "dialogue": "minestuck:consort/blue_moon"
+  "dialogue": "minestuck:consort/blue_moon",
+  "dialogue_weight": 10,
+  "keep_on_reset": false
 }

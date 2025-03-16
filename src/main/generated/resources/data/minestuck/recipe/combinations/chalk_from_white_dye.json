@@ -1,0 +1,11 @@
+{
+  "type": "minestuck:combination",
+  "input1": {
+    "tag": "c:stones"
+  },
+  "input2": {
+    "item": "minecraft:white_dye"
+  },
+  "mode": "and",
+  "output": "minestuck:chalk"
+}

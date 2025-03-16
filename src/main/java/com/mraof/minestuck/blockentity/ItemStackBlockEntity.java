@@ -3,6 +3,7 @@ package com.mraof.minestuck.blockentity;
 import com.mraof.minestuck.Minestuck;
 import com.mraof.minestuck.util.ColorHandler;
 import net.minecraft.core.BlockPos;
+import net.minecraft.core.HolderLookup;
 import net.minecraft.nbt.CompoundTag;
 import net.minecraft.network.Connection;
 import net.minecraft.network.protocol.Packet;
@@ -18,7 +19,7 @@ import javax.annotation.Nullable;
 
 public class ItemStackBlockEntity extends BlockEntity implements IColored
 {
-	public static final ResourceLocation ITEM_DYNAMIC = new ResourceLocation(Minestuck.MOD_ID, "item");
+	public static final ResourceLocation ITEM_DYNAMIC = ResourceLocation.fromNamespaceAndPath(Minestuck.MOD_ID, "item");
 	
 	public ItemStackBlockEntity(BlockPos pos, BlockState state)
 	{
@@ -53,32 +54,31 @@ public class ItemStackBlockEntity extends BlockEntity implements IColored
 	}
 	
 	@Override
-	public void load(CompoundTag nbt)
+	protected void loadAdditional(CompoundTag nbt, HolderLookup.Provider pRegistries)
 	{
-		super.load(nbt);
-		stack = ItemStack.of(nbt.getCompound("stack"));
+		super.loadAdditional(nbt, pRegistries);
+		stack = ItemStack.parseOptional(pRegistries, nbt.getCompound("stack"));
 	}
 	
 	@Override
-	public void saveAdditional(CompoundTag compound)
+	public void saveAdditional(CompoundTag compound, HolderLookup.Provider provider)
 	{
-		super.saveAdditional(compound);
-		compound.put("stack", stack.save(new CompoundTag()));
+		super.saveAdditional(compound, provider);
+		compound.put("stack", stack.saveOptional(provider));
 	}
 	
 	@Override
-	public CompoundTag getUpdateTag()
+	public CompoundTag getUpdateTag(HolderLookup.Provider provider)
 	{
-		CompoundTag nbt = super.getUpdateTag();
-		nbt.put("stack", stack.save(new CompoundTag()));
+		CompoundTag nbt = super.getUpdateTag(provider);
+		nbt.put("stack", stack.saveOptional(provider));
 		return nbt;
 	}
 	
-	
 	@Override
-	public void handleUpdateTag(CompoundTag tag)
+	public void handleUpdateTag(CompoundTag tag, HolderLookup.Provider lookupProvider)
 	{
-		stack = ItemStack.of(tag.getCompound("stack"));
+		stack = ItemStack.parseOptional(lookupProvider, tag.getCompound("stack"));
 	}
 	
 	@Nullable
@@ -89,9 +89,9 @@ public class ItemStackBlockEntity extends BlockEntity implements IColored
 	}
 	
 	@Override
-	public void onDataPacket(Connection net, ClientboundBlockEntityDataPacket pkt)
+	public void onDataPacket(Connection net, ClientboundBlockEntityDataPacket pkt, HolderLookup.Provider provider)
 	{
-		handleUpdateTag(pkt.getTag());
+		handleUpdateTag(pkt.getTag(), provider);
 		if(level != null)
 		{
 			BlockState state = level.getBlockState(worldPosition);
