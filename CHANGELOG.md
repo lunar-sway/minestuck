@@ -14,6 +14,7 @@ The format is based on [Keep a Changelog](https://keepachangelog.com/en/1.1.0/).
 - Fixed many blocks not having a correct tool
 - Color selection button is available in the SBURB Client program before connection again instead of after
 - Fixed untranslated key when using /gutter show command
+- Fixed widget rendering in Color Selection screen
 
 ### Contributors for this release
 
