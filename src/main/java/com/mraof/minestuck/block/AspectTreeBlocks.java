@@ -93,7 +93,7 @@ public final class AspectTreeBlocks
 	public static final DeferredItem<BlockItem> BLOOD_ASPECT_PRESSURE_PLATE_ITEM = MSItems.registerBlockItem(AspectTreeBlocks.BLOOD_ASPECT_PRESSURE_PLATE);
 	
 	public static final DeferredBlock<ButtonBlock> BLOOD_ASPECT_BUTTON = MSBlocks.REGISTER.register("blood_aspect_button",
-			() -> new ButtonBlock(MSBlockSetType.BLOOD, 10, ofFullCopy(BLOOD_ASPECT_PLANKS.get())));
+			() -> new ButtonBlock(MSBlockSetType.BLOOD, 10, ofFullCopy(BLOOD_ASPECT_PLANKS.get()).noCollission()));
 	public static final DeferredItem<BlockItem> BLOOD_ASPECT_BUTTON_ITEM = MSItems.registerBlockItem(AspectTreeBlocks.BLOOD_ASPECT_BUTTON);
 	
 	public static final DeferredBlock<Block> BLOOD_ASPECT_BOOKSHELF = MSBlocks.REGISTER.register("blood_aspect_bookshelf",
@@ -185,7 +185,7 @@ public final class AspectTreeBlocks
 	public static final DeferredItem<BlockItem> BREATH_ASPECT_PRESSURE_PLATE_ITEM = MSItems.registerBlockItem(AspectTreeBlocks.BREATH_ASPECT_PRESSURE_PLATE);
 	
 	public static final DeferredBlock<ButtonBlock> BREATH_ASPECT_BUTTON = MSBlocks.REGISTER.register("breath_aspect_button",
-			() -> new ButtonBlock(MSBlockSetType.BREATH, 10, ofFullCopy(BREATH_ASPECT_PLANKS.get())));
+			() -> new ButtonBlock(MSBlockSetType.BREATH, 10, ofFullCopy(BREATH_ASPECT_PLANKS.get()).noCollission()));
 	public static final DeferredItem<BlockItem> BREATH_ASPECT_BUTTON_ITEM = MSItems.registerBlockItem(AspectTreeBlocks.BREATH_ASPECT_BUTTON);
 	
 	public static final DeferredBlock<Block> BREATH_ASPECT_BOOKSHELF = MSBlocks.REGISTER.register("breath_aspect_bookshelf",
@@ -277,7 +277,7 @@ public final class AspectTreeBlocks
 	public static final DeferredItem<BlockItem> DOOM_ASPECT_PRESSURE_PLATE_ITEM = MSItems.registerBlockItem(AspectTreeBlocks.DOOM_ASPECT_PRESSURE_PLATE);
 	
 	public static final DeferredBlock<ButtonBlock> DOOM_ASPECT_BUTTON = MSBlocks.REGISTER.register("doom_aspect_button",
-			() -> new ButtonBlock(MSBlockSetType.DOOM, 10, ofFullCopy(DOOM_ASPECT_PLANKS.get())));
+			() -> new ButtonBlock(MSBlockSetType.DOOM, 10, ofFullCopy(DOOM_ASPECT_PLANKS.get()).noCollission()));
 	public static final DeferredItem<BlockItem> DOOM_ASPECT_BUTTON_ITEM = MSItems.registerBlockItem(AspectTreeBlocks.DOOM_ASPECT_BUTTON);
 	
 	public static final DeferredBlock<Block> DOOM_ASPECT_BOOKSHELF = MSBlocks.REGISTER.register("doom_aspect_bookshelf",
@@ -369,7 +369,7 @@ public final class AspectTreeBlocks
 	public static final DeferredItem<BlockItem> HEART_ASPECT_PRESSURE_PLATE_ITEM = MSItems.registerBlockItem(AspectTreeBlocks.HEART_ASPECT_PRESSURE_PLATE);
 	
 	public static final DeferredBlock<ButtonBlock> HEART_ASPECT_BUTTON = MSBlocks.REGISTER.register("heart_aspect_button",
-			() -> new ButtonBlock(MSBlockSetType.HEART, 10, ofFullCopy(HEART_ASPECT_PLANKS.get())));
+			() -> new ButtonBlock(MSBlockSetType.HEART, 10, ofFullCopy(HEART_ASPECT_PLANKS.get()).noCollission()));
 	public static final DeferredItem<BlockItem> HEART_ASPECT_BUTTON_ITEM = MSItems.registerBlockItem(AspectTreeBlocks.HEART_ASPECT_BUTTON);
 	
 	public static final DeferredBlock<Block> HEART_ASPECT_BOOKSHELF = MSBlocks.REGISTER.register("heart_aspect_bookshelf",
@@ -461,7 +461,7 @@ public final class AspectTreeBlocks
 	public static final DeferredItem<BlockItem> HOPE_ASPECT_PRESSURE_PLATE_ITEM = MSItems.registerBlockItem(AspectTreeBlocks.HOPE_ASPECT_PRESSURE_PLATE);
 	
 	public static final DeferredBlock<ButtonBlock> HOPE_ASPECT_BUTTON = MSBlocks.REGISTER.register("hope_aspect_button",
-			() -> new ButtonBlock(MSBlockSetType.HOPE, 10, ofFullCopy(HOPE_ASPECT_PLANKS.get())));
+			() -> new ButtonBlock(MSBlockSetType.HOPE, 10, ofFullCopy(HOPE_ASPECT_PLANKS.get()).noCollission()));
 	public static final DeferredItem<BlockItem> HOPE_ASPECT_BUTTON_ITEM = MSItems.registerBlockItem(AspectTreeBlocks.HOPE_ASPECT_BUTTON);
 	
 	public static final DeferredBlock<Block> HOPE_ASPECT_BOOKSHELF = MSBlocks.REGISTER.register("hope_aspect_bookshelf",
@@ -553,7 +553,7 @@ public final class AspectTreeBlocks
 	public static final DeferredItem<BlockItem> LIFE_ASPECT_PRESSURE_PLATE_ITEM = MSItems.registerBlockItem(AspectTreeBlocks.LIFE_ASPECT_PRESSURE_PLATE);
 	
 	public static final DeferredBlock<ButtonBlock> LIFE_ASPECT_BUTTON = MSBlocks.REGISTER.register("life_aspect_button",
-			() -> new ButtonBlock(MSBlockSetType.LIFE, 10, ofFullCopy(LIFE_ASPECT_PLANKS.get())));
+			() -> new ButtonBlock(MSBlockSetType.LIFE, 10, ofFullCopy(LIFE_ASPECT_PLANKS.get()).noCollission()));
 	public static final DeferredItem<BlockItem> LIFE_ASPECT_BUTTON_ITEM = MSItems.registerBlockItem(AspectTreeBlocks.LIFE_ASPECT_BUTTON);
 	
 	public static final DeferredBlock<Block> LIFE_ASPECT_BOOKSHELF = MSBlocks.REGISTER.register("life_aspect_bookshelf",
@@ -645,7 +645,7 @@ public final class AspectTreeBlocks
 	public static final DeferredItem<BlockItem> LIGHT_ASPECT_PRESSURE_PLATE_ITEM = MSItems.registerBlockItem(AspectTreeBlocks.LIGHT_ASPECT_PRESSURE_PLATE);
 	
 	public static final DeferredBlock<ButtonBlock> LIGHT_ASPECT_BUTTON = MSBlocks.REGISTER.register("light_aspect_button",
-			() -> new ButtonBlock(MSBlockSetType.LIGHT, 10, ofFullCopy(LIGHT_ASPECT_PLANKS.get())));
+			() -> new ButtonBlock(MSBlockSetType.LIGHT, 10, ofFullCopy(LIGHT_ASPECT_PLANKS.get()).noCollission()));
 	public static final DeferredItem<BlockItem> LIGHT_ASPECT_BUTTON_ITEM = MSItems.registerBlockItem(AspectTreeBlocks.LIGHT_ASPECT_BUTTON);
 	
 	public static final DeferredBlock<Block> LIGHT_ASPECT_BOOKSHELF = MSBlocks.REGISTER.register("light_aspect_bookshelf",
@@ -737,7 +737,7 @@ public final class AspectTreeBlocks
 	public static final DeferredItem<BlockItem> MIND_ASPECT_PRESSURE_PLATE_ITEM = MSItems.registerBlockItem(AspectTreeBlocks.MIND_ASPECT_PRESSURE_PLATE);
 	
 	public static final DeferredBlock<ButtonBlock> MIND_ASPECT_BUTTON = MSBlocks.REGISTER.register("mind_aspect_button",
-			() -> new ButtonBlock(MSBlockSetType.MIND, 10, ofFullCopy(MIND_ASPECT_PLANKS.get())));
+			() -> new ButtonBlock(MSBlockSetType.MIND, 10, ofFullCopy(MIND_ASPECT_PLANKS.get()).noCollission()));
 	public static final DeferredItem<BlockItem> MIND_ASPECT_BUTTON_ITEM = MSItems.registerBlockItem(AspectTreeBlocks.MIND_ASPECT_BUTTON);
 	
 	public static final DeferredBlock<Block> MIND_ASPECT_BOOKSHELF = MSBlocks.REGISTER.register("mind_aspect_bookshelf",
@@ -829,7 +829,7 @@ public final class AspectTreeBlocks
 	public static final DeferredItem<BlockItem> RAGE_ASPECT_PRESSURE_PLATE_ITEM = MSItems.registerBlockItem(AspectTreeBlocks.RAGE_ASPECT_PRESSURE_PLATE);
 	
 	public static final DeferredBlock<ButtonBlock> RAGE_ASPECT_BUTTON = MSBlocks.REGISTER.register("rage_aspect_button",
-			() -> new ButtonBlock(MSBlockSetType.RAGE, 10, ofFullCopy(RAGE_ASPECT_PLANKS.get())));
+			() -> new ButtonBlock(MSBlockSetType.RAGE, 10, ofFullCopy(RAGE_ASPECT_PLANKS.get()).noCollission()));
 	public static final DeferredItem<BlockItem> RAGE_ASPECT_BUTTON_ITEM = MSItems.registerBlockItem(AspectTreeBlocks.RAGE_ASPECT_BUTTON);
 	
 	public static final DeferredBlock<Block> RAGE_ASPECT_BOOKSHELF = MSBlocks.REGISTER.register("rage_aspect_bookshelf",
@@ -921,7 +921,7 @@ public final class AspectTreeBlocks
 	public static final DeferredItem<BlockItem> SPACE_ASPECT_PRESSURE_PLATE_ITEM = MSItems.registerBlockItem(AspectTreeBlocks.SPACE_ASPECT_PRESSURE_PLATE);
 	
 	public static final DeferredBlock<ButtonBlock> SPACE_ASPECT_BUTTON = MSBlocks.REGISTER.register("space_aspect_button",
-			() -> new ButtonBlock(MSBlockSetType.SPACE, 10, ofFullCopy(SPACE_ASPECT_PLANKS.get())));
+			() -> new ButtonBlock(MSBlockSetType.SPACE, 10, ofFullCopy(SPACE_ASPECT_PLANKS.get()).noCollission()));
 	public static final DeferredItem<BlockItem> SPACE_ASPECT_BUTTON_ITEM = MSItems.registerBlockItem(AspectTreeBlocks.SPACE_ASPECT_BUTTON);
 	
 	public static final DeferredBlock<Block> SPACE_ASPECT_BOOKSHELF = MSBlocks.REGISTER.register("space_aspect_bookshelf",
@@ -1013,7 +1013,7 @@ public final class AspectTreeBlocks
 	public static final DeferredItem<BlockItem> TIME_ASPECT_PRESSURE_PLATE_ITEM = MSItems.registerBlockItem(AspectTreeBlocks.TIME_ASPECT_PRESSURE_PLATE);
 	
 	public static final DeferredBlock<ButtonBlock> TIME_ASPECT_BUTTON = MSBlocks.REGISTER.register("time_aspect_button",
-			() -> new ButtonBlock(MSBlockSetType.TIME, 10, ofFullCopy(TIME_ASPECT_PLANKS.get())));
+			() -> new ButtonBlock(MSBlockSetType.TIME, 10, ofFullCopy(TIME_ASPECT_PLANKS.get()).noCollission()));
 	public static final DeferredItem<BlockItem> TIME_ASPECT_BUTTON_ITEM = MSItems.registerBlockItem(AspectTreeBlocks.TIME_ASPECT_BUTTON);
 	
 	public static final DeferredBlock<Block> TIME_ASPECT_BOOKSHELF = MSBlocks.REGISTER.register("time_aspect_bookshelf",
@@ -1105,7 +1105,7 @@ public final class AspectTreeBlocks
 	public static final DeferredItem<BlockItem> VOID_ASPECT_PRESSURE_PLATE_ITEM = MSItems.registerBlockItem(AspectTreeBlocks.VOID_ASPECT_PRESSURE_PLATE);
 	
 	public static final DeferredBlock<ButtonBlock> VOID_ASPECT_BUTTON = MSBlocks.REGISTER.register("void_aspect_button",
-			() -> new ButtonBlock(MSBlockSetType.VOID, 10, ofFullCopy(VOID_ASPECT_PLANKS.get())));
+			() -> new ButtonBlock(MSBlockSetType.VOID, 10, ofFullCopy(VOID_ASPECT_PLANKS.get()).noCollission()));
 	public static final DeferredItem<BlockItem> VOID_ASPECT_BUTTON_ITEM = MSItems.registerBlockItem(AspectTreeBlocks.VOID_ASPECT_BUTTON);
 	
 	public static final DeferredBlock<Block> VOID_ASPECT_BOOKSHELF = MSBlocks.REGISTER.register("void_aspect_bookshelf",

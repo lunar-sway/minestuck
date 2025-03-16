@@ -2429,6 +2429,7 @@ public class MinestuckEnUsLanguageProvider extends MinestuckLanguageProvider
 		add(GristLayerInfo.INFO, "Grist types at this position; common: %s, uncommon: %s, any: %s");
 		add(CheckLandCommand.CHECK, "You are currently in %s.");
 		add(CheckLandCommand.FAIL, "You are currently not in a land dimension.");
+		add(GutterCommand.SHOW, "Gutter modifier: %s, remaining capacity: %s, grist contained: %s");
 		add(SendGristCommand.SUCCESS, "Successfully gave grist to %s: %s");
 		add(SendGristCommand.RECEIVE, "Received grist from %s: %s");
 		add(SendGristCommand.NOT_PERMITTED, "You are not permitted to send grist to %s.");
