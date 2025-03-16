@@ -17,7 +17,7 @@ import java.util.Optional;
 import java.util.Set;
 import java.util.function.Predicate;
 
-class ComputerWaitingList
+final class ComputerWaitingList
 {
 	private static final Logger LOGGER = LogManager.getLogger();
 	
@@ -63,6 +63,18 @@ class ComputerWaitingList
 			list.add(nbt);
 		}
 		return list;
+	}
+	
+	void useAsClientAndRemoveOnSuccess(PlayerIdentifier player, Predicate<ClientAccess> consumer)
+	{
+		useComputerAndRemoveOnSuccess(player, clientComputer ->
+				ClientAccess.tryGet(clientComputer).map(consumer::test).orElse(true));
+	}
+	
+	void useAsServerAndRemoveOnSuccess(PlayerIdentifier player, Predicate<ServerAccess> consumer)
+	{
+		useComputerAndRemoveOnSuccess(player, serverComputer ->
+				ServerAccess.tryGet(serverComputer).map(consumer::test).orElse(true));
 	}
 	
 	void useComputerAndRemoveOnSuccess(PlayerIdentifier player, Predicate<ISburbComputer> computerConsumer)

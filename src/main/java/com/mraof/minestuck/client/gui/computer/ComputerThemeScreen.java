@@ -1,6 +1,7 @@
-package com.mraof.minestuck.client.gui;
+package com.mraof.minestuck.client.gui.computer;
 
 import com.mraof.minestuck.blockentity.ComputerBlockEntity;
+import com.mraof.minestuck.client.gui.MSScreenFactories;
 import com.mraof.minestuck.computer.theme.ComputerTheme;
 import com.mraof.minestuck.computer.theme.ComputerThemes;
 import com.mraof.minestuck.computer.theme.MSComputerThemes;

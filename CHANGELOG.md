@@ -22,6 +22,8 @@ The format is based on [Keep a Changelog](https://keepachangelog.com/en/1.1.0/).
 
 - Signs now mineable with axe
 - Non-color data will now be preserved on dowels going through a totem lathe
+- Item stack data will now be preserved on disks inserted into a computer
+- Fix disk insertion and computer screen for computer easter egg
 - Carved totems in alchemiter model now have correct uv mapping
 
 ### Contributors for this release
