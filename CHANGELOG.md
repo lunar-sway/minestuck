@@ -12,6 +12,7 @@ The format is based on [Keep a Changelog](https://keepachangelog.com/en/1.1.0/).
 
 - New consort dialogue
 - New carapacian dialogue
+- Message when entering edit mode to remind players of the exit keybind
 
 ### Changed
 
@@ -27,7 +28,7 @@ The format is based on [Keep a Changelog](https://keepachangelog.com/en/1.1.0/).
 
 ### Contributors for this release
 
-- Cibernet, Dweblenod, kirderf1, glubtier, blankMushroom
+- Cibernet, Dweblenod, kirderf1, glubtier, blankMushroom, hadean
 
 ## [1.20.4-1.12.2.0] - 2024-10-06
 

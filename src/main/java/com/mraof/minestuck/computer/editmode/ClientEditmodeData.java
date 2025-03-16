@@ -2,9 +2,11 @@ package com.mraof.minestuck.computer.editmode;
 
 import com.mraof.minestuck.Minestuck;
 import com.mraof.minestuck.client.gui.EditmodeSettingsScreen;
+import com.mraof.minestuck.client.util.MSKeyHandler;
 import com.mraof.minestuck.network.editmode.EditmodeLocationsPacket;
 import com.mraof.minestuck.network.editmode.ServerEditPackets;
 import net.minecraft.client.Minecraft;
+import net.minecraft.network.chat.Component;
 import net.minecraft.resources.ResourceKey;
 import net.minecraft.world.entity.player.Player;
 import net.minecraft.world.level.Level;
@@ -18,6 +20,8 @@ import javax.annotation.Nullable;
 @EventBusSubscriber(modid = Minestuck.MOD_ID, bus = EventBusSubscriber.Bus.GAME, value = Dist.CLIENT)
 public final class ClientEditmodeData
 {
+	public static final String ENTERED = "minestuck.editmode.entered";
+	
 	private static boolean activated;
 	@Nullable
 	private static EditmodeLocations locations;
@@ -50,6 +54,9 @@ public final class ClientEditmodeData
 	
 	public static void onActivatePacket()
 	{
+		Player player = Minecraft.getInstance().player;
+		if(player != null)
+			player.sendSystemMessage(Component.translatable(ENTERED, MSKeyHandler.editKey.getTranslatedKeyMessage()));
 		activated = true;
 	}
 	

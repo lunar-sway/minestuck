@@ -24,6 +24,7 @@ import com.mraof.minestuck.client.util.GuiUtil;
 import com.mraof.minestuck.client.util.MSKeyHandler;
 import com.mraof.minestuck.command.*;
 import com.mraof.minestuck.command.argument.*;
+import com.mraof.minestuck.computer.editmode.ClientEditmodeData;
 import com.mraof.minestuck.computer.editmode.EditmodeLocations;
 import com.mraof.minestuck.computer.theme.MSComputerThemes;
 import com.mraof.minestuck.data.dialogue.DialogueProvider;
@@ -2402,6 +2403,7 @@ public class MinestuckEnUsLanguageProvider extends MinestuckLanguageProvider
 		add(EntryProcess.EXCEPTION, "[Minestuck] Something went wrong during entry. %s");
 		add(EntryCommand.ENTERING, "Preparing to enter The Medium");
 		add(EntryCommand.OTHER_PLAYER_ENTERING, "%s is now entering The Medium");
+		add(ClientEditmodeData.ENTERED, "[Minestuck] Press [%s] to exit edit mode");
 		add(EditmodeLocations.REMOVED_LOCATION_MESSAGE, "The location you were in is no longer in range, and you have now been teleported to a valid location.");
 		
 		addThemeName(MSComputerThemes.DEFAULT, "Default");
