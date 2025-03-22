@@ -1,4 +1,4 @@
-package com.mraof.minestuck.client.gui;
+package com.mraof.minestuck.client.gui.computer;
 
 import com.mojang.blaze3d.systems.RenderSystem;
 import com.mojang.blaze3d.vertex.*;
@@ -124,7 +124,7 @@ public class TorrentWidgets
 			guiGraphics.drawString(font, amount, scale(gristCountXMod), scale(gristIconYMod + 7), 0x19b3ef, false);
 			
 			//renders bars
-			guiGraphics.fill(scale(gristCountXMod), scale(gristIconYMod + 1), scale((int) (gristCountXMod + BAR_WIDTH)), scale(gristIconYMod + 6), TorrentScreen.DARK_GREY);
+			guiGraphics.fill(scale(gristCountXMod), scale(gristIconYMod + 1), scale((int) (gristCountXMod + BAR_WIDTH)), scale(gristIconYMod + 6), GristTorrentGui.DARK_GREY);
 			if(cacheLimit > 0)
 			{
 				double gristFraction = Math.min(1D, (double) gristAmount / cacheLimit);
@@ -138,7 +138,7 @@ public class TorrentWidgets
 		private int getColor()
 		{
 			//is gray unless active, at which point color is determined by whether it is owned by the user
-			int color = TorrentScreen.DARK_GREY;
+			int color = GristTorrentGui.DARK_GREY;
 			
 			if(isActive)
 				color = isOwner ? 0xFFFF0000 : 0xFF00FF00;
@@ -203,8 +203,8 @@ public class TorrentWidgets
 				GristType entryGristType = gristEntry.gristType;
 				
 				gristEntry.torrentSession = torrentSession;
-				gristEntry.isOwner = TorrentScreen.userSession.sameOwner(torrentSession);
-				gristEntry.isActive = gristEntry.isOwner ? torrentSession.getSeeding().contains(entryGristType) : torrentSession.isLeechForGristType(TorrentScreen.userSession.getSeeder(), entryGristType);
+				gristEntry.isOwner = GristTorrentGui.userSession.sameOwner(torrentSession);
+				gristEntry.isActive = gristEntry.isOwner ? torrentSession.getSeeding().contains(entryGristType) : torrentSession.isLeechForGristType(GristTorrentGui.userSession.getSeeder(), entryGristType);
 				gristEntry.font = font;
 				gristEntry.cache = cache;
 				gristEntry.gristAmount = cache.set().getGrist(entryGristType);
@@ -252,7 +252,7 @@ public class TorrentWidgets
 	{
 		public static final int X_OFFSET_FROM_EDGE = 40;
 		public static final int Y_OFFSET_FROM_EDGE = 130;
-		public static final int WIDTH = TorrentScreen.GUI_WIDTH - X_OFFSET_FROM_EDGE;
+		public static final int WIDTH = GristTorrentGui.GUI_WIDTH - X_OFFSET_FROM_EDGE;
 		public static final int HEIGHT = 12;
 		public static final int TEXT_Y_OFFSET = 5;
 		
@@ -277,19 +277,19 @@ public class TorrentWidgets
 		
 		public void updateStats()
 		{
-			LimitedCache userCache = TorrentScreen.visibleTorrentData.get(TorrentScreen.userSession);
+			LimitedCache userCache = GristTorrentGui.visibleTorrentData.get(GristTorrentGui.userSession);
 			
 			int minDownSpeed = Integer.MAX_VALUE;
 			int maxDownSpeed = 1;
 			AtomicInteger totalSeeds = new AtomicInteger(); //TODO is this appropriate?
 			
 			Map<TorrentSession, LimitedCache> filteredData = new HashMap<>();
-			TorrentScreen.visibleTorrentData.forEach((key, value) -> {
+			GristTorrentGui.visibleTorrentData.forEach((key, value) -> {
 				boolean couldSeed = value.set().asAmounts().stream().anyMatch(gristAmount -> gristAmount.hasType(gristType) && !gristAmount.isEmpty());
 				boolean tryingToSeed = key.getSeeding().stream().anyMatch(iterateType -> iterateType.equals(gristType));
-				boolean userTryingToLeech = key.isLeechForGristType(TorrentScreen.userSession.getSeeder(), gristType);
+				boolean userTryingToLeech = key.isLeechForGristType(GristTorrentGui.userSession.getSeeder(), gristType);
 				
-				if(tryingToSeed && !key.sameOwner(TorrentScreen.userSession))
+				if(tryingToSeed && !key.sameOwner(GristTorrentGui.userSession))
 				{
 					if(couldSeed)
 						totalSeeds.addAndGet(1);
@@ -302,7 +302,7 @@ public class TorrentWidgets
 			if(filteredData.isEmpty())
 				return; //widget will render due to how min/max speeds are obtained without this early return
 			
-			List<GristType> userSeeding = TorrentScreen.userSession.getViableSeeding(userCache);
+			List<GristType> userSeeding = GristTorrentGui.userSession.getViableSeeding(userCache);
 			typeUpSpeed = TorrentHelper.getSeedRateMod(userSeeding);
 			
 			for(Map.Entry<TorrentSession, LimitedCache> dataEntry : filteredData.entrySet())
@@ -333,13 +333,13 @@ public class TorrentWidgets
 			
 			//down
 			MutableComponent downText = speedAppend(typeDownSpeedRange.getFirst()).append(" - ").append(speedAppend(typeDownSpeedRange.getSecond()));
-			guiGraphics.drawString(font, downText, scale(getX() + 25), scale(getY() + TEXT_Y_OFFSET), TorrentScreen.LIGHT_BLUE, false);
+			guiGraphics.drawString(font, downText, scale(getX() + 25), scale(getY() + TEXT_Y_OFFSET), GristTorrentGui.LIGHT_BLUE, false);
 			
 			//up
-			guiGraphics.drawString(font, speedAppend(typeUpSpeed), scale(getX() + 70), scale(getY() + TEXT_Y_OFFSET), TorrentScreen.LIGHT_BLUE, false);
+			guiGraphics.drawString(font, speedAppend(typeUpSpeed), scale(getX() + 70), scale(getY() + TEXT_Y_OFFSET), GristTorrentGui.LIGHT_BLUE, false);
 			
 			//seeds
-			guiGraphics.drawString(font, Component.literal(seedsData.getFirst() + "(" + seedsData.getSecond() + ")"), scale(getX() + 110), scale(getY() + TEXT_Y_OFFSET), TorrentScreen.LIGHT_BLUE, false);
+			guiGraphics.drawString(font, Component.literal(seedsData.getFirst() + "(" + seedsData.getSecond() + ")"), scale(getX() + 110), scale(getY() + TEXT_Y_OFFSET), GristTorrentGui.LIGHT_BLUE, false);
 			
 			guiGraphics.pose().popPose();
 		}
@@ -386,16 +386,16 @@ public class TorrentWidgets
 			guiGraphics.pose().pushPose();
 			guiGraphics.pose().scale(0.5F, 0.5F, 0.5F);
 			
-			guiGraphics.drawString(font, Component.literal("Grist"), scale(getX() + 2), scale(getY() + 2), TorrentScreen.LIGHT_BLUE, false);
+			guiGraphics.drawString(font, Component.literal("Grist"), scale(getX() + 2), scale(getY() + 2), GristTorrentGui.LIGHT_BLUE, false);
 			
 			//down
-			guiGraphics.drawString(font, Component.literal("Down Speed"), scale(getX() + 25), scale(getY() + 2), TorrentScreen.LIGHT_BLUE, false);
+			guiGraphics.drawString(font, Component.literal("Down Speed"), scale(getX() + 25), scale(getY() + 2), GristTorrentGui.LIGHT_BLUE, false);
 			
 			//up
-			guiGraphics.drawString(font, Component.literal("Up Speed"), scale(getX() + 70), scale(getY() + 2), TorrentScreen.LIGHT_BLUE, false);
+			guiGraphics.drawString(font, Component.literal("Up Speed"), scale(getX() + 70), scale(getY() + 2), GristTorrentGui.LIGHT_BLUE, false);
 			
 			//seeds
-			guiGraphics.drawString(font, Component.literal("Seeds"), scale(getX() + 110), scale(getY() + 2), TorrentScreen.LIGHT_BLUE, false);
+			guiGraphics.drawString(font, Component.literal("Seeds"), scale(getX() + 110), scale(getY() + 2), GristTorrentGui.LIGHT_BLUE, false);
 			
 			guiGraphics.pose().popPose();
 		}
@@ -439,7 +439,7 @@ public class TorrentWidgets
 			GristType gristType = gristAmount.type();
 			
 			if(gristType == GristTypes.BUILD.get() || gristType == GristTypes.DIAMOND.get())
-				color = TorrentScreen.LIGHT_BLUE;
+				color = GristTorrentGui.LIGHT_BLUE;
 			else if(gristType == GristTypes.MARBLE.get())
 				color = 0xFFFFC0CB; //pink
 			else

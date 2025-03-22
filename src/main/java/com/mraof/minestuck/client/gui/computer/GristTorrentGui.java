@@ -1,4 +1,4 @@
-package com.mraof.minestuck.client.gui;
+package com.mraof.minestuck.client.gui.computer;
 
 import com.mraof.minestuck.Minestuck;
 import com.mraof.minestuck.alchemy.TorrentSession;
@@ -8,7 +8,9 @@ import com.mraof.minestuck.api.alchemy.GristSet;
 import com.mraof.minestuck.api.alchemy.GristType;
 import com.mraof.minestuck.api.alchemy.GristTypes;
 import com.mraof.minestuck.blockentity.ComputerBlockEntity;
-import com.mraof.minestuck.client.gui.TorrentWidgets.*;
+import com.mraof.minestuck.client.gui.MSScreenFactories;
+import com.mraof.minestuck.client.gui.computer.TorrentWidgets.*;
+import com.mraof.minestuck.computer.ProgramType;
 import com.mraof.minestuck.player.ClientPlayerData;
 import net.minecraft.client.gui.GuiGraphics;
 import net.minecraft.client.gui.screens.Screen;
@@ -23,19 +25,19 @@ import java.util.List;
 import java.util.Map;
 
 @ParametersAreNonnullByDefault
-public class TorrentScreen extends Screen
+public final class GristTorrentGui extends Screen implements ProgramGui<ProgramType.EmptyData>
 {
 	public static final String TITLE = "minestuck.computer_themes"; //TODO
 	
 	public static final ResourceLocation GUI_MAIN = Minestuck.id("textures/gui/torrent.png");
 	
-	protected static final int GUI_WIDTH = 190;
-	protected static final int GUI_HEIGHT = 200;
+	static final int GUI_WIDTH = 190;
+	static final int GUI_HEIGHT = 200;
 	
-	protected static final int LIGHT_BLUE = 0xFF19B3EF;
-	protected static final int DARK_GREY = 0xFF333333;
+	static final int LIGHT_BLUE = 0xFF19B3EF;
+	static final int DARK_GREY = 0xFF333333;
 	
-	private final ComputerBlockEntity computer;
+	private ComputerBlockEntity computer;
 	
 	private int xOffset;
 	private int yOffset;
@@ -43,8 +45,8 @@ public class TorrentScreen extends Screen
 	
 	private GristSet gutterGrist;
 	private long gutterRemainingCapacity;
-	protected static Map<TorrentSession, LimitedCache> visibleTorrentData = new HashMap<>();
-	protected static TorrentSession userSession;
+	static Map<TorrentSession, LimitedCache> visibleTorrentData = new HashMap<>();
+	static TorrentSession userSession;
 	
 	private final List<TorrentContainer> torrentContainers = new ArrayList<>();
 	private final List<GristStat> gristStats = new ArrayList<>();
@@ -55,12 +57,9 @@ public class TorrentScreen extends Screen
 	
 	private int updateTick = 0;
 	
-	
-	public TorrentScreen(ComputerBlockEntity computer)
+	public GristTorrentGui()
 	{
 		super(Component.translatable(TITLE));
-		
-		this.computer = computer;
 	}
 	
 	@Override
@@ -270,8 +269,6 @@ public class TorrentScreen extends Screen
 	{
 		if(pKeyCode == GLFW.GLFW_KEY_ESCAPE)
 		{
-			computer.gui.exitProgram();
-			computer.gui.getMinecraft().setScreen(null);
 			MSScreenFactories.displayComputerScreen(computer);
 			
 			return true;
@@ -280,4 +277,17 @@ public class TorrentScreen extends Screen
 		return super.keyPressed(pKeyCode, pScanCode, pModifiers);
 	}
 	
+	@Override
+	public void onInit(ComputerScreen screen)
+	{
+		GristTorrentGui gui = new GristTorrentGui();
+		gui.computer = screen.be;
+		screen.getMinecraft().setScreen(gui);
+	}
+	
+	@Override
+	public void render(GuiGraphics guiGraphics, ComputerScreen screen)
+	{
+		//handled by the screen render method
+	}
 }
