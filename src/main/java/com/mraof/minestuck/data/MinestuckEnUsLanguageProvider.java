@@ -2393,8 +2393,6 @@ public class MinestuckEnUsLanguageProvider extends MinestuckLanguageProvider
 		add(SettingsAppGui.THEME, "Choose Theme");
 		add(SettingsAppGui.DISK_MANAGER, "Disk Manager");
 		add(SettingsAppGui.TITLE, "Sburb Settings");
-		add(GristTorrentGui.NAME, "Grist Torrent");
-		add(GristTorrentGui.TITLE, "Grist Torrent");
 		
 		add(EntryProcess.WRONG_DIMENSION, "Entry not permitted from this dimension");
 		add(EntryProcess.BUSY, "Someone else is already entering");
