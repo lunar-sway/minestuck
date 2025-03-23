@@ -2291,6 +2291,7 @@ public class MinestuckEnUsLanguageProvider extends MinestuckLanguageProvider
 		add(ComputerThemeScreen.TITLE, "Computer Themes");
 		add(ComputerThemeScreen.SELECTED_THEME, "Selected theme:");
 		add(ComputerThemeScreen.DONE_MESSAGE, "DONE");
+		add(DiskManagerScreen.TITLE, "Disk Manager");
 		add(TransportalizerScreen.TITLE, "Transportalizer");
 		add(TransportalizerScreen.DESTINATION_CODE_MESSAGE, "Transportalizer destination code");
 		add(TransportalizerScreen.DONE_MESSAGE, "DONE");
@@ -2391,6 +2392,7 @@ public class MinestuckEnUsLanguageProvider extends MinestuckLanguageProvider
 		add(ComputerInteractions.STOP_RESUME, "Stopped resuming");
 		add(SettingsAppGui.NAME, "Settings");
 		add(SettingsAppGui.THEME, "Choose Theme");
+		add(SettingsAppGui.DISK_MANAGER, "Disk Manager");
 		add(SettingsAppGui.TITLE, "Sburb Settings");
 		add(GristTorrentGui.NAME, "Grist Torrent");
 		add(GristTorrentGui.TITLE, "Grist Torrent");
