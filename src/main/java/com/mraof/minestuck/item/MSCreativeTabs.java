@@ -57,6 +57,7 @@ public final class MSCreativeTabs
 		output.accept(MSItems.BLANK_DISK.get());
 		output.accept(MSItems.CLIENT_DISK.get());
 		output.accept(MSItems.SERVER_DISK.get());
+		output.accept(MSItems.TORRENT_DISK.get());
 		
 		output.accept(MSItems.CAPTCHA_CARD.get());
 		output.accept(CaptchaCardItem.createPunchedCard(MSItems.CRUXITE_APPLE.get()));

@@ -15,6 +15,7 @@ The format is based on [Keep a Changelog](https://keepachangelog.com/en/1.1.0/).
 - Message when entering edit mode to remind players of the exit keybind
 - Added 2 tracks october and endless chasm by triagegremlin
 - Added 2 tracks the note desolation plays and desolate strife by Caldw3ll
+- GristTorrent Computer App
 
 ### Changed
 
