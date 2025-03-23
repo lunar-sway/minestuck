@@ -85,8 +85,8 @@ public class IguanaVillagePieces
 			}
 
 			StructureBlockRegistry blocks = StructureBlockRegistry.getOrDefault(chunkGeneratorIn);
-			BlockState fence = blocks.getBlockState("village_fence");
-			BlockState surface = blocks.getBlockState("surface");
+			BlockState fence = blocks.getBlockState(StructureBlockRegistry.VILLAGE_FENCE);
+			BlockState surface = blocks.getBlockState(StructureBlockRegistry.SURFACE);
 			BlockState dirt = Blocks.COARSE_DIRT.defaultBlockState();
 			BlockState wool = blocks.getBlockState("structure_wool_"+woolType);
 
@@ -164,12 +164,12 @@ public class IguanaVillagePieces
 			}
 
 			StructureBlockRegistry blocks = StructureBlockRegistry.getOrDefault(chunkGeneratorIn);
-			BlockState fence = blocks.getBlockState("village_fence");
-			BlockState planks = blocks.getBlockState("structure_planks");
-			BlockState surface = blocks.getBlockState("surface");
+			BlockState fence = blocks.getBlockState(StructureBlockRegistry.VILLAGE_FENCE);
+			BlockState planks = blocks.getBlockState(StructureBlockRegistry.STRUCTURE_PLANKS);
+			BlockState surface = blocks.getBlockState(StructureBlockRegistry.SURFACE);
 			BlockState dirt = Blocks.COARSE_DIRT.defaultBlockState();
 			BlockState wool = blocks.getBlockState("structure_wool_"+woolType);
-			BlockState torch = blocks.getBlockState("wall_torch");
+			BlockState torch = blocks.getBlockState(StructureBlockRegistry.WALL_TORCH);
 
 			//Floor
 			this.generateAirBox(level, boundingBox, 1, 1, 1, 10, 6, 15);
@@ -225,10 +225,10 @@ public class IguanaVillagePieces
 			this.generateBox(level, boundingBox, 1, 1, 3, 1, 1, 13, planks, planks, false);
 			this.generateBox(level, boundingBox, 10, 1, 3, 10, 1, 13, planks, planks, false);
 
-			this.placeBlock(level, torch.setValue(WallTorchBlock.FACING, Direction.EAST), 1, 3, 5, boundingBox);
-			this.placeBlock(level, torch.setValue(WallTorchBlock.FACING, Direction.EAST), 1, 3, 11, boundingBox);
-			this.placeBlock(level, torch.setValue(WallTorchBlock.FACING, Direction.WEST), 10, 3, 5, boundingBox);
-			this.placeBlock(level, torch.setValue(WallTorchBlock.FACING, Direction.WEST), 10, 3, 11, boundingBox);
+			this.placeBlock(level, StructureBlockRegistry.getModifiedTorch(torch, Direction.EAST), 1, 3, 5, boundingBox);
+			this.placeBlock(level, StructureBlockRegistry.getModifiedTorch(torch, Direction.EAST), 1, 3, 11, boundingBox);
+			this.placeBlock(level, StructureBlockRegistry.getModifiedTorch(torch, Direction.WEST), 10, 3, 5, boundingBox);
+			this.placeBlock(level, StructureBlockRegistry.getModifiedTorch(torch, Direction.WEST), 10, 3, 11, boundingBox);
 
 			if(!spawns[0])
 				spawns[0] = spawnConsort(2, 1, 5, boundingBox, level, chunkGeneratorIn);
@@ -287,13 +287,13 @@ public class IguanaVillagePieces
 			}
 
 			StructureBlockRegistry blocks = StructureBlockRegistry.getOrDefault(chunkGeneratorIn);
-			BlockState fence = blocks.getBlockState("village_fence");
-			BlockState planks = blocks.getBlockState("structure_planks");
-			BlockState plankSlab = blocks.getBlockState("structure_planks_slab");
-			BlockState surface = blocks.getBlockState("surface");
+			BlockState fence = blocks.getBlockState(StructureBlockRegistry.VILLAGE_FENCE);
+			BlockState planks = blocks.getBlockState(StructureBlockRegistry.STRUCTURE_PLANKS);
+			BlockState plankSlab = blocks.getBlockState(StructureBlockRegistry.STRUCTURE_PLANKS_SLAB);
+			BlockState surface = blocks.getBlockState(StructureBlockRegistry.SURFACE);
 			BlockState dirt = Blocks.COARSE_DIRT.defaultBlockState();
 			BlockState wool = blocks.getBlockState("structure_wool_"+woolType);
-			BlockState torch = blocks.getBlockState("wall_torch");
+			BlockState torch = blocks.getBlockState(StructureBlockRegistry.WALL_TORCH);
 
 			//Floor
 			this.generateAirBox(level, structureBoundingBoxIn, 1, 1, 1, 5, 5, 5);
@@ -329,8 +329,8 @@ public class IguanaVillagePieces
 			placeBlock(level, wool, 3, 6, 3, structureBoundingBoxIn);
 			placeBlock(level, wool, 3, 5, 4, structureBoundingBoxIn);
 
-			placeBlock(level, torch.setValue(WallTorchBlock.FACING, Direction.EAST), 1, 2, 4, structureBoundingBoxIn);
-			placeBlock(level, torch.setValue(WallTorchBlock.FACING, Direction.WEST), 5, 2, 4, structureBoundingBoxIn);
+			placeBlock(level, StructureBlockRegistry.getModifiedTorch(torch, Direction.EAST), 1, 2, 4, structureBoundingBoxIn);
+			placeBlock(level, StructureBlockRegistry.getModifiedTorch(torch, Direction.WEST), 5, 2, 4, structureBoundingBoxIn);
 
 			if(!spawns[0])
 				spawns[0] = spawnConsort(3, 2, 2, structureBoundingBoxIn, level, chunkGeneratorIn, EnumConsort.getRandomMerchant(randomIn), 1);

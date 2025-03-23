@@ -29,8 +29,8 @@ public class WindLandType extends TitleLandType
 	@Override
 	public void registerBlocks(StructureBlockRegistry registry)
 	{
-		registry.setBlock("structure_wool_2", Blocks.LIGHT_BLUE_WOOL);
-		registry.setBlock("carpet", Blocks.CYAN_CARPET);
+		registry.setBlock(StructureBlockRegistry.STRUCTURE_WOOL_2, Blocks.LIGHT_BLUE_WOOL);
+		registry.setBlock(StructureBlockRegistry.CARPET, Blocks.CYAN_CARPET);
 	}
 	
 	@Override
