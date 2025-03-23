@@ -2290,6 +2290,7 @@ public class MinestuckEnUsLanguageProvider extends MinestuckLanguageProvider
 		add(ComputerThemeScreen.TITLE, "Computer Themes");
 		add(ComputerThemeScreen.SELECTED_THEME, "Selected theme:");
 		add(ComputerThemeScreen.DONE_MESSAGE, "DONE");
+		add(DiskManagerScreen.TITLE, "Disk Manager");
 		add(TransportalizerScreen.TITLE, "Transportalizer");
 		add(TransportalizerScreen.DESTINATION_CODE_MESSAGE, "Transportalizer destination code");
 		add(TransportalizerScreen.DONE_MESSAGE, "DONE");
@@ -2365,6 +2366,8 @@ public class MinestuckEnUsLanguageProvider extends MinestuckLanguageProvider
 		add(HashMapModus.MESSAGE, "[HASHMAP] %s %% %s -> %s");
 		
 		add(ButtonListHelper.CLEAR_BUTTON, "Clear message");
+		add(SburbClientGui.NAME, "SBURB Client");
+		add(SburbServerGui.NAME, "SBURB Server");
 		add(SburbClientGui.CLOSE_BUTTON, "Disconnect");
 		add(SburbServerGui.EDIT_BUTTON, "Activate edit mode");
 		add(SburbServerGui.GIVE_BUTTON, "Give items");
@@ -2379,14 +2382,19 @@ public class MinestuckEnUsLanguageProvider extends MinestuckLanguageProvider
 		add(SburbServerGui.SERVER_ACTIVE, "Server with your name exists");
 		add(SburbClientGui.RESUME_CLIENT, "Waiting for server...");
 		add(SburbServerGui.RESUME_SERVER, "Waiting for client...");
+		add(DiskBurnerGui.NAME, "Disk Burner");
 		add(DiskBurnerGui.NEED_CODE, "Requires code to burn disks");
 		add(DiskBurnerGui.NO_DISKS, "Insert disk to burn");
 		add(DiskBurnerGui.BURN_CLIENT_DISK, "Burn Client Disk");
 		add(DiskBurnerGui.BURN_SERVER_DISK, "Burn Server Disk");
 		add(DiskBurnerGui.CHOOSE, "Choose disk type to write");
 		add(ComputerInteractions.STOP_RESUME, "Stopped resuming");
+		add(SettingsAppGui.NAME, "Settings");
 		add(SettingsAppGui.THEME, "Choose Theme");
+		add(SettingsAppGui.DISK_MANAGER, "Disk Manager");
 		add(SettingsAppGui.TITLE, "Sburb Settings");
+		add(GristTorrentGui.NAME, "Grist Torrent");
+		add(GristTorrentGui.TITLE, "Grist Torrent");
 		
 		add(EntryProcess.WRONG_DIMENSION, "Entry not permitted from this dimension");
 		add(EntryProcess.BUSY, "Someone else is already entering");

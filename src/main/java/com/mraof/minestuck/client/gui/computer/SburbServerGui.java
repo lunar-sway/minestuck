@@ -22,6 +22,7 @@ import java.util.OptionalInt;
 
 public final class SburbServerGui implements ProgramGui<SburbServerData>
 {
+	public static final String NAME = "minestuck.program.sburb_server";
 	public static final String CLOSE_BUTTON = SburbClientGui.CLOSE_BUTTON;
 	public static final String EDIT_BUTTON = "minestuck.program.server.edit_button";
 	public static final String GIVE_BUTTON = "minestuck.program.server.give_button";

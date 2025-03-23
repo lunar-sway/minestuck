@@ -213,11 +213,6 @@ public final class ComputerBlockEntity extends BlockEntity implements ISburbComp
 		return this.getProgramData(ProgramTypes.SBURB_SERVER);
 	}
 	
-	public boolean hasBlankDisks()
-	{
-		return !this.blankDisks.isEmpty();
-	}
-	
 	public boolean tryTakeBlankDisk()
 	{
 		if(!this.blankDisks.isEmpty())
@@ -247,6 +242,16 @@ public final class ComputerBlockEntity extends BlockEntity implements ISburbComp
 	public Stream<ProgramType<?>> installedPrograms()
 	{
 		return this.existingPrograms.keySet().stream();
+	}
+	
+	public NonNullList<ItemStack> getProgramDisks()
+	{
+		return this.programDisks;
+	}
+	
+	public NonNullList<ItemStack> getBlankDisks()
+	{
+		return this.blankDisks;
 	}
 	
 	@Nullable
