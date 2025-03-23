@@ -27,8 +27,8 @@ public final class SettingsAppGui implements ProgramGui<ProgramType.EmptyData>
 	public void onUpdate(ComputerScreen gui, ProgramType.EmptyData data)
 	{
 		this.buttonListHelper.updateButtons(List.of(
-				new ButtonListHelper.ButtonData(Component.translatable(THEME), () -> openThemeScreen(gui.be)),
-				new ButtonListHelper.ButtonData(Component.translatable(DISK_MANAGER), () -> openDiskManagerScreen(gui))
+				new ButtonListHelper.ButtonData(Component.translatable(THEME), () -> openThemeScreen(gui.computer)),
+				new ButtonListHelper.ButtonData(Component.translatable(DISK_MANAGER), () -> openDiskManagerScreen(gui.computer))
 		));
 	}
 	
@@ -38,10 +38,10 @@ public final class SettingsAppGui implements ProgramGui<ProgramType.EmptyData>
 		Minecraft.getInstance().setScreen(new ComputerThemeScreen(computer));
 	}
 	
-	private void openDiskManagerScreen(ComputerScreen gui)
+	private void openDiskManagerScreen(ComputerBlockEntity computer)
 	{
 		Minecraft.getInstance().setScreen(null);
-		Minecraft.getInstance().setScreen(new DiskManagerScreen(gui));
+		Minecraft.getInstance().setScreen(new DiskManagerScreen(computer));
 	}
 	
 	@Override

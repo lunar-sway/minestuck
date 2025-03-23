@@ -1,13 +1,15 @@
 package com.mraof.minestuck.client.gui.computer;
 
+import com.mraof.minestuck.blockentity.ComputerBlockEntity;
 import com.mraof.minestuck.computer.ProgramType;
+import com.mraof.minestuck.item.components.MSItemComponents;
 import net.minecraft.client.gui.GuiGraphics;
+import net.minecraft.core.Holder;
 import net.minecraft.network.chat.Component;
-import net.minecraft.world.Containers;
-import net.minecraft.world.item.Item;
 import net.minecraft.world.item.ItemStack;
 
 import javax.annotation.ParametersAreNonnullByDefault;
+import java.util.ArrayList;
 import java.util.List;
 
 /**
@@ -19,14 +21,12 @@ public class DiskManagerScreen extends ThemedScreen
 	public static final String TITLE = "minestuck.disk_manager";
 	
 	private final ButtonListHelper buttonListHelper = new ButtonListHelper();
-	private final ComputerScreen gui;
 	
-	public DiskManagerScreen(ComputerScreen gui)
+	public DiskManagerScreen(ComputerBlockEntity computer)
 	{
-		super(gui.be, Component.translatable(TITLE));
+		super(computer, Component.translatable(TITLE));
 		
-		this.gui = gui;
-		this.buttonListHelper.init(gui);
+		this.buttonListHelper.init(this);
 	}
 	
 	@Override
@@ -39,26 +39,28 @@ public class DiskManagerScreen extends ThemedScreen
 	
 	public void recreateButtons()
 	{
-		//TODO add blank disks
-		List<ItemStack> computerDisks = computer.getProgramDisks();
-		this.buttonListHelper.updateButtons(List.of(
-				//new ButtonListHelper.ButtonData(Component.translatable(THEME), () -> openThemeScreen(gui.be)),
-				//new ButtonListHelper.ButtonData(Component.translatable(DISK_MANAGER), () -> openDiskManagerScreen(gui))
-		));
+		List<ButtonListHelper.ButtonData> diskButtons = new ArrayList<>();
+		computer.getDisks().forEach(disk -> {
+			Holder<ProgramType<?>> programTypeHolder = disk.getComponents().get(MSItemComponents.PROGRAM_TYPE.get());
+			if(programTypeHolder != null)
+				diskButtons.add(new ButtonListHelper.ButtonData(Component.literal("Eject ").append(programTypeHolder.value().name()), () -> ejectDisk(disk)));
+		});
+		
+		this.buttonListHelper.updateButtons(diskButtons);
+		//gui.renderables.forEach(widget -> addRenderableWidget(widget));
 	}
 	
 	@Override
 	public void render(GuiGraphics guiGraphics, int mouseX, int mouseY, float partialTick)
 	{
 		super.render(guiGraphics, mouseX, mouseY, partialTick);
-		ProgramGui.drawHeaderMessage(Component.translatable(TITLE), guiGraphics, gui);
+		ProgramGui.drawHeaderMessage(Component.translatable(TITLE), guiGraphics, this);
 	}
 	
-	private void ejectDisk(Item item)
+	private void ejectDisk(ItemStack stack)
 	{
-		//computer;
-		//computer.dropItems();
-		//Containers.dropItemStack(computer.level, this.getBlockPos(), this.blankDisks);
+		//TODO packet
+		computer.dropDisk(stack);
 		
 		recreateButtons();
 	}

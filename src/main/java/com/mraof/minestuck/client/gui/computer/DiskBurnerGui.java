@@ -33,7 +33,7 @@ public final class DiskBurnerGui implements ProgramGui<DiskBurnerData>
 		{
 			this.message = Component.translatable(NEED_CODE);
 			this.buttonListHelper.updateButtons(List.of());
-		} else if(!gui.be.getBlankDisks().isEmpty())
+		} else if(!gui.computer.getBlankDisks().isEmpty())
 		{
 			this.message = Component.translatable(NO_DISKS);
 			this.buttonListHelper.updateButtons(List.of());
@@ -42,9 +42,9 @@ public final class DiskBurnerGui implements ProgramGui<DiskBurnerData>
 			this.message = Component.translatable(CHOOSE);
 			this.buttonListHelper.updateButtons(List.of(
 					new ButtonListHelper.ButtonData(Component.translatable(BURN_SERVER_DISK),
-							() -> PacketDistributor.sendToServer(BurnDiskPacket.create(gui.be, false))),
+							() -> PacketDistributor.sendToServer(BurnDiskPacket.create(gui.computer, false))),
 					new ButtonListHelper.ButtonData(Component.translatable(BURN_CLIENT_DISK),
-							() -> PacketDistributor.sendToServer(BurnDiskPacket.create(gui.be, true)))));
+							() -> PacketDistributor.sendToServer(BurnDiskPacket.create(gui.computer, true)))));
 		}
 	}
 	

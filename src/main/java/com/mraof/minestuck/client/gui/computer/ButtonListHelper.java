@@ -25,7 +25,7 @@ public final class ButtonListHelper
 	{
 	}
 	
-	private void onButtonPressed(ComputerScreen screen, Button button)
+	private void onButtonPressed(ThemedScreen screen, Button button)
 	{
 		Runnable runnable = buttonMap.get(button);
 		
@@ -35,7 +35,7 @@ public final class ButtonListHelper
 		screen.updateGui();
 	}
 	
-	private void onArrowPressed(ComputerScreen screen, boolean reverse)
+	private void onArrowPressed(ThemedScreen screen, boolean reverse)
 	{
 		if(reverse) index--;
 		else index++;
@@ -43,16 +43,15 @@ public final class ButtonListHelper
 		screen.updateGui();
 	}
 	
-	public void init(ComputerScreen gui)
+	public void init(ThemedScreen gui)
 	{
-		var xOffset = (gui.width - ComputerScreen.xSize) / 2;
-		var yOffset = (gui.height - ComputerScreen.ySize) / 2;
+		gui.setOffsets();
 		
 		buttonMap.clear();
 		buttons.clear();
 		for(int i = 0; i < 4; i++)
 		{
-			ExtendedButton button = new ExtendedButton(xOffset + 14, yOffset + 60 + i * 24, 120, 20, Component.empty(), clieckedButton -> onButtonPressed(gui, clieckedButton));
+			ExtendedButton button = new ExtendedButton(gui.xOffset + 14, gui.yOffset + 60 + i * 24, 120, 20, Component.empty(), clickedButton -> onButtonPressed(gui, clickedButton));
 			gui.addRenderableWidget(button);
 			buttons.add(button);
 		}
@@ -87,11 +86,11 @@ public final class ButtonListHelper
 	private class ArrowButton extends ExtendedButton
 	{
 		boolean reverse;
-		ComputerScreen gui;
+		ThemedScreen gui;
 		
-		ArrowButton(boolean reverse, ComputerScreen gui)
+		ArrowButton(boolean reverse, ThemedScreen gui)
 		{
-			super((gui.width - ComputerScreen.xSize) / 2 + 140, (gui.height - ComputerScreen.ySize) / 2 + (reverse ? 60 : 132), 20, 20, Component.empty(), b -> onArrowPressed(gui, reverse));
+			super((gui.width - ComputerScreen.GUI_WIDTH) / 2 + 140, (gui.height - ComputerScreen.GUI_HEIGHT) / 2 + (reverse ? 60 : 132), 20, 20, Component.empty(), b -> onArrowPressed(gui, reverse));
 			this.reverse = reverse;
 			this.gui = gui;
 		}
@@ -100,7 +99,7 @@ public final class ButtonListHelper
 		public void renderWidget(GuiGraphics guiGraphics, int mouseX, int mouseY, float partialTick)
 		{
 			RenderSystem.setShaderColor(1, 1, 1, 1);
-			guiGraphics.blit(gui.getTheme().data().texturePath(), getX(), getY(), 158, reverse ? 0 : 20, 20, 20);
+			guiGraphics.blit(gui.selectedTheme.data().texturePath(), getX(), getY(), 158, reverse ? 0 : 20, 20, 20);
 		}
 	}
 }

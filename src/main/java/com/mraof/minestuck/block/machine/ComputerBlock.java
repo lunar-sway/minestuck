@@ -105,6 +105,7 @@ public class ComputerBlock extends MachineBlock implements EntityBlock
 	@Override
 	protected InteractionResult useWithoutItem(BlockState state, Level level, BlockPos pos, Player player, BlockHitResult hitResult)
 	{
+		//TODO move this to useItemOn()
 		if(player.isShiftKeyDown())
 			return InteractionResult.PASS;
 		

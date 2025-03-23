@@ -45,7 +45,7 @@ public final class SburbServerGui implements ProgramGui<SburbServerData>
 	@Override
 	public void onUpdate(ComputerScreen gui, SburbServerData data)
 	{
-		ComputerBlockEntity computer = gui.be;
+		ComputerBlockEntity computer = gui.computer;
 		Component message;
 		List<ButtonListHelper.ButtonData> list = new ArrayList<>();
 		

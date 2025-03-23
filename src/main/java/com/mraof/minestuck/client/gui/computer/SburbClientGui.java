@@ -39,7 +39,7 @@ public final class SburbClientGui implements ProgramGui<SburbClientData>
 	@Override
 	public void onUpdate(ComputerScreen gui, SburbClientData data)
 	{
-		ComputerBlockEntity computer = gui.be;
+		ComputerBlockEntity computer = gui.computer;
 		Component message;
 		List<ButtonListHelper.ButtonData> list = new ArrayList<>();
 		Optional<String> eventMessage = data.getEventMessage();

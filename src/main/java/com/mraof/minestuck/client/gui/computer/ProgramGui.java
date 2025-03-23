@@ -33,11 +33,11 @@ public interface ProgramGui<D>
 	 */
 	void render(GuiGraphics guiGraphics, ComputerScreen screen);
 	
-	static void drawHeaderMessage(Component message, GuiGraphics guiGraphics, ComputerScreen gui)
+	static void drawHeaderMessage(Component message, GuiGraphics guiGraphics, ThemedScreen gui)
 	{
 		guiGraphics.drawString(gui.getMinecraft().font, message,
-				(gui.width - ComputerScreen.xSize) / 2 + 15, (gui.height - ComputerScreen.ySize) / 2 + 45,
-				gui.getTheme().data().textColor(), false);
+				(gui.width - ComputerScreen.GUI_WIDTH) / 2 + 15, (gui.height - ComputerScreen.GUI_HEIGHT) / 2 + 45,
+				gui.selectedTheme.data().textColor(), false);
 	}
 	
 	final class Registry

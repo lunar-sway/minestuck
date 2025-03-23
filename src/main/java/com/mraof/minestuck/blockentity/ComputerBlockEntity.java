@@ -27,6 +27,7 @@ import net.minecraft.resources.ResourceLocation;
 import net.minecraft.server.level.ServerLevel;
 import net.minecraft.server.level.ServerPlayer;
 import net.minecraft.world.Containers;
+import net.minecraft.world.item.Item;
 import net.minecraft.world.item.ItemStack;
 import net.minecraft.world.item.Items;
 import net.minecraft.world.level.block.Block;
@@ -37,10 +38,7 @@ import org.apache.logging.log4j.Logger;
 
 import javax.annotation.Nullable;
 import javax.annotation.ParametersAreNonnullByDefault;
-import java.util.HashMap;
-import java.util.Map;
-import java.util.Objects;
-import java.util.Optional;
+import java.util.*;
 import java.util.function.Function;
 import java.util.function.Supplier;
 import java.util.stream.Stream;
@@ -50,7 +48,8 @@ import java.util.stream.Stream;
 public final class ComputerBlockEntity extends BlockEntity implements ISburbComputer
 {
 	private static final Logger LOGGER = LogManager.getLogger();
-	private static final int PROGRAM_DISK_CAPACITY = 2, BLANK_DISK_CAPACITY = 2;
+	//TODO turn into config
+	private static final int DISK_CAPACITY = 4;
 	private static final Codec<NonNullList<ItemStack>> DISK_LIST_CODEC = NonNullList.codecOf(ItemStack.SINGLE_ITEM_CODEC);
 	
 	@Nullable
@@ -61,8 +60,7 @@ public final class ComputerBlockEntity extends BlockEntity implements ISburbComp
 	//client side only
 	private int ownerId;
 	
-	private final NonNullList<ItemStack> programDisks = NonNullList.createWithCapacity(PROGRAM_DISK_CAPACITY);
-	private final NonNullList<ItemStack> blankDisks = NonNullList.createWithCapacity(BLANK_DISK_CAPACITY);
+	private final NonNullList<ItemStack> disks = NonNullList.createWithCapacity(DISK_CAPACITY);
 	
 	private final Map<ProgramType<?>, ProgramType.Data> existingPrograms = new HashMap<>();
 	private ResourceLocation computerTheme = MSComputerThemes.DEFAULT;
@@ -81,13 +79,10 @@ public final class ComputerBlockEntity extends BlockEntity implements ISburbComp
 	{
 		super.loadAdditional(tag, pRegistries);
 		
-		this.programDisks.clear();
-		if(tag.contains("program_disks"))
-			DISK_LIST_CODEC.parse(NbtOps.INSTANCE, tag.get("program_disks"))
-					.resultOrPartial(LOGGER::error).ifPresent(this.programDisks::addAll);
-		this.blankDisks.clear();
-		DISK_LIST_CODEC.parse(NbtOps.INSTANCE, tag.get("blank_disks"))
-				.resultOrPartial(LOGGER::error).ifPresent(this.blankDisks::addAll);
+		this.disks.clear();
+		if(tag.contains("disks"))
+			DISK_LIST_CODEC.parse(NbtOps.INSTANCE, tag.get("disks"))
+					.resultOrPartial(LOGGER::error).ifPresent(this.disks::addAll);
 		
 		CompoundTag programs = tag.getCompound("programs");
 		for(String programKey : programs.getAllKeys())
@@ -122,8 +117,6 @@ public final class ComputerBlockEntity extends BlockEntity implements ISburbComp
 	{
 		super.saveAdditional(tag, provider);
 		
-		tag.put("program_disks", DISK_LIST_CODEC.encodeStart(NbtOps.INSTANCE, this.blankDisks).result().orElseThrow());
-		
 		if(owner != null)
 			owner.saveToNBT(tag, "owner");
 		
@@ -146,7 +139,7 @@ public final class ComputerBlockEntity extends BlockEntity implements ISburbComp
 	
 	private void writeSharedData(CompoundTag tag, Function<ProgramType.Data, CompoundTag> serializer)
 	{
-		tag.put("blank_disks", DISK_LIST_CODEC.encodeStart(NbtOps.INSTANCE, this.blankDisks).result().orElseThrow());
+		tag.put("disks", DISK_LIST_CODEC.encodeStart(NbtOps.INSTANCE, this.disks).result().orElseThrow());
 		
 		CompoundTag programs = new CompoundTag();
 		for(Map.Entry<ProgramType<?>, ProgramType.Data> entry : this.existingPrograms.entrySet())
@@ -213,24 +206,41 @@ public final class ComputerBlockEntity extends BlockEntity implements ISburbComp
 		return this.getProgramData(ProgramTypes.SBURB_SERVER);
 	}
 	
-	public boolean tryTakeBlankDisk()
+	public boolean tryTakeDisk(Item diskItem)
 	{
-		if(!this.blankDisks.isEmpty())
+		for(ItemStack stack : this.disks)
 		{
-			this.blankDisks.removeLast();
-			this.markDirtyAndResend();
-			return true;
+			if(stack.is(diskItem))
+			{
+				this.disks.remove(stack);
+				this.markDirtyAndResend();
+				return true;
+			}
 		}
+		
 		return false;
 	}
 	
 	public void dropItems()
 	{
-		if(this.level == null)
+		this.disks.forEach(this::dropDisk);
+	}
+	
+	public void dropDisk(ItemStack stack)
+	{
+		if(this.level == null || !this.level.isClientSide)
 			return;
 		
-		Containers.dropContents(this.level, this.getBlockPos(), this.programDisks);
-		Containers.dropContents(this.level, this.getBlockPos(), this.blankDisks);
+		if(stack.has(MSItemComponents.PROGRAM_TYPE))
+		{
+			Holder<ProgramType<?>> typeHolder = stack.getComponents().get(MSItemComponents.PROGRAM_TYPE.get());
+			if(typeHolder != null)
+				typeHolder.value().eventHandler().onClosed(this);
+		}
+		
+		//TODO disk sound
+		BlockPos pos = this.getBlockPos();
+		Containers.dropItemStack(this.level, pos.getX(), pos.getY(), pos.getZ(), stack);
 	}
 	
 	public void closeAll()
@@ -246,12 +256,26 @@ public final class ComputerBlockEntity extends BlockEntity implements ISburbComp
 	
 	public NonNullList<ItemStack> getProgramDisks()
 	{
-		return this.programDisks;
+		NonNullList<ItemStack> list = NonNullList.create();
+		list.addAll(this.disks.stream().filter(stack -> stack.has(MSItemComponents.PROGRAM_TYPE)).toList());
+		return list;
 	}
 	
 	public NonNullList<ItemStack> getBlankDisks()
 	{
-		return this.blankDisks;
+		NonNullList<ItemStack> list = NonNullList.create();
+		list.addAll(this.disks.stream().filter(stack -> stack.is(MSItems.BLANK_DISK.get())).toList());
+		return list;
+	}
+	
+	public NonNullList<ItemStack> getDisks()
+	{
+		return this.disks;
+	}
+	
+	public boolean hasRoomForDisk()
+	{
+		return this.disks.size() < DISK_CAPACITY;
 	}
 	
 	@Nullable
@@ -300,17 +324,17 @@ public final class ComputerBlockEntity extends BlockEntity implements ISburbComp
 		
 		if(stackInHand.is(MSItems.BLANK_DISK))
 		{
-			if(this.blankDisks.size() < BLANK_DISK_CAPACITY)
+			if(hasRoomForDisk())
 			{
-				this.blankDisks.add(stackInHand.split(1));
+				this.disks.add(stackInHand.split(1));
 				markDirtyAndResend();
 				return true;
 			}
 		} else if(stackInHand.is(Items.MUSIC_DISC_11))
 		{
-			if(!level.isClientSide && this.programDisks.size() < PROGRAM_DISK_CAPACITY)
+			if(!level.isClientSide && hasRoomForDisk())
 			{
-				this.programDisks.add(stackInHand.split(1));
+				this.disks.add(stackInHand.split(1));
 				closeAll();
 				level.setBlock(getBlockPos(), getBlockState().setValue(ComputerBlock.STATE, ComputerBlock.State.BROKEN), Block.UPDATE_CLIENTS);
 				markDirtyAndResend();
@@ -319,9 +343,9 @@ public final class ComputerBlockEntity extends BlockEntity implements ISburbComp
 		} else if(optionalType != null)
 		{
 			ProgramType<?> programType = optionalType.value();
-			if(!level.isClientSide && !hasProgram(programType) && this.programDisks.size() < PROGRAM_DISK_CAPACITY)
+			if(!level.isClientSide && !hasProgram(programType) && hasRoomForDisk())
 			{
-				this.programDisks.add(stackInHand.split(1));
+				this.disks.add(stackInHand.split(1));
 				insertNewProgramInstance(programType);
 				level.setBlock(getBlockPos(), getBlockState().setValue(ComputerBlock.STATE, ComputerBlock.State.GAME_LOADED), Block.UPDATE_CLIENTS);
 				markDirtyAndResend();
