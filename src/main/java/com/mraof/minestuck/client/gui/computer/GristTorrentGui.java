@@ -27,7 +27,8 @@ import java.util.Map;
 @ParametersAreNonnullByDefault
 public final class GristTorrentGui extends Screen implements ProgramGui<ProgramType.EmptyData>
 {
-	public static final String TITLE = "minestuck.computer_themes"; //TODO
+	public static final String NAME = "minestuck.program.grist_torrent";
+	public static final String TITLE = "minestuck.program.grist_torrent.title";
 	
 	public static final ResourceLocation GUI_MAIN = Minestuck.id("textures/gui/torrent.png");
 	

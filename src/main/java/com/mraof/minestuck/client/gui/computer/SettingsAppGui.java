@@ -10,6 +10,7 @@ import java.util.List;
 
 public final class SettingsAppGui implements ProgramGui<ProgramType.EmptyData>
 {
+	public static final String NAME = "minestuck.program.settings";
 	public static final String THEME = "minestuck.program.settings.theme";
 	public static final String TITLE = "minestuck.program.settings.title";
 	

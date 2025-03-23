@@ -18,6 +18,7 @@ import java.util.Optional;
 
 public final class SburbClientGui implements ProgramGui<SburbClientData>
 {
+	public static final String NAME = "minestuck.program.sburb_client";
 	public static final String CLOSE_BUTTON = "minestuck.program.close_button"; //also used in SburbServer
 	public static final String RESUME_BUTTON = "minestuck.program.resume_button"; //also used in SburbServer
 	public static final String SELECT_COLOR = "minestuck.program.client.select_color_button";

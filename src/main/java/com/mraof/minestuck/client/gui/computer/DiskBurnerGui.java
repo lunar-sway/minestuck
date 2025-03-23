@@ -10,6 +10,7 @@ import java.util.List;
 
 public final class DiskBurnerGui implements ProgramGui<DiskBurnerData>
 {
+	public static final String NAME = "minestuck.program.disk_burner";
 	public static final String NEED_CODE = "minestuck.program.disk_burner.needs_code";
 	public static final String NO_DISKS = "minestuck.program.disk_burner.needs_disks";
 	public static final String BURN_SERVER_DISK = "minestuck.program.disk_burner.burn_server_disk";
