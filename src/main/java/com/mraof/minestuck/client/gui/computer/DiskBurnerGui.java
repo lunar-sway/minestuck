@@ -21,13 +21,13 @@ public final class DiskBurnerGui implements ProgramGui<DiskBurnerData>
 	private Component message;
 	
 	@Override
-	public void onInit(ComputerScreen gui)
+	public void onInit(ThemedScreen gui)
 	{
 		this.buttonListHelper.init(gui);
 	}
 	
 	@Override
-	public void onUpdate(ComputerScreen gui, DiskBurnerData data)
+	public void onUpdate(ThemedScreen gui, DiskBurnerData data)
 	{
 		if(!data.hasAllCode())
 		{
@@ -49,7 +49,7 @@ public final class DiskBurnerGui implements ProgramGui<DiskBurnerData>
 	}
 	
 	@Override
-	public void render(GuiGraphics guiGraphics, ComputerScreen gui)
+	public void render(GuiGraphics guiGraphics, ThemedScreen gui)
 	{
 		ProgramGui.drawHeaderMessage(this.message, guiGraphics, gui);
 	}

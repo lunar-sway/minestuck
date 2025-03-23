@@ -16,6 +16,7 @@ public final class ButtonListHelper
 	public static final String CLEAR_BUTTON = "minestuck.clear_button";
 	
 	private final Map<Button, Runnable> buttonMap = new HashMap<>();
+	private List<ButtonData> buttonsData = List.of();
 	private final List<Button> buttons = new ArrayList<>(4);
 	private Button upButton, downButton;
 	
@@ -25,22 +26,22 @@ public final class ButtonListHelper
 	{
 	}
 	
-	private void onButtonPressed(ThemedScreen screen, Button button)
+	private void onButtonPressed(Button button)
 	{
 		Runnable runnable = buttonMap.get(button);
 		
 		if(runnable != null)
 			runnable.run();
 		
-		screen.updateGui();
+		updateButtons();
 	}
 	
-	private void onArrowPressed(ThemedScreen screen, boolean reverse)
+	private void onArrowPressed(boolean reverse)
 	{
 		if(reverse) index--;
 		else index++;
 		
-		screen.updateGui();
+		updateButtons();
 	}
 	
 	public void init(ThemedScreen gui)
@@ -51,7 +52,7 @@ public final class ButtonListHelper
 		buttons.clear();
 		for(int i = 0; i < 4; i++)
 		{
-			ExtendedButton button = new ExtendedButton(gui.xOffset + 14, gui.yOffset + 60 + i * 24, 120, 20, Component.empty(), clickedButton -> onButtonPressed(gui, clickedButton));
+			ExtendedButton button = new ExtendedButton(gui.xOffset + 14, gui.yOffset + 60 + i * 24, 120, 20, Component.empty(), this::onButtonPressed);
 			gui.addRenderableWidget(button);
 			buttons.add(button);
 		}
@@ -60,7 +61,13 @@ public final class ButtonListHelper
 		downButton = gui.addRenderableWidget(new ArrowButton(false, gui));
 	}
 	
-	public void updateButtons(List<ButtonData> buttonsData)
+	public void updateButtons(List<ButtonData> buttonsDataIn)
+	{
+		this.buttonsData = buttonsDataIn;
+		updateButtons();
+	}
+	
+	private void updateButtons()
 	{
 		downButton.active = buttonsData.size() >= index + 4;
 		upButton.active = index > 0;
@@ -90,7 +97,7 @@ public final class ButtonListHelper
 		
 		ArrowButton(boolean reverse, ThemedScreen gui)
 		{
-			super((gui.width - ComputerScreen.GUI_WIDTH) / 2 + 140, (gui.height - ComputerScreen.GUI_HEIGHT) / 2 + (reverse ? 60 : 132), 20, 20, Component.empty(), b -> onArrowPressed(gui, reverse));
+			super((gui.width - ComputerScreen.GUI_WIDTH) / 2 + 140, (gui.height - ComputerScreen.GUI_HEIGHT) / 2 + (reverse ? 60 : 132), 20, 20, Component.empty(), b -> onArrowPressed(reverse));
 			this.reverse = reverse;
 			this.gui = gui;
 		}

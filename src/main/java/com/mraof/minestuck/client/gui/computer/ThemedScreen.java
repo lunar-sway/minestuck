@@ -48,16 +48,15 @@ public abstract class ThemedScreen extends Screen
 		
 		this.computer = computer;
 		this.selectedTheme = ComputerThemes.instance().lookup(computer.getTheme());
-		
-		computer.setGuiCallback(this::updateGui);
 	}
 	
 	@Override
 	public void init()
 	{
 		setOffsets();
-		
 		powerButton = addRenderableWidget(new PowerButton());
+		if(!this.selectedTheme.id().equals(computer.getTheme()))
+			this.selectedTheme = ComputerThemes.instance().lookup(computer.getTheme());
 	}
 	
 	@Override
@@ -77,7 +76,6 @@ public abstract class ThemedScreen extends Screen
 	{
 		super.renderBackground(guiGraphics, mouseX, mouseY, partialTicks);
 		
-		setOffsets();
 		boolean bsod = computer.isBroken();
 		
 		guiGraphics.blit(GUI_MAIN, xOffset, yOffset, 0, 0, GUI_WIDTH, GUI_HEIGHT);
@@ -113,12 +111,6 @@ public abstract class ThemedScreen extends Screen
 		}
 		
 		return super.keyPressed(pKeyCode, pScanCode, pModifiers);
-	}
-	
-	public void updateGui()
-	{
-		if(!this.selectedTheme.id().equals(computer.getTheme()))
-			this.selectedTheme = ComputerThemes.instance().lookup(computer.getTheme());
 	}
 	
 	// make this method public so that programs can add widgets

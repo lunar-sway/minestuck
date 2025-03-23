@@ -25,15 +25,13 @@ public class DiskManagerScreen extends ThemedScreen
 	public DiskManagerScreen(ComputerBlockEntity computer)
 	{
 		super(computer, Component.translatable(TITLE));
-		
-		this.buttonListHelper.init(this);
 	}
 	
 	@Override
 	public void init()
 	{
 		super.init();
-		
+		this.buttonListHelper.init(this);
 		recreateButtons();
 	}
 	
@@ -47,7 +45,6 @@ public class DiskManagerScreen extends ThemedScreen
 		});
 		
 		this.buttonListHelper.updateButtons(diskButtons);
-		//gui.renderables.forEach(widget -> addRenderableWidget(widget));
 	}
 	
 	@Override

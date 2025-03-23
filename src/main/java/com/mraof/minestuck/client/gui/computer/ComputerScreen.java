@@ -13,12 +13,12 @@ import net.minecraft.resources.ResourceLocation;
 import net.neoforged.neoforge.client.gui.widget.ExtendedButton;
 import org.lwjgl.glfw.GLFW;
 
+import javax.annotation.Nullable;
 import javax.annotation.ParametersAreNonnullByDefault;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Objects;
 import java.util.Optional;
-
 
 /**
  * The screen that is shown whenever the computer is first opened. Equivalent to the desktop.
@@ -31,6 +31,7 @@ public class ComputerScreen extends ThemedScreen
 	public static final String TITLE = "minestuck.computer";
 	
 	private final List<ComputerIcon> icons;
+	@Nullable
 	private TypedProgramGui<?> program;
 	
 	public ComputerScreen(Minecraft mc, ComputerBlockEntity computer)
@@ -40,13 +41,18 @@ public class ComputerScreen extends ThemedScreen
 		this.minecraft = mc;
 		this.font = minecraft.font;
 		this.icons = new ArrayList<>();
+		
+		computer.setGuiCallback(this::updateGui);
 	}
 	
 	@Override
 	public void init()
 	{
-		super.init();
 		genIcons();
+		super.init();
+		if(program != null)
+			program.gui.onInit(this);
+		updateGui();
 	}
 	
 	@Override
@@ -64,12 +70,8 @@ public class ComputerScreen extends ThemedScreen
 		}
 	}
 	
-	@Override
 	public void updateGui()
 	{
-		//TODO if screen is resized, program button lists disappear and all program icons are visible
-		super.updateGui();
-		
 		if(program != null)
 			program.updateGui(this);
 		
@@ -172,7 +174,9 @@ public class ComputerScreen extends ThemedScreen
 		@Override
 		public void renderWidget(GuiGraphics guiGraphics, int mouseX, int mouseY, float partialTick)
 		{
-			if(!visible) return;
+			if(!visible)
+				return;
+			
 			RenderSystem.setShaderColor(1, 1, 1, 1);
 			
 			guiGraphics.blit(this.icon, getX(), getY(), WIDTH, HEIGHT, 0, 0, WIDTH, HEIGHT, WIDTH, HEIGHT);

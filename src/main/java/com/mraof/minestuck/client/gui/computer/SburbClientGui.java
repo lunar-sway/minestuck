@@ -31,13 +31,13 @@ public final class SburbClientGui implements ProgramGui<SburbClientData>
 	private Component message;
 	
 	@Override
-	public void onInit(ComputerScreen gui)
+	public void onInit(ThemedScreen gui)
 	{
 		this.buttonListHelper.init(gui);
 	}
 	
 	@Override
-	public void onUpdate(ComputerScreen gui, SburbClientData data)
+	public void onUpdate(ThemedScreen gui, SburbClientData data)
 	{
 		ComputerBlockEntity computer = gui.computer;
 		Component message;
@@ -127,7 +127,7 @@ public final class SburbClientGui implements ProgramGui<SburbClientData>
 	}
 	
 	@Override
-	public void render(GuiGraphics guiGraphics, ComputerScreen gui)
+	public void render(GuiGraphics guiGraphics, ThemedScreen gui)
 	{
 		ProgramGui.drawHeaderMessage(this.message, guiGraphics, gui);
 	}

@@ -18,13 +18,13 @@ public final class SettingsAppGui implements ProgramGui<ProgramType.EmptyData>
 	private final ButtonListHelper buttonListHelper = new ButtonListHelper();
 	
 	@Override
-	public void onInit(ComputerScreen gui)
+	public void onInit(ThemedScreen gui)
 	{
 		this.buttonListHelper.init(gui);
 	}
 	
 	@Override
-	public void onUpdate(ComputerScreen gui, ProgramType.EmptyData data)
+	public void onUpdate(ThemedScreen gui, ProgramType.EmptyData data)
 	{
 		this.buttonListHelper.updateButtons(List.of(
 				new ButtonListHelper.ButtonData(Component.translatable(THEME), () -> openThemeScreen(gui.computer)),
@@ -45,7 +45,7 @@ public final class SettingsAppGui implements ProgramGui<ProgramType.EmptyData>
 	}
 	
 	@Override
-	public final void render(GuiGraphics guiGraphics, ComputerScreen gui)
+	public void render(GuiGraphics guiGraphics, ThemedScreen gui)
 	{
 		ProgramGui.drawHeaderMessage(Component.translatable(TITLE), guiGraphics, gui);
 	}
