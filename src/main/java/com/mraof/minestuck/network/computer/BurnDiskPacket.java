@@ -54,7 +54,7 @@ public record BurnDiskPacket(BlockPos computerPos, boolean isClientDisk) impleme
 		if(!computer.getProgramData(ProgramTypes.DISK_BURNER).map(DiskBurnerData::hasAllCode).orElse(false))
 			return;
 		
-		if(computer.tryTakeDisk(MSItems.BLANK_DISK.get()))
+		if(computer.canTakeDisk(MSItems.BLANK_DISK.get()))
 			computer.dropDisk(disk.getDefaultInstance());
 	}
 }

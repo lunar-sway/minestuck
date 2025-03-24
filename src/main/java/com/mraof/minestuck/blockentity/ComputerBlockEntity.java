@@ -208,19 +208,9 @@ public final class ComputerBlockEntity extends BlockEntity implements ISburbComp
 		return this.getProgramData(ProgramTypes.SBURB_SERVER);
 	}
 	
-	public boolean tryTakeDisk(Item diskItem)
+	public boolean canTakeDisk(Item diskItem)
 	{
-		for(ItemStack stack : this.disks)
-		{
-			if(stack.is(diskItem))
-			{
-				this.disks.remove(stack);
-				this.markDirtyAndResend();
-				return true;
-			}
-		}
-		
-		return false;
+		return this.disks.stream().anyMatch(stack -> stack.is(diskItem));
 	}
 	
 	public void dropItems()
@@ -230,19 +220,25 @@ public final class ComputerBlockEntity extends BlockEntity implements ISburbComp
 	
 	public void dropDisk(ItemStack stack)
 	{
-		if(this.level == null || !this.level.isClientSide)
+		if(this.level == null || this.level.isClientSide)
 			return;
 		
 		if(stack.has(MSItemComponents.PROGRAM_TYPE))
 		{
 			Holder<ProgramType<?>> typeHolder = stack.getComponents().get(MSItemComponents.PROGRAM_TYPE.get());
 			if(typeHolder != null)
+			{
 				typeHolder.value().eventHandler().onClosed(this);
+				existingPrograms.remove(typeHolder.value());
+			}
 		}
 		
+		//TODO not properly removing disks
 		this.level.playSound(null, this.getBlockPos(), MSSoundEvents.COMPUTER_DISK_REMOVE.get(), SoundSource.BLOCKS);
 		BlockPos pos = this.getBlockPos();
 		Containers.dropItemStack(this.level, pos.getX(), pos.getY(), pos.getZ(), stack);
+		this.disks.remove(stack);
+		this.markDirtyAndResend();
 	}
 	
 	public void closeAll()

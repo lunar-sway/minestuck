@@ -19,7 +19,7 @@ import org.lwjgl.glfw.GLFW;
 import javax.annotation.ParametersAreNonnullByDefault;
 
 /**
- * Shows the disks loaded into the computer and allows for them to be ejected.
+ * Abstract class intended to be inherited by screens related to the computer which make use of the computer theme.
  */
 @ParametersAreNonnullByDefault
 public abstract class ThemedScreen extends Screen
@@ -86,7 +86,11 @@ public abstract class ThemedScreen extends Screen
 			guiGraphics.blit(selectedTheme.data().texturePath(), xOffset + SCREEN_OFFSET_X, yOffset + SCREEN_OFFSET_Y, 0, 0, COMPUTER_SCREEN_WIDTH, COMPUTER_SCREEN_HEIGHT);
 	}
 	
-	
+	@Override
+	public boolean isPauseScreen()
+	{
+		return false;
+	}
 	
 	public void setOffsets()
 	{
