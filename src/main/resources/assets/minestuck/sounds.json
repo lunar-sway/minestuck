@@ -873,6 +873,27 @@
       }
     ]
   },
+  "block.computer.boot": {
+    "category": "block",
+    "subtitle": "subtitles.minestuck.computer_boot",
+    "sounds": [
+      "minestuck:random/computer_boot"
+    ]
+  },
+  "block.computer.disk_insert": {
+    "category": "block",
+    "subtitle": "subtitles.minestuck.computer_disk_insert",
+    "sounds": [
+      "minestuck:random/computer_disk_insert"
+    ]
+  },
+  "block.computer.disk_remove": {
+    "category": "block",
+    "subtitle": "subtitles.minestuck.computer_disk_remove",
+    "sounds": [
+      "minestuck:random/computer_disk_remove"
+    ]
+  },
   "block.cruxtruder.dowel": {
     "category": "block",
     "subtitle": "subtitles.minestuck.cruxtruder_dowel",

@@ -3,9 +3,11 @@ package com.mraof.minestuck.client.gui.computer;
 import com.mraof.minestuck.blockentity.ComputerBlockEntity;
 import com.mraof.minestuck.computer.ProgramType;
 import com.mraof.minestuck.item.components.MSItemComponents;
+import com.mraof.minestuck.util.MSSoundEvents;
 import net.minecraft.client.gui.GuiGraphics;
 import net.minecraft.core.Holder;
 import net.minecraft.network.chat.Component;
+import net.minecraft.sounds.SoundSource;
 import net.minecraft.world.item.ItemStack;
 
 import javax.annotation.ParametersAreNonnullByDefault;
@@ -38,6 +40,8 @@ public class DiskManagerScreen extends ThemedScreen
 	public void recreateButtons()
 	{
 		List<ButtonListHelper.ButtonData> diskButtons = new ArrayList<>();
+		
+		//TODO fix necessity of program type check
 		computer.getDisks().forEach(disk -> {
 			Holder<ProgramType<?>> programTypeHolder = disk.getComponents().get(MSItemComponents.PROGRAM_TYPE.get());
 			if(programTypeHolder != null)
@@ -57,7 +61,8 @@ public class DiskManagerScreen extends ThemedScreen
 	private void ejectDisk(ItemStack stack)
 	{
 		//TODO packet
-		computer.dropDisk(stack);
+		//computer.dropDisk(stack);
+		computer.getLevel().playLocalSound(computer.getBlockPos(), MSSoundEvents.COMPUTER_DISK_INSERT.get(), SoundSource.BLOCKS, 1, 1, false);
 		
 		recreateButtons();
 	}

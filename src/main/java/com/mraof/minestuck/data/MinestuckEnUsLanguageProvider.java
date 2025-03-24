@@ -2533,6 +2533,9 @@ public class MinestuckEnUsLanguageProvider extends MinestuckLanguageProvider
 		addSubtitles("projectile_bounce", "Projectile bounces");
 		addSubtitles("tool_revise", "Server uses Revise tool");
 		addSubtitles("tool_recycle", "Server recycles blocks");
+		addSubtitles("computer_boot", "Computer booting up");
+		addSubtitles("computer_disk_insert", "Disk inserted");
+		addSubtitles("computer_disk_remove", "Disk removed");
 		addSubtitles("alchemiter_resonate", "Alchemize!");
 		addSubtitles("transportalizer_teleport", "Transportalize!");
 		addSubtitles("totem_lathe_lathe", "Latheify!");

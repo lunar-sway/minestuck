@@ -11,6 +11,7 @@ import com.mraof.minestuck.item.components.MSItemComponents;
 import com.mraof.minestuck.network.MSPacket;
 import com.mraof.minestuck.player.IdentifierHandler;
 import com.mraof.minestuck.player.PlayerIdentifier;
+import com.mraof.minestuck.util.MSSoundEvents;
 import net.minecraft.MethodsReturnNonnullByDefault;
 import net.minecraft.commands.Commands;
 import net.minecraft.core.BlockPos;
@@ -26,6 +27,7 @@ import net.minecraft.network.protocol.game.ClientboundBlockEntityDataPacket;
 import net.minecraft.resources.ResourceLocation;
 import net.minecraft.server.level.ServerLevel;
 import net.minecraft.server.level.ServerPlayer;
+import net.minecraft.sounds.SoundSource;
 import net.minecraft.world.Containers;
 import net.minecraft.world.item.Item;
 import net.minecraft.world.item.ItemStack;
@@ -238,7 +240,7 @@ public final class ComputerBlockEntity extends BlockEntity implements ISburbComp
 				typeHolder.value().eventHandler().onClosed(this);
 		}
 		
-		//TODO disk sound
+		this.level.playSound(null, this.getBlockPos(), MSSoundEvents.COMPUTER_DISK_REMOVE.get(), SoundSource.BLOCKS);
 		BlockPos pos = this.getBlockPos();
 		Containers.dropItemStack(this.level, pos.getX(), pos.getY(), pos.getZ(), stack);
 	}
@@ -322,22 +324,22 @@ public final class ComputerBlockEntity extends BlockEntity implements ISburbComp
 		@Nullable
 		Holder<ProgramType<?>> optionalType = stackInHand.get(MSItemComponents.PROGRAM_TYPE);
 		
+		//TODO move hasRoomForDisk check and send message about space
+		
 		if(stackInHand.is(MSItems.BLANK_DISK))
 		{
 			if(hasRoomForDisk())
 			{
-				this.disks.add(stackInHand.split(1));
-				markDirtyAndResend();
+				takeDisk(stackInHand);
 				return true;
 			}
 		} else if(stackInHand.is(Items.MUSIC_DISC_11))
 		{
 			if(!level.isClientSide && hasRoomForDisk())
 			{
-				this.disks.add(stackInHand.split(1));
 				closeAll();
 				level.setBlock(getBlockPos(), getBlockState().setValue(ComputerBlock.STATE, ComputerBlock.State.BROKEN), Block.UPDATE_CLIENTS);
-				markDirtyAndResend();
+				takeDisk(stackInHand);
 			}
 			return true;
 		} else if(optionalType != null)
@@ -345,16 +347,22 @@ public final class ComputerBlockEntity extends BlockEntity implements ISburbComp
 			ProgramType<?> programType = optionalType.value();
 			if(!level.isClientSide && !hasProgram(programType) && hasRoomForDisk())
 			{
-				this.disks.add(stackInHand.split(1));
 				insertNewProgramInstance(programType);
 				level.setBlock(getBlockPos(), getBlockState().setValue(ComputerBlock.STATE, ComputerBlock.State.GAME_LOADED), Block.UPDATE_CLIENTS);
-				markDirtyAndResend();
+				takeDisk(stackInHand);
 				programType.eventHandler().onDiskInserted(this);
 			}
 			return true;
 		}
 		
 		return false;
+	}
+	
+	private void takeDisk(ItemStack stackInHand)
+	{
+		this.disks.add(stackInHand.split(1));
+		markDirtyAndResend();
+		this.level.playSound(null, this.getBlockPos(), MSSoundEvents.COMPUTER_DISK_INSERT.get(), SoundSource.BLOCKS);
 	}
 	
 	public void setGuiCallback(Runnable guiCallback)

@@ -9,10 +9,12 @@ import com.mraof.minestuck.computer.theme.MSComputerThemes;
 import com.mraof.minestuck.item.components.MSItemComponents;
 import com.mraof.minestuck.player.IdentifierHandler;
 import com.mraof.minestuck.skaianet.client.SkaiaClient;
+import com.mraof.minestuck.util.MSSoundEvents;
 import net.minecraft.MethodsReturnNonnullByDefault;
 import net.minecraft.core.BlockPos;
 import net.minecraft.core.Direction;
 import net.minecraft.resources.ResourceLocation;
+import net.minecraft.sounds.SoundSource;
 import net.minecraft.util.StringRepresentable;
 import net.minecraft.world.InteractionHand;
 import net.minecraft.world.InteractionResult;
@@ -126,6 +128,7 @@ public class ComputerBlock extends MachineBlock implements EntityBlock
 		if(level.isClientSide)
 			return;
 		
+		level.playSound(null, pos, MSSoundEvents.COMPUTER_BOOT.get(), SoundSource.BLOCKS);
 		BlockState newState = state.setValue(STATE, State.ON);
 		level.setBlock(pos, newState, Block.UPDATE_CLIENTS);
 		
