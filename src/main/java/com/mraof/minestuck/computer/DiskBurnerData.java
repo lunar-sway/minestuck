@@ -1,12 +1,16 @@
 package com.mraof.minestuck.computer;
 
+import com.mraof.minestuck.util.MSSoundEvents;
 import com.mraof.minestuck.util.MSTags;
+import net.minecraft.core.BlockPos;
 import net.minecraft.core.registries.BuiltInRegistries;
 import net.minecraft.nbt.CompoundTag;
 import net.minecraft.nbt.ListTag;
 import net.minecraft.nbt.StringTag;
 import net.minecraft.nbt.Tag;
 import net.minecraft.resources.ResourceLocation;
+import net.minecraft.sounds.SoundSource;
+import net.minecraft.world.level.Level;
 import net.minecraft.world.level.block.Block;
 
 import javax.annotation.Nonnull;
@@ -81,7 +85,7 @@ public final class DiskBurnerData implements ProgramType.Data
 		return this.isHasParadoxInfoStored() && this.getHieroglyphsStored().containsAll(MSTags.getBlocksFromTag(MSTags.Blocks.GREEN_HIEROGLYPHS));
 	}
 	
-	public boolean recordNewInfo(boolean paradoxInfo, Set<Block> recordedBlocks)
+	public boolean recordNewInfo(Level level, BlockPos pos, boolean paradoxInfo, Set<Block> recordedBlocks)
 	{
 		boolean changed = false;
 		
@@ -97,9 +101,11 @@ public final class DiskBurnerData implements ProgramType.Data
 				changed |= getHieroglyphsStored().add(iterateBlock);
 		}
 		
-		//TODO add computer keyboard sound
 		if(changed)
+		{
 			this.markDirty.run();
+			level.playSound(null, pos, MSSoundEvents.COMPUTER_KEYBOARD.get(), SoundSource.BLOCKS);
+		}
 		
 		return changed;
 	}

@@ -21,6 +21,7 @@ import net.minecraft.core.NonNullList;
 import net.minecraft.nbt.CompoundTag;
 import net.minecraft.nbt.NbtOps;
 import net.minecraft.nbt.Tag;
+import net.minecraft.network.chat.Component;
 import net.minecraft.network.protocol.Packet;
 import net.minecraft.network.protocol.game.ClientGamePacketListener;
 import net.minecraft.network.protocol.game.ClientboundBlockEntityDataPacket;
@@ -29,6 +30,7 @@ import net.minecraft.server.level.ServerLevel;
 import net.minecraft.server.level.ServerPlayer;
 import net.minecraft.sounds.SoundSource;
 import net.minecraft.world.Containers;
+import net.minecraft.world.entity.player.Player;
 import net.minecraft.world.item.Item;
 import net.minecraft.world.item.ItemStack;
 import net.minecraft.world.item.Items;
@@ -40,7 +42,10 @@ import org.apache.logging.log4j.Logger;
 
 import javax.annotation.Nullable;
 import javax.annotation.ParametersAreNonnullByDefault;
-import java.util.*;
+import java.util.HashMap;
+import java.util.Map;
+import java.util.Objects;
+import java.util.Optional;
 import java.util.function.Function;
 import java.util.function.Supplier;
 import java.util.stream.Stream;
@@ -49,6 +54,8 @@ import java.util.stream.Stream;
 @MethodsReturnNonnullByDefault
 public final class ComputerBlockEntity extends BlockEntity implements ISburbComputer
 {
+	public static final String DISK_REJECT = "block.minestuck.computer.disk_reject";
+	
 	private static final Logger LOGGER = LogManager.getLogger();
 	//TODO turn into config
 	private static final int DISK_CAPACITY = 4;
@@ -101,7 +108,7 @@ public final class ComputerBlockEntity extends BlockEntity implements ISburbComp
 		
 		if(tag.contains("theme", Tag.TAG_STRING))
 			computerTheme = Objects.requireNonNullElse(ResourceLocation.tryParse(tag.getString("theme")), computerTheme);
-		// Backwards-compatibility with Minestuck-1.20.1-1.11.2.0 and earlier
+			// Backwards-compatibility with Minestuck-1.20.1-1.11.2.0 and earlier
 		else if(tag.contains("theme", Tag.TAG_INT))
 			computerTheme = MSComputerThemes.getThemeFromOldOrdinal(tag.getInt("theme"));
 		
@@ -173,7 +180,7 @@ public final class ComputerBlockEntity extends BlockEntity implements ISburbComp
 		return getBlockState().getValue(ComputerBlock.STATE) == ComputerBlock.State.BROKEN;
 	}
 	
-	public boolean hasProgram(ProgramType<?> programType)
+	public boolean hasExistingProgram(ProgramType<?> programType)
 	{
 		return this.existingPrograms.containsKey(programType);
 	}
@@ -220,9 +227,10 @@ public final class ComputerBlockEntity extends BlockEntity implements ISburbComp
 	
 	public void dropDisk(ItemStack stack)
 	{
-		if(this.level == null || this.level.isClientSide)
+		if(this.level == null)
 			return;
 		
+		//TODO client is not being updated to remove existing program
 		if(stack.has(MSItemComponents.PROGRAM_TYPE))
 		{
 			Holder<ProgramType<?>> typeHolder = stack.getComponents().get(MSItemComponents.PROGRAM_TYPE.get());
@@ -233,11 +241,19 @@ public final class ComputerBlockEntity extends BlockEntity implements ISburbComp
 			}
 		}
 		
-		//TODO not properly removing disks
 		this.level.playSound(null, this.getBlockPos(), MSSoundEvents.COMPUTER_DISK_REMOVE.get(), SoundSource.BLOCKS);
+		
+		for(ItemStack disk : this.disks)
+		{
+			if(disk.is(stack.getItem()))
+			{
+				this.disks.remove(disk);
+				break;
+			}
+		}
+		
 		BlockPos pos = this.getBlockPos();
 		Containers.dropItemStack(this.level, pos.getX(), pos.getY(), pos.getZ(), stack);
-		this.disks.remove(stack);
 		this.markDirtyAndResend();
 	}
 	
@@ -312,36 +328,40 @@ public final class ComputerBlockEntity extends BlockEntity implements ISburbComp
 		markDirtyAndResend();
 	}
 	
-	public boolean tryInsertDisk(ItemStack stackInHand)
+	public boolean tryInsertDisk(Player player, ItemStack stackInHand)
 	{
-		if(isBroken() || level == null)
+		if(isBroken() || level == null || stackInHand.isEmpty())
 			return false;
 		
 		@Nullable
 		Holder<ProgramType<?>> optionalType = stackInHand.get(MSItemComponents.PROGRAM_TYPE);
 		
-		//TODO move hasRoomForDisk check and send message about space
+		boolean holdingBlankDisk = stackInHand.is(MSItems.BLANK_DISK);
+		boolean holdingDisc11Disk = stackInHand.is(Items.MUSIC_DISC_11);
+		boolean holdingProgramDisk = optionalType != null;
 		
-		if(stackInHand.is(MSItems.BLANK_DISK))
+		if(!hasRoomForDisk())
 		{
-			if(hasRoomForDisk())
-			{
-				takeDisk(stackInHand);
-				return true;
-			}
-		} else if(stackInHand.is(Items.MUSIC_DISC_11))
+			if(!level.isClientSide && (holdingBlankDisk || holdingDisc11Disk || holdingProgramDisk))
+				player.sendSystemMessage(Component.translatable(DISK_REJECT));
+			
+			return false;
+		}
+		
+		if(holdingBlankDisk)
 		{
-			if(!level.isClientSide && hasRoomForDisk())
-			{
-				closeAll();
-				level.setBlock(getBlockPos(), getBlockState().setValue(ComputerBlock.STATE, ComputerBlock.State.BROKEN), Block.UPDATE_CLIENTS);
-				takeDisk(stackInHand);
-			}
+			takeDisk(stackInHand);
 			return true;
-		} else if(optionalType != null)
+		} else if(holdingDisc11Disk && !level.isClientSide)
+		{
+			closeAll();
+			level.setBlock(getBlockPos(), getBlockState().setValue(ComputerBlock.STATE, ComputerBlock.State.BROKEN), Block.UPDATE_CLIENTS);
+			takeDisk(stackInHand);
+			return true;
+		} else if(holdingProgramDisk)
 		{
 			ProgramType<?> programType = optionalType.value();
-			if(!level.isClientSide && !hasProgram(programType) && hasRoomForDisk())
+			if(!level.isClientSide && !hasExistingProgram(programType))
 			{
 				insertNewProgramInstance(programType);
 				level.setBlock(getBlockPos(), getBlockState().setValue(ComputerBlock.STATE, ComputerBlock.State.GAME_LOADED), Block.UPDATE_CLIENTS);

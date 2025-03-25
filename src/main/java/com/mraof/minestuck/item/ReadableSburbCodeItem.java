@@ -65,7 +65,7 @@ public abstract class ReadableSburbCodeItem extends Item
 		if(player != null && level.getBlockEntity(pos) instanceof ComputerBlockEntity computer)
 		{
 			Optional<DiskBurnerData> diskBurnerData = computer.getProgramData(ProgramTypes.DISK_BURNER);
-			if(diskBurnerData.isPresent() && useOnComputer(heldStack, player, hand, diskBurnerData.get()))
+			if(diskBurnerData.isPresent() && useOnComputer(heldStack, player, hand, pos, diskBurnerData.get()))
 				return InteractionResult.sidedSuccess(level.isClientSide);
 			else
 				return InteractionResult.FAIL;
@@ -74,9 +74,9 @@ public abstract class ReadableSburbCodeItem extends Item
 		return InteractionResult.PASS;
 	}
 	
-	protected boolean useOnComputer(ItemStack heldStack, Player player, InteractionHand hand, DiskBurnerData diskBurnerData)
+	protected boolean useOnComputer(ItemStack heldStack, Player player, InteractionHand hand, BlockPos pos, DiskBurnerData diskBurnerData)
 	{
-		return diskBurnerData.recordNewInfo(getParadoxInfo(heldStack), getRecordedBlocks(heldStack));
+		return diskBurnerData.recordNewInfo(player.level(), pos, getParadoxInfo(heldStack), getRecordedBlocks(heldStack));
 	}
 	
 	public static class Completed extends ReadableSburbCodeItem

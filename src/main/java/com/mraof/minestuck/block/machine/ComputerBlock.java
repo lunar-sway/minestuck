@@ -94,7 +94,7 @@ public class ComputerBlock extends MachineBlock implements EntityBlock
 		if(!(level.getBlockEntity(pos) instanceof ComputerBlockEntity blockEntity))
 			return ItemInteractionResult.FAIL;
 		
-		if(blockEntity.tryInsertDisk(player.getItemInHand(hand)))
+		if(blockEntity.tryInsertDisk(player, heldItem))
 			return ItemInteractionResult.SUCCESS;
 		//insertion of code handled in ReadableSburbCodeItem onItemUseFirst()
 		

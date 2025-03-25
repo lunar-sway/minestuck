@@ -106,6 +106,7 @@ public final class MSSoundEvents
 	public static final Supplier<SoundEvent> COMPUTER_BOOT = register("block.computer.boot");
 	public static final Supplier<SoundEvent> COMPUTER_DISK_INSERT = register("block.computer.disk_insert");
 	public static final Supplier<SoundEvent> COMPUTER_DISK_REMOVE = register("block.computer.disk_remove");
+	public static final Supplier<SoundEvent> COMPUTER_KEYBOARD = register("block.computer.keyboard");
 	public static final Supplier<SoundEvent> CRUXTRUDER_DOWEL = register("block.cruxtruder.dowel");
 	public static final Supplier<SoundEvent> ALCHEMITER_RESONATE = register("block.alchemiter.resonate");
 	public static final Supplier<SoundEvent> TRANSPORTALIZER_TELEPORT = register("block.transportalizer.teleport");
