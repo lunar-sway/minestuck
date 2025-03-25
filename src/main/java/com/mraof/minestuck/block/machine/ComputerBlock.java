@@ -9,10 +9,12 @@ import com.mraof.minestuck.computer.theme.MSComputerThemes;
 import com.mraof.minestuck.item.components.MSItemComponents;
 import com.mraof.minestuck.player.IdentifierHandler;
 import com.mraof.minestuck.skaianet.client.SkaiaClient;
+import com.mraof.minestuck.util.MSSoundEvents;
 import net.minecraft.MethodsReturnNonnullByDefault;
 import net.minecraft.core.BlockPos;
 import net.minecraft.core.Direction;
 import net.minecraft.resources.ResourceLocation;
+import net.minecraft.sounds.SoundSource;
 import net.minecraft.util.StringRepresentable;
 import net.minecraft.world.InteractionHand;
 import net.minecraft.world.InteractionResult;
@@ -92,7 +94,7 @@ public class ComputerBlock extends MachineBlock implements EntityBlock
 		if(!(level.getBlockEntity(pos) instanceof ComputerBlockEntity blockEntity))
 			return ItemInteractionResult.FAIL;
 		
-		if(blockEntity.tryInsertDisk(player.getItemInHand(hand)))
+		if(blockEntity.tryInsertDisk(player, heldItem))
 			return ItemInteractionResult.SUCCESS;
 		//insertion of code handled in ReadableSburbCodeItem onItemUseFirst()
 		
@@ -105,6 +107,7 @@ public class ComputerBlock extends MachineBlock implements EntityBlock
 	@Override
 	protected InteractionResult useWithoutItem(BlockState state, Level level, BlockPos pos, Player player, BlockHitResult hitResult)
 	{
+		//TODO move this to useItemOn()
 		if(player.isShiftKeyDown())
 			return InteractionResult.PASS;
 		
@@ -125,6 +128,7 @@ public class ComputerBlock extends MachineBlock implements EntityBlock
 		if(level.isClientSide)
 			return;
 		
+		level.playSound(null, pos, MSSoundEvents.COMPUTER_BOOT.get(), SoundSource.BLOCKS);
 		BlockState newState = state.setValue(STATE, State.ON);
 		level.setBlock(pos, newState, Block.UPDATE_CLIENTS);
 		

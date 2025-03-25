@@ -85,6 +85,7 @@ public final class MSPayloads
 		//Base Computer Functionality Packets
 		registerPlayToServer(registrar, BurnDiskPacket.ID, BurnDiskPacket.STREAM_CODEC);
 		registerPlayToServer(registrar, ThemeSelectPacket.ID, ThemeSelectPacket.STREAM_CODEC);
+		registerPlayToServer(registrar, EjectDiskPacket.ID, EjectDiskPacket.STREAM_CODEC);
 		
 		//Data Checker Packets
 		registerPlayToServer(registrar, DataCheckerPackets.Request.ID, DataCheckerPackets.Request.STREAM_CODEC);
