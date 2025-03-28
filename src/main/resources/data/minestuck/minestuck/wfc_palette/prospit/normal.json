@@ -19,6 +19,6 @@
       "weight": 1
     },
     { "prototype": "minestuck:prospit/interior_stairs", "weight": 4 },
-    { "prototype": "minestuck:prospit/outdoor_stairs", "weight": 4 }
+    { "prototype": "minestuck:prospit/outdoor_stairs", "weight": 2 }
   ]
 }

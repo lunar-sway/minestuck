@@ -15,6 +15,7 @@
     { "prototype": "minestuck:prospit/t_corridor", "weight": 1 },
     { "prototype": "minestuck:prospit/t_corridor_window", "weight": 5 },
     { "prototype": "minestuck:prospit/interior_stairs", "weight": 2 },
-    { "prototype": "minestuck:prospit/outdoor_stairs", "weight": 7 }
+    { "prototype": "minestuck:prospit/outdoor_stairs", "weight": 4 },
+    { "prototype": { "type": "template", "template": "minestuck:prospit/lilies", "symmetry": "axis_symmetric" }, "weight": 6 }
   ]
 }
