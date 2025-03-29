@@ -23,6 +23,7 @@ public class MSDimensions
 	public static ResourceKey<Level> PROSPIT = ResourceKey.create(Registries.DIMENSION, ResourceLocation.fromNamespaceAndPath(Minestuck.MOD_ID, "prospit"));
 	public static ResourceKey<Level> DERSE = ResourceKey.create(Registries.DIMENSION, ResourceLocation.fromNamespaceAndPath(Minestuck.MOD_ID, "derse"));
 	public static final ResourceLocation LAND_EFFECTS = ResourceLocation.fromNamespaceAndPath(Minestuck.MOD_ID, "land");
+	public static final ResourceLocation PROSPIT_EFFECTS = ResourceLocation.fromNamespaceAndPath(Minestuck.MOD_ID, "prospit_effects");
 	
 	public static boolean isLandDimension(MinecraftServer server, ResourceKey<Level> levelKey)
 	{

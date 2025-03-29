@@ -147,6 +147,7 @@ public class ClientProxy
 	public static void registerDimensionEffects(RegisterDimensionSpecialEffectsEvent event)
 	{
 		event.register(MSDimensions.LAND_EFFECTS, new LandRenderInfo());
+		event.register(MSDimensions.PROSPIT_EFFECTS, new ProspitSpecialEffects());
 	}
 	
 	private static void registerArmorModels()
