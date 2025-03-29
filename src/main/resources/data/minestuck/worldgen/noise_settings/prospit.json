@@ -1,5 +1,5 @@
 {
-    "aquifers_enabled": true,
+    "aquifers_enabled": false,
     "default_block": {
         "Name": "minestuck:prospit_ferrostrata"
     },
@@ -15,75 +15,56 @@
         "height": 128,
         "min_y": -64,
         "size_horizontal": 1,
-        "size_vertical": 2
+        "size_vertical": 1
     },
     "noise_router": {
-        "barrier": "minecraft:zero",
-        "continents": "minecraft:overworld/continents",
-        "depth": "minecraft:overworld/depth",
-        "erosion": "minecraft:overworld/erosion",
+        "barrier": 0,
+        "continents": 0,
+        "depth": 0,
+        "erosion": 0,
         "final_density": {
-            "type": "minecraft:y_clamped_gradient",
-            "from_y": -64,
-            "to_y": 320,
-            "from_value": 1,
-            "to_value": -1
-        },
-        "fluid_level_floodedness": "minecraft:zero",
-        "fluid_level_spread": "minecraft:zero",
-        "initial_density_without_jaggedness": {
-            "type": "minecraft:add",
-            "argument1": 0.1171875,
-            "argument2": {
+            "type": "minecraft:squeeze",
+            "argument": {
                 "type": "minecraft:mul",
-                "argument1": {
-                    "type": "minecraft:y_clamped_gradient",
-                    "from_value": 0,
-                    "from_y": -64,
-                    "to_value": 1,
-                    "to_y": -40
-                },
+                "argument1": 0.8,
                 "argument2": {
-                    "type": "minecraft:add",
-                    "argument1": -0.1171875,
-                    "argument2": {
-                        "type": "minecraft:add",
-                        "argument1": -0.078125,
-                        "argument2": {
-                            "type": "minecraft:mul",
-                            "argument1": {
-                                "type": "minecraft:y_clamped_gradient",
-                                "from_value": 1,
-                                "from_y": 240,
-                                "to_value": 0,
-                                "to_y": 256
-                            },
+                    "type": "minecraft:interpolated",
+                    "argument": {
+                        "type": "minecraft:blend_density",
+                        "argument": {
+                            "type": "minecraft:add",
+                            "argument1": 1.1,
                             "argument2": {
-                                "type": "minecraft:add",
-                                "argument1": 0.078125,
+                                "type": "minecraft:mul",
+                                "argument1": {
+                                    "type": "minecraft:y_clamped_gradient",
+                                    "from_value": 0,
+                                    "from_y": -64,
+                                    "to_value": 0.8,
+                                    "to_y": -10
+                                },
                                 "argument2": {
-                                    "type": "minecraft:clamp",
-                                    "input": {
+                                    "type": "minecraft:add",
+                                    "argument1": 0,
+                                    "argument2": {
                                         "type": "minecraft:add",
-                                        "argument1": -0.703125,
+                                        "argument1": 0,
                                         "argument2": {
                                             "type": "minecraft:mul",
-                                            "argument1": 4,
+                                            "argument1": {
+                                                "type": "minecraft:y_clamped_gradient",
+                                                "from_value": 0.8,
+                                                "from_y": 50,
+                                                "to_y": 64,
+                                                "to_value": 0
+                                            },
                                             "argument2": {
-                                                "type": "minecraft:quarter_negative",
-                                                "argument": {
-                                                    "type": "minecraft:mul",
-                                                    "argument1": "minecraft:overworld/depth",
-                                                    "argument2": {
-                                                        "type": "minecraft:cache_2d",
-                                                        "argument": "minecraft:overworld/factor"
-                                                    }
-                                                }
+                                                "type": "minecraft:add",
+                                                "argument1": -2,
+                                                "argument2": "minecraft:nether/base_3d_noise"
                                             }
                                         }
-                                    },
-                                    "max": 64,
-                                    "min": -64
+                                    }
                                 }
                             }
                         }
@@ -91,66 +72,20 @@
                 }
             }
         },
-        "lava": "minecraft:zero",
-        "ridges": "minecraft:overworld/ridges",
-        "temperature": "minecraft:zero",
-        "vegetation": "minecraft:zero",
-        "vein_gap": "minecraft:zero",
-        "vein_ridged": "minecraft:zero",
-        "vein_toggle": "minecraft:zero"
+        "fluid_level_floodedness": 0,
+        "fluid_level_spread": 0,
+        "initial_density_without_jaggedness": 0,
+        "lava": 0,
+        "ridges": 0,
+        "temperature": 0,
+        "vegetation": 0,
+        "vein_gap": 0,
+        "vein_ridged": 0,
+        "vein_toggle": 0
     },
     "ore_veins_enabled": false,
     "sea_level": -64,
-    "spawn_target": [
-        {
-            "continentalness": [
-                -0.11,
-                1
-            ],
-            "depth": 0,
-            "erosion": [
-                -1,
-                1
-            ],
-            "humidity": [
-                -1,
-                1
-            ],
-            "offset": 0,
-            "temperature": [
-                -1,
-                1
-            ],
-            "weirdness": [
-                -1,
-                -0.16
-            ]
-        },
-        {
-            "continentalness": [
-                -0.11,
-                1
-            ],
-            "depth": 0,
-            "erosion": [
-                -1,
-                1
-            ],
-            "humidity": [
-                -1,
-                1
-            ],
-            "offset": 0,
-            "temperature": [
-                -1,
-                1
-            ],
-            "weirdness": [
-                0.16,
-                1
-            ]
-        }
-    ],
+    "spawn_target": [],
     "surface_rule": {
         "type": "minecraft:sequence",
         "sequence": [
@@ -178,7 +113,7 @@
                 "if_true": {
                     "type": "minecraft:vertical_gradient",
                     "false_at_and_above": {
-                        "absolute": 8
+                        "absolute": 20
                     },
                     "random_name": "minestuck:prospit_core",
                     "true_at_and_below": {
