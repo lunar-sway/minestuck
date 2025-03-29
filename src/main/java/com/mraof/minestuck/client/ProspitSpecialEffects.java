@@ -1,11 +1,8 @@
 package com.mraof.minestuck.client;
 
-import com.mraof.minestuck.client.renderer.LandSkyRenderer;
 import com.mraof.minestuck.client.renderer.ProspitSkyRenderer;
-import com.mraof.minestuck.world.lands.LandProperties;
 import net.minecraft.MethodsReturnNonnullByDefault;
 import net.minecraft.client.Camera;
-import net.minecraft.client.Minecraft;
 import net.minecraft.client.multiplayer.ClientLevel;
 import net.minecraft.client.renderer.DimensionSpecialEffects;
 import net.minecraft.world.phys.Vec3;
@@ -26,14 +23,15 @@ public class ProspitSpecialEffects extends DimensionSpecialEffects
 	@Override
 	public boolean renderSky(ClientLevel level, int ticks, float partialTick, Matrix4f modelViewMatrix, Camera camera, Matrix4f projectionMatrix, boolean isFoggy, Runnable setupFog)
 	{
-		//ProspitSkyRenderer.render(ticks, partialTick, modelViewMatrix, level, Minecraft.getInstance());
+		ProspitSkyRenderer.render(modelViewMatrix, level);
 		return true;
 	}
 	
 	@Override
 	public Vec3 getBrightnessDependentFogColor(Vec3 biomeFogColor, float brightness)
 	{
-		return biomeFogColor.scale(0.15F);
+		//return biomeFogColor.scale(0.15F);
+		return new Vec3(0D, 0D, 0D);
 	}
 	
 	@Nullable
