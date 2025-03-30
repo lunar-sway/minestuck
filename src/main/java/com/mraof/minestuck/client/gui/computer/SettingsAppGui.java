@@ -10,7 +10,9 @@ import java.util.List;
 
 public final class SettingsAppGui implements ProgramGui<ProgramType.EmptyData>
 {
+	public static final String NAME = "minestuck.program.settings";
 	public static final String THEME = "minestuck.program.settings.theme";
+	public static final String DISK_MANAGER = "minestuck.program.settings.disk_manager";
 	public static final String TITLE = "minestuck.program.settings.title";
 	
 	private final ButtonListHelper buttonListHelper = new ButtonListHelper();
@@ -24,13 +26,22 @@ public final class SettingsAppGui implements ProgramGui<ProgramType.EmptyData>
 	@Override
 	public void onUpdate(ComputerScreen gui, ProgramType.EmptyData data)
 	{
-		this.buttonListHelper.updateButtons(List.of(new ButtonListHelper.ButtonData(Component.translatable(THEME), () -> openThemeScreen(gui.be))));
+		this.buttonListHelper.updateButtons(List.of(
+				new ButtonListHelper.ButtonData(Component.translatable(THEME), () -> openThemeScreen(gui.be)),
+				new ButtonListHelper.ButtonData(Component.translatable(DISK_MANAGER), () -> openDiskManagerScreen(gui))
+		));
 	}
 	
 	private static void openThemeScreen(ComputerBlockEntity computer)
 	{
 		Minecraft.getInstance().setScreen(null);
 		Minecraft.getInstance().setScreen(new ComputerThemeScreen(computer));
+	}
+	
+	private void openDiskManagerScreen(ComputerScreen gui)
+	{
+		Minecraft.getInstance().setScreen(null);
+		Minecraft.getInstance().setScreen(new DiskManagerScreen(gui));
 	}
 	
 	@Override

@@ -1,8 +1,14 @@
 package com.mraof.minestuck.player;
 
+import com.mojang.serialization.Codec;
 import com.mojang.serialization.DataResult;
+import com.mojang.serialization.codecs.RecordCodecBuilder;
+import net.minecraft.core.UUIDUtil;
 import net.minecraft.nbt.CompoundTag;
 import net.minecraft.nbt.Tag;
+import net.minecraft.network.RegistryFriendlyByteBuf;
+import net.minecraft.network.codec.ByteBufCodecs;
+import net.minecraft.network.codec.StreamCodec;
 import net.minecraft.server.MinecraftServer;
 import net.minecraft.server.level.ServerPlayer;
 import net.minecraft.server.players.PlayerList;
@@ -16,6 +22,7 @@ import java.util.*;
 /**
  * Used to encode/decode player usernames, to handle uses with LAN.
  * This file is to now only be used serverside.
+ *
  * @author kirderf1
  */
 public class IdentifierHandler
@@ -152,11 +159,24 @@ public class IdentifierHandler
 		fakePlayerIndex = 0;
 	}
 	
-	private static class UUIDIdentifier extends PlayerIdentifier
+	public static class UUIDIdentifier extends PlayerIdentifier
 	{
+		public static final Codec<UUIDIdentifier> CODEC = RecordCodecBuilder.create(instance -> instance.group(
+				Codec.INT.fieldOf("id").forGetter(UUIDIdentifier::getId),
+				Codec.STRING.xmap(UUID::fromString, UUID::toString).fieldOf("uuid").forGetter(UUIDIdentifier::getUUID)
+		).apply(instance, UUIDIdentifier::new));
+		public static final StreamCodec<RegistryFriendlyByteBuf, UUIDIdentifier> STREAM_CODEC = StreamCodec.composite(
+				ByteBufCodecs.INT,
+				UUIDIdentifier::getId,
+				UUIDUtil.STREAM_CODEC,
+				UUIDIdentifier::getUUID,
+				UUIDIdentifier::new
+		);
+		
 		private final UUID uuid;
 		
-		private UUIDIdentifier(int id, UUID uuid)
+		//TODO make this constructor private again. Exposed for testing
+		public UUIDIdentifier(int id, UUID uuid)
 		{
 			super(id);
 			this.uuid = uuid;
@@ -171,7 +191,12 @@ public class IdentifierHandler
 		@Override
 		public String getUsername()
 		{
-			return UsernameCache.containsUUID(uuid) ? UsernameCache.getLastKnownUsername(uuid) : "Unknown ("+getId()+")";
+			return UsernameCache.containsUUID(uuid) ? UsernameCache.getLastKnownUsername(uuid) : "Unknown (" + getId() + ")";
+		}
+		
+		public UUID getUUID()
+		{
+			return uuid;
 		}
 		
 		@Override
@@ -200,7 +225,7 @@ public class IdentifierHandler
 		@Override
 		public String toString()
 		{
-			return "Identifier:"+getUsername();
+			return "Identifier:" + getUsername();
 		}
 		
 		@Override
@@ -238,7 +263,7 @@ public class IdentifierHandler
 		@Override
 		public String getUsername()
 		{
-			return "Fake player "+count;
+			return "Fake player " + count;
 		}
 		
 		@Override
@@ -250,21 +275,21 @@ public class IdentifierHandler
 		@Override
 		public String getCommandString()
 		{
-			return "fake"+count;
+			return "fake" + count;
 		}
 		
 		@Override
 		public CompoundTag saveToNBT(CompoundTag nbt, String key)
 		{
 			nbt.putString(key, "fake");
-			nbt.putInt(key+"_count", count);
+			nbt.putInt(key + "_count", count);
 			return nbt;
 		}
 		
 		@Override
 		public String toString()
 		{
-			return "Identifier:fake_"+count;
+			return "Identifier:fake_" + count;
 		}
 		
 		@Override

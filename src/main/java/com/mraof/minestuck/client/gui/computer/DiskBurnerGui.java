@@ -10,6 +10,7 @@ import java.util.List;
 
 public final class DiskBurnerGui implements ProgramGui<DiskBurnerData>
 {
+	public static final String NAME = "minestuck.program.disk_burner";
 	public static final String NEED_CODE = "minestuck.program.disk_burner.needs_code";
 	public static final String NO_DISKS = "minestuck.program.disk_burner.needs_disks";
 	public static final String BURN_SERVER_DISK = "minestuck.program.disk_burner.burn_server_disk";
@@ -32,7 +33,7 @@ public final class DiskBurnerGui implements ProgramGui<DiskBurnerData>
 		{
 			this.message = Component.translatable(NEED_CODE);
 			this.buttonListHelper.updateButtons(List.of());
-		} else if(!gui.be.hasBlankDisks())
+		} else if(!gui.be.getBlankDisks().isEmpty())
 		{
 			this.message = Component.translatable(NO_DISKS);
 			this.buttonListHelper.updateButtons(List.of());

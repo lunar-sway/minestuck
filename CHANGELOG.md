@@ -15,10 +15,12 @@ The format is based on [Keep a Changelog](https://keepachangelog.com/en/1.1.0/).
 - Message when entering edit mode to remind players of the exit keybind
 - Added 2 tracks october and endless chasm by triagegremlin
 - Added 2 tracks the note desolation plays and desolate strife by Caldw3ll
+- GristTorrent Computer App
 
 ### Changed
 
 - Knitting needle crafting recipe now produces one item instead of two
+- Updated Grist Cache gui texture
 
 ### Fixed
 
@@ -30,7 +32,7 @@ The format is based on [Keep a Changelog](https://keepachangelog.com/en/1.1.0/).
 
 ### Contributors for this release
 
-- Cibernet, Dweblenod, kirderf1, glubtier, blankMushroom, hadean, ThalliumSulfate, triagegremlin, Caldw3ll
+- Cibernet, Dweblenod, kirderf1, glubtier, blankMushroom, hadean, ThalliumSulfate, triagegremlin, Caldw3ll, Riotmode
 
 ## [1.20.4-1.12.2.1] - 2025-03-16
 

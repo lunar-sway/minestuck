@@ -11,6 +11,7 @@ import net.minecraft.client.Minecraft;
 import net.minecraft.client.gui.GuiGraphics;
 import net.minecraft.client.gui.components.Button;
 import net.minecraft.client.gui.components.Renderable;
+import net.minecraft.client.gui.components.Tooltip;
 import net.minecraft.client.gui.components.events.GuiEventListener;
 import net.minecraft.client.gui.narration.NarratableEntry;
 import net.minecraft.client.gui.screens.Screen;
@@ -220,6 +221,8 @@ public class ComputerScreen extends Screen
 			
 			ResourceLocation programKey = Objects.requireNonNullElse(ProgramTypes.REGISTRY.getKey(programType), Minestuck.id("invalid"));
 			this.icon = programKey.withPath(name -> "textures/gui/desktop_icon/" + name + ".png");
+			
+			setTooltip(Tooltip.create(programType.name()));
 		}
 		
 		@Override
