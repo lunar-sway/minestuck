@@ -2,6 +2,7 @@ package com.mraof.minestuck.blockentity;
 
 import com.mojang.serialization.Codec;
 import com.mraof.minestuck.MinestuckConfig;
+import com.mraof.minestuck.advancements.MSCriteriaTriggers;
 import com.mraof.minestuck.block.machine.ComputerBlock;
 import com.mraof.minestuck.computer.*;
 import com.mraof.minestuck.computer.editmode.ServerEditHandler;
@@ -357,6 +358,8 @@ public final class ComputerBlockEntity extends BlockEntity implements ISburbComp
 			closeAll();
 			setComputerBlockState(ComputerBlock.State.BROKEN);
 			takeDisk(stackInHand);
+			if(player instanceof ServerPlayer serverPlayer)
+				MSCriteriaTriggers.BRICK_COMPUTER.get().trigger(serverPlayer);
 			return true;
 		} else if(holdingProgramDisk)
 		{

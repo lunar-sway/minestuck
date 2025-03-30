@@ -1,0 +1,44 @@
+{
+  "conditioned_nodes": [
+    {
+      "condition": {
+        "type": "minestuck:list",
+        "conditions": [
+          {
+            "type": "minestuck:flag",
+            "flag": "helpingPlayer"
+          },
+          {
+            "type": "minestuck:player_advancement",
+            "advancement_id": "minestuck:minestuck/brick_computer"
+          }
+        ],
+        "list_type": "all"
+      },
+      "node": {
+        "animation": {},
+        "gui": "minestuck:textures/gui/dialogue/dialogue.png",
+        "message": "minestuck.dialogue.consort.computer_expert.done.player_specific_advancement",
+        "responses": []
+      }
+    },
+    {
+      "condition": {
+        "type": "minestuck:flag",
+        "flag": "helpingPlayer"
+      },
+      "node": {
+        "animation": {},
+        "gui": "minestuck:textures/gui/dialogue/dialogue.png",
+        "message": "minestuck.dialogue.consort.computer_expert.done.player_specific",
+        "responses": []
+      }
+    }
+  ],
+  "default_node": {
+    "animation": {},
+    "gui": "minestuck:textures/gui/dialogue/dialogue.png",
+    "message": "minestuck.dialogue.consort.computer_expert.done",
+    "responses": []
+  }
+}

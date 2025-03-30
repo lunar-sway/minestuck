@@ -17,6 +17,7 @@ The format is based on [Keep a Changelog](https://keepachangelog.com/en/1.1.0/).
 - Added 2 tracks the note desolation plays and desolate strife by Caldw3ll
 - New Disk Manager utility in Settings computer program
 - Computer sound effects
+- New computer related advancement
 
 ### Changed
 
