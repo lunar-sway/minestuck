@@ -117,18 +117,6 @@
     "text_color": 11665663
   },
   {
-    "aspect_effects": [
-      {
-        "amplifier": 0,
-        "aspect": "light",
-        "effect": "minecraft:luck"
-      },
-      {
-        "amplifier": 0,
-        "aspect": "space",
-        "effect": "minecraft:jump_boost"
-      }
-    ],
     "background_color": -12566464,
     "boondollars": 575,
     "exp_requirement": 160,
@@ -145,18 +133,6 @@
     "text_color": 7182848
   },
   {
-    "aspect_effects": [
-      {
-        "amplifier": 0,
-        "aspect": "mind",
-        "effect": "minecraft:night_vision"
-      },
-      {
-        "amplifier": 0,
-        "aspect": "void",
-        "effect": "minecraft:invisibility"
-      }
-    ],
     "background_color": -2114708,
     "boondollars": 1140,
     "exp_requirement": 190,
@@ -165,13 +141,6 @@
     "text_color": 2201121
   },
   {
-    "aspect_effects": [
-      {
-        "amplifier": 0,
-        "aspect": "time",
-        "effect": "minecraft:haste"
-      }
-    ],
     "background_color": -3223858,
     "boondollars": 1630,
     "exp_requirement": 205,
@@ -180,18 +149,6 @@
     "text_color": 8352831
   },
   {
-    "aspect_effects": [
-      {
-        "amplifier": 0,
-        "aspect": "blood",
-        "effect": "minecraft:absorption"
-      },
-      {
-        "amplifier": 0,
-        "aspect": "heart",
-        "effect": "minecraft:absorption"
-      }
-    ],
     "background_color": -65536,
     "boondollars": 2230,
     "exp_requirement": 220,
@@ -200,13 +157,6 @@
     "text_color": 16744319
   },
   {
-    "aspect_effects": [
-      {
-        "amplifier": 0,
-        "aspect": "breath",
-        "effect": "minecraft:speed"
-      }
-    ],
     "background_color": -3764659,
     "boondollars": 2980,
     "exp_requirement": 235,
@@ -231,13 +181,6 @@
     "text_color": 16767218
   },
   {
-    "aspect_effects": [
-      {
-        "amplifier": 0,
-        "aspect": "hope",
-        "effect": "minecraft:fire_resistance"
-      }
-    ],
     "background_color": -16748868,
     "boondollars": 6000,
     "exp_requirement": 280,
@@ -254,23 +197,6 @@
     "text_color": 14352255
   },
   {
-    "aspect_effects": [
-      {
-        "amplifier": 0,
-        "aspect": "life",
-        "effect": "minecraft:regeneration"
-      },
-      {
-        "amplifier": 1,
-        "aspect": "light",
-        "effect": "minecraft:luck"
-      },
-      {
-        "amplifier": 1,
-        "aspect": "space",
-        "effect": "minecraft:jump_boost"
-      }
-    ],
     "background_color": -4124672,
     "boondollars": 9500,
     "exp_requirement": 310,
@@ -303,18 +229,6 @@
     "text_color": 5000268
   },
   {
-    "aspect_effects": [
-      {
-        "amplifier": 1,
-        "aspect": "mind",
-        "effect": "minecraft:night_vision"
-      },
-      {
-        "amplifier": 1,
-        "aspect": "void",
-        "effect": "minecraft:invisibility"
-      }
-    ],
     "background_color": -7118533,
     "boondollars": 24400,
     "exp_requirement": 370,
@@ -323,18 +237,6 @@
     "text_color": 54040
   },
   {
-    "aspect_effects": [
-      {
-        "amplifier": 0,
-        "aspect": "hope",
-        "effect": "minecraft:water_breathing"
-      },
-      {
-        "amplifier": 0,
-        "aspect": "rage",
-        "effect": "minecraft:strength"
-      }
-    ],
     "background_color": -15658719,
     "boondollars": 45000,
     "exp_requirement": 385,
@@ -343,13 +245,6 @@
     "text_color": 7283365
   },
   {
-    "aspect_effects": [
-      {
-        "amplifier": 1,
-        "aspect": "time",
-        "effect": "minecraft:haste"
-      }
-    ],
     "background_color": -2745560,
     "boondollars": 68000,
     "exp_requirement": 400,
@@ -366,23 +261,6 @@
     "text_color": 2325504
   },
   {
-    "aspect_effects": [
-      {
-        "amplifier": 1,
-        "aspect": "blood",
-        "effect": "minecraft:absorption"
-      },
-      {
-        "amplifier": 0,
-        "aspect": "doom",
-        "effect": "minecraft:resistance"
-      },
-      {
-        "amplifier": 0,
-        "aspect": "heart",
-        "effect": "minecraft:absorption"
-      }
-    ],
     "background_color": -1221606,
     "boondollars": 124000,
     "exp_requirement": 430,
@@ -399,23 +277,6 @@
     "text_color": 16738081
   },
   {
-    "aspect_effects": [
-      {
-        "amplifier": 1,
-        "aspect": "breath",
-        "effect": "minecraft:speed"
-      },
-      {
-        "amplifier": 2,
-        "aspect": "light",
-        "effect": "minecraft:luck"
-      },
-      {
-        "amplifier": 2,
-        "aspect": "space",
-        "effect": "minecraft:jump_boost"
-      }
-    ],
     "background_color": -1064192,
     "boondollars": 260000,
     "exp_requirement": 460,
@@ -464,23 +325,6 @@
     "text_color": 657568
   },
   {
-    "aspect_effects": [
-      {
-        "amplifier": 1,
-        "aspect": "hope",
-        "effect": "minecraft:fire_resistance"
-      },
-      {
-        "amplifier": 2,
-        "aspect": "mind",
-        "effect": "minecraft:night_vision"
-      },
-      {
-        "amplifier": 2,
-        "aspect": "void",
-        "effect": "minecraft:invisibility"
-      }
-    ],
     "background_color": -12819628,
     "boondollars": 1000000,
     "exp_requirement": 550,
@@ -513,23 +357,6 @@
     "text_color": 3575370
   },
   {
-    "aspect_effects": [
-      {
-        "amplifier": 1,
-        "aspect": "life",
-        "effect": "minecraft:regeneration"
-      },
-      {
-        "amplifier": 3,
-        "aspect": "light",
-        "effect": "minecraft:luck"
-      },
-      {
-        "amplifier": 3,
-        "aspect": "space",
-        "effect": "minecraft:jump_boost"
-      }
-    ],
     "background_color": -5432413,
     "boondollars": 1000000,
     "exp_requirement": 610,
@@ -546,18 +373,6 @@
     "text_color": 41409
   },
   {
-    "aspect_effects": [
-      {
-        "amplifier": 2,
-        "aspect": "blood",
-        "effect": "minecraft:absorption"
-      },
-      {
-        "amplifier": 1,
-        "aspect": "heart",
-        "effect": "minecraft:absorption"
-      }
-    ],
     "background_color": -16777216,
     "boondollars": 1000000,
     "exp_requirement": 640,
@@ -582,13 +397,6 @@
     "text_color": 1577338
   },
   {
-    "aspect_effects": [
-      {
-        "amplifier": 2,
-        "aspect": "breath",
-        "effect": "minecraft:speed"
-      }
-    ],
     "background_color": -12345803,
     "boondollars": 1000000,
     "exp_requirement": 685,
@@ -613,18 +421,6 @@
     "text_color": 14831634
   },
   {
-    "aspect_effects": [
-      {
-        "amplifier": 3,
-        "aspect": "mind",
-        "effect": "minecraft:night_vision"
-      },
-      {
-        "amplifier": 3,
-        "aspect": "void",
-        "effect": "minecraft:invisibility"
-      }
-    ],
     "background_color": -2242478,
     "boondollars": 1000000,
     "exp_requirement": 730,

@@ -97,20 +97,6 @@ public class Rungs
 	{
 		List<MobEffectInstance> instances = new ArrayList<>();
 		
-		for(Rung rungIterate : RUNGS.subList(0, rung))
-		{
-			for(Rung.AspectEffect aspectEffect : rungIterate.aspectEffects().stream().filter(aspectEffect -> aspectEffect.aspect().equals(aspect)).toList())
-			{
-				//TODO remove effects of the same type but of a lower amplifier
-				/*for(int i = 0; i < instances.size(); i++)
-				{
-					if(instances.get(i).getEffect().equals(aspectEffect.effect()))
-						instances.remove(i); //hmm
-				}*/
-				instances.add(new MobEffectInstance(aspectEffect.effect(), 600, aspectEffect.amplifier()));
-			}
-		}
-		
 		for(RungExtension extension : RUNG_EXTENSION_LIST)
 		{
 			if(extension.requiredAspect().isEmpty() || extension.requiredAspect().get() == aspect)
