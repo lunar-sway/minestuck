@@ -1,6 +1,5 @@
 package com.mraof.minestuck.client.renderer;
 
-
 import com.mojang.blaze3d.systems.RenderSystem;
 import com.mojang.blaze3d.vertex.*;
 import com.mojang.math.Axis;
@@ -18,6 +17,7 @@ import net.minecraft.world.level.Level;
 import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.Logger;
 import org.joml.Matrix4f;
+import org.joml.Quaternionf;
 
 import java.util.Random;
 
@@ -25,17 +25,10 @@ public final class SessionRenderHelper
 {
 	private static final Logger LOGGER = LogManager.getLogger();
 	
-	public static float calculateVeilAngle(ClientLevel level)
-	{
-		double d0 = Mth.frac((double) level.getGameTime() / 24000.0D - 0.25D);
-		double d1 = 0.5D - Math.cos(d0 * Math.PI) / 2.0D;
-		return (float) (d0 * 2.0D + d1) / 3.0F;
-	}
-	
 	public static void drawRotatingVeil(PoseStack poseStack, ClientLevel level)
 	{
 		poseStack.pushPose();
-		poseStack.mulPose(Axis.ZP.rotationDegrees(calculateVeilAngle(level) * 360.0F));
+		poseStack.mulPose(getRotationQuaternion(level));
 		drawVeil(poseStack.last().pose());
 		poseStack.popPose();
 	}
@@ -95,7 +88,7 @@ public final class SessionRenderHelper
 	public static void drawRotatingSkaia(PoseStack poseStack, ClientLevel level, float skaiaSize)
 	{
 		poseStack.pushPose();
-		poseStack.mulPose(Axis.ZP.rotationDegrees(calculateVeilAngle(level) * 360.0F));
+		poseStack.mulPose(getRotationQuaternion(level));
 		drawSkaia(poseStack.last().pose(), skaiaSize);
 		poseStack.popPose();
 	}
@@ -156,5 +149,17 @@ public final class SessionRenderHelper
 		drawSprite(matrix, planetSize, LandSkySpriteUploader.getInstance().getOverlaySprite(landTypes.getTitle(), index));
 		
 		poseStack.popPose();
+	}
+	
+	public static float calculateRotationDegree(ClientLevel level)
+	{
+		double d0 = Mth.frac((double) level.getGameTime() / 24000.0D - 0.25D);
+		double d1 = 0.5D - Math.cos(d0 * Math.PI) / 2.0D;
+		return (float) (d0 * 2.0D + d1) / 3.0F;
+	}
+	
+	private static Quaternionf getRotationQuaternion(ClientLevel level)
+	{
+		return Axis.ZP.rotationDegrees(calculateRotationDegree(level) * 360.0F);
 	}
 }

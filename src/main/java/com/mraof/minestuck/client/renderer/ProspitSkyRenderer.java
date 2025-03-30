@@ -1,15 +1,11 @@
 package com.mraof.minestuck.client.renderer;
 
-
 import com.mojang.blaze3d.platform.GlStateManager;
 import com.mojang.blaze3d.systems.RenderSystem;
-import com.mojang.blaze3d.vertex.*;
-import com.mojang.math.Axis;
-import net.minecraft.client.Minecraft;
+import com.mojang.blaze3d.vertex.PoseStack;
 import net.minecraft.client.multiplayer.ClientLevel;
 import net.minecraft.client.renderer.FogRenderer;
 import net.minecraft.client.renderer.GameRenderer;
-import net.minecraft.client.renderer.texture.TextureAtlasSprite;
 import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.Logger;
 import org.joml.Matrix4f;
@@ -23,31 +19,21 @@ public final class ProspitSkyRenderer
 		PoseStack poseStack = new PoseStack();
 		RenderSystem.enableBlend();
 		RenderSystem.defaultBlendFunc();
+		FogRenderer.levelFogColor();
 		RenderSystem.depthMask(false);
 		
 		poseStack.mulPose(modelViewMatrix);
+		
+		//TODO veil is mostly dark, and cannot be seen where the camera is facing
+		RenderSystem.setShader(GameRenderer::getPositionShader);
+		//RenderSystem.blendFuncSeparate(GlStateManager.SourceFactor.SRC_ALPHA, GlStateManager.DestFactor.ONE, GlStateManager.SourceFactor.ONE, GlStateManager.DestFactor.ZERO);
+		RenderSystem.blendFunc(GlStateManager.SourceFactor.SRC_ALPHA, GlStateManager.DestFactor.ONE_MINUS_SRC_ALPHA);
 		RenderSystem.setShaderColor(1, 1, 1, 1);
 		
-		renderVeil(level, poseStack);
-		renderSkaia(level, poseStack);
+		SessionRenderHelper.drawRotatingVeil(poseStack, level);
+		SessionRenderHelper.drawRotatingSkaia(poseStack, level, 200F);
 		
 		RenderSystem.disableBlend();
 		RenderSystem.depthMask(true);
-	}
-	
-	private static void renderVeil(ClientLevel level, PoseStack poseStack)
-	{
-		poseStack.pushPose();
-		poseStack.mulPose(Axis.ZP.rotationDegrees(SessionRenderHelper.calculateVeilAngle(level) * 360.0F));
-		SessionRenderHelper.drawVeil(poseStack.last().pose());
-		poseStack.popPose();
-	}
-	
-	private static void renderSkaia(ClientLevel level, PoseStack poseStack)
-	{
-		RenderSystem.setShader(GameRenderer::getPositionShader);
-		RenderSystem.blendFuncSeparate(GlStateManager.SourceFactor.SRC_ALPHA, GlStateManager.DestFactor.ONE, GlStateManager.SourceFactor.ONE, GlStateManager.DestFactor.ZERO);
-		
-		SessionRenderHelper.drawRotatingSkaia(poseStack, level, 100F);
 	}
 }
