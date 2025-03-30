@@ -14,7 +14,9 @@ This credits file is currently under construction. Join the conversation over at
 - Dado: [`grist_widget.json`](src/main/resources/assets/minestuck/models/block/grist_widget.json)
 and [`grist_widget_with_card.json`](src/main/resources/assets/minestuck/models/block/grist_widget_with_card.json)
 
-- DORO: [Dreamer pajamas](src/main/java/com/mraof/minestuck/client/model/armor/DreamerPajamasModel.java)
+- DORO: [Dreamer pajamas](src/main/java/com/mraof/minestuck/client/model/armor/DreamerPajamasModel.java),
+[Iron lass armor](src/main/resources/assets/minestuck/geo/iron_lass_armor.geo.json)
+and [Prismarine armor](src/main/resources/assets/minestuck/geo/prismarine_armor.geo.json)
 
 - Dweblenod
 
@@ -43,6 +45,9 @@ and [Carapacian rook](src/main/java/com/mraof/minestuck/client/model/entity/Rook
 - Mixmaw: [`skies.ogg`](src/main/resources/assets/minestuck/sounds/music/lands/skies.ogg)
 
 - SinFrog: [`retro_battle_theme.ogg`](src/main/resources/assets/minestuck/sounds/records/retro_battle_theme.ogg)
+
+- triagegremlin: [`october.ogg`](src/main/resources/assets/minestuck/sounds/music/lands/october.ogg)
+and [`the_note_desolation_plays.ogg`](src/main/resources/assets/minestuck/sounds/music/lands/the_note_desolation_plays.ogg)
 
 - ["Dance-Stab-Dance"](src/main/resources/assets/minestuck/sounds/records/dance_stab_dance.ogg) from [LOFAM2](https://unofficialmspafans.bandcamp.com/track/dance-stab-dance)
 and ["Emissary of Dance"](src/main/resources/assets/minestuck/sounds/records/emissary_of_dance.ogg) from [LOFAM3](https://unofficialmspafans.bandcamp.com/track/emissary-of-dance) by Mai Yishan (Catboss)
