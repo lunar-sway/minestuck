@@ -21,6 +21,9 @@ import org.joml.Quaternionf;
 
 import java.util.Random;
 
+/**
+ * Holds various rendering functions used for the sky boxes of various dimensions within a Session.
+ */
 public final class SessionRenderHelper
 {
 	private static final Logger LOGGER = LogManager.getLogger();
@@ -93,22 +96,59 @@ public final class SessionRenderHelper
 		poseStack.popPose();
 	}
 	
-	public static void drawSkaia(Matrix4f matrix, float skaiaSize)
+	public static void drawSkaia(Matrix4f matrix, float size)
 	{
-		TextureAtlasSprite skaiaSprite = LandSkySpriteUploader.getInstance().getSkaiaSprite();
-		drawSprite(matrix, skaiaSize, skaiaSprite);
+		TextureAtlasSprite sprite = LandSkySpriteUploader.getInstance().getSkaiaSprite();
+		drawSprite(matrix, size, sprite);
 	}
 	
-	public static void drawSprite(Matrix4f matrix, float size, TextureAtlasSprite sprite)
+	public static void drawRotatingProspit(PoseStack poseStack, ClientLevel level, float size)
 	{
-		RenderSystem.setShaderTexture(0, sprite.atlasLocation());
-		RenderSystem.setShader(GameRenderer::getPositionTexShader);
-		BufferBuilder buffer = Tesselator.getInstance().begin(VertexFormat.Mode.QUADS, DefaultVertexFormat.POSITION_TEX);
-		buffer.addVertex(matrix, -size, 100, -size).setUv(sprite.getU0(), sprite.getV0());
-		buffer.addVertex(matrix, size, 100, -size).setUv(sprite.getU1(), sprite.getV0());
-		buffer.addVertex(matrix, size, 100, size).setUv(sprite.getU1(), sprite.getV1());
-		buffer.addVertex(matrix, -size, 100, size).setUv(sprite.getU0(), sprite.getV1());
-		BufferUploader.drawWithShader(buffer.buildOrThrow());
+		poseStack.pushPose();
+		poseStack.mulPose(getRotationQuaternion(level));
+		drawProspit(poseStack, level, size);
+		poseStack.popPose();
+	}
+	
+	public static void drawProspit(PoseStack poseStack, ClientLevel level, float size)
+	{
+		TextureAtlasSprite sprite = LandSkySpriteUploader.getInstance().getProspitSprite();
+		poseStack.pushPose();
+		Matrix4f matrix = poseStack.last().pose();
+		float rotateSpeed = (level.getGameTime() % 100000F) * 0.000001F;
+		matrix.rotateY(rotateSpeed * 360);
+		poseStack.mulPose(Axis.XP.rotation(0.26F));
+		
+		drawSprite(matrix, size, sprite);
+		poseStack.popPose();
+	}
+	
+	public static void drawRotatingDerse(PoseStack poseStack, ClientLevel level, float size)
+	{
+		poseStack.pushPose();
+		poseStack.mulPose(getRotationQuaternion(level));
+		drawDerse(poseStack, level, size);
+		poseStack.popPose();
+	}
+	
+	public static void drawDerse(PoseStack poseStack, ClientLevel level, float size)
+	{
+		TextureAtlasSprite sprite = LandSkySpriteUploader.getInstance().getDerseSprite();
+		poseStack.pushPose();
+		Matrix4f matrix = poseStack.last().pose();
+		poseStack.mulPose(Axis.ZP.rotationDegrees(180));
+		poseStack.mulPose(Axis.XP.rotation(0.05F));
+		
+		drawSprite(matrix, size, sprite);
+		poseStack.popPose();
+	}
+	
+	public static void drawRotatingLands(Minecraft mc, PoseStack poseStack, ClientLevel level)
+	{
+		poseStack.pushPose();
+		poseStack.mulPose(getRotationQuaternion(level));
+		drawLands(mc, poseStack, level.dimension());
+		poseStack.popPose();
 	}
 	
 	public static void drawLands(Minecraft mc, PoseStack poseStack, ResourceKey<Level> dim)
@@ -149,6 +189,18 @@ public final class SessionRenderHelper
 		drawSprite(matrix, planetSize, LandSkySpriteUploader.getInstance().getOverlaySprite(landTypes.getTitle(), index));
 		
 		poseStack.popPose();
+	}
+	
+	public static void drawSprite(Matrix4f matrix, float size, TextureAtlasSprite sprite)
+	{
+		RenderSystem.setShaderTexture(0, sprite.atlasLocation());
+		RenderSystem.setShader(GameRenderer::getPositionTexShader);
+		BufferBuilder buffer = Tesselator.getInstance().begin(VertexFormat.Mode.QUADS, DefaultVertexFormat.POSITION_TEX);
+		buffer.addVertex(matrix, -size, 100, -size).setUv(sprite.getU0(), sprite.getV0());
+		buffer.addVertex(matrix, size, 100, -size).setUv(sprite.getU1(), sprite.getV0());
+		buffer.addVertex(matrix, size, 100, size).setUv(sprite.getU1(), sprite.getV1());
+		buffer.addVertex(matrix, -size, 100, size).setUv(sprite.getU0(), sprite.getV1());
+		BufferUploader.drawWithShader(buffer.buildOrThrow());
 	}
 	
 	public static float calculateRotationDegree(ClientLevel level)

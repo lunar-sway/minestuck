@@ -31,7 +31,8 @@ public final class ProspitSkyRenderer
 		RenderSystem.setShaderColor(1, 1, 1, 1);
 		
 		SessionRenderHelper.drawRotatingVeil(poseStack, level);
-		SessionRenderHelper.drawRotatingSkaia(poseStack, level, 200F);
+		SessionRenderHelper.drawRotatingDerse(poseStack, level, 0.5F);
+		SessionRenderHelper.drawRotatingSkaia(poseStack, level, 200.0F);
 		
 		RenderSystem.disableBlend();
 		RenderSystem.depthMask(true);

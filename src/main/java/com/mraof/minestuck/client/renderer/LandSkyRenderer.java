@@ -50,13 +50,17 @@ public final class LandSkyRenderer
 		RenderSystem.blendFuncSeparate(GlStateManager.SourceFactor.SRC_ALPHA, GlStateManager.DestFactor.ONE, GlStateManager.SourceFactor.ONE, GlStateManager.DestFactor.ZERO);
 		RenderSystem.setShaderColor(1.0F, 1.0F, 1.0F, skaiaBrightness);
 		
+		//TODO increase alpha levels at high altitudes
+		//TODO hide veil when behind any other celestial bodies besides derse
 		SessionRenderHelper.drawSkaia(matrix, 20.0F);
+		SessionRenderHelper.drawProspit(poseStack, level, 5.0F);
 		
 		if(starBrightness > 0)
 		{
 			RenderSystem.setShaderColor(starBrightness, starBrightness, starBrightness, starBrightness);
 			SessionRenderHelper.drawRotatingVeil(poseStack, level);
 			RenderSystem.setShaderColor(starBrightness * 2, starBrightness * 2, starBrightness * 2, starBrightness * 2);
+			SessionRenderHelper.drawRotatingDerse(poseStack, level, 1.0F);
 			SessionRenderHelper.drawLands(mc, poseStack, level.dimension());
 		}
 		
