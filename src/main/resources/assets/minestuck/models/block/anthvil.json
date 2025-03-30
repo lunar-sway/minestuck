@@ -1,7 +1,7 @@
 {
+    "credit": "Made with Blockbench by rose_bushes_",
     "render_type": "cutout",
     "parent": "block/block",
-    "credit": "Made with Blockbench by rose_bushes_",
     "texture_size": [28, 28],
     "textures": {
         "texture": "minestuck:block/anthvil",

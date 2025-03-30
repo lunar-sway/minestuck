@@ -1,0 +1,8 @@
+{
+  "condition": {
+    "type": "minestuck:always_true"
+  },
+  "dialogue": "minestuck:consort_general_merchant/got_the_goods",
+  "dialogue_weight": 10,
+  "keep_on_reset": true
+}

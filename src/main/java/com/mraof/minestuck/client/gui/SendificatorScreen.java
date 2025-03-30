@@ -4,8 +4,7 @@ import com.mojang.blaze3d.systems.RenderSystem;
 import com.mraof.minestuck.Minestuck;
 import com.mraof.minestuck.blockentity.machine.SendificatorBlockEntity;
 import com.mraof.minestuck.inventory.SendificatorMenu;
-import com.mraof.minestuck.network.MSPacketHandler;
-import com.mraof.minestuck.network.SendificatorPacket;
+import com.mraof.minestuck.network.block.SetSendificatorDestinationPacket;
 import net.minecraft.client.Minecraft;
 import net.minecraft.client.gui.GuiGraphics;
 import net.minecraft.client.gui.components.EditBox;
@@ -13,7 +12,8 @@ import net.minecraft.core.BlockPos;
 import net.minecraft.network.chat.Component;
 import net.minecraft.resources.ResourceLocation;
 import net.minecraft.world.entity.player.Inventory;
-import net.minecraftforge.client.gui.widget.ExtendedButton;
+import net.neoforged.neoforge.client.gui.widget.ExtendedButton;
+import net.neoforged.neoforge.network.PacketDistributor;
 
 import javax.annotation.Nullable;
 import javax.annotation.ParametersAreNonnullByDefault;
@@ -21,8 +21,8 @@ import javax.annotation.ParametersAreNonnullByDefault;
 @ParametersAreNonnullByDefault
 public class SendificatorScreen extends MachineScreen<SendificatorMenu>
 {
-	private static final ResourceLocation BACKGROUND_TEXTURE = new ResourceLocation(Minestuck.MOD_ID, "textures/gui/sendificator.png");
-	private static final ResourceLocation PROGRESS_BAR_TEXTURE = new ResourceLocation(Minestuck.MOD_ID, "textures/gui/progress/uranium_level.png");
+	private static final ResourceLocation BACKGROUND_TEXTURE = ResourceLocation.fromNamespaceAndPath(Minestuck.MOD_ID, "textures/gui/sendificator.png");
+	private static final ResourceLocation PROGRESS_BAR_TEXTURE = ResourceLocation.fromNamespaceAndPath(Minestuck.MOD_ID, "textures/gui/progress/uranium_level.png");
 	
 	private static final int PROGRESS_BAR_X = 52;
 	private static final int PROGRESS_BAR_Y = 24;
@@ -89,7 +89,6 @@ public class SendificatorScreen extends MachineScreen<SendificatorMenu>
 		// Make the update button clickable only when there is a parsed position and it is different from the original
 		updateButton.active = parsedPos != null && !parsedPos.equals(this.menu.getDestination());
 		
-		this.renderBackground(guiGraphics);
 		super.render(guiGraphics, mouseX, mouseY, partialTicks);
 		this.renderTooltip(guiGraphics, mouseX, mouseY);
 	}
@@ -134,7 +133,7 @@ public class SendificatorScreen extends MachineScreen<SendificatorMenu>
 	{
 		if(parsedPos != null)
 		{
-			MSPacketHandler.sendToServer(new SendificatorPacket(parsedPos));
+			PacketDistributor.sendToServer(new SetSendificatorDestinationPacket(parsedPos));
 		}
 	}
 	

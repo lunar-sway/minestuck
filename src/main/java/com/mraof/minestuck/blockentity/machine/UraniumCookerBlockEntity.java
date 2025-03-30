@@ -4,12 +4,12 @@ import com.mraof.minestuck.blockentity.MSBlockEntityTypes;
 import com.mraof.minestuck.inventory.UraniumCookerMenu;
 import com.mraof.minestuck.item.crafting.IrradiatingRecipe;
 import com.mraof.minestuck.item.crafting.MSRecipeTypes;
-import com.mraof.minestuck.util.ExtraForgeTags;
+import com.mraof.minestuck.util.ExtraModTags;
 import net.minecraft.core.BlockPos;
 import net.minecraft.core.Direction;
+import net.minecraft.core.HolderLookup;
 import net.minecraft.nbt.CompoundTag;
 import net.minecraft.network.chat.Component;
-import net.minecraft.world.Container;
 import net.minecraft.world.MenuProvider;
 import net.minecraft.world.entity.player.Inventory;
 import net.minecraft.world.entity.player.Player;
@@ -18,16 +18,13 @@ import net.minecraft.world.inventory.ContainerLevelAccess;
 import net.minecraft.world.inventory.DataSlot;
 import net.minecraft.world.item.ItemStack;
 import net.minecraft.world.item.crafting.AbstractCookingRecipe;
+import net.minecraft.world.item.crafting.RecipeHolder;
+import net.minecraft.world.item.crafting.SingleRecipeInput;
 import net.minecraft.world.level.block.state.BlockState;
-import net.minecraftforge.common.capabilities.Capability;
-import net.minecraftforge.common.capabilities.ForgeCapabilities;
-import net.minecraftforge.common.util.LazyOptional;
-import net.minecraftforge.items.IItemHandler;
-import net.minecraftforge.items.ItemStackHandler;
-import net.minecraftforge.items.wrapper.RangedWrapper;
-import net.minecraftforge.items.wrapper.RecipeWrapper;
+import net.neoforged.neoforge.items.IItemHandler;
+import net.neoforged.neoforge.items.ItemStackHandler;
+import net.neoforged.neoforge.items.wrapper.RangedWrapper;
 
-import javax.annotation.Nonnull;
 import javax.annotation.Nullable;
 import java.util.Comparator;
 import java.util.Optional;
@@ -38,7 +35,6 @@ public class UraniumCookerBlockEntity extends MachineProcessBlockEntity implemen
 	public static final String TITLE = "container.minestuck.uranium_cooker";
 	
 	private final ProgressTracker progressTracker = new ProgressTracker(ProgressTracker.RunType.ONCE_OR_LOOPING, 0, this::setChanged, this::contentsValid);
-	private final Container recipeInventory = new RecipeWrapper(itemHandler);
 	
 	private final DataSlot fuelHolder = new DataSlot()
 	{
@@ -66,20 +62,20 @@ public class UraniumCookerBlockEntity extends MachineProcessBlockEntity implemen
 	@Override
 	protected ItemStackHandler createItemHandler()
 	{
-		return new CustomHandler(3, (index, stack) -> index == 1 ? stack.is(ExtraForgeTags.Items.URANIUM_CHUNKS) : index != 2);
+		return new CustomHandler(3, (index, stack) -> index == 1 ? stack.is(ExtraModTags.Items.URANIUM_CHUNKS) : index != 2);
 	}
 	
 	@Override
-	public void saveAdditional(CompoundTag compound)
+	public void saveAdditional(CompoundTag compound, HolderLookup.Provider provider)
 	{
-		super.saveAdditional(compound);
+		super.saveAdditional(compound, provider);
 		compound.putShort("fuel", fuel);
 	}
 	
 	@Override
-	public void load(CompoundTag nbt)
+	protected void loadAdditional(CompoundTag nbt, HolderLookup.Provider pRegistries)
 	{
-		super.load(nbt);
+		super.loadAdditional(nbt, pRegistries);
 		fuel = nbt.getShort("fuel");
 	}
 	
@@ -99,7 +95,7 @@ public class UraniumCookerBlockEntity extends MachineProcessBlockEntity implemen
 		ItemStack fuel = itemHandler.getStackInSlot(1);
 		ItemStack input = itemHandler.getStackInSlot(0);
 		ItemStack output = irradiate();
-		return canBeRefueled() && fuel.is(ExtraForgeTags.Items.URANIUM_CHUNKS) || !input.isEmpty() && !output.isEmpty();
+		return canBeRefueled() && fuel.is(ExtraModTags.Items.URANIUM_CHUNKS) || !input.isEmpty() && !output.isEmpty();
 	}
 	
 	private ItemStack irradiate()    //TODO Handle the recipe and make sure to use its exp/cooking time
@@ -107,8 +103,10 @@ public class UraniumCookerBlockEntity extends MachineProcessBlockEntity implemen
 		if(level == null)
 			return ItemStack.EMPTY;
 		
+		SingleRecipeInput recipeInventory = new SingleRecipeInput(itemHandler.getStackInSlot(0));
+		
 		//List of all recipes that match to the current input
-		Stream<IrradiatingRecipe> stream = level.getRecipeManager().getRecipesFor(MSRecipeTypes.IRRADIATING_TYPE.get(), recipeInventory, level).stream();
+		Stream<IrradiatingRecipe> stream = level.getRecipeManager().getRecipesFor(MSRecipeTypes.IRRADIATING_TYPE.get(), recipeInventory, level).stream().map(RecipeHolder::value);
 		//Sort the stream to get non-fallback recipes first, and fallback recipes second
 		stream = stream.sorted(Comparator.comparingInt(o -> (o.isFallback() ? 1 : 0)));
 		//Let the recipe return the recipe actually used (for fallbacks), to clear out all that are not present, and then get the first
@@ -119,7 +117,7 @@ public class UraniumCookerBlockEntity extends MachineProcessBlockEntity implemen
 	
 	private void processContents()
 	{
-		if(canBeRefueled() && itemHandler.getStackInSlot(1).is(ExtraForgeTags.Items.URANIUM_CHUNKS))
+		if(canBeRefueled() && itemHandler.getStackInSlot(1).is(ExtraModTags.Items.URANIUM_CHUNKS))
 		{
 			//Refill fuel
 			addFuel((short) FUEL_INCREASE);
@@ -158,20 +156,16 @@ public class UraniumCookerBlockEntity extends MachineProcessBlockEntity implemen
 		return false;
 	}
 	
-	private final LazyOptional<IItemHandler> upHandler = LazyOptional.of(() -> new RangedWrapper(itemHandler, 0, 1));
-	private final LazyOptional<IItemHandler> downHandler = LazyOptional.of(() -> new RangedWrapper(itemHandler, 2, 3));
-	private final LazyOptional<IItemHandler> sideHandler = LazyOptional.of(() -> new RangedWrapper(itemHandler, 1, 2));
-	
-	@Nonnull
-	@Override
-	public <T> LazyOptional<T> getCapability(@Nonnull Capability<T> cap, @Nullable Direction side)
+	public IItemHandler getItemHandler(@Nullable Direction side)
 	{
-		if(cap == ForgeCapabilities.ITEM_HANDLER && side != null)
-		{
-			return side == Direction.DOWN ? downHandler.cast() :
-					side == Direction.UP ? upHandler.cast() : sideHandler.cast();
-		}
-		return super.getCapability(cap, side);
+		if(side == null)
+			return this.itemHandler;
+		
+		if(side == Direction.DOWN)
+			return new RangedWrapper(itemHandler, 2, 3);
+		if(side == Direction.UP)
+			return new RangedWrapper(itemHandler, 0, 1);
+		return new RangedWrapper(itemHandler, 1, 2);
 	}
 	
 	@Nullable

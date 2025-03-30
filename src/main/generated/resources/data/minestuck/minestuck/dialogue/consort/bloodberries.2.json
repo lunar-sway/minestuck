@@ -1,0 +1,10 @@
+{
+  "node": {
+    "animation": {
+      "emotion": "anxious"
+    },
+    "gui": "minestuck:textures/gui/dialogue/dialogue.png",
+    "message": "minestuck.dialogue.consort.bloodberries.2",
+    "responses": []
+  }
+}

@@ -1,13 +1,13 @@
 package com.mraof.minestuck.client.gui;
 
 import com.mraof.minestuck.inventory.MachineContainerMenu;
-import com.mraof.minestuck.network.MachinePacket;
-import com.mraof.minestuck.network.MSPacketHandler;
+import com.mraof.minestuck.network.block.MachinePackets;
 import net.minecraft.MethodsReturnNonnullByDefault;
 import net.minecraft.client.Minecraft;
 import net.minecraft.client.gui.screens.Screen;
 import net.minecraft.network.chat.Component;
-import net.minecraftforge.client.gui.widget.ExtendedButton;
+import net.neoforged.neoforge.client.gui.widget.ExtendedButton;
+import net.neoforged.neoforge.network.PacketDistributor;
 import org.lwjgl.glfw.GLFW;
 
 @MethodsReturnNonnullByDefault
@@ -94,11 +94,11 @@ public class GoButton extends ExtendedButton
 	
 	private void onRegularClick()
 	{
-		MSPacketHandler.sendToServer(new MachinePacket.SetRunning(!this.menu.isRunning()));
+		PacketDistributor.sendToServer(new MachinePackets.SetRunning(!this.menu.isRunning()));
 	}
 	
 	private void onLoopClick()
 	{
-		MSPacketHandler.sendToServer(new MachinePacket.SetLooping(!this.menu.isLooping()));
+		PacketDistributor.sendToServer(new MachinePackets.SetLooping(!this.menu.isLooping()));
 	}
 }

@@ -2,10 +2,8 @@ package com.mraof.minestuck.jei;
 
 import com.mraof.minestuck.Minestuck;
 import com.mraof.minestuck.api.alchemy.GristAmount;
-import com.mraof.minestuck.api.alchemy.recipe.GristCostRecipe;
 import com.mraof.minestuck.api.alchemy.recipe.JeiGristCost;
 import com.mraof.minestuck.api.alchemy.recipe.combination.CombinationMode;
-import com.mraof.minestuck.api.alchemy.recipe.combination.CombinationRecipe;
 import com.mraof.minestuck.api.alchemy.recipe.combination.JeiCombination;
 import com.mraof.minestuck.block.MSBlocks;
 import com.mraof.minestuck.item.MSItems;
@@ -18,10 +16,10 @@ import mezz.jei.api.registration.*;
 import net.minecraft.client.Minecraft;
 import net.minecraft.resources.ResourceLocation;
 import net.minecraft.world.item.ItemStack;
-import net.minecraft.world.item.crafting.Recipe;
+import net.minecraft.world.item.crafting.RecipeManager;
 import net.minecraft.world.level.Level;
 
-import java.util.Collection;
+import java.util.Objects;
 
 /**
  * Created by mraof on 2017 January 23 at 2:11 AM.
@@ -38,14 +36,16 @@ public class MinestuckJeiPlugin implements IModPlugin
 	@Override
 	public ResourceLocation getPluginUid()
 	{
-		return new ResourceLocation(Minestuck.MOD_ID, "minestuck");
+		return ResourceLocation.fromNamespaceAndPath(Minestuck.MOD_ID, "minestuck");
 	}
 	
 	@Override
 	public void registerItemSubtypes(ISubtypeRegistration subtypeRegistry)
 	{
+		/* FIXME
 		subtypeRegistry.useNbtForSubtypes(MSItems.CAPTCHA_CARD.get());
 		subtypeRegistry.useNbtForSubtypes(MSBlocks.CRUXITE_DOWEL.get().asItem());
+		 */
 	}
 	
 	@Override
@@ -82,14 +82,14 @@ public class MinestuckJeiPlugin implements IModPlugin
 	public void registerRecipes(IRecipeRegistration registration)
 	{
 		Level level = Minecraft.getInstance().level;
-		Collection<Recipe<?>> recipes = level.getRecipeManager().getRecipes();
-		registration.addRecipes(GRIST_COST, recipes.stream().filter(recipe -> recipe.getType() == MSRecipeTypes.GRIST_COST_TYPE.get())
-				.flatMap(recipe -> ((GristCostRecipe) recipe).getJeiCosts(level).stream()).toList());
-		registration.addRecipes(LATHE, recipes.stream().filter(recipe -> recipe.getType() == MSRecipeTypes.COMBINATION_TYPE.get())
-				.flatMap(recipe -> ((CombinationRecipe) recipe).getJeiCombinations().stream())
+		RecipeManager recipeManager = Objects.requireNonNull(level).getRecipeManager();
+		registration.addRecipes(GRIST_COST, recipeManager.getAllRecipesFor(MSRecipeTypes.GRIST_COST_TYPE.get()).stream()
+				.flatMap(holder -> holder.value().getJeiCosts(level).stream()).toList());
+		registration.addRecipes(LATHE, recipeManager.getAllRecipesFor(MSRecipeTypes.COMBINATION_TYPE.get()).stream()
+				.flatMap(holder -> holder.value().getJeiCombinations().stream())
 				.filter(combination -> combination.mode() == CombinationMode.AND).toList());
-		registration.addRecipes(DESIGNIX, recipes.stream().filter(recipe -> recipe.getType() == MSRecipeTypes.COMBINATION_TYPE.get())
-				.flatMap(recipe -> ((CombinationRecipe) recipe).getJeiCombinations().stream())
+		registration.addRecipes(DESIGNIX, recipeManager.getAllRecipesFor(MSRecipeTypes.COMBINATION_TYPE.get()).stream()
+				.flatMap(holder -> holder.value().getJeiCombinations().stream())
 				.filter(combination -> combination.mode() == CombinationMode.OR).toList());
 	}
 }

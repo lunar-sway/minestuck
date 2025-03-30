@@ -1,11 +1,12 @@
 package com.mraof.minestuck.blockentity.machine;
 
+import com.mraof.minestuck.blockentity.MSBlockEntityTypes;
 import com.mraof.minestuck.inventory.OptionalPosHolder;
 import com.mraof.minestuck.inventory.SendificatorMenu;
-import com.mraof.minestuck.blockentity.MSBlockEntityTypes;
-import com.mraof.minestuck.util.ExtraForgeTags;
+import com.mraof.minestuck.util.ExtraModTags;
 import net.minecraft.core.BlockPos;
 import net.minecraft.core.Direction;
+import net.minecraft.core.HolderLookup;
 import net.minecraft.nbt.CompoundTag;
 import net.minecraft.network.chat.Component;
 import net.minecraft.server.level.ServerPlayer;
@@ -18,15 +19,10 @@ import net.minecraft.world.inventory.ContainerLevelAccess;
 import net.minecraft.world.inventory.DataSlot;
 import net.minecraft.world.item.ItemStack;
 import net.minecraft.world.level.block.state.BlockState;
-import net.minecraftforge.common.capabilities.Capability;
-import net.minecraftforge.common.capabilities.ForgeCapabilities;
-import net.minecraftforge.common.util.LazyOptional;
-import net.minecraftforge.items.IItemHandler;
-import net.minecraftforge.items.ItemStackHandler;
-import net.minecraftforge.items.wrapper.RangedWrapper;
-import net.minecraftforge.network.NetworkHooks;
+import net.neoforged.neoforge.items.IItemHandler;
+import net.neoforged.neoforge.items.ItemStackHandler;
+import net.neoforged.neoforge.items.wrapper.RangedWrapper;
 
-import javax.annotation.Nonnull;
 import javax.annotation.Nullable;
 import java.util.Optional;
 
@@ -80,9 +76,9 @@ public class SendificatorBlockEntity extends MachineProcessBlockEntity implement
 	}
 	
 	@Override
-	public void load(CompoundTag compound)
+	public void loadAdditional(CompoundTag compound, HolderLookup.Provider provider)
 	{
-		super.load(compound);
+		super.loadAdditional(compound, provider);
 		
 		this.progressTracker.load(compound);
 		
@@ -98,9 +94,9 @@ public class SendificatorBlockEntity extends MachineProcessBlockEntity implement
 	}
 	
 	@Override
-	public void saveAdditional(CompoundTag compound)
+	public void saveAdditional(CompoundTag compound, HolderLookup.Provider provider)
 	{
-		super.saveAdditional(compound);
+		super.saveAdditional(compound, provider);
 		
 		this.progressTracker.save(compound);
 		
@@ -117,7 +113,7 @@ public class SendificatorBlockEntity extends MachineProcessBlockEntity implement
 	@Override
 	protected ItemStackHandler createItemHandler()
 	{
-		return new MachineProcessBlockEntity.CustomHandler(2, (index, stack) -> index == 0 || stack.is(ExtraForgeTags.Items.URANIUM_CHUNKS));
+		return new MachineProcessBlockEntity.CustomHandler(2, (index, stack) -> index == 0 || stack.is(ExtraModTags.Items.URANIUM_CHUNKS));
 	}
 	
 	@Override
@@ -135,7 +131,7 @@ public class SendificatorBlockEntity extends MachineProcessBlockEntity implement
 		
 		ItemStack fuel = itemHandler.getStackInSlot(1);
 		ItemStack input = itemHandler.getStackInSlot(0);
-		return canBeRefueled() && fuel.is(ExtraForgeTags.Items.URANIUM_CHUNKS) || !input.isEmpty();
+		return canBeRefueled() && fuel.is(ExtraModTags.Items.URANIUM_CHUNKS) || !input.isEmpty();
 	}
 	
 	/**
@@ -146,7 +142,7 @@ public class SendificatorBlockEntity extends MachineProcessBlockEntity implement
 		if(canBeRefueled())
 		{
 			//checks for a uranium itemstack in the lower(fuel) item slot, increases the fuel value if some is found and then removes one count from the fuel stack
-			if(itemHandler.getStackInSlot(1).is(ExtraForgeTags.Items.URANIUM_CHUNKS))
+			if(itemHandler.getStackInSlot(1).is(ExtraModTags.Items.URANIUM_CHUNKS))
 			{
 				//Refill fuel
 				addFuel((short) FUEL_INCREASE);
@@ -205,28 +201,22 @@ public class SendificatorBlockEntity extends MachineProcessBlockEntity implement
 		fuel += fuelAmount;
 	}
 	
-	private final LazyOptional<IItemHandler> inputHandler = LazyOptional.of(() -> new RangedWrapper(itemHandler, 0, 1)); //sendificated item slot
-	private final LazyOptional<IItemHandler> fuelHandler = LazyOptional.of(() -> new RangedWrapper(itemHandler, 1, 2)); //uranium fuel slot
-	
-	@Nonnull
-	@Override
-	public <T> LazyOptional<T> getCapability(@Nonnull Capability<T> cap, @Nullable Direction side)
+	@Nullable
+	public IItemHandler getItemHandler(@Nullable Direction side)
 	{
-		if(cap == ForgeCapabilities.ITEM_HANDLER && side != null)
-		{
-			if(side == Direction.UP)
-				return inputHandler.cast();
-			else if(side == Direction.DOWN)
-				return LazyOptional.empty();
-			else
-				return fuelHandler.cast(); //will fill the sendificator with fuel if fed from the sides
-		}
-		return super.getCapability(cap, side);
+		if(side == null)
+			return this.itemHandler;
+		
+		if(side == Direction.UP)
+			return new RangedWrapper(this.itemHandler, 0, 1);
+		if(side == Direction.DOWN)
+			return null;
+		return new RangedWrapper(this.itemHandler, 1, 2);
 	}
 	
 	public void openMenu(ServerPlayer player)
 	{
-		NetworkHooks.openScreen(player, this, SendificatorMenu.makeExtraDataWriter(this.worldPosition, this.destBlockPos));
+		player.openMenu(this, SendificatorMenu.makeExtraDataWriter(this.worldPosition, this.destBlockPos));
 	}
 	
 	@Nullable

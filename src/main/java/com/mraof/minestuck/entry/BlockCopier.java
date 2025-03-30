@@ -1,17 +1,19 @@
 package com.mraof.minestuck.entry;
 
 import net.minecraft.core.BlockPos;
+import net.minecraft.core.HolderLookup;
+import net.minecraft.core.registries.BuiltInRegistries;
 import net.minecraft.nbt.CompoundTag;
 import net.minecraft.server.level.ServerLevel;
 import net.minecraft.world.level.block.entity.BlockEntity;
 import net.minecraft.world.level.block.state.BlockState;
 import net.minecraft.world.level.chunk.LevelChunk;
-import net.minecraftforge.registries.ForgeRegistries;
 import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.Logger;
 
 import javax.annotation.Nullable;
 import java.util.HashSet;
+import java.util.Objects;
 import java.util.Set;
 
 public final class BlockCopier
@@ -50,15 +52,16 @@ public final class BlockCopier
 	@Nullable
 	private static BlockEntity cloneBEToPos(BlockState block, LevelChunk targetChunk, BlockPos targetPos, BlockEntity blockEntity)
 	{
-		CompoundTag nbt = blockEntity.saveWithId();
+		HolderLookup.Provider provider = Objects.requireNonNull(blockEntity.getLevel()).registryAccess();
+		CompoundTag nbt = blockEntity.saveWithId(provider);
 		nbt.putInt("x", targetPos.getX());
 		nbt.putInt("y", targetPos.getY());
 		nbt.putInt("z", targetPos.getZ());
-		BlockEntity newBE = BlockEntity.loadStatic(targetPos, block, nbt);
+		BlockEntity newBE = BlockEntity.loadStatic(targetPos, block, nbt, provider);
 		if(newBE != null)
 			targetChunk.addAndRegisterBlockEntity(newBE);
 		else
-			LOGGER.warn("Unable to create a new block entity {} when teleporting blocks to the medium!", ForgeRegistries.BLOCK_ENTITY_TYPES.getKey(blockEntity.getType()));
+			LOGGER.warn("Unable to create a new block entity {} when teleporting blocks to the medium!", BuiltInRegistries.BLOCK_ENTITY_TYPE.getKey(blockEntity.getType()));
 		return newBE;
 	}
 }

@@ -4,8 +4,10 @@ import com.mraof.minestuck.block.MSProperties;
 import com.mraof.minestuck.block.redstone.StructureCoreBlock;
 import com.mraof.minestuck.block.redstone.SummonerBlock;
 import com.mraof.minestuck.blockentity.MSBlockEntityTypes;
+import com.mraof.minestuck.network.block.StructureCoreSettingsPacket;
 import com.mraof.minestuck.world.gen.structure.CoreCompatibleScatteredStructurePiece;
 import net.minecraft.core.BlockPos;
+import net.minecraft.core.HolderLookup;
 import net.minecraft.nbt.CompoundTag;
 import net.minecraft.network.protocol.Packet;
 import net.minecraft.network.protocol.game.ClientGamePacketListener;
@@ -172,19 +174,9 @@ public class StructureCoreBlockEntity extends BlockEntity
 		}
 	}
 	
-	public void setShutdownRange(int shutdownRange)
-	{
-		this.shutdownRange = shutdownRange;
-	}
-	
 	public int getShutdownRange()
 	{
 		return shutdownRange;
-	}
-	
-	public void setHasWiped(boolean hasWiped)
-	{
-		this.hasWiped = hasWiped;
 	}
 	
 	public boolean getHasWiped()
@@ -197,20 +189,25 @@ public class StructureCoreBlockEntity extends BlockEntity
 		return this.actionType;
 	}
 	
-	public void setActionType(ActionType actionTypeIn)
-	{
-		actionType = Objects.requireNonNull(actionTypeIn);
-	}
-	
 	public void prepForUpdate()
 	{
 		this.tickCycle = 600;
 	}
 	
-	@Override
-	public void load(CompoundTag compound)
+	public void handleSettingsPacket(StructureCoreSettingsPacket packet)
 	{
-		super.load(compound);
+		actionType = Objects.requireNonNull(packet.actionType());
+		this.shutdownRange = packet.shutdownRange();
+		this.hasWiped = false;
+		
+		setChanged();
+		this.level.setBlock(packet.beBlockPos(), getBlockState().setValue(StructureCoreBlock.POWERED, false), Block.UPDATE_ALL);
+	}
+	
+	@Override
+	public void loadAdditional(CompoundTag compound, HolderLookup.Provider provider)
+	{
+		super.loadAdditional(compound, provider);
 		tickCycle = compound.getInt("tickCycle");
 		this.actionType = ActionType.fromInt(compound.getInt("actionTypeOrdinal"));
 		hasWiped = compound.getBoolean("hasWiped");
@@ -218,9 +215,9 @@ public class StructureCoreBlockEntity extends BlockEntity
 	}
 	
 	@Override
-	public void saveAdditional(CompoundTag compound)
+	public void saveAdditional(CompoundTag compound, HolderLookup.Provider provider)
 	{
-		super.saveAdditional(compound);
+		super.saveAdditional(compound, provider);
 		
 		compound.putInt("tickCycle", tickCycle);
 		compound.putInt("actionTypeOrdinal", getActionType().ordinal());
@@ -229,9 +226,9 @@ public class StructureCoreBlockEntity extends BlockEntity
 	}
 	
 	@Override
-	public CompoundTag getUpdateTag()
+	public CompoundTag getUpdateTag(HolderLookup.Provider provider)
 	{
-		return this.saveWithoutMetadata();
+		return this.saveWithoutMetadata(provider);
 	}
 	
 	@Override

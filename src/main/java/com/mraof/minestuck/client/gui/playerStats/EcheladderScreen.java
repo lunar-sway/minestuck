@@ -35,7 +35,7 @@ public class EcheladderScreen extends PlayerStatsScreen
 	public static final String PROTECTION_UNDERLING = "minestuck.echeladder.protection_underling";
 	public static final String PROTECTION_UNDERLING_INCREASE = "minestuck.echeladder.protection_underling.increase";
 	
-	private static final ResourceLocation guiEcheladder = new ResourceLocation("minestuck", "textures/gui/echeladder.png");
+	private static final ResourceLocation guiEcheladder = ResourceLocation.fromNamespaceAndPath("minestuck", "textures/gui/echeladder.png");
 	
 	private static final int MAX_SCROLL = Echeladder.RUNG_COUNT*14 - 154;
 														//0			1			2			3			4			5			6			7			8			9			10			11			12			13			14			15			16			17			18			19			20			21			22			23			24			25			26			27			28			29			30			31			32			33			34			35			36			37			38			39			40			41			42			43			44			45			46			47			48			49
@@ -113,8 +113,6 @@ public class EcheladderScreen extends PlayerStatsScreen
 		}
 		
 		super.render(guiGraphics, mouseX, mouseY, partialTicks);
-		this.renderBackground(guiGraphics);
-		
 		
 		drawTabs(guiGraphics);
 		
@@ -211,7 +209,7 @@ public class EcheladderScreen extends PlayerStatsScreen
 		
 		double health = mc.player.getMaxHealth()/2;	//10 + Echeladder.healthBoost(currentRung)/2.0;
 		guiGraphics.drawString(font, I18n.get(HEALTH), xOffset + 24, yOffset + 84, 0x404040, false);
-		guiGraphics.drawString(font, String.valueOf(health), xOffset + 26, yOffset + 93, 0x0094FF, false);
+		guiGraphics.drawString(font, String.format(Locale.ROOT, "%.1f", health), xOffset + 26, yOffset + 93, 0x0094FF, false);
 		
 		guiGraphics.drawString(font, "=", xOffset + 25, yOffset + 12, 0x404040, false);	//Should this be black, or the same blue as the numbers?
 		guiGraphics.drawString(font, String.valueOf(ClientPlayerData.getBoondollars()), xOffset + 27 + mc.font.width("="), yOffset + 12, 0x0094FF, false);
@@ -305,17 +303,17 @@ public class EcheladderScreen extends PlayerStatsScreen
 	}
 	
 	@Override
-	public boolean mouseScrolled(double mouseX, double mouseY, double scroll)
+	public boolean mouseScrolled(double mouseX, double mouseY, double scrollX, double scrollY)
 	{
-		if(scroll != 0)
+		if(scrollY != 0)
 		{
-			if(scroll > 0)
+			if(scrollY > 0)
 				scrollIndex += 14;
 			else scrollIndex -= 14;
 			scrollIndex = Mth.clamp(scrollIndex, 0, MAX_SCROLL);
 			return true;
 		}
-		else return super.mouseScrolled(mouseX, mouseY, scroll);
+		else return super.mouseScrolled(mouseX, mouseY, scrollX, scrollY);
 	}
 	
 	@Override

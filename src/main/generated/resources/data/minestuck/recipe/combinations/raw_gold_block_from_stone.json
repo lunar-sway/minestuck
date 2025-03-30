@@ -1,0 +1,11 @@
+{
+  "type": "minestuck:combination",
+  "input1": {
+    "item": "minecraft:raw_gold"
+  },
+  "input2": {
+    "item": "minecraft:stone"
+  },
+  "mode": "and",
+  "output": "minecraft:raw_gold_block"
+}

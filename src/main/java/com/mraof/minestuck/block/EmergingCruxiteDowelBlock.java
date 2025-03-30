@@ -5,7 +5,6 @@ import com.mraof.minestuck.item.MSItems;
 import net.minecraft.MethodsReturnNonnullByDefault;
 import net.minecraft.core.BlockPos;
 import net.minecraft.core.Direction;
-import net.minecraft.world.InteractionHand;
 import net.minecraft.world.InteractionResult;
 import net.minecraft.world.entity.player.Player;
 import net.minecraft.world.item.ItemStack;
@@ -42,8 +41,7 @@ public class EmergingCruxiteDowelBlock extends Block implements EntityBlock
 	}
 	
 	@Override
-	@SuppressWarnings("deprecation")
-	public VoxelShape getShape(BlockState state, BlockGetter level, BlockPos pos, CollisionContext context)
+	protected VoxelShape getShape(BlockState state, BlockGetter level, BlockPos pos, CollisionContext context)
 	{
 		return CRUXTRUDER_SHAPE;
 	}
@@ -58,8 +56,7 @@ public class EmergingCruxiteDowelBlock extends Block implements EntityBlock
 	}
 	
 	@Override
-	@SuppressWarnings("deprecation")
-	public List<ItemStack> getDrops(BlockState state, LootParams.Builder builder)
+	protected List<ItemStack> getDrops(BlockState state, LootParams.Builder builder)
 	{
 		if(builder.getOptionalParameter(LootContextParams.BLOCK_ENTITY) instanceof ItemStackBlockEntity stackEntity)
 			builder = builder.withDynamicDrop(ItemStackBlockEntity.ITEM_DYNAMIC,
@@ -69,32 +66,29 @@ public class EmergingCruxiteDowelBlock extends Block implements EntityBlock
 	}
 	
 	@Override
-	@SuppressWarnings("deprecation")
-	public InteractionResult use(BlockState state, Level level, BlockPos pos, Player player, InteractionHand hand, BlockHitResult hit)
+	protected InteractionResult useWithoutItem(BlockState state, Level level, BlockPos pos, Player player, BlockHitResult hit)
 	{
 		if(!level.isClientSide)
 			CruxiteDowelBlock.dropDowel(level, pos);
 		return  InteractionResult.SUCCESS;
 	}
 	
-	@SuppressWarnings("deprecation")
 	@Override
-	public BlockState updateShape(BlockState state, Direction direction, BlockState neighborState, LevelAccessor level, BlockPos currentPos, BlockPos neighborPos)
+	protected BlockState updateShape(BlockState state, Direction direction, BlockState neighborState, LevelAccessor level, BlockPos currentPos, BlockPos neighborPos)
 	{
 		return direction == Direction.DOWN && !this.canSurvive(state, level, currentPos)
 				? Blocks.AIR.defaultBlockState()
 				: super.updateShape(state, direction, neighborState, level, currentPos, neighborPos);
 	}
 	
-	@SuppressWarnings("deprecation")
 	@Override
-	public boolean canSurvive(BlockState state, LevelReader level, BlockPos pos)
+	protected boolean canSurvive(BlockState state, LevelReader level, BlockPos pos)
 	{
 		return level.getBlockState(pos.below()).is(MSBlocks.CRUXTRUDER.TUBE.get());
 	}
 	
 	@Override
-	public ItemStack getCloneItemStack(BlockState state, HitResult target, BlockGetter level, BlockPos pos, Player player)
+	public ItemStack getCloneItemStack(BlockState state, HitResult target, LevelReader level, BlockPos pos, Player player)
 	{
 		if (level.getBlockEntity(pos) instanceof ItemStackBlockEntity stackEntity)
 		{
@@ -106,7 +100,6 @@ public class EmergingCruxiteDowelBlock extends Block implements EntityBlock
 	}
 	
 	@Override
-	@SuppressWarnings("deprecation")
 	public PushReaction getPistonPushReaction(BlockState state)
 	{
 		return PushReaction.DESTROY;

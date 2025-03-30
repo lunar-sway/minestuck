@@ -1,0 +1,7 @@
+{
+  "parent": "minecraft:block/cube_column",
+  "textures": {
+    "end": "minestuck:block/breath_aspect_log",
+    "side": "minestuck:block/breath_aspect_log"
+  }
+}

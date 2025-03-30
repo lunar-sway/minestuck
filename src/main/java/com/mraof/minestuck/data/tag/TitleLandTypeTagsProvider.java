@@ -8,7 +8,7 @@ import net.minecraft.core.HolderLookup;
 import net.minecraft.data.PackOutput;
 import net.minecraft.data.tags.IntrinsicHolderTagsProvider;
 import net.minecraft.resources.ResourceKey;
-import net.minecraftforge.common.data.ExistingFileHelper;
+import net.neoforged.neoforge.common.data.ExistingFileHelper;
 import org.jetbrains.annotations.Nullable;
 
 import javax.annotation.ParametersAreNonnullByDefault;
@@ -27,7 +27,7 @@ public final class TitleLandTypeTagsProvider extends IntrinsicHolderTagsProvider
 	
 	private static ResourceKey<TitleLandType> keyForLandType(TitleLandType landType)
 	{
-		return LandTypes.TITLE_REGISTRY.get().getResourceKey(landType).orElseThrow();
+		return LandTypes.TITLE_REGISTRY.getResourceKey(landType).orElseThrow();
 	}
 	
 	@Override

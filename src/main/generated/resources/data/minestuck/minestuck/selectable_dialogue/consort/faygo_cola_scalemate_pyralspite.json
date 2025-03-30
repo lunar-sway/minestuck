@@ -1,0 +1,27 @@
+{
+  "condition": {
+    "type": "minestuck:list",
+    "conditions": [
+      {
+        "type": "minestuck:terrain_land_type",
+        "land_type": "minestuck:wood"
+      },
+      {
+        "type": "minestuck:terrain_land_type",
+        "land_type": "minestuck:frost"
+      },
+      {
+        "type": "minestuck:terrain_land_type",
+        "land_type": "minestuck:fungi"
+      },
+      {
+        "type": "minestuck:terrain_land_type",
+        "land_type": "minestuck:rain"
+      }
+    ],
+    "list_type": "any"
+  },
+  "dialogue": "minestuck:consort/faygo_cola_scalemate_pyralspite/start",
+  "dialogue_weight": 10,
+  "keep_on_reset": false
+}

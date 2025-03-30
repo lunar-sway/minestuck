@@ -1,0 +1,22 @@
+{
+  "node": {
+    "animation": {},
+    "gui": "minestuck:textures/gui/dialogue/dialogue.png",
+    "message": "minestuck.dialogue.consort_food_merchant.thyme",
+    "responses": [
+      {
+        "condition": {
+          "type": "minestuck:always_true"
+        },
+        "hide_if_failed": true,
+        "message": "minestuck.arrow",
+        "triggers": [
+          {
+            "type": "minestuck:open_consort_merchant_gui",
+            "loot_table": "minestuck:gameplay/consort_food"
+          }
+        ]
+      }
+    ]
+  }
+}

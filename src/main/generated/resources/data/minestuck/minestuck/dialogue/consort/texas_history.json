@@ -1,0 +1,13 @@
+{
+  "node": {
+    "animation": {},
+    "gui": "minestuck:textures/gui/dialogue/dialogue.png",
+    "message": {
+      "arguments": [
+        "land_name"
+      ],
+      "key": "minestuck.dialogue.consort.texas_history"
+    },
+    "responses": []
+  }
+}

@@ -10,18 +10,18 @@ public class AlchemiterModel extends GeoModel<AlchemiterBlockEntity>
 	@Override
 	public ResourceLocation getModelResource(AlchemiterBlockEntity object)
 	{
-		return new ResourceLocation(Minestuck.MOD_ID, "geo/blockentity/alchemiter.geo.json");
+		return ResourceLocation.fromNamespaceAndPath(Minestuck.MOD_ID, "geo/blockentity/alchemiter.geo.json");
 	}
 	
 	@Override
 	public ResourceLocation getTextureResource(AlchemiterBlockEntity object)
 	{
-		return new ResourceLocation(Minestuck.MOD_ID, "textures/block/machine/alchemiter.png");
+		return ResourceLocation.fromNamespaceAndPath(Minestuck.MOD_ID, "textures/block/machine/alchemiter.png");
 	}
 	
 	@Override
 	public ResourceLocation getAnimationResource(AlchemiterBlockEntity animatable)
 	{
-		return new ResourceLocation(Minestuck.MOD_ID, "animations/blockentity/alchemiter.animation.json");
+		return ResourceLocation.fromNamespaceAndPath(Minestuck.MOD_ID, "animations/blockentity/alchemiter.animation.json");
 	}
 }

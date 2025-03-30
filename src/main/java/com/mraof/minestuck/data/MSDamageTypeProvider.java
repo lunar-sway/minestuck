@@ -5,11 +5,11 @@ import com.mraof.minestuck.util.MSDamageSources;
 import net.minecraft.core.HolderLookup;
 import net.minecraft.data.PackOutput;
 import net.minecraft.data.tags.DamageTypeTagsProvider;
-import net.minecraft.data.worldgen.BootstapContext;
+import net.minecraft.data.worldgen.BootstrapContext;
 import net.minecraft.tags.DamageTypeTags;
 import net.minecraft.world.damagesource.DamageScaling;
 import net.minecraft.world.damagesource.DamageType;
-import net.minecraftforge.common.data.ExistingFileHelper;
+import net.neoforged.neoforge.common.data.ExistingFileHelper;
 import org.jetbrains.annotations.Nullable;
 
 import java.util.concurrent.CompletableFuture;
@@ -19,7 +19,7 @@ public class MSDamageTypeProvider
 	public static final String SPIKE_MSG = "minestuck.spike";
 	public static final String DECAPITATION_MSG = "minestuck.decapitation";
 	
-	public static void register(BootstapContext<DamageType> context)
+	public static void register(BootstrapContext<DamageType> context)
 	{
 		context.register(MSDamageSources.SPIKE, new DamageType(SPIKE_MSG, DamageScaling.ALWAYS, 0.1F));
 		context.register(MSDamageSources.DECAPITATION, new DamageType(DECAPITATION_MSG, 0));

@@ -10,16 +10,16 @@ import net.minecraft.resources.ResourceKey;
 import net.minecraft.util.RandomSource;
 import net.minecraft.world.entity.player.Player;
 import net.minecraft.world.level.Level;
-import net.minecraftforge.api.distmarker.Dist;
-import net.minecraftforge.client.event.ClientPlayerNetworkEvent;
-import net.minecraftforge.event.TickEvent;
-import net.minecraftforge.eventbus.api.SubscribeEvent;
-import net.minecraftforge.fml.common.Mod;
+import net.neoforged.api.distmarker.Dist;
+import net.neoforged.bus.api.SubscribeEvent;
+import net.neoforged.fml.common.EventBusSubscriber;
+import net.neoforged.neoforge.client.event.ClientPlayerNetworkEvent;
+import net.neoforged.neoforge.client.event.ClientTickEvent;
 import org.joml.Vector3f;
 
 import javax.annotation.Nullable;
 
-@Mod.EventBusSubscriber(modid = Minestuck.MOD_ID, value = Dist.CLIENT)
+@EventBusSubscriber(modid = Minestuck.MOD_ID, value = Dist.CLIENT)
 public final class EntryEffect
 {
 	public static final DustParticleOptions PARTICLE = new DustParticleOptions(new Vector3f(0.5f, 0.5f, 1.0f), 1.0f);
@@ -47,11 +47,8 @@ public final class EntryEffect
 	}
 	
 	@SubscribeEvent
-	public static void clientTick(TickEvent.ClientTickEvent event)
+	public static void clientTick(ClientTickEvent.Pre event)
 	{
-		if(event.phase != TickEvent.Phase.START)
-			return;
-		
 		Player player = Minecraft.getInstance().player;
 		if(player == null || location == null || player.level().dimension() != location.level())
 			return;

@@ -4,7 +4,7 @@ import com.mraof.minestuck.block.MSBlocks;
 import com.mraof.minestuck.inventory.slot.InputSlot;
 import com.mraof.minestuck.inventory.slot.OutputSlot;
 import com.mraof.minestuck.item.MSItems;
-import com.mraof.minestuck.alchemy.AlchemyHelper;
+import com.mraof.minestuck.item.components.MSItemComponents;
 import net.minecraft.core.BlockPos;
 import net.minecraft.network.FriendlyByteBuf;
 import net.minecraft.world.entity.player.Inventory;
@@ -12,9 +12,9 @@ import net.minecraft.world.entity.player.Player;
 import net.minecraft.world.inventory.*;
 import net.minecraft.world.item.ItemStack;
 import net.minecraft.world.level.block.Block;
-import net.minecraftforge.items.IItemHandler;
-import net.minecraftforge.items.ItemStackHandler;
-import net.minecraftforge.items.SlotItemHandler;
+import net.neoforged.neoforge.items.IItemHandler;
+import net.neoforged.neoforge.items.ItemStackHandler;
+import net.neoforged.neoforge.items.SlotItemHandler;
 
 import javax.annotation.Nonnull;
 
@@ -79,7 +79,7 @@ public class MiniPunchDesignixMenu extends MachineContainerMenu
 			} else
 			{
 				//if it's an inventory slot with valid contents
-				if(itemstackOrig.getItem() == MSItems.CAPTCHA_CARD.get() && (!AlchemyHelper.hasDecodedItem(itemstackOrig) || AlchemyHelper.isPunchedCard(itemstackOrig)))
+				if(itemstackOrig.is(MSItems.CAPTCHA_CARD) && (!itemstackOrig.has(MSItemComponents.CARD_STORED_ITEM) || itemstackOrig.has(MSItemComponents.ENCODED_ITEM)))
 					result = moveItemStackTo(itemstackOrig, 1, 2, false);
 				else result = moveItemStackTo(itemstackOrig, 0, 1, false);
 			}

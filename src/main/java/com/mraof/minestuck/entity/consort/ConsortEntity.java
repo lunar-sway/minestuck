@@ -6,14 +6,16 @@ import com.mraof.minestuck.advancements.MSCriteriaTriggers;
 import com.mraof.minestuck.entity.AnimatedPathfinderMob;
 import com.mraof.minestuck.entity.ai.AnimatedPanicGoal;
 import com.mraof.minestuck.entity.animation.MobAnimation;
+import com.mraof.minestuck.entity.dialogue.DialogueComponent;
+import com.mraof.minestuck.entity.dialogue.DialogueEntity;
+import com.mraof.minestuck.entity.dialogue.RandomlySelectableDialogue;
 import com.mraof.minestuck.inventory.ConsortMerchantInventory;
 import com.mraof.minestuck.inventory.ConsortMerchantMenu;
 import com.mraof.minestuck.player.IdentifierHandler;
 import com.mraof.minestuck.player.PlayerData;
 import com.mraof.minestuck.player.PlayerIdentifier;
-import com.mraof.minestuck.player.PlayerSavedData;
-import com.mraof.minestuck.util.AnimationControllerUtil;
 import com.mraof.minestuck.world.MSDimensions;
+import net.minecraft.ChatFormatting;
 import net.minecraft.MethodsReturnNonnullByDefault;
 import net.minecraft.core.BlockPos;
 import net.minecraft.nbt.CompoundTag;
@@ -21,7 +23,6 @@ import net.minecraft.nbt.ListTag;
 import net.minecraft.nbt.NbtOps;
 import net.minecraft.nbt.Tag;
 import net.minecraft.network.FriendlyByteBuf;
-import net.minecraft.network.chat.Component;
 import net.minecraft.resources.ResourceKey;
 import net.minecraft.resources.ResourceLocation;
 import net.minecraft.server.level.ServerPlayer;
@@ -43,25 +44,23 @@ import net.minecraft.world.inventory.AbstractContainerMenu;
 import net.minecraft.world.level.Level;
 import net.minecraft.world.level.LevelAccessor;
 import net.minecraft.world.level.ServerLevelAccessor;
-import net.minecraftforge.common.util.FakePlayer;
+import net.neoforged.neoforge.common.util.FakePlayer;
 import org.slf4j.Logger;
 import software.bernie.geckolib.animatable.GeoEntity;
-import software.bernie.geckolib.core.animatable.instance.AnimatableInstanceCache;
-import software.bernie.geckolib.core.animation.AnimatableManager;
-import software.bernie.geckolib.core.animation.Animation;
-import software.bernie.geckolib.core.animation.AnimationState;
-import software.bernie.geckolib.core.animation.RawAnimation;
-import software.bernie.geckolib.core.object.PlayState;
+import software.bernie.geckolib.animatable.instance.AnimatableInstanceCache;
+import software.bernie.geckolib.animation.AnimationState;
+import software.bernie.geckolib.animation.*;
 import software.bernie.geckolib.util.GeckoLibUtil;
 
 import javax.annotation.Nullable;
 import javax.annotation.ParametersAreNonnullByDefault;
 import java.util.HashSet;
+import java.util.Optional;
 import java.util.Set;
 
 @ParametersAreNonnullByDefault
 @MethodsReturnNonnullByDefault
-public class ConsortEntity extends AnimatedPathfinderMob implements MenuProvider, GeoEntity
+public class ConsortEntity extends AnimatedPathfinderMob implements MenuProvider, GeoEntity, DialogueEntity
 {
 	private static final Logger LOGGER = LogUtils.getLogger();
 	
@@ -76,16 +75,14 @@ public class ConsortEntity extends AnimatedPathfinderMob implements MenuProvider
 	private static final RawAnimation DIE_ANIMATION = RawAnimation.begin().then("die", Animation.LoopType.PLAY_ONCE);
 	
 	private final AnimatableInstanceCache cache = GeckoLibUtil.createInstanceCache(this);
+	private final DialogueComponent dialogueComponent = new DialogueComponent(this);
+	
 	private final EnumConsort consortType;
-	private boolean hasHadMessage = false;
-	ConsortDialogue.DialogueWrapper message;
-	int messageTicksLeft;
-	private CompoundTag messageData;
+	private int ticksUntilDialogueReset = 0;
 	private final Set<PlayerIdentifier> talkRepPlayerList = new HashSet<>();
 	public EnumConsort.MerchantType merchantType = EnumConsort.MerchantType.NONE;
 	ResourceKey<Level> homeDimension;
-	boolean visitedSkaia;
-	MessageType.DelayMessage updatingMessage; //TODO Change to an interface/array if more message components need tick updates
+	private boolean visitedSkaia;
 	public ConsortMerchantInventory stocks;
 	private int eventTimer = -1;    //TODO use the interface mentioned in the todo above to implement consort explosion instead
 	
@@ -121,7 +118,8 @@ public class ConsortEntity extends AnimatedPathfinderMob implements MenuProvider
 	
 	private boolean shouldFleeFrom(LivingEntity entity)
 	{
-		return entity instanceof ServerPlayer && EntitySelector.NO_CREATIVE_OR_SPECTATOR.test(entity) && PlayerSavedData.getData((ServerPlayer) entity).getConsortReputation(homeDimension) <= -1000;
+		return entity instanceof ServerPlayer player && EntitySelector.NO_CREATIVE_OR_SPECTATOR.test(entity)
+				&& ConsortReputation.get(player).getConsortReputation(homeDimension) <= -1000;
 	}
 	
 	protected void applyAdditionalAITasks()
@@ -139,56 +137,49 @@ public class ConsortEntity extends AnimatedPathfinderMob implements MenuProvider
 	@Override
 	protected InteractionResult mobInteract(Player player, InteractionHand hand)
 	{
-		if(this.isAlive() && !player.isShiftKeyDown() && eventTimer < 0)
-		{
-			if(!level().isClientSide && player instanceof ServerPlayer serverPlayer)
-			{
-				PlayerData playerData = PlayerSavedData.getData(serverPlayer);
-				
-				if(playerData != null && playerData.getConsortReputation(homeDimension) > -1000)
-				{
-					if(message == null)
-					{
-						message = ConsortDialogue.getRandomMessage(this, hasHadMessage);
-						hasHadMessage = true;
-					}
-					
-					checkMessageData();
-					
-					try
-					{
-						Component text = message.getMessage(this, serverPlayer);
-						if(text != null)
-							player.sendSystemMessage(text);
-						handleConsortRepFromTalking(serverPlayer);
-						setCurrentAnimation(TALK_PROPERTIES);
-						MSCriteriaTriggers.CONSORT_TALK.trigger(serverPlayer, message.getString(), this);
-					} catch(Exception e)
-					{
-						LOGGER.error("Got exception when getting dialogue message for consort for player {}.", serverPlayer.getGameProfile().getName(), e);
-					}
-				}
-			}
-			
+		if(!this.isAlive() || player.isShiftKeyDown())
+			return InteractionResult.PASS;
+		
+		if(eventTimer >= 0)
+			return InteractionResult.FAIL;
+		
+		if(!(player instanceof ServerPlayer serverPlayer))
 			return InteractionResult.SUCCESS;
-		} else
-			return super.mobInteract(player, hand);
-	}
-	
-	private void checkMessageData()
-	{
-		if(messageData == null)
+		
+		if(this.dialogueComponent.hasAnyOngoingDialogue())	//todo do we want this? feel free to remove it if not
+			return InteractionResult.FAIL;
+		
+		Optional<PlayerData> playerData = PlayerData.get(serverPlayer);
+		if(playerData.isEmpty() || ConsortReputation.get(playerData.get()).getConsortReputation(homeDimension) <= -1000)
+			return InteractionResult.FAIL;
+		
+		handleConsortRepFromTalking(serverPlayer);
+		setCurrentAnimation(TALK_PROPERTIES);
+		
+		
+		if(!this.dialogueComponent.hasActiveDialogue())
 		{
-			messageData = new CompoundTag();
-			messageTicksLeft = 24000 + level().random.nextInt(24000);
+			this.dialogueComponent.resetDialogue();
+			RandomlySelectableDialogue.instance(this.merchantType.dialogueCategory())
+					.pickRandomForEntity(this).ifPresent(this.dialogueComponent::setDialogue);
 		}
+		
+		this.dialogueComponent.tryStartDialogue(serverPlayer);
+		
+		this.dialogueComponent.getStartingDialogue().ifPresent(dialogueId -> {
+			MSCriteriaTriggers.CONSORT_TALK.get().trigger(serverPlayer, dialogueId.toString(), this);
+			if(ticksUntilDialogueReset == 0)
+				ticksUntilDialogueReset = 24000 + level().random.nextInt(24000);
+		});
+		
+		return InteractionResult.SUCCESS;
 	}
 	
 	private void clearDialogueData()
 	{
-		messageData = null;
-		updatingMessage = null;
+		ticksUntilDialogueReset = 0;
 		stocks = null;
+		this.dialogueComponent.resetDialogue();
 		talkRepPlayerList.clear();
 	}
 	
@@ -197,17 +188,28 @@ public class ConsortEntity extends AnimatedPathfinderMob implements MenuProvider
 		PlayerIdentifier identifier = IdentifierHandler.encode(player);
 		if(!talkRepPlayerList.contains(identifier))
 		{
-			PlayerSavedData.getData(player).addConsortReputation(1, homeDimension);
+			ConsortReputation.get(player).addConsortReputation(1, homeDimension);
 			talkRepPlayerList.add(identifier);
 		}
 	}
 	
-	protected void setExplosionTimer()
+	public void setExplosionTimer()
 	{
 		//Start a timer of one second: 20 ticks.
 		//Consorts explode when the timer hits zero.
 		if(eventTimer == -1)
 			eventTimer = 20;
+	}
+	
+	@Override
+	public boolean hurt(DamageSource source, float amount)
+	{
+		boolean wasHurt = super.hurt(source, amount);
+		
+		if(wasHurt)
+			this.dialogueComponent.closeAllCurrentDialogue();
+		
+		return wasHurt;
 	}
 	
 	@Override
@@ -217,17 +219,14 @@ public class ConsortEntity extends AnimatedPathfinderMob implements MenuProvider
 		if(level().isClientSide)
 			return;
 		
-		if(messageTicksLeft > 0)
-			messageTicksLeft -= MinestuckConfig.SERVER.dialogueRenewalSpeed.get();
-		else if(messageData != null)
+		if(ticksUntilDialogueReset > 0)
 		{
-			clearDialogueData();
-			if(message != null && !message.isLockedToConsort())
-				message = null;
+			ticksUntilDialogueReset -= MinestuckConfig.SERVER.dialogueRenewalSpeed.get();
+			if(ticksUntilDialogueReset <= 0)
+				clearDialogueData();
 		}
 		
-		if(updatingMessage != null)
-			updatingMessage.onTickUpdate(this);
+		this.dialogueComponent.closeDialogueForMovingPlayers();
 		
 		if(MSDimensions.isSkaia(level().dimension()))
 			visitedSkaia = true;
@@ -254,20 +253,14 @@ public class ConsortEntity extends AnimatedPathfinderMob implements MenuProvider
 	{
 		super.addAdditionalSaveData(compound);
 		
-		if(message != null)
-		{
-			compound.putString("Dialogue", message.getString());
-			if(messageData != null)
-			{
-				compound.putInt("MessageTicks", messageTicksLeft);
-				compound.put("MessageData", messageData);
-				ListTag list = new ListTag();
-				for(PlayerIdentifier id : talkRepPlayerList)
-					list.add(id.saveToNBT(new CompoundTag(), "id"));
-				compound.put("talkRepList", list);
-			}
-		}
-		compound.putBoolean("HasHadMessage", hasHadMessage);
+		compound.put("dialogue", dialogueComponent.write());
+		
+		compound.putInt("dialogue_reset_ticks", ticksUntilDialogueReset);
+		
+		ListTag list = new ListTag();
+		for(PlayerIdentifier id : talkRepPlayerList)
+			list.add(id.saveToNBT(new CompoundTag(), "id"));
+		compound.put("talkRepList", list);
 		
 		compound.putInt("Type", merchantType.ordinal());
 		ResourceLocation.CODEC.encodeStart(NbtOps.INSTANCE, homeDimension.location()).resultOrPartial(LOGGER::error)
@@ -295,22 +288,14 @@ public class ConsortEntity extends AnimatedPathfinderMob implements MenuProvider
 	{
 		super.readAdditionalSaveData(compound);
 		
-		if(compound.contains("Dialogue", Tag.TAG_STRING))
-		{
-			message = ConsortDialogue.getMessageFromString(compound.getString("Dialogue"));
-			if(compound.contains("MessageData", Tag.TAG_COMPOUND))
-			{
-				messageData = compound.getCompound("MessageData");
-				messageTicksLeft = compound.getInt("MessageTicks");
-				
-				talkRepPlayerList.clear();
-				ListTag list = compound.getList("talkRepList", Tag.TAG_COMPOUND);
-				for(int i = 0; i < list.size(); i++)
-					talkRepPlayerList.add(IdentifierHandler.load(list.getCompound(i), "id"));
-			}
-			
-			hasHadMessage = true;
-		} else hasHadMessage = compound.getBoolean("HasHadMessage");
+		dialogueComponent.read(compound.getCompound("dialogue"));
+		
+		ticksUntilDialogueReset = compound.getInt("dialogue_reset_ticks");
+		
+		talkRepPlayerList.clear();
+		ListTag list = compound.getList("talkRepList", Tag.TAG_COMPOUND);
+		for(int i = 0; i < list.size(); i++)
+			talkRepPlayerList.add(IdentifierHandler.load(list.getCompound(i), "id").getOrThrow());
 		
 		merchantType = EnumConsort.MerchantType.values()[Mth.clamp(compound.getInt("Type"), 0, EnumConsort.MerchantType.values().length - 1)];
 		
@@ -338,7 +323,7 @@ public class ConsortEntity extends AnimatedPathfinderMob implements MenuProvider
 	
 	@Nullable
 	@Override
-	public SpawnGroupData finalizeSpawn(ServerLevelAccessor worldIn, DifficultyInstance difficultyIn, MobSpawnType reason, @Nullable SpawnGroupData spawnDataIn, @Nullable CompoundTag dataTag)
+	public SpawnGroupData finalizeSpawn(ServerLevelAccessor worldIn, DifficultyInstance difficultyIn, MobSpawnType reason, @Nullable SpawnGroupData spawnDataIn)
 	{
 		if(merchantType == EnumConsort.MerchantType.NONE && this.random.nextInt(30) == 0)
 		{
@@ -352,14 +337,14 @@ public class ConsortEntity extends AnimatedPathfinderMob implements MenuProvider
 		
 		applyAdditionalAITasks();
 		
-		return super.finalizeSpawn(worldIn, difficultyIn, reason, spawnDataIn, dataTag);
+		return super.finalizeSpawn(worldIn, difficultyIn, reason, spawnDataIn);
 	}
 	
 	@Override
 	public boolean skipAttackInteraction(Entity entityIn)
 	{
 		if(!(entityIn instanceof FakePlayer) && entityIn instanceof ServerPlayer player)
-			PlayerSavedData.getData(player).addConsortReputation(-5, homeDimension);
+			ConsortReputation.get(player).addConsortReputation(-5, homeDimension);
 		return super.skipAttackInteraction(entityIn);
 	}
 	
@@ -368,7 +353,7 @@ public class ConsortEntity extends AnimatedPathfinderMob implements MenuProvider
 	{
 		LivingEntity livingEntity = this.getKillCredit();
 		if(livingEntity instanceof ServerPlayer player && (!(player instanceof FakePlayer)))
-			PlayerSavedData.getData(player).addConsortReputation(-100, homeDimension);
+			ConsortReputation.get(player).addConsortReputation(-100, homeDimension);
 		super.die(cause);
 	}
 	
@@ -383,28 +368,6 @@ public class ConsortEntity extends AnimatedPathfinderMob implements MenuProvider
 		return consortType;
 	}
 	
-	public void commandReply(ServerPlayer player, String chain)
-	{
-		if(this.isAlive() && !level().isClientSide && message != null)
-		{
-			Component text = message.getFromChain(this, player, chain);
-			if(text != null)
-				player.sendSystemMessage(text);
-		}
-	}
-	
-	public CompoundTag getMessageTag()
-	{
-		return messageData;
-	}
-	
-	public CompoundTag getMessageTagForPlayer(Player player)
-	{
-		if(!messageData.contains(player.getStringUUID(), Tag.TAG_COMPOUND))
-			messageData.put(player.getStringUUID(), new CompoundTag());
-		return messageData.getCompound(player.getStringUUID());
-	}
-	
 	@Nullable
 	@Override
 	public AbstractContainerMenu createMenu(int windowId, Inventory playerInventory, Player player)
@@ -414,7 +377,7 @@ public class ConsortEntity extends AnimatedPathfinderMob implements MenuProvider
 		else return null;
 	}
 	
-	protected void writeShopMenuBuffer(FriendlyByteBuf buffer)
+	public void writeShopMenuBuffer(FriendlyByteBuf buffer)
 	{
 		ConsortMerchantMenu.write(buffer, this);
 	}
@@ -445,19 +408,43 @@ public class ConsortEntity extends AnimatedPathfinderMob implements MenuProvider
 		return homeDimension;
 	}
 	
+	public boolean visitedSkaia()
+	{
+		return this.visitedSkaia;
+	}
+	
 	public static boolean canConsortSpawnOn(EntityType<ConsortEntity> entityType, LevelAccessor world, MobSpawnType reason, BlockPos pos, RandomSource random)
 	{
 		return true;
 	}
 	
 	@Override
+	public DialogueComponent getDialogueComponent()
+	{
+		return this.dialogueComponent;
+	}
+	
+	@Override
+	public ChatFormatting getChatColor()
+	{
+		return getConsortType().getColor();
+	}
+	
+	@Override
+	public String getSpriteType()
+	{
+		//TODO consider adding support for vendor sprites here
+		return getConsortType().getName();
+	}
+	
+	@Override
 	public void registerControllers(AnimatableManager.ControllerRegistrar controllers)
 	{
-		controllers.add(AnimationControllerUtil.createAnimation(this, "idleAnimation", 1, ConsortEntity::idleAnimation));
-		controllers.add(AnimationControllerUtil.createAnimation(this, "walkAnimation", 1, ConsortEntity::walkAnimation));
-		controllers.add(AnimationControllerUtil.createAnimation(this, "armsAnimation", 1, ConsortEntity::armsAnimation));
-		controllers.add(AnimationControllerUtil.createAnimation(this, "deathAnimation", 1, ConsortEntity::deathAnimation));
-		controllers.add(AnimationControllerUtil.createAnimation(this, "actionAnimation", 1, ConsortEntity::actionAnimation));
+		controllers.add(new AnimationController<>(this, "idleAnimation", ConsortEntity::idleAnimation));
+		controllers.add(new AnimationController<>(this, "walkAnimation", ConsortEntity::walkAnimation));
+		controllers.add(new AnimationController<>(this, "armsAnimation", ConsortEntity::armsAnimation));
+		controllers.add(new AnimationController<>(this, "deathAnimation", ConsortEntity::deathAnimation));
+		controllers.add(new AnimationController<>(this, "actionAnimation", ConsortEntity::actionAnimation));
 	}
 	
 	private static PlayState idleAnimation(AnimationState<ConsortEntity> state)
@@ -492,8 +479,8 @@ public class ConsortEntity extends AnimatedPathfinderMob implements MenuProvider
 		{
 			state.getController().setAnimation(JUMP_ANIMATION);
 			return PlayState.CONTINUE;
-		}
-		else {
+		} else
+		{
 			state.getController().setAnimation(WALK_ANIMATION);
 			return PlayState.CONTINUE;
 		}
@@ -532,3 +519,4 @@ public class ConsortEntity extends AnimatedPathfinderMob implements MenuProvider
 		return PlayState.STOP;
 	}
 }
+

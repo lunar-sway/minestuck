@@ -2,26 +2,26 @@ package com.mraof.minestuck.effects;
 
 import com.mraof.minestuck.Minestuck;
 import com.mraof.minestuck.item.artifact.CruxiteArtifactItem;
-import com.mraof.minestuck.network.MSPacketHandler;
 import com.mraof.minestuck.network.StopCreativeShockEffectPacket;
 import com.mraof.minestuck.util.MSTags;
 import net.minecraft.server.level.ServerPlayer;
 import net.minecraft.world.effect.MobEffect;
 import net.minecraft.world.effect.MobEffectCategory;
+import net.minecraft.world.effect.MobEffectInstance;
 import net.minecraft.world.entity.LivingEntity;
 import net.minecraft.world.entity.player.Player;
 import net.minecraft.world.item.EnderpearlItem;
-import net.minecraft.world.item.ItemStack;
-import net.minecraftforge.event.TickEvent;
-import net.minecraftforge.event.entity.player.PlayerEvent;
-import net.minecraftforge.event.entity.player.PlayerInteractEvent;
-import net.minecraftforge.event.level.ExplosionEvent;
-import net.minecraftforge.eventbus.api.EventPriority;
-import net.minecraftforge.eventbus.api.SubscribeEvent;
-import net.minecraftforge.fml.common.Mod;
+import net.neoforged.bus.api.EventPriority;
+import net.neoforged.bus.api.SubscribeEvent;
+import net.neoforged.fml.common.EventBusSubscriber;
+import net.neoforged.neoforge.common.EffectCure;
+import net.neoforged.neoforge.event.entity.player.PlayerEvent;
+import net.neoforged.neoforge.event.entity.player.PlayerInteractEvent;
+import net.neoforged.neoforge.event.level.ExplosionEvent;
+import net.neoforged.neoforge.event.tick.PlayerTickEvent;
+import net.neoforged.neoforge.network.PacketDistributor;
 
-import java.util.ArrayList;
-import java.util.List;
+import java.util.Set;
 
 /**
  * This is an adapted version of Cibernet's code in Minestuck Universe, credit goes to him!
@@ -29,7 +29,7 @@ import java.util.List;
  * 0 = cant directly cause block breakage/placement outside of creative, 1 = cant access redstone machinery gui outside of creative, 2 = cant use mobility items outside of creative,
  * 3 = cant directly cause block breakage/placement even in creative, 4 = cant access redstone machinery gui even in creative, 5 = cant use mobility items even in creative
  */
-@Mod.EventBusSubscriber(modid = Minestuck.MOD_ID, bus = Mod.EventBusSubscriber.Bus.FORGE)
+@EventBusSubscriber(modid = Minestuck.MOD_ID, bus = EventBusSubscriber.Bus.GAME)
 public class CreativeShockEffect extends MobEffect
 {
 	public static final int LIMIT_BLOCK_PLACEMENT_AND_BREAKING = 0;
@@ -52,9 +52,9 @@ public class CreativeShockEffect extends MobEffect
 	
 	public static boolean doesCreativeShockLimit(Player player, int survivalAmplifierThreshold, int creativeAmplifierThreshold)
 	{
-		if(player.hasEffect(MSEffects.CREATIVE_SHOCK.get()))
+		if(player.hasEffect(MSEffects.CREATIVE_SHOCK))
 		{
-			return player.getEffect(MSEffects.CREATIVE_SHOCK.get()).getAmplifier() >= (player.isCreative() ? creativeAmplifierThreshold : survivalAmplifierThreshold);
+			return player.getEffect(MSEffects.CREATIVE_SHOCK).getAmplifier() >= (player.isCreative() ? creativeAmplifierThreshold : survivalAmplifierThreshold);
 		}
 		
 		return false;
@@ -67,47 +67,45 @@ public class CreativeShockEffect extends MobEffect
 	}
 	
 	@Override
-	public List<ItemStack> getCurativeItems()
+	public void fillEffectCures(Set<EffectCure> cures, MobEffectInstance effectInstance)
 	{
-		return new ArrayList<>(); //prevent milk from curing creative shock
+		//prevent milk from curing creative shock
 	}
 	
 	@Override
-	public void applyEffectTick(LivingEntity entityLivingBaseIn, int amplifier)
+	public boolean applyEffectTick(LivingEntity entityLivingBaseIn, int amplifier)
 	{
-		super.applyEffectTick(entityLivingBaseIn, amplifier);
-		
 		if(!(entityLivingBaseIn instanceof Player player))
-			return;
+			return false;
 		
 		if(doesCreativeShockLimit(player, LIMIT_BLOCK_PLACEMENT_AND_BREAKING))
-		{
 			player.getAbilities().mayBuild = false; //this property is restored when the effect ends, in StopCreativeShockEffectPacket
-		}
+		
+		return true;
 	}
 	
 	@Override
-	public boolean isDurationEffectTick(int duration, int amplifier)
+	public boolean shouldApplyEffectTickThisTick(int duration, int amplifier)
 	{
 		return (duration % 5) == 0;
 	}
 	
 	@SubscribeEvent
-	public static void onPlayerTickEvent(TickEvent.PlayerTickEvent event)
+	public static void onPlayerTickEvent(PlayerTickEvent.Pre event)
 	{
-		if(event.player.hasEffect(MSEffects.CREATIVE_SHOCK.get()))
+		if(event.getEntity().hasEffect(MSEffects.CREATIVE_SHOCK))
 		{
-			int duration = event.player.getEffect(MSEffects.CREATIVE_SHOCK.get()).getDuration();
+			int duration = event.getEntity().getEffect(MSEffects.CREATIVE_SHOCK).getDuration();
 			if(duration >= 5)
 			{
-				if(CreativeShockEffect.doesCreativeShockLimit(event.player, LIMIT_BLOCK_PLACEMENT_AND_BREAKING))
-					event.player.getAbilities().mayBuild = false;
-				CreativeShockEffect.stopElytraFlying(event.player, LIMIT_MOBILITY_ITEMS);
+				if(CreativeShockEffect.doesCreativeShockLimit(event.getEntity(), LIMIT_BLOCK_PLACEMENT_AND_BREAKING))
+					event.getEntity().getAbilities().mayBuild = false;
+				CreativeShockEffect.stopElytraFlying(event.getEntity(), LIMIT_MOBILITY_ITEMS);
 			} else
 			{
-				if(!event.player.level().isClientSide)
+				if(event.getEntity() instanceof ServerPlayer player)
 				{
-					event.player.getAbilities().mayBuild = ((ServerPlayer) event.player).gameMode.getGameModeForPlayer().isBlockPlacingRestricted();
+					event.getEntity().getAbilities().mayBuild = player.gameMode.getGameModeForPlayer().isBlockPlacingRestricted();
 				}
 			}
 		}
@@ -162,6 +160,6 @@ public class CreativeShockEffect extends MobEffect
 		serverPlayerEntity.getAbilities().mayBuild = !serverPlayerEntity.gameMode.getGameModeForPlayer().isBlockPlacingRestricted(); //block placing restricted was hasLimitedInteractions(), mayBuild was allowEdit
 		
 		StopCreativeShockEffectPacket packet = new StopCreativeShockEffectPacket(serverPlayerEntity.gameMode.getGameModeForPlayer().isBlockPlacingRestricted());
-		MSPacketHandler.sendToPlayer(packet, serverPlayerEntity);
+		PacketDistributor.sendToPlayer(serverPlayerEntity, packet);
 	}
 }

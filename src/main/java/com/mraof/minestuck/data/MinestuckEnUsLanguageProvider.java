@@ -5,7 +5,9 @@ import com.mraof.minestuck.api.alchemy.GristAmount;
 import com.mraof.minestuck.api.alchemy.GristSet;
 import com.mraof.minestuck.api.alchemy.GristType;
 import com.mraof.minestuck.api.alchemy.GristTypes;
+import com.mraof.minestuck.api.alchemy.recipe.JeiGristCost;
 import com.mraof.minestuck.block.MSBlocks;
+import com.mraof.minestuck.block.machine.TransportalizerBlock;
 import com.mraof.minestuck.block.redstone.AreaEffectBlock;
 import com.mraof.minestuck.block.redstone.SummonerBlock;
 import com.mraof.minestuck.block.redstone.WirelessRedstoneReceiverBlock;
@@ -16,16 +18,20 @@ import com.mraof.minestuck.client.gui.*;
 import com.mraof.minestuck.client.gui.captchalouge.HashMapSylladexScreen;
 import com.mraof.minestuck.client.gui.captchalouge.SylladexScreen;
 import com.mraof.minestuck.client.gui.captchalouge.TreeSylladexScreen;
+import com.mraof.minestuck.client.gui.computer.*;
 import com.mraof.minestuck.client.gui.playerStats.*;
 import com.mraof.minestuck.client.util.GuiUtil;
 import com.mraof.minestuck.client.util.MSKeyHandler;
 import com.mraof.minestuck.command.*;
 import com.mraof.minestuck.command.argument.*;
-import com.mraof.minestuck.computer.*;
+import com.mraof.minestuck.computer.editmode.ClientEditmodeData;
+import com.mraof.minestuck.computer.editmode.EditmodeLocations;
+import com.mraof.minestuck.computer.theme.MSComputerThemes;
+import com.mraof.minestuck.data.dialogue.DialogueProvider;
 import com.mraof.minestuck.effects.MSEffects;
 import com.mraof.minestuck.entity.LotusFlowerEntity;
 import com.mraof.minestuck.entity.MSEntityTypes;
-import com.mraof.minestuck.entity.consort.MessageType;
+import com.mraof.minestuck.entity.dialogue.Dialogue;
 import com.mraof.minestuck.entry.EntryProcess;
 import com.mraof.minestuck.inventory.ConsortMerchantInventory;
 import com.mraof.minestuck.inventory.captchalogue.HashMapModus;
@@ -35,8 +41,7 @@ import com.mraof.minestuck.item.StructureScannerItem;
 import com.mraof.minestuck.item.loot.MSLootEvents;
 import com.mraof.minestuck.item.weapon.MusicPlayerWeapon;
 import com.mraof.minestuck.item.weapon.OnHitEffect;
-import com.mraof.minestuck.api.alchemy.recipe.JeiGristCost;
-import com.mraof.minestuck.network.EffectTogglePacket;
+import com.mraof.minestuck.network.ToggleAspectEffectsPacket;
 import com.mraof.minestuck.player.*;
 import com.mraof.minestuck.skaianet.*;
 import com.mraof.minestuck.world.GateHandler;
@@ -46,9 +51,8 @@ import com.mraof.minestuck.world.lands.terrain.*;
 import com.mraof.minestuck.world.lands.title.*;
 import net.minecraft.ChatFormatting;
 import net.minecraft.data.PackOutput;
-import net.minecraft.world.item.ItemStack;
 import net.minecraft.world.item.Items;
-import net.minecraft.world.item.alchemy.PotionUtils;
+import net.minecraft.world.item.alchemy.PotionContents;
 import net.minecraft.world.item.alchemy.Potions;
 
 public class MinestuckEnUsLanguageProvider extends MinestuckLanguageProvider
@@ -61,30 +65,11 @@ public class MinestuckEnUsLanguageProvider extends MinestuckLanguageProvider
 	@Override
 	protected void addTranslations()
 	{
+		SkaiaBlocksData.addEnUsTranslations(this);
+		AspectTreeBlocksData.addEnUsTranslations(this);
+		
 		add("message.shift_for_more_info", "Press §eSHIFT§r for more info");
 		
-		addBlock(MSBlocks.BLACK_CHESS_DIRT, "Black Chess Tile");
-		addBlock(MSBlocks.WHITE_CHESS_DIRT, "White Chess Tile");
-		addBlock(MSBlocks.DARK_GRAY_CHESS_DIRT, "Dark Gray Chess Tile");
-		addBlock(MSBlocks.LIGHT_GRAY_CHESS_DIRT, "Light Gray Chess Tile");
-		addBlock(MSBlocks.SKAIA_PORTAL, "Skaia Portal");
-		addBlock(MSBlocks.BLACK_CHESS_BRICKS, "Black Chess Bricks");
-		addBlock(MSBlocks.DARK_GRAY_CHESS_BRICKS, "Dark Gray Chess Bricks");
-		addBlock(MSBlocks.LIGHT_GRAY_CHESS_BRICKS, "Light Gray Chess Bricks");
-		addBlock(MSBlocks.WHITE_CHESS_BRICKS, "White Chess Bricks");
-		addBlock(MSBlocks.BLACK_CHESS_BRICK_SMOOTH, "Smooth Black Chess Brick");
-		addBlock(MSBlocks.DARK_GRAY_CHESS_BRICK_SMOOTH, "Smooth Dark Gray Chess Brick");
-		addBlock(MSBlocks.LIGHT_GRAY_CHESS_BRICK_SMOOTH, "Smooth Light Gray Black Chess Brick");
-		addBlock(MSBlocks.WHITE_CHESS_BRICK_SMOOTH, "Smooth White Chess Brick");
-		addBlock(MSBlocks.BLACK_CHESS_BRICK_TRIM, "Black Chess Brick Trim");
-		addBlock(MSBlocks.DARK_GRAY_CHESS_BRICK_TRIM, "Dark Gray Chess Brick Trim");
-		addBlock(MSBlocks.LIGHT_GRAY_CHESS_BRICK_TRIM, "Light Gray Chess Brick Trim");
-		addBlock(MSBlocks.WHITE_CHESS_BRICK_TRIM, "White Chess Brick Trim");
-		addBlock(MSBlocks.CHECKERED_STAINED_GLASS, "Checkered Stained Glass");
-		addBlock(MSBlocks.BLACK_CROWN_STAINED_GLASS, "Black Crown Stained Glass");
-		addBlock(MSBlocks.BLACK_PAWN_STAINED_GLASS, "Black Pawn Stained Glass");
-		addBlock(MSBlocks.WHITE_CROWN_STAINED_GLASS, "White Crown Stained Glass");
-		addBlock(MSBlocks.WHITE_PAWN_STAINED_GLASS, "White Pawn Stained Glass");
 		addBlock(MSBlocks.STONE_CRUXITE_ORE, "Cruxite Ore");
 		addBlock(MSBlocks.COBBLESTONE_CRUXITE_ORE, "Cruxite Ore");
 		addBlock(MSBlocks.SANDSTONE_CRUXITE_ORE, "Cruxite Ore");
@@ -94,6 +79,8 @@ public class MinestuckEnUsLanguageProvider extends MinestuckLanguageProvider
 		addBlock(MSBlocks.SHADE_STONE_CRUXITE_ORE, "Cruxite Ore");
 		addBlock(MSBlocks.PINK_STONE_CRUXITE_ORE, "Cruxite Ore");
 		addBlock(MSBlocks.MYCELIUM_STONE_CRUXITE_ORE, "Cruxite Ore");
+		addBlock(MSBlocks.UNCARVED_WOOD_CRUXITE_ORE, "Cruxite Ore");
+		addBlock(MSBlocks.BLACK_STONE_CRUXITE_ORE, "Cruxite Ore");
 		addBlock(MSBlocks.STONE_URANIUM_ORE, "Uranium Ore");
 		addBlock(MSBlocks.DEEPSLATE_URANIUM_ORE, "Uranium Ore");
 		addBlock(MSBlocks.COBBLESTONE_URANIUM_ORE, "Uranium Ore");
@@ -104,101 +91,384 @@ public class MinestuckEnUsLanguageProvider extends MinestuckLanguageProvider
 		addBlock(MSBlocks.SHADE_STONE_URANIUM_ORE, "Uranium Ore");
 		addBlock(MSBlocks.PINK_STONE_URANIUM_ORE, "Uranium Ore");
 		addBlock(MSBlocks.MYCELIUM_STONE_URANIUM_ORE, "Uranium Ore");
+		addBlock(MSBlocks.UNCARVED_WOOD_URANIUM_ORE, "Uranium Ore");
+		addBlock(MSBlocks.BLACK_STONE_URANIUM_ORE, "Uranium Ore");
 		addBlock(MSBlocks.NETHERRACK_COAL_ORE, "Coal Ore");
 		addBlock(MSBlocks.SHADE_STONE_COAL_ORE, "Coal Ore");
 		addBlock(MSBlocks.PINK_STONE_COAL_ORE, "Coal Ore");
 		addBlock(MSBlocks.SANDSTONE_IRON_ORE, "Iron Ore");
 		addBlock(MSBlocks.RED_SANDSTONE_IRON_ORE, "Iron Ore");
 		addBlock(MSBlocks.END_STONE_IRON_ORE, "Iron Ore");
+		addBlock(MSBlocks.UNCARVED_WOOD_IRON_ORE, "Iron Ore");
 		addBlock(MSBlocks.SANDSTONE_GOLD_ORE, "Gold Ore");
 		addBlock(MSBlocks.RED_SANDSTONE_GOLD_ORE, "Gold Ore");
 		addBlock(MSBlocks.SHADE_STONE_GOLD_ORE, "Gold Ore");
 		addBlock(MSBlocks.PINK_STONE_GOLD_ORE, "Gold Ore");
+		addBlock(MSBlocks.BLACK_STONE_GOLD_ORE, "Gold Ore");
 		addBlock(MSBlocks.END_STONE_REDSTONE_ORE, "Redstone Ore");
+		addBlock(MSBlocks.UNCARVED_WOOD_REDSTONE_ORE, "Redstone Ore");
+		addBlock(MSBlocks.BLACK_STONE_REDSTONE_ORE, "Redstone Ore");
 		addBlock(MSBlocks.STONE_QUARTZ_ORE, "Quartz Ore");
+		addBlock(MSBlocks.BLACK_STONE_QUARTZ_ORE, "Quartz Ore");
 		addBlock(MSBlocks.PINK_STONE_LAPIS_ORE, "Lapis Ore");
 		addBlock(MSBlocks.PINK_STONE_DIAMOND_ORE, "Diamond Ore");
+		addBlock(MSBlocks.UNCARVED_WOOD_EMERALD_ORE, "Emerald Ore");
+		
 		addBlock(MSBlocks.CRUXITE_BLOCK, "Cruxite Block");
+		addBlock(MSBlocks.CRUXITE_STAIRS, "Cruxite Stairs");
+		addBlock(MSBlocks.CRUXITE_SLAB, "Cruxite Slab");
+		addBlock(MSBlocks.CRUXITE_WALL, "Cruxite Wall");
+		addBlock(MSBlocks.CRUXITE_BUTTON, "Cruxite Button");
+		addBlock(MSBlocks.CRUXITE_PRESSURE_PLATE, "Cruxite Pressure Plate");
+		addBlock(MSBlocks.CRUXITE_DOOR, "Cruxite Door");
+		addBlock(MSBlocks.CRUXITE_TRAPDOOR, "Cruxite Trapdoor");
+		addBlock(MSBlocks.POLISHED_CRUXITE_BLOCK, "Polished Cruxite Block");
+		addBlock(MSBlocks.POLISHED_CRUXITE_STAIRS, "Polished Cruxite Stairs");
+		addBlock(MSBlocks.POLISHED_CRUXITE_SLAB, "Polished Cruxite Slab");
+		addBlock(MSBlocks.POLISHED_CRUXITE_WALL, "Polished Cruxite Wall");
+		addBlock(MSBlocks.CRUXITE_BRICKS, "Cruxite Bricks");
+		addBlock(MSBlocks.CRUXITE_BRICK_STAIRS, "Cruxite Brick Stairs");
+		addBlock(MSBlocks.CRUXITE_BRICK_SLAB, "Cruxite Brick Slab");
+		addBlock(MSBlocks.CRUXITE_BRICK_WALL, "Cruxite Brick Wall");
+		addBlock(MSBlocks.SMOOTH_CRUXITE_BLOCK, "Smooth Cruxite Block");
+		addBlock(MSBlocks.CHISELED_CRUXITE_BLOCK, "Chiseled Cruxite Block");
+		addBlock(MSBlocks.CRUXITE_PILLAR, "Cruxite Pillar");
+		addBlock(MSBlocks.CRUXITE_LAMP, "Cruxite Lamp");
+		addBlockTooltip(MSBlocks.CRUXITE_LAMP, "The instructions have an arrow pointing at a line figure's right arm. You decide not to get your lamps from IKEA next time.");
+		
 		addBlock(MSBlocks.URANIUM_BLOCK, "Uranium Block");
+		addBlock(MSBlocks.URANIUM_STAIRS, "Uranium Stairs");
+		addBlock(MSBlocks.URANIUM_SLAB, "Uranium Slab");
+		addBlock(MSBlocks.URANIUM_WALL, "Uranium Wall");
+		addBlock(MSBlocks.URANIUM_BUTTON, "Uranium Button");
+		addBlock(MSBlocks.URANIUM_PRESSURE_PLATE, "Uranium Pressure Plate");
+		
 		addBlock(MSBlocks.GENERIC_OBJECT, "Perfectly Generic Object");
+		addBlock(MSBlocks.PERFECTLY_GENERIC_STAIRS, "Perfectly Generic Stairs");
+		addBlock(MSBlocks.PERFECTLY_GENERIC_SLAB, "Perfectly Generic Slab");
+		addBlock(MSBlocks.PERFECTLY_GENERIC_WALL, "Perfectly Generic Wall");
+		addBlock(MSBlocks.PERFECTLY_GENERIC_FENCE, "Perfectly Generic Fence");
+		addBlock(MSBlocks.PERFECTLY_GENERIC_FENCE_GATE, "Perfectly Generic Fence Gate");
+		addBlock(MSBlocks.PERFECTLY_GENERIC_BUTTON, "Perfectly Generic Button");
+		addBlock(MSBlocks.PERFECTLY_GENERIC_PRESSURE_PLATE, "Perfectly Generic Pressure Plate");
+		addBlock(MSBlocks.PERFECTLY_GENERIC_DOOR, "Perfectly Generic Door");
+		addBlock(MSBlocks.PERFECTLY_GENERIC_TRAPDOOR, "Perfectly Generic Trapdoor");
+		addBlock(MSBlocks.PERFECTLY_GENERIC_SIGN, "Perfectly Generic Sign");
+		addBlock(MSBlocks.PERFECTLY_GENERIC_HANGING_SIGN, "Perfectly Generic Hanging Sign");
+		
 		addBlock(MSBlocks.BLUE_DIRT, "Blue Dirt");
 		addBlock(MSBlocks.THOUGHT_DIRT, "Thought Dirt");
+		
 		addBlock(MSBlocks.COARSE_STONE, "Coarse Stone");
+		addBlock(MSBlocks.COARSE_STONE_WALL, "Coarse Stone Wall");
+		addBlock(MSBlocks.COARSE_STONE_BUTTON, "Coarse Stone Button");
+		addBlock(MSBlocks.COARSE_STONE_PRESSURE_PLATE, "Coarse Stone Pressure Plate");
+		
 		addBlock(MSBlocks.CHISELED_COARSE_STONE, "Chiseled Coarse Stone");
+		
 		addBlock(MSBlocks.COARSE_STONE_BRICKS, "Coarse Stone Bricks");
+		addBlock(MSBlocks.COARSE_STONE_BRICK_WALL, "Coarse Stone Brick Wall");
+		
 		addBlock(MSBlocks.COARSE_STONE_COLUMN, "Coarse Stone Column");
 		addBlock(MSBlocks.CHISELED_COARSE_STONE_BRICKS, "Chiseled Coarse Stone Bricks");
 		addBlock(MSBlocks.CRACKED_COARSE_STONE_BRICKS, "Cracked Coarse Stone Bricks");
 		addBlock(MSBlocks.MOSSY_COARSE_STONE_BRICKS, "Mossy Coarse Stone Bricks");
+		
 		addBlock(MSBlocks.SHADE_STONE, "Shade Stone");
+		addBlock(MSBlocks.SHADE_WALL, "Shade Wall");
+		addBlock(MSBlocks.SHADE_BUTTON, "Shade Button");
+		addBlock(MSBlocks.SHADE_PRESSURE_PLATE, "Shade Pressure Plate");
+		
 		addBlock(MSBlocks.SMOOTH_SHADE_STONE, "Smooth Shade Stone");
+		addBlock(MSBlocks.SMOOTH_SHADE_STONE_STAIRS, "Smooth Shade Stone Stairs");
+		addBlock(MSBlocks.SMOOTH_SHADE_STONE_SLAB, "Smooth Shade Stone Slab");
+		addBlock(MSBlocks.SMOOTH_SHADE_STONE_WALL, "Smooth Shade Stone Wall");
+		
 		addBlock(MSBlocks.SHADE_BRICKS, "Shade Bricks");
+		addBlock(MSBlocks.SHADE_BRICK_WALL, "Shade Brick Wall");
+		
 		addBlock(MSBlocks.SHADE_COLUMN, "Shade Stone Column");
 		addBlock(MSBlocks.CHISELED_SHADE_BRICKS, "Chiseled Shade Bricks");
 		addBlock(MSBlocks.CRACKED_SHADE_BRICKS, "Cracked Shade Bricks");
+		
 		addBlock(MSBlocks.MOSSY_SHADE_BRICKS, "Mossy Shade Bricks");
+		addBlock(MSBlocks.MOSSY_SHADE_BRICK_STAIRS, "Mossy Shade Brick Stairs");
+		addBlock(MSBlocks.MOSSY_SHADE_BRICK_SLAB, "Mossy Shade Brick Slab");
+		addBlock(MSBlocks.MOSSY_SHADE_BRICK_WALL, "Mossy Shade Brick Wall");
+		
 		addBlock(MSBlocks.BLOOD_SHADE_BRICKS, "Bloody Shade Bricks");
+		addBlock(MSBlocks.BLOOD_SHADE_BRICK_STAIRS, "Bloody Shade Brick Stairs");
+		addBlock(MSBlocks.BLOOD_SHADE_BRICK_SLAB, "Bloody Shade Brick Slab");
+		addBlock(MSBlocks.BLOOD_SHADE_BRICK_WALL, "Bloody Shade Brick Wall");
+		
 		addBlock(MSBlocks.TAR_SHADE_BRICKS, "Oily Shade Bricks");
+		addBlock(MSBlocks.TAR_SHADE_BRICK_STAIRS, "Oily Shade Brick Stairs");
+		addBlock(MSBlocks.TAR_SHADE_BRICK_SLAB, "Oily Shade Brick Slab");
+		addBlock(MSBlocks.TAR_SHADE_BRICK_WALL, "Oily Shade Brick Wall");
+		
 		addBlock(MSBlocks.FROST_TILE, "Frost Tiles");
+		addBlock(MSBlocks.FROST_TILE_WALL, "Frost Tile Wall");
+		
 		addBlock(MSBlocks.CHISELED_FROST_TILE, "Chiseled Frost Tiles");
+		
 		addBlock(MSBlocks.FROST_BRICKS, "Frost Bricks");
 		addBlock(MSBlocks.FROST_COLUMN, "Frost Column");
+		addBlock(MSBlocks.FROST_BRICK_WALL, "Frost Brick Wall");
+		
 		addBlock(MSBlocks.CHISELED_FROST_BRICKS, "Chiseled Frost Bricks");
 		addBlock(MSBlocks.CRACKED_FROST_BRICKS, "Cracked Frost Bricks");
+		
 		addBlock(MSBlocks.FLOWERY_FROST_BRICKS, "Flowery Frost Bricks");
-		addBlock(MSBlocks.CAST_IRON, "Cast-Iron");
-		addBlock(MSBlocks.CHISELED_CAST_IRON, "Chiseled Cast-Iron");
+		addBlock(MSBlocks.FLOWERY_FROST_BRICK_STAIRS, "Flowery Frost Brick Stairs");
+		addBlock(MSBlocks.FLOWERY_FROST_BRICK_SLAB, "Flowery Frost Brick Slab");
+		addBlock(MSBlocks.FLOWERY_FROST_BRICK_WALL, "Flowery Frost Brick Wall");
+		
+		addBlock(MSBlocks.CAST_IRON, "Cast Iron");
+		addBlock(MSBlocks.CAST_IRON_STAIRS, "Cast Iron Stairs");
+		addBlock(MSBlocks.CAST_IRON_SLAB, "Cast Iron Slab");
+		addBlock(MSBlocks.CAST_IRON_WALL, "Cast Iron Wall");
+		addBlock(MSBlocks.CAST_IRON_BUTTON, "Cast Iron Button");
+		addBlock(MSBlocks.CAST_IRON_PRESSURE_PLATE, "Cast Iron Pressure Plate");
+		
+		addBlock(MSBlocks.CAST_IRON_TILE, "Cast Iron Tile");
+		addBlock(MSBlocks.CAST_IRON_TILE_STAIRS, "Cast Iron Tile Stairs");
+		addBlock(MSBlocks.CAST_IRON_TILE_SLAB, "Cast Iron Tile Slab");
+		
+		addBlock(MSBlocks.CAST_IRON_SHEET, "Cast Iron Sheet");
+		addBlock(MSBlocks.CAST_IRON_SHEET_STAIRS, "Cast Iron Sheet Stairs");
+		addBlock(MSBlocks.CAST_IRON_SHEET_SLAB, "Cast Iron Sheet Slab");
+		
+		addBlock(MSBlocks.CHISELED_CAST_IRON, "Chiseled Cast Iron");
+		addBlock(MSBlocks.CAST_IRON_FRAME, "Cast Iron Frame");
+		
 		addBlock(MSBlocks.STEEL_BEAM, "Steel Beam");
+		
 		addBlock(MSBlocks.MYCELIUM_COBBLESTONE, "Mycelium Cobblestone");
+		addBlock(MSBlocks.MYCELIUM_COBBLESTONE_STAIRS, "Mycelium Cobblestone Stairs");
+		addBlock(MSBlocks.MYCELIUM_COBBLESTONE_SLAB, "Mycelium Cobblestone Slab");
+		addBlock(MSBlocks.MYCELIUM_COBBLESTONE_WALL, "Mycelium Cobblestone Wall");
+		
 		addBlock(MSBlocks.MYCELIUM_STONE, "Mycelium Stone");
+		addBlock(MSBlocks.MYCELIUM_STONE_WALL, "Mycelium Stone Wall");
+		addBlock(MSBlocks.MYCELIUM_STONE_BUTTON, "Mycelium Stone Button");
+		addBlock(MSBlocks.MYCELIUM_STONE_PRESSURE_PLATE, "Mycelium Stone Pressure Plate");
+		
 		addBlock(MSBlocks.POLISHED_MYCELIUM_STONE, "Polished Mycelium Stone");
+		addBlock(MSBlocks.POLISHED_MYCELIUM_STONE_STAIRS, "Polished Mycelium Stone Stairs");
+		addBlock(MSBlocks.POLISHED_MYCELIUM_STONE_SLAB, "Polished Mycelium Stone Slab");
+		addBlock(MSBlocks.POLISHED_MYCELIUM_STONE_WALL, "Polished Mycelium Stone Wall");
+		
 		addBlock(MSBlocks.MYCELIUM_BRICKS, "Mycelium Bricks");
+		addBlock(MSBlocks.MYCELIUM_BRICK_WALL, "Mycelium Brick Wall");
+		
 		addBlock(MSBlocks.MYCELIUM_COLUMN, "Mycelium Column");
 		addBlock(MSBlocks.CHISELED_MYCELIUM_BRICKS, "Chiseled Mycelium Bricks");
 		addBlock(MSBlocks.SUSPICIOUS_CHISELED_MYCELIUM_BRICKS, "Suspicious Chiseled Mycelium Bricks");
 		addBlock(MSBlocks.CRACKED_MYCELIUM_BRICKS, "Cracked Mycelium Bricks");
+		
 		addBlock(MSBlocks.MOSSY_MYCELIUM_BRICKS, "Mossy Mycelium Bricks");
+		addBlock(MSBlocks.MOSSY_MYCELIUM_BRICK_STAIRS, "Mossy Mycelium Brick Stairs");
+		addBlock(MSBlocks.MOSSY_MYCELIUM_BRICK_SLAB, "Mossy Mycelium Brick Slab");
+		addBlock(MSBlocks.MOSSY_MYCELIUM_BRICK_WALL, "Mossy Mycelium Brick Wall");
+		
 		addBlock(MSBlocks.FLOWERY_MYCELIUM_BRICKS, "Flowery Mycelium Bricks");
+		addBlock(MSBlocks.FLOWERY_MYCELIUM_BRICK_STAIRS, "Flowery Mycelium Brick Stairs");
+		addBlock(MSBlocks.FLOWERY_MYCELIUM_BRICK_SLAB, "Flowery Mycelium Brick Slab");
+		addBlock(MSBlocks.FLOWERY_MYCELIUM_BRICK_WALL, "Flowery Mycelium Brick Wall");
+		
 		addBlock(MSBlocks.BLACK_STONE, "Black Stone");
+		addBlock(MSBlocks.BLACK_STONE_STAIRS, "Black Stone Stairs");
+		addBlock(MSBlocks.BLACK_STONE_SLAB, "Black Stone Slab");
+		addBlock(MSBlocks.BLACK_STONE_WALL, "Black Stone Wall");
+		addBlock(MSBlocks.BLACK_STONE_BUTTON, "Black Stone Button");
+		addBlock(MSBlocks.BLACK_STONE_PRESSURE_PLATE, "Black Stone Pressure Plate");
+		
 		addBlock(MSBlocks.POLISHED_BLACK_STONE, "Polished Black Stone");
+		addBlock(MSBlocks.POLISHED_BLACK_STONE_STAIRS, "Polished Black Stone Stairs");
+		addBlock(MSBlocks.POLISHED_BLACK_STONE_SLAB, "Polished Black Stone Slab");
+		addBlock(MSBlocks.POLISHED_BLACK_STONE_WALL, "Polished Black Stone Wall");
+		
 		addBlock(MSBlocks.BLACK_COBBLESTONE, "Black Cobblestone");
+		addBlock(MSBlocks.BLACK_COBBLESTONE_STAIRS, "Black Cobblestone Stairs");
+		addBlock(MSBlocks.BLACK_COBBLESTONE_SLAB, "Black Cobblestone Slab");
+		addBlock(MSBlocks.BLACK_COBBLESTONE_WALL, "Black Cobblestone Wall");
+		
 		addBlock(MSBlocks.BLACK_STONE_BRICKS, "Black Stone Bricks");
+		addBlock(MSBlocks.BLACK_STONE_BRICK_STAIRS, "Black Stone Brick Stairs");
+		addBlock(MSBlocks.BLACK_STONE_BRICK_SLAB, "Black Stone Brick Slab");
+		addBlock(MSBlocks.BLACK_STONE_BRICK_WALL, "Black Stone Brick Wall");
+		
 		addBlock(MSBlocks.BLACK_STONE_COLUMN, "Black Stone Column");
 		addBlock(MSBlocks.CHISELED_BLACK_STONE_BRICKS, "Chiseled Black Stone Bricks");
 		addBlock(MSBlocks.CRACKED_BLACK_STONE_BRICKS, "Cracked Black Stone Bricks");
+		
+		addBlock(MSBlocks.MAGMATIC_BLACK_STONE_BRICKS, "Magmatic Black Stone Bricks");
+		addBlock(MSBlocks.MAGMATIC_BLACK_STONE_BRICK_STAIRS, "Magmatic Black Stone Brick Stairs");
+		addBlock(MSBlocks.MAGMATIC_BLACK_STONE_BRICK_SLAB, "Magmatic Black Stone Brick Slab");
+		addBlock(MSBlocks.MAGMATIC_BLACK_STONE_BRICK_WALL, "Magmatic Black Stone Brick Wall");
+		
 		addBlock(MSBlocks.BLACK_SAND, "Black Sand");
+		
+		addBlock(MSBlocks.IGNEOUS_STONE, "Igneous Stone");
+		addBlock(MSBlocks.IGNEOUS_STONE_STAIRS, "Igneous Stone Stairs");
+		addBlock(MSBlocks.IGNEOUS_STONE_SLAB, "Igneous Stone Slab");
+		addBlock(MSBlocks.IGNEOUS_STONE_WALL, "Igneous Stone Wall");
+		addBlock(MSBlocks.IGNEOUS_STONE_BUTTON, "Igneous Stone Button");
+		addBlock(MSBlocks.IGNEOUS_STONE_PRESSURE_PLATE, "Igneous Stone Pressure Plate");
+		
+		addBlock(MSBlocks.POLISHED_IGNEOUS_STONE, "Polished Igneous Stone");
+		addBlock(MSBlocks.POLISHED_IGNEOUS_STAIRS, "Polished Igneous Stairs");
+		addBlock(MSBlocks.POLISHED_IGNEOUS_SLAB, "Polished Igneous Slab");
+		addBlock(MSBlocks.POLISHED_IGNEOUS_WALL, "Polished Igneous Wall");
+		
+		addBlock(MSBlocks.POLISHED_IGNEOUS_BRICKS, "Polished Igneous Bricks");
+		addBlock(MSBlocks.POLISHED_IGNEOUS_BRICK_STAIRS, "Polished Igneous Brick Stairs");
+		addBlock(MSBlocks.POLISHED_IGNEOUS_BRICK_SLAB, "Polished Igneous Brick Slab");
+		addBlock(MSBlocks.POLISHED_IGNEOUS_BRICK_WALL, "Polished Igneous Brick Wall");
+		
+		addBlock(MSBlocks.POLISHED_IGNEOUS_PILLAR, "Polished Igneous Pillar");
+		addBlock(MSBlocks.CHISELED_IGNEOUS_STONE, "Chiseled Igneous Stone");
+		addBlock(MSBlocks.CRACKED_POLISHED_IGNEOUS_BRICKS, "Cracked Polished Igneous Bricks");
+		
+		addBlock(MSBlocks.MAGMATIC_POLISHED_IGNEOUS_BRICKS, "Magmatic Polished Igneous Bricks");
+		addBlock(MSBlocks.MAGMATIC_POLISHED_IGNEOUS_BRICK_STAIRS, "Magmatic Polished Igneous Brick Stairs");
+		addBlock(MSBlocks.MAGMATIC_POLISHED_IGNEOUS_BRICK_SLAB, "Magmatic Polished Igneous Brick Slab");
+		addBlock(MSBlocks.MAGMATIC_POLISHED_IGNEOUS_BRICK_WALL, "Magmatic Polished Igneous Brick Wall");
+		
+		addBlock(MSBlocks.MAGMATIC_IGNEOUS_STONE, "Magmatic Igneous Stone");
+		
+		addBlock(MSBlocks.PUMICE_STONE, "Pumice Stone");
+		addBlock(MSBlocks.PUMICE_STONE_STAIRS, "Pumice Stone Stairs");
+		addBlock(MSBlocks.PUMICE_STONE_SLAB, "Pumice Stone Slab");
+		addBlock(MSBlocks.PUMICE_STONE_WALL, "Pumice Stone Wall");
+		addBlock(MSBlocks.PUMICE_STONE_BUTTON, "Pumice Stone Button");
+		addBlock(MSBlocks.PUMICE_STONE_PRESSURE_PLATE, "Pumice Stone Pressure Plate");
+		
+		addBlock(MSBlocks.PUMICE_BRICKS, "Pumice Bricks");
+		addBlock(MSBlocks.PUMICE_BRICK_STAIRS, "Pumice Brick Stairs");
+		addBlock(MSBlocks.PUMICE_BRICK_SLAB, "Pumice Brick Slab");
+		addBlock(MSBlocks.PUMICE_BRICK_WALL, "Pumice Brick Wall");
+		
+		addBlock(MSBlocks.PUMICE_TILES, "Pumice Tiles");
+		addBlock(MSBlocks.PUMICE_TILE_STAIRS, "Pumice Tile Stairs");
+		addBlock(MSBlocks.PUMICE_TILE_SLAB, "Pumice Tile Slab");
+		addBlock(MSBlocks.PUMICE_TILE_WALL, "Pumice Tile Wall");
+		
+		addBlock(MSBlocks.HEAT_LAMP, "Heat Lamp");
+		
 		addBlock(MSBlocks.DECREPIT_STONE_BRICKS, "Decrepit Stone Bricks");
+		addBlock(MSBlocks.DECREPIT_STONE_BRICK_STAIRS, "Decrepit Stone Brick Stairs");
+		addBlock(MSBlocks.DECREPIT_STONE_BRICK_SLAB, "Decrepit Stone Brick Slab");
+		addBlock(MSBlocks.DECREPIT_STONE_BRICK_WALL, "Decrepit Stone Brick Wall");
+		
 		addBlock(MSBlocks.FLOWERY_MOSSY_COBBLESTONE, "Flowery Mossy Cobblestone");
+		addBlock(MSBlocks.FLOWERY_MOSSY_COBBLESTONE_STAIRS, "Flowery Mossy Cobblestone Stairs");
+		addBlock(MSBlocks.FLOWERY_MOSSY_COBBLESTONE_SLAB, "Flowery Mossy Cobblestone Slab");
+		addBlock(MSBlocks.FLOWERY_MOSSY_COBBLESTONE_WALL, "Flowery Mossy Cobblestone Wall");
+		
 		addBlock(MSBlocks.MOSSY_DECREPIT_STONE_BRICKS, "Mossy Decrepit Stone Bricks");
+		addBlock(MSBlocks.MOSSY_DECREPIT_STONE_BRICK_STAIRS, "Mossy Decrepit Stone Brick Stairs");
+		addBlock(MSBlocks.MOSSY_DECREPIT_STONE_BRICK_SLAB, "Mossy Decrepit Stone Brick Slab");
+		addBlock(MSBlocks.MOSSY_DECREPIT_STONE_BRICK_WALL, "Mossy Decrepit Stone Brick Wall");
+		
 		addBlock(MSBlocks.FLOWERY_MOSSY_STONE_BRICKS, "Flowery Mossy Decrepit Stone Bricks");
+		addBlock(MSBlocks.FLOWERY_MOSSY_STONE_BRICK_STAIRS, "Flowery Mossy Decrepit Stone Brick Stairs");
+		addBlock(MSBlocks.FLOWERY_MOSSY_STONE_BRICK_SLAB, "Flowery Mossy Decrepit Stone Brick Slab");
+		addBlock(MSBlocks.FLOWERY_MOSSY_STONE_BRICK_WALL, "Flowery Mossy Decrepit Stone Brick Wall");
 		addBlock(MSBlocks.COARSE_END_STONE, "Coarse End Stone");
 		addBlock(MSBlocks.END_GRASS, "End Grass Block");
+		
 		addBlock(MSBlocks.CHALK, "Chalk");
+		addBlock(MSBlocks.CHALK_WALL, "Chalk Wall");
+		addBlock(MSBlocks.CHALK_BUTTON, "Chalk Button");
+		addBlock(MSBlocks.CHALK_PRESSURE_PLATE, "Chalk Pressure Plate");
+		
 		addBlock(MSBlocks.POLISHED_CHALK, "Polished Chalk");
+		addBlock(MSBlocks.POLISHED_CHALK_STAIRS, "Polished Chalk Stairs");
+		addBlock(MSBlocks.POLISHED_CHALK_SLAB, "Polished Chalk Slab");
+		addBlock(MSBlocks.POLISHED_CHALK_WALL, "Polished Chalk Wall");
+		
 		addBlock(MSBlocks.CHALK_BRICKS, "Chalk Bricks");
+		addBlock(MSBlocks.CHALK_BRICK_WALL, "Chalk Brick Wall");
+		
 		addBlock(MSBlocks.CHALK_COLUMN, "Chalk Column");
 		addBlock(MSBlocks.CHISELED_CHALK_BRICKS, "Chiseled Chalk Bricks");
+		
 		addBlock(MSBlocks.MOSSY_CHALK_BRICKS, "Mossy Chalk Bricks");
+		addBlock(MSBlocks.MOSSY_CHALK_BRICK_STAIRS, "Mossy Chalk Brick Stairs");
+		addBlock(MSBlocks.MOSSY_CHALK_BRICK_SLAB, "Mossy Chalk Brick Slab");
+		addBlock(MSBlocks.MOSSY_CHALK_BRICK_WALL, "Mossy Chalk Brick Wall");
+		
 		addBlock(MSBlocks.FLOWERY_CHALK_BRICKS, "Flowery Chalk Bricks");
+		addBlock(MSBlocks.FLOWERY_CHALK_BRICK_STAIRS, "Flowery Chalk Brick Stairs");
+		addBlock(MSBlocks.FLOWERY_CHALK_BRICK_SLAB, "Flowery Chalk Brick Slab");
+		addBlock(MSBlocks.FLOWERY_CHALK_BRICK_WALL, "Flowery Chalk Brick Wall");
+		
 		addBlock(MSBlocks.PINK_STONE, "Pink Stone");
+		addBlock(MSBlocks.PINK_STONE_WALL, "Pink Stone Wall");
+		addBlock(MSBlocks.PINK_STONE_BUTTON, "Pink Stone Button");
+		addBlock(MSBlocks.PINK_STONE_PRESSURE_PLATE, "Pink Stone Pressure Plate");
+		
 		addBlock(MSBlocks.POLISHED_PINK_STONE, "Polished Pink Stone");
+		addBlock(MSBlocks.POLISHED_PINK_STONE_STAIRS, "Polished Pink Stone Stairs");
+		addBlock(MSBlocks.POLISHED_PINK_STONE_SLAB, "Polished Pink Stone Slab");
+		addBlock(MSBlocks.POLISHED_PINK_STONE_WALL, "Polished Pink Stone Wall");
+		
 		addBlock(MSBlocks.PINK_STONE_BRICKS, "Pink Stone Bricks");
+		addBlock(MSBlocks.PINK_STONE_BRICK_WALL, "Pink Stone Brick Wall");
+		
 		addBlock(MSBlocks.CHISELED_PINK_STONE_BRICKS, "Chiseled Pink Stone Bricks");
 		addBlock(MSBlocks.CRACKED_PINK_STONE_BRICKS, "Cracked Pink Stone Bricks");
+		
 		addBlock(MSBlocks.MOSSY_PINK_STONE_BRICKS, "Mossy Pink Stone Bricks");
+		addBlock(MSBlocks.MOSSY_PINK_STONE_BRICK_STAIRS, "Mossy Pink Stone Brick Stairs");
+		addBlock(MSBlocks.MOSSY_PINK_STONE_BRICK_SLAB, "Mossy Pink Stone Brick Slab");
+		addBlock(MSBlocks.MOSSY_PINK_STONE_BRICK_WALL, "Mossy Pink Stone Brick Wall");
+		
 		addBlock(MSBlocks.PINK_STONE_COLUMN, "Pink Stone Column");
+		
 		addBlock(MSBlocks.BROWN_STONE, "Brown Stone");
+		addBlock(MSBlocks.BROWN_STONE_WALL, "Brown Stone Wall");
+		addBlock(MSBlocks.BROWN_STONE_BUTTON, "Brown Stone Button");
+		addBlock(MSBlocks.BROWN_STONE_PRESSURE_PLATE, "Brown Stone Pressure Plate");
+		
 		addBlock(MSBlocks.POLISHED_BROWN_STONE, "Polished Brown Stone");
+		addBlock(MSBlocks.POLISHED_BROWN_STONE_STAIRS, "Polished Brown Stone Stairs");
+		addBlock(MSBlocks.POLISHED_BROWN_STONE_SLAB, "Polished Brown Stone Slab");
+		addBlock(MSBlocks.POLISHED_BROWN_STONE_WALL, "Polished Brown Stone Wall");
+		
 		addBlock(MSBlocks.BROWN_STONE_BRICKS, "Brown Stone Bricks");
+		addBlock(MSBlocks.BROWN_STONE_BRICK_WALL, "Brown Stone Brick Wall");
+		
 		addBlock(MSBlocks.BROWN_STONE_COLUMN, "Brown Stone Column");
 		addBlock(MSBlocks.CRACKED_BROWN_STONE_BRICKS, "Cracked Brown Stone Bricks");
+		
 		addBlock(MSBlocks.GREEN_STONE, "Green Stone");
+		addBlock(MSBlocks.GREEN_STONE_WALL, "Green Stone Wall");
+		addBlock(MSBlocks.GREEN_STONE_BUTTON, "Green Stone Button");
+		addBlock(MSBlocks.GREEN_STONE_PRESSURE_PLATE, "Green Stone Pressure Plate");
+		
 		addBlock(MSBlocks.POLISHED_GREEN_STONE, "Polished Green Stone");
+		addBlock(MSBlocks.POLISHED_GREEN_STONE_STAIRS, "Polished Green Stone Stairs");
+		addBlock(MSBlocks.POLISHED_GREEN_STONE_SLAB, "Polished Green Stone Slab");
+		addBlock(MSBlocks.POLISHED_GREEN_STONE_WALL, "Polished Green Stone Wall");
+		
 		addBlock(MSBlocks.GREEN_STONE_BRICKS, "Green Stone Bricks");
+		addBlock(MSBlocks.GREEN_STONE_BRICK_WALL, "Green Stone Brick Wall");
+		
 		addBlock(MSBlocks.GREEN_STONE_COLUMN, "Green Stone Column");
 		addBlock(MSBlocks.CHISELED_GREEN_STONE_BRICKS, "Chiseled Green Stone Bricks");
+		
 		addBlock(MSBlocks.HORIZONTAL_GREEN_STONE_BRICKS, "Horizontal Green Stone Bricks");
+		addBlock(MSBlocks.HORIZONTAL_GREEN_STONE_BRICK_STAIRS, "Horizontal Green Stone Brick Stairs");
+		addBlock(MSBlocks.HORIZONTAL_GREEN_STONE_BRICK_SLAB, "Horizontal Green Stone Brick Slab");
+		addBlock(MSBlocks.HORIZONTAL_GREEN_STONE_BRICK_WALL, "Horizontal Green Stone Brick Wall");
+		
 		addBlock(MSBlocks.VERTICAL_GREEN_STONE_BRICKS, "Vertical Green Stone Bricks");
+		addBlock(MSBlocks.VERTICAL_GREEN_STONE_BRICK_STAIRS, "Vertical Green Stone Brick Stairs");
+		addBlock(MSBlocks.VERTICAL_GREEN_STONE_BRICK_SLAB, "Vertical Green Stone Brick Slab");
+		addBlock(MSBlocks.VERTICAL_GREEN_STONE_BRICK_WALL, "Vertical Green Stone Brick Wall");
+		
 		addBlock(MSBlocks.GREEN_STONE_BRICK_EMBEDDED_LADDER, "Green Stone Brick Embedded Ladder");
 		addBlock(MSBlocks.GREEN_STONE_BRICK_TRIM, "Green Stone Brick Trim");
 		addBlock(MSBlocks.GREEN_STONE_BRICK_FROG, "Green Stone Brick Frog Hieroglyph");
@@ -216,14 +486,136 @@ public class MinestuckEnUsLanguageProvider extends MinestuckLanguageProvider
 		addBlock(MSBlocks.RED_SANDSTONE_COLUMN, "Red Sandstone Column");
 		addBlock(MSBlocks.CHISELED_RED_SANDSTONE_COLUMN, "Chiseled Red Sandstone Column");
 		addBlock(MSBlocks.NATIVE_SULFUR, "Native Sulfur");
+		
+		addBlock(MSBlocks.CARVED_LOG, "Carved Log");
+		addBlock(MSBlocks.CARVED_WOODEN_LEAF, "Carved Wooden Leaf");
+		
 		addBlock(MSBlocks.UNCARVED_WOOD, "Uncarved Wood");
-		addBlockTooltip(MSBlocks.UNCARVED_WOOD, "Woodgrain terrain");
+		addBlock(MSBlocks.UNCARVED_WOOD_STAIRS, "Uncarved Wood Stairs");
+		addBlock(MSBlocks.UNCARVED_WOOD_SLAB, "Uncarved Wood Slab");
+		addBlock(MSBlocks.UNCARVED_WOOD_BUTTON, "Uncarved Wood Button");
+		addBlock(MSBlocks.UNCARVED_WOOD_PRESSURE_PLATE, "Uncarved Wood Pressure Plate");
+		addBlock(MSBlocks.UNCARVED_WOOD_FENCE, "Uncarved Wood Fence");
+		addBlock(MSBlocks.UNCARVED_WOOD_FENCE_GATE, "Uncarved Wood Fence Gate");
+		
 		addBlock(MSBlocks.CHIPBOARD, "Chipboard");
+		addBlock(MSBlocks.CHIPBOARD_STAIRS, "Chipboard Stairs");
+		addBlock(MSBlocks.CHIPBOARD_SLAB, "Chipboard Slab");
+		addBlock(MSBlocks.CHIPBOARD_BUTTON, "Chipboard Button");
+		addBlock(MSBlocks.CHIPBOARD_PRESSURE_PLATE, "Chipboard Pressure Plate");
+		addBlock(MSBlocks.CHIPBOARD_FENCE, "Chipboard Fence");
+		addBlock(MSBlocks.CHIPBOARD_FENCE_GATE, "Chipboard Fence Gate");
+		
 		addBlock(MSBlocks.WOOD_SHAVINGS, "Wood Shavings");
+		
 		addBlock(MSBlocks.CARVED_HEAVY_PLANKS, "Carved Heavy Planks");
+		addBlock(MSBlocks.CARVED_HEAVY_PLANK_STAIRS, "Carved Heavy Stairs");
+		addBlock(MSBlocks.CARVED_HEAVY_PLANK_SLAB, "Carved Heavy Slab");
+		
 		addBlock(MSBlocks.CARVED_PLANKS, "Carved Planks");
+		addBlock(MSBlocks.CARVED_STAIRS, "Carved Stairs");
+		addBlock(MSBlocks.CARVED_SLAB, "Carved Slab");
+		addBlock(MSBlocks.CARVED_BUTTON, "Carved Button");
+		addBlock(MSBlocks.CARVED_PRESSURE_PLATE, "Carved Pressure Plate");
+		addBlock(MSBlocks.CARVED_FENCE, "Carved Fence");
+		addBlock(MSBlocks.CARVED_FENCE_GATE, "Carved Fence Gate");
+		addBlock(MSBlocks.CARVED_DOOR, "Carved Door");
+		addBlock(MSBlocks.CARVED_TRAPDOOR, "Carved Trapdoor");
+		addBlock(MSBlocks.CARVED_SIGN, "Carved Sign");
+		addBlock(MSBlocks.CARVED_HANGING_SIGN, "Carved Hanging Sign");
+		
 		addBlock(MSBlocks.POLISHED_UNCARVED_WOOD, "Polished Uncarved Wood");
+		addBlock(MSBlocks.POLISHED_UNCARVED_STAIRS, "Polished Uncarved Stairs");
+		addBlock(MSBlocks.POLISHED_UNCARVED_SLAB, "Polished Uncarved Slab");
+		
+		addBlock(MSBlocks.CARVED_BUSH, "Carved Bush");
 		addBlock(MSBlocks.CARVED_KNOTTED_WOOD, "Carved Knotted Wood");
+		addBlock(MSBlocks.WOODEN_GRASS, "Wooden Grass");
+		
+		addBlock(MSBlocks.TREATED_UNCARVED_WOOD, "Treated Uncarved Wood");
+		addBlock(MSBlocks.TREATED_UNCARVED_WOOD_STAIRS, "Treated Uncarved Wood Stairs");
+		addBlock(MSBlocks.TREATED_UNCARVED_WOOD_SLAB, "Treated Uncarved Wood Slab");
+		addBlock(MSBlocks.TREATED_UNCARVED_WOOD_BUTTON, "Treated Uncarved Wood Button");
+		addBlock(MSBlocks.TREATED_UNCARVED_WOOD_PRESSURE_PLATE, "Treated Uncarved Wood Pressure Plate");
+		addBlock(MSBlocks.TREATED_UNCARVED_WOOD_FENCE, "Treated Uncarved Wood Fence");
+		addBlock(MSBlocks.TREATED_UNCARVED_WOOD_FENCE_GATE, "Treated Uncarved Wood Fence Gate");
+		
+		addBlock(MSBlocks.TREATED_CHIPBOARD, "Treated Chipboard");
+		addBlock(MSBlocks.TREATED_CHIPBOARD_STAIRS, "Treated Chipboard Stairs");
+		addBlock(MSBlocks.TREATED_CHIPBOARD_SLAB, "Treated Chipboard Slab");
+		addBlock(MSBlocks.TREATED_CHIPBOARD_BUTTON, "Treated Chipboard Button");
+		addBlock(MSBlocks.TREATED_CHIPBOARD_PRESSURE_PLATE, "Treated Chipboard Pressure Plate");
+		addBlock(MSBlocks.TREATED_CHIPBOARD_FENCE, "Treated Chipboard Fence");
+		addBlock(MSBlocks.TREATED_CHIPBOARD_FENCE_GATE, "Treated Chipboard Fence Gate");
+		
+		addBlock(MSBlocks.TREATED_WOOD_SHAVINGS, "Treated Wood Shavings");
+		
+		addBlock(MSBlocks.TREATED_HEAVY_PLANKS, "Treated Heavy Planks");
+		addBlock(MSBlocks.TREATED_HEAVY_PLANK_STAIRS, "Treated Heavy Stairs");
+		addBlock(MSBlocks.TREATED_HEAVY_PLANK_SLAB, "Treated Heavy Slab");
+		
+		addBlock(MSBlocks.TREATED_PLANKS, "Treated Planks");
+		addBlock(MSBlocks.TREATED_PLANKS_STAIRS, "Treated Stairs");
+		addBlock(MSBlocks.TREATED_PLANKS_SLAB, "Treated Slab");
+		addBlock(MSBlocks.TREATED_BUTTON, "Treated Button");
+		addBlock(MSBlocks.TREATED_PRESSURE_PLATE, "Treated Pressure Plate");
+		addBlock(MSBlocks.TREATED_FENCE, "Treated Fence");
+		addBlock(MSBlocks.TREATED_FENCE_GATE, "Treated Fence Gate");
+		addBlock(MSBlocks.TREATED_DOOR, "Treated Door");
+		addBlock(MSBlocks.TREATED_TRAPDOOR, "Treated Trapdoor");
+		addBlock(MSBlocks.TREATED_SIGN, "Treated Sign");
+		addBlock(MSBlocks.TREATED_HANGING_SIGN, "Treated Hanging Sign");
+		
+		addBlock(MSBlocks.POLISHED_TREATED_UNCARVED_WOOD, "Polished Treated Uncarved Wood");
+		addBlock(MSBlocks.POLISHED_TREATED_UNCARVED_STAIRS, "Polished Treated Uncarved Stairs");
+		addBlock(MSBlocks.POLISHED_TREATED_UNCARVED_SLAB, "Polished Treated Uncarved Slab");
+		
+		addBlock(MSBlocks.TREATED_CARVED_KNOTTED_WOOD, "Treated Carved Knotted Wood");
+		addBlock(MSBlocks.TREATED_WOODEN_GRASS, "Treated Wooden Grass");
+		
+		addBlock(MSBlocks.LACQUERED_UNCARVED_WOOD, "Lacquered Uncarved Wood");
+		addBlock(MSBlocks.LACQUERED_UNCARVED_WOOD_STAIRS, "Lacquered Uncarved Wood Stairs");
+		addBlock(MSBlocks.LACQUERED_UNCARVED_WOOD_SLAB, "Lacquered Uncarved Wood Slab");
+		addBlock(MSBlocks.LACQUERED_UNCARVED_WOOD_BUTTON, "Lacquered Uncarved Wood Button");
+		addBlock(MSBlocks.LACQUERED_UNCARVED_WOOD_PRESSURE_PLATE, "Lacquered Uncarved Wood Pressure Plate");
+		addBlock(MSBlocks.LACQUERED_UNCARVED_WOOD_FENCE, "Lacquered Uncarved Wood Fence");
+		addBlock(MSBlocks.LACQUERED_UNCARVED_WOOD_FENCE_GATE, "Lacquered Uncarved Wood Fence Gate");
+		
+		addBlock(MSBlocks.LACQUERED_CHIPBOARD, "Lacquered Chipboard");
+		addBlock(MSBlocks.LACQUERED_CHIPBOARD_STAIRS, "Lacquered Chipboard Stairs");
+		addBlock(MSBlocks.LACQUERED_CHIPBOARD_SLAB, "Lacquered Chipboard Slab");
+		addBlock(MSBlocks.LACQUERED_CHIPBOARD_BUTTON, "Lacquered Chipboard Button");
+		addBlock(MSBlocks.LACQUERED_CHIPBOARD_PRESSURE_PLATE, "Lacquered Chipboard Pressure Plate");
+		addBlock(MSBlocks.LACQUERED_CHIPBOARD_FENCE, "Lacquered Chipboard Fence");
+		addBlock(MSBlocks.LACQUERED_CHIPBOARD_FENCE_GATE, "Lacquered Chipboard Fence Gate");
+		
+		addBlock(MSBlocks.LACQUERED_WOOD_SHAVINGS, "Lacquered Wood Shavings");
+		
+		addBlock(MSBlocks.LACQUERED_HEAVY_PLANKS, "Lacquered Heavy Planks");
+		addBlock(MSBlocks.LACQUERED_HEAVY_PLANK_STAIRS, "Lacquered Heavy Stairs");
+		addBlock(MSBlocks.LACQUERED_HEAVY_PLANK_SLAB, "Lacquered Heavy Slab");
+		
+		addBlock(MSBlocks.LACQUERED_PLANKS, "Lacquered Planks");
+		addBlock(MSBlocks.LACQUERED_STAIRS, "Lacquered Stairs");
+		addBlock(MSBlocks.LACQUERED_SLAB, "Lacquered Slab");
+		addBlock(MSBlocks.LACQUERED_BUTTON, "Lacquered Button");
+		addBlock(MSBlocks.LACQUERED_PRESSURE_PLATE, "Lacquered Pressure Plate");
+		addBlock(MSBlocks.LACQUERED_FENCE, "Lacquered Fence");
+		addBlock(MSBlocks.LACQUERED_FENCE_GATE, "Lacquered Fence Gate");
+		addBlock(MSBlocks.LACQUERED_DOOR, "Lacquered Door");
+		addBlock(MSBlocks.LACQUERED_TRAPDOOR, "Lacquered Trapdoor");
+		addBlock(MSBlocks.LACQUERED_SIGN, "Lacquered Sign");
+		addBlock(MSBlocks.LACQUERED_HANGING_SIGN, "Lacquered Hanging Sign");
+		
+		addBlock(MSBlocks.POLISHED_LACQUERED_UNCARVED_WOOD, "Polished Lacquered Uncarved Wood");
+		addBlock(MSBlocks.POLISHED_LACQUERED_UNCARVED_STAIRS, "Polished Lacquered Uncarved Stairs");
+		addBlock(MSBlocks.POLISHED_LACQUERED_UNCARVED_SLAB, "Polished Lacquered Uncarved Slab");
+		
+		addBlock(MSBlocks.LACQUERED_CARVED_KNOTTED_WOOD, "Lacquered Carved Knotted Wood");
+		addBlock(MSBlocks.LACQUERED_WOODEN_MUSHROOM, "Lacquered Wooden Mushroom");
+		
+		addBlock(MSBlocks.WOODEN_LAMP, "Wooden Lamp");
+		
 		addBlock(MSBlocks.DENSE_CLOUD, "Dense Cloud");
 		addBlock(MSBlocks.BRIGHT_DENSE_CLOUD, "Bright Dense Cloud");
 		addBlock(MSBlocks.SUGAR_CUBE, "Sugar Cube");
@@ -236,6 +628,7 @@ public class MinestuckEnUsLanguageProvider extends MinestuckLanguageProvider
 		addBlock(MSBlocks.FLOWERY_VINE_LOG, "Flowery Vine Oak Log");
 		addBlock(MSBlocks.DEAD_LOG, "Dead Log");
 		addBlock(MSBlocks.PETRIFIED_LOG, "Petrified Log");
+		addBlock(MSBlocks.CINDERED_LOG, "Cindered Log");
 		addBlock(MSBlocks.GLOWING_WOOD, "Glowing Wood");
 		addBlock(MSBlocks.SHADEWOOD_LOG, "Shadewood Log");
 		addBlock(MSBlocks.SCARRED_SHADEWOOD_LOG, "Scarred Shadewood Log");
@@ -256,14 +649,102 @@ public class MinestuckEnUsLanguageProvider extends MinestuckLanguageProvider
 		addBlock(MSBlocks.FLOWERY_VINE_WOOD, "Flowery Vine Wood");
 		addBlock(MSBlocks.DEAD_WOOD, "Dead Wood");
 		addBlock(MSBlocks.PETRIFIED_WOOD, "Petrified Wood");
+		addBlock(MSBlocks.CINDERED_WOOD, "Cindered Wood");
+		
 		addBlock(MSBlocks.GLOWING_PLANKS, "Glowing Planks");
+		addBlock(MSBlocks.GLOWING_STAIRS, "Glowing Stairs");
+		addBlock(MSBlocks.GLOWING_SLAB, "Glowing Slab");
+		addBlock(MSBlocks.GLOWING_BUTTON, "Glowing Button");
+		addBlock(MSBlocks.GLOWING_PRESSURE_PLATE, "Glowing Pressure Plate");
+		addBlock(MSBlocks.GLOWING_FENCE, "Glowing Fence");
+		addBlock(MSBlocks.GLOWING_FENCE_GATE, "Glowing Fence Gate");
+		addBlock(MSBlocks.GLOWING_DOOR, "Glowing Door");
+		addBlock(MSBlocks.GLOWING_TRAPDOOR, "Glowing Trapdoor");
+		addBlock(MSBlocks.STRIPPED_GLOWING_LOG, "Stripped Glowing Log");
+		addBlock(MSBlocks.STRIPPED_GLOWING_WOOD, "Stripped Glowing Wood");
+		addBlock(MSBlocks.GLOWING_SIGN, "Glowing Sign");
+		addBlock(MSBlocks.GLOWING_HANGING_SIGN, "Glowing Hanging Sign");
+		
+		
 		addBlock(MSBlocks.FROST_PLANKS, "Frost Planks");
+		addBlock(MSBlocks.FROST_STAIRS, "Frost Stairs");
+		addBlock(MSBlocks.FROST_SLAB, "Frost Slab");
+		addBlock(MSBlocks.FROST_BUTTON, "Frost Button");
+		addBlock(MSBlocks.FROST_PRESSURE_PLATE, "Frost Pressure Plate");
+		addBlock(MSBlocks.FROST_FENCE, "Frost Fence");
+		addBlock(MSBlocks.FROST_FENCE_GATE, "Frost Fence Gate");
+		addBlock(MSBlocks.FROST_DOOR, "Frost Door");
+		addBlock(MSBlocks.FROST_TRAPDOOR, "Frost Trapdoor");
+		addBlock(MSBlocks.STRIPPED_FROST_LOG, "Stripped Frost Log");
+		addBlock(MSBlocks.STRIPPED_FROST_WOOD, "Stripped Frost Wood");
+		addBlock(MSBlocks.FROST_SAPLING, "Frost Sapling");
+		addBlock(MSBlocks.FROST_SIGN, "Frost Sign");
+		addBlock(MSBlocks.FROST_HANGING_SIGN, "Frost Hanging Sign");
+		
 		addBlock(MSBlocks.RAINBOW_PLANKS, "Rainbow Planks");
+		addBlock(MSBlocks.RAINBOW_BUTTON, "Rainbow Button");
+		addBlock(MSBlocks.RAINBOW_PRESSURE_PLATE, "Rainbow Pressure Plate");
+		addBlock(MSBlocks.RAINBOW_FENCE, "Rainbow Fence");
+		addBlock(MSBlocks.RAINBOW_FENCE_GATE, "Rainbow Fence Gate");
+		addBlock(MSBlocks.RAINBOW_DOOR, "Rainbow Door");
+		addBlock(MSBlocks.RAINBOW_TRAPDOOR, "Rainbow Trapdoor");
+		addBlock(MSBlocks.STRIPPED_RAINBOW_LOG, "Stripped Rainbow Log");
+		addBlock(MSBlocks.STRIPPED_RAINBOW_WOOD, "Stripped Rainbow Wood");
+		addBlock(MSBlocks.RAINBOW_SIGN, "Rainbow Sign");
+		addBlock(MSBlocks.RAINBOW_HANGING_SIGN, "Rainbow Hanging Sign");
+		
 		addBlock(MSBlocks.END_PLANKS, "End Planks");
+		addBlock(MSBlocks.END_BUTTON, "End Button");
+		addBlock(MSBlocks.END_PRESSURE_PLATE, "End Pressure Plate");
+		addBlock(MSBlocks.END_FENCE, "End Fence");
+		addBlock(MSBlocks.END_FENCE_GATE, "End Fence Gate");
+		addBlock(MSBlocks.END_DOOR, "End Door");
+		addBlock(MSBlocks.END_TRAPDOOR, "End Trapdoor");
+		addBlock(MSBlocks.STRIPPED_END_LOG, "Stripped End Log");
+		addBlock(MSBlocks.STRIPPED_END_WOOD, "Stripped End Wood");
+		addBlock(MSBlocks.END_SIGN, "End Sign");
+		addBlock(MSBlocks.END_HANGING_SIGN, "End Hanging Sign");
+		
 		addBlock(MSBlocks.DEAD_PLANKS, "Dead Planks");
-		addBlock(MSBlocks.TREATED_PLANKS, "Treated Planks");
+		addBlock(MSBlocks.DEAD_BUTTON, "Dead Button");
+		addBlock(MSBlocks.DEAD_PRESSURE_PLATE, "Dead Pressure Plate");
+		addBlock(MSBlocks.DEAD_FENCE, "Dead Fence");
+		addBlock(MSBlocks.DEAD_FENCE_GATE, "Dead Fence Gate");
+		addBlock(MSBlocks.DEAD_DOOR, "Dead Door");
+		addBlock(MSBlocks.DEAD_TRAPDOOR, "Dead Trapdoor");
+		addBlock(MSBlocks.STRIPPED_DEAD_LOG, "Stripped Dead Log");
+		addBlock(MSBlocks.STRIPPED_DEAD_WOOD, "Stripped Dead Wood");
+		addBlock(MSBlocks.DEAD_SIGN, "Dead Sign");
+		addBlock(MSBlocks.DEAD_HANGING_SIGN, "Dead Hanging Sign");
+		
+		addBlock(MSBlocks.CINDERED_PLANKS, "Cindered Planks");
+		addBlock(MSBlocks.CINDERED_STAIRS, "Cindered Stairs");
+		addBlock(MSBlocks.CINDERED_SLAB, "Cindered Slab");
+		addBlock(MSBlocks.CINDERED_BUTTON, "Cindered Button");
+		addBlock(MSBlocks.CINDERED_PRESSURE_PLATE, "Cindered Pressure Plate");
+		addBlock(MSBlocks.CINDERED_FENCE, "Cindered Fence");
+		addBlock(MSBlocks.CINDERED_FENCE_GATE, "Cindered Fence Gate");
+		addBlock(MSBlocks.CINDERED_DOOR, "Cindered Door");
+		addBlock(MSBlocks.CINDERED_TRAPDOOR, "Cindered Trapdoor");
+		addBlock(MSBlocks.STRIPPED_CINDERED_LOG, "Stripped Cindered Log");
+		addBlock(MSBlocks.STRIPPED_CINDERED_WOOD, "Stripped Cindered Wood");
+		addBlock(MSBlocks.CINDERED_SIGN, "Cindered Sign");
+		addBlock(MSBlocks.CINDERED_HANGING_SIGN, "Cindered Hanging Sign");
+		
 		addBlock(MSBlocks.SHADEWOOD_PLANKS, "Shadewood Planks");
+		addBlock(MSBlocks.SHADEWOOD_STAIRS, "Shadewood Stairs");
+		addBlock(MSBlocks.SHADEWOOD_SLAB, "Shadewood Slab");
+		addBlock(MSBlocks.SHADEWOOD_BUTTON, "Shadewood Button");
+		addBlock(MSBlocks.SHADEWOOD_PRESSURE_PLATE, "Shadewood Pressure Plate");
+		addBlock(MSBlocks.SHADEWOOD_FENCE, "Shadewood Fence");
+		addBlock(MSBlocks.SHADEWOOD_FENCE_GATE, "Shadewood Fence Gate");
+		addBlock(MSBlocks.SHADEWOOD_DOOR, "Shadewood Door");
+		addBlock(MSBlocks.SHADEWOOD_TRAPDOOR, "Shadewood Trapdoor");
+		addBlock(MSBlocks.SHADEWOOD_SIGN, "Shadewood Sign");
+		addBlock(MSBlocks.SHADEWOOD_HANGING_SIGN, "Shadewood Hanging Sign");
+		
 		addBlock(MSBlocks.FROST_LEAVES, "Frost Leaves");
+		addBlock(MSBlocks.FROST_LEAVES_FLOWERING, "Flowering Frost Leaves");
 		addBlock(MSBlocks.RAINBOW_LEAVES, "Rainbow Leaves");
 		addBlock(MSBlocks.END_LEAVES, "End Leaves");
 		addBlock(MSBlocks.SHADEWOOD_LEAVES, "Shadewood Leaves");
@@ -271,108 +752,37 @@ public class MinestuckEnUsLanguageProvider extends MinestuckLanguageProvider
 		addBlock(MSBlocks.RAINBOW_SAPLING, "Rainbow Sapling");
 		addBlock(MSBlocks.END_SAPLING, "End Sapling");
 		addBlock(MSBlocks.SHADEWOOD_SAPLING, "Shadewood Sapling");
-		addBlock(MSBlocks.BLOOD_ASPECT_LOG, "Blood Log");
-		addBlock(MSBlocks.BREATH_ASPECT_LOG, "Breath Log");
-		addBlock(MSBlocks.DOOM_ASPECT_LOG, "Doom Log");
-		addBlock(MSBlocks.HEART_ASPECT_LOG, "Heart Log");
-		addBlock(MSBlocks.HOPE_ASPECT_LOG, "Hope Log");
-		addBlock(MSBlocks.LIFE_ASPECT_LOG, "Life Log");
-		addBlock(MSBlocks.LIGHT_ASPECT_LOG, "Light Log");
-		addBlock(MSBlocks.MIND_ASPECT_LOG, "Mind Log");
-		addBlock(MSBlocks.RAGE_ASPECT_LOG, "Rage Log");
-		addBlock(MSBlocks.SPACE_ASPECT_LOG, "Space Log");
-		addBlock(MSBlocks.TIME_ASPECT_LOG, "Time Log");
-		addBlock(MSBlocks.VOID_ASPECT_LOG, "Void Log");
-		addBlock(MSBlocks.BLOOD_ASPECT_PLANKS, "Blood Planks");
-		addBlock(MSBlocks.BREATH_ASPECT_PLANKS, "Breath Planks");
-		addBlock(MSBlocks.DOOM_ASPECT_PLANKS, "Doom Planks");
-		addBlock(MSBlocks.HEART_ASPECT_PLANKS, "Heart Planks");
-		addBlock(MSBlocks.HOPE_ASPECT_PLANKS, "Hope Planks");
-		addBlock(MSBlocks.LIFE_ASPECT_PLANKS, "Life Planks");
-		addBlock(MSBlocks.LIGHT_ASPECT_PLANKS, "Light Planks");
-		addBlock(MSBlocks.MIND_ASPECT_PLANKS, "Mind Planks");
-		addBlock(MSBlocks.RAGE_ASPECT_PLANKS, "Rage Planks");
-		addBlock(MSBlocks.SPACE_ASPECT_PLANKS, "Space Planks");
-		addBlock(MSBlocks.TIME_ASPECT_PLANKS, "Time Planks");
-		addBlock(MSBlocks.VOID_ASPECT_PLANKS, "Void Planks");
-		addBlock(MSBlocks.BLOOD_ASPECT_LEAVES, "Blood Leaves");
-		addBlock(MSBlocks.BREATH_ASPECT_LEAVES, "Breath Leaves");
-		addBlock(MSBlocks.DOOM_ASPECT_LEAVES, "Doom Leaves");
-		addBlock(MSBlocks.HEART_ASPECT_LEAVES, "Heart Leaves");
-		addBlock(MSBlocks.HOPE_ASPECT_LEAVES, "Hope Leaves");
-		addBlock(MSBlocks.LIFE_ASPECT_LEAVES, "Life Leaves");
-		addBlock(MSBlocks.LIGHT_ASPECT_LEAVES, "Light Leaves");
-		addBlock(MSBlocks.MIND_ASPECT_LEAVES, "Mind Leaves");
-		addBlock(MSBlocks.RAGE_ASPECT_LEAVES, "Rage Leaves");
-		addBlock(MSBlocks.SPACE_ASPECT_LEAVES, "Space Leaves");
-		addBlock(MSBlocks.TIME_ASPECT_LEAVES, "Time Leaves");
-		addBlock(MSBlocks.VOID_ASPECT_LEAVES, "Void Leaves");
-		addBlock(MSBlocks.BLOOD_ASPECT_SAPLING, "Blood Sapling");
-		addBlock(MSBlocks.BREATH_ASPECT_SAPLING, "Breath Sapling");
-		addBlock(MSBlocks.DOOM_ASPECT_SAPLING, "Doom Sapling");
-		addBlock(MSBlocks.HEART_ASPECT_SAPLING, "Heart Sapling");
-		addBlock(MSBlocks.HOPE_ASPECT_SAPLING, "Hope Sapling");
-		addBlock(MSBlocks.LIFE_ASPECT_SAPLING, "Life Sapling");
-		addBlock(MSBlocks.LIGHT_ASPECT_SAPLING, "Light Sapling");
-		addBlock(MSBlocks.MIND_ASPECT_SAPLING, "Mind Sapling");
-		addBlock(MSBlocks.RAGE_ASPECT_SAPLING, "Rage Sapling");
-		addBlock(MSBlocks.SPACE_ASPECT_SAPLING, "Space Sapling");
-		addBlock(MSBlocks.TIME_ASPECT_SAPLING, "Time Sapling");
-		addBlock(MSBlocks.VOID_ASPECT_SAPLING, "Void Sapling");
-		addBlockTooltip(MSBlocks.BLOOD_ASPECT_SAPLING, "Not yet implemented");
-		addBlockTooltip(MSBlocks.BREATH_ASPECT_SAPLING, "Not yet implemented");
-		addBlockTooltip(MSBlocks.DOOM_ASPECT_SAPLING, "Not yet implemented");
-		addBlockTooltip(MSBlocks.HEART_ASPECT_SAPLING, "Not yet implemented");
-		addBlockTooltip(MSBlocks.HOPE_ASPECT_SAPLING, "Not yet implemented");
-		addBlockTooltip(MSBlocks.LIFE_ASPECT_SAPLING, "Not yet implemented");
-		addBlockTooltip(MSBlocks.LIGHT_ASPECT_SAPLING, "Not yet implemented");
-		addBlockTooltip(MSBlocks.MIND_ASPECT_SAPLING, "Not yet implemented");
-		addBlockTooltip(MSBlocks.RAGE_ASPECT_SAPLING, "Not yet implemented");
-		addBlockTooltip(MSBlocks.SPACE_ASPECT_SAPLING, "Not yet implemented");
-		addBlockTooltip(MSBlocks.TIME_ASPECT_SAPLING, "Not yet implemented");
-		addBlockTooltip(MSBlocks.VOID_ASPECT_SAPLING, "Not yet implemented");
-		addBlock(MSBlocks.BLOOD_ASPECT_BOOKSHELF, "Blood Bookshelf");
-		addBlock(MSBlocks.BREATH_ASPECT_BOOKSHELF, "Breath Bookshelf");
-		addBlock(MSBlocks.DOOM_ASPECT_BOOKSHELF, "Doom Bookshelf");
-		addBlock(MSBlocks.HEART_ASPECT_BOOKSHELF, "Heart Bookshelf");
-		addBlock(MSBlocks.HOPE_ASPECT_BOOKSHELF, "Hope Bookshelf");
-		addBlock(MSBlocks.LIFE_ASPECT_BOOKSHELF, "Life Bookshelf");
-		addBlock(MSBlocks.LIGHT_ASPECT_BOOKSHELF, "Light Bookshelf");
-		addBlock(MSBlocks.MIND_ASPECT_BOOKSHELF, "Mind Bookshelf");
-		addBlock(MSBlocks.RAGE_ASPECT_BOOKSHELF, "Rage Bookshelf");
-		addBlock(MSBlocks.SPACE_ASPECT_BOOKSHELF, "Space Bookshelf");
-		addBlock(MSBlocks.TIME_ASPECT_BOOKSHELF, "Time Bookshelf");
-		addBlock(MSBlocks.VOID_ASPECT_BOOKSHELF, "Void Bookshelf");
+		
 		addBlock(MSBlocks.GLOWING_BOOKSHELF, "Glowing Bookshelf");
 		addBlock(MSBlocks.FROST_BOOKSHELF, "Frost Bookshelf");
 		addBlock(MSBlocks.RAINBOW_BOOKSHELF, "Rainbow Bookshelf");
 		addBlock(MSBlocks.END_BOOKSHELF, "End Bookshelf");
 		addBlock(MSBlocks.DEAD_BOOKSHELF, "Dead Bookshelf");
 		addBlock(MSBlocks.TREATED_BOOKSHELF, "Treated Bookshelf");
-		addBlock(MSBlocks.BLOOD_ASPECT_LADDER, "Blood Ladder");
-		addBlock(MSBlocks.BREATH_ASPECT_LADDER, "Breath Ladder");
-		addBlock(MSBlocks.DOOM_ASPECT_LADDER, "Doom Ladder");
-		addBlock(MSBlocks.HEART_ASPECT_LADDER, "Heart Ladder");
-		addBlock(MSBlocks.HOPE_ASPECT_LADDER, "Hope Ladder");
-		addBlock(MSBlocks.LIFE_ASPECT_LADDER, "Life Ladder");
-		addBlock(MSBlocks.LIGHT_ASPECT_LADDER, "Light Ladder");
-		addBlock(MSBlocks.MIND_ASPECT_LADDER, "Mind Ladder");
-		addBlock(MSBlocks.RAGE_ASPECT_LADDER, "Rage Ladder");
-		addBlock(MSBlocks.SPACE_ASPECT_LADDER, "Space Ladder");
-		addBlock(MSBlocks.TIME_ASPECT_LADDER, "Time Ladder");
-		addBlock(MSBlocks.VOID_ASPECT_LADDER, "Void Ladder");
+		addBlock(MSBlocks.SHADEWOOD_BOOKSHELF, "Shadewood Bookshelf");
+		addBlock(MSBlocks.CINDERED_BOOKSHELF, "Cindered Bookshelf");
 		addBlock(MSBlocks.GLOWING_LADDER, "Glowing Ladder");
 		addBlock(MSBlocks.FROST_LADDER, "Frost Ladder");
 		addBlock(MSBlocks.RAINBOW_LADDER, "Rainbow Ladder");
 		addBlock(MSBlocks.END_LADDER, "End Ladder");
 		addBlock(MSBlocks.DEAD_LADDER, "Dead Ladder");
 		addBlock(MSBlocks.TREATED_LADDER, "Treated Ladder");
+		addBlock(MSBlocks.SHADEWOOD_LADDER, "Shadewood Ladder");
+		addBlock(MSBlocks.CINDERED_LADDER, "Cindered Ladder");
 		addBlock(MSBlocks.GLOWING_MUSHROOM, "Glowing Mushroom");
 		addBlockStoreTooltip(MSBlocks.GLOWING_MUSHROOM, "This mushroom tastes a bit better than any other around here, according to myself!");
 		addBlock(MSBlocks.DESERT_BUSH, "Desert Bush");
 		addBlock(MSBlocks.BLOOMING_CACTUS, "Blooming Cactus");
+		addBlock(MSBlocks.SANDY_GRASS, "Sandy Grass");
+		addBlock(MSBlocks.TALL_SANDY_GRASS, "Tall Sandy Grass");
+		addBlock(MSBlocks.DEAD_FOLIAGE, "Dead Foliage");
+		addBlock(MSBlocks.TALL_DEAD_BUSH, "Tall Dead Bush");
 		addBlock(MSBlocks.PETRIFIED_GRASS, "Petrified Grass");
 		addBlock(MSBlocks.PETRIFIED_POPPY, "Petrified Poppy");
+		addBlock(MSBlocks.IGNEOUS_SPIKE, "Igneous Spike");
+		addBlock(MSBlocks.SINGED_GRASS, "Singed Grass");
+		addBlock(MSBlocks.SINGED_FOLIAGE, "Singed Foliage");
+		addBlock(MSBlocks.SULFUR_BUBBLE, "Sulfur Bubble");
 		addBlock(MSBlocks.GLOWING_MUSHROOM_VINES, "Glowing Mushroom Vines");
 		addBlock(MSBlocks.STRAWBERRY, "Strawberry");
 		addBlock(MSBlocks.ATTACHED_STRAWBERRY_STEM, "Strawberry Stem");
@@ -388,22 +798,15 @@ public class MinestuckEnUsLanguageProvider extends MinestuckLanguageProvider
 		addBlockTooltip(MSBlocks.PARCEL_PYXIS, "This doesn't actually seem to do anything");
 		addBlock(MSBlocks.PYXIS_LID, "Parcel Pyxis Lid");
 		addBlock(MSBlocks.NAKAGATOR_STATUE, "Nakagator Statue");
-		addBlock(MSBlocks.BLACK_CHESS_BRICK_STAIRS, "Black Chess Brick Stairs");
-		addBlock(MSBlocks.DARK_GRAY_CHESS_BRICK_STAIRS, "Dark Gray Chess Brick Stairs");
-		addBlock(MSBlocks.LIGHT_GRAY_CHESS_BRICK_STAIRS, "Light Gray Chess Brick Stairs");
-		addBlock(MSBlocks.WHITE_CHESS_BRICK_STAIRS, "White Chess Brick Stairs");
+		
 		addBlock(MSBlocks.COARSE_STONE_STAIRS, "Coarse Stone Stairs");
 		addBlock(MSBlocks.COARSE_STONE_BRICK_STAIRS, "Coarse Stone Brick Stairs");
 		addBlock(MSBlocks.SHADE_STAIRS, "Shade Stone Stairs");
 		addBlock(MSBlocks.SHADE_BRICK_STAIRS, "Shade Brick Stairs");
 		addBlock(MSBlocks.FROST_TILE_STAIRS, "Frost Tile Stairs");
 		addBlock(MSBlocks.FROST_BRICK_STAIRS, "Frost Brick Stairs");
-		addBlock(MSBlocks.CAST_IRON_STAIRS, "Cast-Iron Stairs");
-		addBlock(MSBlocks.BLACK_STONE_STAIRS, "Black Stone Stairs");
-		addBlock(MSBlocks.BLACK_STONE_BRICK_STAIRS, "Black Stone Brick Stairs");
 		addBlock(MSBlocks.MYCELIUM_STAIRS, "Mycelium Stairs");
 		addBlock(MSBlocks.MYCELIUM_BRICK_STAIRS, "Mycelium Brick Stairs");
-		addBlock(MSBlocks.FLOWERY_MOSSY_STONE_BRICK_STAIRS, "Flowery Mossy Stone Brick Stairs");
 		addBlock(MSBlocks.CHALK_STAIRS, "Chalk Stairs");
 		addBlock(MSBlocks.CHALK_BRICK_STAIRS, "Chalk Brick Stairs");
 		addBlock(MSBlocks.PINK_STONE_STAIRS, "Pink Stone Stairs");
@@ -412,16 +815,12 @@ public class MinestuckEnUsLanguageProvider extends MinestuckLanguageProvider
 		addBlock(MSBlocks.BROWN_STONE_BRICK_STAIRS, "Brown Stone Brick Stairs");
 		addBlock(MSBlocks.GREEN_STONE_STAIRS, "Green Stone Stairs");
 		addBlock(MSBlocks.GREEN_STONE_BRICK_STAIRS, "Green Stone Brick Stairs");
-		addBlock(MSBlocks.RAINBOW_PLANKS_STAIRS, "Rainbow Planks Stairs");
-		addBlock(MSBlocks.END_PLANKS_STAIRS, "End Planks Stairs");
-		addBlock(MSBlocks.DEAD_PLANKS_STAIRS, "Dead Planks Stairs");
-		addBlock(MSBlocks.TREATED_PLANKS_STAIRS, "Treated Planks Stairs");
+		addBlock(MSBlocks.RAINBOW_STAIRS, "Rainbow Planks Stairs");
+		addBlock(MSBlocks.END_STAIRS, "End Planks Stairs");
+		addBlock(MSBlocks.DEAD_STAIRS, "Dead Planks Stairs");
 		addBlock(MSBlocks.STEEP_GREEN_STONE_BRICK_STAIRS_BASE, "Steep Green Stone Brick Stairs Base");
 		addBlock(MSBlocks.STEEP_GREEN_STONE_BRICK_STAIRS_TOP, "Steep Green Stone Brick Stairs Top");
-		addBlock(MSBlocks.BLACK_CHESS_BRICK_SLAB, "Black Chess Brick Slab");
-		addBlock(MSBlocks.DARK_GRAY_CHESS_BRICK_SLAB, "Dark Gray Chess Brick Slab");
-		addBlock(MSBlocks.LIGHT_GRAY_CHESS_BRICK_SLAB, "Light Gray Chess Brick Slab");
-		addBlock(MSBlocks.WHITE_CHESS_BRICK_SLAB, "White Chess Brick Slab");
+		
 		addBlock(MSBlocks.CHALK_SLAB, "Chalk Slab");
 		addBlock(MSBlocks.CHALK_BRICK_SLAB, "Chalk Brick Slab");
 		addBlock(MSBlocks.PINK_STONE_SLAB, "Pink Stone Slab");
@@ -430,15 +829,12 @@ public class MinestuckEnUsLanguageProvider extends MinestuckLanguageProvider
 		addBlock(MSBlocks.BROWN_STONE_BRICK_SLAB, "Brown Stone Brick Slab");
 		addBlock(MSBlocks.GREEN_STONE_SLAB, "Green Stone Slab");
 		addBlock(MSBlocks.GREEN_STONE_BRICK_SLAB, "Green Stone Brick Slab");
-		addBlock(MSBlocks.RAINBOW_PLANKS_SLAB, "Rainbow Planks Slab");
-		addBlock(MSBlocks.END_PLANKS_SLAB, "End Planks Slab");
-		addBlock(MSBlocks.DEAD_PLANKS_SLAB, "Dead Planks Slab");
-		addBlock(MSBlocks.TREATED_PLANKS_SLAB, "Treated Planks Slab");
-		addBlock(MSBlocks.BLACK_STONE_SLAB, "Black Stone Slab");
-		addBlock(MSBlocks.BLACK_STONE_BRICK_SLAB, "Black Stone Brick Slab");
+		addBlock(MSBlocks.RAINBOW_SLAB, "Rainbow Planks Slab");
+		addBlock(MSBlocks.END_SLAB, "End Planks Slab");
+		addBlock(MSBlocks.DEAD_SLAB, "Dead Planks Slab");
+	
 		addBlock(MSBlocks.MYCELIUM_SLAB, "Mycelium Slab");
 		addBlock(MSBlocks.MYCELIUM_BRICK_SLAB, "Mycelium Brick Slab");
-		addBlock(MSBlocks.FLOWERY_MOSSY_STONE_BRICK_SLAB, "Flowery Mossy Stone Brick Slab");
 		addBlock(MSBlocks.FROST_TILE_SLAB, "Frost Tile Slab");
 		addBlock(MSBlocks.FROST_BRICK_SLAB, "Frost Brick Slab");
 		addBlock(MSBlocks.SHADE_SLAB, "Shade Stone Slab");
@@ -469,7 +865,7 @@ public class MinestuckEnUsLanguageProvider extends MinestuckLanguageProvider
 		addBlock(MSBlocks.AREA_EFFECT_BLOCK, "Area Effect Block");
 		addBlockTooltip(MSBlocks.AREA_EFFECT_BLOCK, "Applies a potion effect to entities within a specified area when powered.");
 		addBlockExtra(MSBlocks.AREA_EFFECT_BLOCK, "additional_info", "- Can be toggled to apply the effect only to players\n- Can be permanently disabled\n- Area of effect changes when rotated\n- UI only accessible in creative mode\n- Right clicking with a potion bottle in creative mode sets it to that potion effect");
-		addBlockExtra(MSBlocks.AREA_EFFECT_BLOCK, AreaEffectBlock.EFFECT_CHANGE_MESSAGE, "Effect type changed to %s with the amplification strength %s.");
+		addBlockExtra(MSBlocks.AREA_EFFECT_BLOCK, AreaEffectBlock.EFFECT_CHANGE_MESSAGE, "Effect type changed to %s");
 		addBlock(MSBlocks.PLATFORM_GENERATOR, "Platform Generator");
 		addBlockTooltip(MSBlocks.PLATFORM_GENERATOR, "Creates a temporary platform when powered.");
 		addBlockExtra(MSBlocks.PLATFORM_GENERATOR, "additional_info", "- Length of area where platforms generate is proportional to power\n- Can be toggled to alternate visibility\n- Platform can be blocked by platform receptacles as well as hard or impossible to break blocks");
@@ -500,6 +896,8 @@ public class MinestuckEnUsLanguageProvider extends MinestuckLanguageProvider
 		addBlockTooltip(MSBlocks.BLOCK_PRESSURE_PLATE, "Lets off a redstone signal when a block is above it or if a player is standing on it without crouching.");
 		addBlock(MSBlocks.PUSHABLE_BLOCK, "Pushable Block");
 		addBlockTooltip(MSBlocks.PUSHABLE_BLOCK, "Right click to push and shift right click to pull! Affected by gravity.");
+		addBlock(MSBlocks.BLOCK_TELEPORTER, "Block Teleporter");
+		addBlockTooltip(MSBlocks.BLOCK_TELEPORTER, "Teleports the block above it to a specified point in relation to where it is facing.");
 		addBlock(MSBlocks.AND_GATE_BLOCK, "AND Gate");
 		addBlock(MSBlocks.OR_GATE_BLOCK, "OR Gate");
 		addBlock(MSBlocks.XOR_GATE_BLOCK, "XOR Gate");
@@ -529,6 +927,10 @@ public class MinestuckEnUsLanguageProvider extends MinestuckLanguageProvider
 		addBlock(MSBlocks.OLD_COMPUTER, "Old Computer");
 		addBlock(MSBlocks.TRANSPORTALIZER, "Transportalizer");
 		addBlock(MSBlocks.TRANS_PORTALIZER, "TRANSportalizer");
+		addBlockExtra(MSBlocks.TRANSPORTALIZER, "idString", "ID: %s");
+		addBlockExtra(MSBlocks.TRANSPORTALIZER, "destId", "Destination: %s");
+		add(TransportalizerBlock.LOCKED, "The transportalizer appears to be locked.");
+		addBlockExtra(MSBlocks.TRANSPORTALIZER, "locked_message", "Locked");
 		addBlock(MSBlocks.SENDIFICATOR, "Sendificator");
 		addBlockTooltip(MSBlocks.SENDIFICATOR, "Approximately head sized");
 		addBlock(MSBlocks.GRIST_WIDGET, "GristWidget 12000");
@@ -570,6 +972,8 @@ public class MinestuckEnUsLanguageProvider extends MinestuckLanguageProvider
 		addBlock(MSBlocks.CARROT_CAKE, "Carrot Cake");
 		addBlock(MSBlocks.LARGE_CAKE, "Large Cake");
 		addBlock(MSBlocks.PINK_FROSTED_TOP_LARGE_CAKE, "Pink Frosted Top Large Cake");
+		addBlock(MSBlocks.CHOCOLATEY_CAKE, "Chocolatey Cake");
+		addBlockStoreTooltip(MSBlocks.CHOCOLATEY_CAKE, "The most scrumptious cake in the entire world!");
 		addBlock(MSBlocks.PRIMED_TNT, "Primed TNT");
 		addBlock(MSBlocks.UNSTABLE_TNT, "Unstable TNT");
 		addBlock(MSBlocks.INSTANT_TNT, "Instant TNT");
@@ -586,12 +990,15 @@ public class MinestuckEnUsLanguageProvider extends MinestuckLanguageProvider
 		addBlock(MSBlocks.MINI_TYPHEUS_STATUE, "Small Denizen Statue"); //Referred to as typheus in all code except name here. Its generic now but more denizen statues may get added
 		addBlock(MSBlocks.GLOWYSTONE_DUST, "Glowystone Dust");
 		addBlock(MSBlocks.MIRROR, "Mirror");
-		addBlock(MSBlocks.OIL, "Oil");
+		
+		addBlock(MSBlocks.OIL, "Shale Oil");
 		addBlock(MSBlocks.BLOOD, "Blood");
 		addBlock(MSBlocks.BRAIN_JUICE, "Brain Juice");
 		addBlock(MSBlocks.WATER_COLORS, "Paint");
 		addBlock(MSBlocks.ENDER, "End Fluid");
 		addBlock(MSBlocks.LIGHT_WATER, "Light Water");
+		addBlock(MSBlocks.CAULK, "Silicone Caulk");
+		addBlock(MSBlocks.MOLTEN_AMBER, "Molten Amber");
 		
 		addItem(MSItems.CLAW_HAMMER, "Claw Hammer");
 		addItemTooltip(MSItems.CLAW_HAMMER, "An average hammer found in about any garage. It can also destroy blocks");
@@ -777,8 +1184,8 @@ public class MinestuckEnUsLanguageProvider extends MinestuckLanguageProvider
 		addItem(MSItems.BLACKSMITH_BANE, "Blacksmith's Bane");
 		addItem(MSItems.REGIAXE, "Regiaxe");
 		addItem(MSItems.GOTHY_AXE, "Gothy Axe");
-        addItem(MSItems.SURPRISE_AXE, "Kundler Surprise Axe");
-        addItemTooltip(MSItems.SURPRISE_AXE, "Who knows what surprises this bad boy has in store!");
+		addItem(MSItems.SURPRISE_AXE, "Kundler Surprise Axe");
+		addItemTooltip(MSItems.SURPRISE_AXE, "Who knows what surprises this bad boy has in store!");
 		addItemExtra(MSItems.SURPRISE_AXE, "message", "WOW! NO WAY! You found a %s from your opponent!");
 		addItem(MSItems.SHOCK_AXE, "Kundler Shock Axe");
 		addItemTooltip(MSItems.SHOCK_AXE, "An electric surprise!");
@@ -803,6 +1210,8 @@ public class MinestuckEnUsLanguageProvider extends MinestuckLanguageProvider
 		addItem(MSItems.MAKESHIFT_CLAWS_SHEATHED, "Makeshift Claws");
 		addItem(MSItems.CAT_CLAWS_DRAWN, "Cat Claws");
 		addItem(MSItems.CAT_CLAWS_SHEATHED, "Cat Claws");
+		addItem(MSItems.COFFEE_CLAWS_DRAWN, "Coffee Claws");
+		addItem(MSItems.COFFEE_CLAWS_SHEATHED, "Coffee Claws");
 		addItem(MSItems.POGO_CLAWS, "Pogo Claws");
 		addItemTooltip(MSItems.POGO_CLAWS, "Pounce around and bounce around with these claws!");
 		addItem(MSItems.ATOMIKITTY_KATAR_DRAWN, "Atomikitty Katar");
@@ -855,7 +1264,7 @@ public class MinestuckEnUsLanguageProvider extends MinestuckLanguageProvider
 		addItemExtra(MSItems.LANEC, OnHitEffect.SORD_DROP_MESSAGE, "fuck......ahhhahahaaa....");
 		addItem(MSItems.JOUSTING_LANCE, "Jousting Lance");
 		addItem(MSItems.POGO_LANCE, "Pogo Lance");
-		addItem(MSItems.LANCELOTS_LOLLY,"Lancelot's Lolly");
+		addItem(MSItems.LANCELOTS_LOLLY, "Lancelot's Lolly");
 		addItemTooltip(MSItems.LANCELOTS_LOLLY, "Make your enemies POP with this SICKLE oops I mean LANCE");
 		addItem(MSItems.DRAGON_LANCE, "Dragon Lance");
 		addItem(MSItems.SKY_PIERCER, "Sky Piercer");
@@ -870,7 +1279,7 @@ public class MinestuckEnUsLanguageProvider extends MinestuckLanguageProvider
 		addItem(MSItems.FAN, "Fan");
 		addItem(MSItems.CANDY_FAN, "Candy Fan");
 		addItem(MSItems.SPINES_OF_FLUTHLU, "Spines of Fluthlu");
-		addItemTooltip(MSItems.SPINES_OF_FLUTHLU, ChatFormatting.OBFUSCATED+"Oooh it's the Spines of FLUTHLU so spooky hehehe");
+		addItemTooltip(MSItems.SPINES_OF_FLUTHLU, ChatFormatting.OBFUSCATED + "Oooh it's the Spines of FLUTHLU so spooky hehehe");
 		addItem(MSItems.RAZOR_FAN, "Razor Fan");
 		addItem(MSItems.MOTOR_FAN, "Motor Fan");
 		addItemTooltip(MSItems.MOTOR_FAN, "This battery-powered fan has greater knockback, and is great for a hot day.");
@@ -908,7 +1317,7 @@ public class MinestuckEnUsLanguageProvider extends MinestuckLanguageProvider
 		addItem(MSItems.EIGHTBALL_SCYTHE, "Eightball Scythe");
 		addItem(MSItems.TIME_FLAYER, "Time Flayer");
 		addItem(MSItems.DESTINY_DECIMATOR, "Destiny Decimator");
-		addItem(MSItems.SUNRAY_HARVESTER,"Sunray Harvester");
+		addItem(MSItems.SUNRAY_HARVESTER, "Sunray Harvester");
 		addItemTooltip(MSItems.SUNRAY_HARVESTER, "Harness the power of the sun with this solar scythe.");
 		addItem(MSItems.GREEN_SUN_RAYREAPER, "Green Sun Rayreaper");
 		addItemTooltip(MSItems.GREEN_SUN_RAYREAPER, "Decimate enemies with the power of a star the mass of two universes.");
@@ -964,6 +1373,7 @@ public class MinestuckEnUsLanguageProvider extends MinestuckLanguageProvider
 		addItem(MSItems.ACE_OF_DIAMONDS, "Ace of Diamonds");
 		addItemStore(MSItems.ACE_OF_DIAMONDS, "Star Sigil");
 		addItemStoreTooltip(MSItems.ACE_OF_DIAMONDS, "This star-shaped sigil probably has magical astral properties.");
+		addItem(MSItems.TV_ANTENNA, "TV Antenna");
 		addItem(MSItems.ACE_OF_HEARTS, "Ace of Hearts");
 		addItemStore(MSItems.ACE_OF_HEARTS, "Heart Sigil");
 		addItemStoreTooltip(MSItems.ACE_OF_HEARTS, "This thing MUST have magical love powers!");
@@ -1184,6 +1594,8 @@ public class MinestuckEnUsLanguageProvider extends MinestuckLanguageProvider
 		addItemStoreTooltip(MSItems.ONION, "This cool vegetable is so good that it will make you cry!");
 		addItem(MSItems.SALAD, "Bowl of Leaves");
 		addItemTooltip(MSItems.SALAD, "It's literally just salad, Gordon Ramsay would not approve.");
+		addItem(MSItems.SOPOR_SLIME_PIE, "Sopor Slime Pie");
+		addItemTooltip(MSItems.SOPOR_SLIME_PIE, "An incandescent sludge made exclusively for a different biology.");
 		addItemStore(MSItems.SALAD, "Handpicked Greens");
 		addItemStoreTooltip(MSItems.SALAD, "A bowl of our fine, handpicked greens. The perfect meal.");
 		addItem(MSItems.DESERT_FRUIT, "Desert Fruit");
@@ -1268,21 +1680,21 @@ public class MinestuckEnUsLanguageProvider extends MinestuckLanguageProvider
 		addItemTooltip(MSItems.BUG_NET, "Perfect for catching bugs and frogs!");
 		addItem(MSItems.FROG, "Frog");
 		addItemExtra(MSItems.FROG, "random", "Random Frog");
-		addItemExtra(MSItems.FROG, "type.0", "Frog");
-		addItemExtra(MSItems.FROG, "type.1", "Totally Normal Frog");
-		addItemExtra(MSItems.FROG, "type.2", "Ruby Contraband");
-		addItemExtra(MSItems.FROG, "type.3", "Tiny Genesis Frog");
-		addItemExtra(MSItems.FROG, "type.4", "Frog");
-		addItemExtra(MSItems.FROG, "type.5", "Golden Frog");
-		addItemExtra(MSItems.FROG, "type.6", "Frog");
-		addItemExtra(MSItems.FROG, "desc.4", "frog.null.name");
-		addItemExtra(MSItems.FROG, "desc.6", ChatFormatting.OBFUSCATED+"Susan");
-		addItemExtra(MSItems.FROG, "eyes.0", "Lighter Eyes");
-		addItemExtra(MSItems.FROG, "eyes.1", "Darker Eyes");
-		addItemExtra(MSItems.FROG, "eyes.2", "Blank Eyes");
-		addItemExtra(MSItems.FROG, "belly.1", "Solid-Colored Belly");
-		addItemExtra(MSItems.FROG, "belly.2", "Spotted Belly");
-		addItemExtra(MSItems.FROG, "belly.3", "Striped Belly");
+		addItemExtra(MSItems.FROG, "type.default", "Frog");
+		addItemExtra(MSItems.FROG, "type.totally_normal", "Totally Normal Frog");
+		addItemExtra(MSItems.FROG, "type.ruby_contraband", "Ruby Contraband");
+		addItemExtra(MSItems.FROG, "type.genesis", "Tiny Genesis Frog");
+		addItemExtra(MSItems.FROG, "type.null", "Frog");
+		addItemExtra(MSItems.FROG, "type.golden", "Golden Frog");
+		addItemExtra(MSItems.FROG, "type.susan", "Frog");
+		addItemExtra(MSItems.FROG, "desc.null", "frog.null.name");
+		addItemExtra(MSItems.FROG, "desc.susan", ChatFormatting.OBFUSCATED + "Susan");
+		addItemExtra(MSItems.FROG, "eyes.light", "Lighter Eyes");
+		addItemExtra(MSItems.FROG, "eyes.dark", "Darker Eyes");
+		addItemExtra(MSItems.FROG, "eyes.blank", "Blank Eyes");
+		addItemExtra(MSItems.FROG, "belly.solid", "Solid-Colored Belly");
+		addItemExtra(MSItems.FROG, "belly.spotted", "Spotted Belly");
+		addItemExtra(MSItems.FROG, "belly.striped", "Striped Belly");
 		addItemExtra(MSItems.FROG, "size.0", "Tiny");
 		addItemExtra(MSItems.FROG, "size.1", "Small");
 		addItemExtra(MSItems.FROG, "size.2", "Normal Sized");
@@ -1296,7 +1708,7 @@ public class MinestuckEnUsLanguageProvider extends MinestuckLanguageProvider
 		addItemExtra(MSItems.STONE_TABLET, "carved", "Looks like something has been carved into it!");
 		addItemStoreTooltip(MSItems.STONE_TABLET, "It's pretty rock, but I wouldn't advise rolling on it.");
 		addItem(MSItems.SHOP_POSTER, "Shop Poster");
-		addItem(MSItems.OIL_BUCKET, "Bucket of Oil");
+		addItem(MSItems.OIL_BUCKET, "Bucket of Shale Oil");
 		addItem(MSItems.BLOOD_BUCKET, "Bucket of Blood");
 		addItemTooltip(MSItems.BLOOD_BUCKET, "It looks like Kool-Aid... But you're too scared to try it yourself.");
 		addItem(MSItems.BRAIN_JUICE_BUCKET, "Bucket of Brain Juice");
@@ -1307,6 +1719,8 @@ public class MinestuckEnUsLanguageProvider extends MinestuckLanguageProvider
 		addItem(MSItems.LIGHT_WATER_BUCKET, "Bucket of Glimmering Water");
 		addItemTooltip(MSItems.LIGHT_WATER_BUCKET, "You're not convinced this is water. It's unnatural.");
 		addItem(MSItems.OBSIDIAN_BUCKET, "Obsidian Bucket");
+		addItem(MSItems.CAULK_BUCKET, "Bucket of Silicone Caulk");
+		addItem(MSItems.MOLTEN_AMBER_BUCKET, "Bucket of Molten Amber");
 		addItem(MSItems.CAPTCHAROID_CAMERA, "Captcharoid Camera");
 		addItem(MSItems.GRIMOIRE, "Grimoire for Summoning the Zoologically Dubious");
 		addItemExtra(MSItems.GRIMOIRE, "message", "After flipping through some pages, you feel significantly more insignificant.");
@@ -1321,8 +1735,10 @@ public class MinestuckEnUsLanguageProvider extends MinestuckLanguageProvider
 		addItemTooltip(MSItems.WHITE_QUEENS_RING, "One of a pair. Cast it into the fire!");
 		addItem(MSItems.RAZOR_BLADE, "Razor Blade");
 		addItemTooltip(MSItems.RAZOR_BLADE, "Only a fool would try to pick this up.");
+		addItemExtra(MSItems.RAZOR_BLADE, "cut_self", "While you handle the razor blade, you accidentally cut yourself and drop it.");
 		addItem(MSItems.URANIUM_POWERED_STICK, "Uranium-Powered Stick");
 		addItemTooltip(MSItems.URANIUM_POWERED_STICK, "Never runs out of uranium!");
+		
 		addItem(MSItems.SCALEMATE_APPLESCAB, "Officer Applescab");
 		addItem(MSItems.SCALEMATE_BERRYBREATH, "Inspector Berrybreath");
 		addItem(MSItems.SCALEMATE_CINNAMONWHIFF, "Officer Cinnamonwhiff");
@@ -1433,6 +1849,20 @@ public class MinestuckEnUsLanguageProvider extends MinestuckLanguageProvider
 		addItemTooltip(MSItems.GUTTER_BALL, "A hardened crystal in the shape of grist");
 		addItemExtra(MSItems.GUTTER_BALL, "press_shift", "Press §eSHIFT§r for more info");
 		addItemExtra(MSItems.GUTTER_BALL, "desc", "Carved from a common ore, it is believed by the natives to be a kind of food to the yet-born deities.");
+		addItem(MSItems.IMP_SPAWN_EGG, "Imp Spawn Egg");
+		addItem(MSItems.OGRE_SPAWN_EGG, "Ogre Spawn Egg");
+		addItem(MSItems.BASILISK_SPAWN_EGG, "Basilisk Spawn Egg");
+		addItem(MSItems.LICH_SPAWN_EGG, "Lich Spawn Egg");
+		addItem(MSItems.SALAMANDER_SPAWN_EGG, "Salamander Spawn Egg");
+		addItem(MSItems.TURTLE_SPAWN_EGG, "Turtle Spawn Egg");
+		addItem(MSItems.NAKAGATOR_SPAWN_EGG, "Nakagator Spawn Egg");
+		addItem(MSItems.IGUANA_SPAWN_EGG, "Iguana Spawn Egg");
+		addItem(MSItems.DERSITE_PAWN_SPAWN_EGG, "Dersite Pawn Spawn Egg");
+		addItem(MSItems.DERSITE_BISHOP_SPAWN_EGG, "Dersite Bishop Spawn Egg");
+		addItem(MSItems.DERSITE_ROOK_SPAWN_EGG, "Dersite Rook Spawn Egg");
+		addItem(MSItems.PROSPITIAN_PAWN_SPAWN_EGG, "Prospitian Pawn Spawn Egg");
+		addItem(MSItems.PROSPITIAN_BISHOP_SPAWN_EGG, "Prospitian Bishop Spawn Egg");
+		addItem(MSItems.PROSPITIAN_ROOK_SPAWN_EGG, "Prospitian Rook Spawn Egg");
 		
 		add("message.horrorterror.machinations", "Your blood shall fuel our machinations.");
 		add("message.horrorterror.stir", "They stir in your subconscious.");
@@ -1488,7 +1918,7 @@ public class MinestuckEnUsLanguageProvider extends MinestuckLanguageProvider
 		addStoreTooltip(Items.WHEAT_SEEDS, "You know what tastes even better than those plant grains? Their seeds, of course!");
 		addStoreTooltip(Items.MUSHROOM_STEW, "Do you enjoy mushrooms? Then this'll be a delicacy!");
 		addStoreTooltip(Items.BEEF, "You want something RAW? We've got BEEF.");
-		addStoreTooltip(PotionUtils.setPotion(new ItemStack(Items.POTION), Potions.WATER), "Stay hydrated with our oasis water.");
+		addStoreTooltip(PotionContents.createItemStack(Items.POTION, Potions.WATER), "Stay hydrated with our oasis water.");
 		addStoreTooltip(Items.CARROT, "Want to try something orange? We've got carrots straight from the ground.");
 		addStoreTooltip(Items.MILK_BUCKET, "You won't find this in a regular bucket!");
 		addStore(Items.POISONOUS_POTATO, "Green Potato");
@@ -1568,10 +1998,7 @@ public class MinestuckEnUsLanguageProvider extends MinestuckLanguageProvider
 		addEntityType(MSEntityTypes.PLAYER_DECOY, "Player Decoy");
 		addEntityType(MSEntityTypes.SERVER_CURSOR, "Server Cursor");
 		addEntityType(MSEntityTypes.METAL_BOAT, "Metal Boat");
-		addEntityType(MSEntityTypes.MIDNIGHT_CREW_POSTER, "Midnight Crew Poster");
-		addEntityType(MSEntityTypes.SBAHJ_POSTER, "SBAHJ Poster");
-		addEntityType(MSEntityTypes.SHOP_POSTER, "Shop Sign");
-		addEntityType(MSEntityTypes.HOLOGRAM, "Hologram");
+		addEntityType(MSEntityTypes.POSTER, "Poster");
 		addEntityType(MSEntityTypes.LOTUS_FLOWER, "Lotus Flower");
 		
 		addGristType(GristTypes.BUILD, "Build");
@@ -1700,7 +2127,7 @@ public class MinestuckEnUsLanguageProvider extends MinestuckLanguageProvider
 		addAdvancement(MSAdvancementProvider.ENTRY, "A New World", "Create, and use the Cruxite Artifact");
 		addAdvancement(MSAdvancementProvider.ALCHEMY, "Step Towards Alchemy", "Getting a punch designix is the first step to alchemizing something else!");
 		addAdvancement(MSAdvancementProvider.NEW_MODUS, "A New Type of Frustrating", "Equip a new modus");
-		addAdvancement(MSAdvancementProvider.ALL_MODI, "A Full Set", "Try a new modus type");
+		addAdvancement(MSAdvancementProvider.ALL_MODI, "A Full Set", "Try every modus type");
 		addAdvancement(MSAdvancementProvider.GOLD_SEEDS, "Gold Farming", "It begins to dawn on you that everything you just did may have been a colossal waste of time");
 		addAdvancement(MSAdvancementProvider.FRENCH_FRY, "Can I Get A, Uh...", "Successfully place and consume an order");
 		addAdvancement(MSAdvancementProvider.MELON_OVERLOAD, "M- M- M- MELON OVERLOAAAAD!", "Become overloaded with melons");
@@ -1711,6 +2138,13 @@ public class MinestuckEnUsLanguageProvider extends MinestuckLanguageProvider
 		addAdvancement(MSAdvancementProvider.COMMUNE, "Commune", "Visit a village and talk to a consort");
 		addAdvancement(MSAdvancementProvider.BUGS, "Crunchy and High in Protein", "Eat a bug");
 		addAdvancement(MSAdvancementProvider.SHADY_BUYER, "Buyer Beware", "Buy an item from a shady consort");
+		addAdvancement(MSAdvancementProvider.FIRST_STEP, "The First Step", "Begin climbing your Echeladder");
+		addAdvancement(MSAdvancementProvider.DOUBLE_DIGITS, "Double Digits", "Reach the tenth rung of your Echeladder");
+		addAdvancement(MSAdvancementProvider.HALFWAY_POINT, "Halfway Point", "Reach the twenty-fifth rung of your Echeladder");
+		addAdvancement(MSAdvancementProvider.BIG_ONE_MIL, "The Big 1 Mil", "Reach a Grist Cache capable of storing one million units of grist");
+		addAdvancement(MSAdvancementProvider.INTELLIBEAM, "Captcha Captured", "Use an Intellibeam Laserstation to decode a particularly challenging captcha");
+		addAdvancement(MSAdvancementProvider.LEGENDARY_WEAPON, "Legendary Weapon", "Obtain a Zilly, Welsh, or Denizen tier weapon");
+		addAdvancement(MSAdvancementProvider.BUY_OUT_SHOP, "Beware the Buyer", "Purchase every item available from a consort merchant");
 		
 		addLand(FungiLandType.FUNGI, "Fungi");
 		addLand(FungiLandType.DANK, "Dank");
@@ -1741,8 +2175,8 @@ public class MinestuckEnUsLanguageProvider extends MinestuckLanguageProvider
 		addLand(SandstoneLandType.STONY_DESERTS, "Stony Deserts");
 		addLand(ShadeLandType.SHADE, "Shade");
 		addLand(WoodLandType.WOOD, "Wood");
-		addLand(WoodLandType.OAK, "Oak");
-		addLand(WoodLandType.LUMBER, "Lumber");
+		addLand(WoodLandType.PLANKS, "Planks");
+		addLand(WoodLandType.CARVINGS, "Carvings");
 		addLand(FloraLandType.FLORA, "Flora");
 		addLand(FloraLandType.FLOWERS, "Flowers");
 		addLand(FloraLandType.THORNS, "Thorns");
@@ -1778,6 +2212,7 @@ public class MinestuckEnUsLanguageProvider extends MinestuckLanguageProvider
 		
 		addEffect(MSEffects.CREATIVE_SHOCK, "Creative Shock");
 		addEffect(MSEffects.SUSPICION, "Suspicion");
+		addEffect(MSEffects.SOPOR_SICKNESS, "Sopor Stupor");
 		
 		addStrife(KindAbstratusList.SWORD, "Bladekind");
 		addStrife(KindAbstratusList.BOW, "Bowkind");
@@ -1806,6 +2241,11 @@ public class MinestuckEnUsLanguageProvider extends MinestuckLanguageProvider
 		add(EcheladderScreen.PROTECTION_UNDERLING, "Underling damage decreased to:");
 		add(EcheladderScreen.PROTECTION_UNDERLING_INCREASE, "Underling damage: -%.1f%%");
 		add(InventoryEditmodeScreen.TITLE, "Deploy List");
+		add(EditmodeSettingsScreen.TITLE, "Editmode Settings");
+		add(EditmodeSettingsScreen.EDITMODE_LOCATIONS, "Teleport Locus");
+		add(EditmodeSettingsScreen.RETURN, "Return");
+		add(EditmodeSettingsScreen.INTERACTION_MODE_UNAVAILABLE, "Interaction mode toggle not available yet");
+		add(EditmodeSettingsScreen.NOCLIP_UNAVAILABLE, "Noclip toggle not available yet");
 		add(AtheneumScreen.TITLE, "Atheneum");
 		add(SylladexScreen.TITLE, "Sylladex");
 		add(SylladexScreen.EMPTY_SYLLADEX_1, "Are you sure you want to continue?");
@@ -1847,6 +2287,9 @@ public class MinestuckEnUsLanguageProvider extends MinestuckLanguageProvider
 		add(RemoteObserverScreen.TITLE, "Remote Observer");
 		add(RemoteObserverScreen.CURRENT_ENTITY_TYPE_MESSAGE, "Current Entity Type");
 		add(ComputerScreen.TITLE, "Computer");
+		add(ComputerThemeScreen.TITLE, "Computer Themes");
+		add(ComputerThemeScreen.SELECTED_THEME, "Selected theme:");
+		add(ComputerThemeScreen.DONE_MESSAGE, "DONE");
 		add(TransportalizerScreen.TITLE, "Transportalizer");
 		add(TransportalizerScreen.DESTINATION_CODE_MESSAGE, "Transportalizer destination code");
 		add(TransportalizerScreen.DONE_MESSAGE, "DONE");
@@ -1866,6 +2309,11 @@ public class MinestuckEnUsLanguageProvider extends MinestuckLanguageProvider
 		add(AreaEffectScreen.DONE_MESSAGE, "DONE");
 		add(AreaEffectScreen.ALL_MOBS_MESSAGE, "ALL MOBS");
 		add(AreaEffectScreen.JUST_PLAYERS_MESSAGE, "JUST PLAYERS");
+		add(BlockTeleporterScreen.TITLE, "Block Teleporter");
+		add(BlockTeleporterScreen.X_MESSAGE, "X Offset");
+		add(BlockTeleporterScreen.Y_MESSAGE, "Y Offset");
+		add(BlockTeleporterScreen.Z_MESSAGE, "Z Offset");
+		add(BlockTeleporterScreen.DONE_MESSAGE, "DONE");
 		addColor("blue", "Blue");
 		addColor("orchid", "Orchid");
 		addColor("red", "Red");
@@ -1895,16 +2343,16 @@ public class MinestuckEnUsLanguageProvider extends MinestuckLanguageProvider
 		add(TitleSelectorScreen.USED_TITLE, "%s is already used");
 		add(TitleSelectorScreen.SELECT, "Select");
 		add(TitleSelectorScreen.RANDOMIZE, "Randomize");
-		add(EffectTogglePacket.ON, "Aspect Effects have been toggled on");
-		add(EffectTogglePacket.OFF, "Aspect Effects have been toggled off");
-		add(SkaianetHandler.PRIVATE_COMPUTER, "You are not allowed to access other players computers.");
+		add(ToggleAspectEffectsPacket.ON, "Aspect Effects have been toggled on");
+		add(ToggleAspectEffectsPacket.OFF, "Aspect Effects have been toggled off");
+		add(InfoTracker.PRIVATE_COMPUTER, "You are not allowed to access other players computers.");
 		add(TransportalizerBlockEntity.DISABLED, "This transportalizer is currently disabled with a redstone signal.");
 		add(TransportalizerBlockEntity.BLOCKED, "The transportalizer appears to need more space above it to function.");
 		add(TransportalizerBlockEntity.BLOCKED_DESTINATION, "The destination seems to be blocked.");
 		add(TransportalizerBlockEntity.FORBIDDEN, "Transportalizers have been disabled for this dimension.");
 		add(TransportalizerBlockEntity.FORBIDDEN_DESTINATION, "Transportalizers have been disabled for the destination dimension.");
+		add(TransportalizerBlockEntity.TAKEN, "The code \"%s\" has been taken by another transportalizer.");
 		add(GateHandler.DESTROYED, "The destination gate seems to have been destroyed.");
-		add(GateHandler.MISSING_LAND, "The land this gate leads to does not exist yet!");
 		add(WirelessRedstoneTransmitterScreen.TITLE, "Wireless Redstone");
 		add(WirelessRedstoneReceiverBlock.NOW_AUTO, "Receiver will now unpower itself automatically.");
 		add(WirelessRedstoneReceiverBlock.NOW_NOT_AUTO, "Receiver will now store the highest input power indefinitely.");
@@ -1915,39 +2363,31 @@ public class MinestuckEnUsLanguageProvider extends MinestuckLanguageProvider
 		add(SummonerScreen.TRIGGERABLE_MESSAGE, "TRIGGERABLE");
 		add(SummonerBlock.SUMMON_TYPE_CHANGE, "Summoned entity type changed to %s.");
 		add(HashMapModus.MESSAGE, "[HASHMAP] %s %% %s -> %s");
-		add(ButtonListProgram.CLEAR_BUTTON, "Clear message");
-		add(SburbClient.CLOSE_BUTTON, "Disconnect");
-		add(SburbClient.CONNECT_BUTTON, "%s");
-		add(SburbServer.EDIT_BUTTON, "Activate edit mode");
-		add(SburbServer.GIVE_BUTTON, "Give items");
-		add(SburbServer.OPEN_BUTTON, "Open to clients");
-		add(SburbClient.RESUME_BUTTON, "Resume connection");
-		add(SburbClient.SELECT_COLOR, "Select a Color");
-		add(SburbClient.CONNECT, "Connected to %s");
-		add(SburbClient.CLIENT_ACTIVE, "Client is already active");
-		add(SkaianetHandler.CLOSED, "Connection closed");
-		add(SkaianetHandler.CLOSED_SERVER, "Server closed");
-		add(SburbServer.OFFLINE, "Server offline");
-		add(SburbClient.SELECT, "Select a server below");
-		add(SburbServer.SERVER_ACTIVE, "Server with your name exists");
-		add(SburbClient.RESUME_CLIENT, "Waiting for server...");
-		add(SburbServer.RESUME_SERVER, "Waiting for client...");
-		add(DiskBurner.NEED_CODE, "Requires code to burn disks");
-		add(DiskBurner.NO_DISKS, "Insert disk to burn");
-		add(DiskBurner.BURN_CLIENT_DISK, "Burn Client Disk");
-		add(DiskBurner.BURN_SERVER_DISK, "Burn Server Disk");
-		add(DiskBurner.CHOOSE, "Choose disk type to write");
-		add(SkaianetHandler.STOP_RESUME, "Stopped resuming");
-		add(SettingsApp.THEME, "Theme: %s");
-		add(SettingsApp.TITLE, "Sburb Settings");
-		add(MergeResult.ABLE, "Able to merge");
-		add(MergeResult.LOCKED, "Either session is locked");
-		add(MergeResult.GLOBAL_SESSION_FULL, "Game session is full");
-		add(MergeResult.SESSION_FULL, "The session is full");
-		add(MergeResult.MERGED_SESSION_FULL, "Too many players in total in both player's sessions");
-		add(MergeResult.BOTH_CUSTOM, "Can't merge two custom sessions");
-		add(MergeResult.GENERIC_FAIL, "Merge failed");
-		add(Generator.NO_AVAILABLE_TITLES, "No title was available to generate under current circumstances.");
+		
+		add(ButtonListHelper.CLEAR_BUTTON, "Clear message");
+		add(SburbClientGui.CLOSE_BUTTON, "Disconnect");
+		add(SburbServerGui.EDIT_BUTTON, "Activate edit mode");
+		add(SburbServerGui.GIVE_BUTTON, "Give items");
+		add(SburbServerGui.OPEN_BUTTON, "Open to clients");
+		add(SburbClientGui.RESUME_BUTTON, "Resume connection");
+		add(SburbClientGui.SELECT_COLOR, "Select a Color");
+		add(SburbClientGui.CONNECT, "Connected to %s");
+		add(SburbClientGui.CLIENT_ACTIVE, "Client is already active");
+		add(SburbConnections.CLOSED, "Connection closed");
+		add(SburbServerGui.OFFLINE, "Server offline");
+		add(SburbClientGui.SELECT, "Select a server below");
+		add(SburbServerGui.SERVER_ACTIVE, "Server with your name exists");
+		add(SburbClientGui.RESUME_CLIENT, "Waiting for server...");
+		add(SburbServerGui.RESUME_SERVER, "Waiting for client...");
+		add(DiskBurnerGui.NEED_CODE, "Requires code to burn disks");
+		add(DiskBurnerGui.NO_DISKS, "Insert disk to burn");
+		add(DiskBurnerGui.BURN_CLIENT_DISK, "Burn Client Disk");
+		add(DiskBurnerGui.BURN_SERVER_DISK, "Burn Server Disk");
+		add(DiskBurnerGui.CHOOSE, "Choose disk type to write");
+		add(ComputerInteractions.STOP_RESUME, "Stopped resuming");
+		add(SettingsAppGui.THEME, "Choose Theme");
+		add(SettingsAppGui.TITLE, "Sburb Settings");
+		
 		add(EntryProcess.WRONG_DIMENSION, "Entry not permitted from this dimension");
 		add(EntryProcess.BUSY, "Someone else is already entering");
 		add(EntryProcess.CREATION_FAILED, "Something went wrong while creating your Land. More details in the server console");
@@ -1963,21 +2403,35 @@ public class MinestuckEnUsLanguageProvider extends MinestuckLanguageProvider
 		add(EntryProcess.EXCEPTION, "[Minestuck] Something went wrong during entry. %s");
 		add(EntryCommand.ENTERING, "Preparing to enter The Medium");
 		add(EntryCommand.OTHER_PLAYER_ENTERING, "%s is now entering The Medium");
+		add(ClientEditmodeData.ENTERED, "[Minestuck] Press [%s] to exit edit mode");
+		add(EditmodeLocations.REMOVED_LOCATION_MESSAGE, "The location you were in is no longer in range, and you have now been teleported to a valid location.");
 		
-		add(Theme.DEFAULT.getName(), "Default");
-		add(Theme.PESTERCHUM.getName(), "Pesterchum");
-		add(Theme.TROLLIAN.getName(), "Trollian");
-		add(Theme.CROCKER.getName(), "Crocker");
-		add(Theme.TYPHEUS.getName(), "Typheus");
-		add(Theme.CETUS.getName(), "Cetus");
-		add(Theme.HEPHAESTUS.getName(), "Hephaestus");
-		add(Theme.ECHIDNA.getName(), "Echidna");
-		add(Theme.JOY.getName(), "Joy");
-		add(Theme.SBURB_95.getName(), "SBURB 95");
+		addThemeName(MSComputerThemes.DEFAULT, "Default");
+		addThemeName(MSComputerThemes.PESTERCHUM, "Pesterchum");
+		addThemeName(MSComputerThemes.TROLLIAN, "Trollian");
+		addThemeName(MSComputerThemes.CROCKER, "Crocker");
+		addThemeName(MSComputerThemes.TYPHEUS, "Typheus");
+		addThemeName(MSComputerThemes.CETUS, "Cetus");
+		addThemeName(MSComputerThemes.HEPHAESTUS, "Hephaestus");
+		addThemeName(MSComputerThemes.ECHIDNA, "Echidna");
+		addThemeName(MSComputerThemes.JOY, "Joy");
+		addThemeName(MSComputerThemes.SBURB_95, "SBURB 95");
+		addThemeName(MSComputerThemes.SBURB_10, "SBURB 10");
+		addThemeName(MSComputerThemes.SCOURGING_HEAT, "Scourging Heat");
+		addThemeName(MSComputerThemes.LIFDOFF, "Lifdoff,,");
+		addThemeName(MSComputerThemes.SKAIANET_GREEN, "Skaianet Green");
+		addThemeName(MSComputerThemes.SKAIANET_WHITE, "Skaianet White");
+		addThemeName(MSComputerThemes.SKAIANET_BLACK, "Skaianet Black");
+		addThemeName(MSComputerThemes.ASTRAL_CHARTS, "Astral Charts");
+		addThemeName(MSComputerThemes.TILLDEATH, "~ATH");
+		addThemeName(MSComputerThemes.LOWAS, "LOWAS");
+		addThemeName(MSComputerThemes.SPIROGRAPH, "Spirograph");
+		addThemeName(MSComputerThemes.MINESTUCK, "Minestuck");
 		
 		add(GristLayerInfo.INFO, "Grist types at this position; common: %s, uncommon: %s, any: %s");
 		add(CheckLandCommand.CHECK, "You are currently in %s.");
 		add(CheckLandCommand.FAIL, "You are currently not in a land dimension.");
+		add(GutterCommand.SHOW, "Gutter modifier: %s, remaining capacity: %s, grist contained: %s");
 		add(SendGristCommand.SUCCESS, "Successfully gave grist to %s: %s");
 		add(SendGristCommand.RECEIVE, "Received grist from %s: %s");
 		add(SendGristCommand.NOT_PERMITTED, "You are not permitted to send grist to %s.");
@@ -2000,13 +2454,20 @@ public class MinestuckEnUsLanguageProvider extends MinestuckLanguageProvider
 		add(TransportalizerCommand.FAILURE_RESULT, "Failed the teleport anything.");
 		add(TransportalizerCommand.RESULT, "Successfully teleported %s entities to transportalizer");
 		add(SburbConnectionCommand.SUCCESS, "Successfully set %s's server player as %s");
-		add(SburbConnectionCommand.LOCKED, "Their session is locked, and should no longer be modified");
 		add(SburbConnectionCommand.ALREADY_CONNECTED, "Those players have already been connected");
+		add(DebugLandsCommand.SUCCESS, "Created %d lands connected to %s");
 		add(DebugLandsCommand.MUST_ENTER, "You must have entered before you can create debug lands");
+		add(DebugLandsCommand.INVALID_CHAIN, "The given land list is not valid for this command");
 		add(SburbPredefineCommand.SET_TITLE, "Predefined %s's title as %s");
 		add(SburbPredefineCommand.SET_TERRAIN_LAND, "Predefined %s's terrain land type");
 		add(SburbPredefineCommand.SET_TITLE_LAND, "Predefined %s's title land type");
 		add(SburbPredefineCommand.DEFINE, "Predefined full data for %s");
+		add(SburbPredefineCommand.TOO_LATE, "It is too late to predefine data for this player");
+		add(ReviewDialogueCommand.INVALID_TYPE_KEY, "The summoned entity is not a dialogue entity");
+		add(ReviewDialogueCommand.SUCCESS_KEY, "Summoned %d entities with dialogue ready to be reviewed");
+		add(SetDialogueCommand.INVALID_ENTITY_KEY, "%s is not a dialogue entity");
+		add(SetDialogueCommand.INVALID_ID_KEY, "%s is not a registered dialogue node");
+		add(SetDialogueCommand.SUCCESS_KEY, "Set dialogue for %s to %s");
 		add(GristTypeArgument.INVALID, "Invalid grist type %s");
 		add(GristSetArgument.INCOMPLETE, "Incomplete (expected pairs of integers and grist types)");
 		add(GristSetArgument.DUPLICATE, "Duplicate grist type %s");
@@ -2016,9 +2477,9 @@ public class MinestuckEnUsLanguageProvider extends MinestuckLanguageProvider
 		add(TitleLandTypeArgument.INVALID, "Invalid title land type %s");
 		add(TerrainLandTypeArgument.INVALID, "Invalid terrain land type %s");
 		add(LandTypePairArgument.INCOMPLETE, "Incomplete (expected two land aspects)");
+		add(DialogueCategoryArgument.INVALID, "Invaid dialogue category %s");
 		
 		add(PredefineData.TITLE_ALREADY_SET, "That player already has their title set to %s");
-		add(PredefineData.TITLE_ALREADY_USED, "The title %s is already used in that players session");
 		add(PredefineData.RESETTING_TERRAIN_TYPE, "The currently set terrain type %s is not compatible with land type, and will be reset");
 		add(PredefineData.GENERATED_TITLE, "Generated %s as predefined title");
 		add(PredefineData.CHANGED_TITLE, "Changed predefined title from %s to %s due to a new title land type");
@@ -2044,402 +2505,9 @@ public class MinestuckEnUsLanguageProvider extends MinestuckLanguageProvider
 				"%1$s lost their head whilst engaged with %2$s");
 		
 		add(ConsortMerchantInventory.CANT_AFFORD, "You don't have enough boondollars for that!");
-		add(MessageType.MISSING_ITEM, "You need a %s for that!");
-		addDialogue("thanks", "Thanks!");
-		addDialogue("thank_you", "Thank you!");
-		addDialogue("dots", "...");
-		addDialogue("sadface", ":(");
-		//Wind
-		addDialogue("dad_wind", "My dad was blown away in one of the recent wind storms.");
-		addDialogue("pyre.1", "If only I was faster than the wind! That would be fun!");
-		addDialogue("pyre.2", "Actually, nevermind. I would be burned on a pyre for being a witch due to our primal society.");
-		//Pulse
-		addDialogue("koolaid", "Some people say the oceans of blood are actually kool-aid. I'm too scared to taste it for myself.");
-		addDialogue("murder_rain", "You don't want to know what it's like to be outside when it rains. You can't tell who's a murderer or who forgot an umbrella!");
-		addDialogue("swimming", "If you're looking for a good land to swim in, it's definitely not this one.");
-		addDialogue("blood_surprise", "OH GOD IS THAT BLOOD oh wait nevermind.");
-		//Thunder
-		addDialogue("skeleton_horse", "Some people say at night, skeletons riding skeleton horses come through the town.");
-		addDialogue("blue_moon", "Every once in a blue moon, lightning strikes and burns down the village. We have to rebuild it!");
-		addDialogue("reckoning.1", "Those darn doomsayers, preaching about the Apocalypse and The Reckoning and such!");
-		addDialogue("reckoning.2", "What's The Reckoning? It's when meteors from The Veil are sent towards Skaia.");
-		addDialogue("reckoning.3", "Like any reasonable %s believes in that!");
-		addDialogue("lightning_strike", "You don't want to be struck by lightning. No one does.");
-		addDialogue("thunder_death.1", "We're lucky to have rain with this weather.");
-		addDialogue("thunder_death.2", "Otherwise the thunder would surely have been our death.");
-		addDialogue("hardcore", "This land is HARDCORE! There's lava and lightning wherever you go!");
-		addDialogue("thunder_throw.1", "Nemesis has been throwing thunder for generations, not stopping for even a moment.");
-		addDialogue("thunder_throw.2", "They are even doing it in their sleep. Can you believe that?");
-		//Rabbits
-		addDialogue("bunny_birthday", "Our daughter wants a bunny for her birthday, even though she caught six in the past three hours.");
-		addDialogue("rabbit_eating", "One time our village ran out of food and we tried eating rabbits. It was a dark period in our village history.");
-		addDialogue("edgy_life_hatred", "This place is just so full of life! I despise it.");
-		addDialogue("rabbit.food_shortage.1", "This land is already pretty desolate. There being lots of rabbits eating everything they find doesn't help!");
-		addDialogue("rabbit.food_shortage.2", "But with that many rabbits around, there sure are other ways of getting food...");
-		addDialogue("rabbit.food.1", "I sure wonder where the rabbits are getting their food from.");
-		addDialogue("rabbit.food.2a", "There's not really much food to be found in this desolate place.");
-		addDialogue("rabbit.food.3a", "Except maybe cacti, but would rabbits eat something that prickly?");
-		addDialogue("rabbit.food.2b", "I mean, there's not really much else than mushrooms around here.");
-		//Monsters
-		addDialogue("pet_zombie", "I've heard moaning coming from our son's bedroom. I found out he's keeping a pet zombie in there! Tamed it and everything!");
-		addDialogue("spider_raid", "A few giant spiders raided our village last night, taking all of our bugs! Those monsters...");
-		addDialogue("monstersona", "What's your monster-sona? Mine is a zombie.");
-		//Towers
-		addDialogue("bug_treasure", "Legends say underneath the tower to the north is a Captain Lizardtail's buried treasure! Literal tons of bugs, they say!");
-		addDialogue("tower_gone", "That tower over there was built by my great grandpa Fjorgenheimer! You can tell by how its about to fall apa- oh it fell apart.");
-		addDialogue("no_tower_treasure", "I feel ripped off. I was born in a land full of magical towers but none of them have treasure!");
-		//Thought
-		addDialogue("glass_books", "Our smartest villager read all the books in the library and now knows how to make glass jars! He's a gift from the big frog above!");
-		addDialogue("book_food", "We ate all the books in the nearby college ruins. It turns out thousand-year-old leather doesn't make the best dinner.");
-		addDialogue("to_eat", "To eat or not to eat, that is the question.");
-		//Cake
-		addDialogue("mystery_recipe", "All of the villagers here are trying to crack the mystery of how to make the frosted bread we see all day on our walks.");
-		addDialogue("cake_regen", "I heard all the cakes magically regenerate if you don't completely eat them! That's completely stupid!");
-		addDialogue("cake_recipe", "Let's see, the recipe calls for 5 tbsp. of sugar, 2 tbsp. vanilla, 1 large grasshopper... what are you looking at?");
-		addDialogue("fire_cakes", "If you're not careful, anything can set you on fire here, even the cakes!");
-		addDialogue("frosting", "When we start talking about cakes, the others start mentioning frosting. I'm not sure I get what they're talking about!");
-		//Clockwork
-		addDialogue("gear_technology", "Legends say the giant gears were used for technology no consort has ever seen before. That's absurd! It's obviously food!");
-		addDialogue("evil_gears", "My neighbor says the gears are evil! He also said that swords are used for combat, so he's probably insane.");
-		addDialogue("ticking", "The ticking keeps me up all night. It keeps us all up all night. Save us.");
-		//Frogs
-		addDialogue("frog_creation", "We are thankful for all the frogs that They gave to us when the universe was created. They, of course, is the genesis frog. I feel bad for the fool who has to make another!");
-		addDialogue("frog_location", "You won't find many frogs where you find villages. Most of them live where the terrain is rougher.");
-		addDialogue("frog_imitation", "Ribbit, ribbit! I'm a frog! I don't care what you say!");
-		addDialogue("frog_variants.1", "Most people believe there aren't that many types of frogs. 4740, maybe? Anything beyond that would be proposterous.");
-		addDialogue("frog_variants.2", "Here in %s, however, we know that there are 9.444731276889531e+22 types of frogs.");
-		addDialogue("frog_hatred", "For whatever reason, residents of Derse HATE frogs! Why would someone hate frogs?");
-		addDialogue("grasshopper_fishing.1", "My brother found a magic grasshopper while fishing recently!");
-		addDialogue("grasshopper_fishing.2", "Usually all we find are rings!");
-		addDialogue("gay_frogs", "The frogs around here are all so gay! Look at them happily hopping about!");
-		addDialogue("non_teleporting_frogs", "While the rest of us are getting dizzy, teleporting at random in the tall grass, the frogs seem immune! Makes it harder to catch them, that's for sure.");
-		//Buckets
-		addDialogue("lewd_buckets", "Some may call our land lewd, but the buckets are just so fun to swim in!");
-		addDialogue("water_buckets", "The buckets are a great source of water, as long as you pick the ones with water...");
-		addDialogue("warm_buckets", "Did you know that some buckets provide warmth? I tend to curl up next to one from time to time.");
-		addDialogue("oil_buckets.1", "Did you know that the buckets sometimes hold something other than oil?");
-		addDialogue("oil_buckets.2", "In some cases, they even contain something drinkable!");
-		//Light
-		addDialogue("blindness", "God, it's bright. Half of our village is blind. It's beginning to become a serious problem.");
-		addDialogue("doctors_inside", "Our best village doctors found that staying outside in the blinding light for too long is not good for us. Most of us stay inside all our lives. It's sad.");
-		addDialogue("staring", "Are you staring at me? No, really! I can't see because I'm blind.");
-		addDialogue("sunglasses.1", "You'd better wear sunglasses, else you might not see where you're going.");
-		addDialogue("sunglasses.2", "This is not the best place to wander blindly in.");
-		addDialogue("bright_snow.1", "You would think that the light would melt more snow.");
-		addDialogue("bright_snow.2", "But nope, the snow stays as frozen as ever!");
-		addDialogue("glimmering_snow", "Isn't it wonderful how much the snow is glimmering in the light?");
-		addDialogue("glimmering_sand", "Isn't it wonderful how much the sand is glimmering in the light?");
-		addDialogue("light_pillars", "Those light pillars... they somehow make me think of the legend of the wyrm.");
-		//Silence
-		addDialogue("murder_silence", "This is a great place for murder. No one will hear you scream.");
-		addDialogue("silent_underlings", "This place is so quiet and peaceful. Too bad we can't hear underlings about to kill us.");
-		addDialogue("listening.1", "Shhh, they can hear you...");
-		addDialogue("listening.2", "Just kidding, no one can hear you! The land itself muffles your words!");
-		addDialogue("calmness", "The sense of calmness in the air, it's kind of unnerving!");
-		//Towers
-		addDialogue("climb_high", "Climb up high and you'll be up for a great view!");
-		addDialogue("height_fear.towers.1", "I'd climb up one of those towers and look at the view, but I am scared of heights.");
-		addDialogue("height_fear.towers.2", "I mean, what if I slipped and fell off the stairs?");
-		addDialogue("height_fear.rock.1", "I'd climb up one of those rocks and look at the view, but I am scared of heights.");
-		addDialogue("height_fear.rock.2", "I mean what if I fell down and landed on my back?");
-		addDialogue("height_fear.panic", "AAH, I am scared of heights!");
-		//Shade
-		addDialogue("mush_farm.1", "Someone's gotta be farmin' all these goddamn fuckin' mushrooms, pain in the ass through truly it be.");
-		addDialogue("mush_farm.2", "So that's what I'm doing.");
-		addDialogue("mush_farm.3", "Standing around here.");
-		addDialogue("mush_farm.4", "farmin' all these");
-		addDialogue("mush_farm.5", "goddamn");
-		addDialogue("mush_farm.6", "fuckin");
-		addDialogue("mush_farm.7", "mushrooms");
-		addDialogue("mushroom_pizza", "Do you put glow mushrooms on your pizza or leave them off?");
-		addDialogue("mushroom_pizza.on", "Put them on");
-		addDialogue("mushroom_pizza.on.reply", "I put them on!");
-		addDialogue("mushroom_pizza.on.consort_reply", "Good! I was afraid I'd have to kill you!");
-		addDialogue("mushroom_pizza.off", "Leave them off");
-		addDialogue("mushroom_pizza.off.reply", "I leave them off!");
-		addDialogue("mushroom_pizza.off.consort_reply", "You are a despicable person.");
-		addDialogue("fire_hazard", "Our land is a fire waiting to happen! Hopefully there isn't any lightning!");
-		addDialogue("that_boy_needs_therapy", "Sometimes I wonder whether a purely mushroom diet is the cause of my dwindling mental capacity. In those moments, I think 'Ooh! mushroom!'... speaking of mushrooms, Sometimes I wonder...");
-		//Heat
-		addDialogue("getting_hot", "Is it getting hot in here or is it just me?");
-		addDialogue("lava_crickets", "Have you ever had a lava-roasted cricket? The lava really brings out the cricket juices.");
-		addDialogue("step_into_fire", "You'd better watch where you're going. Wouldn't want you to step right into some fire.");
-		addDialogue("the_water_is_lava", "You know the water is fucking lava? Who thought it would be a good idea to make water out of lava? How do we even stay hydrated in this place dude?");
-		//Wood
-		addDialogue("wood_treatments", "We figured out how to treat the wood to make it less flammable. I hope we didn't miss a spot.");
-		addDialogue("splinters.1", "Be careful not to walk barefoot here, you could get a splinter!");
-		addDialogue("splinters.2", "Some of our kind have died due to the amount of splinters they received while on a walk.");
-		//Sand & Sandstone
-		addDialogue("sand_surfing", "Sand-surfing is my new favorite sport! Too bad you can't really move, though.");
-		addDialogue("camel", "Want to buy a used camel? Only 2000 boondollars.");
-		addDialogue("camel.yes", "Why not? Seems like a good price for a camel!");
-		addDialogue("camel.yes.reply", "Sure!");
-		addDialogue("camel.no_camel", "Hahaha! Sucker! I have no camel! Cya later! 8)");
-		addDialogue("camel.no", "Of course not! You know better!");
-		addDialogue("camel.no.reply", "Not at all!");
-		addDialogue("camel.dancing_camel", "Are you sure? Too bad! The camel knew how to dance, too!");
-		addDialogue("knockoff", "I kind of feel like we're a stale, knockoff sand land.");
-		addDialogue("sandless.1", "According to legend, %s ate all the sand here leaving nothing but sandstone!");
-		addDialogue("sandless.2", "I'm kidding, I made that up on the spot. I had no other dialogue.");
-		addDialogue("red_better", "Red is much better than yellow, don't you think?");
-		addDialogue("yellow_better", "In our village, we have tales of monsters that are atttracted to red. That's why everything is yellow!");
-		//Frost
-		addDialogue("frozen.1", "My neighbors were complaining the other night about the snow.");
-		addDialogue("frozen.2", "Personally, the cold never really bothered me anyways.");
-		addDialogue("frozen.2.desc", "You hear a faint \"ba-dum tss\" in the distance.");
-		addDialogue("fur_coat", "Darn! I only need 100 more boondollars for a nice, fur coat! I'm going to freeze!");
-		addDialogue("fur_coat.pay", "Give them the boondollars [Pay 100 boondollars]");
-		addDialogue("fur_coat.pay.reply", "Here you go!");
-		addDialogue("fur_coat.grattitude", "Oh, thank you! Now I won't freeze to death out here! Take this as a token of gratitude!");
-		addDialogue("fur_coat.ignore", "Don't give them any of your hard-earned boondollars!");
-		addDialogue("fur_coat.ignore.reply", "Sorry, but I can't help you.");
-		addDialogue("fur_coat.death", "I guess I'll just die then...");
-		addDialogue("tent_protection", "These tents doesn't protect against the cold very well, but they are good enough.");
-		addDialogue("all_ores", "Jokes on the losers in other lands, we have ALL the resources! All of them!");
-		addDialogue("rockfu", "Here in %s, we practice rock-fu! Learn the way of the rock to CRUSH your enemies into a fine rock powder!");
-		addDialogue("all_trees", "Jokes on the losers in other lands, we have ALL the trees! All of them!");
-		addDialogue("really_likes_trees", "Do you like trees? I really like trees. I am one with the tree. Trees. TREES. TREEEES!");
-		//Fungi
-		addDialogue("mildew", "Ah, the mildew on the grass in the morning makes the landscape so pretty!");
-		addDialogue("mycelium.1", "Frog, don't you love the feeling of mycelium on your toes?");
-		addDialogue("mycelium.2", "No? Is that just me?");
-		addDialogue("adaptation.1", "At first, no one liked the mushrooms when our planet was cursed with the Dank.");
-		addDialogue("adaptation.2", "Those who refused to adapt to the new food source Perished, obviously.");
-		addDialogue("jacket", "It's so damp and cold. I wish I had a jacket!");
-		addDialogue("mushroom_curse", "Curse %s! And curse all their mushrooms, too! I miss eating crickets instead of all these mushrooms!");
-		addDialogue("fungus_destroyer", "According to legends of old, the %s will come one day and get the evil %s to clear up all this fungus!");
-		//Rainbow
-		addDialogue("generic_green", "Have you ever noticed rainbow wood looks green from a distance? I wonder if green is somehow more generic than other colors.");
-		addDialogue("overwhelming_colors", "Even for us turtles, this place is too bright. All the light and colors around here can be really overwhelming!");
-		addDialogue("saw_rainbow", "I saw a rainbow yesterday! Normally I see way more than that.");
-		addDialogue("sunglasses", "Some sunglasses would be really great in a Land like this. Too bad I don't have ears!");
-		addDialogue("what_is_wool", "I have no clue what the ground here is made of. I've never seen anything like it anywhere else!");
-		addDialogue("love_colors", "People ask me, \"What's your favorite color?\" I can't pick! I love them all! They're all special in their own way! Well, except green.");
-		addDialogue("types_of_colors.1", "In the additive color system, there are three primary colors: red, green, and blue.");
-		addDialogue("types_of_colors.2", "In the subtractive color system, there are also three primary colors, but those are magenta, yellow, and cyan.");
-		addDialogue("types_of_colors.3", "In the additive system, mixing red and green makes yellow, mixing green and blue makes cyan, and mixing blue and red makes magenta.");
-		addDialogue("types_of_colors.4", "In the subtractive system, mixing magenta and yellow makes red, mixing yellow and cyan makes green, and mixing cyan and magenta makes blue!");
-		addDialogue("types_of_colors.5", "These six colors make up the color wheel: red, yellow, green, cyan, blue, magenta, and then back to red.");
-		addDialogue("types_of_colors.6", "When you look at a rainbow, you don't see magenta, because the blue on one end doesn't mix with the red on the other end.");
-		addDialogue("types_of_colors.7", "You do, however, see purple, which is between magenta and blue. Short answer for why that is, your eyes are lying to you.");
-		addDialogue("types_of_colors.8", "Beyond the six main colors, however, there are also six other colors: pink, brown, orange, lime, light blue, and purple.");
-		addDialogue("types_of_colors.9", "In addition, there are also the tones of white, light gray, gray, and black.");
-		addDialogue("types_of_colors.10", "In the additive system, mixing all the colors together makes white.");
-		addDialogue("types_of_colors.11", "In the subtractive system, mixing all the colors together makes black.");
-		addDialogue("types_of_colors.12", "When dealing with dye, however, you can find some unusual combinations, or lack of combinations.");
-		addDialogue("types_of_colors.13", "Dyes work largely on the subtractive color system, but they don't always mix the way they should.");
-		addDialogue("types_of_colors.14", "This is because dyes, while vibrant, are imperfect representations of their respective colors.");
-		addDialogue("types_of_colors.15", "Lime, for example, should be a mix of yellow and green. To get lime dye, though, you need to mix cactus green with white dye instead.");
-		addDialogue("types_of_colors.16", "When mixing red and blue to get magenta, the blue overpowers the red and you get purple. You have to mix the purple with not just red, but pink to get magenta.");
-		addDialogue("types_of_colors.17", "Dye is weird like that.");
-		addDialogue("types_of_colors.18", "...what, you're still listening to me? Wow. No one's ever listened to the whole thing before. Would you like to hear it again?");
-		//End
-		addDialogue("at_the_end", "This may be the start of our conversation, but now we're at the end.");
-		addDialogue("chorus_fruit", "Never eat fruit. Last time I tried it, I blacked out and came to somewhere else! Stick to bugs like a normal person!");
-		addDialogue("end_grass", "The grass in this place just keeps growing everywhere! You can bet that any patches of grass you find weren't there before. I don't even know how it takes root in the stone like that.");
-		addDialogue("grass_curse", "Rumors say that %s got mad one day and cursed the world with all this grass everywhere. It gets into our homes!");
-		addDialogue("tall_grass", "The taller grass is so disorienting to walk through! Unless you are careful it will just move you around.");
-		addDialogue("useless_elytra", "One time, I saw a guy with some weird wing-looking things on his back. He could glide with them, but without being able to stay in the air, what's the point?");
-		//Rain
-		addDialogue("empty_ocean", "Our oceans used to be filled with life! Now they're all barren, thanks to %s.");
-		addDialogue("forbidden_snack", "Contrary to popular belief, chalk is not safe for consumption... but how can I resist its allure?");
-		addDialogue("cotton_candy", "Have you ever considered eating a rain cloud? Yum! Maybe it tastes like cotton candy...");
-		addDialogue("monsters_below", "Do you know what lies deep beneath the ocean waters? Scary to think about!");
-		addDialogue("keep_swimming", "Just keep swimming, just keep swimming! Yay, swimming!");
-		//flora
-		addDialogue("battle_site", "This land was the site of a battle ages and ages and ages ago.");
-		addDialogue("blood_oceans", "The giant creatures who warred here long ago shed so much blood that, even now, the oceans are red with it.");
-		addDialogue("giant_swords", "My grandpa told me that the giant swords everywhere were dropped by giants locked in combat ages ago.");
-		addDialogue("bloodberries.1", "The strawberries here grow big and red thanks to all the blood in the water supply! The flowers thrive, too!");
-		addDialogue("bloodberries.2", "Strawberry juice is the only thing safe to drink here. If I have any more, I'll scream. Please save us.");
-		addDialogue("immortality_herb.1", "I have a herb that grants immortality! I'm going to eat it right now!");
-		addDialogue("immortality_herb.2", "However, they are easily confused with an explosion-causing herb...");
-		addDialogue("immortality_herb.3", "I'm taking the risk.");
-		addDialogue("spices.1", "A good chef cooks with the spices found throughout the land.");
-		addDialogue("spices.2", "Other chefs are envious that they don't live in %s.");
-		addDialogue("sharp_slide", "Don't use the sharp sides of giant swords as slides. May her beautiful soul rest in pieces.");
-		
-		addDialogue("denizen_mention", "It's a wonderful day. Hopefully some monster underneath the planet's surface doesn't eat us all!");
-		addDialogue("floating_island", "I heard a floating island just appeared somewhere near here recently and falling chunks destroyed a village underneath it!");
-		addDialogue("ring_fishing", "My brother found a magic ring while fishing recently!");
-		addDialogue("frog_walk", "Frog, it's such a wonderful day to just walk around a village.");
-		addDialogue("delicious_hair", "Holy leapin' god, you have such wonderful hair! Can I eat some?");
-		addDialogue("lazy_king", "I feel like our king just sits around doing nothing but eating weird glowing mushrooms! So lazy!");
-		addDialogue("music_invention", "I invented music, y'kno! My favorite song goes like ba ba dum, dum ba dum.");
-		addDialogue("wyrm", "Legends speak of the Wyrm, a giant ivory pillar that radiates joy and happiness and uselessness.");
-		addDialogue("heroic_stench", "You smell kind of... heroic... like a hero, perhaps? It makes me kinda nervous to be around you!");
-		addDialogue("leech_stench", "You smell like you're leeching from the success from another hero... is this true?");
-		addDialogue("rap_battle", "I challenge you to a rap battle! Accept challenge? Y/N");
-		addDialogue("rap_battle.accept", "Accept this consort's challenge!");
-		addDialogue("rap_battle.accept.reply", "Y! I'll take you on! You can even go first.");
-		addDialogue("rap_battle.deny", "Don't bother with this guy.");
-		addDialogue("rap_battle.deny.reply", "N. Maybe later.");
-		addDialogue("rap_battle.deny_answer", "Maybe one day I will find a challenger worthy of my greatness....");
-		addDialogue("rap_battle.a1", "I see you carryin' a pick");
-		addDialogue("rap_battle.a2", "You think you minin'? Sick");
-		addDialogue("rap_battle.a3", "But uh...");
-		addDialogue("rap_battle.a4", "you ain't. Word.");
-		addDialogue("rap_battle.b1", "You're green and square, kinda beveled on the sides");
-		addDialogue("rap_battle.b2", "And the corners I guess. Or are they called vertexes?");
-		addDialogue("rap_battle.b3", "But I'm sayin' you're generic. Like, so generic");
-		addDialogue("rap_battle.b4", "it doesn't make sense. ... uh, sorry for being a jerk.");
-		addDialogue("rap_battle.c1", "Yeah. Yeah. Yeah. Yeah.");
-		addDialogue("rap_battle.c2", "Ooh. Ooh. Ooh. Ooh.");
-		addDialogue("rap_battle.c3", "%1$s. %1$s. %1$s. %1$s.");
-		addDialogue("rap_battle.c4", "Yeah. Yeah. Yeah. Yeah.");
-		addDialogue("rap_battle.d1", "I'm the Knight of Time, the god of sick beats");
-		addDialogue("rap_battle.d2", "Settle down and lemme... why are you giving me that look?");
-		addDialogue("rap_battle.d3", "This is my own original rap!");
-		addDialogue("rap_battle.d4", "Really!");
-		addDialogue("rap_battle.e1", "Incaseyoucouldn'ttell,");
-		addDialogue("rap_battle.e2", "you'reuglyandyousmell!");
-		addDialogue("rap_battle.e3", "OOOHHHHHHHHH!");
-		addDialogue("rap_battle.e4", "...That's how rap works, right?");
-		addDialogue("rap_battle.f1", "Have a nice trip and I'll see you next fall!");
-		addDialogue("rap_battle.f2", "I hope you don't mind that my house isn't tall,");
-		addDialogue("rap_battle.f3", "'Cuz them things is dang'rous and although no one cares,");
-		addDialogue("rap_battle.f4", "I'm tellin' ya, dawg, I WARNED YOU 'BOUT STAIRS!");
-		addDialogue("rap_battle.raps_desc", "... that rap was really awful.");
-		addDialogue("rap_battle_school", "Schoo' that foo'!");
-		addDialogue("rap_battle_school.reply", "All right, now it's my turn.");
-		addDialogue("rap_battle_school.rap", "The %s proceeded to drop sick fire unlike any the %s had ever seen before.");
-		addDialogue("rap_battle_school.final", "%s. You are the greatest rapper ever.");
-		addDialogue("rap_battle_concede", "Let the poor guy think they won.");
-		addDialogue("rap_battle_concede.reply", "... wow. I'm just... not going to try to go against something like that.");
-		addDialogue("rap_battle_concede.final", "%s, yes! I am the greatest rapper ever!");
-		
-		
-		addDialogue("useless_pogo", "I once found this piece of junk that launched me upward when I hit the ground with it. It really hurt when I came back down, and I didn't get anywhere!");
-		addDialogue("await_hero", "Here, in the %s, we %s worship the %s. We wait and hope for the day that they awaken.");
-		addDialogue("watch_skaia", "Sometimes, I look up in the sky to see Skaia and wish I could visit there some day...");
-		addDialogue("at_skaia.1", "OH MY %s! I'M ACTUALLY ON SKAIA!");
-		addDialogue("at_skaia.2", "Oh my...! I'm actually on Skaia!");
-		addDialogue("visited_skaia", "You know, I have actually visited Skaia at one point!");
-		addDialogue("zazzerpan", "Old wizard Zazzerpan would be turning in his grave if he saw the horrors that walk these lands. Those giclopes sure are terrifying!");
-		addDialogue("texas_history", "The place was %s, the year, was 20XX.");
-		addDialogue("disks", "I used to be an adventurer like you, then I never got the disks.");
-		addDialogue("whoops", "Beware the man who speaks in hands, wait...wrong game.");
-		addDialogue("fourth_wall", "Maybe you should do something more productive than talking to NPCs.");
-		addDialogue("hats", "I like crumpled hats, they're comfy and easy to wear!");
-		addDialogue("wwizard", "Secret wizards? Th-there are no secret wizards! Wh-what're you speaking of, o-outlandish traveller?");
-		addDialogue("stock_market", "I bought a bunch of stocks on the market... Now I'm broke...");
-		addDialogue("consort_scoliosis", "I'm not actually a child, I simply have an incredibly advanced case of consort scoliosisis that has gone untreated for years.");
-		addDialogue("oh_to_be_ugly", "Inspite of the fact that I'm training to become an evil wizard, I'm simply not ugly enough to fit the bill. Any good wizardling knows that one must be as ugly as their desires to truly obtain power.");
-		addDialogue("no_to_podcasting", "My buddy wanted to do some podcasting... I'm no longer friends with him I'm not gonna lie");
-		addDialogue("bats", "I don't like the idea of a bat. Never seen one, and I don't plan on it. It's just like, why the fuck are they built like that!?");
-		addDialogue("so_what", "Uhuh, so what you think you and your little hairy non-reptilian disposition impresses me? It doesn't impress me you just look like a fool. A damned hairy fool.");
-		addDialogue("trolly_problem", "The trolly problem isn't really all that complicated for me all things considered. I mean, I'll probably die of old age before the trolly ever hits me considering my incredibly short and quickly dwindling lifespan");
-		addDialogue("a_little_lampshading", "Look I know you aren't a reptile, I just got one question. You ever hear some of these people talk? I swear, they must be putting mercury in the water with how nonsensical conversation can be with these guys.");
-		addDialogue("identity", "I heard that the true name of the %s is %s. Isn't that cool?");
-		addDialogue("college.1", "Please, I need to pay for my children to attend college...");
-		addDialogue("college.2", "Wow, you have so many boondollars! I'll never make that much in my short, amphibious lifetime.");
-		addDialogue("unknown.1", "They are coming...");
-		addDialogue("unknown.2", "Huh? 'Who the fuck is They'? What kind of question is that?! I don't know! Who the fuck are you?");
-		addDialogue("cult.1", "We would love to invite you, %s, to our secret wizards cult.");
-		addDialogue("cult.2", "Meet me by dawn with mercury, salt, and sulfur to begin the initiation.");
-		addDialogue("peppy_offer", "Hey there! I've got a wonderful item here for just 1000 boondollars? How about it kid?");
-		addDialogue("peppy_offer.desc", "This consort is way too nice to ever scam you! Surely you can trust them?");
-		addDialogue("peppy_offer.buy", "Buy \"Wonderful item\" [Pay 1000 boondollars]");
-		addDialogue("peppy_offer.buy.reply", "Sure! Why not?");
-		addDialogue("peppy_offer.item", "Here you are!");
-		addDialogue("peppy_offer.deny", "Do not buy from cheery salesman.");
-		addDialogue("peppy_offer.deny.reply", "No thanks! I'm short on cash.");
-		addDialogue("peppy_offer.next", "Oh! No worries! How about I sell it to you for just 500 boondollars instead??");
-		addDialogue("peppy_offer.deny_again", "Still do not buy from cheery salesman.");
-		addDialogue("peppy_offer.deny_again.reply", "I'm sorry, I meant *really* short on cash...");
-		addDialogue("peppy_offer.buy_2", "Buy that cheap item! [pay 500 boondollars]");
-		addDialogue("peppy_offer.buy_2.reply", "Sure! I'd be glad to!");
-		addDialogue("peppy_offer.purchase", "Thank you for your money!");
-		addDialogue("title_presence", "I sense the presence of the %s. Tell me if you see them, ok?");
-		addDialogue("title_presence.iam", "Present yourself as the %s.");
-		addDialogue("title_presence.iam.reply", "I am the %s.");
-		addDialogue("title_presence.iam_answer", "OH MY %s");
-		addDialogue("title_presence.agree", "\"Agree\" to do that.");
-		addDialogue("title_presence.agree.reply", "Hehe, ok I will.");
-		addDialogue("shady_offer", "Hey kid... I'll give you something special for 1000 boondollars...");
-		addDialogue("shady_offer.desc", "This consort seems pretty shady. You're not sure whether or not to trust them...");
-		addDialogue("shady_offer.buy", "Buy \"Something special\" [Pay 1000 boondollars]");
-		addDialogue("shady_offer.buy.reply", "Ok... Sure??");
-		addDialogue("shady_offer.item", "Here, kid.");
-		addDialogue("shady_offer.deny", "Do not buy from the shadowy dealer.");
-		addDialogue("shady_offer.deny.reply", "Uh, no thanks...");
-		addDialogue("shady_offer.next", "You're missin' out kiddo. %s it. I'll sell you this thing for 500 boondollars.");
-		addDialogue("shady_offer.deny_again", "It may be a deception, do not buy the \"thing\"!");
-		addDialogue("shady_offer.deny_again.reply", "I said no already.");
-		addDialogue("shady_offer.buy_2", "buy it already! [Pay 500 boondollars]");
-		addDialogue("shady_offer.buy_2.reply", " Sure! Fine! Ok! Jeez...");
-		addDialogue("shady_offer.purchase", "Thanks for your cash.");
-		
-		addDialogue("denizen", "%s has been sleeping for a thousand years. I shudder at the thought of their return.");
-		addDialogue("denizen.what", "What?");
-		addDialogue("denizen.what.reply", "The... what?");
-		addDialogue("denizen.explain", "The Denizen is the One that Slumbers in our very soil. It is eternally waiting for the %s to awaken it. Then they will be given The Choice, and their victory will be determined by what they choose.");
-		addDialogue("denizen.ask_alignment", "Ask if the denizens are bad or not.");
-		addDialogue("denizen.ask_alignment.reply", "Were these 'denizens' bad?");
-		addDialogue("denizen.alignment", "How am I supposed to know if they were good or bad? There's more to a living being than just black and white!");
-		
-		addDialogue("hungry", "I'm hungry. Have any bugs? Maybe a chocolate chip cookie? Mmm.");
-		addDialogue("hungry.ask_food", "A %s! Could I have some?");
-		addDialogue("hungry.accept", "Yes");
-		addDialogue("hungry.accept.reply", "Sure, here.");
-		addDialogue("hungry.deny", "No");
-		addDialogue("hungry.deny.reply", "I don't really want to give this away.");
-		addDialogue("hungry.thanks", "Thank you! I will remember your kindness for the rest of my short life.");
-		addDialogue("hungry.starving", "But I am starving here! What if I paid you 10 boondollars for it?");
-		addDialogue("hungry.agree", "Sure");
-		addDialogue("hungry.agree.reply", "Sure, I can agree to that.");
-		addDialogue("hungry.too_cheap", "Too Cheap");
-		addDialogue("hungry.too_cheap.reply", "I won't let it go that cheap.");
-		addDialogue("hungry.finally", "Finally!");
-		addDialogue("hungry.finally.desc", "You are given 10 boondollars for the %s.");
-		addDialogue("hungry.end", "Fine. I will just go and find a real food store.");
-		
-		addDialogue("breeze_food_shop", "It's hard to catch our food with the Breeze carrying them away and whatnot!");
-		addDialogue("blood_food_shop", "Hope you like red meat!");
-		addDialogue("rabbit_food_shop", "Rabbit stew! Mmmm!");
-		addDialogue("lightning_food_shop", "Lightning-smoked meat really adds to the flavor!");
-		addDialogue("frog_leg_food_shop", "Frog legs are good but eating them is heresy! Buy some of our food instead!");
-		addDialogue("buckets_food_shop", "Ever soaked your grist candies in the liquids the buckets contain? It really enhances the taste!");
-		addDialogue("time_food_shop", "Tick Tock, time's a-wasting! Eat something or leave!");
-		addDialogue("thyme_food_shop", "Take your mind off of the limited time we have left alive with food!");
-		addDialogue("library_food_shop", "I'm selling recipes I made from a nearby library's cookbook. Buy some!");
-		addDialogue("cake_food_shop", "Who needs cake when you have crickets!");
-		addDialogue("light_food_shop", "Crickets are nocturnal so our species' main food source is hard to find here. Oh well!");
-		addDialogue("silence_food_shop", "This place used to be filled with the sounds of crickets until we captured them all for food!");
-		addDialogue("rage_food_shop", "You're not you when you're hungry. Buy a snickers!");
-		addDialogue("hope_food_shop", "I HOPE you're hungry!");
-		addDialogue("hope_food_shop.desc", "You hear a faint ba-dum tss in the distance.");
-		addDialogue("frog_food_shop", "We would never eat frogs here in the %s! Grasshoppers, though...");
-		addDialogue("food_shop", "You hungry? I bet you are! Why else would you be talking to me?");
-		addDialogue("fast_food", "Welcome to MacCricket's, what would you like?");
-		addDialogue("grocery_store", "Thank you for choosing Stop and Hop, this village's #1 one grocer!");
-		addDialogue("tasty_welcome", "Welcome. I hope you find something tasty among our wares.");
-		
-		addDialogue("breeze_general_shop", "The breeze has brought me many fine wares.");
-		addDialogue("blood_general_shop", "I accept payment in blood. And boondollars. I also take checks.");
-		addDialogue("life_general_shop", "Twenty years selling losers hats and shit really takes the life out of you.");
-		addDialogue("doom_general_shop", "With my prices, my competitors are doomed!");
-		addDialogue("frog_general_shop", "Get your frog merchandise here! Limited time only! ....Just kidding, I'm always here.");
-		addDialogue("buckets_general_shop", "Here's a witty one-liner tying in buckets and general stores!");
-		addDialogue("time_general_shop", "Future me has told me that some sucker would buy tons of \"goods\" from me... will that sucker be you?");
-		addDialogue("book_general_shop", "Books have taught us how to sell as much useless crap as possible, want some?");
-		addDialogue("cake_general_shop", "Don't buy goods here. Cake is our specialty, not general goods. Very low quality.");
-		addDialogue("light_general_shop", "You may be blind but I'm sure you can see our prices are fantastic!");
-		addDialogue("silence_general_shop", "This land may be silent but our prices will make you SCREAM!... with joy, of course!");
-		addDialogue("rage_general_shop", "Other store's prices are INFURIATING! Our prices, however, will soothe that frustration!");
-		addDialogue("tower_general_shop", "I got the goods; they're all recently raided from a nearby tower!");
-		addDialogue("general_shop", "We have generic goods for generic people!");
-		addDialogue("got_the_goods", "You want the goods? We got the goods.");
-		addDialogue("tummy_tunnel", "Man this shop is packed tighter then my tummy tunnel when I gotta make brown on the john after eating one too many of them incandescent pies what be popping around.");
-		addDialogue("rising_shop", "We have top tier goods for a top tier god!");
-		addDialogue("boring_shop", "Looking for something that won't catch your eye? You've come to the right place!");
-		
-		//TODO Here are some unimplemented dialogue
-		addDialogue("cant_see", "We spent a lot of time making this shop looks really nice, we may have overdone it though, I can barely see over this counter.");
-		addDialogue("naked", "Special offer on shell polish, dear custom- wait a minute, where's your shell? Are you naked?");
-		addDialogue("vines", "Please don't climb on the vines outside, I won't be able to reach you and it'll be really upsetting to watch me fruitlessly try.");
-		addDialogue("skaia_rocket", "My house may be kind of in the ground, but my dreams are taller than any Giclops! One day I'm gonna fly a rocket to Skaia and prove that we're not all so timid.");
-		addDialogue("advertisement", "Been to the shop? They've got the best %s in the area!");
+		add(DialogueProvider.ARROW.key(), "=>");
+		add(DialogueProvider.DOTS.key(), "...");
+		add(Dialogue.DIALOGUE_FORMAT, "%s: %s");
 		
 		addSubtitles("warhorn", "Warhorn sounds");
 		addSubtitles("whispers", "Spooky Whispers");

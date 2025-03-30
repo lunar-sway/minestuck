@@ -1,40 +1,26 @@
 package com.mraof.minestuck.computer;
 
+import com.mojang.serialization.MapCodec;
+import com.mojang.serialization.codecs.RecordCodecBuilder;
 import com.mraof.minestuck.blockentity.ComputerBlockEntity;
 import net.minecraft.core.GlobalPos;
-import net.minecraft.nbt.CompoundTag;
-import net.minecraft.nbt.NbtOps;
 import net.minecraft.server.MinecraftServer;
 import net.minecraft.world.level.Level;
 import net.minecraft.world.level.block.entity.BlockEntity;
-import org.apache.logging.log4j.LogManager;
-import org.apache.logging.log4j.Logger;
 
 import java.util.Objects;
 
-class BEComputerReference implements ComputerReference
+final class BEComputerReference implements ComputerReference
 {
-	private static final Logger LOGGER = LogManager.getLogger();
+	static final MapCodec<BEComputerReference> CODEC = RecordCodecBuilder.mapCodec(instance ->
+			instance.group(GlobalPos.CODEC.fieldOf("pos").forGetter(reference -> reference.location))
+					.apply(instance, BEComputerReference::new));
 	
-	protected final GlobalPos location;
+	private final GlobalPos location;
 	
 	BEComputerReference(GlobalPos location)
 	{
-		this.location = location;
-	}
-	
-	static BEComputerReference create(CompoundTag nbt)
-	{
-		GlobalPos location = GlobalPos.CODEC.parse(NbtOps.INSTANCE, nbt.get("pos")).resultOrPartial(LOGGER::error).orElse(null);
-		return new BEComputerReference(location);
-	}
-	
-	@Override
-	public CompoundTag write(CompoundTag nbt)
-	{
-		nbt.putString("type", "block_entity");
-		GlobalPos.CODEC.encodeStart(NbtOps.INSTANCE, location).resultOrPartial(LOGGER::error).ifPresent(tag -> nbt.put("pos", tag));
-		return nbt;
+		this.location = Objects.requireNonNull(location);
 	}
 	
 	@Override

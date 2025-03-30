@@ -1,0 +1,24 @@
+{
+  "type": "minecraft:crafting_shaped",
+  "category": "equipment",
+  "key": {
+    "S": {
+      "tag": "c:stones"
+    },
+    "i": {
+      "tag": "c:ingots/iron"
+    },
+    "s": {
+      "tag": "c:rods/wooden"
+    }
+  },
+  "pattern": [
+    "iSi",
+    " s ",
+    " s "
+  ],
+  "result": {
+    "count": 1,
+    "id": "minestuck:sledge_hammer"
+  }
+}

@@ -1,0 +1,11 @@
+{
+  "type": "minestuck:combination",
+  "input1": {
+    "item": "minecraft:music_disc_mellohi"
+  },
+  "input2": {
+    "item": "minestuck:cassette_player"
+  },
+  "mode": "or",
+  "output": "minestuck:cassette_mellohi"
+}

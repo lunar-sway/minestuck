@@ -1,34 +1,41 @@
 package com.mraof.minestuck.skaianet;
 
 import com.mojang.datafixers.util.Pair;
+import com.mraof.minestuck.Minestuck;
 import com.mraof.minestuck.MinestuckConfig;
 import com.mraof.minestuck.entry.EntryProcess;
-import com.mraof.minestuck.network.MSPacketHandler;
-import com.mraof.minestuck.network.TitleSelectPacket;
+import com.mraof.minestuck.network.TitleSelectPackets;
 import com.mraof.minestuck.player.IdentifierHandler;
+import com.mraof.minestuck.player.PlayerData;
 import com.mraof.minestuck.player.PlayerIdentifier;
-import com.mraof.minestuck.player.PlayerSavedData;
 import com.mraof.minestuck.player.Title;
 import net.minecraft.core.BlockPos;
 import net.minecraft.server.level.ServerPlayer;
 import net.minecraft.world.entity.player.Player;
 import net.minecraft.world.phys.Vec3;
+import net.neoforged.bus.api.SubscribeEvent;
+import net.neoforged.fml.common.EventBusSubscriber;
+import net.neoforged.neoforge.event.server.ServerStoppedEvent;
+import net.neoforged.neoforge.network.PacketDistributor;
 import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.Logger;
 
+import javax.annotation.Nullable;
 import java.util.HashMap;
 import java.util.Map;
+import java.util.Optional;
 
 /**
  * A class that determines when to stop entry and tell the player to pick a title,
  * and to then handle the selection once it's been sent back.
  */
+@EventBusSubscriber(modid = Minestuck.MOD_ID, bus= EventBusSubscriber.Bus.GAME)
 public class TitleSelectionHook
 {
 	private static final Logger LOGGER = LogManager.getLogger();
 	
 	// previous player position and specified entry point
-	static Map<Player, Pair<Vec3, BlockPos>> playersInTitleSelection = new HashMap<>();
+	private static final Map<Player, Pair<Vec3, BlockPos>> playersInTitleSelection = new HashMap<>();
 	
 	/**
 	 * Checks if the player has the go-ahead to enter.
@@ -40,15 +47,13 @@ public class TitleSelectionHook
 			return true;
 		
 		PlayerIdentifier identifier = IdentifierHandler.encode(player);
-		Session s = SessionHandler.get(player.level()).getPlayerSession(identifier);
 		
-		if(s != null && s.predefinedPlayers.containsKey(identifier) && s.predefinedPlayers.get(identifier).getTitle() != null
-				|| PlayerSavedData.getData(identifier, player.server).getTitle() != null)
+		if(SkaianetData.get(player.server).getOrCreatePredefineData(identifier).map(data -> data.getTitle() != null).orElse(false)
+				|| Title.getTitle(identifier, player.server).isPresent())
 			return true;
 		
 		playersInTitleSelection.put(player, new Pair<>(new Vec3(player.getX(), player.getY(), player.getZ()), savedPos));
-		TitleSelectPacket packet = new TitleSelectPacket();
-		MSPacketHandler.sendToPlayer(packet, player);
+		PacketDistributor.sendToPlayer(player, new TitleSelectPackets.OpenScreen(Optional.empty()));
 		return false;
 	}
 	
@@ -57,7 +62,7 @@ public class TitleSelectionHook
 		playersInTitleSelection.remove(player);
 	}
 	
-	public static void handleTitleSelection(ServerPlayer player, Title title)
+	public static void handleTitleSelection(ServerPlayer player, @Nullable Title title)
 	{
 		if(!MinestuckConfig.SERVER.playerSelectedTitle.get() || !playersInTitleSelection.containsKey(player))
 		{
@@ -68,19 +73,9 @@ public class TitleSelectionHook
 		PlayerIdentifier identifier = IdentifierHandler.encode(player);
 		
 		if(title == null)
-			SburbHandler.generateAndSetTitle(player.level(), identifier);
+			SburbHandler.generateAndSetTitle(identifier, player.server);
 		else
-		{
-			Session s = SessionHandler.get(player.server).getPlayerSession(identifier);
-			if(s != null && s.getUsedTitles(identifier).contains(title))
-			{
-				// Title is already used in session; inform the player that they can't pick this title
-				MSPacketHandler.sendToPlayer(new TitleSelectPacket(title), player);
-				return;
-			}
-			
-			PlayerSavedData.getData(identifier, player.server).setTitle(title);
-		}
+			Title.setTitle(PlayerData.get(identifier, player.server), title);
 		
 		//Once the title selection has finished successfully, restore player position and trigger entry
 		var both = playersInTitleSelection.remove(player);
@@ -92,5 +87,11 @@ public class TitleSelectionHook
 		
 		EntryProcess.enter(player, specifiedPos);
 		
+	}
+	
+	@SubscribeEvent
+	public static void serverStopped(ServerStoppedEvent event)
+	{
+		playersInTitleSelection.clear();
 	}
 }

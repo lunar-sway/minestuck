@@ -1,8 +1,10 @@
 package com.mraof.minestuck.inventory;
 
+import com.mraof.minestuck.advancements.MSCriteriaTriggers;
 import com.mraof.minestuck.entity.consort.ConsortEntity;
+import com.mraof.minestuck.entity.consort.ConsortReputation;
+import com.mraof.minestuck.player.PlayerBoondollars;
 import com.mraof.minestuck.player.PlayerData;
-import com.mraof.minestuck.player.PlayerSavedData;
 import net.minecraft.core.NonNullList;
 import net.minecraft.nbt.CompoundTag;
 import net.minecraft.nbt.ListTag;
@@ -37,7 +39,7 @@ public class ConsortMerchantInventory implements Container
 		for(int i = 0; i < list.size() && i < 9; i++)
 		{
 			CompoundTag nbt = list.getCompound(i);
-			ItemStack stack = ItemStack.of(nbt);
+			ItemStack stack = ItemStack.parse(consort.registryAccess(), nbt).orElseThrow();
 			inv.set(i, stack);
 			if(!stack.isEmpty())
 				prices[i] = nbt.getInt("price");
@@ -63,18 +65,22 @@ public class ConsortMerchantInventory implements Container
 			ItemStack stack = inv.get(index);
 			if (stack.isEmpty())
 				return;
-			PlayerData playerData = PlayerSavedData.getData(player);
-			int amountPurchased = (int) Math.min(prices[index] != 0 ? playerData.getBoondollars() / prices[index] : Integer.MAX_VALUE, all ? stack.getCount() : 1);
+			PlayerData playerData = PlayerData.get(player).orElseThrow();
+			int amountPurchased = (int) Math.min(prices[index] != 0 ? PlayerBoondollars.getBoondollars(playerData) / prices[index] : Integer.MAX_VALUE, all ? stack.getCount() : 1);
 			if (amountPurchased == 0)
 			{
 				player.sendSystemMessage(Component.translatable(CANT_AFFORD));
 			} else
 			{
-				playerData.takeBoondollars(amountPurchased * prices[index]);
-				playerData.addConsortReputation(5, consort.getHomeDimension());
+				PlayerBoondollars.takeBoondollars(playerData, amountPurchased * prices[index]);
+				ConsortReputation.get(playerData).addConsortReputation(5, consort.getHomeDimension());
 				ItemStack items = stack.split(amountPurchased);
 				if(stack.isEmpty())
+				{
 					prices[index] = 0;
+					if (Arrays.stream(prices).sum() == 0)
+						MSCriteriaTriggers.BUY_OUT_SHOP.get().trigger(player);
+				}
 				
 				if (player.addItem(items))
 					player.inventoryMenu.broadcastChanges();
@@ -94,9 +100,9 @@ public class ConsortMerchantInventory implements Container
 		ListTag list = new ListTag();
 		for (int i = 0; i < 9; i++)
 		{
-			CompoundTag nbt = inv.get(i).save(new CompoundTag());
+			CompoundTag nbt = new CompoundTag();
 			nbt.putInt("price", prices[i]);
-			list.add(nbt);
+			list.add(inv.get(i).save(this.consort.registryAccess(), nbt));
 		}
 		return list;
 	}
@@ -207,13 +213,13 @@ public class ConsortMerchantInventory implements Container
 	
 	public ContainerData createPricesFor(ServerPlayer player)
 	{
-		PlayerData data = PlayerSavedData.getData(player);
+		ConsortReputation reputation = ConsortReputation.get(player);
 		return new ContainerData()
 		{
 			@Override
 			public int get(int index)
 			{
-				return calculatePrice(prices[index], data.getConsortReputation(consort.getHomeDimension()));
+				return calculatePrice(prices[index], reputation.getConsortReputation(consort.getHomeDimension()));
 			}
 			
 			@Override

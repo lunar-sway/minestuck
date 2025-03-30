@@ -1,0 +1,20 @@
+{
+  "node": {
+    "animation": {
+      "emotion": "angry"
+    },
+    "gui": "minestuck:textures/gui/dialogue/dialogue.png",
+    "message": "minestuck.dialogue.consort.mush_farm.3",
+    "responses": [
+      {
+        "condition": {
+          "type": "minestuck:always_true"
+        },
+        "hide_if_failed": true,
+        "message": "minestuck.arrow",
+        "next_dialogue": "minestuck:consort/mush_farm/4",
+        "triggers": []
+      }
+    ]
+  }
+}

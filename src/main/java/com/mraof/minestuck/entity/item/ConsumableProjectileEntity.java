@@ -3,8 +3,6 @@ package com.mraof.minestuck.entity.item;
 import com.mraof.minestuck.entity.underling.UnderlingEntity;
 import com.mraof.minestuck.item.MSItems;
 import com.mraof.minestuck.item.weapon.projectiles.ProjectileDamaging;
-import net.minecraft.network.protocol.Packet;
-import net.minecraft.network.protocol.game.ClientGamePacketListener;
 import net.minecraft.sounds.SoundEvents;
 import net.minecraft.sounds.SoundSource;
 import net.minecraft.world.entity.Entity;
@@ -18,7 +16,6 @@ import net.minecraft.world.item.ItemStack;
 import net.minecraft.world.level.Level;
 import net.minecraft.world.phys.EntityHitResult;
 import net.minecraft.world.phys.HitResult;
-import net.minecraftforge.network.NetworkHooks;
 
 public class ConsumableProjectileEntity extends ThrowableItemProjectile
 {
@@ -70,12 +67,6 @@ public class ConsumableProjectileEntity extends ThrowableItemProjectile
 	}
 	
 	@Override
-	public Packet<ClientGamePacketListener> getAddEntityPacket()
-	{
-		return NetworkHooks.getEntitySpawningPacket(this);
-	}
-	
-	@Override
 	protected Item getDefaultItem()
 	{
 		return MSItems.SHURIKEN.get();
@@ -83,7 +74,7 @@ public class ConsumableProjectileEntity extends ThrowableItemProjectile
 	
 	public ItemStack getItemFromItemStack()
 	{
-		ItemStack itemstack = this.getItemRaw();
+		ItemStack itemstack = this.getItem();
 		return itemstack.isEmpty() ? new ItemStack(this.getDefaultItem()) : itemstack;
 	}
 }

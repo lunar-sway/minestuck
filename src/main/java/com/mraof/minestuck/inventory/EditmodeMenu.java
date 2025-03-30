@@ -4,9 +4,9 @@ import com.mraof.minestuck.computer.editmode.DeployEntry;
 import com.mraof.minestuck.computer.editmode.DeployList;
 import com.mraof.minestuck.computer.editmode.EditData;
 import com.mraof.minestuck.computer.editmode.ServerEditHandler;
-import com.mraof.minestuck.network.EditmodeInventoryPacket;
-import com.mraof.minestuck.network.MSPacketHandler;
-import com.mraof.minestuck.skaianet.SburbConnection;
+import com.mraof.minestuck.network.editmode.EditmodeInventoryPackets;
+import com.mraof.minestuck.skaianet.SburbPlayerData;
+import net.minecraft.network.protocol.common.custom.CustomPacketPayload;
 import net.minecraft.server.level.ServerPlayer;
 import net.minecraft.util.Mth;
 import net.minecraft.world.Container;
@@ -16,6 +16,7 @@ import net.minecraft.world.entity.player.Player;
 import net.minecraft.world.inventory.AbstractContainerMenu;
 import net.minecraft.world.inventory.Slot;
 import net.minecraft.world.item.ItemStack;
+import net.neoforged.neoforge.network.PacketDistributor;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -94,17 +95,17 @@ public class EditmodeMenu extends AbstractContainerMenu
 		if(editData == null)
 			throw new IllegalStateException("Creating an editmode inventory menu, but the player is not in editmode");
 		List<ItemStack> itemList = new ArrayList<>();
-		SburbConnection c = editData.getConnection();
+		SburbPlayerData playerData = editData.sburbData();
 		List<ItemStack> tools = DeployList.getEditmodeTools();
 		//Fill list with harvestTool items when implemented
 		
-		List<DeployEntry> deployItems = DeployList.getItemList(player.getServer(), c, DeployList.EntryLists.DEPLOY);
-		deployItems.removeIf(deployEntry -> deployEntry.getCurrentCost(c) == null);
+		List<DeployEntry> deployItems = DeployList.getItemList(player.getServer(), playerData, DeployList.EntryLists.DEPLOY);
+		deployItems.removeIf(deployEntry -> deployEntry.getCurrentCost(playerData) == null);
 		
 		for(int i = 0; i < Math.max(tools.size(), deployItems.size()); i++)
 		{
 			itemList.add(i >= tools.size() ? ItemStack.EMPTY : tools.get(i));
-			itemList.add(i >= deployItems.size() ? ItemStack.EMPTY : deployItems.get(i).getItemStack(c, player.level()));
+			itemList.add(i >= deployItems.size() ? ItemStack.EMPTY : deployItems.get(i).getItemStack(playerData, player.level()));
 		}
 		
 		boolean changed = false;
@@ -136,17 +137,17 @@ public class EditmodeMenu extends AbstractContainerMenu
 			this.inventory.setItem(i, itemList.get(i));
 		}
 		
-		EditmodeInventoryPacket packet = EditmodeInventoryPacket.update(itemList, scroll > 0, scroll*2 + 14 < items.size());
-		MSPacketHandler.sendToPlayer(packet, serverPlayer);
+		CustomPacketPayload packet = new EditmodeInventoryPackets.Update(itemList, scroll > 0, scroll*2 + 14 < items.size());
+		PacketDistributor.sendToPlayer(serverPlayer, packet);
 	}
 	
-	public void receiveUpdatePacket(EditmodeInventoryPacket packet)
+	public void receiveUpdatePacket(EditmodeInventoryPackets.Update packet)
 	{
 		if(!player.level().isClientSide)
 			throw new IllegalStateException("Should not receive update packet here for server-side menu");
-		for(int i = 0; i < packet.getInventory().size(); i++)
+		for(int i = 0; i < packet.inventory().size(); i++)
 		{
-			inventory.setItem(i, packet.getInventory().get(i));
+			inventory.setItem(i, packet.inventory().get(i));
 		}
 	}
 	

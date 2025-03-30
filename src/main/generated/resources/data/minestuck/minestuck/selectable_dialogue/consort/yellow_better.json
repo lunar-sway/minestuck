@@ -1,0 +1,19 @@
+{
+  "condition": {
+    "type": "minestuck:list",
+    "conditions": [
+      {
+        "type": "minestuck:terrain_land_type",
+        "land_type": "minestuck:sand"
+      },
+      {
+        "type": "minestuck:terrain_land_type",
+        "land_type": "minestuck:sandstone"
+      }
+    ],
+    "list_type": "any"
+  },
+  "dialogue": "minestuck:consort/yellow_better",
+  "dialogue_weight": 10,
+  "keep_on_reset": false
+}

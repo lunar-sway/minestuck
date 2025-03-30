@@ -5,25 +5,25 @@ import com.mraof.minestuck.Minestuck;
 import com.mraof.minestuck.client.gui.MSScreenFactories;
 import com.mraof.minestuck.client.gui.playerStats.PlayerStatsScreen;
 import com.mraof.minestuck.computer.editmode.ClientEditHandler;
-import com.mraof.minestuck.network.CaptchaDeckPacket;
-import com.mraof.minestuck.network.EffectTogglePacket;
-import com.mraof.minestuck.network.MSPacketHandler;
+import com.mraof.minestuck.network.CaptchaDeckPackets;
+import com.mraof.minestuck.network.ToggleAspectEffectsPacket;
 import com.mraof.minestuck.player.ClientPlayerData;
 import net.minecraft.client.KeyMapping;
 import net.minecraft.client.Minecraft;
 import net.minecraft.client.gui.screens.inventory.AbstractContainerScreen;
 import net.minecraft.client.gui.screens.inventory.CreativeModeInventoryScreen;
 import net.minecraft.world.inventory.Slot;
-import net.minecraftforge.api.distmarker.Dist;
-import net.minecraftforge.client.event.InputEvent;
-import net.minecraftforge.client.event.RegisterKeyMappingsEvent;
-import net.minecraftforge.client.event.ScreenEvent;
-import net.minecraftforge.client.settings.KeyConflictContext;
-import net.minecraftforge.eventbus.api.SubscribeEvent;
-import net.minecraftforge.fml.common.Mod;
+import net.neoforged.api.distmarker.Dist;
+import net.neoforged.bus.api.SubscribeEvent;
+import net.neoforged.fml.common.EventBusSubscriber;
+import net.neoforged.neoforge.client.event.InputEvent;
+import net.neoforged.neoforge.client.event.RegisterKeyMappingsEvent;
+import net.neoforged.neoforge.client.event.ScreenEvent;
+import net.neoforged.neoforge.client.settings.KeyConflictContext;
+import net.neoforged.neoforge.network.PacketDistributor;
 import org.lwjgl.glfw.GLFW;
 
-@Mod.EventBusSubscriber(modid = Minestuck.MOD_ID, bus = Mod.EventBusSubscriber.Bus.FORGE, value = Dist.CLIENT)
+@EventBusSubscriber(modid = Minestuck.MOD_ID, bus = EventBusSubscriber.Bus.GAME, value = Dist.CLIENT)
 public class MSKeyHandler
 {
 	public static final String CATEGORY = "key.categories.minestuck";
@@ -90,7 +90,7 @@ public class MSKeyHandler
 				captchalogueInGame();
 			
 			if(effectToggleKey.isActiveAndMatches(input))
-				MSPacketHandler.sendToServer(new EffectTogglePacket());
+				PacketDistributor.sendToServer(new ToggleAspectEffectsPacket());
 			
 			if(sylladexKey.isActiveAndMatches(input) && ClientPlayerData.getModus() != null)
 				MSScreenFactories.displaySylladexScreen(ClientPlayerData.getModus());
@@ -101,7 +101,7 @@ public class MSKeyHandler
 	private static void captchalogueInGame()
 	{
 		if(!Minecraft.getInstance().player.getMainHandItem().isEmpty())
-			MSPacketHandler.sendToServer(CaptchaDeckPacket.captchalogue());
+			PacketDistributor.sendToServer(new CaptchaDeckPackets.CaptchalogueHeldItem());
 	}
 	
 	private static void captchalogueInGui(AbstractContainerScreen<?> screen)
@@ -110,7 +110,7 @@ public class MSKeyHandler
 		{
 			Slot slot = screen.getSlotUnderMouse();
 			if(slot != null && slot.hasItem())
-				MSPacketHandler.sendToServer(CaptchaDeckPacket.captchalogueInv(slot.index, screen.getMenu().containerId));
+				PacketDistributor.sendToServer(new CaptchaDeckPackets.CaptchalogueInventorySlot(slot.index, screen.getMenu().containerId));
 		}
 	}
 }

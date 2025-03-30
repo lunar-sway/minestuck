@@ -1,0 +1,9 @@
+{
+  "condition": {
+    "type": "minestuck:title_land_type",
+    "land_type": "minestuck:rabbits"
+  },
+  "dialogue": "minestuck:consort_food_merchant/rabbit",
+  "dialogue_weight": 10,
+  "keep_on_reset": true
+}

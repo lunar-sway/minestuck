@@ -1,0 +1,32 @@
+{
+  "node": {
+    "animation": {},
+    "gui": "minestuck:textures/gui/dialogue/dialogue.png",
+    "message": "minestuck.dialogue.consort.cult.disappointment",
+    "responses": [
+      {
+        "condition": {
+          "type": "minestuck:item_tag_match",
+          "tag": "minestuck:magic_weapon"
+        },
+        "hide_if_failed": true,
+        "message": {
+          "arguments": [
+            "matched_item"
+          ],
+          "key": "minestuck.dialogue.consort.cult.disappointment.argue"
+        },
+        "next_dialogue": "minestuck:consort/cult/exchange",
+        "triggers": []
+      },
+      {
+        "condition": {
+          "type": "minestuck:always_true"
+        },
+        "hide_if_failed": true,
+        "message": "minestuck.dialogue.consort.cult.disappointment.resign",
+        "triggers": []
+      }
+    ]
+  }
+}

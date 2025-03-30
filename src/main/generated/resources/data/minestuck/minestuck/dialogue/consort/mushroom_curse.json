@@ -1,0 +1,15 @@
+{
+  "node": {
+    "animation": {
+      "emotion": "angry"
+    },
+    "gui": "minestuck:textures/gui/dialogue/dialogue.png",
+    "message": {
+      "arguments": [
+        "land_denizen"
+      ],
+      "key": "minestuck.dialogue.consort.mushroom_curse"
+    },
+    "responses": []
+  }
+}

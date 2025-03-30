@@ -2,7 +2,8 @@ package com.mraof.minestuck.block;
 
 import com.mraof.minestuck.blockentity.ItemStackBlockEntity;
 import com.mraof.minestuck.client.gui.MSScreenFactories;
-import com.mraof.minestuck.item.block.StoneTabletItem;
+import com.mraof.minestuck.item.components.StoneTabletTextComponent;
+import net.minecraft.MethodsReturnNonnullByDefault;
 import net.minecraft.core.BlockPos;
 import net.minecraft.core.Direction;
 import net.minecraft.world.InteractionHand;
@@ -10,8 +11,8 @@ import net.minecraft.world.InteractionResult;
 import net.minecraft.world.entity.player.Player;
 import net.minecraft.world.item.ItemStack;
 import net.minecraft.world.item.context.BlockPlaceContext;
-import net.minecraft.world.level.BlockGetter;
 import net.minecraft.world.level.Level;
+import net.minecraft.world.level.LevelReader;
 import net.minecraft.world.level.block.Block;
 import net.minecraft.world.level.block.EntityBlock;
 import net.minecraft.world.level.block.entity.BlockEntity;
@@ -22,10 +23,14 @@ import net.minecraft.world.level.material.PushReaction;
 import net.minecraft.world.level.storage.loot.LootParams;
 import net.minecraft.world.level.storage.loot.parameters.LootContextParams;
 import net.minecraft.world.phys.BlockHitResult;
+import net.minecraft.world.phys.HitResult;
 
 import javax.annotation.Nullable;
+import javax.annotation.ParametersAreNonnullByDefault;
 import java.util.List;
 
+@ParametersAreNonnullByDefault
+@MethodsReturnNonnullByDefault
 public class StoneTabletBlock extends CustomShapeBlock implements EntityBlock //stone slab is the same as stone tablet, both are used in different circumstances
 {
 	public static final BooleanProperty CARVED = MSProperties.CARVED;
@@ -46,8 +51,7 @@ public class StoneTabletBlock extends CustomShapeBlock implements EntityBlock //
 	}
 	
 	@Override
-	@SuppressWarnings("deprecation")
-	public List<ItemStack> getDrops(BlockState state, LootParams.Builder builder)
+	protected List<ItemStack> getDrops(BlockState state, LootParams.Builder builder)
 	{
 		if(builder.getOptionalParameter(LootContextParams.BLOCK_ENTITY) instanceof ItemStackBlockEntity itemBE)
 		{
@@ -58,15 +62,14 @@ public class StoneTabletBlock extends CustomShapeBlock implements EntityBlock //
 	}
 	
 	@Override
-	@SuppressWarnings("deprecation")
-	public InteractionResult use(BlockState state, Level level, BlockPos pos, Player player, InteractionHand hand, BlockHitResult hit)
+	protected InteractionResult useWithoutItem(BlockState state, Level level, BlockPos pos, Player player, BlockHitResult hit)
 	{
 		if(!player.isShiftKeyDown())
 		{
 			if(level.isClientSide && level.getBlockEntity(pos) instanceof ItemStackBlockEntity itemStackBE)
 			{
-				String text = StoneTabletItem.hasText(itemStackBE.getStack()) ? itemStackBE.getStack().getTag().getString("text") : "";
-				MSScreenFactories.displayStoneTabletScreen(player, hand, text, false);
+				String text = StoneTabletTextComponent.getText(itemStackBE.getStack());
+				MSScreenFactories.displayStoneTabletScreen(player, InteractionHand.MAIN_HAND, text, false);
 			}
 		} else
 		{
@@ -77,6 +80,7 @@ public class StoneTabletBlock extends CustomShapeBlock implements EntityBlock //
 		return InteractionResult.SUCCESS;
 	}
 	
+	@Nullable
 	@Override
 	public BlockState getStateForPlacement(BlockPlaceContext context)
 	{
@@ -84,8 +88,7 @@ public class StoneTabletBlock extends CustomShapeBlock implements EntityBlock //
 	}
 	
 	@Override
-	@SuppressWarnings("deprecation")
-	public ItemStack getCloneItemStack(BlockGetter level, BlockPos pos, BlockState state)
+	public ItemStack getCloneItemStack(BlockState state, HitResult target, LevelReader level, BlockPos pos, Player player)
 	{
 		if(level.getBlockEntity(pos) instanceof ItemStackBlockEntity blockEntity)
 		{
@@ -93,7 +96,7 @@ public class StoneTabletBlock extends CustomShapeBlock implements EntityBlock //
 			if(!tabletItemStack.isEmpty())
 				return tabletItemStack.copy();
 		}
-		return super.getCloneItemStack(level, pos, state);
+		return super.getCloneItemStack(state, target, level, pos, player);
 	}
 	
 	public static void dropTablet(Level level, BlockPos pos)
@@ -107,7 +110,6 @@ public class StoneTabletBlock extends CustomShapeBlock implements EntityBlock //
 	}
 	
 	@Override
-	@SuppressWarnings("deprecation")
 	public PushReaction getPistonPushReaction(BlockState state)
 	{
 		return PushReaction.DESTROY;

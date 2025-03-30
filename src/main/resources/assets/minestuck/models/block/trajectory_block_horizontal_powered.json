@@ -4,7 +4,7 @@
         "down": "minestuck:block/redstone_machine_block",
         "up": "minestuck:block/redstone_machine_block",
         "north": "minestuck:block/redstone_machine_block",
-        "south": "minestuck:block/trajectory_block_horizontal_top_powered",
+        "south": "minestuck:block/trajectory_block/horizontal_top_powered",
         "west": "minestuck:block/redstone_machine_block",
         "east": "minestuck:block/redstone_machine_block",
         "particle": "minestuck:block/redstone_machine_block"

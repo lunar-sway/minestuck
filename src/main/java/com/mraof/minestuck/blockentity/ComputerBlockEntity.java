@@ -1,163 +1,176 @@
 package com.mraof.minestuck.blockentity;
 
+import com.mojang.serialization.Codec;
 import com.mraof.minestuck.MinestuckConfig;
 import com.mraof.minestuck.block.machine.ComputerBlock;
-import com.mraof.minestuck.client.gui.ComputerScreen;
-import com.mraof.minestuck.computer.ComputerReference;
-import com.mraof.minestuck.computer.ISburbComputer;
-import com.mraof.minestuck.computer.ProgramData;
-import com.mraof.minestuck.computer.Theme;
+import com.mraof.minestuck.computer.*;
 import com.mraof.minestuck.computer.editmode.ServerEditHandler;
+import com.mraof.minestuck.computer.theme.MSComputerThemes;
+import com.mraof.minestuck.item.MSItems;
+import com.mraof.minestuck.item.components.MSItemComponents;
+import com.mraof.minestuck.network.MSPacket;
 import com.mraof.minestuck.player.IdentifierHandler;
 import com.mraof.minestuck.player.PlayerIdentifier;
-import com.mraof.minestuck.skaianet.SburbConnection;
-import com.mraof.minestuck.skaianet.SkaianetHandler;
-import com.mraof.minestuck.util.MSNBTUtil;
-import com.mraof.minestuck.util.MSTags;
+import net.minecraft.MethodsReturnNonnullByDefault;
+import net.minecraft.commands.Commands;
 import net.minecraft.core.BlockPos;
+import net.minecraft.core.Holder;
+import net.minecraft.core.HolderLookup;
+import net.minecraft.core.NonNullList;
 import net.minecraft.nbt.CompoundTag;
-import net.minecraft.nbt.IntArrayTag;
+import net.minecraft.nbt.NbtOps;
 import net.minecraft.nbt.Tag;
 import net.minecraft.network.protocol.Packet;
 import net.minecraft.network.protocol.game.ClientGamePacketListener;
 import net.minecraft.network.protocol.game.ClientboundBlockEntityDataPacket;
-import net.minecraft.server.MinecraftServer;
+import net.minecraft.resources.ResourceLocation;
+import net.minecraft.server.level.ServerLevel;
 import net.minecraft.server.level.ServerPlayer;
-import net.minecraft.server.players.ServerOpListEntry;
-import net.minecraft.util.RandomSource;
-import net.minecraft.world.entity.item.ItemEntity;
+import net.minecraft.world.Containers;
 import net.minecraft.world.item.ItemStack;
+import net.minecraft.world.item.Items;
 import net.minecraft.world.level.block.Block;
 import net.minecraft.world.level.block.entity.BlockEntity;
 import net.minecraft.world.level.block.state.BlockState;
+import org.apache.logging.log4j.LogManager;
+import org.apache.logging.log4j.Logger;
 
-import javax.annotation.Nonnull;
 import javax.annotation.Nullable;
-import java.util.HashSet;
-import java.util.Hashtable;
-import java.util.Map.Entry;
+import javax.annotation.ParametersAreNonnullByDefault;
+import java.util.HashMap;
+import java.util.Map;
 import java.util.Objects;
-import java.util.Set;
-import java.util.function.Consumer;
+import java.util.Optional;
+import java.util.function.Function;
+import java.util.function.Supplier;
+import java.util.stream.Stream;
 
-public class ComputerBlockEntity extends BlockEntity implements ISburbComputer
+@ParametersAreNonnullByDefault
+@MethodsReturnNonnullByDefault
+public final class ComputerBlockEntity extends BlockEntity implements ISburbComputer
 {
-	//TODO The implementation of this class need a serious rewrite
+	private static final Logger LOGGER = LogManager.getLogger();
+	private static final int PROGRAM_DISK_CAPACITY = 2, BLANK_DISK_CAPACITY = 2;
+	private static final Codec<NonNullList<ItemStack>> DISK_LIST_CODEC = NonNullList.codecOf(ItemStack.SINGLE_ITEM_CODEC);
+	
+	@Nullable
+	private Runnable guiCallback = null;
+	
+	@Nullable
+	private PlayerIdentifier owner;
+	//client side only
+	private int ownerId;
+	
+	private final NonNullList<ItemStack> programDisks = NonNullList.createWithCapacity(PROGRAM_DISK_CAPACITY);
+	private final NonNullList<ItemStack> blankDisks = NonNullList.createWithCapacity(BLANK_DISK_CAPACITY);
+	
+	private final Map<ProgramType<?>, ProgramType.Data> existingPrograms = new HashMap<>();
+	private ResourceLocation computerTheme = MSComputerThemes.DEFAULT;
+	
 	public ComputerBlockEntity(BlockPos pos, BlockState state)
 	{
 		super(MSBlockEntityTypes.COMPUTER.get(), pos, state);
 		
 		// always should exist on computers
-		this.installedPrograms.add(2);
-		this.installedPrograms.add(3);
+		insertNewProgramInstance(ProgramTypes.DISK_BURNER.get());
+		insertNewProgramInstance(ProgramTypes.SETTINGS.get());
 	}
 	
-	/**
-	 * 0 = client, 1 = server, 2 = disk burner, 3 = settings
-	 */
-	public HashSet<Integer> installedPrograms = new HashSet<>();
-	public ComputerScreen gui;
-	public PlayerIdentifier owner;
-	//client side only
-	public int ownerId;
-	public Hashtable<Integer, String> latestmessage = new Hashtable<>();
-	public CompoundTag programData = new CompoundTag();
-	public int programSelected = -1;
-	@Nonnull
-	public Set<Block> hieroglyphsStored = new HashSet<>();
-	public boolean hasParadoxInfoStored = false; //sburb code component received from the lotus flower
-	public int blankDisksStored;
-	private Theme theme = Theme.DEFAULT;
-	
 	@Override
-	public void load(CompoundTag nbt)
+	protected void loadAdditional(CompoundTag tag, HolderLookup.Provider pRegistries)
 	{
-		super.load(nbt);
+		super.loadAdditional(tag, pRegistries);
 		
-		if(nbt.contains("programs"))
+		this.programDisks.clear();
+		if(tag.contains("program_disks"))
+			DISK_LIST_CODEC.parse(NbtOps.INSTANCE, tag.get("program_disks"))
+					.resultOrPartial(LOGGER::error).ifPresent(this.programDisks::addAll);
+		this.blankDisks.clear();
+		DISK_LIST_CODEC.parse(NbtOps.INSTANCE, tag.get("blank_disks"))
+				.resultOrPartial(LOGGER::error).ifPresent(this.blankDisks::addAll);
+		
+		CompoundTag programs = tag.getCompound("programs");
+		for(String programKey : programs.getAllKeys())
 		{
-			if (nbt.contains("programs", Tag.TAG_INT_ARRAY))
+			ProgramType<?> programType = ResourceLocation.read(programKey).result()
+					.flatMap(ProgramTypes.REGISTRY::getOptional).orElse(null);
+			if(programType == null)
 			{
-				for(int id : nbt.getIntArray("programs"))
-					installedPrograms.add(id);
+				LOGGER.error("Unknown program type by name \"{}\" in computer data.", programKey);
+				continue;
 			}
-			else
-			{
-				CompoundTag programs = nbt.getCompound("programs");
-				for(String name : programs.getAllKeys())
-					installedPrograms.add(programs.getInt(name));
-			}
+			insertNewProgramInstance(programType).read(programs.getCompound(programKey));
 		}
 		
-		latestmessage.clear();
-		for(int id : installedPrograms)
-			latestmessage.put(id, nbt.getString("text" + id));
+		if(tag.contains("theme", Tag.TAG_STRING))
+			computerTheme = Objects.requireNonNullElse(ResourceLocation.tryParse(tag.getString("theme")), computerTheme);
+		// Backwards-compatibility with Minestuck-1.20.1-1.11.2.0 and earlier
+		else if(tag.contains("theme", Tag.TAG_INT))
+			computerTheme = MSComputerThemes.getThemeFromOldOrdinal(tag.getInt("theme"));
 		
-		programData = nbt.getCompound("programData");
-		if(nbt.contains("theme"))
-			theme = Theme.values()[nbt.getInt("theme")];
-		
-		hieroglyphsStored = MSNBTUtil.readBlockSet(nbt, "hieroglyphsStored");
-		if(nbt.contains("hasParadoxInfoStored"))
-			hasParadoxInfoStored = nbt.getBoolean("hasParadoxInfoStored");
-		if(nbt.contains("blankDisksStored"))
-			blankDisksStored = nbt.getInt("blankDisksStored");
-		
-		if(nbt.contains("ownerId"))
-			ownerId = nbt.getInt("ownerId");
-		else this.owner = IdentifierHandler.load(nbt, "owner");
+		if(tag.contains("ownerId"))
+			ownerId = tag.getInt("ownerId");
+		else this.owner = IdentifierHandler.load(tag, "owner").result().orElse(null);
 		
 		//keep this after everything else has been loaded
-		if(gui != null)
-			gui.updateGui();
+		if(guiCallback != null)
+			guiCallback.run();
 	}
 	
 	@Override
-	public void saveAdditional(CompoundTag compound)
+	public void saveAdditional(CompoundTag tag, HolderLookup.Provider provider)
 	{
-		super.saveAdditional(compound);
+		super.saveAdditional(tag, provider);
 		
-		for(Entry<Integer, String> e : latestmessage.entrySet())
-			compound.putString("text" + e.getKey(), e.getValue());
-		
-		
-		compound.put("programs", new IntArrayTag(installedPrograms.stream().toList()));
-		compound.put("programData", programData.copy());
+		tag.put("program_disks", DISK_LIST_CODEC.encodeStart(NbtOps.INSTANCE, this.blankDisks).result().orElseThrow());
 		
 		if(owner != null)
-			owner.saveToNBT(compound, "owner");
+			owner.saveToNBT(tag, "owner");
 		
-		MSNBTUtil.writeBlockSet(compound, "hieroglyphsStored", hieroglyphsStored);
-		compound.putBoolean("hasParadoxInfoStored", hasParadoxInfoStored);
-		
-		compound.putInt("blankDisksStored", blankDisksStored);
-		
-		compound.putInt("theme", theme.ordinal());
+		writeSharedData(tag, ProgramType.Data::write);
 	}
 	
 	@Override
-	public CompoundTag getUpdateTag()
+	public CompoundTag getUpdateTag(HolderLookup.Provider provider)
 	{
-		CompoundTag tagCompound = this.saveWithoutMetadata();
-		tagCompound.remove("owner");
-		tagCompound.remove("ownerMost");
-		tagCompound.remove("ownerLeast");
+		CompoundTag compoundtag = new CompoundTag();
+		super.saveAdditional(compoundtag, provider);
+		
 		if(owner != null)
-			tagCompound.putInt("ownerId", owner.getId());
-		if(hasProgram(1))
+			compoundtag.putInt("ownerId", owner.getId());
+		
+		writeSharedData(compoundtag, programData -> programData.writeForSync(this, getLevel().getServer()));
+		
+		return compoundtag;
+	}
+	
+	private void writeSharedData(CompoundTag tag, Function<ProgramType.Data, CompoundTag> serializer)
+	{
+		tag.put("blank_disks", DISK_LIST_CODEC.encodeStart(NbtOps.INSTANCE, this.blankDisks).result().orElseThrow());
+		
+		CompoundTag programs = new CompoundTag();
+		for(Map.Entry<ProgramType<?>, ProgramType.Data> entry : this.existingPrograms.entrySet())
 		{
-			SburbConnection c = SkaianetHandler.get(getLevel()).getServerConnection(this);
-			if(c != null)
-				tagCompound.getCompound("programData").getCompound("program_1").putInt("connectedClient", c.getClientIdentifier().getId());
+			String programKey = Objects.requireNonNull(ProgramTypes.REGISTRY.getKey(entry.getKey())).toString();
+			programs.put(programKey, serializer.apply(entry.getValue()));
 		}
-		return tagCompound;
+		tag.put("programs", programs);
+		
+		tag.putString("theme", computerTheme.toString());
 	}
 	
-	@Nullable
 	@Override
 	public Packet<ClientGamePacketListener> getUpdatePacket()
 	{
 		return ClientboundBlockEntityDataPacket.create(this);
+	}
+	
+	@Override
+	public void onLoad()
+	{
+		super.onLoad();
+		for(ProgramType<?> programType : this.existingPrograms.keySet())
+			programType.eventHandler().onLoad(this);
 	}
 	
 	public boolean isBroken()
@@ -165,43 +178,94 @@ public class ComputerBlockEntity extends BlockEntity implements ISburbComputer
 		return getBlockState().getValue(ComputerBlock.STATE) == ComputerBlock.State.BROKEN;
 	}
 	
-	public boolean hasProgram(int id)
+	public boolean hasProgram(ProgramType<?> programType)
 	{
-		return installedPrograms.contains(id);
+		return this.existingPrograms.containsKey(programType);
 	}
 	
-	public CompoundTag getData(int id)
+	private <D extends ProgramType.Data> D insertNewProgramInstance(ProgramType<D> programType)
 	{
-		if(!programData.contains("program_" + id))
-			programData.put("program_" + id, new CompoundTag());
-		return programData.getCompound("program_" + id);
+		D data = programType.newDataInstance(this::markDirtyAndResend);
+		this.existingPrograms.put(programType, data);
+		return data;
+	}
+	
+	public <D extends ProgramType.Data> Optional<D> getProgramData(Supplier<ProgramType<D>> type)
+	{
+		return this.getProgramData(type.get());
+	}
+	
+	@SuppressWarnings("unchecked")
+	public <D extends ProgramType.Data> Optional<D> getProgramData(ProgramType<D> type)
+	{
+		return Optional.ofNullable((D) this.existingPrograms.get(type));
+	}
+	
+	@Override
+	public Optional<SburbClientData> getSburbClientData()
+	{
+		return this.getProgramData(ProgramTypes.SBURB_CLIENT);
+	}
+	
+	@Override
+	public Optional<SburbServerData> getSburbServerData()
+	{
+		return this.getProgramData(ProgramTypes.SBURB_SERVER);
+	}
+	
+	public boolean hasBlankDisks()
+	{
+		return !this.blankDisks.isEmpty();
+	}
+	
+	public boolean tryTakeBlankDisk()
+	{
+		if(!this.blankDisks.isEmpty())
+		{
+			this.blankDisks.removeLast();
+			this.markDirtyAndResend();
+			return true;
+		}
+		return false;
+	}
+	
+	public void dropItems()
+	{
+		if(this.level == null)
+			return;
+		
+		Containers.dropContents(this.level, this.getBlockPos(), this.programDisks);
+		Containers.dropContents(this.level, this.getBlockPos(), this.blankDisks);
 	}
 	
 	public void closeAll()
 	{
-		for(int id : installedPrograms.stream().filter(i->i!=-1).toList())
-			ProgramData.closeProgram(id, this);
+		for(ProgramType<?> programType : this.existingPrograms.keySet())
+			programType.eventHandler().onClosed(this);
 	}
 	
-	@Override
-	public void connected(PlayerIdentifier player, boolean isClient)
+	public Stream<ProgramType<?>> installedPrograms()
 	{
-		if(isClient)
-		{
-			getData(0).putBoolean("isResuming", false);
-			getData(0).putBoolean("connectedToServer", true);
-		} else
-		{
-			getData(1).putBoolean("isOpen", false);
-		}
-		setChanged();
-		markBlockForUpdate();
+		return this.existingPrograms.keySet().stream();
 	}
 	
+	@Nullable
 	@Override
 	public PlayerIdentifier getOwner()
 	{
 		return owner;
+	}
+	
+	public void initializeOwner(PlayerIdentifier owner)
+	{
+		if(this.owner != null)
+			throw new IllegalStateException("Not allowed to set computer owner in this state");
+		this.owner = owner;
+	}
+	
+	public int clientSideOwnerId()
+	{
+		return this.ownerId;
 	}
 	
 	@Override
@@ -210,123 +274,92 @@ public class ComputerBlockEntity extends BlockEntity implements ISburbComputer
 		return ComputerReference.of(this);
 	}
 	
-	@Override
-	public boolean getClientBoolean(String name)
+	public ResourceLocation getTheme()
 	{
-		return getData(0).getBoolean(name);
-	}
-	@Override
-	public boolean getServerBoolean(String name)
-	{
-		return getData(1).getBoolean(name);
+		return computerTheme;
 	}
 	
-	@Override
-	public void putClientBoolean(String name, boolean value)
+	public void setTheme(ResourceLocation themeId)
 	{
-		getData(0).putBoolean(name, value);
-		setChanged();
-		markBlockForUpdate();
-	}
-	@Override
-	public void putServerBoolean(String name, boolean value)
-	{
-		getData(1).putBoolean(name, value);
-		setChanged();
-		markBlockForUpdate();
+		this.computerTheme = themeId;
+		markDirtyAndResend();
 	}
 	
-	@Override
-	public void clearConnectedClient()
+	public boolean tryInsertDisk(ItemStack stackInHand)
 	{
-		getData(1).putString("connectedClient", "");
-		setChanged();
-		markBlockForUpdate();
-	}
-	
-	@Override
-	public void putClientMessage(String message)
-	{
-		latestmessage.put(0, message);
-		setChanged();
-		markBlockForUpdate();
-	}
-	
-	@Override
-	public void putServerMessage(String message)
-	{
-		latestmessage.put(1, message);
-		setChanged();
-		markBlockForUpdate();
-	}
-	
-	@Override
-	public Theme getTheme()
-	{
-		return theme;
-	}
-	
-	@Override
-	public void setTheme(Theme theme)
-	{
-		this.theme = theme;
-		setChanged();
-		markBlockForUpdate();
-	}
-	
-	public void burnDisk(int programId)
-	{
-		if(level == null)
-			return;
+		if(isBroken() || level == null)
+			return false;
 		
-		BlockPos bePos = getBlockPos();
-		ItemStack diskStack = ProgramData.getItem(programId);
-		if(!diskStack.isEmpty() && blankDisksStored > 0 && hasAllCode())
+		@Nullable
+		Holder<ProgramType<?>> optionalType = stackInHand.get(MSItemComponents.PROGRAM_TYPE);
+		
+		if(stackInHand.is(MSItems.BLANK_DISK))
 		{
-			RandomSource random = level.getRandom();
-			
-			float rx = random.nextFloat() * 0.8F + 0.1F;
-			float ry = random.nextFloat() * 0.8F + 0.1F;
-			float rz = random.nextFloat() * 0.8F + 0.1F;
-			
-			ItemEntity entityItem = new ItemEntity(level, bePos.getX() + rx, bePos.getY() + ry, bePos.getZ() + rz, diskStack);
-			entityItem.setDeltaMovement(random.nextGaussian() * 0.05F, random.nextGaussian() * 0.05F + 0.2F, random.nextGaussian() * 0.05F);
-			level.addFreshEntity(entityItem);
-			
-			blankDisksStored--;
-			
-			//Imitates the structure block to ensure that changes are sent client-side
-			setChanged();
-			markBlockForUpdate();
-		}
-	}
-	
-	/**
-	 * Returns true if the block entity has the paradox info and all the hieroglyphs
-	 */
-	public boolean hasAllCode()
-	{
-		return hasParadoxInfoStored && hieroglyphsStored.containsAll(MSTags.getBlocksFromTag(MSTags.Blocks.GREEN_HIEROGLYPHS));
-	}
-	
-	public void markBlockForUpdate()
-	{
-		if(level==null) return;
-		BlockState state = level.getBlockState(worldPosition);
-		this.level.sendBlockUpdated(worldPosition, state, state, 3);
-	}
-	
-	public static void forNetworkIfPresent(ServerPlayer player, BlockPos pos, Consumer<ComputerBlockEntity> consumer)
-	{
-		if(player.level().isAreaLoaded(pos, 0))    //TODO also check distance to the computer pos (together with a continual check clientside)
-		{
-			if(player.level().getBlockEntity(pos) instanceof ComputerBlockEntity computer && !computer.isBroken())
+			if(this.blankDisks.size() < BLANK_DISK_CAPACITY)
 			{
-				MinecraftServer mcServer = Objects.requireNonNull(player.getServer());
-				ServerOpListEntry opsEntry = mcServer.getPlayerList().getOps().get(player.getGameProfile());
-				if((!MinestuckConfig.SERVER.privateComputers.get() || IdentifierHandler.encode(player) == computer.owner || opsEntry != null && opsEntry.getLevel() >= 2) && ServerEditHandler.getData(player) == null)
-					consumer.accept(computer);
+				this.blankDisks.add(stackInHand.split(1));
+				markDirtyAndResend();
+				return true;
 			}
+		} else if(stackInHand.is(Items.MUSIC_DISC_11))
+		{
+			if(!level.isClientSide && this.programDisks.size() < PROGRAM_DISK_CAPACITY)
+			{
+				this.programDisks.add(stackInHand.split(1));
+				closeAll();
+				level.setBlock(getBlockPos(), getBlockState().setValue(ComputerBlock.STATE, ComputerBlock.State.BROKEN), Block.UPDATE_CLIENTS);
+				markDirtyAndResend();
+			}
+			return true;
+		} else if(optionalType != null)
+		{
+			ProgramType<?> programType = optionalType.value();
+			if(!level.isClientSide && !hasProgram(programType) && this.programDisks.size() < PROGRAM_DISK_CAPACITY)
+			{
+				this.programDisks.add(stackInHand.split(1));
+				insertNewProgramInstance(programType);
+				level.setBlock(getBlockPos(), getBlockState().setValue(ComputerBlock.STATE, ComputerBlock.State.GAME_LOADED), Block.UPDATE_CLIENTS);
+				markDirtyAndResend();
+				programType.eventHandler().onDiskInserted(this);
+			}
+			return true;
 		}
+		
+		return false;
+	}
+	
+	public void setGuiCallback(Runnable guiCallback)
+	{
+		if(this.level == null || !this.level.isClientSide())
+			throw new IllegalStateException("Tried to set gui callback in a non-client context");
+		this.guiCallback = guiCallback;
+	}
+	
+	private void markDirtyAndResend()
+	{
+		setChanged();
+		if(level instanceof ServerLevel serverLevel)
+			serverLevel.getChunkSource().blockChanged(worldPosition);
+	}
+	
+	public static Optional<ComputerBlockEntity> getAccessibleComputer(ServerPlayer player, BlockPos pos)
+	{
+		return MSPacket.getAccessibleBlockEntity(player, pos, ComputerBlockEntity.class)
+				.filter(computer -> computer.canAccessComputer(player));
+	}
+	
+	public boolean canAccessComputer(ServerPlayer player)
+	{
+		if(this.isBroken())
+			return false;
+		if(ServerEditHandler.isInEditmode(player))
+			return false;
+		
+		if(MinestuckConfig.SERVER.privateComputers.get())
+		{
+			return (this.owner != null && this.owner.appliesTo(player))
+					|| player.hasPermissions(Commands.LEVEL_GAMEMASTERS);
+		} else
+			return true;
 	}
 }

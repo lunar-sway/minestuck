@@ -2,8 +2,8 @@ package com.mraof.minestuck.client.gui;
 
 import com.mojang.blaze3d.systems.RenderSystem;
 import com.mraof.minestuck.Minestuck;
-import com.mraof.minestuck.inventory.MiniTotemLatheMenu;
 import com.mraof.minestuck.blockentity.machine.MiniTotemLatheBlockEntity;
+import com.mraof.minestuck.inventory.MiniTotemLatheMenu;
 import net.minecraft.client.gui.GuiGraphics;
 import net.minecraft.network.chat.Component;
 import net.minecraft.resources.ResourceLocation;
@@ -14,8 +14,8 @@ import javax.annotation.ParametersAreNonnullByDefault;
 @ParametersAreNonnullByDefault
 public class MiniTotemLatheScreen extends MachineScreen<MiniTotemLatheMenu>
 {
-	private static final ResourceLocation BACKGROUND_TEXTURE = new ResourceLocation(Minestuck.MOD_ID, "textures/gui/totem_lathe.png");
-	private static final ResourceLocation PROGRESS_BAR_TEXTURE = new ResourceLocation(Minestuck.MOD_ID, "textures/gui/progress/totem_lathe.png");
+	private static final ResourceLocation BACKGROUND_TEXTURE = ResourceLocation.fromNamespaceAndPath(Minestuck.MOD_ID, "textures/gui/totem_lathe.png");
+	private static final ResourceLocation PROGRESS_BAR_TEXTURE = ResourceLocation.fromNamespaceAndPath(Minestuck.MOD_ID, "textures/gui/progress/totem_lathe.png");
 	private static final int PROGRESS_BAR_X = 81;
 	private static final int PROGRESS_BAR_Y = 33;
 	private static final int PROGRESS_BAR_WIDTH = 44;
@@ -31,7 +31,6 @@ public class MiniTotemLatheScreen extends MachineScreen<MiniTotemLatheMenu>
 	@Override
 	public void render(GuiGraphics guiGraphics, int mouseX, int mouseY, float partialTicks)
 	{
-		this.renderBackground(guiGraphics);
 		super.render(guiGraphics, mouseX, mouseY, partialTicks);
 		this.renderTooltip(guiGraphics, mouseX, mouseY);
 	}

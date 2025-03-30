@@ -1,14 +1,18 @@
 package com.mraof.minestuck.blockentity.machine;
 
-import com.mraof.minestuck.alchemy.*;
+import com.mraof.minestuck.alchemy.GristHelper;
+import com.mraof.minestuck.api.alchemy.GristAmount;
+import com.mraof.minestuck.api.alchemy.GristSet;
+import com.mraof.minestuck.api.alchemy.GristType;
+import com.mraof.minestuck.api.alchemy.GristTypes;
 import com.mraof.minestuck.api.alchemy.recipe.GristCostRecipe;
-import com.mraof.minestuck.api.alchemy.*;
 import com.mraof.minestuck.blockentity.MSBlockEntityTypes;
-import com.mraof.minestuck.inventory.*;
+import com.mraof.minestuck.inventory.AnthvilMenu;
 import com.mraof.minestuck.player.GristCache;
-import com.mraof.minestuck.util.ExtraForgeTags;
+import com.mraof.minestuck.util.ExtraModTags;
 import net.minecraft.core.BlockPos;
 import net.minecraft.core.Direction;
+import net.minecraft.core.HolderLookup;
 import net.minecraft.nbt.CompoundTag;
 import net.minecraft.network.chat.Component;
 import net.minecraft.server.level.ServerPlayer;
@@ -21,14 +25,10 @@ import net.minecraft.world.inventory.DataSlot;
 import net.minecraft.world.item.ItemStack;
 import net.minecraft.world.level.Level;
 import net.minecraft.world.level.block.state.BlockState;
-import net.minecraftforge.common.capabilities.Capability;
-import net.minecraftforge.common.capabilities.ForgeCapabilities;
-import net.minecraftforge.common.util.LazyOptional;
-import net.minecraftforge.items.IItemHandler;
-import net.minecraftforge.items.ItemStackHandler;
-import net.minecraftforge.items.wrapper.RangedWrapper;
+import net.neoforged.neoforge.items.IItemHandler;
+import net.neoforged.neoforge.items.ItemStackHandler;
+import net.neoforged.neoforge.items.wrapper.RangedWrapper;
 
-import javax.annotation.Nonnull;
 import javax.annotation.Nullable;
 import java.util.Comparator;
 
@@ -71,17 +71,17 @@ public class AnthvilBlockEntity extends MachineProcessBlockEntity implements Men
 	}
 	
 	@Override
-	public void load(CompoundTag compound)
+	public void loadAdditional(CompoundTag compound, HolderLookup.Provider provider)
 	{
-		super.load(compound);
+		super.loadAdditional(compound, provider);
 		
 		fuel = compound.getShort("fuel");
 	}
 	
 	@Override
-	public void saveAdditional(CompoundTag compound)
+	public void saveAdditional(CompoundTag compound, HolderLookup.Provider provider)
 	{
-		super.saveAdditional(compound);
+		super.saveAdditional(compound, provider);
 		
 		compound.putShort("fuel", fuel);
 	}
@@ -89,7 +89,7 @@ public class AnthvilBlockEntity extends MachineProcessBlockEntity implements Men
 	@Override
 	protected ItemStackHandler createItemHandler()
 	{
-		return new MachineProcessBlockEntity.CustomHandler(2, (index, stack) -> index == 0 || stack.is(ExtraForgeTags.Items.URANIUM_CHUNKS));
+		return new MachineProcessBlockEntity.CustomHandler(2, (index, stack) -> index == 0 || stack.is(ExtraModTags.Items.URANIUM_CHUNKS));
 	}
 	
 	@Override
@@ -107,7 +107,7 @@ public class AnthvilBlockEntity extends MachineProcessBlockEntity implements Men
 		if(level == null || !isMendableItem(slotStack))
 			return;
 		
-		if(anthvil.canBeRefueled() && itemHandler.getStackInSlot(1).is(ExtraForgeTags.Items.URANIUM_CHUNKS))
+		if(anthvil.canBeRefueled() && itemHandler.getStackInSlot(1).is(ExtraModTags.Items.URANIUM_CHUNKS))
 		{
 			anthvil.addFuel((short) FUEL_INCREASE);
 			itemHandler.extractItem(1, 1, false);
@@ -142,7 +142,7 @@ public class AnthvilBlockEntity extends MachineProcessBlockEntity implements Men
 	/**
 	 * Checks a mend-able item's grist type and returns the grist if its valid
 	 */
-	private static ImmutableGristSet mendingGrist(Level level, ItemStack slotStack)
+	private static GristSet.Immutable mendingGrist(Level level, ItemStack slotStack)
 	{
 		GristSet fullSet = GristCostRecipe.findCostForItem(slotStack, null, false, level);
 		
@@ -190,23 +190,18 @@ public class AnthvilBlockEntity extends MachineProcessBlockEntity implements Men
 		return fuel >= MAX_FUEL;
 	}
 	
-	private final LazyOptional<IItemHandler> inputHandler = LazyOptional.of(() -> new RangedWrapper(itemHandler, 0, 1)); //regenerating item slot
-	private final LazyOptional<IItemHandler> fuelHandler = LazyOptional.of(() -> new RangedWrapper(itemHandler, 1, 2)); //uranium fuel slot
-	
-	@Nonnull
-	@Override
-	public <T> LazyOptional<T> getCapability(@Nonnull Capability<T> cap, @Nullable Direction side)
+	@Nullable
+	public IItemHandler getItemHandler(@Nullable Direction side)
 	{
-		if(cap == ForgeCapabilities.ITEM_HANDLER && side != null)
-		{
-			if(side == Direction.UP)
-				return inputHandler.cast();
-			else if(side == Direction.DOWN)
-				return LazyOptional.empty();
-			else
-				return fuelHandler.cast(); //will fill the anthvil with fuel if fed from the sides
-		}
-		return super.getCapability(cap, side);
+		if(side == null)
+			return this.itemHandler;
+		
+		if(side == Direction.UP)
+			return new RangedWrapper(itemHandler, 0, 1);
+		if(side == Direction.DOWN)
+			return null;
+		
+		return new RangedWrapper(itemHandler, 1, 2);
 	}
 	
 	@Nullable

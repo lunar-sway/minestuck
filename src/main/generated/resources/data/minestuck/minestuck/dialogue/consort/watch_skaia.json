@@ -1,0 +1,60 @@
+{
+  "conditioned_nodes": [
+    {
+      "condition": {
+        "type": "minestuck:list",
+        "conditions": [
+          {
+            "type": "minestuck:is_in_skaia"
+          },
+          {
+            "type": "minestuck:entity_type",
+            "entity_type": "minestuck:turtle"
+          }
+        ],
+        "list_type": "all"
+      },
+      "node": {
+        "animation": {},
+        "gui": "minestuck:textures/gui/dialogue/dialogue.png",
+        "message": "minestuck.dialogue.consort.watch_skaia.at_skaia.turtle",
+        "responses": []
+      }
+    },
+    {
+      "condition": {
+        "type": "minestuck:is_in_skaia"
+      },
+      "node": {
+        "animation": {
+          "emotion": "happy"
+        },
+        "gui": "minestuck:textures/gui/dialogue/dialogue.png",
+        "message": {
+          "arguments": [
+            "entity_sound_2"
+          ],
+          "key": "minestuck.dialogue.consort.watch_skaia.at_skaia"
+        },
+        "responses": []
+      }
+    },
+    {
+      "condition": {
+        "type": "minestuck:consort_visited_skaia"
+      },
+      "node": {
+        "animation": {},
+        "gui": "minestuck:textures/gui/dialogue/dialogue.png",
+        "message": "minestuck.dialogue.consort.watch_skaia.has_visited",
+        "responses": []
+      }
+    }
+  ],
+  "default_node": {
+    "animation": {},
+    "gui": "minestuck:textures/gui/dialogue/dialogue.png",
+    "message": "minestuck.dialogue.consort.watch_skaia",
+    "responses": []
+  }
+}

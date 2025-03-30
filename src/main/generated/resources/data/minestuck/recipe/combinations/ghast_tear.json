@@ -1,0 +1,11 @@
+{
+  "type": "minestuck:combination",
+  "input1": {
+    "item": "minecraft:phantom_membrane"
+  },
+  "input2": {
+    "item": "minecraft:gunpowder"
+  },
+  "mode": "and",
+  "output": "minecraft:ghast_tear"
+}

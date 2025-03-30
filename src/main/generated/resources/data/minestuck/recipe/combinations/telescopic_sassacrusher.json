@@ -1,0 +1,11 @@
+{
+  "type": "minestuck:combination",
+  "input1": {
+    "item": "minestuck:sledge_hammer"
+  },
+  "input2": {
+    "item": "minestuck:sassacre_text"
+  },
+  "mode": "and",
+  "output": "minestuck:telescopic_sassacrusher"
+}

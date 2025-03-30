@@ -4,11 +4,9 @@ import com.mojang.blaze3d.platform.GlStateManager;
 import com.mojang.blaze3d.systems.RenderSystem;
 import com.mojang.blaze3d.vertex.*;
 import com.mraof.minestuck.Minestuck;
-import com.mraof.minestuck.network.MSPacketHandler;
-import com.mraof.minestuck.network.StoneTabletPacket;
 import com.mraof.minestuck.client.gui.StoneTabletUtils.Point;
+import com.mraof.minestuck.network.CarveStoneTabletPacket;
 import net.minecraft.ChatFormatting;
-import net.minecraft.SharedConstants;
 import net.minecraft.Util;
 import net.minecraft.client.GameNarrator;
 import net.minecraft.client.StringSplitter;
@@ -20,15 +18,17 @@ import net.minecraft.client.renderer.GameRenderer;
 import net.minecraft.network.chat.Component;
 import net.minecraft.network.chat.Style;
 import net.minecraft.resources.ResourceLocation;
+import net.minecraft.util.StringUtil;
 import net.minecraft.world.InteractionHand;
 import net.minecraft.world.entity.player.Player;
 import net.minecraft.world.item.ItemStack;
+import net.neoforged.neoforge.network.PacketDistributor;
 import org.apache.commons.lang3.mutable.MutableInt;
 import org.lwjgl.glfw.GLFW;
 
 public class StoneTabletScreen extends Screen
 {
-	public static final ResourceLocation TABLET_TEXTURES = new ResourceLocation(Minestuck.MOD_ID, "textures/gui/stone_tablet.png");
+	public static final ResourceLocation TABLET_TEXTURES = ResourceLocation.fromNamespaceAndPath(Minestuck.MOD_ID, "textures/gui/stone_tablet.png");
 	
 	//GUI sizes
 	public static final int GUI_WIDTH = 192;
@@ -96,15 +96,22 @@ public class StoneTabletScreen extends Screen
 	}
 	
 	@Override
-	public void render(GuiGraphics guiGraphics, int mouseX, int mouseY, float partialTicks)
+	public void renderBackground(GuiGraphics guiGraphics, int mouseX, int mouseY, float partialTicks)
 	{
-		this.renderBackground(guiGraphics);
-		this.setFocused(null);
+		super.renderBackground(guiGraphics, mouseX, mouseY, partialTicks);
+		
 		int topX = (this.width - GUI_WIDTH) / 2;
 		int topY = 2;
-		
-		RenderSystem.setShaderColor(1, 1, 1, 1);
 		guiGraphics.blit(TABLET_TEXTURES, topX, topY, 0, 0, GUI_WIDTH, GUI_HEIGHT);
+	}
+	
+	@Override
+	public void render(GuiGraphics guiGraphics, int mouseX, int mouseY, float partialTicks)
+	{
+		this.setFocused(null);
+		
+		super.render(guiGraphics, mouseX, mouseY, partialTicks);
+		
 		{
 			
 			MutableInt lineY = new MutableInt();
@@ -131,8 +138,6 @@ public class StoneTabletScreen extends Screen
 					guiGraphics.drawString(font, "_", (float) point.x, (float) point.y, 0, false);
 			}
 		}
-		
-		super.render(guiGraphics, mouseX, mouseY, partialTicks);
 	}
 	
 	/**
@@ -186,13 +191,12 @@ public class StoneTabletScreen extends Screen
 		RenderSystem.setShader(GameRenderer::getPositionShader);
 		
 		Tesselator tesselator = Tesselator.getInstance();
-		BufferBuilder bufferbuilder = tesselator.getBuilder();
-		bufferbuilder.begin(VertexFormat.Mode.QUADS, DefaultVertexFormat.POSITION);
-		bufferbuilder.vertex(point.x, point1.y, 0.0D).endVertex();
-		bufferbuilder.vertex(point1.x, point1.y, 0.0D).endVertex();
-		bufferbuilder.vertex(point1.x, point.y, 0.0D).endVertex();
-		bufferbuilder.vertex(point.x, point.y, 0.0D).endVertex();
-		tesselator.end();
+		BufferBuilder bufferbuilder = tesselator.begin(VertexFormat.Mode.QUADS, DefaultVertexFormat.POSITION);
+		bufferbuilder.addVertex(point.x, point1.y, 0);
+		bufferbuilder.addVertex(point1.x, point1.y, 0);
+		bufferbuilder.addVertex(point1.x, point.y, 0);
+		bufferbuilder.addVertex(point.x, point.y, 0);
+		BufferUploader.drawWithShader(bufferbuilder.buildOrThrow());
 		
 		RenderSystem.disableColorLogicOp();
 	}
@@ -210,7 +214,7 @@ public class StoneTabletScreen extends Screen
 	{
 		if(super.charTyped(keycode, modifiers))
 			return true;
-		else if(SharedConstants.isAllowedChatCharacter(keycode) && canEdit)
+		else if(StringUtil.isAllowedChatCharacter(keycode) && canEdit)
 		{
 			pageEditor.insertText(Character.toString(keycode));
 			return true;
@@ -222,7 +226,7 @@ public class StoneTabletScreen extends Screen
 	private void sendTabletToServer()
 	{
 		if(isModified && text != null)
-			MSPacketHandler.sendToServer(new StoneTabletPacket(text, hand));
+			PacketDistributor.sendToServer(new CarveStoneTabletPacket(text, hand));
 	}
 	
 	private void setText(String text)

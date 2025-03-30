@@ -1,21 +1,21 @@
 package com.mraof.minestuck.client;
 
 import com.mraof.minestuck.Minestuck;
-import com.mraof.minestuck.network.data.LandTypesDataPacket;
+import com.mraof.minestuck.network.LandTypesDataPacket;
 import com.mraof.minestuck.world.lands.LandProperties;
 import com.mraof.minestuck.world.lands.LandTypePair;
 import net.minecraft.client.multiplayer.ClientLevel;
 import net.minecraft.resources.ResourceKey;
 import net.minecraft.world.level.Level;
-import net.minecraftforge.api.distmarker.Dist;
-import net.minecraftforge.client.event.ClientPlayerNetworkEvent;
-import net.minecraftforge.eventbus.api.SubscribeEvent;
-import net.minecraftforge.fml.common.Mod;
+import net.neoforged.api.distmarker.Dist;
+import net.neoforged.bus.api.SubscribeEvent;
+import net.neoforged.fml.common.EventBusSubscriber;
+import net.neoforged.neoforge.client.event.ClientPlayerNetworkEvent;
 
 import java.util.HashMap;
 import java.util.Map;
 
-@Mod.EventBusSubscriber(modid = Minestuck.MOD_ID, bus = Mod.EventBusSubscriber.Bus.FORGE, value = Dist.CLIENT)
+@EventBusSubscriber(modid = Minestuck.MOD_ID, bus = EventBusSubscriber.Bus.GAME, value = Dist.CLIENT)
 public class ClientDimensionData
 {
 	private static final Map<ResourceKey<Level>, LandTypePair> landTypes = new HashMap<>();
@@ -61,6 +61,8 @@ public class ClientDimensionData
 	public static void receivePacket(LandTypesDataPacket packet)
 	{
 		landTypes.clear();
-		landTypes.putAll(packet.getTypes());
+		currentWorld = null;
+		properties = null;
+		landTypes.putAll(packet.types());
 	}
 }

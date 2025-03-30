@@ -1,0 +1,55 @@
+{
+  "node": {
+    "animation": {},
+    "gui": "minestuck:textures/gui/dialogue/dialogue.png",
+    "messages": [
+      {
+        "type": "description",
+        "message": "minestuck.dialogue.consort.rap_battle.after_rap"
+      }
+    ],
+    "responses": [
+      {
+        "condition": {
+          "type": "minestuck:always_true"
+        },
+        "hide_if_failed": true,
+        "message": "minestuck.dialogue.consort.rap_battle.after_rap.school",
+        "next_dialogue": {
+          "id": "minestuck:consort/rap_battle/final",
+          "reply_messages": [
+            {
+              "type": "player",
+              "message": "minestuck.dialogue.consort.rap_battle.after_rap.school.reply"
+            },
+            {
+              "type": "description",
+              "message": {
+                "arguments": [
+                  "player_title",
+                  "land_name"
+                ],
+                "key": "minestuck.dialogue.consort.rap_battle.after_rap.school.desc"
+              }
+            }
+          ],
+          "set_as_entrypoint": true
+        },
+        "triggers": []
+      },
+      {
+        "condition": {
+          "type": "minestuck:always_true"
+        },
+        "hide_if_failed": true,
+        "message": "minestuck.dialogue.consort.rap_battle.after_rap.concede",
+        "next_dialogue": {
+          "id": "minestuck:consort/rap_battle/concede",
+          "player_message": "minestuck.dialogue.consort.rap_battle.after_rap.concede.reply",
+          "set_as_entrypoint": true
+        },
+        "triggers": []
+      }
+    ]
+  }
+}

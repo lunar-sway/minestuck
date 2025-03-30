@@ -1,0 +1,40 @@
+{
+  "node": {
+    "animation": {},
+    "gui": "minestuck:textures/gui/dialogue/dialogue.png",
+    "message": {
+      "arguments": [
+        "entity_type"
+      ],
+      "key": "minestuck.dialogue.consort.frog_creation.explain"
+    },
+    "responses": [
+      {
+        "condition": {
+          "type": "minestuck:always_true"
+        },
+        "hide_if_failed": true,
+        "message": "minestuck.dialogue.consort.frog_creation.explain.doubt",
+        "next_dialogue": "minestuck:consort/frog_creation/explain.inside",
+        "triggers": []
+      },
+      {
+        "condition": {
+          "type": "minestuck:always_true"
+        },
+        "hide_if_failed": true,
+        "message": "minestuck.dialogue.consort.frog_creation.explain.make",
+        "next_dialogue": "minestuck:consort/frog_creation/explain.no_idea",
+        "triggers": []
+      },
+      {
+        "condition": {
+          "type": "minestuck:always_true"
+        },
+        "hide_if_failed": true,
+        "message": "minestuck.dialogue.goodbye",
+        "triggers": []
+      }
+    ]
+  }
+}

@@ -1,20 +1,17 @@
 package com.mraof.minestuck.player;
 
+import com.mojang.serialization.DataResult;
 import net.minecraft.nbt.CompoundTag;
 import net.minecraft.nbt.Tag;
 import net.minecraft.server.MinecraftServer;
 import net.minecraft.server.level.ServerPlayer;
 import net.minecraft.server.players.PlayerList;
 import net.minecraft.world.entity.player.Player;
-import net.minecraftforge.common.UsernameCache;
-import net.minecraftforge.common.util.FakePlayer;
+import net.neoforged.neoforge.common.UsernameCache;
+import net.neoforged.neoforge.common.util.FakePlayer;
 
-import javax.annotation.Nonnull;
 import javax.annotation.Nullable;
-import java.util.ArrayList;
-import java.util.List;
-import java.util.Objects;
-import java.util.UUID;
+import java.util.*;
 
 /**
  * Used to encode/decode player usernames, to handle uses with LAN.
@@ -23,9 +20,7 @@ import java.util.UUID;
  */
 public class IdentifierHandler
 {
-	public static final PlayerIdentifier NULL_IDENTIFIER = new NullIdentifier();
-	
-	private static List<PlayerIdentifier> identifierList = new ArrayList<>();
+	private static final List<PlayerIdentifier> identifierList = new ArrayList<>();
 	private static int nextIdentifierId;
 	private static int fakePlayerIndex = 0;
 	
@@ -43,38 +38,49 @@ public class IdentifierHandler
 		return identifier;
 	}
 	
-	public static boolean hasIdentifier(CompoundTag nbt, String key)
+	public static DataResult<Optional<PlayerIdentifier>> loadOptional(CompoundTag tag, String key)
 	{
-		return nbt.contains(key, Tag.TAG_STRING) || nbt.contains(key + "Most", Tag.TAG_LONG) && nbt.contains(key + "Least", Tag.TAG_LONG);
+		if(!tag.contains(key, Tag.TAG_STRING))
+			return DataResult.success(Optional.empty());
+		return load(tag, key).map(Optional::of);
 	}
 	
-	@Nonnull
-	public static PlayerIdentifier load(CompoundTag nbt, String key)
+	/**
+	 * Tries to parse a player identifier and returns the result. It will not return a {@code NULL_IDENTIFIER}.
+	 */
+	public static DataResult<PlayerIdentifier> load(CompoundTag tag, String key)
 	{
+		return loadNullable(tag, key).flatMap(id -> id.map(DataResult::success).orElse(DataResult.error(() -> "Null identifiers not supported here")));
+	}
+	
+	public static DataResult<Optional<PlayerIdentifier>> loadNullable(CompoundTag tag, String key)
+	{
+		String type = tag.getString(key);
 		PlayerIdentifier identifier;
-		String type = nbt.getString(key);
 		switch(type)
 		{
-			case "null":
-				return NULL_IDENTIFIER;
-			case "uuid":
-				identifier = new UUIDIdentifier(nextIdentifierId, nbt.getUUID(key + "_uuid"));
-				break;
-			case "fake":
-				identifier = new FakeIdentifier(nextIdentifierId, nbt.getInt(key+"_count"));
-				break;
-			default: throw new IllegalArgumentException("Can't parse identifier type "+type);
+			case "null" ->
+			{
+				return DataResult.success(Optional.empty());
+			}
+			case "uuid" -> identifier = new UUIDIdentifier(nextIdentifierId, tag.getUUID(key + "_uuid"));
+			case "fake" -> identifier = new FakeIdentifier(nextIdentifierId, tag.getInt(key + "_count"));
+			default ->
+			{
+				return DataResult.error(() -> "Can't parse identifier type " + type);
+			}
 		}
 		
 		for(PlayerIdentifier id : identifierList)
 			if(id.equals(identifier))
-				return id;
+				return DataResult.success(Optional.of(id));
 		
 		nextIdentifierId++;
 		identifierList.add(identifier);
-		return identifier;
+		return DataResult.success(Optional.of(identifier));
 	}
 	
+	@Nullable
 	public static PlayerIdentifier getById(int id)
 	{
 		for(PlayerIdentifier identifier : identifierList)
@@ -148,7 +154,7 @@ public class IdentifierHandler
 	
 	private static class UUIDIdentifier extends PlayerIdentifier
 	{
-		private UUID uuid;
+		private final UUID uuid;
 		
 		private UUIDIdentifier(int id, UUID uuid)
 		{
@@ -210,51 +216,6 @@ public class IdentifierHandler
 		public int hashCode()
 		{
 			return Objects.hash(uuid);
-		}
-	}
-	
-	private static class NullIdentifier extends PlayerIdentifier
-	{
-		public NullIdentifier()
-		{
-			super(-1);
-		}
-		
-		@Override
-		public boolean appliesTo(Player player)
-		{
-			return false;
-		}
-		
-		@Override
-		public String getUsername()
-		{
-			return "Invalid Player";
-		}
-		
-		@Override
-		public ServerPlayer getPlayer(MinecraftServer server)
-		{
-			return null;
-		}
-		
-		@Override
-		public String getCommandString()
-		{
-			return "null";
-		}
-		
-		@Override
-		public CompoundTag saveToNBT(CompoundTag nbt, String key)
-		{
-			nbt.putString(key, "null");
-			return nbt;
-		}
-		
-		@Override
-		public String toString()
-		{
-			return "Identifier:null";
 		}
 	}
 	

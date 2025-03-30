@@ -1,0 +1,18 @@
+{
+  "condition": {
+    "type": "minestuck:list",
+    "conditions": [
+      {
+        "type": "minestuck:entity_type",
+        "entity_type": "minestuck:salamander"
+      },
+      {
+        "type": "minestuck:is_consort_from_land"
+      }
+    ],
+    "list_type": "all"
+  },
+  "dialogue": "minestuck:consort/identity",
+  "dialogue_weight": 10,
+  "keep_on_reset": false
+}

@@ -1,5 +1,6 @@
 package com.mraof.minestuck.block.redstone;
 
+import com.mojang.serialization.MapCodec;
 import com.mraof.minestuck.block.BlockUtil;
 import net.minecraft.core.BlockPos;
 import net.minecraft.core.Direction;
@@ -35,6 +36,12 @@ public class LogicGateBlock extends DiodeBlock
 	}
 	
 	@Override
+	protected MapCodec<LogicGateBlock> codec()
+	{
+		return null; //todo
+	}
+	
+	@Override
 	protected boolean shouldTurnOn(Level level, BlockPos pos, BlockState state)
 	{
 		Direction leftInput = state.getValue(FACING).getCounterClockWise();
@@ -64,13 +71,13 @@ public class LogicGateBlock extends DiodeBlock
 	}
 	
 	@Override
-	public boolean canSurvive(BlockState state, LevelReader level, BlockPos pos)
+	protected boolean canSurvive(BlockState state, LevelReader level, BlockPos pos)
 	{
 		return true; //default for RedstoneDiode means it cannot rest on air, now it can
 	}
 	
 	@Override
-	public VoxelShape getShape(BlockState state, BlockGetter level, BlockPos pos, CollisionContext context)
+	protected VoxelShape getShape(BlockState state, BlockGetter level, BlockPos pos, CollisionContext context)
 	{
 		return Shapes.block(); //collision shape for other redstone diodes is not a full block, now it is
 	}

@@ -1,6 +1,5 @@
 package com.mraof.minestuck.client.gui;
 
-import com.mojang.blaze3d.systems.RenderSystem;
 import com.mojang.logging.LogUtils;
 import com.mraof.minestuck.Minestuck;
 import com.mraof.minestuck.util.MSTags;
@@ -9,21 +8,23 @@ import net.minecraft.client.gui.GuiGraphics;
 import net.minecraft.client.gui.components.Button;
 import net.minecraft.client.gui.screens.Screen;
 import net.minecraft.client.gui.screens.inventory.PageButton;
+import net.minecraft.core.Holder;
+import net.minecraft.core.HolderSet;
+import net.minecraft.core.registries.BuiltInRegistries;
 import net.minecraft.network.chat.Component;
 import net.minecraft.network.chat.Style;
 import net.minecraft.resources.ResourceLocation;
 import net.minecraft.world.level.block.Block;
-import net.minecraftforge.registries.ForgeRegistries;
 import org.apache.commons.io.IOUtils;
 import org.apache.commons.lang3.mutable.MutableInt;
 import org.lwjgl.glfw.GLFW;
 import org.slf4j.Logger;
 
+import javax.annotation.ParametersAreNonnullByDefault;
 import java.io.BufferedReader;
 import java.io.Reader;
 import java.util.ArrayList;
 import java.util.List;
-import java.util.Objects;
 import java.util.Set;
 import java.util.stream.Collectors;
 
@@ -31,14 +32,15 @@ import java.util.stream.Collectors;
  * Code is modified components of, or inspired by, WinGameScreen/ReadBookScreen/StoneTabletScreen.
  * It reads the nucleotide sequence stored in rana_temporaria_sec22b.txt and associates a number of lines of the text to each hieroglyph from the block tag with one extra pseudo-hieroglyph in the form of the paradox code
  */
+@ParametersAreNonnullByDefault
 public class ReadableSburbCodeScreen extends Screen
 {
 	private static final Logger LOGGER = LogUtils.getLogger();
 	
-	private static final ResourceLocation BOOK_TEXTURES_01A = new ResourceLocation(Minestuck.MOD_ID, "textures/gui/sburb_book_01a.png");
-	private static final ResourceLocation BOOK_TEXTURES_01B = new ResourceLocation(Minestuck.MOD_ID, "textures/gui/sburb_book_01b.png");
-	private static final ResourceLocation BOOK_TEXTURES_02 = new ResourceLocation(Minestuck.MOD_ID, "textures/gui/sburb_book_02.png");
-	private static final ResourceLocation BOOK_TEXTURES_03 = new ResourceLocation(Minestuck.MOD_ID, "textures/gui/sburb_book_03.png");
+	private static final ResourceLocation BOOK_TEXTURES_01A = ResourceLocation.fromNamespaceAndPath(Minestuck.MOD_ID, "textures/gui/sburb_book_01a.png");
+	private static final ResourceLocation BOOK_TEXTURES_01B = ResourceLocation.fromNamespaceAndPath(Minestuck.MOD_ID, "textures/gui/sburb_book_01b.png");
+	private static final ResourceLocation BOOK_TEXTURES_02 = ResourceLocation.fromNamespaceAndPath(Minestuck.MOD_ID, "textures/gui/sburb_book_02.png");
+	private static final ResourceLocation BOOK_TEXTURES_03 = ResourceLocation.fromNamespaceAndPath(Minestuck.MOD_ID, "textures/gui/sburb_book_03.png");
 	private final boolean[] hieroglyphValidityArray; //same size as MAX_HIEROGLYPH_COUNT
 	private final List<List<String>> listOfPages = new ArrayList<>(); //each element of the outermost list is a different page, and each page is a collection of lines
 	
@@ -60,7 +62,7 @@ public class ReadableSburbCodeScreen extends Screen
 	private static final int LINES_PER_PAGE = 40; //how many lines can be fit neatly on a page, at 48 character per line
 	
 	// Use a list instead of a set because we need the hieroglyphs to be ordered when building up filled pages
-	private final List<Block> FULL_HIEROGLYPH_LIST = Objects.requireNonNull(ForgeRegistries.BLOCKS.tags()).getTag(MSTags.Blocks.GREEN_HIEROGLYPHS).stream().toList();
+	private final List<Block> FULL_HIEROGLYPH_LIST = BuiltInRegistries.BLOCK.getTag(MSTags.Blocks.GREEN_HIEROGLYPHS).stream().flatMap(HolderSet.ListBacked::stream).map(Holder::value).toList();
 	private final int MAX_HIEROGLYPH_COUNT = FULL_HIEROGLYPH_LIST.size() + 1;
 	
 	private final static String EMPTY_SPACE = " ".repeat(48);
@@ -83,7 +85,7 @@ public class ReadableSburbCodeScreen extends Screen
 		
 		try
 		{
-			reader = this.minecraft.getResourceManager().openAsReader(new ResourceLocation(Minestuck.MOD_ID, "texts/rana_temporaria_sec22b.txt")); //The text is broken into lines 48 characters long to neatly fit within a block of text that avoids empty spaces
+			reader = this.minecraft.getResourceManager().openAsReader(ResourceLocation.fromNamespaceAndPath(Minestuck.MOD_ID, "texts/rana_temporaria_sec22b.txt")); //The text is broken into lines 48 characters long to neatly fit within a block of text that avoids empty spaces
 			BufferedReader bufferedReader = new BufferedReader(reader);
 			textList = bufferedReader.lines().collect(Collectors.toList());
 			
@@ -143,11 +145,10 @@ public class ReadableSburbCodeScreen extends Screen
 	}
 	
 	@Override
-	public void render(GuiGraphics guiGraphics, int mouseX, int mouseY, float partialTicks)
+	public void renderBackground(GuiGraphics guiGraphics, int mouseX, int mouseY, float partialTicks)
 	{
-		this.renderBackground(guiGraphics);
-		this.setFocused(null);
-		RenderSystem.setShaderColor(1.0F, 1.0F, 1.0F, 1.0F);
+		super.renderBackground(guiGraphics, mouseX, mouseY, partialTicks);
+		
 		ResourceLocation pageTexture;
 		if(currentPage == 0) //specifically if its the first page
 			pageTexture = BOOK_TEXTURES_01A;
@@ -165,6 +166,14 @@ public class ReadableSburbCodeScreen extends Screen
 		int topX = (this.width - GUI_WIDTH) / 2;
 		int topY = 2;
 		guiGraphics.blit(pageTexture, topX, topY, 0, 0, GUI_WIDTH, GUI_HEIGHT);
+	}
+	
+	@Override
+	public void render(GuiGraphics guiGraphics, int mouseX, int mouseY, float partialTicks)
+	{
+		this.setFocused(null);
+		
+		super.render(guiGraphics, mouseX, mouseY, partialTicks);
 		
 		if(textList != null)
 		{
@@ -192,8 +201,6 @@ public class ReadableSburbCodeScreen extends Screen
 			
 			guiGraphics.pose().popPose();
 		}
-		
-		super.render(guiGraphics, mouseX, mouseY, partialTicks);
 	}
 	
 	/**

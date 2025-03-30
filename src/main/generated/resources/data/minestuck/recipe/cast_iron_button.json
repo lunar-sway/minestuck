@@ -1,0 +1,13 @@
+{
+  "type": "minecraft:crafting_shapeless",
+  "category": "building",
+  "ingredients": [
+    {
+      "item": "minestuck:cast_iron"
+    }
+  ],
+  "result": {
+    "count": 1,
+    "id": "minestuck:cast_iron_button"
+  }
+}

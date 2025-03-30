@@ -6,29 +6,33 @@ import com.mraof.minestuck.block.redstone.StatStorerBlock;
 import com.mraof.minestuck.blockentity.MSBlockEntityTypes;
 import com.mraof.minestuck.event.AlchemyEvent;
 import com.mraof.minestuck.event.GristDropsEvent;
+import com.mraof.minestuck.network.block.StatStorerSettingsPacket;
 import net.minecraft.core.BlockPos;
+import net.minecraft.core.HolderLookup;
 import net.minecraft.nbt.CompoundTag;
 import net.minecraft.network.protocol.Packet;
 import net.minecraft.network.protocol.game.ClientGamePacketListener;
 import net.minecraft.network.protocol.game.ClientboundBlockEntityDataPacket;
+import net.minecraft.server.level.ServerLevel;
+import net.minecraft.tags.BlockTags;
 import net.minecraft.world.level.Level;
 import net.minecraft.world.level.block.Block;
 import net.minecraft.world.level.block.entity.BlockEntity;
 import net.minecraft.world.level.block.state.BlockState;
-import net.minecraftforge.event.entity.EntityStruckByLightningEvent;
-import net.minecraftforge.event.entity.living.BabyEntitySpawnEvent;
-import net.minecraftforge.event.entity.living.LivingDeathEvent;
-import net.minecraftforge.event.entity.living.LivingHealEvent;
-import net.minecraftforge.event.entity.living.LivingHurtEvent;
-import net.minecraftforge.event.level.ExplosionEvent;
-import net.minecraftforge.event.level.SaplingGrowTreeEvent;
-import net.minecraftforge.eventbus.api.EventPriority;
-import net.minecraftforge.eventbus.api.SubscribeEvent;
-import net.minecraftforge.fml.common.Mod;
+import net.neoforged.bus.api.EventPriority;
+import net.neoforged.bus.api.SubscribeEvent;
+import net.neoforged.fml.common.EventBusSubscriber;
+import net.neoforged.neoforge.event.entity.EntityStruckByLightningEvent;
+import net.neoforged.neoforge.event.entity.living.BabyEntitySpawnEvent;
+import net.neoforged.neoforge.event.entity.living.LivingDamageEvent;
+import net.neoforged.neoforge.event.entity.living.LivingDeathEvent;
+import net.neoforged.neoforge.event.entity.living.LivingHealEvent;
+import net.neoforged.neoforge.event.level.BlockGrowFeatureEvent;
+import net.neoforged.neoforge.event.level.ExplosionEvent;
 
 import javax.annotation.Nullable;
 
-@Mod.EventBusSubscriber(modid = Minestuck.MOD_ID, bus = Mod.EventBusSubscriber.Bus.FORGE)
+@EventBusSubscriber(modid = Minestuck.MOD_ID, bus = EventBusSubscriber.Bus.GAME)
 public class StatStorerBlockEntity extends BlockEntity
 {
 	private float damageStored;
@@ -98,10 +102,20 @@ public class StatStorerBlockEntity extends BlockEntity
 		blockEntity.tickCycle++;
 	}
 	
-	@Override
-	public void load(CompoundTag compound)
+	public void handleSettingsPacket(StatStorerSettingsPacket packet)
 	{
-		super.load(compound);
+		activeType = packet.activeType();
+		this.divideValueBy = Math.max(1, packet.divideValueBy());
+		
+		this.setChanged();
+		if(getLevel() instanceof ServerLevel serverLevel)
+			serverLevel.getChunkSource().blockChanged(getBlockPos());
+	}
+	
+	@Override
+	public void loadAdditional(CompoundTag compound, HolderLookup.Provider provider)
+	{
+		super.loadAdditional(compound, provider);
 		
 		if(compound.contains("damageStored"))
 			this.damageStored = compound.getFloat("damageStored");
@@ -158,9 +172,9 @@ public class StatStorerBlockEntity extends BlockEntity
 	}
 	
 	@Override
-	public void saveAdditional(CompoundTag compound)
+	public void saveAdditional(CompoundTag compound, HolderLookup.Provider provider)
 	{
-		super.saveAdditional(compound);
+		super.saveAdditional(compound, provider);
 		
 		compound.putFloat("damageStored", damageStored);
 		compound.putInt("deathsStored", deathsStored);
@@ -217,16 +231,6 @@ public class StatStorerBlockEntity extends BlockEntity
 		if(this.divideValueBy <= 0)
 			divideValueBy = 1;
 		return this.divideValueBy;
-	}
-	
-	public void setActiveTypeAndDivideValue(ActiveType activeTypeIn, int divideValueBy)
-	{
-		activeType = activeTypeIn;
-		if(divideValueBy <= 0)
-			divideValueBy = 1;
-		this.divideValueBy = divideValueBy;
-		this.setChanged();
-		level.sendBlockUpdated(worldPosition, getBlockState(), getBlockState(), 0);
 	}
 	
 	public void setActiveStoredStatValue(float storedStatIn)
@@ -305,9 +309,10 @@ public class StatStorerBlockEntity extends BlockEntity
 	}
 	
 	@SubscribeEvent(priority = EventPriority.LOWEST, receiveCanceled = false)
-	public static void onSaplingGrow(SaplingGrowTreeEvent event)
+	public static void onSaplingGrow(BlockGrowFeatureEvent event)
 	{
-		attemptStatUpdate(1, StatStorerBlockEntity.ActiveType.SAPLING_GROWN, event.getPos(), (Level) event.getLevel());
+		if(event.getLevel().getBlockState(event.getPos()).is(BlockTags.SAPLINGS))
+			attemptStatUpdate(1, StatStorerBlockEntity.ActiveType.SAPLING_GROWN, event.getPos(), (Level) event.getLevel());
 	}
 	
 	@SubscribeEvent(priority = EventPriority.LOWEST, receiveCanceled = false)
@@ -327,7 +332,7 @@ public class StatStorerBlockEntity extends BlockEntity
 	@SubscribeEvent
 	public static void onExplosion(ExplosionEvent.Detonate event)
 	{
-		attemptStatUpdate(1, StatStorerBlockEntity.ActiveType.EXPLOSIONS, BlockPos.containing(event.getExplosion().getPosition()), event.getLevel());
+		attemptStatUpdate(1, StatStorerBlockEntity.ActiveType.EXPLOSIONS, BlockPos.containing(event.getExplosion().center()), event.getLevel());
 	}
 	
 	@SubscribeEvent(priority = EventPriority.LOWEST, receiveCanceled = false)
@@ -343,9 +348,9 @@ public class StatStorerBlockEntity extends BlockEntity
 	}
 	
 	@SubscribeEvent(priority = EventPriority.LOWEST, receiveCanceled = false)
-	public static void onEntityDamage(LivingHurtEvent event)
+	public static void onEntityDamage(LivingDamageEvent.Post event)
 	{
-		attemptStatUpdate(event.getAmount(), StatStorerBlockEntity.ActiveType.DAMAGE, event.getEntity().blockPosition(), event.getEntity().level());
+		attemptStatUpdate(event.getNewDamage(), StatStorerBlockEntity.ActiveType.DAMAGE, event.getEntity().blockPosition(), event.getEntity().level());
 	}
 	
 	@SubscribeEvent(priority = EventPriority.LOWEST, receiveCanceled = false)
@@ -355,9 +360,9 @@ public class StatStorerBlockEntity extends BlockEntity
 	}
 	
 	@Override
-	public CompoundTag getUpdateTag()
+	public CompoundTag getUpdateTag(HolderLookup.Provider provider)
 	{
-		CompoundTag tagCompound = super.getUpdateTag();
+		CompoundTag tagCompound = super.getUpdateTag(provider);
 		tagCompound.putInt("activeTypeOrdinal", getActiveType().ordinal());
 		tagCompound.putInt("divideValueBy", getDivideValueBy());
 		

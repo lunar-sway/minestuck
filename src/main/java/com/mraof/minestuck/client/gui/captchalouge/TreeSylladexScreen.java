@@ -4,12 +4,12 @@ import com.mraof.minestuck.MinestuckConfig;
 import com.mraof.minestuck.inventory.captchalogue.Modus;
 import com.mraof.minestuck.inventory.captchalogue.TreeModus;
 import com.mraof.minestuck.inventory.captchalogue.TreeModus.TreeNode;
-import com.mraof.minestuck.network.CaptchaDeckPacket;
-import com.mraof.minestuck.network.MSPacketHandler;
+import com.mraof.minestuck.network.CaptchaDeckPackets;
 import net.minecraft.client.gui.GuiGraphics;
 import net.minecraft.client.gui.components.Button;
 import net.minecraft.network.chat.Component;
-import net.minecraftforge.client.gui.widget.ExtendedButton;
+import net.neoforged.neoforge.client.gui.widget.ExtendedButton;
+import net.neoforged.neoforge.network.PacketDistributor;
 
 public class TreeSylladexScreen extends SylladexScreen
 {
@@ -97,7 +97,7 @@ public class TreeSylladexScreen extends SylladexScreen
 		if(MinestuckConfig.SERVER.treeModusSetting.get() == MinestuckConfig.AvailableOptions.BOTH)
 		{
 			modus.autoBalance = !modus.autoBalance;
-			MSPacketHandler.sendToServer(CaptchaDeckPacket.modusParam((byte) 0, modus.autoBalance ? 1 : 0));
+			PacketDistributor.sendToServer(new CaptchaDeckPackets.SetModusParameter((byte) 0, modus.autoBalance ? 1 : 0));
 		}
 	}
 	

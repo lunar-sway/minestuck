@@ -1,0 +1,26 @@
+{
+  "conditioned_nodes": [
+    {
+      "condition": {
+        "type": "minestuck:flag",
+        "flag": "helpingPlayer"
+      },
+      "node": {
+        "animation": {
+          "emotion": "happy"
+        },
+        "gui": "minestuck:textures/gui/dialogue/dialogue.png",
+        "message": "minestuck.dialogue.consort.generic_thanks.player_helped",
+        "responses": []
+      }
+    }
+  ],
+  "default_node": {
+    "animation": {
+      "emotion": "happy"
+    },
+    "gui": "minestuck:textures/gui/dialogue/dialogue.png",
+    "message": "minestuck.dialogue.consort.generic_thanks.other_helped",
+    "responses": []
+  }
+}

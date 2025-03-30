@@ -8,8 +8,7 @@ import com.mraof.minestuck.inventory.captchalogue.Modus;
 import com.mraof.minestuck.inventory.captchalogue.ModusType;
 import com.mraof.minestuck.inventory.captchalogue.ModusTypes;
 import com.mraof.minestuck.item.CaptchaCardItem;
-import com.mraof.minestuck.network.CaptchaDeckPacket;
-import com.mraof.minestuck.network.MSPacketHandler;
+import com.mraof.minestuck.network.CaptchaDeckPackets;
 import com.mraof.minestuck.player.ClientPlayerData;
 import net.minecraft.client.gui.GuiGraphics;
 import net.minecraft.client.gui.components.Button;
@@ -19,7 +18,8 @@ import net.minecraft.network.protocol.game.ServerboundContainerClosePacket;
 import net.minecraft.resources.ResourceLocation;
 import net.minecraft.world.entity.player.Inventory;
 import net.minecraft.world.item.ItemStack;
-import net.minecraftforge.client.gui.widget.ExtendedButton;
+import net.neoforged.neoforge.client.gui.widget.ExtendedButton;
+import net.neoforged.neoforge.network.PacketDistributor;
 
 public class CaptchaDeckScreen extends PlayerStatsContainerScreen<CaptchaDeckMenu>
 {
@@ -27,7 +27,7 @@ public class CaptchaDeckScreen extends PlayerStatsContainerScreen<CaptchaDeckMen
 	public static final String SYLLADEX = SylladexScreen.TITLE;
 	public static final String USE_ITEM = "minestuck.captcha_deck.use_item";
 	
-	private static final ResourceLocation guiCaptchaDeck = new ResourceLocation("minestuck", "textures/gui/captcha_deck.png");
+	private static final ResourceLocation guiCaptchaDeck = ResourceLocation.fromNamespaceAndPath("minestuck", "textures/gui/captcha_deck.png");
 	
 	private Button modusButton, sylladexMap;
 	
@@ -95,7 +95,7 @@ public class CaptchaDeckScreen extends PlayerStatsContainerScreen<CaptchaDeckMen
 					return;
 				}
 			}
-			MSPacketHandler.sendToServer(CaptchaDeckPacket.modus());
+			PacketDistributor.sendToServer(new CaptchaDeckPackets.TriggerModusButton());
 		}
 	}
 	
@@ -112,7 +112,7 @@ public class CaptchaDeckScreen extends PlayerStatsContainerScreen<CaptchaDeckMen
 	private void onConfirm(boolean result)
 	{
 		if(result && !menu.getMenuItem().isEmpty())
-			MSPacketHandler.sendToServer(CaptchaDeckPacket.modus());
+			PacketDistributor.sendToServer(new CaptchaDeckPackets.TriggerModusButton());
 		minecraft.screen = this;
 	}
 	

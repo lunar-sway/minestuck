@@ -1,0 +1,28 @@
+{
+  "node": {
+    "animation": {
+      "emotion": "angry"
+    },
+    "gui": "minestuck:textures/gui/dialogue/dialogue.png",
+    "message": "minestuck.dialogue.consort.why_monsters.why_punish.3",
+    "responses": [
+      {
+        "condition": {
+          "type": "minestuck:always_true"
+        },
+        "hide_if_failed": true,
+        "message": "minestuck.dialogue.consort.why_monsters.why_punish.3.no_reason",
+        "next_dialogue": "minestuck:consort/why_monsters/why_no_reason.1",
+        "triggers": []
+      },
+      {
+        "condition": {
+          "type": "minestuck:always_true"
+        },
+        "hide_if_failed": true,
+        "message": "minestuck.dialogue.consort.why_monsters.why_punish.3.no_answer",
+        "triggers": []
+      }
+    ]
+  }
+}

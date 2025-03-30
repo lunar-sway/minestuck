@@ -6,8 +6,7 @@ import com.mraof.minestuck.Minestuck;
 import com.mraof.minestuck.MinestuckConfig;
 import com.mraof.minestuck.client.gui.MinestuckScreen;
 import com.mraof.minestuck.client.util.MSKeyHandler;
-import com.mraof.minestuck.computer.editmode.ClientEditHandler;
-import com.mraof.minestuck.network.MSPacketHandler;
+import com.mraof.minestuck.computer.editmode.ClientEditmodeData;
 import com.mraof.minestuck.network.MiscContainerPacket;
 import com.mraof.minestuck.player.ClientPlayerData;
 import com.mraof.minestuck.skaianet.client.SkaiaClient;
@@ -22,21 +21,22 @@ import net.minecraft.resources.ResourceLocation;
 import net.minecraft.sounds.SoundEvents;
 import net.minecraft.world.entity.player.Inventory;
 import net.minecraft.world.item.ItemStack;
-import net.minecraftforge.api.distmarker.Dist;
-import net.minecraftforge.client.event.ClientPlayerNetworkEvent;
-import net.minecraftforge.eventbus.api.SubscribeEvent;
-import net.minecraftforge.fml.common.Mod;
+import net.neoforged.api.distmarker.Dist;
+import net.neoforged.bus.api.SubscribeEvent;
+import net.neoforged.fml.common.EventBusSubscriber;
+import net.neoforged.neoforge.client.event.ClientPlayerNetworkEvent;
+import net.neoforged.neoforge.network.PacketDistributor;
 
 import java.util.function.BiFunction;
 import java.util.function.Supplier;
 
-@Mod.EventBusSubscriber(modid = Minestuck.MOD_ID, bus = Mod.EventBusSubscriber.Bus.FORGE, value = Dist.CLIENT)
+@EventBusSubscriber(modid = Minestuck.MOD_ID, bus = EventBusSubscriber.Bus.GAME, value = Dist.CLIENT)
 public abstract class PlayerStatsScreen extends MinestuckScreen
 {
 	//TODO A better way of working with inventory-like guis like these?
 	public static final int WINDOW_ID_START = 105;	//Note that window ids used MUST be a byte. (that's how the window id is serialized in minecraft's packets)
 	
-	public static final ResourceLocation icons = new ResourceLocation("minestuck", "textures/gui/icons.png");
+	public static final ResourceLocation icons = ResourceLocation.fromNamespaceAndPath("minestuck", "textures/gui/icons.png");
 	
 	public enum NormalGuiType
 	{
@@ -142,7 +142,7 @@ public abstract class PlayerStatsScreen extends MinestuckScreen
 	public PlayerStatsScreen(Component titleIn)
 	{
 		super(titleIn);
-		this.mode = !ClientEditHandler.isActive();
+		this.mode = !ClientEditmodeData.isInEditmode();
 	}
 	
 	@Override
@@ -167,7 +167,7 @@ public abstract class PlayerStatsScreen extends MinestuckScreen
 		if(mode)
 		{
 			for(NormalGuiType type : NormalGuiType.values())
-				if(type != normalTab && (!type.reqMedium() || SkaiaClient.enteredMedium(SkaiaClient.playerId) || mc.gameMode.hasInfiniteItems()))
+				if(type != normalTab && (!type.reqMedium() || SkaiaClient.hasPlayerEntered() || mc.gameMode.hasInfiniteItems()))
 				{
 					int i = type.ordinal();
 					guiGraphics.blit(icons, xOffset + i*(tabWidth + 2), yOffset - tabHeight + tabOverlap, i==0? 0:tabWidth, 0, tabWidth, tabHeight);
@@ -195,7 +195,7 @@ public abstract class PlayerStatsScreen extends MinestuckScreen
 				index == 0? 0:tabWidth, tabHeight, tabWidth, tabHeight);
 		
 		for(int i = 0; i < (mode? NormalGuiType.values():EditmodeGuiType.values()).length; i++)
-			if(!mode || !NormalGuiType.values()[i].reqMedium() || SkaiaClient.enteredMedium(SkaiaClient.playerId) || mc.gameMode.hasInfiniteItems())
+			if(!mode || !NormalGuiType.values()[i].reqMedium() || SkaiaClient.hasPlayerEntered() || mc.gameMode.hasInfiniteItems())
 				guiGraphics.blit(icons, xOffset + (tabWidth - 16)/2 + (tabWidth+2)*i, yOffset - tabHeight + tabOverlap + 8, i*16, tabHeight*2 + (mode? 0:16), 16, 16);
 		
 		if(ClientPlayerData.hasDataCheckerAccess())
@@ -206,7 +206,7 @@ public abstract class PlayerStatsScreen extends MinestuckScreen
 				if(xcor < xOffset + i*(tabWidth + 2))
 					break;
 				else if(xcor < xOffset + i*(tabWidth + 2) + tabWidth
-						&& (!mode || !NormalGuiType.values()[i].reqMedium() || SkaiaClient.enteredMedium(SkaiaClient.playerId) || mc.gameMode.hasInfiniteItems()))
+						&& (!mode || !NormalGuiType.values()[i].reqMedium() || SkaiaClient.hasPlayerEntered() || mc.gameMode.hasInfiniteItems()))
 					guiGraphics.renderTooltip(font, Component.translatable(mode? NormalGuiType.values()[i].name:EditmodeGuiType.values()[i].name),
 							xcor, ycor);
 	}
@@ -222,7 +222,7 @@ public abstract class PlayerStatsScreen extends MinestuckScreen
 					break;
 				else if(xcor < xOffset + i*(tabWidth + 2) + tabWidth)
 				{
-					if(mode && NormalGuiType.values()[i].reqMedium() && !SkaiaClient.enteredMedium(SkaiaClient.playerId) && mc.gameMode.hasMissTime())
+					if(mode && NormalGuiType.values()[i].reqMedium() && !SkaiaClient.hasPlayerEntered() && mc.gameMode.hasMissTime())
 						return true;
 					mc.getSoundManager().play(SimpleSoundInstance.forUI(SoundEvents.UI_BUTTON_CLICK, 1.0F));
 					if(i != (mode? normalTab:editmodeTab).ordinal())
@@ -266,17 +266,17 @@ public abstract class PlayerStatsScreen extends MinestuckScreen
 				mc.player.connection.send(new ServerboundContainerClosePacket(mc.player.containerMenu.containerId));
 				mc.player.containerMenu.setCarried(ItemStack.EMPTY);
 			}
-			if(ClientEditHandler.isActive() ? editmodeTab.isContainer : normalTab.isContainer)
+			if(ClientEditmodeData.isInEditmode() ? editmodeTab.isContainer : normalTab.isContainer)
 			{
-				int ordinal = (ClientEditHandler.isActive() ? editmodeTab : normalTab).ordinal();
+				int ordinal = (ClientEditmodeData.isInEditmode() ? editmodeTab : normalTab).ordinal();
 				int windowId = WINDOW_ID_START + ordinal;
-				PlayerStatsContainerScreen<?> containerScreen = (PlayerStatsContainerScreen<?>) (ClientEditHandler.isActive() ? editmodeTab.createGuiInstance(windowId) : normalTab.createGuiInstance(windowId));
+				PlayerStatsContainerScreen<?> containerScreen = (PlayerStatsContainerScreen<?>) (ClientEditmodeData.isInEditmode() ? editmodeTab.createGuiInstance(windowId) : normalTab.createGuiInstance(windowId));
 				
 				mc.setScreen(containerScreen);
 				if(mc.screen == containerScreen)
-					MSPacketHandler.sendToServer(new MiscContainerPacket(ordinal, ClientEditHandler.isActive()));
+					PacketDistributor.sendToServer(new MiscContainerPacket(ordinal, ClientEditmodeData.isInEditmode()));
 			}
-			else mc.setScreen(ClientEditHandler.isActive()? editmodeTab.createGuiInstance():normalTab.createGuiInstance());
+			else mc.setScreen(ClientEditmodeData.isInEditmode() ? editmodeTab.createGuiInstance():normalTab.createGuiInstance());
 		}
 		else if(mc.screen instanceof PlayerStatsScreen || mc.screen instanceof PlayerStatsContainerScreen)
 			mc.setScreen(null);

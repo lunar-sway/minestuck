@@ -10,9 +10,12 @@ import net.minecraft.network.chat.Component;
 import net.minecraft.resources.ResourceLocation;
 import net.minecraft.world.entity.player.Inventory;
 
+import javax.annotation.ParametersAreNonnullByDefault;
+
+@ParametersAreNonnullByDefault
 public class ConsortShopScreen extends AbstractContainerScreen<ConsortMerchantMenu>
 {
-	private final ResourceLocation guiBackground = new ResourceLocation("minestuck", "textures/gui/consort_shop.png");
+	private final ResourceLocation guiBackground = ResourceLocation.fromNamespaceAndPath("minestuck", "textures/gui/consort_shop.png");
 	private ResourceLocation portrait;
 	
 	public ConsortShopScreen(ConsortMerchantMenu screenContainer, Inventory inv, Component titleIn)
@@ -29,7 +32,7 @@ public class ConsortShopScreen extends AbstractContainerScreen<ConsortMerchantMe
 			return;
 		
 		if(portrait == null)
-			portrait = new ResourceLocation("minestuck",
+			portrait = ResourceLocation.fromNamespaceAndPath("minestuck",
 					"textures/gui/store/"+menu.getConsortType().name().toLowerCase()+"_"+menu.getMerchantType().name().toLowerCase()+".png");
 		
 		int x = (width - imageWidth) / 2;
@@ -62,7 +65,6 @@ public class ConsortShopScreen extends AbstractContainerScreen<ConsortMerchantMe
 	@Override
 	public void render(GuiGraphics guiGraphics, int mouseX, int mouseY, float partialTicks)
 	{
-		this.renderBackground(guiGraphics);
 		super.render(guiGraphics, mouseX, mouseY, partialTicks);
 		this.renderTooltip(guiGraphics, mouseX, mouseY);
 	}

@@ -1,10 +1,11 @@
 package com.mraof.minestuck.api.alchemy;
 
 import com.mraof.minestuck.Minestuck;
+import net.minecraft.core.Holder;
+import net.minecraft.core.HolderSet;
 import net.minecraft.resources.ResourceLocation;
 import net.minecraft.tags.TagKey;
 
-import java.util.Objects;
 import java.util.stream.Stream;
 
 /**
@@ -22,7 +23,7 @@ public enum GristTypeSpawnCategory    //Which categories can a certain grist typ
 	
 	GristTypeSpawnCategory(String name)
 	{
-		this.tagKey = TagKey.create(GristTypes.REGISTRY_KEY, new ResourceLocation(Minestuck.MOD_ID, "spawnable_" + name));
+		this.tagKey = TagKey.create(GristTypes.REGISTRY_KEY, ResourceLocation.fromNamespaceAndPath(Minestuck.MOD_ID, "spawnable_" + name));
 	}
 	
 	public TagKey<GristType> getTagKey()
@@ -32,7 +33,9 @@ public enum GristTypeSpawnCategory    //Which categories can a certain grist typ
 	
 	public Stream<GristType> gristTypes()
 	{
-		return Objects.requireNonNull(GristTypes.getRegistry().tags()).getTag(this.tagKey).stream()
+		return GristTypes.REGISTRY.getTag(this.tagKey).stream()
+				.flatMap(HolderSet.ListBacked::stream)
+				.map(Holder::value)
 				.filter(GristType::isUnderlingType);
 	}
 }

@@ -1,36 +1,34 @@
 package com.mraof.minestuck.computer.editmode;
 
 import com.mraof.minestuck.api.alchemy.GristSet;
-import com.mraof.minestuck.api.alchemy.ImmutableGristSet;
+import com.mraof.minestuck.network.editmode.ServerEditPackets;
+import net.minecraft.core.HolderLookup;
 import net.minecraft.nbt.CompoundTag;
 import net.minecraft.nbt.ListTag;
 import net.minecraft.nbt.NbtOps;
 import net.minecraft.nbt.Tag;
 import net.minecraft.world.item.ItemStack;
-import org.apache.logging.log4j.LogManager;
-import org.apache.logging.log4j.Logger;
 
 import java.util.ArrayList;
 import java.util.List;
+import java.util.Objects;
 
 public final class ClientDeployList
 {
-	private static final Logger LOGGER = LogManager.getLogger();
-	
-	static void load(CompoundTag nbt)
+	public static void load(ServerEditPackets.UpdateDeployList packet, HolderLookup.Provider provider)
 	{
 		if(entryList == null)
 			entryList = new ArrayList<>();
 		else entryList.clear();
-		ListTag list = nbt.getList("l", Tag.TAG_COMPOUND);
+		ListTag list = packet.data().getList("l", Tag.TAG_COMPOUND);
 		for(int i = 0; i < list.size(); i++)
 		{
 			CompoundTag tag = list.getCompound(i);
 			Entry entry = new Entry();
-			entry.item = ItemStack.of(tag);
+			entry.item = ItemStack.parse(provider, Objects.requireNonNull(tag.get("item"))).orElseThrow();
 			entry.index = tag.getInt("i");
 			
-			entry.cost = ImmutableGristSet.LIST_CODEC.parse(NbtOps.INSTANCE, tag.get("cost")).getOrThrow(false, LOGGER::error);
+			entry.cost = GristSet.Codecs.LIST_CODEC.parse(NbtOps.INSTANCE, tag.get("cost")).getOrThrow();
 			entry.category = DeployList.EntryLists.values()[tag.getInt("cat")];
 			
 			entryList.add(entry);
@@ -51,7 +49,7 @@ public final class ClientDeployList
 	public static class Entry
 	{
 		private ItemStack item;
-		private ImmutableGristSet cost;
+		private GristSet.Immutable cost;
 		private int index;
 		private DeployList.EntryLists category;
 		

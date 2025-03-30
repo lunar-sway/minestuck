@@ -1,0 +1,8 @@
+{
+  "node": {
+    "animation": {},
+    "gui": "minestuck:textures/gui/dialogue/dialogue.png",
+    "message": "minestuck.dialogue.shady_consort.peppy_offer.item",
+    "responses": []
+  }
+}

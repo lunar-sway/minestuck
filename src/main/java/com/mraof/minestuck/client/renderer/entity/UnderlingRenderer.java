@@ -4,24 +4,24 @@ import com.mojang.blaze3d.platform.NativeImage;
 import com.mojang.blaze3d.vertex.PoseStack;
 import com.mojang.blaze3d.vertex.VertexConsumer;
 import com.mraof.minestuck.Minestuck;
-import com.mraof.minestuck.client.model.entity.UnderlingModel;
 import com.mraof.minestuck.entity.underling.UnderlingEntity;
+import net.minecraft.MethodsReturnNonnullByDefault;
 import net.minecraft.client.Minecraft;
 import net.minecraft.client.renderer.MultiBufferSource;
 import net.minecraft.client.renderer.RenderType;
 import net.minecraft.client.renderer.entity.EntityRendererProvider;
 import net.minecraft.client.renderer.texture.DynamicTexture;
-import net.minecraft.client.renderer.texture.OverlayTexture;
 import net.minecraft.client.renderer.texture.SimpleTexture;
 import net.minecraft.resources.ResourceLocation;
 import net.minecraft.server.packs.resources.Resource;
 import net.minecraft.server.packs.resources.ResourceManager;
 import net.minecraft.util.FastColor;
 import software.bernie.geckolib.cache.object.BakedGeoModel;
-import software.bernie.geckolib.core.object.Color;
+import software.bernie.geckolib.model.DefaultedEntityGeoModel;
 import software.bernie.geckolib.renderer.GeoEntityRenderer;
 import software.bernie.geckolib.renderer.GeoRenderer;
 import software.bernie.geckolib.renderer.layer.GeoRenderLayer;
+import software.bernie.geckolib.util.Color;
 
 import java.io.IOException;
 import java.io.InputStream;
@@ -29,13 +29,19 @@ import java.io.InputStream;
 /**
  * A renderer that applies the correct grist texture/color to the underlings
  */
+@MethodsReturnNonnullByDefault
 public class UnderlingRenderer<T extends UnderlingEntity> extends GeoEntityRenderer<T>
 {
-	public UnderlingRenderer(EntityRendererProvider.Context context)
+	private final String underlingName;
+	
+	public UnderlingRenderer(EntityRendererProvider.Context context, String underlingName)
 	{
 		// this renderer does two simple things :
-		super(context, new UnderlingModel<>()); // render the entity with the base layer merged with a grist texture
-		this.addRenderLayer(new UnderlingDetailsLayer(this)); // render a second layer with details (eyes, mouth, etc)
+		// render the entity with the base layer merged with a grist texture
+		super(context, new DefaultedEntityGeoModel<>(Minestuck.id("underlings/" + underlingName), true));
+		// render a second layer with details (eyes, mouth, etc)
+		this.addRenderLayer(new UnderlingDetailsLayer<>(this, underlingName));
+		this.underlingName = underlingName;
 	}
 	
 	@Override
@@ -43,6 +49,7 @@ public class UnderlingRenderer<T extends UnderlingEntity> extends GeoEntityRende
 	{
 		return 0;
 	}
+	
 	
 	@Override
 	public Color getRenderColor(T animatable, float partialTick, int packedLight)
@@ -58,17 +65,16 @@ public class UnderlingRenderer<T extends UnderlingEntity> extends GeoEntityRende
 	@Override
 	public ResourceLocation getTextureLocation(T entity)
 	{
-		String underlingName = UnderlingModel.getName(entity);
-		ResourceLocation resource = entity.getGristType().getTextureId().withPath(gristName -> "textures/entity/underlings/%s_%s.png".formatted(underlingName, gristName));
+		ResourceLocation resource = entity.getGristType().getTextureId().withPath(gristName -> "textures/entity/underlings/%s_%s.png".formatted(this.underlingName, gristName));
 		
 		// the texture manager will cache the computed textures so they're effectively computed once (at least in theory)
 		SimpleTexture nullTexture = new SimpleTexture(resource);
-		if(Minecraft.getInstance().textureManager.getTexture(resource, nullTexture) == nullTexture)
+		if(Minecraft.getInstance().getTextureManager().getTexture(resource, nullTexture) == nullTexture)
 		{
 			DynamicTexture texture = createLayeredTexture(entity);
 			
 			// save the computed texture to the texture manager's cache
-			Minecraft.getInstance().textureManager.register(resource, texture);
+			Minecraft.getInstance().getTextureManager().register(resource, texture);
 		}
 		
 		return resource;
@@ -110,8 +116,7 @@ public class UnderlingRenderer<T extends UnderlingEntity> extends GeoEntityRende
 	
 	private ResourceLocation getGristTexture(T entity)
 	{
-		String textureName = entity.getGristType().getTextureId().getPath();
-		var textureLocation = new ResourceLocation(Minestuck.MOD_ID, "textures/entity/underlings/" + textureName + ".png");
+		var textureLocation = entity.getGristType().getTextureId().withPath(textureName -> "textures/entity/underlings/" + textureName + ".png");
 		if (Minecraft.getInstance().getResourceManager().getResource(textureLocation).isEmpty()) {
 			return this.model.getTextureResource(entity);
 		}
@@ -121,22 +126,26 @@ public class UnderlingRenderer<T extends UnderlingEntity> extends GeoEntityRende
 	/**
 	 * Detail layer for the underling
 	 */
-	public class UnderlingDetailsLayer extends GeoRenderLayer<T>
+	private static class UnderlingDetailsLayer<T extends UnderlingEntity> extends GeoRenderLayer<T>
 	{
-		public UnderlingDetailsLayer(GeoRenderer<T> entityRendererIn)
+		private final ResourceLocation textureId;
+		
+		public UnderlingDetailsLayer(GeoRenderer<T> entityRendererIn, String underlingName)
 		{
 			super(entityRendererIn);
+			this.textureId = Minestuck.id("textures/entity/underlings/" + underlingName + "_details.png");
 		}
 		
 		@Override
 		public void render(PoseStack poseStack, T animatable, BakedGeoModel bakedModel, RenderType renderType, MultiBufferSource bufferSource, VertexConsumer buffer, float partialTick, int packedLight, int packedOverlay)
 		{
-			RenderType layerRenderType = RenderType.armorCutoutNoCull(new ResourceLocation(Minestuck.MOD_ID, "textures/entity/underlings/" + UnderlingModel.getName(animatable) + "_details.png"));
-			float color = getContrastModifier(animatable);
+			RenderType layerRenderType = RenderType.entityCutoutNoCullZOffset(this.textureId);
+			float contrast = getContrastModifier(animatable);
+			
 			poseStack.pushPose();
 			
 			this.getRenderer().reRender(bakedModel, poseStack, bufferSource, animatable, layerRenderType, bufferSource.getBuffer(layerRenderType),
-					partialTick, packedLight, OverlayTexture.NO_OVERLAY, color, color, color, 1);
+					partialTick, packedLight, packedOverlay, FastColor.ARGB32.colorFromFloat(1, contrast, contrast, contrast));
 			
 			poseStack.popPose();
 		}

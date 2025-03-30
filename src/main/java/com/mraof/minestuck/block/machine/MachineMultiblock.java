@@ -3,16 +3,22 @@ package com.mraof.minestuck.block.machine;
 import net.minecraft.core.BlockPos;
 import net.minecraft.core.Direction;
 import net.minecraft.world.item.Item;
-import net.minecraft.world.level.*;
+import net.minecraft.world.level.BlockGetter;
+import net.minecraft.world.level.ItemLike;
+import net.minecraft.world.level.Level;
+import net.minecraft.world.level.LevelAccessor;
 import net.minecraft.world.level.block.Block;
 import net.minecraft.world.level.block.Rotation;
 import net.minecraft.world.level.block.state.BlockState;
 import net.minecraft.world.level.levelgen.structure.BoundingBox;
-import net.minecraftforge.registries.DeferredRegister;
-import net.minecraftforge.registries.RegistryObject;
+import net.neoforged.neoforge.registries.DeferredBlock;
+import net.neoforged.neoforge.registries.DeferredRegister;
 
 import javax.annotation.Nonnull;
-import java.util.*;
+import java.util.ArrayList;
+import java.util.List;
+import java.util.Objects;
+import java.util.Optional;
 import java.util.function.BiPredicate;
 import java.util.function.Consumer;
 import java.util.function.Supplier;
@@ -24,18 +30,18 @@ public abstract class MachineMultiblock implements ItemLike    //An abstraction 
 	//The above or states has the same block and direction
 	public static final BiPredicate<BlockState, BlockState> ROTATION_PREDICATE = BASE_PREDICATE.and((state1, state2) -> state1.getValue(MachineBlock.FACING) == state2.getValue(MachineBlock.FACING));
 	
-	private final DeferredRegister<Block> register;
-	private final Set<RegistryObject<? extends Block>> registryEntries = new HashSet<>();
+	private final DeferredRegister.Blocks register;
+	private final List<Supplier<? extends Block>> registryEntries = new ArrayList<>();
 	private final List<PlacementEntry> blockEntries = new ArrayList<>();
 	
-	protected MachineMultiblock(DeferredRegister<Block> register)
+	protected MachineMultiblock(DeferredRegister.Blocks register)
 	{
 		this.register = register;
 	}
 	
-	protected <B extends Block> RegistryObject<B> register(String name, Supplier<B> constructor)
+	protected <B extends Block> DeferredBlock<B> register(String name, Supplier<B> constructor)
 	{
-		RegistryObject<B> registryObject = register.register(name, constructor);
+		DeferredBlock<B> registryObject = register.register(name, constructor);
 		registryEntries.add(registryObject);
 		return registryObject;
 	}
@@ -62,7 +68,7 @@ public abstract class MachineMultiblock implements ItemLike    //An abstraction 
 	 * Assumes that the block must exist for a valid machine,
 	 * so {@link #isInvalidFromPlacement(BlockGetter, BlockPos, PlacementEntry)} will return true if this block is missing.
 	 */
-	protected PlacementEntry addDirectionPlacement(int x, int y, int z, RegistryObject<Block> regBlock, Direction direction)
+	protected PlacementEntry addDirectionPlacement(int x, int y, int z, Supplier<Block> regBlock, Direction direction)
 	{
 		return addPlacement(new BlockPos(x, y, z), applyDirection(regBlock, direction), true, true, true, ROTATION_PREDICATE);
 	}
@@ -76,7 +82,7 @@ public abstract class MachineMultiblock implements ItemLike    //An abstraction 
 	 * so {@link #isInvalidFromPlacement(BlockGetter, BlockPos, PlacementEntry)} will ignore this block.
 	 */
 	@SuppressWarnings("SameParameterValue")
-	protected PlacementEntry addDirectionOptional(int x, int y, int z, RegistryObject<Block> regBlock, Direction direction)
+	protected PlacementEntry addDirectionOptional(int x, int y, int z, Supplier<Block> regBlock, Direction direction)
 	{
 		return addPlacement(new BlockPos(x, y, z), applyDirection(regBlock, direction), false, true, false, ROTATION_PREDICATE);
 	}
@@ -94,17 +100,25 @@ public abstract class MachineMultiblock implements ItemLike    //An abstraction 
 	
 	public Block getMainBlock()
 	{
-		return !registryEntries.isEmpty() ? registryEntries.iterator().next().get() : null;
+		return !registryEntries.isEmpty() ? registryEntries.get(0).get() : null;
 	}
 	
 	public void forEachBlock(Consumer<Block> consumer)
 	{
-		registryEntries.forEach(blockRegistryObject -> blockRegistryObject.ifPresent(consumer));
+		registryEntries.forEach(block -> consumer.accept(block.get()));
 	}
 	
 	public void placeWithRotation(LevelAccessor level, Placement placement)
 	{
 		blockEntries.forEach(entry -> entry.placeWithRotation(level, placement));
+	}
+	
+	/**
+	 * Additional code to run after the multiblock has been placed.
+	 */
+	public void placeAdditional(Level level, Placement placement)
+	{
+	
 	}
 	
 	private boolean isInvalid(BlockGetter level, Placement placement)
@@ -244,8 +258,8 @@ public abstract class MachineMultiblock implements ItemLike    //An abstraction 
 	public record Placement(BlockPos zeroPos, Rotation rotation)
 	{}
 	
-	protected static Supplier<BlockState> applyDirection(RegistryObject<Block> regBlock, Direction direction)
+	protected static Supplier<BlockState> applyDirection(Supplier<Block> block, Direction direction)
 	{
-		return regBlock.lazyMap(block -> block.defaultBlockState().setValue(MachineBlock.FACING, direction));
+		return () -> block.get().defaultBlockState().setValue(MachineBlock.FACING, direction);
 	}
 }

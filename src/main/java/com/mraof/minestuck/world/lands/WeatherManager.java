@@ -3,13 +3,13 @@ package com.mraof.minestuck.world.lands;
 import com.mraof.minestuck.Minestuck;
 import net.minecraft.server.level.ServerLevel;
 import net.minecraft.world.level.storage.ServerLevelData;
-import net.minecraftforge.event.level.LevelEvent;
-import net.minecraftforge.eventbus.api.SubscribeEvent;
-import net.minecraftforge.fml.common.Mod;
+import net.neoforged.bus.api.SubscribeEvent;
+import net.neoforged.fml.common.EventBusSubscriber;
+import net.neoforged.neoforge.event.level.LevelEvent;
 import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.Logger;
 
-@Mod.EventBusSubscriber(modid = Minestuck.MOD_ID)
+@EventBusSubscriber(modid = Minestuck.MOD_ID)
 public class WeatherManager
 {
 	private static final Logger LOGGER = LogManager.getLogger();

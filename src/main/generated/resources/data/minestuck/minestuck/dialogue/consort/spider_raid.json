@@ -1,0 +1,10 @@
+{
+  "node": {
+    "animation": {
+      "emotion": "angry"
+    },
+    "gui": "minestuck:textures/gui/dialogue/dialogue.png",
+    "message": "minestuck.dialogue.consort.spider_raid",
+    "responses": []
+  }
+}

@@ -2,18 +2,18 @@ package com.mraof.minestuck;
 
 import com.mraof.minestuck.computer.editmode.DeployList;
 import net.minecraft.server.MinecraftServer;
-import net.minecraftforge.common.ForgeConfigSpec;
-import net.minecraftforge.common.ForgeConfigSpec.*;
-import net.minecraftforge.eventbus.api.SubscribeEvent;
-import net.minecraftforge.fml.common.Mod;
-import net.minecraftforge.fml.event.config.ModConfigEvent;
-import net.minecraftforge.server.ServerLifecycleHooks;
+import net.neoforged.bus.api.SubscribeEvent;
+import net.neoforged.fml.common.EventBusSubscriber;
+import net.neoforged.fml.event.config.ModConfigEvent;
+import net.neoforged.neoforge.common.ModConfigSpec;
+import net.neoforged.neoforge.common.ModConfigSpec.*;
+import net.neoforged.neoforge.server.ServerLifecycleHooks;
 import org.apache.commons.lang3.tuple.Pair;
 
 import java.util.ArrayList;
 import java.util.List;
 
-@Mod.EventBusSubscriber(modid = Minestuck.MOD_ID, bus = Mod.EventBusSubscriber.Bus.MOD)
+@EventBusSubscriber(modid = Minestuck.MOD_ID, bus = EventBusSubscriber.Bus.MOD)
 public class MinestuckConfig
 {
 	//Uses the singleton design pattern, much like the forge config
@@ -25,7 +25,7 @@ public class MinestuckConfig
 		
 		public final IntValue entryDelay;
 		
-		private Common(ForgeConfigSpec.Builder builder)
+		private Common(ModConfigSpec.Builder builder)
 		{
 			builder.comment("If you're looking for a config option that isn't here, try looking in the world-specific config").push("logging");
 			logIngredientItemsWithoutCosts = builder.comment("Makes the recipe-generated grist cost process log any items that are used as recipe ingredients, but is neither the output of a different recipe, or has a grist cost. Useful for finding items that probably need manual grist costs.")
@@ -46,6 +46,7 @@ public class MinestuckConfig
 		public final EnumValue<AnimationSpeed> echeladderAnimation;
 		public final BooleanValue loginColorSelector;
 		public final BooleanValue alchemyIcons;
+		public final BooleanValue npcDialogueTextColors;
 		
 		private Client(Builder builder)
 		{
@@ -56,6 +57,8 @@ public class MinestuckConfig
 					.define("loginColorSelector", true);
 			echeladderAnimation = builder.comment("Allows control of standard speed for the echeladder rung \"animation\", or if it should have one in the first place.")
 					.defineEnum("echeladderAnimation", AnimationSpeed.NORMAL);
+			npcDialogueTextColors = builder.comment("Determines whether an NPC will use their custom formatted color value when talking in a dialogue screen.")
+					.define("npcDialogueTextColors", true);
 			builder.pop();
 		}
 	}
@@ -88,7 +91,6 @@ public class MinestuckConfig
 		public final EnumValue<AvailableOptions> hashmapChatModusSetting;
 		
 		//Mechanics
-		public final boolean forceMaxSize = true;
 		public final BooleanValue hardMode;
 		public final BooleanValue echeladderProgress;
 		public final BooleanValue aspectEffects;
@@ -108,10 +110,7 @@ public class MinestuckConfig
 		//Computer
 		public final BooleanValue privateComputers;
 		public final BooleanValue globalSession;
-		public final BooleanValue skaianetCheck;
 		public final EnumValue<PermissionType> dataCheckerPermission;
-		
-		public final EnumValue<FailedEscapeMode> escapeFailureMode = null;	//TODO once a connection can close from meteor failure
 		
 		//Edit Mode
 		public final BooleanValue showGristChanges;
@@ -162,8 +161,6 @@ public class MinestuckConfig
 					.define("privateComputers", true);
 			globalSession = builder.comment("Whenever all sburb connections should be put into a single session or not.")
 					.define("globalSession",false);
-			skaianetCheck = builder.comment("If enabled, will during certain moments perform a check on all connections and computers that are in use. Recommended to turn off if there is a need to improve performance, however skaianet-related bugs might appear when done so.")
-					.define("skaianetCheck",true);
 			dataCheckerPermission = builder.comment("Determines who's allowed to access the data checker. \"none\": No one is allowed. \"ops\": only those with a command permission of level 2 or more may access the data ckecker. (for single player, that would be if cheats are turned on) \"gamemode\": Only players with the creative or spectator gamemode may view the data checker. \"ops_or_gamemode\": Both ops and players in creative or spectator mode may view the data checker. \"anyone\": No access restrictions are used.")
 					.defineEnum("dataCheckerPermission", PermissionType.OPS_OR_GAMEMODE);
 			builder.pop();
@@ -232,30 +229,30 @@ public class MinestuckConfig
 		}
 	}
 	
-	static final ForgeConfigSpec commonSpec;
+	static final ModConfigSpec commonSpec;
 	public static final Common COMMON;
 	static
 	{
-		Pair<Common, ForgeConfigSpec> pair = new ForgeConfigSpec.Builder().configure(Common::new);
+		Pair<Common, ModConfigSpec> pair = new ModConfigSpec.Builder().configure(Common::new);
 		COMMON = pair.getLeft();
 		commonSpec = pair.getRight();
 	}
 	
-	static final ForgeConfigSpec clientSpec;
+	static final ModConfigSpec clientSpec;
 	public static final Client CLIENT;
 	static
 	{
-		Pair<Client, ForgeConfigSpec> pair = new ForgeConfigSpec.Builder().configure(Client::new);
+		Pair<Client, ModConfigSpec> pair = new ModConfigSpec.Builder().configure(Client::new);
 		CLIENT = pair.getLeft();
 		clientSpec = pair.getRight();
 	}
 	
 	
-	static final ForgeConfigSpec serverSpec;
+	static final ModConfigSpec serverSpec;
 	public static final Server SERVER;
 	static
 	{
-		Pair<Server, ForgeConfigSpec> pair = new ForgeConfigSpec.Builder().configure(Server::new);
+		Pair<Server, ModConfigSpec> pair = new ModConfigSpec.Builder().configure(Server::new);
 		SERVER = pair.getLeft();
 		serverSpec = pair.getRight();
 	}
@@ -321,17 +318,5 @@ public class MinestuckConfig
 		{
 			return factor;
 		}
-	}
-	
-	public enum FailedEscapeMode
-	{
-		/**
-		 * Make the player's new server player his/her old server player's server player
-		 */
-		CLOSE,
-		/**
-		 * The player that lost his/her server player will have an idle main connection until someone without a client player connects to him/her.
-		 */
-		OPEN
 	}
 }

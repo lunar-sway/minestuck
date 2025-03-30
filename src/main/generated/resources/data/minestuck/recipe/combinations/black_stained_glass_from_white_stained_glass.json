@@ -1,0 +1,11 @@
+{
+  "type": "minestuck:combination",
+  "input1": {
+    "tag": "c:dyes/black"
+  },
+  "input2": {
+    "item": "minecraft:white_stained_glass"
+  },
+  "mode": "or",
+  "output": "minecraft:black_stained_glass"
+}

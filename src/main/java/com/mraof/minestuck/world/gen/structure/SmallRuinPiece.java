@@ -7,7 +7,7 @@ import com.mraof.minestuck.world.gen.structure.blocks.StructureBlockRegistry;
 import net.minecraft.core.BlockPos;
 import net.minecraft.core.Direction;
 import net.minecraft.nbt.CompoundTag;
-import net.minecraft.resources.ResourceLocation;
+import net.minecraft.resources.ResourceKey;
 import net.minecraft.util.RandomSource;
 import net.minecraft.world.entity.MobSpawnType;
 import net.minecraft.world.level.ChunkPos;
@@ -22,6 +22,7 @@ import net.minecraft.world.level.levelgen.Heightmap;
 import net.minecraft.world.level.levelgen.structure.BoundingBox;
 import net.minecraft.world.level.levelgen.structure.ScatteredFeaturePiece;
 import net.minecraft.world.level.levelgen.structure.pieces.StructurePieceSerializationContext;
+import net.minecraft.world.level.storage.loot.LootTable;
 
 public class SmallRuinPiece extends ScatteredFeaturePiece
 {
@@ -31,7 +32,7 @@ public class SmallRuinPiece extends ScatteredFeaturePiece
 	
 	public SmallRuinPiece(RandomSource random, int minX, int minZ, float skyLight)
 	{
-		super(MSStructurePieces.SMALL_RUIN.get(), minX, 64, minZ, 7, 4, 10, getRandomHorizontalDirection(random));
+		super(MSStructures.SMALL_RUIN_PIECE.get(), minX, 64, minZ, 7, 4, 10, getRandomHorizontalDirection(random));
 		
 		float torchChance = 1 - skyLight;
 		
@@ -43,7 +44,7 @@ public class SmallRuinPiece extends ScatteredFeaturePiece
 	
 	public SmallRuinPiece(CompoundTag nbt)
 	{
-		super(MSStructurePieces.SMALL_RUIN.get(), nbt);
+		super(MSStructures.SMALL_RUIN_PIECE.get(), nbt);
 		
 		for(int i = 0; i < 4; i++)
 			torches[i] = nbt.getBoolean("torch" + i);
@@ -127,7 +128,7 @@ public class SmallRuinPiece extends ScatteredFeaturePiece
 			placedOgres[3] = placeUnderling(this.boundingBox.maxX() + 3, this.boundingBox.maxZ() + 3, boundingBoxIn, level, randomIn);
 	}
 	
-	private boolean generateChest(WorldGenLevel level, BoundingBox boundingBoxIn, RandomSource randomIn, int x, int y, int z, Direction direction, ResourceLocation lootTable)
+	private boolean generateChest(WorldGenLevel level, BoundingBox boundingBoxIn, RandomSource randomIn, int x, int y, int z, Direction direction, ResourceKey<LootTable> lootTable)
 	{
 		BlockPos blockpos = new BlockPos(this.getWorldX(x, z), this.getWorldY(y), this.getWorldZ(x, z));
 		return createChest(level, boundingBoxIn, randomIn, blockpos, lootTable, Blocks.CHEST.defaultBlockState().setValue(ChestBlock.FACING, direction));
@@ -197,7 +198,7 @@ public class SmallRuinPiece extends ScatteredFeaturePiece
 				throw new IllegalStateException("Unable to create a new ogre. Entity factory returned null!");
 			ogre.setPersistenceRequired();
 			ogre.moveTo(xPos + 0.5, maxY, zPos + 0.5, rand.nextFloat() * 360F, 0);
-			ogre.finalizeSpawn(level, level.getCurrentDifficultyAt(new BlockPos(xPos, maxY, zPos)), MobSpawnType.STRUCTURE, null, null);
+			ogre.finalizeSpawn(level, level.getCurrentDifficultyAt(new BlockPos(xPos, maxY, zPos)), MobSpawnType.STRUCTURE, null);
 			ogre.restrictTo(new BlockPos(xPos, this.boundingBox.minY(), zPos), 10);
 			level.addFreshEntity(ogre);
 		}

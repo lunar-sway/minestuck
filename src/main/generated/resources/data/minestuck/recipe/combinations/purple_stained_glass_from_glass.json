@@ -1,0 +1,11 @@
+{
+  "type": "minestuck:combination",
+  "input1": {
+    "item": "minecraft:glass"
+  },
+  "input2": {
+    "tag": "c:dyes/purple"
+  },
+  "mode": "and",
+  "output": "minecraft:purple_stained_glass"
+}

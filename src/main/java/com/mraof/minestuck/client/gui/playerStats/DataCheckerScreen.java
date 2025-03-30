@@ -3,8 +3,7 @@ package com.mraof.minestuck.client.gui.playerStats;
 import com.mojang.blaze3d.platform.InputConstants;
 import com.mojang.blaze3d.systems.RenderSystem;
 import com.mraof.minestuck.client.util.MSKeyHandler;
-import com.mraof.minestuck.network.DataCheckerPacket;
-import com.mraof.minestuck.network.MSPacketHandler;
+import com.mraof.minestuck.network.DataCheckerPackets;
 import com.mraof.minestuck.player.ClientPlayerData;
 import com.mraof.minestuck.player.EnumAspect;
 import com.mraof.minestuck.player.EnumClass;
@@ -22,7 +21,8 @@ import net.minecraft.nbt.Tag;
 import net.minecraft.network.chat.Component;
 import net.minecraft.resources.ResourceLocation;
 import net.minecraft.util.Mth;
-import net.minecraftforge.client.gui.widget.ExtendedButton;
+import net.neoforged.neoforge.client.gui.widget.ExtendedButton;
+import net.neoforged.neoforge.network.PacketDistributor;
 import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.Logger;
 
@@ -34,8 +34,8 @@ public class DataCheckerScreen extends Screen
 {
 	private static final Logger LOGGER = LogManager.getLogger();
 	
-	private static final ResourceLocation icons = new ResourceLocation("minestuck", "textures/gui/icons.png");
-	private static final ResourceLocation guiBackground = new ResourceLocation("minestuck", "textures/gui/data_check.png");
+	private static final ResourceLocation icons = ResourceLocation.fromNamespaceAndPath("minestuck", "textures/gui/icons.png");
+	private static final ResourceLocation guiBackground = ResourceLocation.fromNamespaceAndPath("minestuck", "textures/gui/data_check.png");
 	private static final int GUI_WIDTH = 210, GUI_HEIGHT = 140;
 	private static final int LIST_Y = 25;
 	
@@ -72,9 +72,19 @@ public class DataCheckerScreen extends Screen
 		refreshButton = addRenderableWidget(Button.builder(Component.empty(), button -> refresh()).pos(xOffset + GUI_WIDTH - 45, yOffset + 5).size(18, 18).build());
 		
 		if(activeComponent == null)
-			MSPacketHandler.sendToServer(DataCheckerPacket.request());
+			PacketDistributor.sendToServer(DataCheckerPackets.Request.create());
 		
 		componentChanged();
+	}
+	
+	@Override
+	public void renderBackground(GuiGraphics guiGraphics, int mouseX, int mouseY, float partialTicks)
+	{
+		super.renderBackground(guiGraphics, mouseX, mouseY, partialTicks);
+		
+		int xOffset = (width - GUI_WIDTH)/2;
+		int yOffset = (height - GUI_HEIGHT)/2;
+		guiGraphics.blit(guiBackground, xOffset, yOffset, 0, 0, GUI_WIDTH, GUI_HEIGHT);
 	}
 	
 	@Override
@@ -95,11 +105,6 @@ public class DataCheckerScreen extends Screen
 				updateGuiButtons();
 			}
 		}
-		
-		renderBackground(guiGraphics);
-		
-		RenderSystem.setShaderColor(1, 1, 1, 1);
-		guiGraphics.blit(guiBackground, xOffset, yOffset, 0, 0, GUI_WIDTH, GUI_HEIGHT);
 		
 		super.render(guiGraphics, mouseX, mouseY, partialTicks);
 		
@@ -144,16 +149,16 @@ public class DataCheckerScreen extends Screen
 	}
 	
 	@Override
-	public boolean mouseScrolled(double mouseX, double mouseY, double scroll)
+	public boolean mouseScrolled(double mouseX, double mouseY, double scrollX, double scrollY)
 	{
-		if(scroll != 0 && guiComponent != null)
+		if(scrollY != 0 && guiComponent != null)
 		{
 			int size = guiComponent.getComponentList().size();
 			if(size <= 5)
-				return super.mouseScrolled(mouseX, mouseY, scroll);
+				return super.mouseScrolled(mouseX, mouseY, scrollX, scrollY);
 			
 			int prevIndex = index;
-			if(scroll > 0)
+			if(scrollY > 0)
 				index -= 1;
 			else index += 1;
 			index = Mth.clamp(index, 0, size - 5);
@@ -164,7 +169,7 @@ public class DataCheckerScreen extends Screen
 				updateGuiButtons();
 			}
 			return true;
-		} else return super.mouseScrolled(mouseX, mouseY, scroll);
+		} else return super.mouseScrolled(mouseX, mouseY, scrollX, scrollY);
 	}
 	
 	@Override
@@ -215,7 +220,7 @@ public class DataCheckerScreen extends Screen
 	
 	private void refresh()
 	{
-		MSPacketHandler.sendToServer(DataCheckerPacket.request());
+		PacketDistributor.sendToServer(DataCheckerPackets.Request.create());
 		activeComponent = null;
 		componentChanged();
 	}
@@ -364,13 +369,7 @@ public class DataCheckerScreen extends Screen
 			{
 				CompoundTag sessionTag = sessionList.getCompound(i);
 				SessionComponent session = new SessionComponent(this, sessionTag, data);
-				if(sessionTag.contains("name", Tag.TAG_STRING))
-					session.name = sessionTag.getString("name");
-				else
-				{
-					session.name = "Session " + String.valueOf(nameIndex);
-					nameIndex++;
-				}
+				session.name = "Session " + nameIndex++;
 				list.add(session);
 			}
 		}
@@ -477,30 +476,27 @@ public class DataCheckerScreen extends Screen
 			list.add(new TextField("Client Player: %s", client));
 			if(!server.isEmpty())
 				list.add(new TextField("Server Player: %s", server));
-			list.add(new TextField("Is Active: %b", connectionTag.getBoolean("isActive")));
 			list.add(new TextField("Is Primary Connection: %b", isMain));
 			
 			list.add(null);
-			if(isMain)
+			list.add(new TextField("Land dim: %s", (!landDim.isEmpty() ? landDim : "Pre-entry")));
+			
+			if(!landDim.isEmpty() && connectionTag.contains("landTypes"))
+				LandTypePair.Named.CODEC.parse(NbtOps.INSTANCE, connectionTag.get("landTypes")).resultOrPartial(LOGGER::error)
+						.ifPresent(namedTypes -> list.add(new LocalizedTextField(namedTypes.asComponent())));
+			
+			if(connectionTag.contains("class"))
 			{
-				list.add(new TextField("Land dim: %s", (!landDim.isEmpty() ? landDim : "Pre-entry")));
-				
-				if(!landDim.isEmpty() && connectionTag.contains("landTypes"))
-					LandTypePair.Named.CODEC.parse(NbtOps.INSTANCE, connectionTag.get("landTypes")).resultOrPartial(LOGGER::error)
-							.ifPresent(namedTypes -> list.add(new LocalizedTextField(namedTypes.asComponent())));
-				
-				if(connectionTag.contains("class"))
-				{
-					byte cl = connectionTag.getByte("class"), as = connectionTag.getByte("aspect");
-					Title title = new Title(EnumClass.values()[cl], EnumAspect.values()[as]);
-					list.add(new TextField(title.asTextComponent().getString()));
-				}
-				
-				if(connectionTag.contains("titleLandType"))
-					list.add(new TextField("Title land type: %s", connectionTag.getString("titleLandType")));
-				if(connectionTag.contains("terrainLandType"))
-					list.add(new TextField("Terrain land type: %s", connectionTag.getString("terrainLandType")));
+				byte cl = connectionTag.getByte("class"), as = connectionTag.getByte("aspect");
+				Title title = new Title(EnumClass.values()[cl], EnumAspect.values()[as]);
+				list.add(new TextField(title.asTextComponent().getString()));
 			}
+			
+			if(connectionTag.contains("titleLandType"))
+				list.add(new TextField("Title land type: %s", connectionTag.getString("titleLandType")));
+			if(connectionTag.contains("terrainLandType"))
+				list.add(new TextField("Terrain land type: %s", connectionTag.getString("terrainLandType")));
+			
 			list.add(new GristCacheButton(connectionTag.getString("clientId")));
 		}
 		@Override

@@ -1,42 +1,60 @@
 package com.mraof.minestuck.item.crafting;
 
-import com.google.gson.JsonObject;
-import com.google.gson.JsonSyntaxException;
+import com.mojang.serialization.MapCodec;
+import com.mojang.serialization.codecs.RecordCodecBuilder;
+import net.minecraft.MethodsReturnNonnullByDefault;
+import net.minecraft.core.registries.BuiltInRegistries;
 import net.minecraft.network.FriendlyByteBuf;
+import net.minecraft.network.RegistryFriendlyByteBuf;
+import net.minecraft.network.codec.StreamCodec;
 import net.minecraft.resources.ResourceLocation;
-import net.minecraft.util.GsonHelper;
-import net.minecraft.world.Container;
 import net.minecraft.world.item.ItemStack;
 import net.minecraft.world.item.crafting.*;
 import net.minecraft.world.level.Level;
-import net.minecraftforge.registries.ForgeRegistries;
 
-import javax.annotation.Nullable;
 import javax.annotation.ParametersAreNonnullByDefault;
 import java.util.Objects;
 import java.util.Optional;
+import java.util.stream.Stream;
 
 @ParametersAreNonnullByDefault
+@MethodsReturnNonnullByDefault
 public class IrradiatingFallbackRecipe extends IrradiatingRecipe
 {
-	protected final RecipeType<? extends AbstractCookingRecipe> fallbackType;
+	protected final RecipeType<?> fallbackType;
 	
-	public IrradiatingFallbackRecipe(ResourceLocation idIn, RecipeType<? extends AbstractCookingRecipe> fallbackType)
+	public IrradiatingFallbackRecipe(RecipeType<?> fallbackType)
 	{
-		super(idIn, "", CookingBookCategory.MISC, Ingredient.EMPTY, ItemStack.EMPTY, 0, 20);
+		super("", CookingBookCategory.MISC, Ingredient.EMPTY, ItemStack.EMPTY, 0, 20);
 		this.fallbackType = fallbackType;
 	}
 	
 	@Override
-	public boolean matches(Container inventory, Level level)
+	public boolean matches(SingleRecipeInput input, Level level)
 	{
 		return true;	//Only need to do a recipe search once in the getCookingRecipe()
 	}
 	
 	@Override
-	public Optional<? extends AbstractCookingRecipe> getCookingRecipe(Container container, Level level)
+	public Optional<? extends AbstractCookingRecipe> getCookingRecipe(SingleRecipeInput input, Level level)
 	{
-		return level.getRecipeManager().getRecipesFor(fallbackType, container, level).stream().filter(o -> !o.isSpecial()).findFirst();
+		RecipeManager recipeManager = level.getRecipeManager();
+		return getFallbackRecipes(recipeManager)
+				.filter(recipe -> recipe.matches(input, level))
+				.findFirst();
+	}
+	
+	private Stream<AbstractCookingRecipe> getFallbackRecipes(RecipeManager recipeManager)
+	{
+		return recipeManager.getRecipes().stream()
+				.filter(recipe -> recipe.value().getType() == this.fallbackType)
+				.flatMap(recipe -> {
+					if(recipe.value() instanceof AbstractCookingRecipe cookingRecipe)
+						return Stream.of(cookingRecipe);
+					else
+						return Stream.empty();
+				})
+				.filter(o -> !o.isSpecial());
 	}
 	
 	@Override
@@ -59,37 +77,36 @@ public class IrradiatingFallbackRecipe extends IrradiatingRecipe
 	
 	public static class Serializer implements RecipeSerializer<IrradiatingFallbackRecipe>
 	{
+		private static final MapCodec<IrradiatingFallbackRecipe> CODEC = RecordCodecBuilder.mapCodec(instance ->
+				instance.group(
+						BuiltInRegistries.RECIPE_TYPE.byNameCodec().fieldOf("fallback_type").forGetter(recipe -> recipe.fallbackType)
+				).apply(instance, IrradiatingFallbackRecipe::new));
+		private static final StreamCodec<RegistryFriendlyByteBuf, IrradiatingFallbackRecipe> STREAM_CODEC = StreamCodec.of(Serializer::toNetwork, Serializer::fromNetwork);
+		
 		@Override
-		public IrradiatingFallbackRecipe fromJson(ResourceLocation recipeId, JsonObject json)
+		public MapCodec<IrradiatingFallbackRecipe> codec()
 		{
-			RecipeType<? extends AbstractCookingRecipe> fallbackType = deserializeRecipeType(json);
-			return new IrradiatingFallbackRecipe(recipeId, fallbackType);
+			return CODEC;
 		}
 		
-		@Nullable
 		@Override
-		public IrradiatingFallbackRecipe fromNetwork(ResourceLocation recipeId, FriendlyByteBuf buffer)
+		public StreamCodec<RegistryFriendlyByteBuf, IrradiatingFallbackRecipe> streamCodec()
+		{
+			return STREAM_CODEC;
+		}
+		
+		private static IrradiatingFallbackRecipe fromNetwork(FriendlyByteBuf buffer)
 		{
 			ResourceLocation typeName = buffer.readResourceLocation();
-			RecipeType<?> fallbackType = ForgeRegistries.RECIPE_TYPES.getValue(typeName);
+			RecipeType<?> fallbackType = BuiltInRegistries.RECIPE_TYPE.get(typeName);
 			if(fallbackType == null)
 				throw new IllegalArgumentException("Can not deserialize unknown Recipe type: " + typeName);
-			return new IrradiatingFallbackRecipe(recipeId, (RecipeType<? extends AbstractCookingRecipe>) fallbackType);
+			return new IrradiatingFallbackRecipe(fallbackType);
 		}
 		
-		@Override
-		public void toNetwork(FriendlyByteBuf buffer, IrradiatingFallbackRecipe recipe)
+		private static void toNetwork(FriendlyByteBuf buffer, IrradiatingFallbackRecipe recipe)
 		{
-			buffer.writeResourceLocation(Objects.requireNonNull(ForgeRegistries.RECIPE_TYPES.getKey(recipe.fallbackType)));
+			buffer.writeResourceLocation(Objects.requireNonNull(BuiltInRegistries.RECIPE_TYPE.getKey(recipe.fallbackType)));
 		}
-	}
-	
-	private static RecipeType<? extends AbstractCookingRecipe> deserializeRecipeType(JsonObject json)
-	{
-		String typeName = GsonHelper.getAsString(json, "fallback_type");
-		RecipeType<?> fallbackType = ForgeRegistries.RECIPE_TYPES.getValue(new ResourceLocation(typeName));
-		if(fallbackType == null)
-			throw new JsonSyntaxException("Unknown recipe type '" + typeName + "'");
-		return (RecipeType<? extends AbstractCookingRecipe>) fallbackType;
 	}
 }

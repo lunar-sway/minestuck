@@ -1,0 +1,23 @@
+{
+  "node": {
+    "animation": {},
+    "gui": "minestuck:textures/gui/dialogue/dialogue.png",
+    "message": {
+      "arguments": [
+        "land_denizen"
+      ],
+      "key": "minestuck.dialogue.consort.underling_commission.answer.1"
+    },
+    "responses": [
+      {
+        "condition": {
+          "type": "minestuck:always_true"
+        },
+        "hide_if_failed": true,
+        "message": "minestuck.arrow",
+        "next_dialogue": "minestuck:consort/underling_commission/answer.2",
+        "triggers": []
+      }
+    ]
+  }
+}

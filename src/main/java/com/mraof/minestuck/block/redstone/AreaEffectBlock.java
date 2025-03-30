@@ -1,5 +1,6 @@
 package com.mraof.minestuck.block.redstone;
 
+import com.mojang.serialization.MapCodec;
 import com.mraof.minestuck.block.BlockUtil;
 import com.mraof.minestuck.block.MSProperties;
 import com.mraof.minestuck.blockentity.MSBlockEntityTypes;
@@ -8,18 +9,18 @@ import com.mraof.minestuck.client.gui.MSScreenFactories;
 import com.mraof.minestuck.effects.CreativeShockEffect;
 import net.minecraft.core.BlockPos;
 import net.minecraft.core.Direction;
+import net.minecraft.core.component.DataComponents;
 import net.minecraft.core.particles.DustParticleOptions;
 import net.minecraft.network.chat.Component;
 import net.minecraft.sounds.SoundEvents;
 import net.minecraft.sounds.SoundSource;
 import net.minecraft.util.RandomSource;
 import net.minecraft.world.InteractionHand;
-import net.minecraft.world.InteractionResult;
+import net.minecraft.world.ItemInteractionResult;
 import net.minecraft.world.effect.MobEffectInstance;
 import net.minecraft.world.entity.player.Player;
 import net.minecraft.world.item.ItemStack;
 import net.minecraft.world.item.PotionItem;
-import net.minecraft.world.item.alchemy.PotionUtils;
 import net.minecraft.world.item.context.BlockPlaceContext;
 import net.minecraft.world.level.Level;
 import net.minecraft.world.level.block.Block;
@@ -33,7 +34,6 @@ import net.minecraft.world.level.block.state.StateDefinition;
 import net.minecraft.world.level.block.state.properties.BlockStateProperties;
 import net.minecraft.world.level.block.state.properties.BooleanProperty;
 import net.minecraft.world.phys.BlockHitResult;
-import net.minecraftforge.registries.ForgeRegistries;
 
 import javax.annotation.Nullable;
 
@@ -54,6 +54,12 @@ public class AreaEffectBlock extends HorizontalDirectionalBlock implements Entit
 		this.registerDefaultState(stateDefinition.any().setValue(FACING, Direction.NORTH).setValue(POWERED, false).setValue(ALL_MOBS, false).setValue(SHUT_DOWN, false));
 	}
 	
+	@Override
+	protected MapCodec<AreaEffectBlock> codec()
+	{
+		return null; //todo
+	}
+	
 	@Nullable
 	@Override
 	public BlockEntity newBlockEntity(BlockPos pos, BlockState state)
@@ -68,56 +74,59 @@ public class AreaEffectBlock extends HorizontalDirectionalBlock implements Entit
 		return !level.isClientSide ? BlockUtil.checkTypeForTicker(placedType, MSBlockEntityTypes.AREA_EFFECT.get(), AreaEffectBlockEntity::serverTick) : null;
 	}
 	
-	@SuppressWarnings("deprecation")
+	
 	@Override
-	public InteractionResult use(BlockState state, Level level, BlockPos pos, Player player, InteractionHand hand, BlockHitResult hit)
+	protected ItemInteractionResult useItemOn(ItemStack stack, BlockState state, Level level, BlockPos pos, Player player, InteractionHand hand, BlockHitResult hitResult)
 	{
-		if(player.isCreative() && !CreativeShockEffect.doesCreativeShockLimit(player, CreativeShockEffect.LIMIT_MACHINE_INTERACTIONS))
+		if(!canInteract(player) || !(level.getBlockEntity(pos) instanceof AreaEffectBlockEntity be))
+			return ItemInteractionResult.PASS_TO_DEFAULT_BLOCK_INTERACTION;
+		
+		ItemStack heldItemStack = player.getItemInHand(hand);
+		
+		if(heldItemStack.getItem() instanceof PotionItem)
 		{
-			if(level.getBlockEntity(pos) instanceof AreaEffectBlockEntity be)
-			{
-				
-				ItemStack heldItemStack = player.getItemInHand(hand);
-				
-				if(heldItemStack.getItem() instanceof PotionItem)
-				{
-					clickWithPotion(level, pos, player, be, heldItemStack);
-				} else
-				{
-					if(level.isClientSide)
-						MSScreenFactories.displayAreaEffectScreen(be);
-				}
-				
-				return InteractionResult.sidedSuccess(level.isClientSide);
-			}
+			clickWithPotion(level, pos, player, be, heldItemStack);
+		} else
+		{
+			if(level.isClientSide)
+				MSScreenFactories.displayAreaEffectScreen(be);
 		}
 		
-		return InteractionResult.PASS;
+		return ItemInteractionResult.sidedSuccess(level.isClientSide);
+	}
+	
+	public static boolean canInteract(Player player)
+	{
+		return player.isCreative() && !CreativeShockEffect.doesCreativeShockLimit(player, CreativeShockEffect.LIMIT_MACHINE_INTERACTIONS);
 	}
 	
 	private void clickWithPotion(Level level, BlockPos pos, Player player, AreaEffectBlockEntity be, ItemStack potionStack)
 	{
-		MobEffectInstance firstEffect = PotionUtils.getPotion(potionStack).getEffects().get(0);
-		if(firstEffect != null && !level.isClientSide)
+		
+		if(potionStack.has(DataComponents.POTION_CONTENTS))
 		{
-			be.setEffect(firstEffect.getEffect(), firstEffect.getAmplifier());
-			
-			player.displayClientMessage(Component.translatable(getDescriptionId() + "." + EFFECT_CHANGE_MESSAGE, ForgeRegistries.MOB_EFFECTS.getKey(firstEffect.getEffect()), firstEffect.getAmplifier()), true); //getDescriptionId was getTranslationKey
-			level.playSound(null, pos, SoundEvents.UI_BUTTON_CLICK.value(), SoundSource.BLOCKS, 0.5F, 1F);
+			MobEffectInstance firstEffect = potionStack.get(DataComponents.POTION_CONTENTS).getAllEffects().iterator().next();
+			if(firstEffect != null && !level.isClientSide)
+			{
+				be.setEffect(firstEffect.getEffect(), firstEffect.getAmplifier());
+				
+				player.displayClientMessage(Component.translatable(getDescriptionId() + "." + EFFECT_CHANGE_MESSAGE, Component.translatable(
+						"potion.withAmplifier", Component.translatable(firstEffect.getDescriptionId()),
+						Component.translatable("potion.potency." + firstEffect.getAmplifier()))), true);
+				level.playSound(null, pos, SoundEvents.UI_BUTTON_CLICK.value(), SoundSource.BLOCKS, 0.5F, 1F);
+			}
 		}
 	}
 	
-	@SuppressWarnings("deprecation")
 	@Override
-	public void neighborChanged(BlockState state, Level level, BlockPos pos, Block blockIn, BlockPos fromPos, boolean isMoving)
+	protected void neighborChanged(BlockState state, Level level, BlockPos pos, Block blockIn, BlockPos fromPos, boolean isMoving)
 	{
 		super.neighborChanged(state, level, pos, blockIn, fromPos, isMoving);
 		updatePower(level, pos);
 	}
 	
-	@SuppressWarnings("deprecation")
 	@Override
-	public void onPlace(BlockState state, Level level, BlockPos pos, BlockState oldState, boolean isMoving)
+	protected void onPlace(BlockState state, Level level, BlockPos pos, BlockState oldState, boolean isMoving)
 	{
 		super.onPlace(state, level, pos, oldState, isMoving);
 		updatePower(level, pos);

@@ -1,31 +1,23 @@
 package com.mraof.minestuck.event;
 
-import com.mraof.minestuck.skaianet.SburbConnection;
-import com.mraof.minestuck.skaianet.Session;
+import com.mraof.minestuck.skaianet.ActiveConnection;
 import net.minecraft.server.MinecraftServer;
-import net.minecraftforge.eventbus.api.Event;
+import net.neoforged.bus.api.Event;
 
 public abstract class SburbEvent extends Event
 {
 	private final MinecraftServer mcServer;
-	private final SburbConnection connection;
-	private final Session session;
+	private final ActiveConnection connection;
 	
-	public SburbEvent(MinecraftServer mcServer, SburbConnection connection, Session session)
+	public SburbEvent(MinecraftServer mcServer, ActiveConnection connection)
 	{
 		this.connection = connection;
-		this.session = session;
 		this.mcServer = mcServer;
 	}
 	
-	public SburbConnection getConnection()
+	public ActiveConnection getConnection()
 	{
 		return connection;
-	}
-	
-	public Session getSession()
-	{
-		return session;
 	}
 	
 	public MinecraftServer getMinecraftServer()
@@ -33,11 +25,38 @@ public abstract class SburbEvent extends Event
 		return mcServer;
 	}
 	
-	public static class OnEntry extends SburbEvent
+	
+	public static class ConnectionCreated extends SburbEvent
 	{
-		public OnEntry(MinecraftServer mcServer, SburbConnection connection, Session session)
+		private final ConnectionType connectionType;
+		
+		public ConnectionCreated(MinecraftServer mcServer, ActiveConnection connection, ConnectionType connectionType)
 		{
-			super(mcServer, connection, session);
+			super(mcServer, connection);
+			this.connectionType = connectionType;
 		}
+		
+		@SuppressWarnings("unused")
+		public ConnectionType getConnectionType()
+		{
+			return connectionType;
+		}
+		
+	}
+	
+	public static final class ConnectionClosed extends SburbEvent
+	{
+		public ConnectionClosed(MinecraftServer mcServer, ActiveConnection connection)
+		{
+			super(mcServer, connection);
+		}
+	}
+	
+	public enum ConnectionType
+	{
+		REGULAR,
+		SECONDARY,
+		RESUME,
+		NEW_SERVER
 	}
 }

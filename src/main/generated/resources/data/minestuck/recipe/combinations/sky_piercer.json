@@ -1,0 +1,11 @@
+{
+  "type": "minestuck:combination",
+  "input1": {
+    "item": "minestuck:dragon_lance"
+  },
+  "input2": {
+    "item": "minestuck:star_ray"
+  },
+  "mode": "or",
+  "output": "minestuck:sky_piercer"
+}

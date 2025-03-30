@@ -39,7 +39,7 @@ public class StartingModusProvider implements DataProvider
 		List<ModusType<?>> modusTypes = createDefaultModusTypes();
 		
 		JsonArray jsonList = new JsonArray(modusTypes.size());
-		modusTypes.forEach(modusType -> jsonList.add(String.valueOf(ModusTypes.REGISTRY.get().getKey(modusType))));
+		modusTypes.forEach(modusType -> jsonList.add(String.valueOf(ModusTypes.REGISTRY.getKey(modusType))));
 		
 		return DataProvider.saveStable(cache, jsonList, path);
 	}

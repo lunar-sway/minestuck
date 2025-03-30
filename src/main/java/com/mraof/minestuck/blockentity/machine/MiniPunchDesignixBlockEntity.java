@@ -1,14 +1,18 @@
 package com.mraof.minestuck.blockentity.machine;
 
-import com.mraof.minestuck.alchemy.*;
+import com.mraof.minestuck.api.alchemy.recipe.combination.CombinationInput;
 import com.mraof.minestuck.api.alchemy.recipe.combination.CombinationMode;
 import com.mraof.minestuck.api.alchemy.recipe.combination.CombinationRecipe;
-import com.mraof.minestuck.api.alchemy.recipe.combination.CombinerContainer;
 import com.mraof.minestuck.blockentity.MSBlockEntityTypes;
 import com.mraof.minestuck.inventory.MiniPunchDesignixMenu;
+import com.mraof.minestuck.item.CaptchaCardItem;
 import com.mraof.minestuck.item.MSItems;
+import com.mraof.minestuck.item.components.CardStoredItemComponent;
+import com.mraof.minestuck.item.components.EncodedItemComponent;
+import com.mraof.minestuck.item.components.MSItemComponents;
 import net.minecraft.core.BlockPos;
 import net.minecraft.core.Direction;
+import net.minecraft.core.HolderLookup;
 import net.minecraft.nbt.CompoundTag;
 import net.minecraft.network.chat.Component;
 import net.minecraft.world.MenuProvider;
@@ -18,14 +22,11 @@ import net.minecraft.world.inventory.AbstractContainerMenu;
 import net.minecraft.world.inventory.ContainerLevelAccess;
 import net.minecraft.world.item.ItemStack;
 import net.minecraft.world.level.block.state.BlockState;
-import net.minecraftforge.common.capabilities.Capability;
-import net.minecraftforge.common.capabilities.ForgeCapabilities;
-import net.minecraftforge.common.util.LazyOptional;
-import net.minecraftforge.items.IItemHandler;
-import net.minecraftforge.items.IItemHandlerModifiable;
-import net.minecraftforge.items.ItemStackHandler;
-import net.minecraftforge.items.wrapper.CombinedInvWrapper;
-import net.minecraftforge.items.wrapper.RangedWrapper;
+import net.neoforged.neoforge.items.IItemHandler;
+import net.neoforged.neoforge.items.IItemHandlerModifiable;
+import net.neoforged.neoforge.items.ItemStackHandler;
+import net.neoforged.neoforge.items.wrapper.CombinedInvWrapper;
+import net.neoforged.neoforge.items.wrapper.RangedWrapper;
 
 import javax.annotation.Nonnull;
 import javax.annotation.Nullable;
@@ -36,7 +37,6 @@ public class MiniPunchDesignixBlockEntity extends MachineProcessBlockEntity impl
 	public static final int MAX_PROGRESS = 100;
 	
 	private final ProgressTracker progressTracker = new ProgressTracker(ProgressTracker.RunType.ONCE, MAX_PROGRESS, this::setChanged, this::contentsValid);
-	private final CombinerContainer combinerInventory = new CombinerContainer.ItemHandlerWrapper(itemHandler, CombinationMode.OR);
 	
 	public MiniPunchDesignixBlockEntity(BlockPos pos, BlockState state)
 	{
@@ -58,32 +58,31 @@ public class MiniPunchDesignixBlockEntity extends MachineProcessBlockEntity impl
 	}
 	
 	@Override
-	public void load(CompoundTag nbt)
+	protected void loadAdditional(CompoundTag nbt, HolderLookup.Provider pRegistries)
 	{
-		super.load(nbt);
+		super.loadAdditional(nbt, pRegistries);
 		this.progressTracker.load(nbt);
 	}
 	
 	@Override
-	protected void saveAdditional(CompoundTag compound)
+	protected void saveAdditional(CompoundTag compound, HolderLookup.Provider provider)
 	{
-		super.saveAdditional(compound);
+		super.saveAdditional(compound, provider);
 		this.progressTracker.save(compound);
 	}
 	
 	private boolean contentsValid()
 	{
 		boolean bothHaveItems = !itemHandler.getStackInSlot(0).isEmpty() && !itemHandler.getStackInSlot(1).isEmpty();
-		boolean bothAreReadable = AlchemyHelper.isReadableCard(itemHandler.getStackInSlot(0)) && (AlchemyHelper.isReadableCard(itemHandler.getStackInSlot(1)) || AlchemyHelper.getDecodedItem(itemHandler.getStackInSlot(1)).isEmpty());
 		
-		if(bothHaveItems && bothAreReadable)
+		if(bothHaveItems)
 		{
 			ItemStack output = createResult();
 			if(output.isEmpty())
 				return false;
 			
 			ItemStack currentOutput = itemHandler.getStackInSlot(2);
-			return (currentOutput.isEmpty() || currentOutput.getCount() < 16 && ItemStack.isSameItemSameTags(currentOutput, output));
+			return (currentOutput.isEmpty() || currentOutput.getCount() < 16 && ItemStack.isSameItemSameComponents(currentOutput, output));
 		} else
 		{
 			return false;
@@ -98,10 +97,14 @@ public class MiniPunchDesignixBlockEntity extends MachineProcessBlockEntity impl
 	
 	private void processContents()
 	{
+		ItemStack captchaInput = itemHandler.getStackInSlot(0);
+		boolean shouldConsumeCaptchaInput = !(captchaInput.is(MSItems.CAPTCHA_CARD)
+				&& (captchaInput.has(MSItemComponents.ENCODED_ITEM) || captchaInput.has(MSItemComponents.CARD_STORED_ITEM)));
+		
 		if(!itemHandler.getStackInSlot(2).isEmpty())
 		{
 			itemHandler.extractItem(1, 1, false);
-			if(!AlchemyHelper.hasDecodedItem(itemHandler.getStackInSlot(0)))
+			if(shouldConsumeCaptchaInput)
 				itemHandler.extractItem(0, 1, false);
 			itemHandler.extractItem(2, -1, false);
 			return;
@@ -110,22 +113,36 @@ public class MiniPunchDesignixBlockEntity extends MachineProcessBlockEntity impl
 		ItemStack outputItem = createResult();
 		
 		itemHandler.setStackInSlot(2, outputItem);
-		if(!AlchemyHelper.hasDecodedItem(itemHandler.getStackInSlot(0)))
+		if(shouldConsumeCaptchaInput)
 			itemHandler.extractItem(0, 1, false);
 		itemHandler.extractItem(1, 1, false);
 	}
 	
 	private ItemStack createResult()
 	{
-		ItemStack output = AlchemyHelper.getDecodedItemDesignix(itemHandler.getStackInSlot(0));
-		if(!output.isEmpty() && AlchemyHelper.isPunchedCard(itemHandler.getStackInSlot(1)))
-		{
-			output = CombinationRecipe.findResult(combinerInventory, level);
-		}
+		ItemStack output;
 		
-		if(!output.isEmpty())
-			return AlchemyHelper.createPunchedCard(output);
-		else return ItemStack.EMPTY;
+		ItemStack captchaInput = itemHandler.getStackInSlot(0);
+		EncodedItemComponent captchaPunchedInput = captchaInput.get(MSItemComponents.ENCODED_ITEM);
+		CardStoredItemComponent captchaStoredInput = captchaInput.get(MSItemComponents.CARD_STORED_ITEM);
+		if (captchaInput.is(MSItems.CAPTCHA_CARD) && captchaPunchedInput != null)
+			output = captchaPunchedInput.asItemStack();
+		else if (captchaInput.is(MSItems.CAPTCHA_CARD) && captchaStoredInput != null)
+		{
+			if(!captchaInput.has(MSItemComponents.CAPTCHA_CODE))
+				return ItemStack.EMPTY;
+			output = captchaStoredInput.storedStack().copy();
+		} else
+			output = captchaInput.copy();
+		
+		EncodedItemComponent punchedInput = itemHandler.getStackInSlot(1).get(MSItemComponents.ENCODED_ITEM);
+		if(punchedInput != null)
+			output = CombinationRecipe.findResult(new CombinationInput(output, punchedInput.asItemStack(), CombinationMode.OR), level);
+		
+		if(output.isEmpty())
+			return ItemStack.EMPTY;
+		
+		return CaptchaCardItem.createPunchedCard(output.getItem());
 	}
 	
 	@Override
@@ -133,10 +150,6 @@ public class MiniPunchDesignixBlockEntity extends MachineProcessBlockEntity impl
 	{
 		return Component.translatable(TITLE);
 	}
-	
-	private final LazyOptional<IItemHandler> sideHandler = LazyOptional.of(this::createInputSlotHandler);
-	private final LazyOptional<IItemHandler> upHandler = LazyOptional.of(() -> new RangedWrapper(itemHandler, 1, 2));
-	private final LazyOptional<IItemHandler> downHandler = LazyOptional.of(() -> new CombinedInvWrapper(createInputSlotHandler(), new RangedWrapper(itemHandler, 2, 3)));
 	
 	private IItemHandlerModifiable createInputSlotHandler()
 	{
@@ -153,16 +166,16 @@ public class MiniPunchDesignixBlockEntity extends MachineProcessBlockEntity impl
 		};
 	}
 	
-	@Nonnull
-	@Override
-	public <T> LazyOptional<T> getCapability(@Nonnull Capability<T> cap, @Nullable Direction side)
+	public IItemHandler getItemHandler(@Nullable Direction side)
 	{
-		if(cap == ForgeCapabilities.ITEM_HANDLER && side != null)
-		{
-			return side == Direction.DOWN ? downHandler.cast() :
-					side == Direction.UP ? upHandler.cast() : sideHandler.cast();
-		}
-		return super.getCapability(cap, side);
+		if(side == null)
+			return this.itemHandler;
+		
+		if(side == Direction.DOWN)
+			return new CombinedInvWrapper(this.createInputSlotHandler(), new RangedWrapper(this.itemHandler, 2, 3));
+		if(side == Direction.UP)
+			return new RangedWrapper(this.itemHandler, 1, 2);
+		return this.createInputSlotHandler();
 	}
 	
 	@Nullable

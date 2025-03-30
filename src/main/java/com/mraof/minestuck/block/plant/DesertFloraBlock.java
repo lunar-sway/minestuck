@@ -1,5 +1,6 @@
 package com.mraof.minestuck.block.plant;
 
+import com.mojang.serialization.MapCodec;
 import net.minecraft.core.BlockPos;
 import net.minecraft.tags.BlockTags;
 import net.minecraft.world.level.BlockGetter;
@@ -20,13 +21,19 @@ public class DesertFloraBlock extends BushBlock
 	}
 	
 	@Override
+	protected MapCodec<DesertFloraBlock> codec()
+	{
+		return null; //todo
+	}
+	
+	@Override
 	protected boolean mayPlaceOn(BlockState state, BlockGetter level, BlockPos pos)
 	{
 		return state.is(BlockTags.SAND);
 	}
 	
 	@Override
-	public VoxelShape getShape(BlockState pState, BlockGetter pLevel, BlockPos pPos, CollisionContext pContext)
+	protected VoxelShape getShape(BlockState pState, BlockGetter pLevel, BlockPos pPos, CollisionContext pContext)
 	{
 		Vec3 vec3 = pState.getOffset(pLevel, pPos);
 		return SHAPE.move(vec3.x, vec3.y, vec3.z);

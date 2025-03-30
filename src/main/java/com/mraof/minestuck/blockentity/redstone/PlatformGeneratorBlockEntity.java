@@ -1,5 +1,6 @@
 package com.mraof.minestuck.blockentity.redstone;
 
+import com.mraof.minestuck.block.BlockUtil;
 import com.mraof.minestuck.block.MSBlocks;
 import com.mraof.minestuck.block.redstone.PlatformBlock;
 import com.mraof.minestuck.block.redstone.PlatformGeneratorBlock;
@@ -7,10 +8,10 @@ import com.mraof.minestuck.block.redstone.PlatformReceptacleBlock;
 import com.mraof.minestuck.blockentity.MSBlockEntityTypes;
 import com.mraof.minestuck.util.MSTags;
 import net.minecraft.core.BlockPos;
+import net.minecraft.core.HolderLookup;
 import net.minecraft.nbt.CompoundTag;
 import net.minecraft.network.protocol.Packet;
 import net.minecraft.network.protocol.game.ClientGamePacketListener;
-import net.minecraft.tags.BlockTags;
 import net.minecraft.network.protocol.game.ClientboundBlockEntityDataPacket;
 import net.minecraft.world.level.Level;
 import net.minecraft.world.level.block.entity.BlockEntity;
@@ -66,7 +67,7 @@ public class PlatformGeneratorBlockEntity extends BlockEntity
 					} else if(iterateBlockState.is(MSTags.Blocks.PLATFORM_ABSORBING))
 					{
 						break;
-					} else if(isReplaceable(iterateBlockState))
+					} else if(BlockUtil.isReplaceable(iterateBlockState))
 					{
 						if(!iterateBlockState.isAir())
 							level.destroyBlock(iteratePos, true);
@@ -92,11 +93,6 @@ public class PlatformGeneratorBlockEntity extends BlockEntity
 				}
 			}
 		}
-	}
-	
-	private static boolean isReplaceable(BlockState state)
-	{
-		return state.isAir() || state.is(BlockTags.FIRE) || state.liquid() || state.canBeReplaced();
 	}
 	
 	private boolean shouldReplaceExistingPlatformBlock(BlockPos pos, int loopIteration)
@@ -126,27 +122,27 @@ public class PlatformGeneratorBlockEntity extends BlockEntity
 	}
 	
 	@Override
-	public void load(CompoundTag compound)
+	public void loadAdditional(CompoundTag compound, HolderLookup.Provider provider)
 	{
-		super.load(compound);
+		super.loadAdditional(compound, provider);
 		
 		tickCycle = compound.getInt("tickCycle");
 		platformLength = compound.getInt("platformLength");
 	}
 	
 	@Override
-	public void saveAdditional(CompoundTag compound)
+	public void saveAdditional(CompoundTag compound, HolderLookup.Provider provider)
 	{
-		super.saveAdditional(compound);
+		super.saveAdditional(compound, provider);
 		
 		compound.putInt("tickCycle", tickCycle);
 		compound.putInt("platformLength", platformLength);
 	}
 	
 	@Override
-	public CompoundTag getUpdateTag()
+	public CompoundTag getUpdateTag(HolderLookup.Provider provider)
 	{
-		return this.saveWithoutMetadata();
+		return this.saveWithoutMetadata(provider);
 	}
 	
 	@Override

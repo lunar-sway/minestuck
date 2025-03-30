@@ -1,10 +1,16 @@
 package com.mraof.minestuck.network.computer;
 
-import com.mraof.minestuck.network.PlayToServerPacket;
+import com.mraof.minestuck.Minestuck;
 import com.mraof.minestuck.blockentity.ComputerBlockEntity;
+import com.mraof.minestuck.computer.SburbClientData;
+import com.mraof.minestuck.computer.SburbServerData;
+import com.mraof.minestuck.network.MSPacket;
 import net.minecraft.core.BlockPos;
 import net.minecraft.network.FriendlyByteBuf;
+import net.minecraft.network.codec.ByteBufCodecs;
+import net.minecraft.network.codec.StreamCodec;
 import net.minecraft.server.level.ServerPlayer;
+import net.neoforged.neoforge.network.handling.IPayloadContext;
 
 /**
  * This packet tells the server to clear the message for the
@@ -14,38 +20,33 @@ import net.minecraft.server.level.ServerPlayer;
  * @author kirderf1
  *
  */
-public class ClearMessagePacket implements PlayToServerPacket
+public record ClearMessagePacket(BlockPos computerPos, int program) implements MSPacket.PlayToServer
 {
-	private final BlockPos pos;
-	private final int program;
+	public static final Type<ClearMessagePacket> ID = new Type<>(Minestuck.id("clear_message"));
+	public static final StreamCodec<FriendlyByteBuf, ClearMessagePacket> STREAM_CODEC = StreamCodec.composite(
+			BlockPos.STREAM_CODEC,
+			ClearMessagePacket::computerPos,
+			ByteBufCodecs.INT,
+			ClearMessagePacket::program,
+			ClearMessagePacket::new
+	);
 	
-	public ClearMessagePacket(BlockPos pos, int program)
-	{
-		this.pos = pos;
-		this.program = program;
-	}
-	
-	@Override
-	public void encode(FriendlyByteBuf buffer)
-	{
-		buffer.writeBlockPos(pos);
-		buffer.writeInt(program);
-	}
-	
-	public static ClearMessagePacket decode(FriendlyByteBuf buffer)
-	{
-		BlockPos computer = buffer.readBlockPos();
-		int program = buffer.readInt();
-		
-		return new ClearMessagePacket(computer, program);
-	}
 	
 	@Override
-	public void execute(ServerPlayer player)
+	public Type<ClearMessagePacket> type()
 	{
-		ComputerBlockEntity.forNetworkIfPresent(player, pos, computer -> {
-			computer.latestmessage.put(program, "");
-			computer.markBlockForUpdate();
+		return ID;
+	}
+	
+	
+	@Override
+	public void execute(IPayloadContext context, ServerPlayer player)
+	{
+		ComputerBlockEntity.getAccessibleComputer(player, computerPos).ifPresent(computer -> {
+			if(program == 0)
+				computer.getSburbClientData().ifPresent(SburbClientData::clearEventMessage);
+			if(program == 1)
+				computer.getSburbServerData().ifPresent(SburbServerData::clearEventMessage);
 		});
 	}
 }

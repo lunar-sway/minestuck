@@ -1,0 +1,13 @@
+{
+  "node": {
+    "animation": {},
+    "gui": "minestuck:textures/gui/dialogue/dialogue.png",
+    "message": {
+      "arguments": [
+        "entity_type"
+      ],
+      "key": "minestuck.dialogue.consort.reckoning.3"
+    },
+    "responses": []
+  }
+}

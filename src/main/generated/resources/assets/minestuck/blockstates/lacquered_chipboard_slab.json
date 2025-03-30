@@ -1,0 +1,13 @@
+{
+  "variants": {
+    "type=bottom": {
+      "model": "minestuck:block/lacquered_chipboard_slab"
+    },
+    "type=double": {
+      "model": "minestuck:block/lacquered_chipboard"
+    },
+    "type=top": {
+      "model": "minestuck:block/lacquered_chipboard_slab_top"
+    }
+  }
+}

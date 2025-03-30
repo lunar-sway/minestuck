@@ -1,14 +1,13 @@
 package com.mraof.minestuck.block.redstone;
 
+import com.mraof.minestuck.block.BlockUtil;
 import com.mraof.minestuck.block.MSDirectionalBlock;
 import com.mraof.minestuck.block.MSProperties;
-import com.mraof.minestuck.block.BlockUtil;
 import com.mraof.minestuck.util.MSTags;
 import net.minecraft.core.BlockPos;
 import net.minecraft.core.Direction;
 import net.minecraft.sounds.SoundEvents;
 import net.minecraft.sounds.SoundSource;
-import net.minecraft.world.InteractionHand;
 import net.minecraft.world.InteractionResult;
 import net.minecraft.world.entity.player.Player;
 import net.minecraft.world.level.Level;
@@ -21,10 +20,13 @@ import net.minecraft.world.level.block.state.properties.BlockStateProperties;
 import net.minecraft.world.level.block.state.properties.BooleanProperty;
 import net.minecraft.world.phys.BlockHitResult;
 
+import javax.annotation.ParametersAreNonnullByDefault;
+
 /**
  * Rotates(horizontally) the block it is facing when it encounters a new redstone signal, assuming that block it is facing is already horizontally oriented and would not break rules mostly comparable to piston movement.
  * Whether it rotates clockwise or counterclockwise depends on the ROTATION_FLIPPED property which can be cycled by right clicking
  */
+@ParametersAreNonnullByDefault
 public class RotatorBlock extends MSDirectionalBlock
 {
 	public static final BooleanProperty POWERED = BlockStateProperties.POWERED;
@@ -36,26 +38,23 @@ public class RotatorBlock extends MSDirectionalBlock
 		this.registerDefaultState(stateDefinition.any().setValue(FACING, Direction.UP).setValue(POWERED, false).setValue(ROTATION_FLIPPED, false));
 	}
 	
-	@SuppressWarnings("deprecation")
 	@Override
-	public void neighborChanged(BlockState state, Level level, BlockPos pos, Block blockIn, BlockPos fromPos, boolean isMoving)
+	protected void neighborChanged(BlockState state, Level level, BlockPos pos, Block blockIn, BlockPos fromPos, boolean isMoving)
 	{
 		super.neighborChanged(state, level, pos, blockIn, fromPos, isMoving);
 		if(fromPos != pos.relative(state.getValue(FACING)))
 			updatePower(level, pos);
 	}
 	
-	@SuppressWarnings("deprecation")
 	@Override
-	public void onPlace(BlockState state, Level level, BlockPos pos, BlockState oldState, boolean isMoving)
+	protected void onPlace(BlockState state, Level level, BlockPos pos, BlockState oldState, boolean isMoving)
 	{
 		super.onPlace(state, level, pos, oldState, isMoving);
 		updatePower(level, pos);
 	}
 	
 	@Override
-	@SuppressWarnings("deprecation")
-	public InteractionResult use(BlockState state, Level level, BlockPos pos, Player player, InteractionHand hand, BlockHitResult hit)
+	protected InteractionResult useWithoutItem(BlockState state, Level level, BlockPos pos, Player player, BlockHitResult hit)
 	{
 		level.setBlock(pos, state.cycle(ROTATION_FLIPPED), Block.UPDATE_ALL);
 		if(state.getValue(ROTATION_FLIPPED))

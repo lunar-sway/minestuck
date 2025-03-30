@@ -1,0 +1,11 @@
+{
+  "type": "minestuck:combination",
+  "input1": {
+    "item": "minecraft:terracotta"
+  },
+  "input2": {
+    "tag": "c:dyes/white"
+  },
+  "mode": "and",
+  "output": "minecraft:white_terracotta"
+}

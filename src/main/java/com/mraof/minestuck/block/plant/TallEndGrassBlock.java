@@ -2,6 +2,7 @@ package com.mraof.minestuck.block.plant;
 
 import com.mraof.minestuck.block.MSBlocks;
 import com.mraof.minestuck.entity.FrogEntity;
+import net.minecraft.MethodsReturnNonnullByDefault;
 import net.minecraft.core.BlockPos;
 import net.minecraft.core.particles.ParticleTypes;
 import net.minecraft.server.level.ServerLevel;
@@ -17,8 +18,11 @@ import net.minecraft.world.level.block.DoublePlantBlock;
 import net.minecraft.world.level.block.state.BlockState;
 import net.minecraft.world.phys.AABB;
 
+import javax.annotation.ParametersAreNonnullByDefault;
 import java.util.List;
 
+@ParametersAreNonnullByDefault
+@MethodsReturnNonnullByDefault
 public class TallEndGrassBlock extends DoublePlantBlock
 {
 	public TallEndGrassBlock(Properties properties)
@@ -33,8 +37,7 @@ public class TallEndGrassBlock extends DoublePlantBlock
 	}
 	
 	@Override
-	@SuppressWarnings("deprecation")
-	public void randomTick(BlockState state, ServerLevel level, BlockPos pos, RandomSource random)
+	protected void randomTick(BlockState state, ServerLevel level, BlockPos pos, RandomSource random)
 	{
 		if(!level.isClientSide && random.nextFloat() >= .75F)
 		{
@@ -50,13 +53,14 @@ public class TallEndGrassBlock extends DoublePlantBlock
 	}
 	
 	@Override
-	public void playerWillDestroy(Level level, BlockPos pos, BlockState state, Player player)
+	public BlockState playerWillDestroy(Level level, BlockPos pos, BlockState state, Player player)
 	{
-		super.playerWillDestroy(level, pos, state, player);
+		state = super.playerWillDestroy(level, pos, state, player);
 		if(!level.isClientSide && !player.isCreative())
 		{
 			randomTeleport(level, player);
 		}
+		return state;
 	}
 	
 	@Override

@@ -2,8 +2,7 @@ package com.mraof.minestuck.computer.editmode;
 
 
 import com.mraof.minestuck.api.alchemy.GristSet;
-import com.mraof.minestuck.api.alchemy.ImmutableGristSet;
-import com.mraof.minestuck.skaianet.SburbConnection;
+import com.mraof.minestuck.skaianet.SburbPlayerData;
 import net.minecraft.nbt.CompoundTag;
 import net.minecraft.nbt.ListTag;
 import net.minecraft.nbt.NbtOps;
@@ -23,11 +22,13 @@ public class DeployEntry
 	
 	private final int tier;
 	private final DeployList.IAvailabilityCondition condition;
-	private final BiFunction<SburbConnection, Level, ItemStack> item;
-	private final BiFunction<Boolean, SburbConnection, GristSet> grist;
+	private final BiFunction<SburbPlayerData, Level, ItemStack> item;
+	private final BiFunction<Boolean, SburbPlayerData, GristSet> grist;
 	private final DeployList.EntryLists category;
 	
-	DeployEntry(String name, int tier, DeployList.IAvailabilityCondition condition, BiFunction<SburbConnection, Level, ItemStack> item, BiFunction<Boolean, SburbConnection, GristSet> grist, DeployList.EntryLists entryList)
+	DeployEntry(String name, int tier, DeployList.IAvailabilityCondition condition,
+				BiFunction<SburbPlayerData, Level, ItemStack> item,
+				BiFunction<Boolean, SburbPlayerData, GristSet> grist, DeployList.EntryLists entryList)
 	{
 		this.name = name;
 		this.tier = tier;
@@ -49,42 +50,33 @@ public class DeployEntry
 
 	public DeployList.EntryLists getCategory() { return category; }
 	
-	public boolean isAvailable(SburbConnection c, int tier)
+	public boolean isAvailable(SburbPlayerData playerData, int tier)
 	{
-		return (condition == null || condition.test(c)) && this.tier <= tier && getCurrentCost(c) != null;
+		return (condition == null || condition.test(playerData)) && this.tier <= tier && getCurrentCost(playerData) != null;
 	}
 	
-	public ItemStack getItemStack(SburbConnection c, Level level)
+	public ItemStack getItemStack(SburbPlayerData playerData, Level level)
 	{
-		return item.apply(c, level).copy();
-	}
-	
-	public GristSet getPrimaryGristCost(SburbConnection c)
-	{
-		return grist.apply(true, c);
-	}
-	
-	public GristSet getSecondaryGristCost(SburbConnection c)
-	{
-		return grist.apply(false, c);
+		return item.apply(playerData, level).copy();
 	}
 	
 	@Nullable
-	public GristSet getCurrentCost(SburbConnection c)
+	public GristSet getCurrentCost(SburbPlayerData playerData)
 	{
-		return c.hasGivenItem(this) ? getSecondaryGristCost(c) : getPrimaryGristCost(c);
+		boolean usePrimaryCost = !playerData.hasGivenItem(this);
+		return grist.apply(usePrimaryCost, playerData);
 	}
 	
-	void tryAddDeployTag(SburbConnection c, Level level, int tier, ListTag list, int i)
+	void tryAddDeployTag(SburbPlayerData playerData, Level level, int tier, ListTag list, int i)
 	{
-		if(isAvailable(c, tier))
+		if(isAvailable(playerData, tier))
 		{
-			ItemStack stack = getItemStack(c, level);
-			GristSet cost = getCurrentCost(c);
+			ItemStack stack = getItemStack(playerData, level);
+			GristSet cost = getCurrentCost(playerData);
 			CompoundTag tag = new CompoundTag();
-			stack.save(tag);
+			tag.put("item", stack.save(level.registryAccess()));
 			tag.putInt("i", i);
-			tag.put("cost", ImmutableGristSet.LIST_CODEC.encodeStart(NbtOps.INSTANCE, cost.asImmutable()).getOrThrow(false, LOGGER::error));
+			tag.put("cost", GristSet.Codecs.LIST_CODEC.encodeStart(NbtOps.INSTANCE, cost.asImmutable()).getOrThrow());
 			tag.putInt("cat", category.ordinal());
 			list.add(tag);
 		}

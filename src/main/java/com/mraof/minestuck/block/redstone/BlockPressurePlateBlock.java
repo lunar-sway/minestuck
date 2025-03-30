@@ -40,21 +40,18 @@ public class BlockPressurePlateBlock extends Block
 	{
 		if(entityIn instanceof Player)
 		{
-			tryDepressPlate(level, pos, state, true);
+			tryDepressPlate(level, pos, state);
 		}
 	}
 	
-	@SuppressWarnings("deprecation")
 	@Override
-	public void tick(BlockState state, ServerLevel level, BlockPos pos, RandomSource random)
+	protected void tick(BlockState state, ServerLevel level, BlockPos pos, RandomSource random)
 	{
 		super.tick(state, level, pos, random);
 		
 		if(!level.isClientSide)
 		{
-			AABB checkBB = new AABB(pos);
-			List<Player> list = level.getEntitiesOfClass(Player.class, checkBB.move(0, 0.5, 0));
-			boolean entityStandingOnBlock = list.stream().anyMatch(playerEntity -> playerEntity.onGround() && !playerEntity.isCrouching());
+			boolean entityStandingOnBlock = isPlayerStandingAbove(level, pos);
 			
 			if(!entityStandingOnBlock && !isAboveBlockFullyTouching(level, pos.above()) && state.getValue(POWERED))
 			{
@@ -67,16 +64,14 @@ public class BlockPressurePlateBlock extends Block
 		}
 	}
 	
-	@SuppressWarnings("deprecation")
 	@Override
-	public boolean isSignalSource(BlockState state)
+	protected boolean isSignalSource(BlockState state)
 	{
 		return state.getValue(POWERED);
 	}
 	
-	@SuppressWarnings("deprecation")
 	@Override
-	public int getSignal(BlockState blockState, BlockGetter blockAccess, BlockPos pos, Direction side)
+	protected int getSignal(BlockState blockState, BlockGetter blockAccess, BlockPos pos, Direction side)
 	{
 		return blockState.getValue(POWERED) ? 15 : 0;
 	}
@@ -87,20 +82,18 @@ public class BlockPressurePlateBlock extends Block
 		return true;
 	}
 	
-	@SuppressWarnings("deprecation")
 	@Override
-	public void neighborChanged(BlockState state, Level level, BlockPos pos, Block blockIn, BlockPos fromPos, boolean isMoving)
+	protected void neighborChanged(BlockState state, Level level, BlockPos pos, Block blockIn, BlockPos fromPos, boolean isMoving)
 	{
 		super.neighborChanged(state, level, pos, blockIn, fromPos, isMoving);
-		tryDepressPlate(level, pos, state, false);
+		tryDepressPlate(level, pos, state);
 	}
 	
-	@SuppressWarnings("deprecation")
 	@Override
-	public void onPlace(BlockState state, Level level, BlockPos pos, BlockState oldState, boolean isMoving)
+	protected void onPlace(BlockState state, Level level, BlockPos pos, BlockState oldState, boolean isMoving)
 	{
 		super.onPlace(state, level, pos, oldState, isMoving);
-		tryDepressPlate(level, pos, state, false);
+		tryDepressPlate(level, pos, state);
 	}
 	
 	public static boolean isAboveBlockFullyTouching(Level level, BlockPos abovePos)
@@ -108,13 +101,20 @@ public class BlockPressurePlateBlock extends Block
 		return level.getBlockState(abovePos).isFaceSturdy(level, abovePos, Direction.DOWN);
 	}
 	
+	public static boolean isPlayerStandingAbove(Level level, BlockPos pos)
+	{
+		AABB checkBB = new AABB(pos);
+		List<Player> list = level.getEntitiesOfClass(Player.class, checkBB.move(0, 0.5, 0));
+		return list.stream().anyMatch(playerEntity -> playerEntity.onGround() && !playerEntity.isCrouching());
+	}
+	
 	/**
 	 * Will depress the plate assuming the block is being stepped on by a player or while a suitable block is above it, causing it to become powered
 	 */
-	public void tryDepressPlate(Level level, BlockPos pos, BlockState state, boolean steppedOn)
+	public void tryDepressPlate(Level level, BlockPos pos, BlockState state)
 	{
 		BlockPos abovePos = pos.above();
-		if((isAboveBlockFullyTouching(level, abovePos) || steppedOn) && !state.getValue(POWERED))
+		if((isAboveBlockFullyTouching(level, abovePos) || isPlayerStandingAbove(level, pos)) && !state.getValue(POWERED))
 		{
 			level.playSound(null, pos, SoundEvents.PISTON_CONTRACT, SoundSource.BLOCKS, 0.5F, 1.2F);
 			level.setBlock(pos, state.setValue(POWERED, true), Block.UPDATE_ALL);

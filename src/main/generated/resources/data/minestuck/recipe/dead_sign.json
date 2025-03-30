@@ -1,0 +1,22 @@
+{
+  "type": "minecraft:crafting_shaped",
+  "category": "misc",
+  "group": "dead_sign",
+  "key": {
+    "p": {
+      "item": "minestuck:dead_planks"
+    },
+    "s": {
+      "item": "minecraft:stick"
+    }
+  },
+  "pattern": [
+    "ppp",
+    "ppp",
+    " s "
+  ],
+  "result": {
+    "count": 3,
+    "id": "minestuck:dead_sign"
+  }
+}

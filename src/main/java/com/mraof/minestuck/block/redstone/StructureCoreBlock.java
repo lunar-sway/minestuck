@@ -1,5 +1,6 @@
 package com.mraof.minestuck.block.redstone;
 
+import com.mojang.serialization.MapCodec;
 import com.mraof.minestuck.block.BlockUtil;
 import com.mraof.minestuck.block.MSProperties;
 import com.mraof.minestuck.blockentity.MSBlockEntityTypes;
@@ -12,7 +13,6 @@ import net.minecraft.core.particles.DustParticleOptions;
 import net.minecraft.sounds.SoundEvents;
 import net.minecraft.sounds.SoundSource;
 import net.minecraft.util.RandomSource;
-import net.minecraft.world.InteractionHand;
 import net.minecraft.world.InteractionResult;
 import net.minecraft.world.entity.player.Player;
 import net.minecraft.world.level.BlockGetter;
@@ -30,11 +30,13 @@ import net.minecraft.world.level.block.state.properties.BooleanProperty;
 import net.minecraft.world.phys.BlockHitResult;
 
 import javax.annotation.Nullable;
+import javax.annotation.ParametersAreNonnullByDefault;
 
 /**
  * When ACTIVE is true, the block entity will perform one of several tasks outlined in its ActionType enum to either send nbt to a CoreCompatibleScatteredStructurePiece or act on nbt it receives from said Piece type.
  * It is made to work with various structures in which recording whether it has been completed or not will be important, such as for updating quest completion(quest system pending) or preventing area effect blocks/summoners from remaining in use after completion of a dungeon
  */
+@ParametersAreNonnullByDefault
 public class StructureCoreBlock extends HorizontalDirectionalBlock implements EntityBlock
 {
 	public static final BooleanProperty POWERED = BlockStateProperties.POWERED;
@@ -47,51 +49,56 @@ public class StructureCoreBlock extends HorizontalDirectionalBlock implements En
 	}
 	
 	@Override
-	@SuppressWarnings("deprecation")
-	public InteractionResult use(BlockState state, Level level, BlockPos pos, Player player, InteractionHand hand, BlockHitResult hit)
+	protected MapCodec<StructureCoreBlock> codec()
 	{
-		if(!CreativeShockEffect.doesCreativeShockLimit(player, CreativeShockEffect.LIMIT_MACHINE_INTERACTIONS))
+		return null; //todo
+	}
+	
+	@Override
+	protected InteractionResult useWithoutItem(BlockState state, Level level, BlockPos pos, Player player, BlockHitResult hit)
+	{
+		if(!canInteract(player) || !(level.getBlockEntity(pos) instanceof StructureCoreBlockEntity structureCore))
+			return InteractionResult.FAIL;
+		
+		if(player.isCrouching())
 		{
-			if(level.getBlockEntity(pos) instanceof StructureCoreBlockEntity structureCore)
+			structureCore.prepForUpdate(); //sets tickCycle to 600 so next tick an update will occur
+			
+			boolean startedOffActive = state.getValue(ACTIVE);
+			
+			if(startedOffActive)
 			{
-				if(player.isCrouching())
-				{
-					structureCore.prepForUpdate(); //sets tickCycle to 600 so next tick an update will occur
-					
-					boolean startedOffActive = state.getValue(ACTIVE);
-					
-					if(startedOffActive)
-					{
-						level.setBlockAndUpdate(pos, state.cycle(ACTIVE).setValue(POWERED, false));
-						level.playSound(null, pos, SoundEvents.PISTON_CONTRACT, SoundSource.BLOCKS, 0.5F, 1.2F);
-					} else
-					{
-						level.setBlockAndUpdate(pos, state.cycle(ACTIVE));
-						level.playSound(null, pos, SoundEvents.PISTON_EXTEND, SoundSource.BLOCKS, 0.5F, 1.2F);
-					}
-				} else if(level.isClientSide && !player.isCrouching())
-				{
-					MSScreenFactories.displayStructureCoreScreen(structureCore);
-				}
-				
-				return InteractionResult.sidedSuccess(level.isClientSide);
+				level.setBlockAndUpdate(pos, state.cycle(ACTIVE).setValue(POWERED, false));
+				level.playSound(null, pos, SoundEvents.PISTON_CONTRACT, SoundSource.BLOCKS, 0.5F, 1.2F);
+			} else
+			{
+				level.setBlockAndUpdate(pos, state.cycle(ACTIVE));
+				level.playSound(null, pos, SoundEvents.PISTON_EXTEND, SoundSource.BLOCKS, 0.5F, 1.2F);
 			}
 		}
 		
-		return InteractionResult.FAIL;
+		if(!player.isCrouching() && level.isClientSide)
+		{
+			MSScreenFactories.displayStructureCoreScreen(structureCore);
+		}
+		
+		return InteractionResult.sidedSuccess(level.isClientSide);
 	}
 	
-	@SuppressWarnings("deprecation")
+	public static boolean canInteract(Player player)
+	{
+		return !CreativeShockEffect.doesCreativeShockLimit(player, CreativeShockEffect.LIMIT_MACHINE_INTERACTIONS);
+	}
+	
 	@Override
-	public void neighborChanged(BlockState state, Level level, BlockPos pos, Block blockIn, BlockPos fromPos, boolean isMoving)
+	protected void neighborChanged(BlockState state, Level level, BlockPos pos, Block blockIn, BlockPos fromPos, boolean isMoving)
 	{
 		super.neighborChanged(state, level, pos, blockIn, fromPos, isMoving);
 		updateBlockEntityWithBlock(level, pos);
 	}
 	
-	@SuppressWarnings("deprecation")
 	@Override
-	public void onPlace(BlockState state, Level level, BlockPos pos, BlockState oldState, boolean isMoving)
+	protected void onPlace(BlockState state, Level level, BlockPos pos, BlockState oldState, boolean isMoving)
 	{
 		super.onPlace(state, level, pos, oldState, isMoving);
 		updateBlockEntityWithBlock(level, pos);
@@ -112,16 +119,14 @@ public class StructureCoreBlock extends HorizontalDirectionalBlock implements En
 		}
 	}
 	
-	@SuppressWarnings("deprecation")
 	@Override
-	public boolean isSignalSource(BlockState state)
+	protected boolean isSignalSource(BlockState state)
 	{
 		return state.getValue(POWERED);
 	}
 	
-	@SuppressWarnings("deprecation")
 	@Override
-	public int getSignal(BlockState blockState, BlockGetter blockAccess, BlockPos pos, Direction side)
+	protected int getSignal(BlockState blockState, BlockGetter blockAccess, BlockPos pos, Direction side)
 	{
 		return blockState.getValue(POWERED) ? 15 : 0;
 	}

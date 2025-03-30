@@ -19,11 +19,19 @@ public class SpecialButtonBlock extends ButtonBlock
 	
 	public final boolean explosive;
 	
-	public SpecialButtonBlock(Properties properties, boolean explosive, BlockSetType type, int ticksToStayPressed, boolean arrowsCanPress)
+	public SpecialButtonBlock(boolean explosive, BlockSetType type, int ticksToStayPressed, Properties properties)
 	{
-		super(properties, type, ticksToStayPressed, arrowsCanPress);
+		super(type, ticksToStayPressed, properties);
 		this.explosive = explosive;
 	}
+	
+	/* todo
+	@Override
+	public MapCodec<SpecialButtonBlock> codec()
+	{
+		return null;
+	}
+	*/
 	
 	@Override
 	public void tick(BlockState state, ServerLevel level, BlockPos pos, RandomSource random)

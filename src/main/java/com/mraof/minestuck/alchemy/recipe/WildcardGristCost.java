@@ -1,22 +1,23 @@
 package com.mraof.minestuck.alchemy.recipe;
 
-import com.google.gson.JsonObject;
-import com.mraof.minestuck.api.alchemy.recipe.generator.GeneratedCostProvider;
-import com.mraof.minestuck.api.alchemy.GristAmount;
-import com.mraof.minestuck.api.alchemy.GristType;
+import com.mojang.serialization.Codec;
+import com.mojang.serialization.MapCodec;
+import com.mojang.serialization.codecs.RecordCodecBuilder;
 import com.mraof.minestuck.api.alchemy.GristSet;
+import com.mraof.minestuck.api.alchemy.GristType;
 import com.mraof.minestuck.api.alchemy.recipe.GristCostRecipe;
-import com.mraof.minestuck.item.crafting.MSRecipeTypes;
 import com.mraof.minestuck.api.alchemy.recipe.JeiGristCost;
+import com.mraof.minestuck.api.alchemy.recipe.generator.GeneratedCostProvider;
+import com.mraof.minestuck.item.crafting.MSRecipeTypes;
 import net.minecraft.MethodsReturnNonnullByDefault;
-import net.minecraft.network.FriendlyByteBuf;
+import net.minecraft.network.RegistryFriendlyByteBuf;
+import net.minecraft.network.codec.StreamCodec;
 import net.minecraft.resources.ResourceLocation;
-import net.minecraft.util.GsonHelper;
-import net.minecraft.world.Container;
 import net.minecraft.world.item.Item;
 import net.minecraft.world.item.ItemStack;
 import net.minecraft.world.item.crafting.Ingredient;
 import net.minecraft.world.item.crafting.RecipeSerializer;
+import net.minecraft.world.item.crafting.SingleRecipeInput;
 import net.minecraft.world.level.Level;
 
 import javax.annotation.Nullable;
@@ -24,35 +25,29 @@ import javax.annotation.ParametersAreNonnullByDefault;
 import java.util.Collections;
 import java.util.List;
 import java.util.Objects;
+import java.util.Optional;
 import java.util.function.BiConsumer;
 
 @ParametersAreNonnullByDefault
 @MethodsReturnNonnullByDefault
 public final class WildcardGristCost implements GristCostRecipe
 {
-	private final ResourceLocation id;
 	private final Ingredient ingredient;
 	private final Integer priority;
 	private final long wildcardCost;
 	
-	public WildcardGristCost(ResourceLocation id, Ingredient ingredient, long wildcardCost, @Nullable Integer priority)
+	@SuppressWarnings("OptionalUsedAsFieldOrParameterType")
+	public WildcardGristCost(Ingredient ingredient, long wildcardCost, Optional<Integer> priority)
 	{
-		this.id = id;
 		this.ingredient = ingredient;
-		this.priority = priority;
+		this.priority = priority.orElse(null);
 		this.wildcardCost = wildcardCost;
 	}
 	
 	@Override
-	public ResourceLocation getId()
+	public boolean matches(SingleRecipeInput input, Level level)
 	{
-		return this.id;
-	}
-	
-	@Override
-	public boolean matches(Container inv, Level level)
-	{
-		return ingredient.test(inv.getItem(0));
+		return ingredient.test(input.item());
 	}
 	
 	@Override
@@ -61,6 +56,7 @@ public final class WildcardGristCost implements GristCostRecipe
 		return Objects.requireNonNullElseGet(this.priority, () -> GristCostRecipe.defaultPriority(this.ingredient));
 	}
 	
+	@Nullable
 	@Override
 	public GristSet getGristCost(ItemStack input, @Nullable GristType wildcardType, boolean shouldRoundDown)
 	{
@@ -74,7 +70,7 @@ public final class WildcardGristCost implements GristCostRecipe
 	}
 	
 	@Override
-	public void addCostProvider(BiConsumer<Item, GeneratedCostProvider> consumer)
+	public void addCostProvider(BiConsumer<Item, GeneratedCostProvider> consumer, ResourceLocation recipeId)
 	{
 		GristCostRecipe.addSimpleCostProvider(consumer, this, this.ingredient);
 	}
@@ -93,34 +89,40 @@ public final class WildcardGristCost implements GristCostRecipe
 	
 	public static class Serializer implements RecipeSerializer<WildcardGristCost>
 	{
+		private static final MapCodec<WildcardGristCost> CODEC = RecordCodecBuilder.mapCodec(instance ->
+				instance.group(
+						Ingredient.CODEC_NONEMPTY.fieldOf("ingredient").forGetter(recipe -> recipe.ingredient),
+						Codec.LONG.fieldOf("grist_cost").forGetter(recipe -> recipe.wildcardCost),
+						Codec.INT.optionalFieldOf("priority").forGetter(recipe -> Optional.ofNullable(recipe.priority))
+				).apply(instance, WildcardGristCost::new));
+		private static final StreamCodec<RegistryFriendlyByteBuf, WildcardGristCost> STREAM_CODEC = StreamCodec.of(Serializer::toNetwork, Serializer::fromNetwork);
+		
 		@Override
-		public WildcardGristCost fromJson(ResourceLocation recipeId, JsonObject json)
+		public MapCodec<WildcardGristCost> codec()
 		{
-			Ingredient ingredient = Ingredient.fromJson(json.get("ingredient"));
-			Integer priority = json.has("priority") ? GsonHelper.getAsInt(json, "priority") : null;
-			
-			long wildcardCost1 = GsonHelper.getAsLong(json, "grist_cost");
-			
-			return new WildcardGristCost(recipeId, ingredient, wildcardCost1, priority);
+			return CODEC;
 		}
 		
 		@Override
-		public void toNetwork(FriendlyByteBuf buffer, WildcardGristCost recipe)
+		public StreamCodec<RegistryFriendlyByteBuf, WildcardGristCost> streamCodec()
 		{
-			recipe.ingredient.toNetwork(buffer);
+			return STREAM_CODEC;
+		}
+		
+		private static void toNetwork(RegistryFriendlyByteBuf buffer, WildcardGristCost recipe)
+		{
+			Ingredient.CONTENTS_STREAM_CODEC.encode(buffer, recipe.ingredient);
 			buffer.writeInt(recipe.getPriority());
 			buffer.writeLong(recipe.wildcardCost);
 		}
 		
-		@Nullable
-		@Override
-		public WildcardGristCost fromNetwork(ResourceLocation recipeId, FriendlyByteBuf buffer)
+		private static WildcardGristCost fromNetwork(RegistryFriendlyByteBuf buffer)
 		{
-			Ingredient ingredient = Ingredient.fromNetwork(buffer);
+			Ingredient ingredient = Ingredient.CONTENTS_STREAM_CODEC.decode(buffer);
 			int priority = buffer.readInt();
 			long wildcardCost = buffer.readLong();
 			
-			return new WildcardGristCost(recipeId, ingredient, wildcardCost, priority);
+			return new WildcardGristCost(ingredient, wildcardCost, Optional.of(priority));
 		}
 	}
 }

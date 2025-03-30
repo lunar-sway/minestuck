@@ -2,8 +2,8 @@
   "type": "minestuck:grist",
   "conditions": [
     {
-      "action": "grist_harvest",
-      "condition": "forge:can_tool_perform_action"
+      "ability": "grist_harvest",
+      "condition": "neoforge:can_item_perform_ability"
     }
   ],
   "multiplier": 0.5

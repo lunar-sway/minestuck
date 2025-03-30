@@ -1,0 +1,13 @@
+{
+  "type": "minecraft:crafting_shapeless",
+  "category": "building",
+  "ingredients": [
+    {
+      "item": "minestuck:coarse_stone"
+    }
+  ],
+  "result": {
+    "count": 1,
+    "id": "minestuck:coarse_stone_button"
+  }
+}

@@ -2,9 +2,9 @@ package com.mraof.minestuck.skaianet;
 
 import com.mraof.minestuck.Minestuck;
 import net.minecraft.server.MinecraftServer;
-import net.minecraftforge.event.server.ServerStartedEvent;
-import net.minecraftforge.eventbus.api.SubscribeEvent;
-import net.minecraftforge.fml.common.Mod;
+import net.neoforged.bus.api.SubscribeEvent;
+import net.neoforged.fml.common.EventBusSubscriber;
+import net.neoforged.neoforge.event.server.ServerStartedEvent;
 import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.Logger;
 
@@ -12,7 +12,7 @@ import org.apache.logging.log4j.Logger;
  * A class responsible for fixing invalid states in connection or session data,
  * which might happen if a world is saved incorrectly after a crash.
  */
-@Mod.EventBusSubscriber(modid = Minestuck.MOD_ID)
+@EventBusSubscriber(modid = Minestuck.MOD_ID)
 public final class SessionPostFixer
 {
 	private static final Logger LOGGER = LogManager.getLogger();
@@ -20,19 +20,16 @@ public final class SessionPostFixer
 	@SubscribeEvent
 	public static void onServerStarted(ServerStartedEvent event)
 	{
-		for(Session session : SessionHandler.get(event.getServer()).getSessions())
-		{
-			for(SburbConnection connection : session.connections)
-				validate(event.getServer(), connection);
-		}
+		for(SburbPlayerData playerData : SkaianetData.get(event.getServer()).allPlayerData())
+			validate(event.getServer(), playerData);
 	}
 	
-	private static void validate(MinecraftServer mcServer, SburbConnection connection)
+	private static void validate(MinecraftServer mcServer, SburbPlayerData playerData)
 	{
-		if(connection.getClientDimension() != null && mcServer.getLevel(connection.getClientDimension()) == null)
+		if(playerData.getLandDimension() != null && mcServer.getLevel(playerData.getLandDimension()) == null)
 		{
-			LOGGER.error("Found missing land dimension \"{}\" in the connection for player {}. Resetting entry status.", connection.getClientDimension(), connection.getClientIdentifier().getUsername());
-			connection.resetEntryState();
+			LOGGER.error("Found missing land dimension \"{}\" in the connection for player {}. Resetting entry status.", playerData.getLandDimension(), playerData.playerId().getUsername());
+			playerData.resetEntryState();
 		}
 	}
 }

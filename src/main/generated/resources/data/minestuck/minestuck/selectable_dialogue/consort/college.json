@@ -1,0 +1,8 @@
+{
+  "condition": {
+    "type": "minestuck:always_true"
+  },
+  "dialogue": "minestuck:consort/college",
+  "dialogue_weight": 10,
+  "keep_on_reset": false
+}

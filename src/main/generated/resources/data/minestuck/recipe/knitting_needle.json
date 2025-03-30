@@ -1,0 +1,21 @@
+{
+  "type": "minecraft:crafting_shaped",
+  "category": "equipment",
+  "key": {
+    "i": {
+      "item": "minecraft:iron_ingot"
+    },
+    "n": {
+      "item": "minecraft:iron_nugget"
+    }
+  },
+  "pattern": [
+    "  n",
+    " i ",
+    "i  "
+  ],
+  "result": {
+    "count": 1,
+    "id": "minestuck:knitting_needle"
+  }
+}

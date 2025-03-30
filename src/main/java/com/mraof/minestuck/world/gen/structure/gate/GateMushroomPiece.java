@@ -1,6 +1,6 @@
 package com.mraof.minestuck.world.gen.structure.gate;
 
-import com.mraof.minestuck.world.gen.structure.MSStructurePieces;
+import com.mraof.minestuck.world.gen.structure.MSStructures;
 import net.minecraft.core.BlockPos;
 import net.minecraft.nbt.CompoundTag;
 import net.minecraft.util.RandomSource;
@@ -19,12 +19,12 @@ public class GateMushroomPiece extends GatePiece
 {
 	public GateMushroomPiece(ChunkGenerator generator, LevelHeightAccessor level, RandomState randomState, RandomSource random, int minX, int minZ)
 	{
-		super(MSStructurePieces.GATE_MUSHROOM.get(), level, randomState, generator, random, minX, minZ, 11, 25, 11, 0);
+		super(MSStructures.GATE_MUSHROOM_PIECE.get(), level, randomState, generator, random, minX, minZ, 11, 25, 11, 0);
 	}
 	
 	public GateMushroomPiece(CompoundTag nbt)
 	{
-		super(MSStructurePieces.GATE_MUSHROOM.get(), nbt);
+		super(MSStructures.GATE_MUSHROOM_PIECE.get(), nbt);
 	}
 	
 	@Override

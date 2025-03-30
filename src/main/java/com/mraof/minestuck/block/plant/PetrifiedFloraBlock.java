@@ -1,5 +1,6 @@
 package com.mraof.minestuck.block.plant;
 
+import com.mojang.serialization.MapCodec;
 import com.mraof.minestuck.util.MSTags;
 import net.minecraft.core.BlockPos;
 import net.minecraft.world.level.BlockGetter;
@@ -23,13 +24,19 @@ public class PetrifiedFloraBlock extends BushBlock
 	}
 	
 	@Override
+	protected MapCodec<PetrifiedFloraBlock> codec()
+	{
+		return null; //todo
+	}
+	
+	@Override
 	protected boolean mayPlaceOn(BlockState state, BlockGetter level, BlockPos pos)
 	{
 		return state.is(MSTags.Blocks.PETRIFIED_FLORA_PLACEABLE);
 	}
 	
 	@Override
-	public VoxelShape getShape(BlockState pState, BlockGetter pLevel, BlockPos pPos, CollisionContext pContext)
+	protected VoxelShape getShape(BlockState pState, BlockGetter pLevel, BlockPos pPos, CollisionContext pContext)
 	{
 		Vec3 vec3 = pState.getOffset(pLevel, pPos);
 		return shape.move(vec3.x, vec3.y, vec3.z);

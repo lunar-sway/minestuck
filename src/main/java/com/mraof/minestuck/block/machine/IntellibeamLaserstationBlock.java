@@ -3,11 +3,10 @@ package com.mraof.minestuck.block.machine;
 import com.mraof.minestuck.block.BlockUtil;
 import com.mraof.minestuck.block.MSBlockShapes;
 import com.mraof.minestuck.block.MSProperties;
-import com.mraof.minestuck.blockentity.machine.IntellibeamLaserstationBlockEntity;
 import com.mraof.minestuck.blockentity.MSBlockEntityTypes;
+import com.mraof.minestuck.blockentity.machine.IntellibeamLaserstationBlockEntity;
 import net.minecraft.core.BlockPos;
 import net.minecraft.core.Direction;
-import net.minecraft.world.InteractionHand;
 import net.minecraft.world.InteractionResult;
 import net.minecraft.world.entity.player.Player;
 import net.minecraft.world.level.BlockGetter;
@@ -25,8 +24,10 @@ import net.minecraft.world.phys.shapes.CollisionContext;
 import net.minecraft.world.phys.shapes.VoxelShape;
 
 import javax.annotation.Nullable;
+import javax.annotation.ParametersAreNonnullByDefault;
 import java.util.Map;
 
+@ParametersAreNonnullByDefault
 public class IntellibeamLaserstationBlock extends MachineBlock implements EntityBlock
 {
 	public static final Map<Direction, VoxelShape> SHAPE = MSBlockShapes.INTELLIBEAM_LASERSTATION.createRotatedShapes();
@@ -38,9 +39,8 @@ public class IntellibeamLaserstationBlock extends MachineBlock implements Entity
 		registerDefaultState(defaultBlockState().setValue(HAS_CARD, false));
 	}
 	
-	@SuppressWarnings("deprecation")
 	@Override
-	public InteractionResult use(BlockState state, Level level, BlockPos pos, Player player, InteractionHand handIn, BlockHitResult hit)
+	protected InteractionResult useWithoutItem(BlockState state, Level level, BlockPos pos, Player player, BlockHitResult hit)
 	{
 		if(level.isClientSide)
 			return InteractionResult.SUCCESS;
@@ -65,26 +65,24 @@ public class IntellibeamLaserstationBlock extends MachineBlock implements Entity
 	}
 	
 	@Override
-	public void playerWillDestroy(Level level, BlockPos pos, BlockState state, Player player)
+	public BlockState playerWillDestroy(Level level, BlockPos pos, BlockState state, Player player)
 	{
 		if(!level.isClientSide && level.getBlockEntity(pos) instanceof IntellibeamLaserstationBlockEntity intellibeamEntity)
 		{
 			intellibeamEntity.dropCard(true, level, pos, intellibeamEntity.getAnalyzedCard());
 		}
 		
-		super.playerWillDestroy(level, pos, state, player);
+		return super.playerWillDestroy(level, pos, state, player);
 	}
 	
 	@Override
-	@SuppressWarnings("deprecation")
-	public VoxelShape getShape(BlockState state, BlockGetter level, BlockPos pos, CollisionContext context)
+	protected VoxelShape getShape(BlockState state, BlockGetter level, BlockPos pos, CollisionContext context)
 	{
 		return SHAPE.get(state.getValue(FACING));
 	}
 	
 	@Override
-	@SuppressWarnings("deprecation")
-	public VoxelShape getCollisionShape(BlockState state, BlockGetter level, BlockPos pos, CollisionContext context)
+	protected VoxelShape getCollisionShape(BlockState state, BlockGetter level, BlockPos pos, CollisionContext context)
 	{
 		return SHAPE.get(state.getValue(FACING));
 	}

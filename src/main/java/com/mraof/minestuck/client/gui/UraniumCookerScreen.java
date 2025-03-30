@@ -14,8 +14,8 @@ import javax.annotation.ParametersAreNonnullByDefault;
 @ParametersAreNonnullByDefault
 public final class UraniumCookerScreen extends MachineScreen<UraniumCookerMenu>
 {
-	private static final ResourceLocation BACKGROUND_TEXTURE = new ResourceLocation(Minestuck.MOD_ID, "textures/gui/uranium_cooker.png");
-	private static final ResourceLocation FUEL_BAR_TEXTURE = new ResourceLocation(Minestuck.MOD_ID, "textures/gui/progress/uranium_level.png");
+	private static final ResourceLocation BACKGROUND_TEXTURE = ResourceLocation.fromNamespaceAndPath(Minestuck.MOD_ID, "textures/gui/uranium_cooker.png");
+	private static final ResourceLocation FUEL_BAR_TEXTURE = ResourceLocation.fromNamespaceAndPath(Minestuck.MOD_ID, "textures/gui/progress/uranium_level.png");
 	private static final int FUEL_BAR_X = 67;
 	private static final int FUEL_BAR_Y = 24;
 	private static final int FUEL_BAR_WIDTH = 35;
@@ -31,7 +31,6 @@ public final class UraniumCookerScreen extends MachineScreen<UraniumCookerMenu>
 	@Override
 	public void render(GuiGraphics guiGraphics, int mouseX, int mouseY, float partialTicks)
 	{
-		this.renderBackground(guiGraphics);
 		super.render(guiGraphics, mouseX, mouseY, partialTicks);
 		this.renderTooltip(guiGraphics, mouseX, mouseY);
 	}

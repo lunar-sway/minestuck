@@ -6,13 +6,14 @@ import com.mraof.minestuck.block.GateBlock;
 import com.mraof.minestuck.block.MSBlocks;
 import com.mraof.minestuck.blockentity.ComputerBlockEntity;
 import com.mraof.minestuck.blockentity.TransportalizerBlockEntity;
+import com.mraof.minestuck.computer.SburbClientData;
+import com.mraof.minestuck.computer.SburbServerData;
 import com.mraof.minestuck.computer.editmode.ServerEditHandler;
 import com.mraof.minestuck.network.EntryEffectPackets;
-import com.mraof.minestuck.network.MSPacketHandler;
 import com.mraof.minestuck.player.IdentifierHandler;
 import com.mraof.minestuck.player.PlayerIdentifier;
-import com.mraof.minestuck.skaianet.SburbConnection;
-import com.mraof.minestuck.skaianet.SkaianetHandler;
+import com.mraof.minestuck.skaianet.SburbHandler;
+import com.mraof.minestuck.skaianet.SburbPlayerData;
 import com.mraof.minestuck.skaianet.TitleSelectionHook;
 import com.mraof.minestuck.util.Teleport;
 import com.mraof.minestuck.world.GateHandler;
@@ -20,7 +21,6 @@ import com.mraof.minestuck.world.MSDimensions;
 import com.mraof.minestuck.world.storage.MSExtraData;
 import net.minecraft.ChatFormatting;
 import net.minecraft.core.BlockPos;
-import net.minecraft.nbt.CompoundTag;
 import net.minecraft.network.chat.Component;
 import net.minecraft.resources.ResourceKey;
 import net.minecraft.server.level.ServerLevel;
@@ -39,18 +39,18 @@ import net.minecraft.world.level.block.state.BlockState;
 import net.minecraft.world.level.chunk.LevelChunk;
 import net.minecraft.world.level.levelgen.Heightmap;
 import net.minecraft.world.phys.AABB;
-import net.minecraftforge.event.TickEvent;
-import net.minecraftforge.eventbus.api.SubscribeEvent;
-import net.minecraftforge.fml.common.Mod;
+import net.neoforged.bus.api.SubscribeEvent;
+import net.neoforged.fml.common.EventBusSubscriber;
+import net.neoforged.neoforge.event.tick.ServerTickEvent;
+import net.neoforged.neoforge.network.PacketDistributor;
 import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.Logger;
 
 import java.util.Iterator;
 import java.util.List;
 import java.util.Objects;
-import java.util.Optional;
 
-@Mod.EventBusSubscriber(modid = Minestuck.MOD_ID)
+@EventBusSubscriber(modid = Minestuck.MOD_ID)
 public class EntryProcess
 {
 	public static final String WRONG_DIMENSION = "minestuck.entry.wrong_dimension";
@@ -116,15 +116,15 @@ public class EntryProcess
 		}
 		
 		PlayerIdentifier identifier = IdentifierHandler.encode(player);
-		Optional<SburbConnection> c = SkaianetHandler.get(player.serverLevel()).getPrimaryConnection(identifier, true);
+		ResourceKey<Level> land = SburbPlayerData.get(identifier, player.server).getLandDimensionIfEntered();
 		
-		if(c.isPresent() && c.get().hasEntered())
+		if(land != null)
 		{
-			secondEntryTeleport(player, c.get().getClientDimension());
+			secondEntryTeleport(player, land);
 			return;
 		}
 		
-		ResourceKey<Level> landDimension = SkaianetHandler.get(player.level()).prepareEntry(identifier);
+		ResourceKey<Level> landDimension = SburbHandler.prepareEntry(identifier, player.server);
 		if(landDimension == null)
 		{
 			player.sendSystemMessage(Component.translatable(CREATION_FAILED));
@@ -149,7 +149,7 @@ public class EntryProcess
 		
 		waitingProcess = process;
 		startTime = player.level().getGameTime() + MinestuckConfig.COMMON.entryDelay.get();
-		MSPacketHandler.sendToAll(new EntryEffectPackets.Effect(player.level().dimension(), process.origin, process.artifactRange));
+		PacketDistributor.sendToAllPlayers(new EntryEffectPackets.Effect(player.level().dimension(), process.origin, process.artifactRange));
 		LOGGER.info("Entry prep done in {}ms", System.currentTimeMillis() - time);
 	}
 	
@@ -182,18 +182,15 @@ public class EntryProcess
 	private static long startTime;
 	
 	@SubscribeEvent
-	public static void onServerTick(TickEvent.ServerTickEvent event)
+	public static void onServerTick(ServerTickEvent.Pre event)
 	{
-		if(event.phase == TickEvent.Phase.START)
+		//noinspection resource
+		if(waitingProcess != null && startTime <= event.getServer().overworld().getGameTime())
 		{
-			//noinspection resource
-			if(waitingProcess != null && startTime <= event.getServer().overworld().getGameTime())
-			{
-				waitingProcess.landLevel.getChunkSource().removeRegionTicket(CHUNK_TICKET_TYPE, new ChunkPos(0, 0), 0, Unit.INSTANCE);
-				waitingProcess.runEntry();
-				waitingProcess = null;
-				MSPacketHandler.sendToAll(new EntryEffectPackets.Clear());
-			}
+			waitingProcess.landLevel.getChunkSource().removeRegionTicket(CHUNK_TICKET_TYPE, new ChunkPos(0, 0), 0, Unit.INSTANCE);
+			waitingProcess.runEntry();
+			waitingProcess = null;
+			PacketDistributor.sendToAllPlayers(new EntryEffectPackets.Clear());
 		}
 	}
 	
@@ -226,7 +223,7 @@ public class EntryProcess
 			}
 			
 			finalizeEntry(player, originLevel, landLevel, wasInsideEntryArea);
-			SkaianetHandler.get(player.level()).onEntry(playerId);
+			SburbHandler.onEntry(player.server, player);
 			LOGGER.info("Entry finished in {}ms", System.currentTimeMillis() - time);
 			
 		} catch(Exception e)
@@ -257,7 +254,7 @@ public class EntryProcess
 				return true;
 			} else if(be instanceof ComputerBlockEntity computer)
 			{
-				if(!computer.owner.appliesTo(player))
+				if(computer.getOwner() == null || !computer.getOwner().appliesTo(player))
 				{
 					player.displayClientMessage(Component.translatable(NOT_YOUR_COMPUTER), false);
 					return true;
@@ -318,7 +315,7 @@ public class EntryProcess
 		
 		placeGates(level1);
 		
-		MSExtraData.get(level1).addPostEntryTask(new PostEntryTask(level1.dimension(), origin.getX() + xDiff, origin.getY() + yDiff, origin.getZ() + zDiff, artifactRange, (byte) 0));
+		MSExtraData.get(level1).addPostEntryTask(new PostEntryTask(level1.dimension(), origin.getX() + xDiff, origin.getY() + yDiff, origin.getZ() + zDiff, artifactRange));
 	}
 	
 	private static void removeDroppedEntities(ServerPlayer player, ServerLevel level0, AABB entityTeleportBB, List<Entity> entities)
@@ -372,25 +369,31 @@ public class EntryProcess
 		Iterator<Entity> iterator = entities.iterator();
 		while(iterator.hasNext())
 		{
-			Entity e = iterator.next();
-			if(origin.distToCenterSqr(e.getX(), e.getY(), e.getZ()) <= artifactRange * artifactRange)
+			Entity entity = iterator.next();
+			if(origin.distToCenterSqr(entity.getX(), entity.getY(), entity.getZ()) <= artifactRange * artifactRange)
 			{
-				if(MinestuckConfig.SERVER.entryCrater.get() || e instanceof Player || !creative && e instanceof ItemEntity)
+				if(MinestuckConfig.SERVER.entryCrater.get() || entity instanceof Player || !creative && entity instanceof ItemEntity)
 				{
-					if(e instanceof Player && ServerEditHandler.getData((Player) e) != null)
-						ServerEditHandler.reset(ServerEditHandler.getData((Player) e));
-					else
+					try
 					{
-						Teleport.teleportEntity(e, level1, e.getX() + xDiff, e.getY() + yDiff, e.getZ() + zDiff);
+						if(entity instanceof Player && ServerEditHandler.getData((Player) entity) != null)
+							ServerEditHandler.reset(ServerEditHandler.getData((Player) entity));
+						else
+						{
+							Teleport.teleportEntity(entity, level1, entity.getX() + xDiff, entity.getY() + yDiff, entity.getZ() + zDiff);
+						}
+						//These entities should no longer be in the world, and this list is later used for entities that *should* remain.
+						iterator.remove();
+					} catch(RuntimeException e)
+					{
+						LOGGER.error("Exception while teleporting entity during entry {}:", entity, e);
 					}
-					//These entities should no longer be in the world, and this list is later used for entities that *should* remain.
-					iterator.remove();
 				} else    //Copy instead of teleport
 				{
-					Entity newEntity = e.getType().create(level1);
+					Entity newEntity = entity.getType().create(level1);
 					if(newEntity != null)
 					{
-						newEntity.restoreFrom(e);
+						newEntity.restoreFrom(entity);
 						newEntity.setPos(newEntity.getX() + xDiff, newEntity.getY() + yDiff, newEntity.getZ() + zDiff);
 						level1.addFreshEntity(newEntity);
 					}
@@ -427,8 +430,12 @@ public class EntryProcess
 				}
 			} else
 			{
-				if(blockEntity instanceof ComputerBlockEntity)    //Avoid duplicating computer data when a computer is kept in the overworld
-					((ComputerBlockEntity) blockEntity).programData = new CompoundTag();
+				//Avoid duplicating computer data when a computer is kept in the overworld
+				if(blockEntity instanceof ComputerBlockEntity computer)
+				{
+					computer.getSburbClientData().ifPresent(SburbClientData::handleBeingDuplicated);
+					computer.getSburbServerData().ifPresent(SburbServerData::handleBeingDuplicated);
+				}
 				else if(blockEntity instanceof TransportalizerBlockEntity)
 					level.removeBlockEntity(pos);
 			}

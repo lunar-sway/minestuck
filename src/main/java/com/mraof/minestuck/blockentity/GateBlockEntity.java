@@ -2,7 +2,9 @@ package com.mraof.minestuck.blockentity;
 
 import com.mraof.minestuck.util.ColorHandler;
 import com.mraof.minestuck.world.GateHandler;
+import net.minecraft.MethodsReturnNonnullByDefault;
 import net.minecraft.core.BlockPos;
+import net.minecraft.core.HolderLookup;
 import net.minecraft.nbt.CompoundTag;
 import net.minecraft.network.Connection;
 import net.minecraft.network.protocol.Packet;
@@ -13,6 +15,10 @@ import net.minecraft.server.level.ServerPlayer;
 import net.minecraft.world.level.block.state.BlockState;
 import net.minecraft.world.phys.AABB;
 
+import javax.annotation.ParametersAreNonnullByDefault;
+
+@ParametersAreNonnullByDefault
+@MethodsReturnNonnullByDefault
 public class GateBlockEntity extends OnCollisionTeleporterBlockEntity<ServerPlayer>
 {
 	//Only used client-side
@@ -39,31 +45,25 @@ public class GateBlockEntity extends OnCollisionTeleporterBlockEntity<ServerPlay
 	}
 	
 	@Override
-	public AABB getRenderBoundingBox()
+	protected void loadAdditional(CompoundTag nbt, HolderLookup.Provider pRegistries)
 	{
-		return new AABB(this.getBlockPos().offset(-1, 0, -1), this.getBlockPos().offset(1, 1, 1));
-	}
-	
-	@Override
-	public void load(CompoundTag nbt)
-	{
-		super.load(nbt);
+		super.loadAdditional(nbt, pRegistries);
 		if(nbt.contains("gate_type"))
 			this.gateType = GateHandler.Type.fromString(nbt.getString("gate_type"));
 	}
 	
 	@Override
-	public void saveAdditional(CompoundTag compound)
+	public void saveAdditional(CompoundTag compound, HolderLookup.Provider provider)
 	{
-		super.saveAdditional(compound);
+		super.saveAdditional(compound, provider);
 		if(this.gateType != null)
 			compound.putString("gate_type", gateType.toString());
 	}
 	
 	@Override
-	public CompoundTag getUpdateTag()
+	public CompoundTag getUpdateTag(HolderLookup.Provider provider)
 	{
-		CompoundTag nbt = super.getUpdateTag();
+		CompoundTag nbt = super.getUpdateTag(provider);
 		nbt.putInt("color", ColorHandler.getColorForDimension((ServerLevel) level));
 		return nbt;
 	}
@@ -75,15 +75,15 @@ public class GateBlockEntity extends OnCollisionTeleporterBlockEntity<ServerPlay
 	}
 	
 	@Override
-	public void handleUpdateTag(CompoundTag tag)
+	public void handleUpdateTag(CompoundTag tag, HolderLookup.Provider lookupProvider)
 	{
 		this.color = tag.getInt("color");
 	}
 	
 	@Override
-	public void onDataPacket(Connection net, ClientboundBlockEntityDataPacket pkt)
+	public void onDataPacket(Connection net, ClientboundBlockEntityDataPacket pkt, HolderLookup.Provider lookupProvider)
 	{
-		handleUpdateTag(pkt.getTag());
+		handleUpdateTag(pkt.getTag(), lookupProvider);
 	}
 	
 }

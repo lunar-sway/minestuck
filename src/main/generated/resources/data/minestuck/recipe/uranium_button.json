@@ -1,0 +1,13 @@
+{
+  "type": "minecraft:crafting_shapeless",
+  "category": "building",
+  "ingredients": [
+    {
+      "item": "minestuck:raw_uranium"
+    }
+  ],
+  "result": {
+    "count": 1,
+    "id": "minestuck:uranium_button"
+  }
+}

@@ -1,50 +1,49 @@
 package com.mraof.minestuck.network;
 
+import com.mraof.minestuck.Minestuck;
 import com.mraof.minestuck.client.gui.playerStats.PlayerStatsScreen;
 import com.mraof.minestuck.computer.editmode.ServerEditHandler;
 import com.mraof.minestuck.inventory.AtheneumMenu;
 import com.mraof.minestuck.inventory.EditmodeMenu;
 import com.mraof.minestuck.inventory.captchalogue.CaptchaDeckMenu;
 import net.minecraft.network.FriendlyByteBuf;
+import net.minecraft.network.RegistryFriendlyByteBuf;
+import net.minecraft.network.codec.ByteBufCodecs;
+import net.minecraft.network.codec.StreamCodec;
+import net.minecraft.network.protocol.common.custom.CustomPacketPayload;
+import net.minecraft.resources.ResourceLocation;
 import net.minecraft.server.level.ServerPlayer;
 import net.minecraft.world.inventory.AbstractContainerMenu;
-import net.minecraftforge.common.MinecraftForge;
-import net.minecraftforge.event.entity.player.PlayerContainerEvent;
+import net.neoforged.neoforge.common.NeoForge;
+import net.neoforged.neoforge.event.entity.player.PlayerContainerEvent;
+import net.neoforged.neoforge.network.handling.IPayloadContext;
 import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.Logger;
 
-public class MiscContainerPacket implements PlayToServerPacket
+public record MiscContainerPacket(int index, boolean editmode) implements MSPacket.PlayToServer
 {
+	
+		public static final Type<MiscContainerPacket> ID = new Type<>(Minestuck.id("misc_container"));
+	public static final StreamCodec<FriendlyByteBuf, MiscContainerPacket> STREAM_CODEC = StreamCodec.composite(
+			ByteBufCodecs.INT,
+			MiscContainerPacket::index,
+			ByteBufCodecs.BOOL,
+			MiscContainerPacket::editmode,
+			MiscContainerPacket::new
+	);
+	
 	private static final Logger LOGGER = LogManager.getLogger();
 	
-	private final int index;
-	private final boolean editmode;
-	
-	public MiscContainerPacket(int index, boolean editmode)
+	@Override
+	public Type<? extends CustomPacketPayload> type()
 	{
-		this.index = index;
-		this.editmode = editmode;
+		return ID;
 	}
 	
 	@Override
-	public void encode(FriendlyByteBuf buffer)
+	public void execute(IPayloadContext context, ServerPlayer player)
 	{
-		buffer.writeInt(index);
-		buffer.writeBoolean(editmode);
-	}
-	
-	public static MiscContainerPacket decode(FriendlyByteBuf buffer)
-	{
-		int index = buffer.readInt();
-		boolean editmode = buffer.readBoolean();
-		
-		return new MiscContainerPacket(index, editmode);
-	}
-	
-	@Override
-	public void execute(ServerPlayer player)
-	{
-		boolean isInEditmode = ServerEditHandler.getData(player) != null;
+		boolean isInEditmode = ServerEditHandler.isInEditmode(player);
 		
 		if(editmode != isInEditmode)
 		{
@@ -67,7 +66,7 @@ public class MiscContainerPacket implements PlayToServerPacket
 				
 			player.containerMenu = menu;
 			player.initMenu(menu);
-			MinecraftForge.EVENT_BUS.post(new PlayerContainerEvent.Open(player, menu));
+			NeoForge.EVENT_BUS.post(new PlayerContainerEvent.Open(player, menu));
 		}
 	}
 }

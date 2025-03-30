@@ -6,16 +6,15 @@ import com.mraof.minestuck.item.MSItems;
 import com.mraof.minestuck.player.EnumAspect;
 import com.mraof.minestuck.player.Title;
 import com.mraof.minestuck.util.MSSoundEvents;
-import com.mraof.minestuck.player.PlayerSavedData;
 import net.minecraft.server.level.ServerPlayer;
 import net.minecraft.sounds.SoundSource;
 import net.minecraft.stats.Stats;
 import net.minecraft.world.InteractionHand;
 import net.minecraft.world.InteractionResultHolder;
+import net.minecraft.world.entity.EquipmentSlot;
 import net.minecraft.world.entity.player.Player;
 import net.minecraft.world.item.ItemStack;
 import net.minecraft.world.level.Level;
-import net.minecraftforge.common.util.FakePlayer;
 
 public class ReturningProjectileWeaponItem extends ConsumableProjectileWeaponItem
 {
@@ -34,15 +33,10 @@ public class ReturningProjectileWeaponItem extends ConsumableProjectileWeaponIte
 		
 		level.playSound(null, playerIn.getX(), playerIn.getY(), playerIn.getZ(), MSSoundEvents.ITEM_PROJECTILE_THROW.get(), SoundSource.PLAYERS, 1.0F, 1.2F);
 		
-		if(!level.isClientSide && !(playerIn instanceof FakePlayer))
+		if(playerIn instanceof ServerPlayer serverPlayer)
 		{
-			boolean noBlockCollision = false;
-			Title title = PlayerSavedData.getData((ServerPlayer) playerIn).getTitle();
-			if(title != null)
-			{
-				noBlockCollision = title.getHeroAspect() == EnumAspect.VOID && item.getItem() == MSItems.UMBRAL_INFILTRATOR.get();
-			} else if(playerIn.isCreative() && item.getItem() == MSItems.UMBRAL_INFILTRATOR.get())
-				noBlockCollision = true;
+			boolean noBlockCollision = item.is(MSItems.UMBRAL_INFILTRATOR)
+					&& (playerIn.isCreative() || Title.isPlayerOfAspect(serverPlayer, EnumAspect.VOID));
 			
 			ReturningProjectileEntity projectileEntity = new ReturningProjectileEntity(MSEntityTypes.RETURNING_PROJECTILE.get(), playerIn, level, maxTick, noBlockCollision);
 			projectileEntity.setItem(item);
@@ -53,7 +47,7 @@ public class ReturningProjectileWeaponItem extends ConsumableProjectileWeaponIte
 			level.addFreshEntity(projectileEntity);
 		}
 		
-		item.hurtAndBreak(1, playerIn, playerEntity -> playerEntity.broadcastBreakEvent(InteractionHand.MAIN_HAND));
+		item.hurtAndBreak(1, playerIn, EquipmentSlot.MAINHAND);
 		
 		playerIn.getCooldowns().addCooldown(this, maxTick);
 		playerIn.awardStat(Stats.ITEM_USED.get(this));

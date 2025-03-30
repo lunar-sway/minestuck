@@ -1,6 +1,5 @@
 package com.mraof.minestuck.block;
 
-import com.mraof.minestuck.util.CustomVoxelShape;
 import net.minecraft.core.BlockPos;
 import net.minecraft.core.Direction;
 import net.minecraft.world.item.context.BlockPlaceContext;
@@ -55,16 +54,14 @@ public class CustomShapeBlock extends Block implements SimpleWaterloggedBlock
 		return super.updateShape(stateIn, facing, facingState, level, currentPos, facingPos);
 	}
 	
-	@SuppressWarnings("deprecation")
 	@Override
-	public BlockState rotate(BlockState state, Rotation direction)
+	protected BlockState rotate(BlockState state, Rotation direction)
 	{
 		return state.setValue(FACING, direction.rotate(state.getValue(FACING)));
 	}
 	
-	@SuppressWarnings("deprecation")
 	@Override
-	public BlockState mirror(BlockState state, Mirror mirrorIn)
+	protected BlockState mirror(BlockState state, Mirror mirrorIn)
 	{
 		return state.setValue(FACING, mirrorIn.mirror(state.getValue(FACING)));
 	}
@@ -76,15 +73,13 @@ public class CustomShapeBlock extends Block implements SimpleWaterloggedBlock
 	}
 	
 	@Override
-	@SuppressWarnings("deprecation")
-	public VoxelShape getShape(BlockState state, BlockGetter level, BlockPos pos, CollisionContext context)
+	protected VoxelShape getShape(BlockState state, BlockGetter level, BlockPos pos, CollisionContext context)
 	{
 		return shape.get(state.getValue(FACING));
 	}
 	
 	@Override
-	@SuppressWarnings("deprecation")
-	public FluidState getFluidState(BlockState state)
+	protected FluidState getFluidState(BlockState state)
 	{
 		return state.getValue(WATERLOGGED) ? Fluids.WATER.getSource(false) : super.getFluidState(state);
 	}

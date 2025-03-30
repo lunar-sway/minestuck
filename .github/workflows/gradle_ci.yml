@@ -1,0 +1,54 @@
+name: Gradle CI
+
+on:
+  push:
+    branches: 
+      - 'main'
+      - 'upcoming-content'
+  pull_request:
+
+permissions:
+  contents: read
+
+jobs:
+  validate-and-build:
+    runs-on: ubuntu-latest
+
+    steps:
+    - uses: actions/checkout@v4
+    - name: Set up JDK
+      uses: actions/setup-java@v4
+      with:
+        java-version: '17'
+        distribution: 'temurin'
+    - name: Validate Gradle wrapper
+      uses: gradle/wrapper-validation-action@v2
+    - name: Setup Gradle
+      uses: gradle/actions/setup-gradle@v3
+    - name: Gradle Build
+      timeout-minutes: 20
+      run: ./gradlew build
+
+  check-datagen:
+    needs: validate-and-build
+    runs-on: ubuntu-latest
+
+    steps:
+      - uses: actions/checkout@v4
+      - name: Set up JDK
+        uses: actions/setup-java@v4
+        with:
+          java-version: '17'
+          distribution: 'temurin'
+      - name: Setup Gradle
+        uses: gradle/actions/setup-gradle@v3
+        with:
+          cache-read-only: true
+        # Meant to be sped up by cached gradle stuff from the validate-and-build job,
+        # but the cache is only written to when that job is run on the default branch.
+        # If the next step is slow, rerun this action on the default branch to recreate the cache.
+      - name: Run Data Generation
+        timeout-minutes: 20
+        run: ./gradlew :runData
+      - name: Detect Changes
+        uses: NathanielHill/fail-if-changes@9e6ed6bb0543551728592d8114cfaa1dcd9155a6

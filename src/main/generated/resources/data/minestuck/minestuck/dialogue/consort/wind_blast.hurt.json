@@ -1,0 +1,19 @@
+{
+  "node": {
+    "animation": {
+      "emotion": "happy"
+    },
+    "gui": "minestuck:textures/gui/dialogue/dialogue.png",
+    "message": "minestuck.dialogue.consort.wind_blast.hurt",
+    "responses": [
+      {
+        "condition": {
+          "type": "minestuck:always_true"
+        },
+        "hide_if_failed": true,
+        "message": "minestuck.dots",
+        "triggers": []
+      }
+    ]
+  }
+}

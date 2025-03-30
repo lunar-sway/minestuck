@@ -15,7 +15,10 @@ import net.minecraft.world.level.levelgen.feature.FeaturePlaceContext;
 import net.minecraft.world.level.levelgen.feature.configurations.NoneFeatureConfiguration;
 import net.minecraft.world.level.levelgen.structure.BoundingBox;
 
-import java.util.*;
+import java.util.HashMap;
+import java.util.LinkedList;
+import java.util.Map;
+import java.util.Queue;
 
 public class MesaFeature extends Feature<NoneFeatureConfiguration>
 {
@@ -55,7 +58,7 @@ public class MesaFeature extends Feature<NoneFeatureConfiguration>
 		int tallness = 7;
 		int height = rand.nextInt(tallness) + tallness + 3;
 		
-		if(level.getBlockState(pos.above(height*2/3)).liquid())	//At least 1/3rd of the height should be above the liquid surface
+		if(!level.getFluidState(pos.above(height*2/3)).isEmpty())	//At least 1/3rd of the height should be above the liquid surface
 			return false;
 		
 		float plateauSize = 0.6F + rand.nextFloat()*(height/10F);
@@ -144,7 +147,7 @@ public class MesaFeature extends Feature<NoneFeatureConfiguration>
 				continue;
 			}
 			
-			if(!boundingBox.isInside(new BlockPos(entry.pos.x, 64, entry.pos.z)) || !checkCoord(entry.pos, heightMap))
+			if(!boundingBox.isInside(entry.pos.atY(64)) || !checkCoord(entry.pos, heightMap))
 				continue;
 			if(random.nextFloat() < entry.spreadChance)
 			{
@@ -155,7 +158,7 @@ public class MesaFeature extends Feature<NoneFeatureConfiguration>
 				entry.spreadChance -= Math.min(0.5F, (2F*h)/height);
 				if(!heightMap.containsKey(coord))
 				{
-					BlockPos pos = new BlockPos(coord.x, rockPos.getY() - h, coord.z);
+					BlockPos pos = coord.atY(rockPos.getY() - h);
 					/*if(provider.villageHandler.isPositionInStructure(world, pos) || provider.structureHandler.isPositionInStructure(world, pos)) TODO
 					{
 						stomps=true;
@@ -167,13 +170,13 @@ public class MesaFeature extends Feature<NoneFeatureConfiguration>
 				}
 			} else entry.spreadChance += 0.5F;
 			
-			if(!level.getBlockState(new BlockPos(entry.pos.x, rockPos.getY() - h - 1, entry.pos.z)).equals(groundBlock))
+			if(!level.getBlockState(entry.pos.atY(rockPos.getY() - h - 1)).equals(groundBlock))
 				toProcess2.add(entry);
 		}
 		
 		for(Map.Entry<CoordPair, Integer> entry : heightMap.entrySet())
 		{
-			BlockPos pos = new BlockPos(entry.getKey().x, entry.getValue(), entry.getKey().z);
+			BlockPos pos = entry.getKey().atY(entry.getValue());
 			do
 			{
 				was.put(pos, level.getBlockState(pos));
@@ -190,7 +193,7 @@ public class MesaFeature extends Feature<NoneFeatureConfiguration>
 			int blockCount = 0;
 			for(int i1 = 0; i1 < 4; i1++)
 			{
-				Integer coordsHeight = heightMap.get(new CoordPair(coords.x + (i1 % 2), coords.z + i1/2));
+				Integer coordsHeight = heightMap.get(new CoordPair(coords.x() + (i1 % 2), coords.z() + i1/2));
 				if(coordsHeight != null && coordsHeight == rockPos.getY())
 					blockCount++;
 			}
@@ -201,7 +204,7 @@ public class MesaFeature extends Feature<NoneFeatureConfiguration>
 			}
 		}
 		
-		BlockPos corePosition = new BlockPos(nodePos.x, rockPos.getY() + 1, nodePos.z);
+		BlockPos corePosition = nodePos.atY(rockPos.getY() + 1);
 		
 		if(stomps)
 		{

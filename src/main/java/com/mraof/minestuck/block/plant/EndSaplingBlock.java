@@ -1,8 +1,10 @@
 package com.mraof.minestuck.block.plant;
 
+import com.mojang.serialization.MapCodec;
+import com.mraof.minestuck.Minestuck;
 import com.mraof.minestuck.block.MSProperties;
 import com.mraof.minestuck.util.MSTags;
-import com.mraof.minestuck.world.gen.feature.tree.EndTree;
+import com.mraof.minestuck.world.gen.feature.MSCFeatures;
 import net.minecraft.MethodsReturnNonnullByDefault;
 import net.minecraft.core.BlockPos;
 import net.minecraft.server.level.ServerLevel;
@@ -13,7 +15,7 @@ import net.minecraft.world.level.LevelReader;
 import net.minecraft.world.level.block.Block;
 import net.minecraft.world.level.block.BonemealableBlock;
 import net.minecraft.world.level.block.BushBlock;
-import net.minecraft.world.level.block.grower.AbstractTreeGrower;
+import net.minecraft.world.level.block.grower.TreeGrower;
 import net.minecraft.world.level.block.state.BlockState;
 import net.minecraft.world.level.block.state.StateDefinition;
 import net.minecraft.world.level.block.state.properties.BooleanProperty;
@@ -21,6 +23,7 @@ import net.minecraft.world.phys.shapes.CollisionContext;
 import net.minecraft.world.phys.shapes.VoxelShape;
 
 import javax.annotation.ParametersAreNonnullByDefault;
+import java.util.Optional;
 
 @ParametersAreNonnullByDefault
 @MethodsReturnNonnullByDefault
@@ -30,7 +33,7 @@ public class EndSaplingBlock extends BushBlock implements BonemealableBlock
 	public static final BooleanProperty OMEGA = MSProperties.OMEGA;
 	protected static final VoxelShape SHAPE = Block.box(2.0D, 0.0D, 2.0D, 14.0D, 12.0D, 14.0D);
 	
-	private final AbstractTreeGrower tree = new EndTree();
+	private final TreeGrower tree = new TreeGrower(Minestuck.id("end").toString(), Optional.empty(), Optional.of(MSCFeatures.END_TREE), Optional.empty());
 	
 	public EndSaplingBlock(Properties properties)
 	{
@@ -39,14 +42,19 @@ public class EndSaplingBlock extends BushBlock implements BonemealableBlock
 	}
 	
 	@Override
-	@SuppressWarnings("deprecation")
-	public VoxelShape getShape(BlockState state, BlockGetter level, BlockPos pos, CollisionContext context)
+	protected MapCodec<EndSaplingBlock> codec()
+	{
+		return null; //todo
+	}
+	
+	@Override
+	protected VoxelShape getShape(BlockState state, BlockGetter level, BlockPos pos, CollisionContext context)
 	{
 		return SHAPE;
 	}
 	
 	@Override
-	public boolean isValidBonemealTarget(LevelReader level, BlockPos pos, BlockState state, boolean isClient)
+	public boolean isValidBonemealTarget(LevelReader level, BlockPos pos, BlockState state)
 	{
 		return true;
 	}
@@ -105,14 +113,13 @@ public class EndSaplingBlock extends BushBlock implements BonemealableBlock
 	}
 	
 	@Override
-	@SuppressWarnings("deprecation")
-	public void tick(BlockState state, ServerLevel level, BlockPos pos, RandomSource random)
+	protected void tick(BlockState state, ServerLevel level, BlockPos pos, RandomSource random)
 	{
 		if (!level.isClientSide)
 		{
 			super.tick(state, level, pos, random);
 			
-			if (isValidBonemealTarget(level, pos, state, false) && random.nextInt(7) == 0)	//The world is not remote, therefore the side is not client.
+			if (isValidBonemealTarget(level, pos, state) && random.nextInt(7) == 0)	//The world is not remote, therefore the side is not client.
 			{
 				this.performBonemeal(level, random, pos, state);
 			}

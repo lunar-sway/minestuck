@@ -1,0 +1,9 @@
+{
+  "condition": {
+    "type": "minestuck:entity_type",
+    "entity_type": "minestuck:turtle"
+  },
+  "dialogue": "minestuck:consort/zazzerpan",
+  "dialogue_weight": 10,
+  "keep_on_reset": false
+}

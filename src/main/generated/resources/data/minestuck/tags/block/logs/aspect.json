@@ -1,0 +1,28 @@
+{
+  "values": [
+    "minestuck:blood_aspect_log",
+    "minestuck:breath_aspect_log",
+    "minestuck:doom_aspect_log",
+    "minestuck:heart_aspect_log",
+    "minestuck:hope_aspect_log",
+    "minestuck:life_aspect_log",
+    "minestuck:light_aspect_log",
+    "minestuck:mind_aspect_log",
+    "minestuck:rage_aspect_log",
+    "minestuck:space_aspect_log",
+    "minestuck:time_aspect_log",
+    "minestuck:void_aspect_log",
+    "minestuck:blood_aspect_stripped_log",
+    "minestuck:breath_aspect_stripped_log",
+    "minestuck:doom_aspect_stripped_log",
+    "minestuck:heart_aspect_stripped_log",
+    "minestuck:hope_aspect_stripped_log",
+    "minestuck:life_aspect_stripped_log",
+    "minestuck:light_aspect_stripped_log",
+    "minestuck:mind_aspect_stripped_log",
+    "minestuck:rage_aspect_stripped_log",
+    "minestuck:space_aspect_stripped_log",
+    "minestuck:time_aspect_stripped_log",
+    "minestuck:void_aspect_stripped_log"
+  ]
+}

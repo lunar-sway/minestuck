@@ -7,6 +7,7 @@ import com.mraof.minestuck.block.machine.GristCollectorBlock;
 import com.mraof.minestuck.blockentity.MSBlockEntityTypes;
 import com.mraof.minestuck.entity.item.GristEntity;
 import net.minecraft.core.BlockPos;
+import net.minecraft.core.HolderLookup;
 import net.minecraft.nbt.CompoundTag;
 import net.minecraft.nbt.NbtOps;
 import net.minecraft.sounds.SoundEvents;
@@ -54,17 +55,17 @@ public class GristCollectorBlockEntity extends BlockEntity
 	}
 	
 	@Override
-	public void load(CompoundTag compound)
+	public void loadAdditional(CompoundTag compound, HolderLookup.Provider provider)
 	{
-		super.load(compound);
+		super.loadAdditional(compound, provider);
 		storedGrist = MutableGristSet.CODEC.parse(NbtOps.INSTANCE, compound.get("storedGrist"))
 				.resultOrPartial(LOGGER::error).orElseGet(MutableGristSet::newDefault);
 	}
 	
 	@Override
-	public void saveAdditional(CompoundTag compound)
+	public void saveAdditional(CompoundTag compound, HolderLookup.Provider provider)
 	{
-		super.saveAdditional(compound);
+		super.saveAdditional(compound, provider);
 		MutableGristSet.CODEC.encodeStart(NbtOps.INSTANCE, storedGrist)
 				.resultOrPartial(LOGGER::error).ifPresent(tag -> compound.put("storedGrist", tag));
 	}

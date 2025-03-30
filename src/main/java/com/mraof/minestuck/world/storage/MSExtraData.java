@@ -4,8 +4,10 @@ import com.mraof.minestuck.Minestuck;
 import com.mraof.minestuck.alchemy.CardCaptchas;
 import com.mraof.minestuck.computer.editmode.EditData;
 import com.mraof.minestuck.entry.PostEntryTask;
+import net.minecraft.core.HolderLookup;
 import net.minecraft.nbt.CompoundTag;
 import net.minecraft.nbt.ListTag;
+import net.minecraft.nbt.NbtOps;
 import net.minecraft.nbt.Tag;
 import net.minecraft.server.MinecraftServer;
 import net.minecraft.server.level.ServerLevel;
@@ -15,6 +17,7 @@ import net.minecraft.world.level.storage.DimensionDataStorage;
 import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.Logger;
 
+import javax.annotation.Nullable;
 import java.util.*;
 import java.util.function.Consumer;
 import java.util.function.Predicate;
@@ -65,8 +68,8 @@ public class MSExtraData extends SavedData
 		ListTag entryTaskList = nbt.getList("entry_tasks", Tag.TAG_COMPOUND);
 		for(int i = 0; i < entryTaskList.size(); i++)
 		{
-			CompoundTag tag = entryTaskList.getCompound(i);
-			data.postEntryTasks.add(new PostEntryTask(tag));
+			PostEntryTask.CODEC.parse(NbtOps.INSTANCE, entryTaskList.getCompound(i))
+					.resultOrPartial(LOGGER::error).ifPresent(data.postEntryTasks::add);
 		}
 		
 		if(nbt.contains("card_captchas", Tag.TAG_COMPOUND))
@@ -76,7 +79,7 @@ public class MSExtraData extends SavedData
 	}
 	
 	@Override
-	public CompoundTag save(CompoundTag compound)
+	public CompoundTag save(CompoundTag compound, HolderLookup.Provider registries)
 	{
 		ListTag editRecoveryList = new ListTag();
 		editRecoveryList.addAll(editPlayerRecovery.entrySet().stream().map(MSExtraData::writeRecovery).toList());
@@ -85,7 +88,9 @@ public class MSExtraData extends SavedData
 		compound.put("editmode_recovery", editRecoveryList);
 		
 		ListTag entryTaskList = new ListTag();
-		entryTaskList.addAll(postEntryTasks.stream().map(PostEntryTask::write).toList());
+		postEntryTasks.stream()
+				.flatMap(task -> PostEntryTask.CODEC.encodeStart(NbtOps.INSTANCE, task).resultOrPartial(LOGGER::error).stream())
+				.forEach(entryTaskList::add);
 		
 		compound.put("entry_tasks", entryTaskList);
 		
@@ -122,9 +127,10 @@ public class MSExtraData extends SavedData
 		
 		DimensionDataStorage storage = level.getDataStorage();
 		
-		return storage.computeIfAbsent(MSExtraData::load, MSExtraData::new, DATA_NAME);
+		return storage.computeIfAbsent(new Factory<>(MSExtraData::new, (tag, provider) -> MSExtraData.load(tag)), DATA_NAME);
 	}
 	
+	@Nullable
 	public EditData findEditData(Predicate<EditData> condition)
 	{
 		for(EditData data : activeEditData)
@@ -170,12 +176,12 @@ public class MSExtraData extends SavedData
 		return recovery;
 	}
 	
-	public void recoverConnections(Consumer<EditData.ConnectionRecovery> recover)
+	public void recoverConnections(MinecraftServer mcServer)
 	{
 		if(!editConnectionRecovery.isEmpty())
 		{
 			LOGGER.warn("Recovering extra connection data for {} players that were in editmode when the server shut down abruptly last session. An attempt to recover players will be made when they rejoin the server.", editConnectionRecovery.size());
-			editConnectionRecovery.forEach(recover);
+			editConnectionRecovery.forEach(recovery -> recovery.recover(mcServer));
 			editConnectionRecovery.clear();
 			setDirty();
 		}

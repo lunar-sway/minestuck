@@ -1,9 +1,7 @@
 package com.mraof.minestuck.client.gui;
 
-import com.mojang.blaze3d.systems.RenderSystem;
 import com.mraof.minestuck.blockentity.redstone.RemoteObserverBlockEntity;
-import com.mraof.minestuck.network.MSPacketHandler;
-import com.mraof.minestuck.network.RemoteObserverPacket;
+import com.mraof.minestuck.network.block.RemoteObserverSettingsPacket;
 import net.minecraft.client.gui.GuiGraphics;
 import net.minecraft.client.gui.components.Button;
 import net.minecraft.client.gui.components.EditBox;
@@ -12,7 +10,8 @@ import net.minecraft.network.chat.Component;
 import net.minecraft.resources.ResourceLocation;
 import net.minecraft.util.Mth;
 import net.minecraft.world.entity.EntityType;
-import net.minecraftforge.client.gui.widget.ExtendedButton;
+import net.neoforged.neoforge.client.gui.widget.ExtendedButton;
+import net.neoforged.neoforge.network.PacketDistributor;
 
 import java.util.Optional;
 
@@ -20,7 +19,7 @@ public class RemoteObserverScreen extends Screen
 {
 	public static final String TITLE = "minestuck.remote_observer";
 	public static final String CURRENT_ENTITY_TYPE_MESSAGE = "minestuck.remote_observer.current_entity_type";
-	private static final ResourceLocation GUI_BACKGROUND = new ResourceLocation("minestuck", "textures/gui/generic_medium.png");
+	private static final ResourceLocation GUI_BACKGROUND = ResourceLocation.fromNamespaceAndPath("minestuck", "textures/gui/generic_medium.png");
 	
 	private static final int GUI_WIDTH = 150;
 	private static final int GUI_HEIGHT = 98;
@@ -90,16 +89,20 @@ public class RemoteObserverScreen extends Screen
 	}
 	
 	@Override
+	public void renderBackground(GuiGraphics guiGraphics, int mouseX, int mouseY, float partialTicks)
+	{
+		super.renderBackground(guiGraphics, mouseX, mouseY, partialTicks);
+		
+		int yOffset = (this.height / 2) - (GUI_HEIGHT / 2);
+		guiGraphics.blit(GUI_BACKGROUND, (this.width / 2) - (GUI_WIDTH / 2), yOffset, 0, 0, GUI_WIDTH, GUI_HEIGHT);
+	}
+	
+	@Override
 	public void render(GuiGraphics guiGraphics, int mouseX, int mouseY, float partialTicks)
 	{
-		this.renderBackground(guiGraphics);
-		int yOffset = (this.height / 2) - (GUI_HEIGHT / 2);
-		
-		RenderSystem.setShaderColor(1, 1, 1, 1);
-		guiGraphics.blit(GUI_BACKGROUND, (this.width / 2) - (GUI_WIDTH / 2), yOffset, 0, 0, GUI_WIDTH, GUI_HEIGHT);
-		guiGraphics.drawString(font, Integer.toString(observingRange), (width / 2) - 5, (height - GUI_HEIGHT) / 2 + 55, 0x404040, false);
-		
 		super.render(guiGraphics, mouseX, mouseY, partialTicks);
+		
+		guiGraphics.drawString(font, Integer.toString(observingRange), (width / 2) - 5, (height - GUI_HEIGHT) / 2 + 55, 0x404040, false);
 	}
 	
 	private void finish()
@@ -115,7 +118,7 @@ public class RemoteObserverScreen extends Screen
 			if(isValidAndObservableEntityType)
 				entityType = attemptedEntityType.get();
 			
-			MSPacketHandler.sendToServer(new RemoteObserverPacket(activeType, observingRange, be.getBlockPos(), entityType));
+			PacketDistributor.sendToServer(new RemoteObserverSettingsPacket(activeType, observingRange, be.getBlockPos(), Optional.ofNullable(entityType)));
 			onClose();
 		} else
 		{

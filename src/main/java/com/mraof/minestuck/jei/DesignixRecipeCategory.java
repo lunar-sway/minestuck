@@ -1,8 +1,9 @@
 package com.mraof.minestuck.jei;
 
+import com.mraof.minestuck.Minestuck;
 import com.mraof.minestuck.api.alchemy.recipe.combination.JeiCombination;
 import com.mraof.minestuck.block.MSBlocks;
-import com.mraof.minestuck.alchemy.AlchemyHelper;
+import com.mraof.minestuck.item.CaptchaCardItem;
 import mezz.jei.api.constants.VanillaTypes;
 import mezz.jei.api.gui.builder.IRecipeLayoutBuilder;
 import mezz.jei.api.gui.drawable.IDrawable;
@@ -29,7 +30,7 @@ public class DesignixRecipeCategory implements IRecipeCategory<JeiCombination>
 
     DesignixRecipeCategory(IGuiHelper guiHelper)
     {
-        ResourceLocation punchDesignixBackground = new ResourceLocation("minestuck:textures/gui/designix.png");
+        ResourceLocation punchDesignixBackground = Minestuck.id("textures/gui/designix.png");
         background = guiHelper.createDrawable(punchDesignixBackground, 43, 25, 94, 42);
 		icon = guiHelper.createDrawableIngredient(VanillaTypes.ITEM_STACK, new ItemStack(MSBlocks.PUNCH_DESIGNIX));
     }
@@ -64,6 +65,6 @@ public class DesignixRecipeCategory implements IRecipeCategory<JeiCombination>
 		builder.addSlot(RecipeIngredientRole.INPUT, 1, 1).addIngredients(recipe.input1());
 		builder.addSlot(RecipeIngredientRole.INPUT, 1, 25).addIngredients(recipe.input2());
 		builder.addSlot(RecipeIngredientRole.OUTPUT, 73, 12).addItemStack(recipe.output())
-				.addItemStack(AlchemyHelper.createPunchedCard(recipe.output()));
+				.addItemStack(CaptchaCardItem.createPunchedCard(recipe.output().getItem()));
 	}
 }

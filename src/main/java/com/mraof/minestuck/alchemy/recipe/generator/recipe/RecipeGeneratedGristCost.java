@@ -1,19 +1,23 @@
 package com.mraof.minestuck.alchemy.recipe.generator.recipe;
 
-import com.google.gson.JsonObject;
-import com.mraof.minestuck.api.alchemy.recipe.GristCostRecipe;
-import com.mraof.minestuck.api.alchemy.recipe.generator.GeneratedCostProvider;
+import com.mojang.serialization.Codec;
+import com.mojang.serialization.MapCodec;
 import com.mraof.minestuck.api.alchemy.GristSet;
 import com.mraof.minestuck.api.alchemy.GristType;
-import com.mraof.minestuck.item.crafting.MSRecipeTypes;
+import com.mraof.minestuck.api.alchemy.recipe.GristCostRecipe;
 import com.mraof.minestuck.api.alchemy.recipe.JeiGristCost;
+import com.mraof.minestuck.api.alchemy.recipe.generator.GeneratedCostProvider;
+import com.mraof.minestuck.item.crafting.MSRecipeTypes;
 import net.minecraft.MethodsReturnNonnullByDefault;
 import net.minecraft.network.FriendlyByteBuf;
+import net.minecraft.network.RegistryFriendlyByteBuf;
+import net.minecraft.network.codec.StreamCodec;
 import net.minecraft.resources.ResourceLocation;
 import net.minecraft.world.Container;
 import net.minecraft.world.item.Item;
 import net.minecraft.world.item.ItemStack;
 import net.minecraft.world.item.crafting.RecipeSerializer;
+import net.minecraft.world.item.crafting.SingleRecipeInput;
 import net.minecraft.world.level.Level;
 
 import javax.annotation.Nullable;
@@ -26,20 +30,17 @@ import java.util.function.BiConsumer;
 @MethodsReturnNonnullByDefault
 public final class RecipeGeneratedGristCost implements GristCostRecipe
 {
-	private final ResourceLocation id;
 	@Nullable
 	private RecipeGeneratedCostHandler handler;
 	
-	private RecipeGeneratedGristCost(ResourceLocation id, @Nullable RecipeGeneratedCostHandler handler)
+	public RecipeGeneratedGristCost()
 	{
-		this.id = id;
-		this.handler = handler;
+		this(null);
 	}
 	
-	@Override
-	public ResourceLocation getId()
+	private RecipeGeneratedGristCost(@Nullable RecipeGeneratedCostHandler handler)
 	{
-		return this.id;
+		this.handler = handler;
 	}
 	
 	void setHandler(RecipeGeneratedCostHandler handler)
@@ -54,7 +55,7 @@ public final class RecipeGeneratedGristCost implements GristCostRecipe
 	}
 	
 	@Override
-	public boolean matches(Container inv, Level level)
+	public boolean matches(SingleRecipeInput inv, Level level)
 	{
 		return getCost(inv.getItem(0).getItem()) != null;
 	}
@@ -74,7 +75,7 @@ public final class RecipeGeneratedGristCost implements GristCostRecipe
 	}
 	
 	@Override
-	public void addCostProvider(BiConsumer<Item, GeneratedCostProvider> consumer)
+	public void addCostProvider(BiConsumer<Item, GeneratedCostProvider> consumer, ResourceLocation recipeId)
 	{
 		if(handler != null)
 			handler.addAsProvider(consumer);
@@ -96,23 +97,26 @@ public final class RecipeGeneratedGristCost implements GristCostRecipe
 	
 	public static class Serializer implements RecipeSerializer<RecipeGeneratedGristCost>
 	{
+		private static final MapCodec<RecipeGeneratedGristCost> CODEC = MapCodec.unit(RecipeGeneratedGristCost::new);
+		private static final StreamCodec<RegistryFriendlyByteBuf, RecipeGeneratedGristCost> STREAM_CODEC = StreamCodec.of(
+				(encode, recipe) ->
+				{
+					if(recipe.handler != null)
+						recipe.handler.write(encode);
+				},
+				(decode) -> new RecipeGeneratedGristCost(RecipeGeneratedCostHandler.read(decode))
+		);
+		
 		@Override
-		public RecipeGeneratedGristCost fromJson(ResourceLocation recipeId, JsonObject json)
+		public MapCodec<RecipeGeneratedGristCost> codec()
 		{
-			return new RecipeGeneratedGristCost(recipeId, null);
+			return CODEC;
 		}
 		
 		@Override
-		public RecipeGeneratedGristCost fromNetwork(ResourceLocation recipeId, FriendlyByteBuf buffer)
+		public StreamCodec<RegistryFriendlyByteBuf, RecipeGeneratedGristCost> streamCodec()
 		{
-			return new RecipeGeneratedGristCost(recipeId, RecipeGeneratedCostHandler.read(buffer));
-		}
-		
-		@Override
-		public void toNetwork(FriendlyByteBuf buffer, RecipeGeneratedGristCost recipe)
-		{
-			if(recipe.handler != null)
-				recipe.handler.write(buffer);
+			return STREAM_CODEC;
 		}
 	}
 }

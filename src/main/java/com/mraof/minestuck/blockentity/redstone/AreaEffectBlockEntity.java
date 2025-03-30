@@ -4,29 +4,41 @@ import com.mraof.minestuck.block.redstone.AreaEffectBlock;
 import com.mraof.minestuck.blockentity.MSBlockEntityTypes;
 import com.mraof.minestuck.effects.CreativeShockEffect;
 import com.mraof.minestuck.effects.MSEffects;
+import com.mraof.minestuck.network.block.AreaEffectSettingsPacket;
 import com.mraof.minestuck.util.MSRotationUtil;
+import net.minecraft.MethodsReturnNonnullByDefault;
 import net.minecraft.core.BlockPos;
 import net.minecraft.core.Direction;
+import net.minecraft.core.Holder;
+import net.minecraft.core.HolderLookup;
+import net.minecraft.core.registries.BuiltInRegistries;
 import net.minecraft.nbt.CompoundTag;
 import net.minecraft.network.protocol.Packet;
 import net.minecraft.network.protocol.game.ClientGamePacketListener;
 import net.minecraft.network.protocol.game.ClientboundBlockEntityDataPacket;
+import net.minecraft.resources.ResourceLocation;
+import net.minecraft.server.level.ServerLevel;
 import net.minecraft.world.effect.MobEffect;
 import net.minecraft.world.effect.MobEffectInstance;
 import net.minecraft.world.entity.LivingEntity;
 import net.minecraft.world.entity.player.Player;
 import net.minecraft.world.level.Level;
+import net.minecraft.world.level.block.Block;
 import net.minecraft.world.level.block.entity.BlockEntity;
 import net.minecraft.world.level.block.state.BlockState;
 import net.minecraft.world.phys.AABB;
 
 import javax.annotation.Nonnull;
+import javax.annotation.ParametersAreNonnullByDefault;
 import java.util.Objects;
+import java.util.Optional;
 
+@ParametersAreNonnullByDefault
+@MethodsReturnNonnullByDefault
 public class AreaEffectBlockEntity extends BlockEntity
 {
 	@Nonnull
-	private MobEffect effect = MSEffects.CREATIVE_SHOCK.get();
+	private Holder<MobEffect> effect = MSEffects.CREATIVE_SHOCK;
 	private int effectAmplifier;
 	@Nonnull
 	private BlockPos minAreaOffset = new BlockPos(-16, -16, -16);
@@ -62,13 +74,15 @@ public class AreaEffectBlockEntity extends BlockEntity
 		
 		if(getBlockState().getValue(AreaEffectBlock.ALL_MOBS))
 		{
-			for(LivingEntity livingEntity : level.getEntitiesOfClass(LivingEntity.class, new AABB(minAreaPos, maxAreaPos)))
+			for(LivingEntity livingEntity : level.getEntitiesOfClass(LivingEntity.class,
+					AABB.encapsulatingFullBlocks(minAreaPos, maxAreaPos)))
 			{
 				iterateThroughEntities(livingEntity);
 			}
 		} else
 		{
-			for(Player playerEntity : level.getEntitiesOfClass(Player.class, new AABB(minAreaPos, maxAreaPos)))
+			for(Player playerEntity : level.getEntitiesOfClass(Player.class,
+					AABB.encapsulatingFullBlocks(minAreaPos, maxAreaPos)))
 			{
 				iterateThroughEntities(playerEntity);
 			}
@@ -82,23 +96,25 @@ public class AreaEffectBlockEntity extends BlockEntity
 			entityIterate.addEffect(new MobEffectInstance(effect, 120, effectAmplifier, false, false));
 		} else
 		{
-			boolean ignoreEntity = entityIterate instanceof Player player && player.isCreative() && !effect.isBeneficial(); //if not a player, or it is a player but they are in creative and the effect is not beneficial, ignore
+			boolean ignoreEntity = entityIterate instanceof Player player && player.isCreative() && !effect.value().isBeneficial(); //if not a player, or it is a player but they are in creative and the effect is not beneficial, ignore
 			
 			if(!ignoreEntity)
-				entityIterate.addEffect(new MobEffectInstance(effect, effect.isInstantenous() ? 1 : 120, effectAmplifier, false, false));
+				entityIterate.addEffect(new MobEffectInstance(effect, effect.value().isInstantenous() ? 1 : 120, effectAmplifier, false, false));
 		}
 	}
 	
-	public void setEffect(MobEffect effectIn, int effectAmplifierIn)
+	public void setEffect(Holder<MobEffect> effectIn, int effectAmplifierIn)
 	{
 		this.effect = Objects.requireNonNull(effectIn);
 		this.effectAmplifier = effectAmplifierIn;
-		this.setChanged();
+		setChanged();
+		if(getLevel() instanceof ServerLevel serverLevel)
+			serverLevel.getChunkSource().blockChanged(getBlockPos());
 	}
 	
 	public MobEffect getEffect()
 	{
-		return this.effect;
+		return this.effect.value();
 	}
 	
 	public int getEffectAmplifier()
@@ -106,25 +122,27 @@ public class AreaEffectBlockEntity extends BlockEntity
 		return this.effectAmplifier;
 	}
 	
-	public void setMinAndMaxEffectPosOffset(BlockPos minAreaOffsetIn, BlockPos maxAreaOffsetIn)
-	{
-		Objects.requireNonNull(this.level);
-		minAreaOffset = clampMinPos(minAreaOffsetIn.getX(), minAreaOffsetIn.getY(), minAreaOffsetIn.getZ());
-		maxAreaOffset = clampMaxPos(maxAreaOffsetIn.getX(), maxAreaOffsetIn.getY(), maxAreaOffsetIn.getZ());
-		this.setChanged();
-		level.sendBlockUpdated(worldPosition, getBlockState(), getBlockState(), 0);
-	}
-	
-	@Nonnull
 	public BlockPos getMinAreaOffset()
 	{
 		return this.minAreaOffset;
 	}
 	
-	@Nonnull
 	public BlockPos getMaxAreaOffset()
 	{
 		return this.maxAreaOffset;
+	}
+	
+	public void handleSettingsPacket(AreaEffectSettingsPacket packet)
+	{
+		Objects.requireNonNull(this.level);
+		
+		this.minAreaOffset = clampMinPos(packet.minEffectPos().getX(), packet.minEffectPos().getY(), packet.minEffectPos().getZ());
+		this.maxAreaOffset = clampMaxPos(packet.maxEffectPos().getX(), packet.maxEffectPos().getY(), packet.maxEffectPos().getZ());
+		setChanged();
+		
+		this.setEffect(packet.effect(), packet.effectAmp());
+		
+		this.level.setBlock(this.worldPosition, getBlockState().setValue(AreaEffectBlock.ALL_MOBS, packet.isAllMobs()), Block.UPDATE_ALL);
 	}
 	
 	/**
@@ -144,13 +162,12 @@ public class AreaEffectBlockEntity extends BlockEntity
 	}
 	
 	@Override
-	public void load(CompoundTag compound)
+	public void loadAdditional(CompoundTag compound, HolderLookup.Provider provider)
 	{
-		super.load(compound);
+		super.loadAdditional(compound, provider);
 		
-		MobEffect effectRead = MobEffect.byId(compound.getInt("effect"));
-		if(effectRead != null)
-			effect = effectRead;
+		Optional<Holder.Reference<MobEffect>> effectRead = BuiltInRegistries.MOB_EFFECT.getHolder(ResourceLocation.parse(compound.getString("effect")));
+		effectRead.ifPresent(mobEffectReference -> effect = mobEffectReference);
 		
 		effectAmplifier = compound.getInt("effectAmplifier");
 		
@@ -166,11 +183,11 @@ public class AreaEffectBlockEntity extends BlockEntity
 	}
 	
 	@Override
-	public void saveAdditional(CompoundTag compound)
+	public void saveAdditional(CompoundTag compound, HolderLookup.Provider provider)
 	{
-		super.saveAdditional(compound);
+		super.saveAdditional(compound, provider);
 		
-		compound.putInt("effect", MobEffect.getId(getEffect()));
+		compound.putString("effect", String.valueOf(BuiltInRegistries.MOB_EFFECT.getKey(this.effect.value())));
 		compound.putInt("effectAmplifier", effectAmplifier);
 		
 		compound.putInt("minAreaOffsetX", minAreaOffset.getX());
@@ -183,9 +200,9 @@ public class AreaEffectBlockEntity extends BlockEntity
 	}
 	
 	@Override
-	public CompoundTag getUpdateTag()
+	public CompoundTag getUpdateTag(HolderLookup.Provider provider)
 	{
-		return this.saveWithoutMetadata();
+		return this.saveWithoutMetadata(provider);
 	}
 	
 	@Override

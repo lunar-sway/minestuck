@@ -8,7 +8,7 @@ import net.minecraft.core.HolderLookup;
 import net.minecraft.data.PackOutput;
 import net.minecraft.data.tags.IntrinsicHolderTagsProvider;
 import net.minecraft.resources.ResourceKey;
-import net.minecraftforge.common.data.ExistingFileHelper;
+import net.neoforged.neoforge.common.data.ExistingFileHelper;
 import org.jetbrains.annotations.Nullable;
 
 import javax.annotation.ParametersAreNonnullByDefault;
@@ -27,16 +27,20 @@ public final class TerrainLandTypeTagsProvider extends IntrinsicHolderTagsProvid
 	
 	private static ResourceKey<TerrainLandType> keyForLandType(TerrainLandType landType)
 	{
-		return LandTypes.TERRAIN_REGISTRY.get().getResourceKey(landType).orElseThrow();
+		return LandTypes.TERRAIN_REGISTRY.getResourceKey(landType).orElseThrow();
 	}
 	
 	@Override
+	@SuppressWarnings("unchecked")
 	protected void addTags(HolderLookup.Provider provider)
 	{
 		this.tag(FOREST).add(LandTypes.FOREST.get(), LandTypes.TAIGA.get());
 		this.tag(ROCK).add(LandTypes.ROCK.get(), LandTypes.PETRIFICATION.get());
 		this.tag(SAND).add(LandTypes.SAND.get(), LandTypes.RED_SAND.get(), LandTypes.LUSH_DESERTS.get());
 		this.tag(SANDSTONE).add(LandTypes.SANDSTONE.get(), LandTypes.RED_SANDSTONE.get());
+		this.tag(IS_DESOLATE).addTags(SAND, SANDSTONE, ROCK);
+		this.tag(IS_DANGEROUS).add(LandTypes.HEAT.get());
+		this.tag(IS_FLUID_IMPORTANT).add(LandTypes.HEAT.get());
 	}
 	
 	@Override

@@ -3,8 +3,10 @@ package com.mraof.minestuck.api.alchemy;
 import com.mojang.serialization.Codec;
 import com.mojang.serialization.DataResult;
 import com.mojang.serialization.codecs.RecordCodecBuilder;
-import net.minecraft.network.FriendlyByteBuf;
+import net.minecraft.network.RegistryFriendlyByteBuf;
 import net.minecraft.network.chat.Component;
+import net.minecraft.network.codec.ByteBufCodecs;
+import net.minecraft.network.codec.StreamCodec;
 
 import java.util.Collections;
 import java.util.List;
@@ -15,10 +17,10 @@ import java.util.function.Supplier;
 /**
  * Container for a GristType + integer combination that might be useful when iterating through a GristSet.
  */
-public record GristAmount(GristType type, long amount) implements ImmutableGristSet
+public record GristAmount(GristType type, long amount) implements GristSet.Immutable
 {
 	public static final Codec<GristAmount> CODEC = RecordCodecBuilder.create(instance ->
-			instance.group(GristTypes.getRegistry().getCodec().fieldOf("type").forGetter(GristAmount::type),
+			instance.group(GristTypes.REGISTRY.byNameCodec().fieldOf("type").forGetter(GristAmount::type),
 							Codec.LONG.fieldOf("amount").forGetter(GristAmount::amount))
 					.apply(instance, GristAmount::new));
 	public static final Codec<List<GristAmount>> LIST_CODEC = CODEC.listOf();
@@ -82,16 +84,11 @@ public record GristAmount(GristType type, long amount) implements ImmutableGrist
 		return Component.translatable(GRIST_AMOUNT, amount(), type().getDisplayName());
 	}
 	
-	public void write(FriendlyByteBuf buffer)
-	{
-		buffer.writeRegistryId(GristTypes.getRegistry(), type());
-		buffer.writeLong(amount());
-	}
-	
-	public static GristAmount read(FriendlyByteBuf buffer)
-	{
-		GristType type = buffer.readRegistryIdSafe(GristType.class);
-		long amount = buffer.readLong();
-		return new GristAmount(type, amount);
-	}
+	public static final StreamCodec<RegistryFriendlyByteBuf, GristAmount> STREAM_CODEC = StreamCodec.composite(
+			GristType.STREAM_CODEC,
+			GristAmount::type,
+			ByteBufCodecs.VAR_LONG,
+			GristAmount::amount,
+			GristAmount::new
+	);
 }

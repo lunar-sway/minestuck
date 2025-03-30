@@ -2,8 +2,12 @@ package com.mraof.minestuck.data.tag;
 
 import com.mraof.minestuck.Minestuck;
 import com.mraof.minestuck.block.MSBlocks;
+import com.mraof.minestuck.item.MSItemTypes;
 import com.mraof.minestuck.item.MSItems;
-import com.mraof.minestuck.util.ExtraForgeTags;
+import com.mraof.minestuck.item.weapon.MagicAOERightClickEffect;
+import com.mraof.minestuck.item.weapon.MagicRangedRightClickEffect;
+import com.mraof.minestuck.item.weapon.WeaponItem;
+import com.mraof.minestuck.util.ExtraModTags;
 import com.mraof.minestuck.util.MSTags;
 import net.minecraft.MethodsReturnNonnullByDefault;
 import net.minecraft.core.HolderLookup;
@@ -11,21 +15,21 @@ import net.minecraft.data.PackOutput;
 import net.minecraft.data.tags.ItemTagsProvider;
 import net.minecraft.data.tags.TagsProvider;
 import net.minecraft.tags.BlockTags;
-import net.minecraft.tags.ItemTags;
+import net.minecraft.world.item.Item;
 import net.minecraft.world.item.Items;
 import net.minecraft.world.level.block.Block;
-import net.minecraftforge.common.Tags;
-import net.minecraftforge.common.data.ExistingFileHelper;
+import net.neoforged.neoforge.common.Tags;
+import net.neoforged.neoforge.common.data.ExistingFileHelper;
 
 import javax.annotation.Nullable;
 import javax.annotation.ParametersAreNonnullByDefault;
-
 import java.util.concurrent.CompletableFuture;
+import java.util.function.Supplier;
 
 import static com.mraof.minestuck.item.MSItems.*;
 import static com.mraof.minestuck.util.MSTags.Items.*;
 import static net.minecraft.tags.ItemTags.*;
-import static net.minecraftforge.common.Tags.Items.*;
+import static net.neoforged.neoforge.common.Tags.Items.*;
 
 @ParametersAreNonnullByDefault
 @MethodsReturnNonnullByDefault
@@ -50,7 +54,7 @@ public class MinestuckItemTagsProvider extends ItemTagsProvider
 		copy(BlockTags.SLABS, SLABS);
 		copy(BlockTags.LOGS, LOGS);
 		copy(BlockTags.LEAVES, LEAVES);
-		copy(Tags.Blocks.COBBLESTONE, COBBLESTONE);
+		copy(Tags.Blocks.COBBLESTONES, COBBLESTONES);
 		copy(Tags.Blocks.ORES, ORES);
 		copy(BlockTags.COAL_ORES, ORES_COAL);
 		copy(BlockTags.DIAMOND_ORES, ORES_DIAMOND);
@@ -59,11 +63,11 @@ public class MinestuckItemTagsProvider extends ItemTagsProvider
 		copy(BlockTags.LAPIS_ORES, ORES_LAPIS);
 		copy(Tags.Blocks.ORES_QUARTZ, ORES_QUARTZ);
 		copy(BlockTags.REDSTONE_ORES, ORES_REDSTONE);
-		copy(Tags.Blocks.STONE, STONE);
+		copy(BlockTags.EMERALD_ORES, ORES_EMERALD);
+		copy(Tags.Blocks.STONES, STONES);
 		copy(Tags.Blocks.STORAGE_BLOCKS, STORAGE_BLOCKS);
-		copy(ExtraForgeTags.Blocks.URANIUM_ORES, ExtraForgeTags.Items.URANIUM_ORES);
-		copy(ExtraForgeTags.Blocks.URANIUM_STORAGE_BLOCKS, ExtraForgeTags.Items.URANIUM_STORAGE_BLOCKS);
-		copy(ExtraForgeTags.Blocks.TERRACOTTA, ExtraForgeTags.Items.TERRACOTTA);
+		copy(ExtraModTags.Blocks.URANIUM_ORES, ExtraModTags.Items.URANIUM_ORES);
+		copy(ExtraModTags.Blocks.URANIUM_STORAGE_BLOCKS, ExtraModTags.Items.URANIUM_STORAGE_BLOCKS);
 		copy(MSTags.Blocks.GLOWING_LOGS, GLOWING_LOGS);
 		copy(MSTags.Blocks.FROST_LOGS, FROST_LOGS);
 		copy(MSTags.Blocks.RAINBOW_LOGS, RAINBOW_LOGS);
@@ -71,9 +75,12 @@ public class MinestuckItemTagsProvider extends ItemTagsProvider
 		copy(MSTags.Blocks.VINE_LOGS, VINE_LOGS);
 		copy(MSTags.Blocks.FLOWERY_VINE_LOGS, FLOWERY_VINE_LOGS);
 		copy(MSTags.Blocks.DEAD_LOGS, DEAD_LOGS);
+		copy(MSTags.Blocks.CINDERED_LOGS, CINDERED_LOGS);
 		copy(MSTags.Blocks.PETRIFIED_LOGS, PETRIFIED_LOGS);
 		copy(MSTags.Blocks.ASPECT_LOGS, ASPECT_LOGS);
+		copy(MSTags.Blocks.ASPECT_WOOD, ASPECT_WOOD);
 		copy(MSTags.Blocks.ASPECT_PLANKS, ASPECT_PLANKS);
+		copy(MSTags.Blocks.ASPECT_SLABS, ASPECT_SLABS);
 		copy(MSTags.Blocks.ASPECT_LEAVES, ASPECT_LEAVES);
 		copy(MSTags.Blocks.ASPECT_SAPLINGS, ASPECT_SAPLINGS);
 		copy(MSTags.Blocks.SHADEWOOD_LOGS, SHADEWOOD_LOGS);
@@ -87,6 +94,7 @@ public class MinestuckItemTagsProvider extends ItemTagsProvider
 		copy(MSTags.Blocks.QUARTZ_ORES, QUARTZ_ORES);
 		copy(MSTags.Blocks.LAPIS_ORES, MSTags.Items.LAPIS_ORES);
 		copy(MSTags.Blocks.DIAMOND_ORES, MSTags.Items.DIAMOND_ORES);
+		copy(MSTags.Blocks.EMERALD_ORES, MSTags.Items.EMERALD_ORES);
 		copy(MSTags.Blocks.CRUXITE_STORAGE_BLOCKS, CRUXITE_STORAGE_BLOCKS);
 		
 		tag(SWORDS).add(EMERALD_SWORD.get(), SORD.get(), PAPER_SWORD.get(), CACTACEAE_CUTLASS.get(), STEAK_SWORD.get(), BEEF_SWORD.get(), IRRADIATED_STEAK_SWORD.get(), MACUAHUITL.get(), FROSTY_MACUAHUITL.get(), KATANA.get(), UNBREAKABLE_KATANA.get(), ANGEL_APOCALYPSE.get(), FIRE_POKER.get(), TOO_HOT_TO_HANDLE.get(), CALEDSCRATCH.get(), CALEDFWLCH.get(), ROYAL_DERINGER.get(), CLAYMORE.get(), CUTLASS_OF_ZILLYWAIR.get(), REGISWORD.get(), CRUEL_FATE_CRUCIBLE.get(), SCARLET_RIBBITAR.get(), DOGG_MACHETE.get(), COBALT_SABRE.get(), QUANTUM_SABRE.get(), SHATTER_BEACON.get(), SHATTER_BACON.get(), SUBTRACTSHUMIDIRE_ZOMORRODNEGATIVE.get(), MUSIC_SWORD.get(), PILLOW_TALK.get(), KRAKENS_EYE.get(), CINNAMON_SWORD.get());
@@ -95,49 +103,49 @@ public class MinestuckItemTagsProvider extends ItemTagsProvider
 		tag(PICKAXES).add(EMERALD_PICKAXE.get(), MINE_AND_GRIST.get(), PROSPECTING_PICKSCYTHE.get());
 		tag(SHOVELS).add(EMERALD_SHOVEL.get(), WOODEN_SPOON.get(), SILVER_SPOON.get(), MELONBALLER.get(), TERRAIN_FLATENATOR.get(), NOSFERATU_SPOON.get(), THRONGLER.get(), CROCKER_SPOON.get());
 		tag(HOES).add(EMERALD_HOE.get(), HELLBRINGERS_HOE_INACTIVE.get(), HELLBRINGERS_HOE_ACTIVE.get());
-		tag(Tags.Items.TOOLS_TRIDENTS).add(BIDENT.get(), MEATFORK.get(), DOUBLE_ENDED_TRIDENT.get());
-		tag(Tags.Items.ARMORS_HELMETS).add(PRISMARINE_HELMET.get(), IRON_LASS_GLASSES.get());
-		tag(Tags.Items.ARMORS_CHESTPLATES).add(PRISMARINE_CHESTPLATE.get(), IRON_LASS_CHESTPLATE.get());
-		tag(Tags.Items.ARMORS_LEGGINGS).add(PRISMARINE_LEGGINGS.get(), IRON_LASS_SKIRT.get());
-		tag(Tags.Items.ARMORS_BOOTS).add(PRISMARINE_BOOTS.get(), IRON_LASS_SHOES.get());
+		tag(TRIDENT_ENCHANTABLE).add(BIDENT.get(), MEATFORK.get(), DOUBLE_ENDED_TRIDENT.get());
+		tag(HEAD_ARMOR).add(PRISMARINE_HELMET.get(), IRON_LASS_GLASSES.get());
+		tag(CHEST_ARMOR).add(PRISMARINE_CHESTPLATE.get(), IRON_LASS_CHESTPLATE.get());
+		tag(LEG_ARMOR).add(PRISMARINE_LEGGINGS.get(), IRON_LASS_SKIRT.get());
+		tag(FOOT_ARMOR).add(PRISMARINE_BOOTS.get(), IRON_LASS_SHOES.get());
 
-		tag(ItemTags.MUSIC_DISCS).add(MUSIC_DISC_DANCE_STAB_DANCE.get(), MUSIC_DISC_EMISSARY_OF_DANCE.get(), MUSIC_DISC_RETRO_BATTLE.get());
+		tag(Tags.Items.MUSIC_DISCS).add(MUSIC_DISC_DANCE_STAB_DANCE.get(), MUSIC_DISC_EMISSARY_OF_DANCE.get(), MUSIC_DISC_RETRO_BATTLE.get());
 		tag(DUSTS).add(MSBlocks.GLOWYSTONE_DUST.get().asItem());
 		tag(RODS).add(URANIUM_POWERED_STICK.get());
-		tag(ExtraForgeTags.Items.URANIUM_CHUNKS).add(RAW_URANIUM.get());
-		tag(ExtraForgeTags.Items.TIN_ORES);
-		tag(ExtraForgeTags.Items.SILVER_ORES);
-		tag(ExtraForgeTags.Items.LEAD_ORES);
-		tag(ExtraForgeTags.Items.GALENA_ORES);
-		tag(ExtraForgeTags.Items.ZINC_ORES);
-		tag(ExtraForgeTags.Items.NICKEL_ORES);
-		tag(ExtraForgeTags.Items.ALUMINIUM_ORES);
-		tag(ExtraForgeTags.Items.ALUMINUM_ORES);
-		tag(ExtraForgeTags.Items.COBALT_ORES);
-		tag(ExtraForgeTags.Items.ARDITE_ORES);
-		tag(ExtraForgeTags.Items.TIN_RAW_MATERIALS);
-		tag(ExtraForgeTags.Items.SILVER_RAW_MATERIALS);
-		tag(ExtraForgeTags.Items.LEAD_RAW_MATERIALS);
-		tag(ExtraForgeTags.Items.GALENA_RAW_MATERIALS);
-		tag(ExtraForgeTags.Items.ZINC_RAW_MATERIALS);
-		tag(ExtraForgeTags.Items.NICKEL_RAW_MATERIALS);
-		tag(ExtraForgeTags.Items.ALUMINIUM_RAW_MATERIALS);
-		tag(ExtraForgeTags.Items.ALUMINUM_RAW_MATERIALS);
-		tag(ExtraForgeTags.Items.COBALT_RAW_MATERIALS);
-		tag(ExtraForgeTags.Items.ARDITE_RAW_MATERIALS);
-		tag(ExtraForgeTags.Items.URANIUM_INGOTS);
-		tag(ExtraForgeTags.Items.TIN_INGOTS);
-		tag(ExtraForgeTags.Items.BRASS_INGOTS);
-		tag(ExtraForgeTags.Items.SILVER_INGOTS);
-		tag(ExtraForgeTags.Items.ELECTRUM_INGOTS);
-		tag(ExtraForgeTags.Items.LEAD_INGOTS);
-		tag(ExtraForgeTags.Items.NICKEL_INGOTS);
-		tag(ExtraForgeTags.Items.ZINC_INGOTS);
-		tag(ExtraForgeTags.Items.INVAR_INGOTS);
-		tag(ExtraForgeTags.Items.ALUMINIUM_INGOTS);
-		tag(ExtraForgeTags.Items.COBALT_INGOTS);
-		tag(ExtraForgeTags.Items.ARDITE_INGOTS);
-		tag(ExtraForgeTags.Items.RED_ALLOY_INGOTS);
+		tag(ExtraModTags.Items.URANIUM_CHUNKS).add(RAW_URANIUM.get());
+		tag(ExtraModTags.Items.TIN_ORES);
+		tag(ExtraModTags.Items.SILVER_ORES);
+		tag(ExtraModTags.Items.LEAD_ORES);
+		tag(ExtraModTags.Items.GALENA_ORES);
+		tag(ExtraModTags.Items.ZINC_ORES);
+		tag(ExtraModTags.Items.NICKEL_ORES);
+		tag(ExtraModTags.Items.ALUMINIUM_ORES);
+		tag(ExtraModTags.Items.ALUMINUM_ORES);
+		tag(ExtraModTags.Items.COBALT_ORES);
+		tag(ExtraModTags.Items.ARDITE_ORES);
+		tag(ExtraModTags.Items.TIN_RAW_MATERIALS);
+		tag(ExtraModTags.Items.SILVER_RAW_MATERIALS);
+		tag(ExtraModTags.Items.LEAD_RAW_MATERIALS);
+		tag(ExtraModTags.Items.GALENA_RAW_MATERIALS);
+		tag(ExtraModTags.Items.ZINC_RAW_MATERIALS);
+		tag(ExtraModTags.Items.NICKEL_RAW_MATERIALS);
+		tag(ExtraModTags.Items.ALUMINIUM_RAW_MATERIALS);
+		tag(ExtraModTags.Items.ALUMINUM_RAW_MATERIALS);
+		tag(ExtraModTags.Items.COBALT_RAW_MATERIALS);
+		tag(ExtraModTags.Items.ARDITE_RAW_MATERIALS);
+		tag(ExtraModTags.Items.URANIUM_INGOTS);
+		tag(ExtraModTags.Items.TIN_INGOTS);
+		tag(ExtraModTags.Items.BRASS_INGOTS);
+		tag(ExtraModTags.Items.SILVER_INGOTS);
+		tag(ExtraModTags.Items.ELECTRUM_INGOTS);
+		tag(ExtraModTags.Items.LEAD_INGOTS);
+		tag(ExtraModTags.Items.NICKEL_INGOTS);
+		tag(ExtraModTags.Items.ZINC_INGOTS);
+		tag(ExtraModTags.Items.INVAR_INGOTS);
+		tag(ExtraModTags.Items.ALUMINIUM_INGOTS);
+		tag(ExtraModTags.Items.COBALT_INGOTS);
+		tag(ExtraModTags.Items.ARDITE_INGOTS);
+		tag(ExtraModTags.Items.RED_ALLOY_INGOTS);
 		
 		tag(GRIST_CANDY).add(BUILD_GUSHERS.get(), AMBER_GUMMY_WORM.get(), CAULK_PRETZEL.get(), CHALK_CANDY_CIGARETTE.get(), IODINE_LICORICE.get(), SHALE_PEEP.get(), TAR_LICORICE.get(), COBALT_GUM.get(), MARBLE_JAWBREAKER.get(), MERCURY_SIXLETS.get(), QUARTZ_JELLY_BEAN.get(), SULFUR_CANDY_APPLE.get(), AMETHYST_HARD_CANDY.get(), GARNET_TWIX.get(), RUBY_LOLLIPOP.get(), RUST_GUMMY_EYE.get(), DIAMOND_MINT.get(), GOLD_CANDY_RIBBON.get(), URANIUM_GUMMY_BEAR.get(), ARTIFACT_WARHEAD.get(), ZILLIUM_SKITTLES.get());
 		tag(MSTags.Items.FAYGO).add(MSItems.ORANGE_FAYGO.get(), CANDY_APPLE_FAYGO.get(), FAYGO_COLA.get(), COTTON_CANDY_FAYGO.get(), CREME_SODA_FAYGO.get(), GRAPE_FAYGO.get(), MOON_MIST_FAYGO.get(), PEACH_FAYGO.get(), REDPOP_FAYGO.get());
@@ -145,8 +153,10 @@ public class MinestuckItemTagsProvider extends ItemTagsProvider
 		tag(CASSETTES).add(MSItems.CASSETTE_MELLOHI.get(), CASSETTE_13.get(), CASSETTE_BLOCKS.get(), CASSETTE_CAT.get(), CASSETTE_CHIRP.get(), CASSETTE_FAR.get(), CASSETTE_MALL.get(), CASSETTE_DANCE_STAB.get(), CASSETTE_RETRO_BATTLE.get(), CASSETTE_EMISSARY.get(), CASSETTE_11.get(), CASSETTE_PIGSTEP.get(), CASSETTE_STAL.get(), CASSETTE_STRAD.get(), CASSETTE_WAIT.get(), CASSETTE_WARD.get(), CASSETTE_OTHERSIDE.get(), CASSETTE_5.get());
 		tag(BUGS).add(BUG_ON_A_STICK.get(), CHOCOLATE_BEETLE.get(), CONE_OF_FLIES.get(), GRASSHOPPER.get(), CICADA.get(), JAR_OF_BUGS.get());
 		tag(CONSORT_SNACKS).add(Items.COOKIE).addTag(BUGS);
+		tag(MAGIC_WEAPON).add(MSItems.REGISTER.getEntries().stream().map(Supplier::get).filter(item -> item instanceof WeaponItem weapon && (weapon.getItemRightClickEffect() instanceof MagicRangedRightClickEffect || weapon.getItemRightClickEffect() instanceof MagicAOERightClickEffect)).toArray(Item[]::new));
 		tag(CREATIVE_SHOCK_RIGHT_CLICK_LIMIT).add(Items.CHORUS_FRUIT);
 		tag(UNREADABLE).add(CRUEL_FATE_CRUCIBLE.get(), ROYAL_DERINGER.get(), TRANSPORTALIZER.get(), TRANS_PORTALIZER.get(), FEAR_NO_ANVIL.get(), TYPHONIC_TRIVIALIZER.get(), QUILL_OF_ECHIDNA.get(), UMBRAL_INFILTRATOR.get(), FLUORITE_OCTET.get(), CLIENT_DISK.get(), SERVER_DISK.get(), GUTTER_THUMB_DRIVE.get(), GUTTER_BALL.get(), CAPTCHA_CARD.get(), CUEBALL.get(), BLACK_QUEENS_RING.get(), WHITE_QUEENS_RING.get(), BLACK_KINGS_SCEPTER.get(), WHITE_KINGS_SCEPTER.get()).add(Items.DRAGON_EGG).add(Items.DRAGON_HEAD).add(Items.DRAGON_BREATH).add(Items.NETHER_STAR).add(Items.COMMAND_BLOCK).add(Items.COMMAND_BLOCK_MINECART).add(Items.CHAIN_COMMAND_BLOCK).add(Items.REPEATING_COMMAND_BLOCK).add(Items.END_CRYSTAL).add(Items.EXPERIENCE_BOTTLE).add(Items.ELYTRA).add(Items.TOTEM_OF_UNDYING).add(Items.BEACON).add(Items.BEDROCK).add(Items.PUMPKIN);
+		tag(LEGENDARY).add(MSItems.REGISTER.getEntries().stream().map(Supplier::get).filter(item -> item instanceof WeaponItem weapon && (weapon.getTier() == MSItemTypes.DENIZEN_TIER || weapon.getTier() == MSItemTypes.ZILLY_TIER || weapon.getTier() == MSItemTypes.WELSH_TIER)).toArray(Item[]::new));
 	}
 
 	@Override

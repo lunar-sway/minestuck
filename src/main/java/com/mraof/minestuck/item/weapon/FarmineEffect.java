@@ -2,12 +2,10 @@ package com.mraof.minestuck.item.weapon;
 
 import com.mraof.minestuck.block.MSBlocks;
 import net.minecraft.core.BlockPos;
-import net.minecraft.world.InteractionHand;
+import net.minecraft.world.entity.EquipmentSlot;
 import net.minecraft.world.entity.LivingEntity;
 import net.minecraft.world.entity.player.Player;
 import net.minecraft.world.item.ItemStack;
-import net.minecraft.world.item.enchantment.EnchantmentHelper;
-import net.minecraft.world.item.enchantment.Enchantments;
 import net.minecraft.world.level.Level;
 import net.minecraft.world.level.block.Block;
 import net.minecraft.world.level.block.Blocks;
@@ -51,7 +49,7 @@ public class FarmineEffect implements DestroyBlockEffect
 	{
 		farMineForbiddenBlocks.add(Blocks.OBSIDIAN);
 		
-		addAssociation(Blocks.DIRT, Blocks.GRASS);
+		addAssociation(Blocks.DIRT, Blocks.GRASS_BLOCK);
 		addAssociation(Blocks.DIRT, Blocks.MYCELIUM);
 		addAssociation(Blocks.DIRT, Blocks.DIRT_PATH);
 		addAssociation(Blocks.END_STONE, MSBlocks.END_GRASS.get());
@@ -88,7 +86,6 @@ public class FarmineEffect implements DestroyBlockEffect
 		Comparator<Pair<BlockPos, Integer>> comparator = new PairedIntComparator();
 		PriorityQueue<Pair<BlockPos, Integer>> candidates = new PriorityQueue<>(comparator);
 		Block block = blockState.getBlock();
-		int fortuneLevel = EnchantmentHelper.getItemEnchantmentLevel(Enchantments.BLOCK_FORTUNE, stack);
 		HashSet<Block> equals = farMineEquivalencies.get(block);
 		if(equals == null) equals = new HashSet<>();
 		
@@ -192,7 +189,7 @@ public class FarmineEffect implements DestroyBlockEffect
 		//We add 1 because that means the harvestTool will always take at least 2 damage.
 		//This is important because all ItemWeapons take at least 2 damage whenever it breaks a block.
 		//This is because WeaponItem extends ItemSword.
-		stack.hurtAndBreak(blocksToBreak.size() + 1, playerIn, player -> player.broadcastBreakEvent(InteractionHand.MAIN_HAND));
+		stack.hurtAndBreak(blocksToBreak.size() + 1, playerIn, EquipmentSlot.MAINHAND);
 	}
 	
 	/*

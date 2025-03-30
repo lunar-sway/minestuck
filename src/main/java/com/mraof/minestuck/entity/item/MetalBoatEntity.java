@@ -1,24 +1,25 @@
 package com.mraof.minestuck.entity.item;
 
 import com.mraof.minestuck.entity.MSEntityTypes;
+import com.mraof.minestuck.item.CustomBoatItem;
 import com.mraof.minestuck.item.MSItems;
 import net.minecraft.core.BlockPos;
 import net.minecraft.nbt.CompoundTag;
 import net.minecraft.network.FriendlyByteBuf;
-import net.minecraft.network.protocol.Packet;
-import net.minecraft.network.protocol.game.ClientGamePacketListener;
+import net.minecraft.network.RegistryFriendlyByteBuf;
 import net.minecraft.resources.ResourceLocation;
 import net.minecraft.world.damagesource.DamageSource;
+import net.minecraft.world.entity.Entity;
 import net.minecraft.world.entity.EntityType;
 import net.minecraft.world.entity.item.ItemEntity;
 import net.minecraft.world.entity.vehicle.Boat;
 import net.minecraft.world.item.Item;
+import net.minecraft.world.item.ItemStack;
 import net.minecraft.world.item.Items;
 import net.minecraft.world.level.Level;
 import net.minecraft.world.level.block.state.BlockState;
 import net.minecraft.world.phys.Vec3;
-import net.minecraftforge.entity.IEntityAdditionalSpawnData;
-import net.minecraftforge.network.NetworkHooks;
+import net.neoforged.neoforge.entity.IEntityWithComplexSpawn;
 import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.Logger;
 
@@ -28,7 +29,7 @@ import java.util.Collection;
 import java.util.List;
 import java.util.function.Supplier;
 
-public class MetalBoatEntity extends Boat implements IEntityAdditionalSpawnData
+public class MetalBoatEntity extends Boat implements IEntityWithComplexSpawn
 {
 	private static final Logger LOGGER = LogManager.getLogger();
 	
@@ -128,27 +129,21 @@ public class MetalBoatEntity extends Boat implements IEntityAdditionalSpawnData
 	}
 	
 	@Override
-	public void writeSpawnData(FriendlyByteBuf buffer)
+	public void writeSpawnData(RegistryFriendlyByteBuf buffer)
 	{
 		buffer.writeUtf(type.asString());
 	}
 	
 	@Override
-	public void readSpawnData(FriendlyByteBuf additionalData)
+	public void readSpawnData(RegistryFriendlyByteBuf additionalData)
 	{
 		this.type = Type.fromString(additionalData.readUtf(16));
 	}
 	
-	@Override
-	public Packet<ClientGamePacketListener> getAddEntityPacket()
+	public enum Type implements CustomBoatItem.BoatProvider
 	{
-		return NetworkHooks.getEntitySpawningPacket(this);
-	}
-	
-	public enum Type
-	{
-		IRON(1 / 1.5F, () -> Items.IRON_INGOT, MSItems.IRON_BOAT, new ResourceLocation("minestuck", "textures/entity/iron_boat.png")),
-		GOLD(1.0F, () -> Items.GOLD_INGOT, MSItems.GOLD_BOAT, new ResourceLocation("minestuck", "textures/entity/gold_boat.png"));
+		IRON(1 / 1.5F, () -> Items.IRON_INGOT, MSItems.IRON_BOAT, ResourceLocation.fromNamespaceAndPath("minestuck", "textures/entity/iron_boat.png")),
+		GOLD(1.0F, () -> Items.GOLD_INGOT, MSItems.GOLD_BOAT, ResourceLocation.fromNamespaceAndPath("minestuck", "textures/entity/gold_boat.png"));
 		
 		private final float damageModifier;
 		private final Supplier<Item> droppedItem, boatItem;
@@ -181,6 +176,12 @@ public class MetalBoatEntity extends Boat implements IEntityAdditionalSpawnData
 		public ResourceLocation getBoatTexture()
 		{
 			return boatTexture;
+		}
+		
+		@Override
+		public Entity createBoat(ItemStack stack, Level level, double x, double y, double z)
+		{
+			return new MetalBoatEntity(level, x, y, z, this);
 		}
 	}
 }

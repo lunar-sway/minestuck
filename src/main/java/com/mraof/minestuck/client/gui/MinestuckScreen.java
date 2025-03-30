@@ -2,11 +2,11 @@ package com.mraof.minestuck.client.gui;
 
 import com.mojang.blaze3d.systems.RenderSystem;
 import com.mojang.blaze3d.vertex.*;
+import com.mraof.minestuck.api.alchemy.GristSet;
 import com.mraof.minestuck.api.alchemy.GristType;
 import com.mraof.minestuck.api.alchemy.GristTypes;
-import com.mraof.minestuck.api.alchemy.GristSet;
 import com.mraof.minestuck.client.util.GuiUtil;
-import com.mraof.minestuck.computer.editmode.ClientEditHandler;
+import com.mraof.minestuck.computer.editmode.ClientEditmodeData;
 import com.mraof.minestuck.player.ClientPlayerData;
 import net.minecraft.client.gui.GuiGraphics;
 import net.minecraft.client.gui.screens.Screen;
@@ -14,10 +14,7 @@ import net.minecraft.client.renderer.GameRenderer;
 import net.minecraft.network.chat.Component;
 import net.minecraft.resources.ResourceLocation;
 
-import java.util.ArrayList;
-import java.util.Collections;
 import java.util.List;
-import java.util.stream.Collectors;
 
 /**
  * Created by mraof on 2017 December 06 at 11:31 PM.
@@ -29,7 +26,7 @@ public abstract class MinestuckScreen extends Screen
 	protected static final int gristCountX = 44, gristCountY = 36;
 	protected static final int rows = 7;
 	protected static final int columns = 3;
-	private static final ResourceLocation barCovers = new ResourceLocation("minestuck", "textures/gui/bar_covers.png");
+	private static final ResourceLocation barCovers = ResourceLocation.fromNamespaceAndPath("minestuck", "textures/gui/bar_covers.png");
 	
 	protected MinestuckScreen(Component titleIn)
 	{
@@ -44,13 +41,11 @@ public abstract class MinestuckScreen extends Screen
 		//Show the name of the grist instead of the count if displaying a tooltip
 		boolean showName = false;
 		GristType tooltipType = null;
-		ClientPlayerData.ClientCache cache = ClientPlayerData.getGristCache(ClientEditHandler.isActive() ? ClientPlayerData.CacheSource.EDITMODE : ClientPlayerData.CacheSource.PLAYER);
+		ClientPlayerData.ClientCache cache = ClientPlayerData.getGristCache(ClientEditmodeData.isInEditmode() ? ClientPlayerData.CacheSource.EDITMODE : ClientPlayerData.CacheSource.PLAYER);
 		GristSet clientGrist = cache.set();
 		long cacheLimit = cache.limit();
 		
-		List<GristType> types = new ArrayList<>(GristTypes.getRegistry().getValues());
-		Collections.sort(types);
-		types = types.stream().skip((long) page * rows * columns).limit(rows * columns).collect(Collectors.toList());
+		List<GristType> types = GristTypes.REGISTRY.stream().sorted().skip((long) page * rows * columns).limit(rows * columns).toList();
 
 		int offset = 0;
 		for (GristType type : types)
@@ -105,13 +100,12 @@ public abstract class MinestuckScreen extends Screen
 		int iconU = 0;
 		int iconV = 0;
 		
-		BufferBuilder render = Tesselator.getInstance().getBuilder();
-		render.begin(VertexFormat.Mode.QUADS, DefaultVertexFormat.POSITION_TEX);
-		render.vertex(x, y + iconY, 0D).uv((iconU) * scale, (iconV + iconY) * scale).endVertex();
-		render.vertex(x + iconX, y + iconY, 0D).uv((iconU + iconX) * scale, (iconV + iconY) * scale).endVertex();
-		render.vertex(x + iconX, y, 0D).uv((iconU + iconX) * scale, (iconV) * scale).endVertex();
-		render.vertex(x, y, 0D).uv((iconU) * scale, (iconV) * scale).endVertex();
-		Tesselator.getInstance().end();
+		BufferBuilder buffer = Tesselator.getInstance().begin(VertexFormat.Mode.QUADS, DefaultVertexFormat.POSITION_TEX);
+		buffer.addVertex(x, y + iconY, 0).setUv((iconU) * scale, (iconV + iconY) * scale);
+		buffer.addVertex(x + iconX, y + iconY, 0).setUv((iconU + iconX) * scale, (iconV + iconY) * scale);
+		buffer.addVertex(x + iconX, y, 0).setUv((iconU + iconX) * scale, (iconV) * scale);
+		buffer.addVertex(x, y, 0).setUv((iconU) * scale, (iconV) * scale);
+		BufferUploader.drawWithShader(buffer.buildOrThrow());
 	}
 	private void drawIcon(int x, int y, ResourceLocation icon)
 	{
@@ -128,13 +122,12 @@ public abstract class MinestuckScreen extends Screen
 		int iconU = 0;
 		int iconV = 0;
 
-		BufferBuilder render = Tesselator.getInstance().getBuilder();
-		render.begin(VertexFormat.Mode.QUADS, DefaultVertexFormat.POSITION_TEX);
-		render.vertex(x, y + iconY, 0D).uv((iconU) * scale, (iconV + iconY) * scale).endVertex();
-		render.vertex(x + iconX, y + iconY, 0D).uv((iconU + iconX) * scale, (iconV + iconY) * scale).endVertex();
-		render.vertex(x + iconX, y, 0D).uv((iconU + iconX) * scale, (iconV) * scale).endVertex();
-		render.vertex(x, y, 0D).uv((iconU) * scale, (iconV) * scale).endVertex();
-		Tesselator.getInstance().end();
+		BufferBuilder buffer = Tesselator.getInstance().begin(VertexFormat.Mode.QUADS, DefaultVertexFormat.POSITION_TEX);
+		buffer.addVertex(x, y + iconY, 0).setUv((iconU) * scale, (iconV + iconY) * scale);
+		buffer.addVertex(x + iconX, y + iconY, 0).setUv((iconU + iconX) * scale, (iconV + iconY) * scale);
+		buffer.addVertex(x + iconX, y, 0).setUv((iconU + iconX) * scale, (iconV) * scale);
+		buffer.addVertex(x, y, 0).setUv((iconU) * scale, (iconV) * scale);
+		BufferUploader.drawWithShader(buffer.buildOrThrow());
 	}
 
 	protected boolean isPointInRegion(int regionX, int regionY, int regionWidth, int regionHeight, int pointX, int pointY)

@@ -1,47 +1,43 @@
 package com.mraof.minestuck.network.computer;
 
+import com.mraof.minestuck.Minestuck;
 import com.mraof.minestuck.blockentity.ComputerBlockEntity;
-import com.mraof.minestuck.computer.Theme;
-import com.mraof.minestuck.network.PlayToServerPacket;
+import com.mraof.minestuck.network.MSPacket;
 import net.minecraft.core.BlockPos;
 import net.minecraft.network.FriendlyByteBuf;
+import net.minecraft.network.RegistryFriendlyByteBuf;
+import net.minecraft.network.codec.StreamCodec;
+import net.minecraft.network.protocol.common.custom.CustomPacketPayload;
+import net.minecraft.resources.ResourceLocation;
 import net.minecraft.server.level.ServerPlayer;
+import net.neoforged.neoforge.network.handling.IPayloadContext;
 
-public class ThemeSelectPacket implements PlayToServerPacket
+public record ThemeSelectPacket(BlockPos pos, ResourceLocation themeId) implements MSPacket.PlayToServer
 {
-	private final BlockPos pos;
-	private final int themeId;
+	public static final Type<ThemeSelectPacket> ID = new Type<>(Minestuck.id("theme_select"));
+	public static final StreamCodec<FriendlyByteBuf, ThemeSelectPacket> STREAM_CODEC = StreamCodec.composite(
+			BlockPos.STREAM_CODEC,
+			ThemeSelectPacket::pos,
+			ResourceLocation.STREAM_CODEC,
+			ThemeSelectPacket::themeId,
+			ThemeSelectPacket::new
+	);
 	
-	public ThemeSelectPacket(BlockPos pos, int themeId)
+	public static ThemeSelectPacket create(ComputerBlockEntity be, ResourceLocation themeId)
 	{
-		this.pos = pos;
-		this.themeId = themeId;
-	}
-	
-	public static ThemeSelectPacket create(ComputerBlockEntity be, Theme theme)
-	{
-		return new ThemeSelectPacket(be.getBlockPos(), theme.ordinal());
-	}
-	
-	@Override
-	public void execute(ServerPlayer player)
-	{
-		ComputerBlockEntity.forNetworkIfPresent(player, pos, computer -> computer.setTheme(Theme.values()[themeId]));
+		return new ThemeSelectPacket(be.getBlockPos(), themeId);
 	}
 	
 	@Override
-	public void encode(FriendlyByteBuf buffer)
+	public Type<? extends CustomPacketPayload> type()
 	{
-		buffer.writeBlockPos(pos);
-		buffer.writeInt(themeId);
+		return ID;
 	}
 	
-	public static ThemeSelectPacket decode(FriendlyByteBuf buffer)
-	{
-		BlockPos computer = buffer.readBlockPos();
-		int themeId = buffer.readInt();
-		
-		return new ThemeSelectPacket(computer, themeId);
-	}
 	
+	@Override
+	public void execute(IPayloadContext context, ServerPlayer player)
+	{
+		ComputerBlockEntity.getAccessibleComputer(player, pos).ifPresent(computer -> computer.setTheme(themeId));
+	}
 }

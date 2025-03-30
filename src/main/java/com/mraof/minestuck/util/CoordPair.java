@@ -1,28 +1,15 @@
 package com.mraof.minestuck.util;
 
+import net.minecraft.core.BlockPos;
+
 /**
  * A simple x/z coordinate pair
  */
-public class CoordPair
+public record CoordPair(int x, int z)
 {
-	public final int x;
-	public final int z;
-	public CoordPair(int x, int z)
+	public BlockPos atY(int y)
 	{
-		this.x = x;
-		this.z = z;
-	}
-	
-	@Override
-	public boolean equals(Object obj)
-	{
-		return obj instanceof CoordPair && ((CoordPair) obj).x == x && ((CoordPair) obj).z == z;
-	}
-	
-	@Override
-	public int hashCode()
-	{
-		return (Integer.hashCode(x) << 16) | (Integer.hashCode(z) >> 16);
+		return new BlockPos(this.x, y, this.z);
 	}
 	
 	public CoordPair north()

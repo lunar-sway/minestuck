@@ -1,20 +1,20 @@
 package com.mraof.minestuck.network.computer;
 
-import com.mraof.minestuck.network.PlayToServerPacket;
-import com.mraof.minestuck.skaianet.SkaianetHandler;
+import com.mraof.minestuck.Minestuck;
 import com.mraof.minestuck.blockentity.ComputerBlockEntity;
+import com.mraof.minestuck.network.MSPacket;
+import com.mraof.minestuck.skaianet.ComputerInteractions;
+import io.netty.buffer.ByteBuf;
 import net.minecraft.core.BlockPos;
-import net.minecraft.network.FriendlyByteBuf;
+import net.minecraft.network.codec.StreamCodec;
+import net.minecraft.network.protocol.common.custom.CustomPacketPayload;
 import net.minecraft.server.level.ServerPlayer;
+import net.neoforged.neoforge.network.handling.IPayloadContext;
 
-public class OpenSburbServerPacket implements PlayToServerPacket
+public record OpenSburbServerPacket(BlockPos computerPos) implements MSPacket.PlayToServer
 {
-	private final BlockPos pos;
-	
-	private OpenSburbServerPacket(BlockPos pos)
-	{
-		this.pos = pos;
-	}
+	public static final Type<OpenSburbServerPacket> ID = new Type<>(Minestuck.id("open_sburb_server"));
+	public static final StreamCodec<ByteBuf, OpenSburbServerPacket> STREAM_CODEC = BlockPos.STREAM_CODEC.map(OpenSburbServerPacket::new, OpenSburbServerPacket::computerPos);
 	
 	public static OpenSburbServerPacket create(ComputerBlockEntity be)
 	{
@@ -22,21 +22,16 @@ public class OpenSburbServerPacket implements PlayToServerPacket
 	}
 	
 	@Override
-	public void encode(FriendlyByteBuf buffer)
+	public Type<? extends CustomPacketPayload> type()
 	{
-		buffer.writeBlockPos(pos);
+		return ID;
 	}
 	
-	public static OpenSburbServerPacket decode(FriendlyByteBuf buffer)
-	{
-		BlockPos computer = buffer.readBlockPos();
-		return new OpenSburbServerPacket(computer);
-	}
 	
 	@Override
-	public void execute(ServerPlayer player)
+	public void execute(IPayloadContext context, ServerPlayer player)
 	{
-		ComputerBlockEntity.forNetworkIfPresent(player, pos,
-				computer -> SkaianetHandler.get(player.server).openServer(computer));
+		ComputerBlockEntity.getAccessibleComputer(player, computerPos)
+				.ifPresent(computer -> ComputerInteractions.get(player.server).openServer(computer));
 	}
 }

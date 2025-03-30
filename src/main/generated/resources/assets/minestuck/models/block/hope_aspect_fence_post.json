@@ -1,0 +1,6 @@
+{
+  "parent": "minecraft:block/fence_post",
+  "textures": {
+    "texture": "minestuck:block/hope_aspect_planks"
+  }
+}

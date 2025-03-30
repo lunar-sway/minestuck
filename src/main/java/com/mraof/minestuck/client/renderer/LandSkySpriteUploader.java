@@ -9,19 +9,20 @@ import net.minecraft.client.renderer.texture.TextureAtlasSprite;
 import net.minecraft.client.renderer.texture.TextureManager;
 import net.minecraft.client.resources.TextureAtlasHolder;
 import net.minecraft.resources.ResourceLocation;
-import net.minecraftforge.api.distmarker.Dist;
-import net.minecraftforge.client.event.RegisterClientReloadListenersEvent;
-import net.minecraftforge.eventbus.api.SubscribeEvent;
-import net.minecraftforge.fml.common.Mod;
+import net.neoforged.api.distmarker.Dist;
+import net.neoforged.bus.api.SubscribeEvent;
+import net.neoforged.fml.common.EventBusSubscriber;
+import net.neoforged.fml.common.Mod;
+import net.neoforged.neoforge.client.event.RegisterClientReloadListenersEvent;
 
 import java.util.Objects;
 
-@Mod.EventBusSubscriber(modid = Minestuck.MOD_ID, bus = Mod.EventBusSubscriber.Bus.MOD, value = Dist.CLIENT)
+@EventBusSubscriber(modid = Minestuck.MOD_ID, bus = EventBusSubscriber.Bus.MOD, value = Dist.CLIENT)
 public class LandSkySpriteUploader extends TextureAtlasHolder
 {
 	public static final int VARIANT_COUNT = 3;
 	
-	private static final ResourceLocation SKAIA = new ResourceLocation(Minestuck.MOD_ID, "skaia");
+	private static final ResourceLocation SKAIA = ResourceLocation.fromNamespaceAndPath(Minestuck.MOD_ID, "skaia");
 	
 	private static LandSkySpriteUploader INSTANCE;
 	
@@ -38,7 +39,7 @@ public class LandSkySpriteUploader extends TextureAtlasHolder
 	
 	public LandSkySpriteUploader(TextureManager textureManagerIn)
 	{
-		super(textureManagerIn, new ResourceLocation(Minestuck.MOD_ID, "textures/atlas/land_sky.png"), new ResourceLocation(Minestuck.MOD_ID, "land_sky"));
+		super(textureManagerIn, ResourceLocation.fromNamespaceAndPath(Minestuck.MOD_ID, "textures/atlas/land_sky.png"), ResourceLocation.fromNamespaceAndPath(Minestuck.MOD_ID, "land_sky"));
 	}
 	
 	public TextureAtlasSprite getSkaiaSprite()
@@ -48,15 +49,15 @@ public class LandSkySpriteUploader extends TextureAtlasHolder
 	
 	public TextureAtlasSprite getPlanetSprite(TerrainLandType type, int index)
 	{
-		ResourceLocation typeName = LandTypes.TERRAIN_REGISTRY.get().getKey(type);
+		ResourceLocation typeName = LandTypes.TERRAIN_REGISTRY.getKey(type);
 		Objects.requireNonNull(typeName);
-		return getSprite(new ResourceLocation(typeName.getNamespace(), "planets/planet_"+typeName.getPath()+"_"+index));
+		return getSprite(ResourceLocation.fromNamespaceAndPath(typeName.getNamespace(), "planets/planet_"+typeName.getPath()+"_"+index));
 	}
 	
 	public TextureAtlasSprite getOverlaySprite(TitleLandType type, int index)
 	{
-		ResourceLocation typeName = LandTypes.TITLE_REGISTRY.get().getKey(type);
+		ResourceLocation typeName = LandTypes.TITLE_REGISTRY.getKey(type);
 		Objects.requireNonNull(typeName);
-		return getSprite(new ResourceLocation(typeName.getNamespace(), "overlays/overlay_"+typeName.getPath()+"_"+index));
+		return getSprite(ResourceLocation.fromNamespaceAndPath(typeName.getNamespace(), "overlays/overlay_"+typeName.getPath()+"_"+index));
 	}
 }

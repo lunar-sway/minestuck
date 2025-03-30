@@ -1,4 +1,5 @@
 {
+    "credit": "Made by kirderf1",
     "render_type": "cutout",
     "textures": {
         "particle": "minestuck:block/machine/totem",

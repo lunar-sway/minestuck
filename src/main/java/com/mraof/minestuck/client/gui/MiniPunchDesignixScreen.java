@@ -1,8 +1,9 @@
 package com.mraof.minestuck.client.gui;
 
 import com.mojang.blaze3d.systems.RenderSystem;
-import com.mraof.minestuck.inventory.MiniPunchDesignixMenu;
+import com.mraof.minestuck.Minestuck;
 import com.mraof.minestuck.blockentity.machine.MiniPunchDesignixBlockEntity;
+import com.mraof.minestuck.inventory.MiniPunchDesignixMenu;
 import net.minecraft.client.gui.GuiGraphics;
 import net.minecraft.network.chat.Component;
 import net.minecraft.resources.ResourceLocation;
@@ -13,8 +14,8 @@ import javax.annotation.ParametersAreNonnullByDefault;
 @ParametersAreNonnullByDefault
 public class MiniPunchDesignixScreen extends MachineScreen<MiniPunchDesignixMenu>
 {
-	private static final ResourceLocation BACKGROUND_TEXTURE = new ResourceLocation("minestuck:textures/gui/designix.png");
-	private static final ResourceLocation PROGRESS_BAR_TEXTURE = new ResourceLocation("minestuck:textures/gui/progress/designix.png");
+	private static final ResourceLocation BACKGROUND_TEXTURE = Minestuck.id("textures/gui/designix.png");
+	private static final ResourceLocation PROGRESS_BAR_TEXTURE = Minestuck.id("textures/gui/progress/designix.png");
 	private static final int PROGRESS_BAR_X = 63;
 	private static final int PROGRESS_BAR_Y = 38;
 	private static final int PROGRESS_BAR_WIDTH = 43;
@@ -30,7 +31,6 @@ public class MiniPunchDesignixScreen extends MachineScreen<MiniPunchDesignixMenu
 	@Override
 	public void render(GuiGraphics guiGraphics, int mouseX, int mouseY, float partialTicks)
 	{
-		this.renderBackground(guiGraphics);
 		super.render(guiGraphics, mouseX, mouseY, partialTicks);
 		this.renderTooltip(guiGraphics, mouseX, mouseY);
 	}

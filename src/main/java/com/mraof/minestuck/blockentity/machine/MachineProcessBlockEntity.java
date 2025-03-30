@@ -1,27 +1,21 @@
 package com.mraof.minestuck.blockentity.machine;
 
 import net.minecraft.core.BlockPos;
-import net.minecraft.core.Direction;
+import net.minecraft.core.HolderLookup;
 import net.minecraft.nbt.CompoundTag;
 import net.minecraft.world.item.ItemStack;
 import net.minecraft.world.level.Level;
 import net.minecraft.world.level.block.entity.BlockEntity;
 import net.minecraft.world.level.block.entity.BlockEntityType;
 import net.minecraft.world.level.block.state.BlockState;
-import net.minecraftforge.common.capabilities.Capability;
-import net.minecraftforge.common.capabilities.ForgeCapabilities;
-import net.minecraftforge.common.util.LazyOptional;
-import net.minecraftforge.items.IItemHandler;
-import net.minecraftforge.items.ItemStackHandler;
+import net.neoforged.neoforge.items.ItemStackHandler;
 
 import javax.annotation.Nonnull;
-import javax.annotation.Nullable;
 import java.util.function.BiPredicate;
 
 public abstract class MachineProcessBlockEntity extends BlockEntity
 {
 	protected final ItemStackHandler itemHandler = createItemHandler();
-	private final LazyOptional<IItemHandler> itemOptional = LazyOptional.of(() -> itemHandler);
 	
 	public static final int FUEL_INCREASE = 32; //how many units of fuel a chunk of uranium adds to a machine powered by it, used by Sendificator and UraniumCooker
 	
@@ -33,28 +27,19 @@ public abstract class MachineProcessBlockEntity extends BlockEntity
 	protected abstract ItemStackHandler createItemHandler();
 	
 	@Override
-	public void load(CompoundTag nbt)
+	protected void loadAdditional(CompoundTag nbt, HolderLookup.Provider pRegistries)
 	{
-		super.load(nbt);
+		super.loadAdditional(nbt, pRegistries);
 		
-		itemHandler.deserializeNBT(nbt.getCompound("inventory"));
+		itemHandler.deserializeNBT(pRegistries, nbt.getCompound("inventory"));
 	}
 	
 	@Override
-	protected void saveAdditional(CompoundTag compound)
+	protected void saveAdditional(CompoundTag compound, HolderLookup.Provider provider)
 	{
-		super.saveAdditional(compound);
+		super.saveAdditional(compound, provider);
 		
-		compound.put("inventory", itemHandler.serializeNBT());
-	}
-	
-	@Nonnull
-	@Override
-	public <T> LazyOptional<T> getCapability(@Nonnull Capability<T> cap, @Nullable Direction side)
-	{
-		if(cap == ForgeCapabilities.ITEM_HANDLER)
-			return itemOptional.cast();
-		return super.getCapability(cap, side);
+		compound.put("inventory", itemHandler.serializeNBT(provider));
 	}
 	
 	public static void serverTick(Level ignoredLevel, BlockPos ignoredPos, BlockState ignoredState, MachineProcessBlockEntity blockEntity)

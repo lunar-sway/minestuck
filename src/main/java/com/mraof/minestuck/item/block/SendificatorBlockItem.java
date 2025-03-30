@@ -3,7 +3,7 @@ package com.mraof.minestuck.item.block;
 import com.mraof.minestuck.block.MSBlocks;
 import com.mraof.minestuck.item.MSItems;
 import com.mraof.minestuck.util.MSDamageSources;
-import net.minecraft.nbt.NbtUtils;
+import net.minecraft.core.component.DataComponents;
 import net.minecraft.world.InteractionHand;
 import net.minecraft.world.InteractionResultHolder;
 import net.minecraft.world.entity.Entity;
@@ -13,10 +13,14 @@ import net.minecraft.world.entity.player.Player;
 import net.minecraft.world.item.BlockItem;
 import net.minecraft.world.item.ItemStack;
 import net.minecraft.world.item.Items;
+import net.minecraft.world.item.component.ResolvableProfile;
 import net.minecraft.world.level.Level;
 import net.minecraft.world.level.block.Block;
 import net.minecraft.world.level.block.Blocks;
 
+import javax.annotation.ParametersAreNonnullByDefault;
+
+@ParametersAreNonnullByDefault
 public class SendificatorBlockItem extends BlockItem
 {
 	public SendificatorBlockItem(Block blockIn, Properties builder)
@@ -46,7 +50,7 @@ public class SendificatorBlockItem extends BlockItem
 			if(recoverItem.is(MSItems.SENDIFICATOR.get()) && !playerIn.isCreative())
 			{
 				ItemStack headItem = new ItemStack(Items.PLAYER_HEAD, 1);
-				NbtUtils.writeGameProfile(headItem.getOrCreateTagElement("SkullOwner"), playerIn.getGameProfile());
+				headItem.set(DataComponents.PROFILE, new ResolvableProfile(playerIn.getGameProfile()));
 				ItemEntity headItemEntity = new ItemEntity(level, playerIn.getX(), playerIn.getY(), playerIn.getZ(), headItem);
 				level.addFreshEntity(headItemEntity);
 				

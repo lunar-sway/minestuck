@@ -1,0 +1,18 @@
+{
+  "condition": {
+    "type": "minestuck:list",
+    "conditions": [
+      {
+        "type": "minestuck:terrain_land_type",
+        "land_type": "minestuck:frost"
+      },
+      {
+        "type": "minestuck:move_restriction"
+      }
+    ],
+    "list_type": "all"
+  },
+  "dialogue": "minestuck:consort/tent_protection",
+  "dialogue_weight": 10,
+  "keep_on_reset": false
+}

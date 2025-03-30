@@ -1,7 +1,7 @@
 package com.mraof.minestuck.inventory.captchalogue;
 
 import net.minecraft.world.item.Item;
-import net.minecraftforge.fml.LogicalSide;
+import net.neoforged.fml.LogicalSide;
 
 import java.util.Objects;
 import java.util.function.Supplier;

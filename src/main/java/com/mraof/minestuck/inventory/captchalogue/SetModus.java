@@ -1,13 +1,15 @@
 package com.mraof.minestuck.inventory.captchalogue;
 
 import com.mraof.minestuck.MinestuckConfig;
-import com.mraof.minestuck.alchemy.AlchemyHelper;
+import com.mraof.minestuck.item.CaptchaCardItem;
 import com.mraof.minestuck.item.MSItems;
+import net.minecraft.core.HolderLookup;
 import net.minecraft.core.NonNullList;
 import net.minecraft.nbt.CompoundTag;
+import net.minecraft.nbt.Tag;
 import net.minecraft.server.level.ServerPlayer;
 import net.minecraft.world.item.ItemStack;
-import net.minecraftforge.fml.LogicalSide;
+import net.neoforged.fml.LogicalSide;
 
 import java.util.Iterator;
 
@@ -46,14 +48,14 @@ public class SetModus extends Modus
 	}
 	
 	@Override
-	public void readFromNBT(CompoundTag nbt)
+	public void readFromNBT(CompoundTag nbt, HolderLookup.Provider provider)
 	{
 		size = nbt.getInt("size");
 		list = NonNullList.create();
 		
 		for(int i = 0; i < size; i++)
-			if(nbt.contains("item"+i))
-				list.add(ItemStack.of(nbt.getCompound("item"+i)));
+			if(nbt.contains("item"+i, Tag.TAG_COMPOUND))
+				list.add(ItemStack.parse(provider, nbt.getCompound("item"+i)).orElseThrow());
 			else break;
 		if(side == LogicalSide.CLIENT)
 		{
@@ -64,14 +66,14 @@ public class SetModus extends Modus
 	}
 	
 	@Override
-	public CompoundTag writeToNBT(CompoundTag nbt)
+	public CompoundTag writeToNBT(CompoundTag nbt, HolderLookup.Provider provider)
 	{
 		nbt.putInt("size", size);
 		Iterator<ItemStack> iter = list.iterator();
 		for(int i = 0; i < list.size(); i++)
 		{
 			ItemStack stack = iter.next();
-			nbt.put("item"+i, stack.save(new CompoundTag()));
+			nbt.put("item"+i, stack.save(provider));
 		}
 		return nbt;
 	}
@@ -177,7 +179,7 @@ public class SetModus extends Modus
 		{
 			size--;
 			markDirty();
-			item = AlchemyHelper.createCard(item, player.server);
+			item = CaptchaCardItem.createCardWithItem(item, player.server);
 		}
 		
 		return item;

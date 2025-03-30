@@ -1,0 +1,11 @@
+{
+  "type": "minestuck:combination",
+  "input1": {
+    "item": "minecraft:amethyst_shard"
+  },
+  "input2": {
+    "item": "minestuck:conductors_baton"
+  },
+  "mode": "or",
+  "output": "minestuck:celestial_fulcrum"
+}

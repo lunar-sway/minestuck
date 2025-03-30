@@ -1,0 +1,11 @@
+{
+  "type": "minestuck:combination",
+  "input1": {
+    "item": "minestuck:razor_fan"
+  },
+  "input2": {
+    "item": "minestuck:battery"
+  },
+  "mode": "and",
+  "output": "minestuck:motor_fan"
+}

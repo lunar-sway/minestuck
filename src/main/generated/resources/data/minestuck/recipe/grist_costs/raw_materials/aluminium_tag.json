@@ -1,0 +1,10 @@
+{
+  "type": "minestuck:source_grist_cost",
+  "grist_cost": {},
+  "ingredient": {
+    "tag": "c:raw_materials/aluminium"
+  },
+  "sources": [
+    "#c:raw_materials/aluminum"
+  ]
+}

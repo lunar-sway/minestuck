@@ -1,7 +1,8 @@
 package com.mraof.minestuck.entity.item;
 
 
-import com.mraof.minestuck.alchemy.*;
+import com.mraof.minestuck.alchemy.GristGutter;
+import com.mraof.minestuck.alchemy.GristHelper;
 import com.mraof.minestuck.api.alchemy.GristAmount;
 import com.mraof.minestuck.api.alchemy.GristSet;
 import com.mraof.minestuck.api.alchemy.GristType;
@@ -9,19 +10,14 @@ import com.mraof.minestuck.api.alchemy.GristTypes;
 import com.mraof.minestuck.computer.editmode.ServerEditHandler;
 import com.mraof.minestuck.entity.MSEntityTypes;
 import com.mraof.minestuck.network.GristRejectAnimationPacket;
-import com.mraof.minestuck.network.MSPacketHandler;
 import com.mraof.minestuck.player.GristCache;
 import com.mraof.minestuck.player.IdentifierHandler;
 import com.mraof.minestuck.player.PlayerIdentifier;
-import com.mraof.minestuck.skaianet.Session;
-import com.mraof.minestuck.skaianet.SessionHandler;
-import com.mraof.minestuck.util.MSNBTUtil;
 import net.minecraft.core.BlockPos;
 import net.minecraft.nbt.CompoundTag;
 import net.minecraft.nbt.Tag;
-import net.minecraft.network.FriendlyByteBuf;
-import net.minecraft.network.protocol.Packet;
-import net.minecraft.network.protocol.game.ClientGamePacketListener;
+import net.minecraft.network.RegistryFriendlyByteBuf;
+import net.minecraft.network.syncher.SynchedEntityData;
 import net.minecraft.server.level.ServerPlayer;
 import net.minecraft.sounds.SoundEvents;
 import net.minecraft.util.RandomSource;
@@ -29,15 +25,17 @@ import net.minecraft.world.damagesource.DamageSource;
 import net.minecraft.world.entity.*;
 import net.minecraft.world.entity.player.Player;
 import net.minecraft.world.level.Level;
-import net.minecraftforge.common.util.FakePlayer;
-import net.minecraftforge.entity.IEntityAdditionalSpawnData;
-import net.minecraftforge.network.NetworkHooks;
+import net.neoforged.neoforge.common.util.FakePlayer;
+import net.neoforged.neoforge.entity.IEntityWithComplexSpawn;
+import net.neoforged.neoforge.network.PacketDistributor;
 
 import javax.annotation.Nullable;
+import javax.annotation.ParametersAreNonnullByDefault;
 import java.util.function.Consumer;
 import java.util.function.Predicate;
 
-public class GristEntity extends Entity implements IEntityAdditionalSpawnData
+@ParametersAreNonnullByDefault
+public class GristEntity extends Entity implements IEntityWithComplexSpawn
 {
 	//TODO Perhaps use a data manager for grist type in the same way as the underling entity?
 	public int cycle;
@@ -117,7 +115,7 @@ public class GristEntity extends Entity implements IEntityAdditionalSpawnData
 	}
 	
 	@Override
-	protected void defineSynchedData()
+	protected void defineSynchedData(SynchedEntityData.Builder builder)
 	{
 	}
 	
@@ -182,15 +180,9 @@ public class GristEntity extends Entity implements IEntityAdditionalSpawnData
 	{
 		if(entityIn instanceof ServerPlayer player)
 		{
-			Session playerSession = SessionHandler.get(level()).getPlayerSession(IdentifierHandler.encode(entityIn));
-			
 			long cacheCapacity = GristCache.get(player).getRemainingCapacity(gristType);
 			
-			long gutterCapacity;
-			if(playerSession != null)
-				gutterCapacity = playerSession.getGristGutter().getRemainingCapacity();
-			else
-				gutterCapacity = 0;
+			long gutterCapacity = GristGutter.get(player).map(GristGutter::getRemainingCapacity).orElse(0L);
 			
 			return gutterCapacity + cacheCapacity;
 		}
@@ -221,7 +213,7 @@ public class GristEntity extends Entity implements IEntityAdditionalSpawnData
 		}
 		
 		//this.setPosition(this.getPosX(), (this.getEntityBoundingBox().minY + this.getEntityBoundingBox().maxY) / 2.0D, this.getPosZ());
-		double d0 = this.getDimensions(Pose.STANDING).width * 2.0D;
+		double d0 = this.getDimensions(Pose.STANDING).width() * 2.0D;
 		
 		// Periodically re-evaluate whether the grist should be following this particular player
 		if(this.targetCycle < this.cycle - 20 + this.getId() % 100) //Why should I care about the entityId
@@ -244,7 +236,7 @@ public class GristEntity extends Entity implements IEntityAdditionalSpawnData
 			double d2 = (this.closestPlayer.getY() + (double) this.closestPlayer.getEyeHeight() - this.getY()) / d0;
 			double d3 = (this.closestPlayer.getZ() - this.getZ()) / d0;
 			double d4 = Math.sqrt(d1 * d1 + d2 * d2 + d3 * d3);
-			double d5 = this.getDimensions(Pose.STANDING).width * 2.0D - d4;
+			double d5 = this.getDimensions(Pose.STANDING).width() * 2.0D - d4;
 			
 			if(d5 > 0.0D)
 			{
@@ -300,7 +292,7 @@ public class GristEntity extends Entity implements IEntityAdditionalSpawnData
 		compound.putShort("Health", (short) this.gristHealth);
 		compound.putShort("Age", (short) this.gristAge);
 		compound.putLong("Value", (short) this.gristValue);
-		MSNBTUtil.writeGristType(compound, "Type", gristType);
+		compound.put("Type", GristHelper.encodeGristType(gristType));
 	}
 	
 	@Override
@@ -311,7 +303,7 @@ public class GristEntity extends Entity implements IEntityAdditionalSpawnData
 		if(compound.contains("Value", Tag.TAG_ANY_NUMERIC))
 			this.gristValue = compound.getLong("Value");
 		if(compound.contains("Type", Tag.TAG_STRING))
-			this.gristType = MSNBTUtil.readGristType(compound, "Type");
+			this.gristType = GristHelper.parseGristType(compound.get("Type")).orElseGet(GristTypes.BUILD);
 	}
 	
 	/**
@@ -320,20 +312,20 @@ public class GristEntity extends Entity implements IEntityAdditionalSpawnData
 	@Override
 	public void playerTouch(Player player)
 	{
-		if(this.level().isClientSide || player instanceof FakePlayer)
+		if(!(player instanceof ServerPlayer serverPlayer) || player instanceof FakePlayer)
 			return;
 		
-		if(ServerEditHandler.getData(player) != null)
+		if(ServerEditHandler.isInEditmode(serverPlayer))
 			return;
 		
-		long canPickUp = getPlayerCacheRoom(player);
+		long canPickUp = getPlayerCacheRoom(serverPlayer);
 		
 		if(canPickUp >= gristValue)
-			consumeGrist(IdentifierHandler.encode(player), true);
+			consumeGrist(IdentifierHandler.encode(serverPlayer), true);
 		else
 		{
 			GristRejectAnimationPacket packet = GristRejectAnimationPacket.createPacket(this);
-			MSPacketHandler.sendToTracking(packet, this);
+			PacketDistributor.sendToPlayersTrackingEntity(this, packet);
 		}
 	}
 	
@@ -376,22 +368,16 @@ public class GristEntity extends Entity implements IEntityAdditionalSpawnData
 	}
 	
 	@Override
-	public void writeSpawnData(FriendlyByteBuf buffer)
+	public void writeSpawnData(RegistryFriendlyByteBuf buffer)
 	{
-		buffer.writeRegistryId(GristTypes.getRegistry(), gristType);
+		GristType.STREAM_CODEC.encode(buffer, gristType);
 		buffer.writeLong(gristValue);
 	}
 	
 	@Override
-	public void readSpawnData(FriendlyByteBuf data)
+	public void readSpawnData(RegistryFriendlyByteBuf data)
 	{
-		gristType = data.readRegistryIdSafe(GristType.class);
+		gristType = GristType.STREAM_CODEC.decode(data);
 		gristValue = data.readLong();
-	}
-	
-	@Override
-	public Packet<ClientGamePacketListener> getAddEntityPacket()
-	{
-		return NetworkHooks.getEntitySpawningPacket(this);
 	}
 }

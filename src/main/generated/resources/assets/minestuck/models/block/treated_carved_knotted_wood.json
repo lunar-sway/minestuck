@@ -1,0 +1,6 @@
+{
+  "parent": "minecraft:block/template_glazed_terracotta",
+  "textures": {
+    "pattern": "minestuck:block/treated_carved_knotted_wood"
+  }
+}

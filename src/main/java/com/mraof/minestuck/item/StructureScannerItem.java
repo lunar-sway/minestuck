@@ -1,11 +1,11 @@
 package com.mraof.minestuck.item;
 
 import com.mojang.logging.LogUtils;
+import com.mraof.minestuck.item.components.MSItemComponents;
 import net.minecraft.ChatFormatting;
 import net.minecraft.MethodsReturnNonnullByDefault;
 import net.minecraft.core.BlockPos;
 import net.minecraft.core.GlobalPos;
-import net.minecraft.nbt.NbtOps;
 import net.minecraft.network.chat.Component;
 import net.minecraft.network.chat.MutableComponent;
 import net.minecraft.server.level.ServerLevel;
@@ -59,38 +59,9 @@ public class StructureScannerItem extends Item
 		return getPower(stack) > 0;
 	}
 	
-	@SuppressWarnings("DataFlowIssue")
 	public static int getPower(ItemStack stack)
 	{
-		return stack.hasTag() ? stack.getTag().getInt("power") : 0;
-	}
-	
-	public static void setPower(ItemStack stack, int power)
-	{
-		stack.getOrCreateTag().putInt("power", power);
-	}
-	
-	@Nullable
-	@SuppressWarnings("DataFlowIssue")
-	public static GlobalPos getTargetFromNbt(ItemStack stack)
-	{
-		if(stack.hasTag() && stack.getTag().contains("TargetLocation"))
-		{
-			return GlobalPos.CODEC
-					.parse(NbtOps.INSTANCE, stack.getTag().get("TargetLocation"))
-					.resultOrPartial(LOGGER::error).orElse(null);
-		} else
-			return null;
-	}
-	
-	public static void setTargetToNbt(ItemStack stack, @Nullable GlobalPos pos)
-	{
-		if(pos == null)
-			stack.removeTagKey("TargetLocation");
-		else
-			stack.getOrCreateTag().put("TargetLocation",
-					GlobalPos.CODEC.encodeStart(NbtOps.INSTANCE, pos)
-							.getOrThrow(false, LOGGER::error));
+		return stack.getOrDefault(MSItemComponents.POWER, 0);
 	}
 	
 	@Override
@@ -144,7 +115,7 @@ public class StructureScannerItem extends Item
 	
 	private boolean tryActivateScanner(ServerLevel level, Player player, ItemStack stack)
 	{
-		level.playSound(null, player.getX(), player.getY(), player.getZ(), SoundEvents.UI_BUTTON_CLICK.get(), SoundSource.AMBIENT, 0.8F, 1.3F);
+		level.playSound(null, player.getX(), player.getY(), player.getZ(), SoundEvents.UI_BUTTON_CLICK.value(), SoundSource.AMBIENT, 0.8F, 1.3F);
 		GlobalPos pos = findStructureTarget(player, level);
 		
 		if(pos == null)
@@ -153,8 +124,8 @@ public class StructureScannerItem extends Item
 			return false;
 		}
 		
-		setTargetToNbt(stack, pos);
-		setPower(stack, this.powerCapacity);
+		stack.set(MSItemComponents.TARGET_LOCATION, pos);
+		stack.set(MSItemComponents.POWER, this.powerCapacity);
 		
 		player.sendSystemMessage(Component.translatable(ON).withStyle(ChatFormatting.DARK_GREEN));
 		return true;
@@ -180,11 +151,11 @@ public class StructureScannerItem extends Item
 	
 	private static void powerTick(ItemStack stack, Entity entity)
 	{
-		setPower(stack, getPower(stack) - 1);
+		stack.set(MSItemComponents.POWER, getPower(stack) - 1);
 		
 		if(!isPowered(stack))
 		{
-			setTargetToNbt(stack, null);
+			stack.set(MSItemComponents.TARGET_LOCATION, null);
 			MutableComponent message = Component.translatable(OFF);
 			entity.sendSystemMessage(message.withStyle(ChatFormatting.DARK_GREEN));
 		}

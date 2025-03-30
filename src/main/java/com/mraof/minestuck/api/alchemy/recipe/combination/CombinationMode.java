@@ -1,13 +1,21 @@
 package com.mraof.minestuck.api.alchemy.recipe.combination;
 
+import com.mojang.serialization.Codec;
+import net.minecraft.MethodsReturnNonnullByDefault;
+import net.minecraft.util.StringRepresentable;
+
 import java.util.Locale;
 
-public enum CombinationMode
+@MethodsReturnNonnullByDefault
+public enum CombinationMode implements StringRepresentable
 {
 	AND,
 	OR;
 	
-	public String asString()
+	public static final Codec<CombinationMode> CODEC = StringRepresentable.fromEnumWithMapping(CombinationMode::values, CombinationMode::mapSymbols);
+	
+	@Override
+	public String getSerializedName()
 	{
 		return this.name().toLowerCase(Locale.ROOT);
 	}
@@ -22,12 +30,13 @@ public enum CombinationMode
 		return b ? AND : OR;
 	}
 	
-	public static CombinationMode fromString(String str)
+	private static String mapSymbols(String str)
 	{
-		if(str.equals("&&") || str.equalsIgnoreCase("and"))
-			return AND;
-		else if(str.equals("||") || str.equalsIgnoreCase("or"))
-			return OR;
-		else throw new IllegalArgumentException(str+" is not a valid combination type");
+		if(str.equals("&&"))
+			return AND.getSerializedName();
+		else if(str.equals("||"))
+			return OR.getSerializedName();
+		else
+			return str.toLowerCase(Locale.ROOT);
 	}
 }

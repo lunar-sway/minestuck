@@ -2,14 +2,16 @@ package com.mraof.minestuck.data;
 
 import com.mraof.minestuck.Minestuck;
 import com.mraof.minestuck.item.MSItems;
+import net.minecraft.core.registries.BuiltInRegistries;
 import net.minecraft.data.PackOutput;
 import net.minecraft.resources.ResourceLocation;
 import net.minecraft.world.item.Item;
-import net.minecraftforge.client.model.generators.ItemModelBuilder;
-import net.minecraftforge.client.model.generators.ItemModelProvider;
-import net.minecraftforge.client.model.generators.ModelProvider;
-import net.minecraftforge.common.data.ExistingFileHelper;
-import net.minecraftforge.registries.RegistryObject;
+import net.neoforged.neoforge.client.model.generators.ItemModelBuilder;
+import net.neoforged.neoforge.client.model.generators.ItemModelProvider;
+import net.neoforged.neoforge.client.model.generators.ModelProvider;
+import net.neoforged.neoforge.common.data.ExistingFileHelper;
+
+import java.util.function.Supplier;
 
 @SuppressWarnings("UnusedReturnValue")
 public class MinestuckItemModelProvider extends ItemModelProvider
@@ -511,6 +513,30 @@ public class MinestuckItemModelProvider extends ItemModelProvider
 		simpleItem(MSItems.ANCIENT_THUMB_DRIVE);
 		simpleItem(MSItems.GUTTER_BALL);
 		
+		//Signs
+		simpleItem(MSItems.CARVED_SIGN);
+		simpleItem(MSItems.CARVED_HANGING_SIGN);
+		simpleItem(MSItems.DEAD_SIGN);
+		simpleItem(MSItems.DEAD_HANGING_SIGN);
+		simpleItem(MSItems.END_SIGN);
+		simpleItem(MSItems.END_HANGING_SIGN);
+		simpleItem(MSItems.FROST_SIGN);
+		simpleItem(MSItems.FROST_HANGING_SIGN);
+		simpleItem(MSItems.GLOWING_SIGN);
+		simpleItem(MSItems.GLOWING_HANGING_SIGN);
+		simpleItem(MSItems.RAINBOW_SIGN);
+		simpleItem(MSItems.RAINBOW_HANGING_SIGN);
+		simpleItem(MSItems.SHADEWOOD_SIGN);
+		simpleItem(MSItems.SHADEWOOD_HANGING_SIGN);
+		simpleItem(MSItems.TREATED_SIGN);
+		simpleItem(MSItems.TREATED_HANGING_SIGN);
+		simpleItem(MSItems.LACQUERED_SIGN);
+		simpleItem(MSItems.LACQUERED_HANGING_SIGN);
+		simpleItem(MSItems.PERFECTLY_GENERIC_SIGN);
+		simpleItem(MSItems.PERFECTLY_GENERIC_HANGING_SIGN);
+		simpleItem(MSItems.CINDERED_SIGN);
+		simpleItem(MSItems.CINDERED_HANGING_SIGN);
+		
 		//Buckets
 		simpleItem(MSItems.OIL_BUCKET);
 		simpleItem(MSItems.BLOOD_BUCKET);
@@ -519,6 +545,8 @@ public class MinestuckItemModelProvider extends ItemModelProvider
 		simpleItem(MSItems.ENDER_BUCKET);
 		simpleItem(MSItems.LIGHT_WATER_BUCKET);
 		simpleItem(MSItems.OBSIDIAN_BUCKET);
+		simpleItem(MSItems.CAULK_BUCKET);
+		simpleItem(MSItems.MOLTEN_AMBER_BUCKET);
 		
 		
 		//Alchemy Items
@@ -606,71 +634,90 @@ public class MinestuckItemModelProvider extends ItemModelProvider
 		simpleItem(MSItems.CASSETTE_OTHERSIDE, "cassette/cassette_otherside");
 		simpleItem(MSItems.CASSETTE_5, "cassette/cassette_5");
 		
+		//Spawn Eggs
+		simpleItem(MSItems.IMP_SPAWN_EGG);
+		simpleItem(MSItems.OGRE_SPAWN_EGG);
+		simpleItem(MSItems.BASILISK_SPAWN_EGG);
+		simpleItem(MSItems.LICH_SPAWN_EGG);
+		simpleItem(MSItems.SALAMANDER_SPAWN_EGG);
+		simpleItem(MSItems.TURTLE_SPAWN_EGG);
+		simpleItem(MSItems.NAKAGATOR_SPAWN_EGG);
+		simpleItem(MSItems.IGUANA_SPAWN_EGG);
+		simpleItem(MSItems.DERSITE_PAWN_SPAWN_EGG);
+		simpleItem(MSItems.DERSITE_BISHOP_SPAWN_EGG);
+		simpleItem(MSItems.DERSITE_ROOK_SPAWN_EGG);
+		simpleItem(MSItems.PROSPITIAN_PAWN_SPAWN_EGG);
+		simpleItem(MSItems.PROSPITIAN_BISHOP_SPAWN_EGG);
+		simpleItem(MSItems.PROSPITIAN_ROOK_SPAWN_EGG);
 	}
 	
-	private ItemModelBuilder simpleItem(RegistryObject<? extends Item> item)
+	ItemModelBuilder simpleItem(Supplier<? extends Item> item)
 	{
-		return simpleItem(item, item.getId().getPath());
+		return simpleItem(item, id(item).getPath());
 	}
 	
-	private ItemModelBuilder simpleItem(RegistryObject<? extends Item> item, String textureName)
+	private ItemModelBuilder simpleItem(Supplier<? extends Item> item, String textureName)
 	{
-		return withExistingParent(item.getId().getPath(),
-				new ResourceLocation("item/generated"))
+		return withExistingParent(id(item).getPath(),
+				ResourceLocation.withDefaultNamespace("item/generated"))
 				.texture("layer0", texture(textureName));
 	}
 	
-	private ItemModelBuilder handheldItem(RegistryObject<? extends Item> item)
+	private ItemModelBuilder handheldItem(Supplier<? extends Item> item)
 	{
-		return handheldItem(item, item.getId().getPath());
+		return handheldItem(item, id(item).getPath());
 	}
 	
-	private ItemModelBuilder handheldItem(RegistryObject<? extends Item> item, String textureName)
+	private ItemModelBuilder handheldItem(Supplier<? extends Item> item, String textureName)
 	{
-		return withExistingParent(item.getId().getPath(),
-				new ResourceLocation("item/handheld"))
+		return withExistingParent(id(item).getPath(),
+				ResourceLocation.withDefaultNamespace("item/handheld"))
 				.texture("layer0", texture(textureName));
 	}
 	
 	/**
 	 * Generates a model that in third person places the weapon flat on top of the hand.
 	 */
-	private ItemModelBuilder clawWeapon(RegistryObject<? extends Item> item)
+	private ItemModelBuilder clawWeapon(Supplier<? extends Item> item)
 	{
-		return withExistingParent(item.getId().getPath(),
+		String name = id(item).getPath();
+		return withExistingParent(name,
 				id("item/claw_weapon"))
-				.texture("layer0", texture(item.getId().getPath()));
+				.texture("layer0", texture(name));
 	}
 	
 	/**
 	 * Generates a model positioned for weapons with the handle in the top right corner of the texture.
 	 */
-	private ItemModelBuilder knifeWeapon(RegistryObject<? extends Item> item)
+	private ItemModelBuilder knifeWeapon(Supplier<? extends Item> item)
 	{
-		return withExistingParent(item.getId().getPath(),
+		String name = id(item).getPath();
+		return withExistingParent(name,
 				id("item/knife_weapon"))
-				.texture("layer0", texture(item.getId().getPath()));
+				.texture("layer0", texture(name));
 	}
 	
 	/**
 	 * Generated a model that is larger than other weapons when in hand.
 	 * This variant moves the weapon forward a little bit, suitable for weapons with a short handle or otherwise should be held closer to the bottom left corner.
 	 */
-	private ItemModelBuilder largeLongWeapon(RegistryObject<? extends Item> item)
+	private ItemModelBuilder largeLongWeapon(Supplier<? extends Item> item)
 	{
-		return withExistingParent(item.getId().getPath(),
+		String name = id(item).getPath();
+		return withExistingParent(name,
 				id("item/large_long_weapon"))
-				.texture("layer0", texture(item.getId().getPath()));
+				.texture("layer0", texture(name));
 	}
 	
 	/**
 	 * Generated a model that is larger than other weapons when in hand.
 	 */
-	private ItemModelBuilder largeWeapon(RegistryObject<? extends Item> item)
+	private ItemModelBuilder largeWeapon(Supplier<? extends Item> item)
 	{
-		return withExistingParent(item.getId().getPath(),
+		String name = id(item).getPath();
+		return withExistingParent(name,
 				id("item/large_weapon"))
-				.texture("layer0", texture(item.getId().getPath()));
+				.texture("layer0", texture(name));
 	}
 	
 	private static ResourceLocation texture(String path)
@@ -680,6 +727,11 @@ public class MinestuckItemModelProvider extends ItemModelProvider
 	
 	private static ResourceLocation id(String path)
 	{
-		return new ResourceLocation(Minestuck.MOD_ID, path);
+		return ResourceLocation.fromNamespaceAndPath(Minestuck.MOD_ID, path);
+	}
+	
+	private static ResourceLocation id(Supplier<? extends Item> item)
+	{
+		return BuiltInRegistries.ITEM.getKey(item.get());
 	}
 }

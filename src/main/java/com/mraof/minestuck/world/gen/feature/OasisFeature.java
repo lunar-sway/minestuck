@@ -100,7 +100,7 @@ public class OasisFeature extends Feature<NoneFeatureConfiguration>
 					BlockPos surfacePos = level.getHeightmapPos(Heightmap.Types.WORLD_SURFACE, pos.offset(x - 8, 0, z - 8));
 					setBlock(level, surfacePos.below(), Blocks.GRASS_BLOCK.defaultBlockState());
 					if (rand.nextInt(5) == 0)
-						setBlock(level, surfacePos, Blocks.GRASS.defaultBlockState());
+						setBlock(level, surfacePos, Blocks.SHORT_GRASS.defaultBlockState());
 					if (hasBlock1(blocks, x, 3, z, true))
 					{
 						blockCount++;

@@ -1,16 +1,21 @@
 package com.mraof.minestuck.api.alchemy;
 
 import com.google.common.collect.ImmutableMap;
-import net.minecraft.network.FriendlyByteBuf;
+import com.mojang.serialization.Codec;
+import net.minecraft.network.RegistryFriendlyByteBuf;
 import net.minecraft.network.chat.Component;
+import net.minecraft.network.codec.ByteBufCodecs;
+import net.minecraft.network.codec.StreamCodec;
 
-import java.util.*;
+import java.util.Collections;
+import java.util.List;
+import java.util.Map;
 
 /**
  * An interface for anything that might contain grist.
  * There are several different implementations of this interface with different properties.
  * <p>
- * If you want to limit yourself to a set that doesn't change after creation, check out {@link ImmutableGristSet}.
+ * If you want to limit yourself to a set that doesn't change after creation, check out {@link GristSet.Immutable}.
  * You can create an immutable grist set using {@link GristSet#of(GristAmount...)},
  * or you can create an instance of {@link DefaultImmutableGristSet} directly.
  * You can convert any grist set into an immutable grist set using {@link GristSet#asImmutable()}.
@@ -41,7 +46,7 @@ public interface GristSet
 	
 	default boolean equalContent(GristSet other)
 	{
-		for(GristType type : GristTypes.values())
+		for(GristType type : GristTypes.REGISTRY)
 			if(this.getGrist(type) != other.getGrist(type))
 				return false;
 		return true;
@@ -63,7 +68,7 @@ public interface GristSet
 	 */
 	Map<GristType, Long> asMap();
 	
-	ImmutableGristSet asImmutable();
+	GristSet.Immutable asImmutable();
 	
 	default MutableGristSet mutableCopy()
 	{
@@ -89,9 +94,9 @@ public interface GristSet
 		else return Component.empty();
 	}
 	
-	ImmutableGristSet EMPTY = Collections::emptyMap;
+	GristSet.Immutable EMPTY = Collections::emptyMap;
 	
-	static ImmutableGristSet of(GristAmount... amounts)
+	static GristSet.Immutable of(GristAmount... amounts)
 	{
 		if(amounts.length == 0)
 			return GristSet.EMPTY;
@@ -104,20 +109,38 @@ public interface GristSet
 		return new DefaultImmutableGristSet(builder);
 	}
 	
-	static void write(GristSet gristSet, FriendlyByteBuf buffer)
+	/**
+	 * A version of {@link GristSet}, but with the extra guarantee that this set cannot be changed.
+	 * Suitable for things like recipes, where the set should not be allowed to change after the recipe was loaded.
+	 * Can be obtained from any grist set by calling {@link GristSet#asImmutable()}.
+	 */
+	interface Immutable extends GristSet
 	{
-		Collection<GristAmount> amounts = gristSet.asAmounts();
-		buffer.writeInt(amounts.size());
-		amounts.forEach(gristAmount -> gristAmount.write(buffer));
+		@Override
+		default Immutable asImmutable()
+		{
+			return this;
+		}
 	}
 	
-	static ImmutableGristSet read(FriendlyByteBuf buffer)
+	/**
+	 * Container for different codecs for grist sets.
+	 * Codecs are not placed directly in the grist set class to avoid cyclic class loading between grist set and grist amount.
+	 */
+	final class Codecs
 	{
-		int size = buffer.readInt();
-		List<GristAmount> list = new ArrayList<>(size);
-		for(int i = 0; i < size; i++)
-			list.add(GristAmount.read(buffer));
+		public static final Codec<GristSet.Immutable> NON_NEGATIVE_CODEC = GristAmount.NON_NEGATIVE_LIST_CODEC.xmap(DefaultImmutableGristSet::create, GristSet::asAmounts);
+		/**
+		 * Codec for serializing a grist set in a map format. Currently used for json serialization.
+		 * Perhaps we should prefer this format for nbt-serialization as well? Something worth considering for the future.
+		 */
+		public static final Codec<GristSet.Immutable> MAP_CODEC = Codec.unboundedMap(GristTypes.REGISTRY.byNameCodec(), Codec.LONG).xmap(DefaultImmutableGristSet::new, GristSet::asMap);
+		public static final Codec<GristSet.Immutable> LIST_CODEC = GristAmount.LIST_CODEC.xmap(DefaultImmutableGristSet::create, GristSet::asAmounts);
 		
-		return DefaultImmutableGristSet.create(list);
+		public static final StreamCodec<RegistryFriendlyByteBuf, GristSet.Immutable> STREAM_CODEC = StreamCodec.composite(
+				GristAmount.STREAM_CODEC.apply(ByteBufCodecs.list()),
+				GristSet::asAmounts,
+				DefaultImmutableGristSet::create
+		);
 	}
 }

@@ -1,11 +1,11 @@
 package com.mraof.minestuck.block;
 
+import com.mojang.serialization.MapCodec;
 import com.mraof.minestuck.util.MSTags;
 import net.minecraft.core.BlockPos;
 import net.minecraft.core.Direction;
 import net.minecraft.sounds.SoundEvents;
 import net.minecraft.sounds.SoundSource;
-import net.minecraft.world.InteractionHand;
 import net.minecraft.world.InteractionResult;
 import net.minecraft.world.entity.item.FallingBlockEntity;
 import net.minecraft.world.entity.player.Player;
@@ -15,10 +15,13 @@ import net.minecraft.world.level.block.FallingBlock;
 import net.minecraft.world.level.block.state.BlockState;
 import net.minecraft.world.phys.BlockHitResult;
 
+import javax.annotation.ParametersAreNonnullByDefault;
+
 /**
  * Can be right clicked on one of its horizontal faces in order to push it in that direction, it will only destroy replaceables in its path.
  * It can be affected by gravity and can be lifted upwards by an item magnet
  */
+@ParametersAreNonnullByDefault
 public class PushableBlock extends FallingBlock
 {
 	public final Maneuverability maneuverability;
@@ -37,8 +40,13 @@ public class PushableBlock extends FallingBlock
 	}
 	
 	@Override
-	@SuppressWarnings("deprecation")
-	public InteractionResult use(BlockState state, Level level, BlockPos pos, Player player, InteractionHand hand, BlockHitResult hit)
+	protected MapCodec<PushableBlock> codec()
+	{
+		return null; //todo
+	}
+	
+	@Override
+	protected InteractionResult useWithoutItem(BlockState state, Level level, BlockPos pos, Player player, BlockHitResult hit)
 	{
 		boolean willPush = ((!player.isShiftKeyDown() && maneuverability == Maneuverability.PUSH_AND_PULL) || maneuverability == Maneuverability.PUSH)||
 				!((player.isShiftKeyDown() && maneuverability == Maneuverability.PUSH_AND_PULL) || maneuverability == Maneuverability.PULL);

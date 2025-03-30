@@ -1,0 +1,32 @@
+{
+  "parent": "minecraft:recipes/root",
+  "criteria": {
+    "has_generic_object": {
+      "conditions": {
+        "items": [
+          {
+            "items": "minestuck:generic_object"
+          }
+        ]
+      },
+      "trigger": "minecraft:inventory_changed"
+    },
+    "has_the_recipe": {
+      "conditions": {
+        "recipe": "minestuck:perfectly_generic_trapdoor"
+      },
+      "trigger": "minecraft:recipe_unlocked"
+    }
+  },
+  "requirements": [
+    [
+      "has_the_recipe",
+      "has_generic_object"
+    ]
+  ],
+  "rewards": {
+    "recipes": [
+      "minestuck:perfectly_generic_trapdoor"
+    ]
+  }
+}

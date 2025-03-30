@@ -1,0 +1,8 @@
+{
+  "node": {
+    "animation": {},
+    "gui": "minestuck:textures/gui/dialogue/dialogue.png",
+    "message": "minestuck.dialogue.consort.oil_buckets.2",
+    "responses": []
+  }
+}

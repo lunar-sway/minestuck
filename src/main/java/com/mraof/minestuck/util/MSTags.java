@@ -4,26 +4,29 @@ import com.mraof.minestuck.Minestuck;
 import com.mraof.minestuck.world.lands.LandTypes;
 import com.mraof.minestuck.world.lands.terrain.TerrainLandType;
 import com.mraof.minestuck.world.lands.title.TitleLandType;
+import net.minecraft.core.Holder;
+import net.minecraft.core.HolderSet;
+import net.minecraft.core.registries.BuiltInRegistries;
 import net.minecraft.core.registries.Registries;
-import net.minecraft.resources.ResourceLocation;
 import net.minecraft.tags.BlockTags;
 import net.minecraft.tags.FluidTags;
 import net.minecraft.tags.ItemTags;
 import net.minecraft.tags.TagKey;
+import net.minecraft.world.effect.MobEffect;
 import net.minecraft.world.entity.EntityType;
+import net.minecraft.world.entity.decoration.PaintingVariant;
 import net.minecraft.world.item.Item;
 import net.minecraft.world.item.ItemStack;
 import net.minecraft.world.level.biome.Biome;
 import net.minecraft.world.level.block.Block;
 import net.minecraft.world.level.levelgen.structure.Structure;
 import net.minecraft.world.level.material.Fluid;
-import net.minecraftforge.registries.ForgeRegistries;
 
 import java.util.List;
-import java.util.Objects;
 import java.util.Set;
 import java.util.stream.Collectors;
 
+@SuppressWarnings("SameParameterValue")
 public class MSTags
 {
 	public static class Blocks
@@ -38,15 +41,22 @@ public class MSTags
 		public static final TagKey<Block> VINE_LOGS = tag("logs/vine");
 		public static final TagKey<Block> FLOWERY_VINE_LOGS = tag("logs/flowery_vine");
 		public static final TagKey<Block> DEAD_LOGS = tag("logs/dead");
+		public static final TagKey<Block> CINDERED_LOGS = tag("logs/cindered");
 		public static final TagKey<Block> PETRIFIED_LOGS = tag("logs/petrified");
 		public static final TagKey<Block> ASPECT_LOGS = tag("logs/aspect");
+		public static final TagKey<Block> ASPECT_WOOD = tag("wood/aspect");
 		public static final TagKey<Block> ASPECT_PLANKS = tag("planks/aspect");
+		public static final TagKey<Block> ASPECT_SLABS = tag("slabs/aspect");
 		public static final TagKey<Block> ASPECT_LEAVES = tag("leaves/aspect");
 		public static final TagKey<Block> ASPECT_SAPLINGS = tag("saplings/aspect");
 		public static final TagKey<Block> ASPECT_BOOKSHELVES = tag("bookshelves/aspect");
 		public static final TagKey<Block> ASPECT_LADDERS = tag("ladders/aspect");
+		public static final TagKey<Block> ASPECT_POTTED_SAPLINGS = tag("flower_pots/aspect");
 		public static final TagKey<Block> SHADEWOOD_LOGS = tag("logs/shadewood");
 		public static final TagKey<Block> SHADEWOOD_LEAVES = tag("leaves/shadewood");
+		public static final TagKey<Block> WOOD_TERRAIN_BLOCKS = tag("terrain/wood_terrain_blocks");
+		public static final TagKey<Block> HEAT_TERRAIN_BLOCKS = tag("terrain/heat_terrain_blocks");
+		public static final TagKey<Block> ASPECT_TREE_PLACEABLE = tag("terrain/aspect_tree_placeable");
 		public static final TagKey<Block> CRUXITE_ORES = tag("ores/cruxite");
 		public static final TagKey<Block> URANIUM_ORES = tag("ores/uranium");
 		public static final TagKey<Block> COAL_ORES = tag("ores/coal");
@@ -56,6 +66,7 @@ public class MSTags
 		public static final TagKey<Block> QUARTZ_ORES = tag("ores/quartz");
 		public static final TagKey<Block> LAPIS_ORES = tag("ores/lapis");
 		public static final TagKey<Block> DIAMOND_ORES = tag("ores/diamond");
+		public static final TagKey<Block> EMERALD_ORES = tag("ores/emerald");
 		public static final TagKey<Block> CRUXITE_STORAGE_BLOCKS = tag("storage_blocks/cruxite");
 		public static final TagKey<Block> END_SAPLING_DIRT = tag("end_sapling_dirt");
 		public static final TagKey<Block> ROTATOR_WHITELISTED = tag("rule_exempt_rotatable");
@@ -64,9 +75,46 @@ public class MSTags
 		public static final TagKey<Block> PETRIFIED_FLORA_PLACEABLE = tag("petrified_flora_placeable");
 		public static final TagKey<Block> EDITMODE_BREAK_BLACKLIST = tag("editmode_break_blacklist");
 		
+		public static final TagKey<Block> MINEABLE_WITH_SICKLE = tag("mineable_with_sickle");
+		public static final TagKey<Block> MINEABLE_WITH_SCYTHE = tag("mineable_with_scythe");
+		public static final TagKey<Block> MINEABLE_WITH_CLAWS = tag("mineable_with_claws");
+		public static final TagKey<Block> MINEABLE_WITH_HAMMER = tag("mineable_with_hammer");
+		public static final TagKey<Block> MINEABLE_WITH_CHAINSAW = tag("mineable_with_chainsaw");
+		public static final TagKey<Block> MINEABLE_WITH_LANCE = tag("mineable_with_lance");
+		public static final TagKey<Block> MINEABLE_WITH_CLUB = tag("mineable_with_club");
+		public static final TagKey<Block> MINEABLE_WITH_KNIFE = tag("mineable_with_knife");
+		public static final TagKey<Block> MINEABLE_WITH_KEY = tag("mineable_with_key");
+		public static final TagKey<Block> MINEABLE_WITH_FAN = tag("mineable_with_fan");
+		public static final TagKey<Block> MINEABLE_WITH_BATON = tag("mineable_with_baton");
+		public static final TagKey<Block> MINEABLE_WITH_STAFF = tag("mineable_with_staff");
+		public static final TagKey<Block> MINEABLE_WITH_CANE = tag("mineable_with_cane");
+		public static final TagKey<Block> MINEABLE_WITH_FORK = tag("mineable_with_fork");
+		public static final TagKey<Block> MINEABLE_WITH_SPOON = tag("mineable_with_spoon");
+		public static final TagKey<Block> MINEABLE_WITH_WAND = tag("mineable_with_wand");
+		
+		public static final TagKey<Block> INCORRECT_FOR_SBAHJ_TOOL = tag("incorrect_for_sbahj_tool");
+		public static final TagKey<Block> INCORRECT_FOR_PAPER_TOOL = tag("incorrect_for_paper_tool");
+		public static final TagKey<Block> INCORRECT_FOR_ORGANIC_TOOL = tag("incorrect_for_organic_tool");
+		public static final TagKey<Block> INCORRECT_FOR_MEAT_TOOL = tag("incorrect_for_meat_tool");
+		public static final TagKey<Block> INCORRECT_FOR_CANDY_TOOL = tag("incorrect_for_candy_tool");
+		public static final TagKey<Block> INCORRECT_FOR_BOOK_TOOL = tag("incorrect_for_book_tool");
+		public static final TagKey<Block> INCORRECT_FOR_CACTUS_TOOL = tag("incorrect_for_cactus_tool");
+		public static final TagKey<Block> INCORRECT_FOR_ICE_TOOL = tag("incorrect_for_ice_tool");
+		public static final TagKey<Block> INCORRECT_FOR_POGO_TOOL = tag("incorrect_for_pogo_tool");
+		public static final TagKey<Block> INCORRECT_FOR_EMERALD_TOOL = tag("incorrect_for_emerald_tool");
+		public static final TagKey<Block> INCORRECT_FOR_PRISMARINE_TOOL = tag("incorrect_for_prismarine_tool");
+		public static final TagKey<Block> INCORRECT_FOR_CORUNDUM_TOOL = tag("incorrect_for_corundum_tool");
+		public static final TagKey<Block> INCORRECT_FOR_REGI_TOOL = tag("incorrect_for_regi_tool");
+		public static final TagKey<Block> INCORRECT_FOR_HORRORTERROR_TOOL = tag("incorrect_for_horrorterror_tool");
+		public static final TagKey<Block> INCORRECT_FOR_URANIUM_TOOL = tag("incorrect_for_uranium_tool");
+		public static final TagKey<Block> INCORRECT_FOR_BATTERY_TOOL = tag("incorrect_for_battery_tool");
+		public static final TagKey<Block> INCORRECT_FOR_DENIZEN_TOOL = tag("incorrect_for_denizen_tool");
+		public static final TagKey<Block> INCORRECT_FOR_ZILLY_TOOL = tag("incorrect_for_zilly_tool");
+		public static final TagKey<Block> INCORRECT_FOR_WELSH_TOOL = tag("incorrect_for_welsh_tool");
+		
 		private static TagKey<Block> tag(String name)
 		{
-			return BlockTags.create(new ResourceLocation(Minestuck.MOD_ID, name));
+			return BlockTags.create(Minestuck.id(name));
 		}
 	}
 	
@@ -79,9 +127,12 @@ public class MSTags
 		public static final TagKey<Item> VINE_LOGS = tag("logs/vine");
 		public static final TagKey<Item> FLOWERY_VINE_LOGS = tag("logs/flowery_vine");
 		public static final TagKey<Item> DEAD_LOGS = tag("logs/dead");
+		public static final TagKey<Item> CINDERED_LOGS = tag("logs/cindered");
 		public static final TagKey<Item> PETRIFIED_LOGS = tag("logs/petrified");
 		public static final TagKey<Item> ASPECT_LOGS = tag("logs/aspect");
+		public static final TagKey<Item> ASPECT_WOOD = tag("wood/aspect");
 		public static final TagKey<Item> ASPECT_PLANKS = tag("planks/aspect");
+		public static final TagKey<Item> ASPECT_SLABS = tag("slabs/aspect");
 		public static final TagKey<Item> ASPECT_LEAVES = tag("leaves/aspect");
 		public static final TagKey<Item> ASPECT_SAPLINGS = tag("saplings/aspect");
 		public static final TagKey<Item> SHADEWOOD_LOGS = tag("logs/shadewood");
@@ -95,6 +146,7 @@ public class MSTags
 		public static final TagKey<Item> QUARTZ_ORES = tag("ores/quartz");
 		public static final TagKey<Item> LAPIS_ORES = tag("ores/lapis");
 		public static final TagKey<Item> DIAMOND_ORES = tag("ores/diamond");
+		public static final TagKey<Item> EMERALD_ORES = tag("ores/emerald");
 		public static final TagKey<Item> CRUXITE_STORAGE_BLOCKS = tag("storage_blocks/cruxite");
 		public static final TagKey<Item> GRIST_CANDY = tag("grist_candy");
 		public static final TagKey<Item> FAYGO = tag("faygo");
@@ -102,12 +154,14 @@ public class MSTags
 		public static final TagKey<Item> CASSETTES = tag("cassettes");
 		public static final TagKey<Item> BUGS = tag("bugs");
 		public static final TagKey<Item> CONSORT_SNACKS = tag("consort_snacks");
+		public static final TagKey<Item> MAGIC_WEAPON = tag("magic_weapon");
 		public static final TagKey<Item> CREATIVE_SHOCK_RIGHT_CLICK_LIMIT = tag("creative_shock_right_click_limit");
 		public static final TagKey<Item> UNREADABLE = tag("unreadable");
+		public static final TagKey<Item> LEGENDARY = tag("legendary");
 
 		private static TagKey<Item> tag(String name)
 		{
-			return ItemTags.create(new ResourceLocation(Minestuck.MOD_ID, name));
+			return ItemTags.create(Minestuck.id(name));
 		}
 	}
 	
@@ -119,10 +173,11 @@ public class MSTags
 		public static final TagKey<Fluid> WATER_COLORS = tag("water_colors");
 		public static final TagKey<Fluid> ENDER = tag("ender");
 		public static final TagKey<Fluid> LIGHT_WATER = tag("light_water");
+		public static final TagKey<Fluid> CAULK = tag("caulk");
 		
 		private static TagKey<Fluid> tag(String name)
 		{
-			return FluidTags.create(new ResourceLocation(Minestuck.MOD_ID, name));
+			return FluidTags.create(Minestuck.id(name));
 		}
 	}
 	
@@ -142,7 +197,17 @@ public class MSTags
 		
 		private static TagKey<EntityType<?>> tag(String name)
 		{
-			return TagKey.create(Registries.ENTITY_TYPE, new ResourceLocation(Minestuck.MOD_ID, name));
+			return TagKey.create(Registries.ENTITY_TYPE, Minestuck.id(name));
+		}
+	}
+	
+	public static class Effects
+	{
+		public static final TagKey<MobEffect> SOPOR_SICKNESS_WHITELIST = tag("sopor_sickness_whitelist");
+		
+		private static TagKey<MobEffect> tag(String name)
+		{
+			return TagKey.create(Registries.MOB_EFFECT, Minestuck.id(name));
 		}
 	}
 	
@@ -167,7 +232,7 @@ public class MSTags
 		
 		private static TagKey<Biome> tag(String name)
 		{
-			return TagKey.create(Registries.BIOME, new ResourceLocation(Minestuck.MOD_ID, name));
+			return TagKey.create(Registries.BIOME, Minestuck.id(name));
 		}
 	}
 	
@@ -177,7 +242,7 @@ public class MSTags
 		
 		private static TagKey<Structure> tag(String name)
 		{
-			return TagKey.create(Registries.STRUCTURE, new ResourceLocation(Minestuck.MOD_ID, name));
+			return TagKey.create(Registries.STRUCTURE, Minestuck.id(name));
 		}
 	}
 	
@@ -187,31 +252,44 @@ public class MSTags
 		public static final TagKey<TerrainLandType> ROCK = tag("rock");
 		public static final TagKey<TerrainLandType> SAND = tag("sand");
 		public static final TagKey<TerrainLandType> SANDSTONE = tag("sandstone");
+		public static final TagKey<TerrainLandType> IS_DESOLATE = tag("is_desolate");
+		public static final TagKey<TerrainLandType> IS_DANGEROUS = tag("is_dangerous");
+		public static final TagKey<TerrainLandType> IS_FLUID_IMPORTANT = tag("is_fluid_important");
 		
 		private static TagKey<TerrainLandType> tag(String name)
 		{
-			return TagKey.create(LandTypes.TERRAIN_KEY, new ResourceLocation(Minestuck.MOD_ID, name));
+			return TagKey.create(LandTypes.TERRAIN_KEY, Minestuck.id(name));
 		}
 	}
 	
+	public static class PaintingVariants
+	{
+		public static final TagKey<PaintingVariant> SBAHJ_POSTERS = tag("sbahj_posters");
+		public static final TagKey<PaintingVariant> MIDNIGHT_CREW_POSTERS = tag("midnight_crew_posters");
+		public static final TagKey<PaintingVariant> SHOP_POSTERS = tag("shop_posters");
+		
+		private static TagKey<PaintingVariant> tag(String name)
+		{
+			return TagKey.create(Registries.PAINTING_VARIANT, Minestuck.id(name));
+		}
+	}
 	
 	public static class TitleLandTypes
 	{
 		public static final TagKey<TitleLandType> MONSTERS = tag("monsters");
-		
-		private static TagKey<TitleLandType> tag(@SuppressWarnings("SameParameterValue") String name)
+		private static TagKey<TitleLandType> tag(String name)
 		{
-			return TagKey.create(LandTypes.TITLE_KEY, new ResourceLocation(Minestuck.MOD_ID, name));
+			return TagKey.create(LandTypes.TITLE_KEY, Minestuck.id(name));
 		}
 	}
 	
 	public static Set<Block> getBlocksFromTag(TagKey<Block> blockTag)
 	{
-		return Objects.requireNonNull(ForgeRegistries.BLOCKS.tags()).getTag(blockTag).stream().collect(Collectors.toSet());
+		return BuiltInRegistries.BLOCK.getTag(blockTag).stream().flatMap(HolderSet.ListBacked::stream).map(Holder::value).collect(Collectors.toSet());
 	}
 	
 	public static List<ItemStack> getItemStacksFromTag(TagKey<Item> itemTag)
 	{
-		return ForgeRegistries.ITEMS.tags().getTag(itemTag).stream().map(ItemStack::new).toList();
+		return BuiltInRegistries.ITEM.getTag(itemTag).stream().flatMap(HolderSet.ListBacked::stream).map(ItemStack::new).toList();
 	}
 }

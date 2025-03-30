@@ -5,12 +5,11 @@ import com.mojang.brigadier.builder.ArgumentBuilder;
 import com.mojang.brigadier.exceptions.CommandSyntaxException;
 import com.mojang.brigadier.exceptions.SimpleCommandExceptionType;
 import com.mraof.minestuck.alchemy.GristGutter;
-import com.mraof.minestuck.player.IdentifierHandler;
-import com.mraof.minestuck.skaianet.Session;
-import com.mraof.minestuck.skaianet.SessionHandler;
 import net.minecraft.commands.CommandSourceStack;
 import net.minecraft.network.chat.Component;
 import net.minecraft.server.level.ServerPlayer;
+
+import java.util.Optional;
 
 import static net.minecraft.commands.Commands.LEVEL_GAMEMASTERS;
 import static net.minecraft.commands.Commands.literal;
@@ -19,6 +18,7 @@ import static net.minecraft.commands.Commands.literal;
 //TODO how about a player argument to be able to pick which session to target
 public class GutterCommand
 {
+	public static final String SHOW = "commands.minestuck.gutter.show";
 	public static final SimpleCommandExceptionType NO_SESSION_EXCEPTION = new SimpleCommandExceptionType(Component.literal("Cannot find gutter because you are not in a session."));
 	
 	public static void register(CommandDispatcher<CommandSourceStack> dispatcher)
@@ -35,15 +35,15 @@ public class GutterCommand
 	{
 		ServerPlayer player = source.getPlayerOrException();
 		
-		Session session = SessionHandler.get(player.server).getPlayerSession(IdentifierHandler.encode(player));
-		if(session == null)
+		Optional<GristGutter> optionalGutter = GristGutter.get(player);
+		if(optionalGutter.isEmpty())
 			throw NO_SESSION_EXCEPTION.create();
+		GristGutter gutter = optionalGutter.get();
 		
-		GristGutter gutter = session.getGristGutter();
 		double multiplier = gutter.gutterMultiplierForSession();
 		long capacity = gutter.getRemainingCapacity();
 		Component gutterContentText = gutter.getCache().asTextComponent();
-		source.sendSuccess(() -> Component.literal("Gutter modifier: %s, remaining capacity: %s, grist contained: %s".formatted(multiplier, capacity, gutterContentText)), false);
+		source.sendSuccess(() -> Component.translatable(SHOW, multiplier, capacity, gutterContentText), true);
 		
 		return 1;
 	}

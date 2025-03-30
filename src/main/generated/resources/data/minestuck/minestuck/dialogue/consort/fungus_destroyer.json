@@ -1,0 +1,14 @@
+{
+  "node": {
+    "animation": {},
+    "gui": "minestuck:textures/gui/dialogue/dialogue.png",
+    "message": {
+      "arguments": [
+        "land_title",
+        "land_denizen"
+      ],
+      "key": "minestuck.dialogue.consort.fungus_destroyer"
+    },
+    "responses": []
+  }
+}

@@ -1,0 +1,9 @@
+{
+  "condition": {
+    "type": "minestuck:terrain_land_type",
+    "land_type": "minestuck:heat"
+  },
+  "dialogue": "minestuck:consort/tummy_tunnel",
+  "dialogue_weight": 10,
+  "keep_on_reset": false
+}

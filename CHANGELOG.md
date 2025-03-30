@@ -4,7 +4,251 @@ All notable changes to this project will be documented in this file.
 
 The format is based on [Keep a Changelog](https://keepachangelog.com/en/1.1.0/).
 
-## [Unreleased]
+## [Unreleased 1.21]
+
+- Updated to run with Minecraft 1.21 / Neoforge 21.0
+
+### Added
+
+- New consort dialogue
+- New carapacian dialogue
+- Message when entering edit mode to remind players of the exit keybind
+- Added 2 tracks october and endless chasm by triagegremlin
+- Added 2 tracks the note desolation plays and desolate strife by Caldw3ll
+
+### Changed
+
+- Knitting needle crafting recipe now produces one item instead of two
+
+### Fixed
+
+- Wall Signs now mineable with axe
+- Non-color data will now be preserved on dowels going through a totem lathe
+- Item stack data will now be preserved on disks inserted into a computer
+- Fix disk insertion and computer screen for computer easter egg
+- Carved totems in alchemiter model now have correct uv mapping
+
+### Contributors for this release
+
+- Cibernet, Dweblenod, kirderf1, glubtier, blankMushroom, hadean, ThalliumSulfate, triagegremlin, Caldw3ll
+
+## [1.20.4-1.12.2.1] - 2025-03-16
+
+### Fixed
+
+- Shade stone no longer has texture of shade stone cruxite ore
+- Carved totems in alchemiter model now have correct uv mapping
+- Removed collision from buttons
+- Fixed many blocks not having a correct tool
+- Color selection button is available in the SBURB Client program before connection again instead of after
+- Fixed untranslated key when using /gutter show command
+- Fixed widget rendering in Color Selection screen
+
+### Contributors for this release
+
+- Dweblenod, blankMushroom, kirderf1
+
+## [1.20.4-1.12.2.0] - 2024-10-06
+
+- Updated to run with Minecraft 1.20.4 / Neoforge 20.4
+
+### Added
+
+- Block Teleporter
+- Built in compatability for Better Combat mod
+- Cindered ladder and bookshelf
+- Shadewood ladder and bookshelf
+- Parrots will mimic imps, ogres, basilisks, and liches
+
+### Changed
+
+- Gave Underlings and Carapacian Pawns the Attack Speed attribute. This influences how fast their attack animations play
+- Underlings, Carapacian Pawns, and Consorts now adjust their walk animation speed according to their Movement Speed attribute
+- Structure Block Registry Processor can now be used for data generated structures through a processor_list
+- Adjusted the hitbox size for Lotus Flowers
+- The Lotus Time Capsule now spawns a Lotus Flower when placed
+- Lotus Time Capsule blocks now remove any Lotus Flowers above them when destroyed
+- Many organic blocks are now compostable
+- Many wood-based blocks can now be used as fuel
+- Cruxite ore textures tweaked
+- Localized potion name for the status message that appears when right-clicking an Area Effect Block with a potion
+- Localized entity type for the status message that appears when right-clicking a Summoner Block with a Spawn Egg
+
+### Fixed
+
+- The Umbral Infiltrator no longer jitters when thrown by a void player
+- Manually-spawned Lotus Flowers can no longer be hurt or killed by any damage source
+- Lotus Flowers no longer push entities inside of them away
+- Ogres and Basilisks no longer slide around when idling
+- Cruxite button now uses raw cruxite instead of cruxite block, which resolves a conflict with storage block breakdown
+- Bookshelves for terrain woods can now be crafted, resolving a conflict with the vanilla bookshelf recipe
+- Fixed right-clicking on an Area Effect Block with a Potion not properly updating its settings
+- Fixed right-clicking on a Summoner Block with a Spawn Egg not properly updating its settings
+- Updated holopad collision shape
+- The block model for the holopad with card now renders with cutout
+
+### Contributors for this release
+
+- Dweblenod, sipherNil, gtzc, Cibernet, glubtier, rose_bushes_, kirderf1
+
+## [1.20.1-1.12.1.0] - 2024-09-08
+
+### Added
+
+- Predetermined captcha codes can now be set through a data file (`data/<namespace>/minestuck/captcha_codes.json`)
+
+### Changed
+
+- Silicone Caulk Bucket alchemy recipe was changed from Water Bucket && Quartz to Water Bucket && Amethyst Shard, to avoid conflict with Prismarine Shard alchemy recipe
+- Frost Trees will now drop saplings
+- Saplings are now pottable
+- Aspect slabs can now be used in crafting recipes
+- Uranium button now made with 1 raw uranium instead of 1 uranium block
+
+### Fixed
+
+- Fix player gutter multiplier, which wasn't being saved
+- Space sapling texture baseline lowered, space and frost sapling sides trimmed
+- Fixed crash involving null targets with animated attacks
+- Changed aspect-wood bookshelf recipes to match their book drop rate
+- Added missing pressure plates to tag
+- Activating the hashmap modus from chat now gives the correct message
+
+### Contributors for this release
+
+- Akisephila, kirderf1, glubtier, ThalliumSulfate, Dweblenod
+
+## [1.20.1-1.12.0.1] - 2024-04-15
+
+### Fixed
+
+- More logging for grist cost generator to help identify bottlenecks
+- Perfectly generic and cindered signs work again
+- Fixed execution permissions for the `minestuck:command` dialogue trigger
+- Add missing wood-related recipes
+
+### Contributors for this release
+
+- kirderf1, glubtier, Dweblenod
+
+## [1.20.1-1.12.0.0] - 2024-04-13
+
+### Added
+
+- Spawn egg items for main Underling types, Consorts, and Carapacians
+- Stairs, slabs, walls, fences, fence gates, doors, trapdoors, buttons, and pressure plates to land-specific blocks
+- Carved Logs, Carved Wooden Leaf, and Treated and Lacquered variants of Carved blocks
+- Tree Stump feature in Forest Lands
+- Frog Ruins feature in Frog Lands
+- Various Unfinished and Carved features in Wood Lands
+- Transportalizer codes can now be manually set instead of having one randomly assigned (can only be done once per transportalizer)
+- New NBT tag on transportalizers that allows them to be locked, permanently preventing the viewing or editing of its id or destination
+- Transportalizer NBT data will now be saved when mined, even without silk touch, and can be viewed on the item's tooltip
+- New advancements for Echeladder milestones, using an Intellibeam Laserstation, getting a max tier weapon, and buying every item from a consort merchant
+- New computer Themes: Astral Charts, Lifdoff, LOWAS, Minestuck, SBURB 10, Scourging Heat, Skaianet Black, Skaianet Green, Skaianet White, Spirograph, ~ATH
+- Carved Bush
+- Uncarved Wood Cruxite, Uranium, Iron, Redstone, and Emerald ores
+- Silicone Caulk fluid, used in Wood lands
+- Cindered woodset and Trees in Heat lands
+- Igneous Stone, Magmatic Igneous Stone, Pumice Stone, Singed Grass and Foliage, and Igneous Spike, that generate in Heat lands.
+- Sandy Grass, Dead Foliage, Tall Sandy Grass and Tall Dead Bush that generate in Sand lands.
+- Coffee Claws
+- TV Antenna
+- Molten Amber fluid, used in Heat lands
+- Cruxite block set
+- Black Stone Cruxite, Uranium, Gold, Redstone, and Quartz ores
+- Alchemy recipes for all Minestuck fluids
+- Magmatic Black Stone Bricks
+- Cast Iron Frame, Sheet, and Tile
+- Sulfur Pools and Cast Iron features in Heat Lands
+- Wooden Lamp and Heat Lamp blocks, used in Wood and Heat lands respectively
+- Chocolatey Cake - the most scrumptious cake in the entire world!
+- New dialogue system that uses a gui screen, replacing the chat-based system
+- Dialogue in this new system is data-driven, and can be defined or tweaked through datapacks
+- New dialogue
+- Carapacian pawns now have dialogue
+- New structure in rain lands
+- Signs and hanging signs for all wood types
+- Shade and glowing block sets updated
+- Doors and trapdoors added
+- All aspect block sets updated
+- Minor Aspect trees added
+
+### Changed
+
+- Minor changes to what is shown in the data checker
+- Duplicate titles are now allowed in the same session,
+  and consequently the session size limit has been removed
+- Pre-entry players no longer play a part in grist gutter capacity,
+  and they no longer receive grist from the gutter
+- Wooden Cactus is now only placeable on the Wood Terrain Blocks tag instead of Sand
+- Carved Planks are now the surface block of Wood Lands instead of Treated Planks
+- Carved Planks no longer need to be mined with a Stone Axe or better
+- Transportalizers now stack to one instead of 64
+- Prismarine armor remodel and retexture
+- Iron Lass Armor has now been remodeled, and retextured; with additional new animations.
+- Computer Themes can now be added and rendered via resource pack
+- Default computer Theme for crockertop is now Crocker
+- Computer Theme is now chosen from a list of available Themes in separate GUI
+- Changes to computer Theme texture Crocker
+- Computer programs now always use Theme specific texture for arrow buttons
+- Updated textures of Treated Planks, Chipboard, Wood Shavings, and Wooden Cactus by Vinnelli and Riotmode
+- Updated textures of Treated Bookshelf and Treated Ladder to fit updated Treated Planks
+- Oil Buckets no longer cost 8 Tar and 8 Shale, now cost 16 Shale
+- Renamed Oil to Shale Oil
+- Pumord is now alchemized with Pumice Stone instead of any regular Stone
+- Minor change to land terrain height
+- Black Sand now generates in Heat lands
+- Updated Textures of Cast Iron blocks
+- Steel Beams are now alchemized with Iron Blocks instead of Cast Iron Blocks
+- Existing consort dialogue have been ported to the new dialogue system with some tweaks
+- New format for the data file `grist_cost_generation_recipes.json`
+
+### Removed
+
+- Removed "skaianetCheck" config option
+- Uncarved Wood no longer has a tooltip
+
+### Fixed
+
+- Fixes some niche issues with connections
+- `/sburbpredefine` now gives an error when applied to a player that already has a land
+- Fixed missing data sync for land types after using `/debuglands`
+- Added command success message to `/debuglands`
+- Fixed player owner id not loading for mini alchemiter and grist widget
+- Double slabs will now drop two slabs when broken
+- Sneaking now prevents trajectory blocks from moving the player
+- Blue dirt can now have the shovel used on it
+- Minestuck fences will now connect with vanilla fences appropriately
+- All walls will now connect with each other properly
+- Fixed name typos for some chess castle blocks
+- Area effect blocks now save their effect as a string id instead of an int id
+- Improved grammar on some dialogues
+- Error handling when teleporting entities during entry
+
+### Contributors for this release
+
+- rose_bushes_, hadean, glubtier, ScarabOasis, Dweblenod, Boxfox, DORO, Akisephila, Vinnelli, Riotmode, pavizi, sipherNil, kirderf1
+
+## [1.20.1-1.11.2.1] - 2024-03-10
+
+### Fixed
+
+- Metal Boats no longer crash the game when dispensed
+- Block Pressure Plates no longer cycle power states endlessly when players are crouched on them
+- Fixed underling texture layer that on hurt wasn't tinted red with the rest of the underling
+- Fixed fall damage for minestuck fluids
+- Fluids no longer break gates and return nodes
+- Advanced color selection screen no longer tints buttons
+- Round the displayed max health value on the echeladder screen
+- Prevent one method of captchaloguing stacks with stack size larger than max stack size
+- Stopped editmode cursor from spinning
+
+### Contributors for this release
+
+- hadean, Dweblenod, kirderf1, glubtier
+
+## [1.20.1-1.11.2.0] - 2024-01-13
 
 ### Added
 
@@ -13,6 +257,21 @@ The format is based on [Keep a Changelog](https://keepachangelog.com/en/1.1.0/).
 - `/rung get` command, which output a player's echeladder rung
 - Pogo lance weapon
 - New consort dialogue
+- Sopor Stupor Effect
+- Sopor Slime Pie food item
+- Land type extensions for datapacks, which can be used to add worldgen features, carvers and mob spawn to lands
+- New editmode settings screen, which can be used to teleport between different areas where editmode can function
+- Behaviour for buckets and barbasol bombs when used in dispensers
+- Minestuck fluids now have sound effects in situations reminiscent of water
+- Light water now acts as a light source and has underwater fog appear closer
+- All Minestuck fluids besides ender fluid now support boats
+- All Minestuck fluids besides oil now extinguish on fire entities, entities touching oil while on fire extends fire duration
+- Brain juice now forms an infinite source, it also now cannot be drowned in
+- Blood and brain juice now hydrate crops
+- Minestuck fluids now have custom tick rates
+- Blood/brain juice/light water now have underwater particles
+- Minestuck fluids now have improved mod compatibility
+- The Iron Lass armor set has the ability to glide like an elytra and boost with the sneak key
 
 ### Changed
 
@@ -20,15 +279,28 @@ The format is based on [Keep a Changelog](https://keepachangelog.com/en/1.1.0/).
 - Fine china axe now uses decorated pot in recipe instead of flower pot
 - Changed `/setrung` command into `/rung set`
 - Minor changes and polish to the temple scanner
+- The area around which an editmode player can move has been made more flexible, each computer can act as a source to extend reach
+- Entities now move through and sink in Minestuck fluids at rates specific to the fluid
+- The texture for oil and blood are now more transparent than they were in previous versions
+- Underwater fog appears closer for oil/blood/water colors/light water
 
 ### Fixed
 
 - Fixed multiple sources of crashes involving fake players
 - Creative Shock effect is no longer cured by drinking milk
+- Right-clicking an item outside the atheneum menu no longer crashes the client
+- Suspicion effect now correctly stops the affected mob from summoning zombie reinforcements
+- Respawning mid-entry no longer spawns you in your land
+- Fixed a performance issue with land gate placement
+- Minestuck fluids now prevent fall damage
+- Minestuck fluids no longer have a breaking sound effect and now have bucket/extinguish sound effects
+- Minestuck fluids now use their translatable name
+- All Minestuck fluids besides ender fluid now have transparency
+- Water colors underwater fog is a rave again
 
 ### Contributors for this release
 
-- Dweblenod, Zepsun, Hadean, pavizi, kirderf1, DORO
+- Dweblenod, Zepsun, hadean, pavizi, kirderf1, DORO, sipherNil, Vinnelli
 
 ## [1.19.2-1.11.0.2] - 2023-11-16
 
@@ -188,7 +460,7 @@ The format is based on [Keep a Changelog](https://keepachangelog.com/en/1.1.0/).
 
 - Added 75 more blocks to the default atheneum list.
 - Config option for delaying entry from when the land dimension is generated, which can help with performance.
-Note that this option is found in the common config and not the world config.
+  Note that this option is found in the common config and not the world config.
 - Particle effect while entering
 - Transportalizer particle
 
@@ -282,7 +554,7 @@ Note that this option is found in the common config and not the world config.
 - The "minestuck:land_type" loot condition now uses tags instead of land type groups
 - Some consort dialogue conditions now uses tags instead of land type groups
 - New way to determine which land types that can get picked at random,
-defined using data files `data/<namespace>/minestuck/terrain_land_types.json` and `data/<namespace>/minestuck/title_land_types.json`
+  defined using data files `data/<namespace>/minestuck/terrain_land_types.json` and `data/<namespace>/minestuck/title_land_types.json`
 - Grist mining tools (currently only Grist N Mine) now only extract grist at 50% efficiency
 - Minor tweaks to tooltips of some existing puzzle related blocks
 - Land vegetation now has a partial random XZ offset the same way. Hitboxes are more appropriate
@@ -335,7 +607,7 @@ defined using data files `data/<namespace>/minestuck/terrain_land_types.json` an
 ### Removed
 
 - Removed config options "generateCruxiteOre" and "generateUraniumOre".
-For the overworld, these ores can now instead be disabled by overriding the new biome modifier with a datapack.
+  For the overworld, these ores can now instead be disabled by overriding the new biome modifier with a datapack.
 
 ### Fixed
 

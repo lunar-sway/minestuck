@@ -1,0 +1,9 @@
+{
+  "type": "neoforge:add_features",
+  "biomes": "#minecraft:is_overworld",
+  "features": [
+    "minestuck:cruxite_ore",
+    "minestuck:uranium_ore"
+  ],
+  "step": "underground_ores"
+}

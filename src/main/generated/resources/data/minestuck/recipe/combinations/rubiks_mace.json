@@ -1,0 +1,11 @@
+{
+  "type": "minestuck:combination",
+  "input1": {
+    "item": "minestuck:mace"
+  },
+  "input2": {
+    "item": "minestuck:water_colors_bucket"
+  },
+  "mode": "and",
+  "output": "minestuck:rubiks_mace"
+}

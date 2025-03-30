@@ -1,0 +1,9 @@
+{
+  "condition": {
+    "type": "minestuck:terrain_land_type_tag",
+    "land_type_tag": "minestuck:rock"
+  },
+  "dialogue": "minestuck:consort/all_ores",
+  "dialogue_weight": 10,
+  "keep_on_reset": false
+}

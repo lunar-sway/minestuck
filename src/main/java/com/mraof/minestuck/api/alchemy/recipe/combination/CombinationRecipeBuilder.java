@@ -1,23 +1,18 @@
 package com.mraof.minestuck.api.alchemy.recipe.combination;
 
-import com.google.gson.JsonObject;
-import com.mraof.minestuck.data.recipe.AdvancementFreeRecipe;
-import com.mraof.minestuck.item.crafting.MSRecipeTypes;
+import com.mraof.minestuck.alchemy.recipe.RegularCombinationRecipe;
 import net.minecraft.MethodsReturnNonnullByDefault;
-import net.minecraft.data.recipes.FinishedRecipe;
+import net.minecraft.core.registries.BuiltInRegistries;
+import net.minecraft.data.recipes.RecipeOutput;
 import net.minecraft.resources.ResourceLocation;
 import net.minecraft.tags.TagKey;
 import net.minecraft.world.item.Item;
 import net.minecraft.world.item.ItemStack;
 import net.minecraft.world.item.crafting.Ingredient;
-import net.minecraft.world.item.crafting.RecipeSerializer;
 import net.minecraft.world.level.ItemLike;
-import net.minecraftforge.registries.ForgeRegistries;
 
 import javax.annotation.ParametersAreNonnullByDefault;
 import java.util.Objects;
-import java.util.function.Consumer;
-import java.util.function.Supplier;
 
 /**
  * Used to datagen a regular combination recipe.
@@ -34,11 +29,6 @@ public final class CombinationRecipeBuilder
 	private CombinationRecipeBuilder(ItemStack output)
 	{
 		this.output = Objects.requireNonNull(output);
-	}
-	
-	public static CombinationRecipeBuilder of(Supplier<? extends ItemLike> supplier)
-	{
-		return of(supplier.get());
 	}
 	
 	public static CombinationRecipeBuilder of(ItemLike output)
@@ -80,7 +70,7 @@ public final class CombinationRecipeBuilder
 	public CombinationRecipeBuilder namedInput(ItemLike item)
 	{
 		input(Ingredient.of(item));
-		return namedSource(Objects.requireNonNull(ForgeRegistries.ITEMS.getKey(item.asItem())).getPath());
+		return namedSource(Objects.requireNonNull(BuiltInRegistries.ITEM.getKey(item.asItem())).getPath());
 	}
 	
 	public CombinationRecipeBuilder namedSource(String str)
@@ -109,51 +99,20 @@ public final class CombinationRecipeBuilder
 		return this;
 	}
 	
-	public void build(Consumer<FinishedRecipe> recipeSaver)
+	public void build(RecipeOutput recipeOutput)
 	{
-		ResourceLocation name = Objects.requireNonNull(ForgeRegistries.ITEMS.getKey(output.getItem()));
-		build(recipeSaver, new ResourceLocation(name.getNamespace(), name.getPath() + suffix));
+		ResourceLocation name = Objects.requireNonNull(BuiltInRegistries.ITEM.getKey(output.getItem()));
+		build(recipeOutput, ResourceLocation.fromNamespaceAndPath(name.getNamespace(), name.getPath() + suffix));
 	}
 	
-	public void buildFor(Consumer<FinishedRecipe> recipeSaver, String modId)
+	public void buildFor(RecipeOutput recipeOutput, String modId)
 	{
-		ResourceLocation name = Objects.requireNonNull(ForgeRegistries.ITEMS.getKey(output.getItem()));
-		build(recipeSaver, new ResourceLocation(modId, name.getPath() + suffix));
+		ResourceLocation name = Objects.requireNonNull(BuiltInRegistries.ITEM.getKey(output.getItem()));
+		build(recipeOutput, ResourceLocation.fromNamespaceAndPath(modId, name.getPath() + suffix));
 	}
 	
-	public void build(Consumer<FinishedRecipe> recipeSaver, ResourceLocation id)
+	public void build(RecipeOutput recipeOutput, ResourceLocation id)
 	{
-		recipeSaver.accept(new Result(id.withPrefix("combinations/"), output, input1, input2, mode));
-	}
-	
-	private record Result(ResourceLocation id, ItemStack output, Ingredient input1, Ingredient input2, CombinationMode mode) implements AdvancementFreeRecipe
-	{
-		@Override
-		public void serializeRecipeData(JsonObject json)
-		{
-			json.add("input1", input1.toJson());
-			json.add("input2", input2.toJson());
-			json.addProperty("mode", mode.asString());
-			JsonObject outputJson = new JsonObject();
-			ResourceLocation outputId = Objects.requireNonNull(ForgeRegistries.ITEMS.getKey(output.getItem()));
-			outputJson.addProperty("item", outputId.toString());
-			if(output.getCount() > 1)
-			{
-				outputJson.addProperty("count", output.getCount());
-			}
-			json.add("output", outputJson);
-		}
-		
-		@Override
-		public ResourceLocation getId()
-		{
-			return id;
-		}
-		
-		@Override
-		public RecipeSerializer<?> getType()
-		{
-			return MSRecipeTypes.COMBINATION.get();
-		}
+		recipeOutput.accept(id.withPrefix("combinations/"), new RegularCombinationRecipe(input1, input2, mode, output), null);
 	}
 }

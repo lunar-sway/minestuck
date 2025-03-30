@@ -1,22 +1,34 @@
 package com.mraof.minestuck.entity.consort;
 
+import com.mojang.datafixers.util.Either;
+import com.mojang.serialization.Codec;
 import com.mraof.minestuck.entity.MSEntityTypes;
+import com.mraof.minestuck.entity.dialogue.RandomlySelectableDialogue.DialogueCategory;
 import com.mraof.minestuck.util.MSSoundEvents;
 import net.minecraft.ChatFormatting;
 import net.minecraft.sounds.SoundEvent;
 import net.minecraft.util.RandomSource;
+import net.minecraft.util.StringRepresentable;
 import net.minecraft.world.entity.Entity;
 import net.minecraft.world.entity.EntityType;
 import net.minecraft.world.level.Level;
 
+import java.util.List;
+import java.util.Locale;
+import java.util.function.Function;
 import java.util.function.Supplier;
 
-public enum EnumConsort	//TODO Could ideally be changed into a registry.
+public enum EnumConsort implements StringRepresentable	//TODO Could ideally be changed into a registry.
 {
 	SALAMANDER(MSEntityTypes.SALAMANDER, "salamander", ChatFormatting.YELLOW, MSSoundEvents.ENTITY_SALAMANDER_AMBIENT, MSSoundEvents.ENTITY_SALAMANDER_HURT, MSSoundEvents.ENTITY_SALAMANDER_DEATH),
 	TURTLE(MSEntityTypes.TURTLE, "turtle", ChatFormatting.LIGHT_PURPLE, () -> null, MSSoundEvents.ENTITY_TURTLE_HURT, MSSoundEvents.ENTITY_TURTLE_DEATH),
 	NAKAGATOR(MSEntityTypes.NAKAGATOR, "nakagator", ChatFormatting.RED, MSSoundEvents.ENTITY_NAKAGATOR_AMBIENT, MSSoundEvents.ENTITY_NAKAGATOR_HURT, MSSoundEvents.ENTITY_NAKAGATOR_DEATH),
 	IGUANA(MSEntityTypes.IGUANA, "iguana", ChatFormatting.AQUA, MSSoundEvents.ENTITY_IGUANA_AMBIENT, MSSoundEvents.ENTITY_IGUANA_HURT, MSSoundEvents.ENTITY_IGUANA_DEATH);
+	
+	public static final Codec<EnumConsort> CODEC = StringRepresentable.fromEnum(EnumConsort::values);
+	public static final Codec<List<EnumConsort>> SINGLE_OR_LIST_CODEC = Codec.either(CODEC, CODEC.listOf())
+			.xmap(either -> either.map(List::of, Function.identity()),
+					list -> list.size() == 1 ? Either.left(list.getFirst()) : Either.right(list));
 	
 	private final Supplier<? extends EntityType<? extends ConsortEntity>> consortType;
 	private final String name;
@@ -90,17 +102,32 @@ public enum EnumConsort	//TODO Could ideally be changed into a registry.
 		throw new IllegalArgumentException("Invalid consort type " + str);
 	}
 	
-	public enum MerchantType
+	@Override
+	public String getSerializedName()
 	{
-		NONE,
-		SHADY,
-		FOOD,
-		GENERAL,
+		return this.name;
+	}
+	
+	public enum MerchantType implements StringRepresentable
+	{
+		NONE(DialogueCategory.CONSORT),
+		SHADY(DialogueCategory.SHADY_CONSORT),
+		FOOD(DialogueCategory.CONSORT_FOOD_MERCHANT),
+		GENERAL(DialogueCategory.CONSORT_GENERAL_MERCHANT),
 		;
 		
-		public String getName()
+		public static final Codec<MerchantType> CODEC = StringRepresentable.fromEnum(MerchantType::values);
+		
+		private final DialogueCategory category;
+		
+		MerchantType(DialogueCategory category)
 		{
-			return name().toLowerCase();
+			this.category = category;
+		}
+		
+		public DialogueCategory dialogueCategory()
+		{
+			return category;
 		}
 		
 		public static MerchantType getFromName(String str)
@@ -109,6 +136,12 @@ public enum EnumConsort	//TODO Could ideally be changed into a registry.
 				if(type.name().toLowerCase().equals(str))
 					return type;
 			throw new IllegalArgumentException("Invalid merchant type " + str);
+		}
+		
+		@Override
+		public String getSerializedName()
+		{
+			return name().toLowerCase(Locale.ROOT);
 		}
 	}
 }

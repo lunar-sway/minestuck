@@ -1,0 +1,8 @@
+{
+  "node": {
+    "animation": {},
+    "gui": "minestuck:textures/gui/dialogue/dialogue.png",
+    "message": "minestuck.dialogue.consort.bright_snow.2",
+    "responses": []
+  }
+}

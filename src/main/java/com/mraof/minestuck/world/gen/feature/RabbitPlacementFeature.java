@@ -25,14 +25,10 @@ public class RabbitPlacementFeature extends Feature<NoneFeatureConfiguration>
 		WorldGenLevel level = context.level();
 		BlockPos pos = context.origin();
 		
-		if(!level.getBlockState(pos).liquid())
-		{
-			Rabbit rabbit = Objects.requireNonNull(EntityType.RABBIT.create(level.getLevel()));
-			rabbit.setPos(pos.getX() + 0.5, pos.getY(), pos.getZ() + 0.5);
-			rabbit.finalizeSpawn(level, level.getCurrentDifficultyAt(rabbit.blockPosition()), MobSpawnType.CHUNK_GENERATION, null, null);
-			level.addFreshEntity(rabbit);
-			return true;
-		}
-		return false;
+		Rabbit rabbit = Objects.requireNonNull(EntityType.RABBIT.create(level.getLevel()));
+		rabbit.setPos(pos.getX() + 0.5, pos.getY(), pos.getZ() + 0.5);
+		rabbit.finalizeSpawn(level, level.getCurrentDifficultyAt(rabbit.blockPosition()), MobSpawnType.CHUNK_GENERATION, null);
+		level.addFreshEntity(rabbit);
+		return true;
 	}
 }

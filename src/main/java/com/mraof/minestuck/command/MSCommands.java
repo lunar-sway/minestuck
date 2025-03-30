@@ -3,11 +3,11 @@ package com.mraof.minestuck.command;
 import com.mojang.brigadier.CommandDispatcher;
 import com.mraof.minestuck.Minestuck;
 import net.minecraft.commands.CommandSourceStack;
-import net.minecraftforge.event.RegisterCommandsEvent;
-import net.minecraftforge.eventbus.api.SubscribeEvent;
-import net.minecraftforge.fml.common.Mod;
+import net.neoforged.bus.api.SubscribeEvent;
+import net.neoforged.fml.common.EventBusSubscriber;
+import net.neoforged.neoforge.event.RegisterCommandsEvent;
 
-@Mod.EventBusSubscriber(modid = Minestuck.MOD_ID, bus=Mod.EventBusSubscriber.Bus.FORGE)
+@EventBusSubscriber(modid = Minestuck.MOD_ID, bus = EventBusSubscriber.Bus.GAME)
 public class MSCommands
 {
 	@SubscribeEvent
@@ -24,9 +24,10 @@ public class MSCommands
 		SburbPredefineCommand.register(dispatcher);
 		SburbConnectionCommand.register(dispatcher);
 		RungCommand.register(dispatcher);
-		ConsortReplyCommand.register(dispatcher);
 		PorkhollowCommand.register(dispatcher);
 		DebugLandsCommand.register(dispatcher);
 		EntryCommand.register(dispatcher);
+		ReviewDialogueCommand.register(dispatcher, event.getBuildContext());
+		SetDialogueCommand.register(dispatcher);
 	}
 }

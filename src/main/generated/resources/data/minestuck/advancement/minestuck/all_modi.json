@@ -1,0 +1,99 @@
+{
+  "parent": "minestuck:minestuck/new_modus",
+  "criteria": {
+    "hash_map": {
+      "conditions": {
+        "items": [
+          {
+            "items": "minestuck:hashmap_modus_card"
+          }
+        ]
+      },
+      "trigger": "minecraft:inventory_changed"
+    },
+    "queue": {
+      "conditions": {
+        "items": [
+          {
+            "items": "minestuck:queue_modus_card"
+          }
+        ]
+      },
+      "trigger": "minecraft:inventory_changed"
+    },
+    "queue_stack": {
+      "conditions": {
+        "items": [
+          {
+            "items": "minestuck:queuestack_modus_card"
+          }
+        ]
+      },
+      "trigger": "minecraft:inventory_changed"
+    },
+    "set": {
+      "conditions": {
+        "items": [
+          {
+            "items": "minestuck:set_modus_card"
+          }
+        ]
+      },
+      "trigger": "minecraft:inventory_changed"
+    },
+    "stack": {
+      "conditions": {
+        "items": [
+          {
+            "items": "minestuck:stack_modus_card"
+          }
+        ]
+      },
+      "trigger": "minecraft:inventory_changed"
+    },
+    "tree": {
+      "conditions": {
+        "items": [
+          {
+            "items": "minestuck:tree_modus_card"
+          }
+        ]
+      },
+      "trigger": "minecraft:inventory_changed"
+    }
+  },
+  "display": {
+    "description": {
+      "translate": "advancements.minestuck.all_modi.description"
+    },
+    "frame": "goal",
+    "icon": {
+      "count": 1,
+      "id": "minestuck:queuestack_modus_card"
+    },
+    "title": {
+      "translate": "advancements.minestuck.all_modi.title"
+    }
+  },
+  "requirements": [
+    [
+      "stack"
+    ],
+    [
+      "queue"
+    ],
+    [
+      "queue_stack"
+    ],
+    [
+      "tree"
+    ],
+    [
+      "hash_map"
+    ],
+    [
+      "set"
+    ]
+  ],
+  "sends_telemetry_event": true
+}

@@ -2,6 +2,7 @@ package com.mraof.minestuck.world.gen.structure.blocks;
 
 import com.mraof.minestuck.block.MSBlocks;
 import com.mraof.minestuck.world.gen.LandChunkGenerator;
+import com.mraof.minestuck.world.lands.LandTypePair;
 import net.minecraft.core.Direction;
 import net.minecraft.tags.BlockTags;
 import net.minecraft.world.level.block.Block;
@@ -16,6 +17,8 @@ import net.minecraft.world.level.chunk.ChunkGenerator;
 import net.minecraft.world.level.levelgen.structure.templatesystem.BlockStateMatchTest;
 import net.minecraft.world.level.levelgen.structure.templatesystem.RuleTest;
 import net.minecraft.world.level.levelgen.structure.templatesystem.TagMatchTest;
+import org.apache.logging.log4j.LogManager;
+import org.apache.logging.log4j.Logger;
 
 import java.util.HashMap;
 import java.util.Map;
@@ -23,6 +26,7 @@ import java.util.function.Supplier;
 
 public final class StructureBlockRegistry
 {
+	private static final Logger LOGGER = LogManager.getLogger();
 	
 	private static final Map<String, BlockEntry> staticRegistry = new HashMap<>();
 	private static final Map<Block, String> templateBlockMap = new HashMap<>();
@@ -128,6 +132,21 @@ public final class StructureBlockRegistry
 		if(generator instanceof LandChunkGenerator)
 			return ((LandChunkGenerator) generator).blockRegistry;
 		else return defaultRegistry;
+	}
+	
+	public static StructureBlockRegistry init(LandTypePair landTypes)
+	{
+		try
+		{
+			StructureBlockRegistry blockRegistry = new StructureBlockRegistry();
+			landTypes.getTerrain().registerBlocks(blockRegistry);
+			landTypes.getTitle().registerBlocks(blockRegistry);
+			return blockRegistry;
+		} catch(RuntimeException e)
+		{
+			LOGGER.error("Caught exception while setting up StructureBlockRegistry.", e);
+			return defaultRegistry;
+		}
 	}
 	
 	private static class BlockEntry

@@ -1,0 +1,32 @@
+{
+  "parent": "minecraft:recipes/root",
+  "criteria": {
+    "has_grub_sauce": {
+      "conditions": {
+        "items": [
+          {
+            "items": "minestuck:grub_sauce"
+          }
+        ]
+      },
+      "trigger": "minecraft:inventory_changed"
+    },
+    "has_the_recipe": {
+      "conditions": {
+        "recipe": "minestuck:bug_mac"
+      },
+      "trigger": "minecraft:recipe_unlocked"
+    }
+  },
+  "requirements": [
+    [
+      "has_the_recipe",
+      "has_grub_sauce"
+    ]
+  ],
+  "rewards": {
+    "recipes": [
+      "minestuck:bug_mac"
+    ]
+  }
+}

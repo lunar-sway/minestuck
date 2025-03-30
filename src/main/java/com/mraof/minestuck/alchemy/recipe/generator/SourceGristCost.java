@@ -1,79 +1,65 @@
 package com.mraof.minestuck.alchemy.recipe.generator;
 
-import com.google.gson.JsonArray;
-import com.google.gson.JsonObject;
-import com.mojang.serialization.JsonOps;
-import com.mraof.minestuck.api.alchemy.recipe.generator.GeneratedCostProvider;
-import com.mraof.minestuck.api.alchemy.recipe.GristCostRecipe;
+import com.mojang.serialization.Codec;
+import com.mojang.serialization.MapCodec;
+import com.mojang.serialization.codecs.RecordCodecBuilder;
 import com.mraof.minestuck.api.alchemy.GristSet;
 import com.mraof.minestuck.api.alchemy.GristType;
-import com.mraof.minestuck.api.alchemy.ImmutableGristSet;
 import com.mraof.minestuck.api.alchemy.MutableGristSet;
+import com.mraof.minestuck.api.alchemy.recipe.GristCostRecipe;
+import com.mraof.minestuck.api.alchemy.recipe.JeiGristCost;
+import com.mraof.minestuck.api.alchemy.recipe.generator.GeneratedCostProvider;
 import com.mraof.minestuck.api.alchemy.recipe.generator.GeneratorCallback;
 import com.mraof.minestuck.item.crafting.MSRecipeTypes;
-import com.mraof.minestuck.api.alchemy.recipe.JeiGristCost;
 import net.minecraft.MethodsReturnNonnullByDefault;
+import net.minecraft.core.Holder;
+import net.minecraft.core.registries.BuiltInRegistries;
 import net.minecraft.core.registries.Registries;
-import net.minecraft.network.FriendlyByteBuf;
+import net.minecraft.network.RegistryFriendlyByteBuf;
+import net.minecraft.network.codec.StreamCodec;
 import net.minecraft.resources.ResourceLocation;
 import net.minecraft.tags.TagKey;
-import net.minecraft.util.GsonHelper;
-import net.minecraft.world.Container;
 import net.minecraft.world.item.Item;
 import net.minecraft.world.item.ItemStack;
 import net.minecraft.world.item.crafting.Ingredient;
 import net.minecraft.world.item.crafting.RecipeSerializer;
+import net.minecraft.world.item.crafting.SingleRecipeInput;
 import net.minecraft.world.level.Level;
-import net.minecraftforge.registries.ForgeRegistries;
-import org.apache.logging.log4j.LogManager;
-import org.apache.logging.log4j.Logger;
 
 import javax.annotation.Nullable;
 import javax.annotation.ParametersAreNonnullByDefault;
-import java.util.ArrayList;
 import java.util.Collections;
 import java.util.List;
 import java.util.Objects;
+import java.util.Optional;
 import java.util.function.BiConsumer;
 
 @ParametersAreNonnullByDefault
 @MethodsReturnNonnullByDefault
 public final class SourceGristCost implements GristCostRecipe
 {
-	private static final Logger LOGGER = LogManager.getLogger();
-	
-	private final ResourceLocation id;
 	private final Ingredient ingredient;
+	private final List<Source> sources;
+	private final float multiplier;
+	private final GristSet.Immutable addedCost;
 	@Nullable
 	private final Integer priority;
-	private final GeneratedGristCostCache cache;
+	private final GeneratedGristCostCache cache = new GeneratedGristCostCache();
 	
-	private SourceGristCost(ResourceLocation id, Ingredient ingredient, List<Source> sources, float multiplier, ImmutableGristSet addedCost, @Nullable Integer priority)
+	@SuppressWarnings("OptionalUsedAsFieldOrParameterType")
+	public SourceGristCost(Ingredient ingredient, List<Source> sources, float multiplier, GristSet.Immutable addedCost, Optional<Integer> priority)
 	{
-		this.id = id;
 		this.ingredient = ingredient;
-		this.priority = priority;
-		this.cache = new GeneratedGristCostCache(callback -> generateCost(callback, sources, multiplier, addedCost));
-	}
-	
-	private SourceGristCost(ResourceLocation id, Ingredient ingredient, @Nullable Integer priority, GeneratedGristCostCache cache)
-	{
-		this.id = id;
-		this.ingredient = ingredient;
-		this.priority = priority;
-		this.cache = cache;
+		this.sources = sources;
+		this.multiplier = multiplier;
+		this.addedCost = addedCost;
+		this.priority = priority.orElse(null);
 	}
 	
 	@Override
-	public ResourceLocation getId()
+	public boolean matches(SingleRecipeInput input, Level level)
 	{
-		return this.id;
-	}
-	
-	@Override
-	public boolean matches(Container inv, Level level)
-	{
-		return cache.getCachedCost() != null && ingredient.test(inv.getItem(0));
+		return cache.getCachedCost() != null && ingredient.test(input.item());
 	}
 	
 	@Override
@@ -83,7 +69,7 @@ public final class SourceGristCost implements GristCostRecipe
 	}
 	
 	@Nullable
-	private GristSet generateCost(GeneratorCallback callback, List<Source> sources, float multiplier, ImmutableGristSet addedCost)
+	private GristSet generateCost(GeneratorCallback callback, List<Source> sources, float multiplier, GristSet.Immutable addedCost)
 	{
 		MutableGristSet costSum = MutableGristSet.newDefault();
 		for(Source source : sources)
@@ -104,9 +90,10 @@ public final class SourceGristCost implements GristCostRecipe
 	}
 	
 	@Override
-	public void addCostProvider(BiConsumer<Item, GeneratedCostProvider> consumer)
+	public void addCostProvider(BiConsumer<Item, GeneratedCostProvider> consumer, ResourceLocation recipeId)
 	{
-		GristCostRecipe.addCostProviderForIngredient(consumer, this.ingredient, this.cache);
+		GristCostRecipe.addCostProviderForIngredient(consumer, this.ingredient,
+				this.cache.generatedProvider(callback -> generateCost(callback, sources, multiplier, addedCost)));
 	}
 	
 	@Override
@@ -125,62 +112,65 @@ public final class SourceGristCost implements GristCostRecipe
 	
 	public static class Serializer implements RecipeSerializer<SourceGristCost>
 	{
+		private static final MapCodec<SourceGristCost> CODEC = RecordCodecBuilder.mapCodec(instance ->
+				instance.group(
+						Ingredient.CODEC_NONEMPTY.fieldOf("ingredient").forGetter(recipe -> recipe.ingredient),
+						Source.CODEC.listOf().fieldOf("sources").forGetter(recipe -> recipe.sources),
+						Codec.FLOAT.optionalFieldOf("multiplier", 1F).forGetter(recipe -> recipe.multiplier),
+						GristSet.Codecs.MAP_CODEC.fieldOf("grist_cost").forGetter(recipe -> recipe.addedCost),
+						Codec.INT.optionalFieldOf("priority").forGetter(recipe -> Optional.ofNullable(recipe.priority))
+				).apply(instance, SourceGristCost::new));
+		private static final StreamCodec<RegistryFriendlyByteBuf, SourceGristCost> STREAM_CODEC = StreamCodec.of(Serializer::toNetwork, Serializer::fromNetwork);
+		
 		@Override
-		public SourceGristCost fromJson(ResourceLocation recipeId, JsonObject json)
+		public MapCodec<SourceGristCost> codec()
 		{
-			Ingredient ingredient = Ingredient.fromJson(json.get("ingredient"));
-			Integer priority = json.has("priority") ? GsonHelper.getAsInt(json, "priority") : null;
-			
-			ImmutableGristSet cost = ImmutableGristSet.MAP_CODEC.parse(JsonOps.INSTANCE, GsonHelper.getAsJsonObject(json, "grist_cost"))
-					.getOrThrow(false, LOGGER::error);
-			float multiplier = json.has("multiplier") ? GsonHelper.getAsFloat(json, "multiplier") : 1;
-			JsonArray jsonList = GsonHelper.getAsJsonArray(json, "sources");
-			List<Source> sources = new ArrayList<>();
-			jsonList.forEach(element -> sources.add(parseSource(GsonHelper.convertToString(element, "source"))));
-			
-			return new SourceGristCost(recipeId, ingredient, sources, multiplier, cost, priority);
+			return CODEC;
 		}
 		
 		@Override
-		public void toNetwork(FriendlyByteBuf buffer, SourceGristCost recipe)
+		public StreamCodec<RegistryFriendlyByteBuf, SourceGristCost> streamCodec()
 		{
-			recipe.ingredient.toNetwork(buffer);
+			return STREAM_CODEC;
+		}
+		
+		private static void toNetwork(RegistryFriendlyByteBuf buffer, SourceGristCost recipe)
+		{
+			Ingredient.CONTENTS_STREAM_CODEC.encode(buffer, recipe.ingredient);
 			buffer.writeInt(recipe.getPriority());
 			recipe.cache.toNetwork(buffer);
 		}
 		
-		@Nullable
-		@Override
-		public SourceGristCost fromNetwork(ResourceLocation recipeId, FriendlyByteBuf buffer)
+		private static SourceGristCost fromNetwork(RegistryFriendlyByteBuf buffer)
 		{
-			Ingredient ingredient = Ingredient.fromNetwork(buffer);
+			Ingredient ingredient = Ingredient.CONTENTS_STREAM_CODEC.decode(buffer);
 			int priority = buffer.readInt();
-			GeneratedGristCostCache cache = GeneratedGristCostCache.fromNetwork(buffer);
 			
-			return new SourceGristCost(recipeId, ingredient, priority, cache);
+			var recipe = new SourceGristCost(ingredient, Collections.emptyList(), 1, GristSet.EMPTY, Optional.of(priority));
+			recipe.cache.fromNetwork(buffer);
+			
+			return recipe;
 		}
 	}
 	
-	private static Source parseSource(String name)
+	public sealed interface Source
 	{
-		if(name.startsWith("#"))
-			return new TagSource(new ResourceLocation(name.substring(1)));
-		else return new ItemSource(new ResourceLocation(name));
-	}
-	
-	private interface Source
-	{
+		Codec<Source> CODEC = Codec.STRING.comapFlatMap(
+				name -> name.startsWith("#")
+						? ResourceLocation.read(name.substring(1)).map(TagSource::new)
+						: ResourceLocation.read(name).map(ItemSource::new),
+				Source::toString
+				);
+		
 		@Nullable
 		GristSet getCostFor(GeneratorCallback callback);
 	}
 	
-	private static class ItemSource implements Source
+	public record ItemSource(Item item) implements Source
 	{
-		final Item item;
-		
 		private ItemSource(ResourceLocation name)
 		{
-			this.item = ForgeRegistries.ITEMS.getValue(name);
+			this(BuiltInRegistries.ITEM.get(name));
 		}
 		
 		@Override
@@ -188,39 +178,39 @@ public final class SourceGristCost implements GristCostRecipe
 		{
 			return callback.lookupCostFor(item);
 		}
-	}
-	
-	public static String itemString(Item item)
-	{
-		return Objects.requireNonNull(ForgeRegistries.ITEMS.getKey(item)).toString();
-	}
-	
-	private static class TagSource implements Source
-	{
-		final TagKey<Item> tag;
 		
+		@Override
+		public String toString()
+		{
+			return BuiltInRegistries.ITEM.getKey(this.item).toString();
+		}
+	}
+	
+	public record TagSource(TagKey<Item> tag) implements Source
+	{
 		private TagSource(ResourceLocation name)
 		{
-			this.tag = TagKey.create(Registries.ITEM, name);
+			this(TagKey.create(Registries.ITEM, name));
 		}
 		
 		@Override
 		public GristSet getCostFor(GeneratorCallback callback)
 		{
 			GristSet maxCost = null;
-			for(Item item : Objects.requireNonNull(ForgeRegistries.ITEMS.tags()).getTag(this.tag))
+			for(Holder<Item> item : BuiltInRegistries.ITEM.getTagOrEmpty(this.tag))
 			{
-				GristSet cost = callback.lookupCostFor(item);
+				GristSet cost = callback.lookupCostFor(item.value());
 				
 				if(cost != null && (maxCost == null || cost.getValue() > maxCost.getValue()))
 					maxCost = cost;
 			}
 			return maxCost;
 		}
-	}
-	
-	public static String tagString(TagKey<Item> tag)
-	{
-		return "#" + tag.location();
+		
+		@Override
+		public String toString()
+		{
+			return "#" + this.tag.location();
+		}
 	}
 }

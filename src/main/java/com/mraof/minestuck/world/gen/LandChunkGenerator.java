@@ -1,16 +1,17 @@
 package com.mraof.minestuck.world.gen;
 
 import com.mojang.datafixers.util.Pair;
-import com.mojang.serialization.Codec;
+import com.mojang.serialization.MapCodec;
 import com.mojang.serialization.codecs.RecordCodecBuilder;
 import com.mraof.minestuck.entity.MSEntityTypes;
-import com.mraof.minestuck.skaianet.UnderlingController;
+import com.mraof.minestuck.entity.underling.UnderlingSpawnSettings;
 import com.mraof.minestuck.world.biome.LandBiomeSource;
+import com.mraof.minestuck.world.biome.LandCustomBiomeSettings;
 import com.mraof.minestuck.world.biome.RegistryBackedBiomeSet;
-import com.mraof.minestuck.world.biome.WorldGenBiomeSet;
-import com.mraof.minestuck.world.gen.structure.MSStructurePlacements;
+import com.mraof.minestuck.world.gen.structure.MSStructures;
 import com.mraof.minestuck.world.gen.structure.blocks.StructureBlockRegistry;
 import com.mraof.minestuck.world.gen.structure.gate.GateStructure;
+import com.mraof.minestuck.world.lands.LandTypeExtensions;
 import com.mraof.minestuck.world.lands.LandTypePair;
 import net.minecraft.MethodsReturnNonnullByDefault;
 import net.minecraft.core.*;
@@ -33,16 +34,21 @@ import net.minecraft.world.level.levelgen.synth.NormalNoise;
 
 import javax.annotation.Nullable;
 import javax.annotation.ParametersAreNonnullByDefault;
+import java.util.ArrayList;
 import java.util.List;
+import java.util.Objects;
 import java.util.Optional;
+import java.util.function.Function;
+import java.util.stream.Stream;
 
 @ParametersAreNonnullByDefault
 @MethodsReturnNonnullByDefault
 public class LandChunkGenerator extends CustomizableNoiseChunkGenerator
 {
-	public static final Codec<LandChunkGenerator> CODEC = RecordCodecBuilder.create(instance -> instance.group(
+	public static final MapCodec<LandChunkGenerator> CODEC = RecordCodecBuilder.mapCodec(instance -> instance.group(
 			RegistryOps.retrieveGetter(Registries.NOISE),
 			RegistryOps.retrieveGetter(Registries.DENSITY_FUNCTION),
+			RegistryOps.retrieveGetter(Registries.STRUCTURE),
 			LandTypePair.Named.CODEC.fieldOf("named_land_types").forGetter(generator -> generator.namedTypes),
 			RegistryOps.retrieveGetter(Registries.BIOME),
 			RegistryOps.retrieveGetter(Registries.PLACED_FEATURE),
@@ -51,33 +57,36 @@ public class LandChunkGenerator extends CustomizableNoiseChunkGenerator
 	
 	public final LandTypePair.Named namedTypes;
 	public final StructureBlockRegistry blockRegistry;
-	public final WorldGenBiomeSet biomeSet;
+	private final LazyBiomeSettings customBiomeSettings;
 	public final GateStructure.PieceFactory gatePiece;
+	private final HolderGetter<Structure> structureLookup;
 	
-	public static LandChunkGenerator create(HolderGetter<NormalNoise.NoiseParameters> noises, HolderGetter<DensityFunction> densityFunctions, LandTypePair.Named namedTypes,
-											HolderGetter<Biome> biomes, HolderGetter<PlacedFeature> features, HolderGetter<ConfiguredWorldCarver<?>> carvers)
+	public static LandChunkGenerator create(HolderGetter<NormalNoise.NoiseParameters> noises, HolderGetter<DensityFunction> densityFunctions, HolderGetter<Structure> structureLookup,
+											LandTypePair.Named namedTypes, HolderGetter<Biome> biomeGetter, HolderGetter<PlacedFeature> features, HolderGetter<ConfiguredWorldCarver<?>> carvers)
 	{
-		RegistryBackedBiomeSet biomeSetWrapper = new RegistryBackedBiomeSet(namedTypes.landTypes().getTerrain().getBiomeSet(), biomes);
+		RegistryBackedBiomeSet biomes = new RegistryBackedBiomeSet(namedTypes.landTypes().getTerrain().getBiomeSet(), biomeGetter);
 		LandGenSettings genSettings = new LandGenSettings(namedTypes.landTypes());
 		
-		WorldGenBiomeSet biomeHolder = new WorldGenBiomeSet(biomeSetWrapper, genSettings, features, carvers);
+		LazyBiomeSettings customBiomeSettings = new LazyBiomeSettings(extensions -> new LandCustomBiomeSettings(biomes, genSettings, extensions, features, carvers));
 		
-		return new LandChunkGenerator(noises, densityFunctions, namedTypes, biomeHolder, genSettings);
+		return new LandChunkGenerator(noises, densityFunctions, structureLookup, namedTypes, biomes, customBiomeSettings, genSettings);
 	}
 	
-	private LandChunkGenerator(HolderGetter<NormalNoise.NoiseParameters> noises, HolderGetter<DensityFunction> densityFunctions, LandTypePair.Named namedTypes, WorldGenBiomeSet biomes, LandGenSettings genSettings)
+	private LandChunkGenerator(HolderGetter<NormalNoise.NoiseParameters> noises, HolderGetter<DensityFunction> densityFunctions, HolderGetter<Structure> structureLookup,
+							   LandTypePair.Named namedTypes, RegistryBackedBiomeSet biomes, LazyBiomeSettings customBiomeSettings, LandGenSettings genSettings)
 	{
-		super(new LandBiomeSource(biomes.baseBiomes, genSettings), biome -> biomes.getBiomeFromBase(biome).get().getGenerationSettings(),
+		super(new LandBiomeSource(biomes, genSettings), biome -> customBiomeSettings.get().generationFor(biome),
 				genSettings.createDimensionSettings(noises, densityFunctions));
 		
-		this.biomeSet = biomes;
+		this.customBiomeSettings = customBiomeSettings;
 		this.namedTypes = namedTypes;
 		this.blockRegistry = genSettings.getBlockRegistry();
 		this.gatePiece = genSettings.getGatePiece();
+		this.structureLookup = structureLookup;
 	}
 	
 	@Override
-	protected Codec<? extends LandChunkGenerator> codec()
+	protected MapCodec<? extends LandChunkGenerator> codec()
 	{
 		return CODEC;
 	}
@@ -85,9 +94,17 @@ public class LandChunkGenerator extends CustomizableNoiseChunkGenerator
 	@Override
 	public ChunkGeneratorStructureState createState(HolderLookup<StructureSet> structureSetLookup, RandomState randomState, long seed)
 	{
-		List<Holder<StructureSet>> list = structureSetLookup.listElements().filter(structureSet -> hasStructureSet(structureSet.value()))
-				.<Holder<StructureSet>>map(holder -> holder).toList();
-		return new LandStructureState(randomState, biomeSource, seed, list);
+		List<StructureSet> landSpecificStructureSets = new ArrayList<>();
+		this.namedTypes.landTypes().getTerrain().addStructureSets(landSpecificStructureSets::add, this.structureLookup);
+		this.namedTypes.landTypes().getTitle().addStructureSets(landSpecificStructureSets::add, this.structureLookup);
+		
+		List<Holder<StructureSet>> structureSets = Stream.concat(
+				landSpecificStructureSets.stream().map(Holder::direct),
+				structureSetLookup.listElements()
+						.filter(structureSet -> hasStructureSet(structureSet.value()))
+						.<Holder<StructureSet>>map(holder -> holder)
+		).toList();
+		return new LandStructureState(randomState, biomeSource, seed, structureSets);
 	}
 	
 	private boolean hasStructureSet(StructureSet structureSet)
@@ -99,8 +116,8 @@ public class LandChunkGenerator extends CustomizableNoiseChunkGenerator
 	public WeightedRandomList<MobSpawnSettings.SpawnerData> getMobsAt(Holder<Biome> biome, StructureManager structures, MobCategory category, BlockPos pos)
 	{
 		if(category == MSEntityTypes.UNDERLING)
-			return UnderlingController.getUnderlingList(pos);
-		else return biomeSet.getBiomeFromBase(biome).value().getMobSettings().getMobs(category);
+			return UnderlingSpawnSettings.getUnderlingList(pos);
+		else return customBiomeSettings.get().customMobSpawnsFor(biome).getMobs(category);
 	}
 	
 	@Nullable
@@ -126,6 +143,36 @@ public class LandChunkGenerator extends CustomizableNoiseChunkGenerator
 	
 	private static boolean hasGatePlacement(ChunkGeneratorStructureState state, Holder<Structure> structure)
 	{
-		return state.getPlacementsForStructure(structure).stream().anyMatch(placement -> placement.type() == MSStructurePlacements.LAND_GATE.get());
+		return state.getPlacementsForStructure(structure).stream().anyMatch(placement -> placement.type() == MSStructures.LAND_GATE_PLACEMENT.get());
+	}
+	
+	public boolean tryInit(LandTypeExtensions extensions)
+	{
+		return this.customBiomeSettings.tryInit(extensions);
+	}
+	
+	private static final class LazyBiomeSettings
+	{
+		private final Function<LandTypeExtensions, LandCustomBiomeSettings> constructor;
+		private LandCustomBiomeSettings value = null;
+		
+		
+		public LazyBiomeSettings(Function<LandTypeExtensions, LandCustomBiomeSettings> constructor)
+		{
+			this.constructor = constructor;
+		}
+		
+		public LandCustomBiomeSettings get()
+		{
+			return Objects.requireNonNull(this.value);
+		}
+		
+		public boolean tryInit(LandTypeExtensions extensions)
+		{
+			if(this.value != null)
+				return false;
+			this.value = constructor.apply(extensions);
+			return true;
+		}
 	}
 }

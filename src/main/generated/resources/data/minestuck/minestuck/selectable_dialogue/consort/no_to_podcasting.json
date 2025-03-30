@@ -1,0 +1,9 @@
+{
+  "condition": {
+    "type": "minestuck:entity_type",
+    "entity_type": "minestuck:iguana"
+  },
+  "dialogue": "minestuck:consort/no_to_podcasting",
+  "dialogue_weight": 10,
+  "keep_on_reset": false
+}

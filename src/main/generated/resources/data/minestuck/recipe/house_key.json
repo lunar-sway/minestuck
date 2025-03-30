@@ -1,0 +1,21 @@
+{
+  "type": "minecraft:crafting_shaped",
+  "category": "equipment",
+  "key": {
+    "i": {
+      "tag": "c:ingots/iron"
+    },
+    "n": {
+      "tag": "c:nuggets/iron"
+    }
+  },
+  "pattern": [
+    " in",
+    " in",
+    " i "
+  ],
+  "result": {
+    "count": 1,
+    "id": "minestuck:house_key"
+  }
+}

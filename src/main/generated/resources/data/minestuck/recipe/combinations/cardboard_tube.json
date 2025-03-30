@@ -1,0 +1,11 @@
+{
+  "type": "minestuck:combination",
+  "input1": {
+    "item": "minecraft:stick"
+  },
+  "input2": {
+    "item": "minecraft:paper"
+  },
+  "mode": "or",
+  "output": "minestuck:cardboard_tube"
+}

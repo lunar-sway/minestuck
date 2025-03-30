@@ -1,36 +1,28 @@
 package com.mraof.minestuck.advancements;
 
-import net.minecraft.advancements.CriteriaTriggers;
+import com.mraof.minestuck.Minestuck;
+import net.minecraft.advancements.CriterionTrigger;
+import net.minecraft.core.registries.BuiltInRegistries;
+import net.neoforged.neoforge.registries.DeferredRegister;
+
+import java.util.function.Supplier;
 
 public class MSCriteriaTriggers
 {
-	public static final EventTrigger SBURB_CONNECTION = new EventTrigger(EventTrigger.SBURB_CONNECTION_ID);
-	public static final EventTrigger CRUXITE_ARTIFACT = new EventTrigger(EventTrigger.CRUXITE_ARTIFACT_ID);
-	public static final EventTrigger RETURN_NODE = new EventTrigger(EventTrigger.RETURN_NODE_ID);
-	public static final EventTrigger MELON_OVERLOAD = new EventTrigger(EventTrigger.MELON_OVERLOAD_ID);
+	public static final DeferredRegister<CriterionTrigger<?>> REGISTER = DeferredRegister.create(BuiltInRegistries.TRIGGER_TYPES, Minestuck.MOD_ID);
 	
-	public static final PunchDesignixTrigger PUNCH_DESIGNIX = new PunchDesignixTrigger();
-	public static final CaptchalogueTrigger CAPTCHALOGUE = new CaptchalogueTrigger();
-	public static final ChangeModusTrigger CHANGE_MODUS = new ChangeModusTrigger();
-	public static final TreeModusRootTrigger TREE_MODUS_ROOT = new TreeModusRootTrigger();
-	public static final ConsortItemTrigger CONSORT_ITEM = new ConsortItemTrigger();
-	public static final ConsortTalkTrigger CONSORT_TALK = new ConsortTalkTrigger();
+	public static final Supplier<EventTrigger> SBURB_CONNECTION = REGISTER.register("sburb_connection", EventTrigger::new);
+	public static final Supplier<EventTrigger> CRUXITE_ARTIFACT = REGISTER.register("cruxite_artifact", EventTrigger::new);
+	public static final Supplier<EventTrigger> RETURN_NODE = REGISTER.register("return_node", EventTrigger::new);
+	public static final Supplier<EventTrigger> MELON_OVERLOAD = REGISTER.register("melon_overload", EventTrigger::new);
+	public static final Supplier<EventTrigger> BUY_OUT_SHOP = REGISTER.register("buy_out_shop", EventTrigger::new);
 	
-	/**
-	 * Currently (1.15), this is not thread safe and need to be deferred
-	 */
-	public static void register()
-	{
-		CriteriaTriggers.register(SBURB_CONNECTION);
-		CriteriaTriggers.register(CRUXITE_ARTIFACT);
-		CriteriaTriggers.register(RETURN_NODE);
-		CriteriaTriggers.register(MELON_OVERLOAD);
-		
-		CriteriaTriggers.register(PUNCH_DESIGNIX);
-		CriteriaTriggers.register(CAPTCHALOGUE);
-		CriteriaTriggers.register(CHANGE_MODUS);
-		CriteriaTriggers.register(TREE_MODUS_ROOT);
-		CriteriaTriggers.register(CONSORT_ITEM);
-		CriteriaTriggers.register(CONSORT_TALK);
-	}
+	public static final Supplier<PunchDesignixTrigger> PUNCH_DESIGNIX = REGISTER.register("punch_designix", PunchDesignixTrigger::new);
+	public static final Supplier<IntellibeamLaserstationTrigger> INTELLIBEAM_LASERSTATION = REGISTER.register("intellibeam_laserstation", IntellibeamLaserstationTrigger::new);
+	public static final Supplier<CaptchalogueTrigger> CAPTCHALOGUE = REGISTER.register("captchalogue", CaptchalogueTrigger::new);
+	public static final Supplier<ChangeModusTrigger> CHANGE_MODUS = REGISTER.register("change_modus", ChangeModusTrigger::new);
+	public static final Supplier<TreeModusRootTrigger> TREE_MODUS_ROOT = REGISTER.register("tree_modus_root", TreeModusRootTrigger::new);
+	public static final Supplier<EcheladderTrigger> ECHELADDER = REGISTER.register("echeladder", EcheladderTrigger::new);
+	public static final Supplier<ConsortItemTrigger> CONSORT_ITEM = REGISTER.register("consort_item", ConsortItemTrigger::new);
+	public static final Supplier<ConsortTalkTrigger> CONSORT_TALK = REGISTER.register("consort_talk", ConsortTalkTrigger::new);
 }

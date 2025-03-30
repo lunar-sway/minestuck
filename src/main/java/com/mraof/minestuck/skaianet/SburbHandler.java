@@ -2,14 +2,14 @@ package com.mraof.minestuck.skaianet;
 
 import com.mraof.minestuck.MinestuckConfig;
 import com.mraof.minestuck.advancements.MSCriteriaTriggers;
-import com.mraof.minestuck.api.alchemy.GristTypeSpawnCategory;
-import com.mraof.minestuck.computer.editmode.DeployList;
-import com.mraof.minestuck.item.MSItems;
 import com.mraof.minestuck.api.alchemy.GristType;
+import com.mraof.minestuck.api.alchemy.GristTypeSpawnCategory;
+import com.mraof.minestuck.computer.editmode.EditmodeLocations;
+import com.mraof.minestuck.event.OnEntryEvent;
 import com.mraof.minestuck.player.*;
 import com.mraof.minestuck.util.ColorHandler;
+import com.mraof.minestuck.world.DynamicDimensions;
 import com.mraof.minestuck.world.MSDimensions;
-import com.mraof.minestuck.world.lands.gen.LandTypeGenerator;
 import com.mraof.minestuck.world.lands.LandTypePair;
 import com.mraof.minestuck.world.lands.LandTypes;
 import com.mraof.minestuck.world.lands.terrain.TerrainLandType;
@@ -20,15 +20,15 @@ import net.minecraft.network.protocol.game.ClientboundSetTitleTextPacket;
 import net.minecraft.network.protocol.game.ClientboundSetTitlesAnimationPacket;
 import net.minecraft.resources.ResourceKey;
 import net.minecraft.server.MinecraftServer;
-import net.minecraft.server.level.ServerLevel;
 import net.minecraft.server.level.ServerPlayer;
-import net.minecraft.world.item.Item;
 import net.minecraft.world.item.ItemStack;
 import net.minecraft.world.level.Level;
+import net.neoforged.neoforge.common.NeoForge;
 import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.Logger;
 
 import java.util.List;
+import java.util.Objects;
 import java.util.Optional;
 import java.util.Random;
 
@@ -43,81 +43,39 @@ public final class SburbHandler
 	
 	public static final String CHAT_LAND_ENTRY = "minestuck.chat_land_entry";
 	
-	private static Title produceTitle(Level level, PlayerIdentifier player)
+	private static Title produceTitle(PlayerIdentifier player, MinecraftServer mcServer)
 	{
-		Session session = SessionHandler.get(level).getPlayerSession(player);
-		if(session == null)
-			if(MinestuckConfig.SERVER.playerSelectedTitle.get())
-				session = new Session();
-			else
-			{
-				LOGGER.warn("Trying to generate a title for {} before creating a session!", player.getUsername(), new Throwable().fillInStackTrace());
-				return null;
-			}
+		SkaianetData skaianetData = SkaianetData.get(mcServer);
 		
 		Title title = null;
-		if(session.predefinedPlayers.containsKey(player))
-		{
-			PredefineData data = session.predefinedPlayers.get(player);
-			title = data.getTitle();
-		}
+		Optional<PredefineData> data = skaianetData.getOrCreatePredefineData(player);
+		if(data.isPresent())
+			title = data.get().getTitle();
 		
 		if(title == null)
-		{
-			try
-			{
-				title = Generator.generateTitle(session, EnumAspect.valuesSet(), player);
-			} catch(SkaianetException e)
-			{
-				return null;	//TODO handle exception further down the line
-			}
-		}
+			title = Generator.generateTitle(player, EnumAspect.valuesSet(), skaianetData);
+		
 		return title;
 	}
 	
-	static void generateAndSetTitle(Level level, PlayerIdentifier player)
+	static void generateAndSetTitle(PlayerIdentifier player, MinecraftServer mcServer)
 	{
-		PlayerData data = PlayerSavedData.getData(player, level);
-		if(data.getTitle() == null)
+		PlayerData data = PlayerData.get(player, mcServer);
+		if(Title.getTitle(data).isEmpty())
 		{
-			Title title = produceTitle(level, player);
+			Title title = produceTitle(player, mcServer);
 			if(title == null)
 				return;
-			PlayerSavedData.getData(player, level).setTitle(title);
+			Title.setTitle(data, title);
 		} else if(!MinestuckConfig.SERVER.playerSelectedTitle.get())
 			LOGGER.warn("Trying to generate a title for {} when a title is already assigned!", player.getUsername());
 	}
 	
-	public static void handlePredefineData(ServerPlayer player, SkaianetException.SkaianetConsumer<PredefineData> consumer) throws SkaianetException
+	public static ItemStack getEntryItem(Level level, SburbPlayerData playerData)
 	{
-		PlayerIdentifier identifier = IdentifierHandler.encode(player);
-		SessionHandler.get(player.server).findOrCreateAndCall(identifier, session -> session.predefineCall(identifier, consumer));
-	}
-	
-	/**
-	 * @param c The connection.
-	 * @return Damage value for the entry item
-	 */
-	public static ItemStack getEntryItem(Level level, SburbConnection c)
-	{
-		int color =  ColorHandler.getColorForPlayer(c.getClientIdentifier(), level);
+		int color =  ColorHandler.getColorForPlayer(playerData.playerId(), level);
 		
-		Item artifact = c.artifactType == 1 ? MSItems.CRUXITE_POTION.get() : MSItems.CRUXITE_APPLE.get();
-		
-		return ColorHandler.setColor(new ItemStack(artifact), color);
-	}
-	
-	public static SburbConnection getConnectionForDimension(ServerLevel level)
-	{
-		return getConnectionForDimension(level.getServer(), level.dimension());
-	}
-	public static SburbConnection getConnectionForDimension(MinecraftServer mcServer, ResourceKey<Level> dim)
-	{
-		if(dim == null)
-			return null;
-		
-		return SessionHandler.get(mcServer).getConnectionStream().filter(c -> c.getClientDimension() == dim)
-				.findAny().orElse(null);
+		return ColorHandler.setColor(playerData.artifactType.createItemStack(), color);
 	}
 	
 	/**
@@ -128,144 +86,132 @@ public final class SburbHandler
 	public static int availableTier(MinecraftServer mcServer, PlayerIdentifier client)
 	{
 		SessionHandler handler = SessionHandler.get(mcServer);
-		Session s = handler.getPlayerSession(client);
-		if(s == null)
-			return -1;
+		Session s = handler.getOrCreateSession(client);
+		
 		if(handler.doesSessionHaveMaxTier(s))
 			return Integer.MAX_VALUE;
-		SburbConnection c = SkaianetHandler.get(mcServer).getActiveConnection(client);
-		if(c == null)
-			return -1;
+		
 		int count = -1;
-		for(SburbConnection conn : s.connections)
-			if(conn.hasEntered())
+		for(PlayerIdentifier player : s.getPlayers())
+			if(SburbPlayerData.get(player, mcServer).hasEntered())
 				count++;
-		if(!c.hasEntered())
+		if(!SburbPlayerData.get(client, mcServer).hasEntered())
 			count++;
+		
 		return count;
 	}
 	
-	private static LandTypePair genLandAspects(MinecraftServer mcServer, SburbConnection connection)
+	private static LandTypePair genLandAspects(MinecraftServer mcServer, PlayerIdentifier player)
 	{
-		Session session = SessionHandler.get(mcServer).getPlayerSession(connection.getClientIdentifier());
-		Title title = PlayerSavedData.getData(connection.getClientIdentifier(), mcServer).getTitle();
+		SkaianetData skaianetData = SkaianetData.get(mcServer);
+		List<PlayerIdentifier> otherPlayers = skaianetData.sessionHandler.playersToCheckForDataSelection(player).toList();
+		Title title = Title.getTitle(player, mcServer).orElseThrow();
 		TitleLandType titleLandType = null;
 		TerrainLandType terrainLandType = null;
 		
-		if(session.predefinedPlayers.containsKey(connection.getClientIdentifier()))
+		Optional<PredefineData> data = skaianetData.getOrCreatePredefineData(player);
+		if(data.isPresent())
 		{
-			PredefineData data = session.predefinedPlayers.get(connection.getClientIdentifier());
-			titleLandType = data.getTitleLandType();
-			terrainLandType = data.getTerrainLandType();
+			titleLandType = data.get().getTitleLandType();
+			terrainLandType = data.get().getTerrainLandType();
 		}
 		
 		if(titleLandType == null)
 		{
-			if(title.getHeroAspect() == EnumAspect.SPACE && !session.getUsedTitleLandTypes(mcServer).contains(LandTypes.FROGS.get()) &&
+			if(title.heroAspect() == EnumAspect.SPACE && !Generator.titleLandTypesUsedBy(otherPlayers, skaianetData).contains(LandTypes.FROGS.get()) &&
 					(terrainLandType == null || LandTypes.FROGS.get().isAspectCompatible(terrainLandType)))
 				titleLandType = LandTypes.FROGS.get();
 			else
 			{
-				titleLandType = Generator.generateWeightedTitleLandType(mcServer, session, title.getHeroAspect(), terrainLandType, connection.getClientIdentifier());
+				titleLandType = Generator.generateWeightedTitleLandType(otherPlayers, title.heroAspect(), terrainLandType, skaianetData);
 				if(terrainLandType != null && titleLandType == LandTypes.TITLE_NULL.get())
 				{
-					LOGGER.warn("Failed to find a title land aspect compatible with land aspect \"{}\". Forced to use a poorly compatible land aspect instead.", LandTypes.TERRAIN_REGISTRY.get().getKey(terrainLandType));
-					titleLandType = Generator.generateWeightedTitleLandType(mcServer, session, title.getHeroAspect(), null, connection.getClientIdentifier());
+					LOGGER.warn("Failed to find a title land aspect compatible with land aspect \"{}\". Forced to use a poorly compatible land aspect instead.", LandTypes.TERRAIN_REGISTRY.getKey(terrainLandType));
+					titleLandType = Generator.generateWeightedTitleLandType(otherPlayers, title.heroAspect(), null, skaianetData);
 				}
 			}
 		}
 		if(terrainLandType == null)
-			terrainLandType = Generator.generateWeightedTerrainLandType(mcServer, session, titleLandType, connection.getClientIdentifier());
+			terrainLandType = Generator.generateWeightedTerrainLandType(otherPlayers, titleLandType, skaianetData);
 		
 		return new LandTypePair(terrainLandType, titleLandType);
 	}
 	
-	public static boolean giveItems(MinecraftServer mcServer, PlayerIdentifier player)
+	public static void onEntryItemsDeployed(MinecraftServer mcServer, PlayerIdentifier player)
 	{
-		SkaianetHandler handler = SkaianetHandler.get(mcServer);
-		SburbConnection c = handler.getPrimaryConnection(player, true).orElse(null);
-		if(c != null && !c.isMain())
-		{
-			onFirstItemGiven(c);
-			return true;
-		}
-		return false;
+		var connections = SburbConnections.get(mcServer);
+		Optional<ActiveConnection> connection = connections.getActiveConnection(player);
+		if(connection.isPresent() && !connections.hasPrimaryConnectionForClient(player))
+			connections.setPrimaryConnection(connection.get());
 	}
 	
-	static void onFirstItemGiven(SburbConnection connection)
+	public static ResourceKey<Level> prepareEntry(PlayerIdentifier player, MinecraftServer mcServer)
 	{
-		connection.setIsMain();
-	}
-	
-	static void prepareEntry(MinecraftServer mcServer, SburbConnection c)
-	{
-		PlayerIdentifier identifier = c.getClientIdentifier();
+		SkaianetData skaianetData = SkaianetData.get(mcServer);
+		SburbPlayerData playerData = skaianetData.getOrCreateData(player);
+		if(playerData.getLandDimension() != null)
+			return playerData.getLandDimension();
 		
-		generateAndSetTitle(mcServer.getLevel(Level.OVERWORLD), c.getClientIdentifier());
-		LandTypePair landTypes = genLandAspects(mcServer, c);		//This is where the Land dimension is actually registered, but it also needs the player's Title to be determined.
+		PlayerIdentifier identifier = playerData.playerId();
 		
-		ResourceKey<Level> dimType = LandTypeGenerator.createLandDimension(mcServer, identifier, landTypes);
+		generateAndSetTitle(identifier, mcServer);
+		
+		LandTypePair landTypes = genLandAspects(mcServer, identifier);
+		
+		skaianetData.connections.setPrimaryConnectionForEntry(identifier);
+		ResourceKey<Level> landDimension = DynamicDimensions.createLand(mcServer, DynamicDimensions.landIdBaseForPLayer(identifier), landTypes);
+		playerData.setLand(landDimension);
 		MSDimensions.sendLandTypesToAll(mcServer);
 		
-		c.setLand(dimType);
+		skaianetData.removePredefineData(identifier);
+		
+		return landDimension;
 	}
 	
-	static void onEntry(MinecraftServer server, SburbConnection c)
+	public static void onEntry(MinecraftServer server, ServerPlayer player)
 	{
-		c.setHasEntered();
+		PlayerIdentifier playerId = Objects.requireNonNull(IdentifierHandler.encode(player));
+		SkaianetData skaianetData = SkaianetData.get(server);
+		SburbPlayerData playerData = skaianetData.getOrCreateData(playerId);
 		
-		SessionHandler.get(server).getPlayerSession(c.getClientIdentifier()).checkIfCompleted();
+		playerData.setHasEntered();
+		skaianetData.infoTracker.markLandChainDirty();
 		
-		ServerPlayer player = c.getClientIdentifier().getPlayer(server);
-		if(player != null)
-		{
-			MSCriteriaTriggers.CRUXITE_ARTIFACT.trigger(player);
-			
-			LandTypePair.Named landTypes = LandTypePair.getNamed(player.serverLevel()).orElseThrow();
-			
-			//chat message
-			player.sendSystemMessage(Component.translatable(CHAT_LAND_ENTRY, landTypes.asComponent()));
-			
-			//Title style message
-			player.connection.send(new ClientboundSetTitlesAnimationPacket(90, 150, 40)); //large fade in time and total length to offset lag
-			player.connection.send(new ClientboundSetTitleTextPacket(Component.empty())); //clears preexisting titles
-			player.connection.send(new ClientboundSetSubtitleTextPacket(landTypes.asComponentWithLandFont()));
-		}
+		SessionHandler.get(server).getOrCreateSession(playerData.playerId()).checkIfCompleted();
+		
+		MSCriteriaTriggers.CRUXITE_ARTIFACT.get().trigger(player);
+		
+		EditmodeLocations.onEntry(server, playerData.playerId());
+		
+		LandTypePair.Named landTypes = LandTypePair.getNamed(player.serverLevel()).orElseThrow();
+		
+		//chat message
+		player.sendSystemMessage(Component.translatable(CHAT_LAND_ENTRY, landTypes.asComponent()));
+		
+		//Title style message
+		player.connection.send(new ClientboundSetTitlesAnimationPacket(90, 150, 40)); //large fade in time and total length to offset lag
+		player.connection.send(new ClientboundSetTitleTextPacket(Component.empty())); //clears preexisting titles
+		player.connection.send(new ClientboundSetSubtitleTextPacket(landTypes.asComponentWithLandFont()));
+		
+		NeoForge.EVENT_BUS.post(new OnEntryEvent(server, playerId));
 	}
 	
 	public static boolean canSelectColor(PlayerIdentifier player, MinecraftServer mcServer)
 	{
-		return SessionHandler.get(mcServer).getConnectionStream().noneMatch(c -> c.getClientIdentifier().equals(player));
+		var connections = SburbConnections.get(mcServer);
+		return connections.getActiveConnection(player).isEmpty() && !connections.hasPrimaryConnectionForClient(player);
 	}
 	
-	public static boolean hasEntered(ServerPlayer player)
-	{
-		PlayerIdentifier identifier = IdentifierHandler.encode(player);
-		Optional<SburbConnection> c = SkaianetHandler.get(player.server).getPrimaryConnection(identifier, true);
-		return c.isPresent() && c.get().hasEntered();
-	}
-	
-	/**
-	 * Extra behavior on the creation of a connection, such as generating the artifact type.
-	 */
-	static void onConnectionCreated(SburbConnection c)
+	static void initNewData(SburbPlayerData playerData)
 	{
 		Random rand = new Random();	//TODO seed?
-		c.artifactType = rand.nextInt(2);
-		LOGGER.info("Randomized artifact type to be: {} for player {}.", c.artifactType, c.getClientIdentifier().getUsername());
-		c.setBaseGrist(generateGristType(rand));
+		playerData.artifactType = SburbPlayerData.ArtifactType.values()[rand.nextInt(SburbPlayerData.ArtifactType.values().length)];
+		playerData.setBaseGrist(generateGristType(rand));
 	}
 	
 	static GristType generateGristType(Random rand)
 	{
 		List<GristType> types = GristTypeSpawnCategory.COMMON.gristTypes().toList();
 		return types.get(rand.nextInt(types.size()));
-	}
-	
-	public static void resetGivenItems(MinecraftServer mcServer)
-	{
-		SessionHandler.get(mcServer).getConnectionStream().forEach(SburbConnection::resetGivenItems);
-		
-		DeployList.onConditionsUpdated(mcServer);
 	}
 }

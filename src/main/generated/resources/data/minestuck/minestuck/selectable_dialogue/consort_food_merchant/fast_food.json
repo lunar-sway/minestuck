@@ -1,0 +1,9 @@
+{
+  "condition": {
+    "type": "minestuck:entity_type",
+    "entity_type": "minestuck:nakagator"
+  },
+  "dialogue": "minestuck:consort_food_merchant/fast_food",
+  "dialogue_weight": 10,
+  "keep_on_reset": true
+}

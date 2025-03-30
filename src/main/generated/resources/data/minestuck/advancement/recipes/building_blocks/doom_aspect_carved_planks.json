@@ -1,0 +1,32 @@
+{
+  "parent": "minecraft:recipes/root",
+  "criteria": {
+    "has_doom_aspect_planks": {
+      "conditions": {
+        "items": [
+          {
+            "items": "minestuck:doom_aspect_planks"
+          }
+        ]
+      },
+      "trigger": "minecraft:inventory_changed"
+    },
+    "has_the_recipe": {
+      "conditions": {
+        "recipe": "minestuck:doom_aspect_carved_planks"
+      },
+      "trigger": "minecraft:recipe_unlocked"
+    }
+  },
+  "requirements": [
+    [
+      "has_the_recipe",
+      "has_doom_aspect_planks"
+    ]
+  ],
+  "rewards": {
+    "recipes": [
+      "minestuck:doom_aspect_carved_planks"
+    ]
+  }
+}

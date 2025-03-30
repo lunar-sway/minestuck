@@ -2,13 +2,16 @@ package com.mraof.minestuck.world.lands;
 
 import com.mojang.serialization.Codec;
 import com.mojang.serialization.codecs.RecordCodecBuilder;
+import com.mraof.minestuck.Minestuck;
 import com.mraof.minestuck.world.gen.LandChunkGenerator;
 import com.mraof.minestuck.world.lands.terrain.TerrainLandType;
 import com.mraof.minestuck.world.lands.title.TitleLandType;
 import net.minecraft.nbt.CompoundTag;
+import net.minecraft.network.RegistryFriendlyByteBuf;
 import net.minecraft.network.chat.Component;
 import net.minecraft.network.chat.MutableComponent;
 import net.minecraft.network.chat.Style;
+import net.minecraft.network.codec.StreamCodec;
 import net.minecraft.resources.ResourceKey;
 import net.minecraft.resources.ResourceLocation;
 import net.minecraft.server.MinecraftServer;
@@ -21,28 +24,26 @@ import javax.annotation.Nonnull;
 import java.util.Objects;
 import java.util.Optional;
 
-public final class LandTypePair
+public record LandTypePair(TerrainLandType terrain, TitleLandType title)
 {
 	public static final Codec<LandTypePair> CODEC = RecordCodecBuilder.create(instance -> instance.group(
 			TerrainLandType.CODEC.fieldOf("terrain").forGetter(LandTypePair::getTerrain),
 			TitleLandType.CODEC.fieldOf("title").forGetter(LandTypePair::getTitle)).apply(instance, LandTypePair::new));
 	
+	public static final StreamCodec<RegistryFriendlyByteBuf, LandTypePair> STREAM_CODEC = StreamCodec.composite(
+			TerrainLandType.STREAM_CODEC,
+			LandTypePair::terrain,
+			TitleLandType.STREAM_CODEC,
+			LandTypePair::title,
+			LandTypePair::new
+	);
+	
 	/**
 	 * Custom font made by Riotmode. Similar to Carima used for "Land of _ and _" in comic. Font size of 4 is smaller than default of 11
 	 */
-	public static final Style LAND_OF_COPYLEFT_AND_FREEDOM_FONT_STYLE = Style.EMPTY.withFont(new ResourceLocation("minestuck", "land_of_copyleft_and_freedom"));
+	public static final Style LAND_OF_COPYLEFT_AND_FREEDOM_FONT_STYLE = Style.EMPTY.withFont(ResourceLocation.fromNamespaceAndPath("minestuck", "land_of_copyleft_and_freedom"));
 	public static final String FORMAT = "land.format";
 	
-	public LandTypePair(TerrainLandType terrainType, TitleLandType titleType)
-	{
-		terrain = Objects.requireNonNull(terrainType);
-		title = Objects.requireNonNull(titleType);
-	}
-	
-	@Nonnull
-	private final TerrainLandType terrain;
-	@Nonnull
-	private final TitleLandType title;
 	
 	@Nonnull
 	public TerrainLandType getTerrain()
@@ -58,8 +59,8 @@ public final class LandTypePair
 	
 	public CompoundTag write(CompoundTag nbt)
 	{
-		nbt.putString("terrain_aspect", LandTypes.TERRAIN_REGISTRY.get().getKey(terrain).toString());
-		nbt.putString("title_aspect", LandTypes.TITLE_REGISTRY.get().getKey(title).toString());
+		nbt.putString("terrain_aspect", LandTypes.TERRAIN_REGISTRY.getKey(terrain).toString());
+		nbt.putString("title_aspect", LandTypes.TITLE_REGISTRY.getKey(title).toString());
 		return nbt;
 	}
 	
@@ -67,8 +68,8 @@ public final class LandTypePair
 	{
 		String terrainName = nbt.getString("terrain_aspect");
 		String titleName = nbt.getString("title_aspect");
-		TerrainLandType terrain = LandTypes.TERRAIN_REGISTRY.get().getValue(new ResourceLocation(terrainName));
-		TitleLandType title = LandTypes.TITLE_REGISTRY.get().getValue(new ResourceLocation(titleName));
+		TerrainLandType terrain = LandTypes.TERRAIN_REGISTRY.get(Minestuck.id(terrainName));
+		TitleLandType title = LandTypes.TITLE_REGISTRY.get(Minestuck.id(titleName));
 		Objects.requireNonNull(terrain, "Could not find terrain land aspect by name " + terrainName);
 		Objects.requireNonNull(title, "Could not find title land aspect by name " + titleName);
 		

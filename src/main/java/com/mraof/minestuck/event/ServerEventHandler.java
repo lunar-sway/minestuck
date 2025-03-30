@@ -5,94 +5,72 @@ import com.mraof.minestuck.MinestuckConfig;
 import com.mraof.minestuck.block.MSBlocks;
 import com.mraof.minestuck.effects.CreativeShockEffect;
 import com.mraof.minestuck.effects.MSEffects;
-import com.mraof.minestuck.entity.consort.ConsortDialogue;
 import com.mraof.minestuck.entity.underling.UnderlingEntity;
 import com.mraof.minestuck.entry.EntryEvent;
+import com.mraof.minestuck.inventory.captchalogue.CaptchaDeckHandler;
 import com.mraof.minestuck.inventory.captchalogue.HashMapModus;
 import com.mraof.minestuck.inventory.captchalogue.Modus;
 import com.mraof.minestuck.item.MSItems;
-import com.mraof.minestuck.player.*;
-import com.mraof.minestuck.skaianet.SburbHandler;
-import com.mraof.minestuck.skaianet.SkaianetHandler;
+import com.mraof.minestuck.player.Echeladder;
+import com.mraof.minestuck.player.EnumAspect;
+import com.mraof.minestuck.player.IdentifierHandler;
+import com.mraof.minestuck.player.Title;
 import com.mraof.minestuck.skaianet.TitleSelectionHook;
 import com.mraof.minestuck.world.storage.MSExtraData;
 import net.minecraft.server.MinecraftServer;
 import net.minecraft.server.level.ServerPlayer;
 import net.minecraft.sounds.SoundEvents;
 import net.minecraft.sounds.SoundSource;
-import net.minecraft.world.InteractionHand;
 import net.minecraft.world.effect.MobEffect;
 import net.minecraft.world.effect.MobEffectInstance;
 import net.minecraft.world.effect.MobEffects;
 import net.minecraft.world.entity.Entity;
+import net.minecraft.world.entity.EquipmentSlot;
 import net.minecraft.world.entity.LivingEntity;
 import net.minecraft.world.entity.item.ItemEntity;
 import net.minecraft.world.entity.monster.*;
-import net.minecraft.world.entity.player.Player;
 import net.minecraft.world.item.ItemStack;
 import net.minecraft.world.item.Items;
 import net.minecraft.world.phys.AABB;
-import net.minecraftforge.common.util.FakePlayer;
-import net.minecraftforge.event.ServerChatEvent;
-import net.minecraftforge.event.TickEvent;
-import net.minecraftforge.event.entity.item.ItemExpireEvent;
-import net.minecraftforge.event.entity.living.LivingDeathEvent;
-import net.minecraftforge.event.entity.living.LivingHurtEvent;
-import net.minecraftforge.event.entity.living.MobEffectEvent;
-import net.minecraftforge.event.entity.player.CriticalHitEvent;
-import net.minecraftforge.event.entity.player.PlayerEvent;
-import net.minecraftforge.event.furnace.FurnaceFuelBurnTimeEvent;
-import net.minecraftforge.event.server.ServerStartingEvent;
-import net.minecraftforge.event.server.ServerStoppedEvent;
-import net.minecraftforge.eventbus.api.Event;
-import net.minecraftforge.eventbus.api.EventPriority;
-import net.minecraftforge.eventbus.api.SubscribeEvent;
-import net.minecraftforge.fml.common.Mod;
-import net.minecraftforge.server.ServerLifecycleHooks;
+import net.neoforged.bus.api.EventPriority;
+import net.neoforged.bus.api.SubscribeEvent;
+import net.neoforged.fml.common.EventBusSubscriber;
+import net.neoforged.neoforge.common.util.FakePlayer;
+import net.neoforged.neoforge.event.ServerChatEvent;
+import net.neoforged.neoforge.event.entity.item.ItemExpireEvent;
+import net.neoforged.neoforge.event.entity.living.LivingDamageEvent;
+import net.neoforged.neoforge.event.entity.living.LivingDeathEvent;
+import net.neoforged.neoforge.event.entity.living.LivingIncomingDamageEvent;
+import net.neoforged.neoforge.event.entity.living.MobEffectEvent;
+import net.neoforged.neoforge.event.entity.player.CriticalHitEvent;
+import net.neoforged.neoforge.event.entity.player.PlayerEvent;
+import net.neoforged.neoforge.event.furnace.FurnaceFuelBurnTimeEvent;
+import net.neoforged.neoforge.event.server.ServerStoppedEvent;
+import net.neoforged.neoforge.event.tick.ServerTickEvent;
+import net.neoforged.neoforge.server.ServerLifecycleHooks;
 
 import java.util.List;
 
-@Mod.EventBusSubscriber(modid = Minestuck.MOD_ID, bus=Mod.EventBusSubscriber.Bus.FORGE)
+@EventBusSubscriber(modid = Minestuck.MOD_ID, bus = EventBusSubscriber.Bus.GAME)
 public class ServerEventHandler
 {
-	public static long lastDay;
-	
-	@SubscribeEvent
-	public static void serverStarting(ServerStartingEvent event)
-	{
-		ConsortDialogue.serverStarting();
-		lastDay = event.getServer().overworld().getGameTime() / 24000L;
-	}
-	
 	@SubscribeEvent
 	public static void serverStopped(ServerStoppedEvent event)
 	{
 		IdentifierHandler.clear();
-		SkaianetHandler.clear();
 	}
 	
 	@SubscribeEvent
-	public static void onServerTick(TickEvent.ServerTickEvent event)
+	public static void onServerTick(ServerTickEvent.Post event)
 	{
-		if(event.phase == TickEvent.Phase.END)
-		{
-			MinecraftServer server = ServerLifecycleHooks.getCurrentServer();
-			if(!MinestuckConfig.SERVER.hardMode.get())
-			{
-				long time = server.overworld().getGameTime() / 24000L;
-				if(time != lastDay)
-				{
-					lastDay = time;
-					SburbHandler.resetGivenItems(server);
-				}
-			}
-			
-			if(event.haveTime())
-				MSExtraData.get(server).executeEntryTasks(server);
-			
-			if(MinestuckConfig.SERVER.hardMode.get())
-				EntryEvent.tick(server);
-		}
+		MinecraftServer server = ServerLifecycleHooks.getCurrentServer();
+		
+		if(event.hasTime())
+			MSExtraData.get(server).executeEntryTasks(server);
+		
+		if(MinestuckConfig.SERVER.hardMode.get())
+			EntryEvent.tick(server);
+	
 	}
 	
 	@SubscribeEvent(priority=EventPriority.LOWEST, receiveCanceled=false)
@@ -113,7 +91,7 @@ public class ServerEventHandler
 					exp = Math.min(((Slime) event.getEntity()).getSize() - 1, 9);
 				
 				if(exp > 0)
-					Echeladder.increaseProgress(player, exp);
+					Echeladder.get(player).increaseProgress(exp);
 			}
 		}
 		if(event.getEntity() instanceof ServerPlayer)
@@ -130,7 +108,7 @@ public class ServerEventHandler
 	public static void onCrit(CriticalHitEvent event)
 	{
 		if(!event.getEntity().level().isClientSide)
-			cachedCrit = event.getResult() == Event.Result.ALLOW || event.getResult() == Event.Result.DEFAULT && event.isVanillaCritical();
+			cachedCrit = event.isCriticalHit() && event.isVanillaCritical();
 	}
 	
 	public static boolean wasLastHitCrit(LivingEntity entity)
@@ -139,7 +117,7 @@ public class ServerEventHandler
 	}
 	
 	@SubscribeEvent(priority=EventPriority.NORMAL)
-	public static void onEntityAttack(LivingHurtEvent event)
+	public static void onEntityAttack(LivingIncomingDamageEvent event)
 	{
 		if(event.getSource().getEntity() != null)
 		{
@@ -154,21 +132,17 @@ public class ServerEventHandler
 				if(attackerIsRealPlayer && injured instanceof UnderlingEntity)
 				{
 					//Increase damage to underling
-					double modifier = PlayerSavedData.getData((ServerPlayer) attacker).getEcheladder().getUnderlingDamageModifier();
+					double modifier = Echeladder.get((ServerPlayer) attacker).getUnderlingDamageModifier();
 					event.setAmount((float) (event.getAmount() * modifier));
 				} else if (injuredIsRealPlayer && attacker instanceof UnderlingEntity)
 				{
 					//Decrease damage to player
-					double modifier = PlayerSavedData.getData((ServerPlayer) injured).getEcheladder().getUnderlingProtectionModifier();
+					double modifier = Echeladder.get((ServerPlayer) injured).getUnderlingProtectionModifier();
 					event.setAmount((float) (event.getAmount() * modifier));
 				}
 			}
 		}
-	}
-	
-	@SubscribeEvent(priority = EventPriority.LOWEST, receiveCanceled = false)
-	public static void onEntityDamage(LivingHurtEvent event)
-	{
+		
 		if(event.getEntity() instanceof UnderlingEntity underling)
 		{
 			underling.onEntityDamaged(event.getSource(), event.getAmount());
@@ -176,15 +150,15 @@ public class ServerEventHandler
 	}
 	
 	@SubscribeEvent(priority = EventPriority.NORMAL, receiveCanceled = false)
-	public static void onPlayerInjured(LivingHurtEvent event)
+	public static void onPlayerInjured(LivingDamageEvent.Post event)
 	{
-		if(event.getEntity() instanceof Player injuredPlayer && !(injuredPlayer instanceof FakePlayer))
+		if(event.getEntity() instanceof ServerPlayer injuredPlayer && !(injuredPlayer instanceof FakePlayer))
 		{
-			Title title = PlayerSavedData.getData((ServerPlayer) injuredPlayer).getTitle();
-			boolean isDoom = title != null && title.getHeroAspect() == EnumAspect.DOOM;
+			boolean isDoom = Title.isPlayerOfAspect(injuredPlayer, EnumAspect.DOOM);
 			ItemStack handItem = injuredPlayer.getMainHandItem();
 			float activateThreshold = ((injuredPlayer.getMaxHealth() / (injuredPlayer.getHealth() + 1)) / injuredPlayer.getMaxHealth()); //fraction of players health that rises dramatically the more injured they are
 			
+			//TODO make a property
 			if(handItem.getItem() == MSItems.LUCERNE_HAMMER_OF_UNDYING.get())
 			{
 				if(isDoom)
@@ -199,15 +173,17 @@ public class ServerEventHandler
 					injuredPlayer.addEffect(new MobEffectInstance(MobEffects.REGENERATION, 450, 0));
 					if(isDoom)
 					{
+						
 						injuredPlayer.addEffect(new MobEffectInstance(MobEffects.ABSORPTION, 100, 0));
-						handItem.hurtAndBreak(100, injuredPlayer, playerEntity -> playerEntity.broadcastBreakEvent(InteractionHand.MAIN_HAND));
+						handItem.hurtAndBreak(100, injuredPlayer, EquipmentSlot.MAINHAND);
 					} else
 					{
-						handItem.hurtAndBreak(250, injuredPlayer, playerEntity -> playerEntity.broadcastBreakEvent(InteractionHand.MAIN_HAND));
+						handItem.hurtAndBreak(250, injuredPlayer, EquipmentSlot.MAINHAND);
 					}
 				}
 			}
 			
+			//TODO make a property
 			if(handItem.getItem() == MSItems.CRUEL_FATE_CRUCIBLE.get())
 			{
 				activateThreshold = activateThreshold * 8 + injuredPlayer.getRandom().nextFloat() * .9F;
@@ -221,9 +197,9 @@ public class ServerEventHandler
 					{
 						injuredPlayer.level().playSound(null, injuredPlayer.getX(), injuredPlayer.getY(), injuredPlayer.getZ(), SoundEvents.WITHER_HURT, SoundSource.PLAYERS, 0.5F, 1.6F);
 						if(isDoom)
-							handItem.hurtAndBreak(2, injuredPlayer, playerEntity -> playerEntity.broadcastBreakEvent(InteractionHand.MAIN_HAND));
+							handItem.hurtAndBreak(2, injuredPlayer, EquipmentSlot.MAINHAND);
 						else
-							handItem.hurtAndBreak(10, injuredPlayer, playerEntity -> playerEntity.broadcastBreakEvent(InteractionHand.MAIN_HAND));
+							handItem.hurtAndBreak(10, injuredPlayer, EquipmentSlot.MAINHAND);
 						for(LivingEntity livingentity : list)
 						{
 							livingentity.addEffect(new MobEffectInstance(MobEffects.HARM, 1, 1));
@@ -243,13 +219,9 @@ public class ServerEventHandler
 	@SubscribeEvent(priority=EventPriority.LOW, receiveCanceled=false)
 	public static void onServerChat(ServerChatEvent event)
 	{
-		ServerPlayer player = event.getPlayer();
-		if(!(player instanceof FakePlayer))
-		{
-			Modus modus = PlayerSavedData.getData(player).getModus();
-			if(modus instanceof HashMapModus)
-				((HashMapModus) modus).onChatMessage(event.getPlayer(), event.getMessage().getString());
-		}
+		Modus modus = CaptchaDeckHandler.getModus(event.getPlayer());
+		if(modus instanceof HashMapModus hashMapModus)
+			hashMapModus.onChatMessage(event.getPlayer(), event.getMessage().getString());
 	}
 	
 	@SubscribeEvent
@@ -260,26 +232,15 @@ public class ServerEventHandler
 	}
 	
 	@SubscribeEvent
-	public static void onPlayerTickEvent(TickEvent.PlayerTickEvent event)
-	{
-		if(!event.player.level().isClientSide && !(event.player instanceof FakePlayer))
-		{
-			PlayerData data = PlayerSavedData.getData((ServerPlayer) event.player);
-			if(data.getTitle() != null)
-				data.getTitle().handleAspectEffects((ServerPlayer) event.player);
-		}
-	}
-	
-	@SubscribeEvent
 	public static void onEffectRemove(MobEffectEvent.Remove event)
 	{
-		onEffectEnd(event.getEntity(), event.getEffect());
+		onEffectEnd(event.getEntity(), event.getEffect().value());
 	}
 	
 	@SubscribeEvent
 	public static void onEffectExpire(MobEffectEvent.Expired expiryEvent)
 	{
-		onEffectEnd(expiryEvent.getEntity(), expiryEvent.getEffectInstance().getEffect());
+		onEffectEnd(expiryEvent.getEntity(), expiryEvent.getEffectInstance().getEffect().value());
 	}
 	
 	private static void onEffectEnd(LivingEntity entityLiving, MobEffect effect)

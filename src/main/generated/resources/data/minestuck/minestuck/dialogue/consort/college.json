@@ -1,0 +1,32 @@
+{
+  "conditioned_nodes": [
+    {
+      "condition": {
+        "type": "minestuck:player_boondollars",
+        "amount": 1000
+      },
+      "node": {
+        "animation": {},
+        "gui": "minestuck:textures/gui/dialogue/dialogue.png",
+        "message": "minestuck.dialogue.consort.college.1",
+        "responses": [
+          {
+            "condition": {
+              "type": "minestuck:always_true"
+            },
+            "hide_if_failed": true,
+            "message": "minestuck.arrow",
+            "next_dialogue": "minestuck:consort/college.2",
+            "triggers": []
+          }
+        ]
+      }
+    }
+  ],
+  "default_node": {
+    "animation": {},
+    "gui": "minestuck:textures/gui/dialogue/dialogue.png",
+    "message": "minestuck.dialogue.consort.college.poor",
+    "responses": []
+  }
+}

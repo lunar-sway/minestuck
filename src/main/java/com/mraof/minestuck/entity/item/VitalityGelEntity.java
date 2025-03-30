@@ -1,24 +1,27 @@
 package com.mraof.minestuck.entity.item;
 
-import com.mraof.minestuck.computer.editmode.ClientEditHandler;
+import com.mraof.minestuck.computer.editmode.ClientEditmodeData;
 import com.mraof.minestuck.computer.editmode.ServerEditHandler;
 import com.mraof.minestuck.entity.MSEntityTypes;
 import net.minecraft.core.BlockPos;
 import net.minecraft.nbt.CompoundTag;
 import net.minecraft.nbt.Tag;
 import net.minecraft.network.FriendlyByteBuf;
-import net.minecraft.network.protocol.Packet;
-import net.minecraft.network.protocol.game.ClientGamePacketListener;
+import net.minecraft.network.RegistryFriendlyByteBuf;
+import net.minecraft.network.syncher.SynchedEntityData;
+import net.minecraft.server.level.ServerPlayer;
 import net.minecraft.sounds.SoundEvents;
 import net.minecraft.util.Mth;
 import net.minecraft.world.damagesource.DamageSource;
 import net.minecraft.world.entity.*;
 import net.minecraft.world.entity.player.Player;
 import net.minecraft.world.level.Level;
-import net.minecraftforge.entity.IEntityAdditionalSpawnData;
-import net.minecraftforge.network.NetworkHooks;
+import net.neoforged.neoforge.entity.IEntityWithComplexSpawn;
 
-public class VitalityGelEntity extends Entity implements IEntityAdditionalSpawnData
+import javax.annotation.ParametersAreNonnullByDefault;
+
+@ParametersAreNonnullByDefault
+public class VitalityGelEntity extends Entity implements IEntityWithComplexSpawn
 {
 	public int cycle;
 	
@@ -84,7 +87,7 @@ public class VitalityGelEntity extends Entity implements IEntityAdditionalSpawnD
 	}
 	
 	@Override
-	protected void defineSynchedData()
+	protected void defineSynchedData(SynchedEntityData.Builder builder)
 	{
 	}
 
@@ -125,7 +128,7 @@ public class VitalityGelEntity extends Entity implements IEntityAdditionalSpawnD
 			this.playSound(SoundEvents.GENERIC_BURN, 0.4F, 2.0F + this.random.nextFloat() * 0.4F);
 		}
 		
-		double d0 = this.getDimensions(Pose.STANDING).width * 2.0D;
+		double d0 = this.getDimensions(Pose.STANDING).width() * 2.0D;
 		
 		if(this.targetCycle < this.cycle - 20 + this.getId() % 100)
 		{
@@ -143,7 +146,7 @@ public class VitalityGelEntity extends Entity implements IEntityAdditionalSpawnD
 			double d2 = (this.closestPlayer.getY() + (double) this.closestPlayer.getEyeHeight() - this.getY()) / d0;
 			double d3 = (this.closestPlayer.getZ() - this.getZ()) / d0;
 			double d4 = Math.sqrt(d1 * d1 + d2 * d2 + d3 * d3);
-			double d5 = this.getDimensions(Pose.STANDING).width * 2.0D - d4;
+			double d5 = this.getDimensions(Pose.STANDING).width() * 2.0D - d4;
 			
 			if(d5 > 0.0D)
 			{
@@ -209,7 +212,9 @@ public class VitalityGelEntity extends Entity implements IEntityAdditionalSpawnD
 	@Override
 	public void playerTouch(Player player)
 	{
-		if(this.level().isClientSide ? ClientEditHandler.isActive() : ServerEditHandler.getData(player) != null)
+		if(this.level().isClientSide && ClientEditmodeData.isInEditmode())
+			return;
+		if(player instanceof ServerPlayer serverPlayer && ServerEditHandler.isInEditmode(serverPlayer))
 			return;
 		
 		if(!this.level().isClientSide)
@@ -238,20 +243,14 @@ public class VitalityGelEntity extends Entity implements IEntityAdditionalSpawnD
 	}
 	
 	@Override
-	public void writeSpawnData(FriendlyByteBuf buffer)
+	public void writeSpawnData(RegistryFriendlyByteBuf buffer)
 	{
 		buffer.writeInt(this.healAmount);
 	}
 	
 	@Override
-	public void readSpawnData(FriendlyByteBuf data)
+	public void readSpawnData(RegistryFriendlyByteBuf data)
 	{
 		this.healAmount = data.readInt();
-	}
-	
-	@Override
-	public Packet<ClientGamePacketListener> getAddEntityPacket()
-	{
-		return NetworkHooks.getEntitySpawningPacket(this);
 	}
 }

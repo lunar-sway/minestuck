@@ -1,0 +1,22 @@
+{
+  "node": {
+    "animation": {},
+    "gui": "minestuck:textures/gui/dialogue/dialogue.png",
+    "messages": [
+      {
+        "type": "entity",
+        "message": "minestuck.dialogue.consort.camel.no_camel"
+      },
+      {
+        "type": "description",
+        "message": {
+          "arguments": [
+            "entity_type"
+          ],
+          "key": "minestuck.dialogue.consort.camel.no_camel.desc"
+        }
+      }
+    ],
+    "responses": []
+  }
+}

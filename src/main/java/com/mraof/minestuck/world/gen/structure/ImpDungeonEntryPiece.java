@@ -31,13 +31,13 @@ public class ImpDungeonEntryPiece extends StructurePiece
 	
 	private ImpDungeonEntryPiece(int x, int z, Direction orientation)
 	{
-		super(MSStructurePieces.IMP_ENTRY.get(), 0, makeBoundingBox(x, 64, z, orientation, 6, 4, 11));
+		super(MSStructures.ImpDungeon.ENTRY_PIECE.get(), 0, makeBoundingBox(x, 64, z, orientation, 6, 4, 11));
 		setOrientation(orientation);
 	}
 	
 	public ImpDungeonEntryPiece(CompoundTag nbt)
 	{
-		super(MSStructurePieces.IMP_ENTRY.get(), nbt);
+		super(MSStructures.ImpDungeon.ENTRY_PIECE.get(), nbt);
 		definedHeight = nbt.getBoolean("definedHeight");
 		compoHeight = nbt.getInt("compoHeight");
 	}

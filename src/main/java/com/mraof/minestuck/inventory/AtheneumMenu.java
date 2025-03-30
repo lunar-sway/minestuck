@@ -1,13 +1,12 @@
 package com.mraof.minestuck.inventory;
 
-import com.mraof.minestuck.alchemy.AlchemyHelper;
 import com.mraof.minestuck.computer.editmode.DeployEntry;
 import com.mraof.minestuck.computer.editmode.DeployList;
 import com.mraof.minestuck.computer.editmode.EditData;
 import com.mraof.minestuck.computer.editmode.ServerEditHandler;
-import com.mraof.minestuck.network.AtheneumPacket;
-import com.mraof.minestuck.network.MSPacketHandler;
-import com.mraof.minestuck.skaianet.SburbConnection;
+import com.mraof.minestuck.item.CaptchaCardItem;
+import com.mraof.minestuck.network.editmode.AtheneumPackets;
+import com.mraof.minestuck.skaianet.SburbPlayerData;
 import net.minecraft.server.level.ServerPlayer;
 import net.minecraft.util.Mth;
 import net.minecraft.world.Container;
@@ -18,6 +17,7 @@ import net.minecraft.world.inventory.AbstractContainerMenu;
 import net.minecraft.world.inventory.ClickType;
 import net.minecraft.world.inventory.Slot;
 import net.minecraft.world.item.ItemStack;
+import net.neoforged.neoforge.network.PacketDistributor;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -97,17 +97,17 @@ public class AtheneumMenu extends AbstractContainerMenu
 		if(editData == null)
 			throw new IllegalStateException("Creating an editmode inventory menu, but the player is not in editmode");
 		List<ItemStack> itemList = new ArrayList<>();
-		SburbConnection c = editData.getConnection();
+		SburbPlayerData playerData = editData.sburbData();
 		
 		//Gets items from the atheneum category of the DeployList
-		List<DeployEntry> atheneumItems = DeployList.getItemList(player.getServer(), c, DeployList.EntryLists.ATHENEUM);
-		atheneumItems.removeIf(deployEntry -> deployEntry.getCurrentCost(c) == null);
+		List<DeployEntry> atheneumItems = DeployList.getItemList(player.getServer(), playerData, DeployList.EntryLists.ATHENEUM);
+		atheneumItems.removeIf(deployEntry -> deployEntry.getCurrentCost(playerData) == null);
 		
 		//if each stack is not empty, put it in the item list.
 		for(DeployEntry atheneumItem : atheneumItems)
 		{
-			if(!atheneumItem.getItemStack(c, player.level()).isEmpty())
-				itemList.add(atheneumItem.getItemStack(c, player.level()));
+			if(!atheneumItem.getItemStack(playerData, player.level()).isEmpty())
+				itemList.add(atheneumItem.getItemStack(playerData, player.level()));
 		}
 		
 		
@@ -142,11 +142,11 @@ public class AtheneumMenu extends AbstractContainerMenu
 			this.inventory.setItem(i, itemList.get(i));
 		}
 		
-		AtheneumPacket.Update packet = new AtheneumPacket.Update(scroll > 0, INVENTORY_SIZE + (scroll * INVENTORY_COLUMNS) < items.size(), itemList);
-		MSPacketHandler.sendToPlayer(packet, serverPlayer);
+		AtheneumPackets.Update packet = new AtheneumPackets.Update(scroll > 0, INVENTORY_SIZE + (scroll * INVENTORY_COLUMNS) < items.size(), itemList);
+		PacketDistributor.sendToPlayer(serverPlayer, packet);
 	}
 	
-	public void receiveUpdatePacket(AtheneumPacket.Update packet)
+	public void receiveUpdatePacket(AtheneumPackets.Update packet)
 	{
 		if(!player.level().isClientSide)
 			throw new IllegalStateException("Should not receive update packet here for server-side menu");
@@ -161,9 +161,9 @@ public class AtheneumMenu extends AbstractContainerMenu
 	{
 		super.clicked(pSlotId, pButton, pClickType, pPlayer);
 		
-		if(pClickType == ClickType.PICKUP && pButton == 1)
+		if(pClickType == ClickType.PICKUP && pButton == 1 && pSlotId >= 0)
 		{
-			this.setCarried(AlchemyHelper.createPunchedCard(this.slots.get(pSlotId).getItem()));
+			this.setCarried(CaptchaCardItem.createPunchedCard(this.slots.get(pSlotId).getItem().getItem()));
 		}
 		
 	}

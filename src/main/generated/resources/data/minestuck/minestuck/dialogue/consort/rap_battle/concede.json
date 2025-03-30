@@ -1,0 +1,13 @@
+{
+  "node": {
+    "animation": {},
+    "gui": "minestuck:textures/gui/dialogue/dialogue.png",
+    "message": {
+      "arguments": [
+        "entity_sound"
+      ],
+      "key": "minestuck.dialogue.consort.rap_battle.concede"
+    },
+    "responses": []
+  }
+}

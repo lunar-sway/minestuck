@@ -2,12 +2,12 @@ package com.mraof.minestuck.world.storage;
 
 import com.mraof.minestuck.Minestuck;
 import net.minecraft.core.GlobalPos;
+import net.minecraft.core.HolderLookup;
 import net.minecraft.nbt.CompoundTag;
 import net.minecraft.nbt.NbtOps;
 import net.minecraft.nbt.Tag;
 import net.minecraft.server.MinecraftServer;
 import net.minecraft.server.level.ServerLevel;
-import net.minecraft.util.RandomSource;
 import net.minecraft.world.level.Level;
 import net.minecraft.world.level.saveddata.SavedData;
 import net.minecraft.world.level.storage.DimensionDataStorage;
@@ -32,7 +32,7 @@ public class TransportalizerSavedData extends SavedData
 		locations = new HashMap<>();
 	}
 	
-	public static TransportalizerSavedData load(CompoundTag nbt)
+	private static TransportalizerSavedData load(CompoundTag nbt, HolderLookup.Provider registries)
 	{
 		TransportalizerSavedData data = new TransportalizerSavedData();
 		data.locations.clear();
@@ -45,7 +45,7 @@ public class TransportalizerSavedData extends SavedData
 	}
 	
 	@Override
-	public CompoundTag save(CompoundTag compound)
+	public CompoundTag save(CompoundTag compound, HolderLookup.Provider registries)
 	{
 		for(Map.Entry<String, GlobalPos> entry : locations.entrySet())
 		{
@@ -80,24 +80,6 @@ public class TransportalizerSavedData extends SavedData
 		return removed;
 	}
 	
-	public String findNewId(RandomSource random, GlobalPos location)
-	{
-		String unusedId;
-		do
-		{
-			unusedId = "";
-			for(int i = 0; i < 4; i++)
-			{
-				unusedId += (char) (random.nextInt(26) + 'A');
-			}
-		}
-		while(locations.containsKey(unusedId));
-		
-		locations.put(unusedId, location);
-		this.setDirty();
-		return unusedId;
-	}
-	
 	public void replace(String id, GlobalPos oldPos, GlobalPos newPos)
 	{
 		if(locations.replace(id, oldPos, newPos))
@@ -118,6 +100,6 @@ public class TransportalizerSavedData extends SavedData
 		
 		DimensionDataStorage storage = level.getDataStorage();
 		
-		return storage.computeIfAbsent(TransportalizerSavedData::load, TransportalizerSavedData::new, DATA_NAME);
+		return storage.computeIfAbsent(new Factory<>(TransportalizerSavedData::new, TransportalizerSavedData::load), DATA_NAME);
 	}
 }

@@ -1,0 +1,11 @@
+{
+  "type": "minestuck:combination",
+  "input1": {
+    "item": "minecraft:cake"
+  },
+  "input2": {
+    "item": "minecraft:apple"
+  },
+  "mode": "or",
+  "output": "minestuck:apple_cake"
+}

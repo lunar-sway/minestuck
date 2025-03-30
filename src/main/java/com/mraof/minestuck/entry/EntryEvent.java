@@ -1,7 +1,8 @@
 package com.mraof.minestuck.entry;
 
-import com.mraof.minestuck.skaianet.SburbConnection;
-import com.mraof.minestuck.skaianet.SkaianetHandler;
+import com.mraof.minestuck.skaianet.ActiveConnection;
+import com.mraof.minestuck.skaianet.SburbConnections;
+import com.mraof.minestuck.skaianet.SburbPlayerData;
 import net.minecraft.core.GlobalPos;
 import net.minecraft.server.MinecraftServer;
 import net.minecraft.server.level.ServerLevel;
@@ -22,12 +23,17 @@ public class EntryEvent
 	public static void tick(MinecraftServer server)
 	{
 		if (server.overworld().getGameTime() % FREQUENCY == 0)
-			SkaianetHandler.get(server).getConnectionsInEntry().forEach(connection -> handleConnection(connection, server));
+		{
+			SburbConnections connections = SburbConnections.get(server);
+			connections.activeConnections().filter(connection ->
+					connections.hasPrimaryConnectionForClient(connection.client())
+							&& !SburbPlayerData.get(connection.client(), server).hasEntered()).forEach(connection -> handleConnection(connection, server));
+		}
 	}
 	
-	private static void handleConnection(SburbConnection connection, MinecraftServer server)
+	private static void handleConnection(ActiveConnection connection, MinecraftServer server)
 	{
-		GlobalPos pos = connection.getClientComputer().getPosForEditmode();
+		GlobalPos pos = connection.clientComputer().getPosForEditmode();
 		ServerLevel level = server.getLevel(pos.dimension());
 		if (level != null && level.isLoaded(pos.pos()))
 		{
@@ -45,9 +51,7 @@ public class EntryEvent
 				entity = EntityType.DRAGON_FIREBALL.create(level);
 			Objects.requireNonNull(entity);
 			entity.moveTo(x, y, z, entity.getYRot(), entity.getXRot());
-			entity.xPower = 0;
-			entity.yPower = -0.1D;
-			entity.zPower = 0;
+			entity.setDeltaMovement(0, -0.1, 0);
 			
 			level.addFreshEntity(entity);
 		}

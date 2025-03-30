@@ -2,6 +2,7 @@ package com.mraof.minestuck.world.lands.title;
 
 import com.mraof.minestuck.entity.MSEntityTypes;
 import com.mraof.minestuck.util.MSSoundEvents;
+import com.mraof.minestuck.util.MSTags;
 import com.mraof.minestuck.world.biome.LandBiomeSetType;
 import com.mraof.minestuck.world.biome.LandBiomeType;
 import com.mraof.minestuck.world.gen.feature.MSPlacedFeatures;
@@ -13,7 +14,6 @@ import net.minecraft.world.entity.MobCategory;
 import net.minecraft.world.level.biome.MobSpawnSettings;
 import net.minecraft.world.level.block.Blocks;
 import net.minecraft.world.level.levelgen.GenerationStep;
-import net.minecraft.world.level.material.Fluids;
 
 public class FrogsLandType extends TitleLandType
 {
@@ -54,14 +54,17 @@ public class FrogsLandType extends TitleLandType
 	public void addBiomeGeneration(LandBiomeGenBuilder builder, StructureBlockRegistry blocks, LandBiomeSetType biomeSet)
 	{
 		builder.addFeature(GenerationStep.Decoration.VEGETAL_DECORATION, MSPlacedFeatures.WATERLILY_PATCH, LandBiomeType.OCEAN);
+		
+		builder.addFeature(GenerationStep.Decoration.SURFACE_STRUCTURES, MSPlacedFeatures.FROG_RUINS, LandBiomeType.anyExcept(LandBiomeType.OCEAN));
+		
+		builder.addFeature(GenerationStep.Decoration.VEGETAL_DECORATION, MSPlacedFeatures.SPACE_TREE, LandBiomeType.anyExcept(LandBiomeType.OCEAN));
+		
 	}
 	
 	@Override
 	public boolean isAspectCompatible(TerrainLandType otherType)
 	{
-		StructureBlockRegistry registry = new StructureBlockRegistry();
-		otherType.registerBlocks(registry);
-		return !registry.getBlockState("ocean").getFluidState().is(Fluids.LAVA);
+		return !otherType.is(MSTags.TerrainLandTypes.IS_DANGEROUS);
 	}
 	
 	@Override

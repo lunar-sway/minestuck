@@ -1,7 +1,6 @@
 package com.mraof.minestuck.alchemy.recipe.generator.recipe;
 
-import com.google.gson.JsonElement;
-import com.google.gson.JsonNull;
+import com.mojang.serialization.MapCodec;
 import com.mraof.minestuck.api.alchemy.GristSet;
 import com.mraof.minestuck.api.alchemy.MutableGristSet;
 import com.mraof.minestuck.api.alchemy.recipe.generator.GeneratorCallback;
@@ -14,11 +13,12 @@ import net.minecraft.world.item.crafting.Recipe;
 import java.util.Collections;
 import java.util.List;
 
-public class DefaultInterpreter implements RecipeInterpreter
+//TODO interpreter (perhaps setting) that makes the interpreter not remove container cost for ingredient
+public enum DefaultInterpreter implements RecipeInterpreter
 {
-	public static final DefaultInterpreter INSTANCE = new DefaultInterpreter();
+	INSTANCE;
 	
-	//TODO interpreter (perhaps setting) that makes the interpreter not remove container cost for ingredient
+	public static final MapCodec<DefaultInterpreter> CODEC = MapCodec.unit(INSTANCE);
 	
 	@Override
 	public List<Item> getOutputItems(Recipe<?> recipe)
@@ -32,7 +32,7 @@ public class DefaultInterpreter implements RecipeInterpreter
 	{
 		if(recipe.isSpecial())
 			return null;
-
+		
 		MutableGristSet totalCost = MutableGristSet.newDefault();
 		for(Ingredient ingredient : recipe.getIngredients())
 		{
@@ -42,7 +42,7 @@ public class DefaultInterpreter implements RecipeInterpreter
 			else totalCost.add(ingredientCost);
 		}
 		
-		totalCost.scale(1F/recipe.getResultItem(null).getCount(), false);	//Do not round down because it's better to have something cost a little to much than it possibly costing nothing
+		totalCost.scale(1F / recipe.getResultItem(null).getCount(), false);    //Do not round down because it's better to have something cost a little to much than it possibly costing nothing
 		
 		return totalCost;
 	}
@@ -54,23 +54,8 @@ public class DefaultInterpreter implements RecipeInterpreter
 	}
 	
 	@Override
-	public InterpreterSerializer<?> getSerializer()
+	public MapCodec<? extends RecipeInterpreter> codec()
 	{
-		return InterpreterSerializers.DEFAULT.get();
-	}
-	
-	public static class Serializer extends InterpreterSerializer<DefaultInterpreter>
-	{
-		@Override
-		public DefaultInterpreter read(JsonElement json)
-		{
-			return INSTANCE;
-		}
-		
-		@Override
-		public JsonElement write(DefaultInterpreter interpreter)
-		{
-			return JsonNull.INSTANCE;
-		}
+		return CODEC;
 	}
 }

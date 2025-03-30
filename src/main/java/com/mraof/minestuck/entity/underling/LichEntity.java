@@ -1,15 +1,16 @@
 package com.mraof.minestuck.entity.underling;
 
+import com.mraof.minestuck.Minestuck;
 import com.mraof.minestuck.alchemy.GristHelper;
-import com.mraof.minestuck.api.alchemy.MutableGristSet;
 import com.mraof.minestuck.api.alchemy.GristType;
+import com.mraof.minestuck.api.alchemy.MutableGristSet;
 import com.mraof.minestuck.entity.ai.attack.AnimatedAttackWhenInRangeGoal;
 import com.mraof.minestuck.entity.ai.attack.MoveToTargetGoal;
 import com.mraof.minestuck.entity.animation.MobAnimation;
 import com.mraof.minestuck.entity.animation.PhasedMobAnimation;
 import com.mraof.minestuck.player.EcheladderBonusType;
-import com.mraof.minestuck.util.AnimationControllerUtil;
 import com.mraof.minestuck.util.MSSoundEvents;
+import net.minecraft.resources.ResourceLocation;
 import net.minecraft.sounds.SoundEvent;
 import net.minecraft.world.damagesource.DamageSource;
 import net.minecraft.world.entity.Entity;
@@ -21,19 +22,15 @@ import net.minecraft.world.entity.ai.attributes.Attributes;
 import net.minecraft.world.entity.ai.goal.Goal;
 import net.minecraft.world.level.Level;
 import software.bernie.geckolib.animatable.GeoEntity;
-import software.bernie.geckolib.core.animation.AnimatableManager;
-import software.bernie.geckolib.core.animation.Animation;
-import software.bernie.geckolib.core.animation.AnimationState;
-import software.bernie.geckolib.core.animation.RawAnimation;
-import software.bernie.geckolib.core.object.PlayState;
+import software.bernie.geckolib.animation.*;
 
 import javax.annotation.ParametersAreNonnullByDefault;
-import java.util.UUID;
 
 @ParametersAreNonnullByDefault
 public class LichEntity extends UnderlingEntity implements GeoEntity
 {
-	public static final PhasedMobAnimation CLAW_PROPERTIES = new PhasedMobAnimation(new MobAnimation(MobAnimation.Action.CLAW, 10, false, false), 5, 6, 7);
+	
+	public static final PhasedMobAnimation CLAW_PROPERTIES = new PhasedMobAnimation(new MobAnimation(MobAnimation.Action.CLAW, 10, false, false), 11, 13, 16, 22);
 	private static final RawAnimation IDLE_ANIMATION = RawAnimation.begin().thenLoop("idle");
 	private static final RawAnimation CLAW_LEGS_ANIMATION = RawAnimation.begin().then("claw_legs", Animation.LoopType.PLAY_ONCE);
 	private static final RawAnimation WALK_ANIMATION = RawAnimation.begin().thenLoop("walk");
@@ -49,7 +46,7 @@ public class LichEntity extends UnderlingEntity implements GeoEntity
 	{
 		return UnderlingEntity.underlingAttributes().add(Attributes.MAX_HEALTH, 175)
 				.add(Attributes.KNOCKBACK_RESISTANCE, 0.3).add(Attributes.MOVEMENT_SPEED, 0.25)
-				.add(Attributes.ATTACK_DAMAGE, 8);
+				.add(Attributes.ATTACK_DAMAGE, 8).add(Attributes.ATTACK_SPEED, 2.25);
 	}
 	
 	@Override
@@ -95,8 +92,8 @@ public class LichEntity extends UnderlingEntity implements GeoEntity
 	protected void onGristTypeUpdated(GristType type)
 	{
 		super.onGristTypeUpdated(type);
-		applyGristModifier(Attributes.MAX_HEALTH, 30 * type.getPower(), AttributeModifier.Operation.ADDITION);
-		applyGristModifier(Attributes.ATTACK_DAMAGE, 3.4 * type.getPower(), AttributeModifier.Operation.ADDITION);
+		applyGristModifier(Attributes.MAX_HEALTH, 30 * type.getPower(), AttributeModifier.Operation.ADD_VALUE);
+		applyGristModifier(Attributes.ATTACK_DAMAGE, 3.4 * type.getPower(), AttributeModifier.Operation.ADD_VALUE);
 		this.xpReward = (int) (6.5 * type.getPower() + 4);
 	}
 	
@@ -133,10 +130,11 @@ public class LichEntity extends UnderlingEntity implements GeoEntity
 	@Override
 	public void registerControllers(AnimatableManager.ControllerRegistrar controller)
 	{
-		controller.add(AnimationControllerUtil.createAnimation(this, "idleAnimation", 1, LichEntity::idleAnimation));
-		controller.add(AnimationControllerUtil.createAnimation(this, "walkAnimation", 1, LichEntity::walkAnimation));
-		controller.add(AnimationControllerUtil.createAnimation(this, "deathAnimation", 1, LichEntity::deathAnimation));
-		controller.add(AnimationControllerUtil.createAnimation(this, "attackAnimation", 2.25, LichEntity::attackAnimation));
+		controller.add(new AnimationController<>(this, "idleAnimation", LichEntity::idleAnimation));
+		controller.add(new AnimationController<>(this, "walkAnimation", LichEntity::walkAnimation)
+				.setAnimationSpeedHandler(entity -> MobAnimation.getAttributeAffectedSpeed(entity, Attributes.MOVEMENT_SPEED) * 4));
+		controller.add(new AnimationController<>(this, "deathAnimation", LichEntity::deathAnimation));
+		controller.add(new AnimationController<>(this, "attackAnimation", LichEntity::attackAnimation));
 	}
 	
 	private static PlayState idleAnimation(AnimationState<LichEntity> state)
@@ -158,7 +156,7 @@ public class LichEntity extends UnderlingEntity implements GeoEntity
 		{
 			state.getController().setAnimation(CLAW_LEGS_ANIMATION);
 			return PlayState.CONTINUE;
-		} else if(!state.isMoving())
+		} else if(!MobAnimation.isEntityMovingHorizontally(state.getAnimatable()))
 		{
 			return PlayState.STOP;
 		} else
@@ -186,11 +184,12 @@ public class LichEntity extends UnderlingEntity implements GeoEntity
 			return PlayState.CONTINUE;
 		}
 		state.getController().forceAnimationReset();
+		state.getController().setAnimationSpeed(MobAnimation.getAttributeAffectedSpeed(state.getAnimatable(), Attributes.ATTACK_SPEED)); //Setting animation speed on stop so it doesn't jump around when attack speed changes mid-attack
 		return PlayState.STOP;
 	}
 	
-	private static final UUID RESISTANCE_MODIFIER_ATTACKING_UUID = UUID.fromString("7f03c94c-e287-11ec-8fea-0242ac120002");
-	private static final AttributeModifier RESISTANCE_MODIFIER_ATTACKING = new AttributeModifier(RESISTANCE_MODIFIER_ATTACKING_UUID, "Attacking resistance boost", 1, AttributeModifier.Operation.ADDITION);
+	private static final ResourceLocation RESISTANCE_MODIFIER_ATTACKING_ID = Minestuck.id("attacking_resistance");
+	private static final AttributeModifier RESISTANCE_MODIFIER_ATTACKING = new AttributeModifier(RESISTANCE_MODIFIER_ATTACKING_ID, 1, AttributeModifier.Operation.ADD_VALUE);
 	
 	private class AttackResistanceGoal extends Goal
 	{
@@ -204,7 +203,7 @@ public class LichEntity extends UnderlingEntity implements GeoEntity
 		public void start()
 		{
 			AttributeInstance instance = getAttributes().getInstance(Attributes.KNOCKBACK_RESISTANCE);
-			if(instance != null && !instance.hasModifier(RESISTANCE_MODIFIER_ATTACKING))
+			if(instance != null && !instance.hasModifier(RESISTANCE_MODIFIER_ATTACKING_ID))
 				instance.addTransientModifier(RESISTANCE_MODIFIER_ATTACKING);
 		}
 		
@@ -213,7 +212,7 @@ public class LichEntity extends UnderlingEntity implements GeoEntity
 		{
 			AttributeInstance instance = getAttributes().getInstance(Attributes.KNOCKBACK_RESISTANCE);
 			if(instance != null)
-				instance.removeModifier(RESISTANCE_MODIFIER_ATTACKING);
+				instance.removeModifier(RESISTANCE_MODIFIER_ATTACKING_ID);
 		}
 	}
 }

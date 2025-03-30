@@ -1,21 +1,35 @@
 package com.mraof.minestuck.network;
 
+import com.mraof.minestuck.Minestuck;
 import com.mraof.minestuck.MinestuckConfig;
 import com.mraof.minestuck.alchemy.GristHelper;
-import com.mraof.minestuck.api.alchemy.ImmutableGristSet;
 import com.mraof.minestuck.api.alchemy.GristSet;
 import com.mraof.minestuck.client.gui.toasts.GristToast;
 import com.mraof.minestuck.computer.editmode.EditData;
 import com.mraof.minestuck.computer.editmode.ServerEditHandler;
 import com.mraof.minestuck.player.PlayerIdentifier;
-import com.mraof.minestuck.skaianet.SburbConnection;
-import com.mraof.minestuck.skaianet.SkaianetHandler;
-import net.minecraft.network.FriendlyByteBuf;
+import net.minecraft.network.RegistryFriendlyByteBuf;
+import net.minecraft.network.codec.ByteBufCodecs;
+import net.minecraft.network.codec.StreamCodec;
+import net.minecraft.network.protocol.common.custom.CustomPacketPayload;
 import net.minecraft.server.MinecraftServer;
+import net.neoforged.neoforge.network.PacketDistributor;
+import net.neoforged.neoforge.network.codec.NeoForgeStreamCodecs;
+import net.neoforged.neoforge.network.handling.IPayloadContext;
 
-public record GristToastPacket(GristSet gristValue, GristHelper.EnumSource source,
-							   boolean isCacheOwner) implements PlayToClientPacket
+public record GristToastPacket(GristSet.Immutable gristValue, GristHelper.EnumSource source,
+							   boolean isCacheOwner) implements MSPacket.PlayToClient
 {
+	public static final Type<GristToastPacket> ID = new Type<>(Minestuck.id("grist_toast"));
+	public static final StreamCodec<RegistryFriendlyByteBuf, GristToastPacket> STREAM_CODEC = StreamCodec.composite(
+			GristSet.Codecs.STREAM_CODEC,
+			GristToastPacket::gristValue,
+			NeoForgeStreamCodecs.enumCodec(GristHelper.EnumSource.class),
+			GristToastPacket::source,
+			ByteBufCodecs.BOOL,
+			GristToastPacket::isCacheOwner,
+			GristToastPacket::new
+	);
 	
 	/**
 	 * Sends a request to make a client-side Toast Notification for incoming/outgoing grist, if enabled in the config.
@@ -30,43 +44,29 @@ public record GristToastPacket(GristSet gristValue, GristHelper.EnumSource sourc
 		if(MinestuckConfig.SERVER.showGristChanges.get())
 		{
 			if(player.getPlayer(server) != null)
-				MSPacketHandler.sendToPlayer(new GristToastPacket(set, source, true), player.getPlayer(server));
+				PacketDistributor.sendToPlayer(player.getPlayer(server), new GristToastPacket(set.asImmutable(), source, true));
 			
 			if(source == GristHelper.EnumSource.SERVER)
 			{
-				SburbConnection sc = SkaianetHandler.get(server).getActiveConnection(player);
-				if(sc == null)
-					return;
-				
-				EditData ed = ServerEditHandler.getData(server, sc);
+				EditData ed = ServerEditHandler.getData(server, player);
 				if(ed == null)
 					return;
 				
 				if(!player.appliesTo(ed.getEditor()))
-					MSPacketHandler.sendToPlayer(new GristToastPacket(set, source, false), ed.getEditor());
+					PacketDistributor.sendToPlayer(ed.getEditor(), new GristToastPacket(set.asImmutable(), source, false));
 				
 			}
 		}
 	}
 	
 	@Override
-	public void encode(FriendlyByteBuf buffer)
+	public Type<? extends CustomPacketPayload> type()
 	{
-		GristSet.write(gristValue, buffer);
-		buffer.writeEnum(source);
-		buffer.writeBoolean(isCacheOwner);
-	}
-	
-	public static GristToastPacket decode(FriendlyByteBuf buffer)
-	{
-		ImmutableGristSet gristValue = GristSet.read(buffer);
-		GristHelper.EnumSource source = buffer.readEnum(GristHelper.EnumSource.class);
-		boolean isCacheOwner = buffer.readBoolean();
-		return new GristToastPacket(gristValue, source, isCacheOwner);
+		return ID;
 	}
 	
 	@Override
-	public void execute()
+	public void execute(IPayloadContext context)
 	{
 		GristToast.handlePacket(this);
 	}

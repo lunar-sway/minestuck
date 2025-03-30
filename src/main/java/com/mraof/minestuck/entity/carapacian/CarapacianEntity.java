@@ -4,8 +4,13 @@ import com.mraof.minestuck.entity.AnimatedPathfinderMob;
 import com.mraof.minestuck.entity.EntityListFilter;
 import com.mraof.minestuck.entity.ai.HurtByTargetAlliedGoal;
 import com.mraof.minestuck.util.MSTags;
+import net.minecraft.core.Holder;
+import net.minecraft.core.registries.BuiltInRegistries;
 import net.minecraft.tags.TagKey;
-import net.minecraft.world.entity.*;
+import net.minecraft.world.entity.Entity;
+import net.minecraft.world.entity.EntityType;
+import net.minecraft.world.entity.LivingEntity;
+import net.minecraft.world.entity.Mob;
 import net.minecraft.world.entity.ai.attributes.AttributeSupplier;
 import net.minecraft.world.entity.ai.attributes.Attributes;
 import net.minecraft.world.entity.ai.goal.FloatGoal;
@@ -14,7 +19,6 @@ import net.minecraft.world.entity.ai.goal.RandomLookAroundGoal;
 import net.minecraft.world.entity.ai.goal.WaterAvoidingRandomStrollGoal;
 import net.minecraft.world.entity.player.Player;
 import net.minecraft.world.level.Level;
-import net.minecraftforge.registries.ForgeRegistries;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -58,10 +62,10 @@ public abstract class CarapacianEntity extends AnimatedPathfinderMob
 		switch(this.getKingdom())
 		{
 			case PROSPITIAN:
-				enemyTypes.addAll(ForgeRegistries.ENTITY_TYPES.tags().getTag(MSTags.EntityTypes.DERSITE_CARAPACIANS).stream().toList());    //TODO Should refer to tags directly. Entities will otherwise need to be reconstructed for resource reload changes to take place, is this now resolved?
+				BuiltInRegistries.ENTITY_TYPE.getTag(MSTags.EntityTypes.DERSITE_CARAPACIANS).ifPresent(set -> enemyTypes.addAll(set.stream().map(Holder::value).toList()));    //TODO Should refer to tags directly. Entities will otherwise need to be reconstructed for resource reload changes to take place, is this now resolved?
 				break;
 			case DERSITE:
-				enemyTypes.addAll(ForgeRegistries.ENTITY_TYPES.tags().getTag(MSTags.EntityTypes.PROSPITIAN_CARAPACIANS).stream().toList());
+				BuiltInRegistries.ENTITY_TYPE.getTag(MSTags.EntityTypes.PROSPITIAN_CARAPACIANS).ifPresent(set -> enemyTypes.addAll(set.stream().map(Holder::value).toList()));
 		}
 	}
 	

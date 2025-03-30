@@ -1,0 +1,10 @@
+{
+  "type": "minecraft:stonecutting",
+  "ingredient": {
+    "item": "minestuck:chalk_bricks"
+  },
+  "result": {
+    "count": 2,
+    "id": "minestuck:chalk_brick_slab"
+  }
+}

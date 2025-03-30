@@ -1,0 +1,12 @@
+{
+  "parent": "minecraft:block/cube",
+  "textures": {
+    "down": "minestuck:block/cindered_log_bottom",
+    "east": "minestuck:block/cindered_log_east",
+    "north": "minestuck:block/cindered_log_north",
+    "particle": "minestuck:block/cindered_log_north",
+    "south": "minestuck:block/cindered_log_south",
+    "up": "minestuck:block/cindered_log_top",
+    "west": "minestuck:block/cindered_log_west"
+  }
+}

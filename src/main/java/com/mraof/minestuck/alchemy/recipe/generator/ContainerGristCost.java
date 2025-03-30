@@ -1,26 +1,26 @@
 package com.mraof.minestuck.alchemy.recipe.generator;
 
-import com.google.gson.JsonObject;
-import com.mojang.serialization.JsonOps;
-import com.mraof.minestuck.api.alchemy.recipe.generator.GeneratedCostProvider;
-import com.mraof.minestuck.api.alchemy.recipe.GristCostRecipe;
+import com.mojang.serialization.Codec;
+import com.mojang.serialization.MapCodec;
+import com.mojang.serialization.codecs.RecordCodecBuilder;
 import com.mraof.minestuck.api.alchemy.GristSet;
 import com.mraof.minestuck.api.alchemy.GristType;
-import com.mraof.minestuck.api.alchemy.ImmutableGristSet;
+import com.mraof.minestuck.api.alchemy.recipe.GristCostRecipe;
+import com.mraof.minestuck.api.alchemy.recipe.JeiGristCost;
+import com.mraof.minestuck.api.alchemy.recipe.generator.GeneratedCostProvider;
 import com.mraof.minestuck.api.alchemy.recipe.generator.GeneratorCallback;
 import com.mraof.minestuck.item.crafting.MSRecipeTypes;
-import com.mraof.minestuck.api.alchemy.recipe.JeiGristCost;
 import net.minecraft.MethodsReturnNonnullByDefault;
-import net.minecraft.network.FriendlyByteBuf;
+import net.minecraft.core.registries.BuiltInRegistries;
+import net.minecraft.network.RegistryFriendlyByteBuf;
+import net.minecraft.network.codec.StreamCodec;
 import net.minecraft.resources.ResourceLocation;
-import net.minecraft.util.GsonHelper;
-import net.minecraft.world.Container;
 import net.minecraft.world.item.Item;
 import net.minecraft.world.item.ItemStack;
 import net.minecraft.world.item.crafting.Ingredient;
 import net.minecraft.world.item.crafting.RecipeSerializer;
+import net.minecraft.world.item.crafting.SingleRecipeInput;
 import net.minecraft.world.level.Level;
-import net.minecraftforge.registries.ForgeRegistries;
 import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.Logger;
 
@@ -29,6 +29,7 @@ import javax.annotation.ParametersAreNonnullByDefault;
 import java.util.Collections;
 import java.util.List;
 import java.util.Objects;
+import java.util.Optional;
 import java.util.function.BiConsumer;
 
 @ParametersAreNonnullByDefault
@@ -37,30 +38,22 @@ public final class ContainerGristCost implements GristCostRecipe
 {
 	private static final Logger LOGGER = LogManager.getLogger();
 	
-	private final ResourceLocation id;
 	private final Ingredient ingredient;
+	private final GristSet.Immutable addedCost;
 	@Nullable
 	private final Integer priority;
-	private final GeneratedGristCostCache cache;
+	private final GeneratedGristCostCache cache = new GeneratedGristCostCache();
 	
-	public ContainerGristCost(ResourceLocation id, Ingredient ingredient, ImmutableGristSet addedCost, @Nullable Integer priority)
+	@SuppressWarnings("OptionalUsedAsFieldOrParameterType")
+	public ContainerGristCost(Ingredient ingredient, GristSet.Immutable addedCost, Optional<Integer> priority)
 	{
-		this.id = id;
 		this.ingredient = ingredient;
-		this.priority = priority;
-		this.cache = new GeneratedGristCostCache(callback -> this.generateCost(callback, addedCost));
-	}
-	
-	private ContainerGristCost(ResourceLocation id, Ingredient ingredient, @Nullable Integer priority, GeneratedGristCostCache cache)
-	{
-		this.id = id;
-		this.ingredient = ingredient;
-		this.priority = priority;
-		this.cache = cache;
+		this.addedCost = addedCost;
+		this.priority = priority.orElse(null);
 	}
 	
 	@Nullable
-	private GristSet generateCost(GeneratorCallback callback, ImmutableGristSet addedCost)
+	private GristSet generateCost(GeneratorCallback callback, GristSet.Immutable addedCost, ResourceLocation recipeId)
 	{
 		ItemStack container = ingredient.getItems().length > 0 ? ingredient.getItems()[0].getCraftingRemainingItem() : ItemStack.EMPTY;
 		if(!container.isEmpty())
@@ -72,12 +65,12 @@ public final class ContainerGristCost implements GristCostRecipe
 			} else
 			{
 				if(callback.shouldSaveResult())
-					LOGGER.warn("Got null grist cost when looking up container item {} for container grist cost {}. No grist cost is set for this recipe.", ForgeRegistries.ITEMS.getKey(container.getItem()), id);
+					LOGGER.warn("Got null grist cost when looking up container item {} for container grist cost {}. No grist cost is set for this recipe.", BuiltInRegistries.ITEM.getKey(container.getItem()), recipeId);
 			}
 		} else
 		{
 			if(callback.shouldSaveResult())
-				LOGGER.warn("No container item found for ingredient to container grist cost {}. Assuming that the container cost is zero.", id);
+				LOGGER.warn("No container item found for ingredient to container grist cost {}. Assuming that the container cost is zero.", recipeId);
 			return addedCost;
 		}
 		
@@ -85,15 +78,9 @@ public final class ContainerGristCost implements GristCostRecipe
 	}
 	
 	@Override
-	public ResourceLocation getId()
+	public boolean matches(SingleRecipeInput input, Level level)
 	{
-		return this.id;
-	}
-	
-	@Override
-	public boolean matches(Container inv, Level level)
-	{
-		return cache.getCachedCost() != null && ingredient.test(inv.getItem(0));
+		return cache.getCachedCost() != null && ingredient.test(input.item());
 	}
 	
 	@Override
@@ -109,9 +96,10 @@ public final class ContainerGristCost implements GristCostRecipe
 	}
 	
 	@Override
-	public void addCostProvider(BiConsumer<Item, GeneratedCostProvider> consumer)
+	public void addCostProvider(BiConsumer<Item, GeneratedCostProvider> consumer, ResourceLocation recipeId)
 	{
-		GristCostRecipe.addCostProviderForIngredient(consumer, this.ingredient, this.cache);
+		GristCostRecipe.addCostProviderForIngredient(consumer, this.ingredient,
+				this.cache.generatedProvider(callback -> this.generateCost(callback, addedCost, recipeId)));
 	}
 	
 	@Override
@@ -130,35 +118,41 @@ public final class ContainerGristCost implements GristCostRecipe
 	
 	public static class Serializer implements RecipeSerializer<ContainerGristCost>
 	{
+		private static final MapCodec<ContainerGristCost> CODEC = RecordCodecBuilder.mapCodec(instance ->
+				instance.group(
+						Ingredient.CODEC_NONEMPTY.fieldOf("ingredient").forGetter(recipe -> recipe.ingredient),
+						GristSet.Codecs.MAP_CODEC.fieldOf("grist_cost").forGetter(recipe -> recipe.addedCost),
+						Codec.INT.optionalFieldOf("priority").forGetter(recipe -> Optional.ofNullable(recipe.priority))
+				).apply(instance, ContainerGristCost::new));
+		private static final StreamCodec<RegistryFriendlyByteBuf, ContainerGristCost> STREAM_CODEC = StreamCodec.of(Serializer::toNetwork, Serializer::fromNetwork);
+		
 		@Override
-		public ContainerGristCost fromJson(ResourceLocation recipeId, JsonObject json)
+		public MapCodec<ContainerGristCost> codec()
 		{
-			Ingredient ingredient = Ingredient.fromJson(json.get("ingredient"));
-			Integer priority = json.has("priority") ? GsonHelper.getAsInt(json, "priority") : null;
-			
-			ImmutableGristSet cost = ImmutableGristSet.MAP_CODEC.parse(JsonOps.INSTANCE, GsonHelper.getAsJsonObject(json, "grist_cost"))
-					.getOrThrow(false, LOGGER::error);
-			
-			return new ContainerGristCost(recipeId, ingredient, cost, priority);
+			return CODEC;
 		}
 		
 		@Override
-		public void toNetwork(FriendlyByteBuf buffer, ContainerGristCost recipe)
+		public StreamCodec<RegistryFriendlyByteBuf, ContainerGristCost> streamCodec()
 		{
-			recipe.ingredient.toNetwork(buffer);
+			return STREAM_CODEC;
+		}
+		
+		private static void toNetwork(RegistryFriendlyByteBuf buffer, ContainerGristCost recipe)
+		{
+			Ingredient.CONTENTS_STREAM_CODEC.encode(buffer, recipe.ingredient);
 			buffer.writeInt(recipe.getPriority());
 			recipe.cache.toNetwork(buffer);
 		}
 		
-		@Nullable
-		@Override
-		public ContainerGristCost fromNetwork(ResourceLocation recipeId, FriendlyByteBuf buffer)
+		private static ContainerGristCost fromNetwork(RegistryFriendlyByteBuf buffer)
 		{
-			Ingredient ingredient = Ingredient.fromNetwork(buffer);
+			Ingredient ingredient = Ingredient.CONTENTS_STREAM_CODEC.decode(buffer);
 			int priority = buffer.readInt();
-			GeneratedGristCostCache cache = GeneratedGristCostCache.fromNetwork(buffer);
 			
-			return new ContainerGristCost(recipeId, ingredient, priority, cache);
+			var recipe = new ContainerGristCost(ingredient, GristSet.EMPTY, Optional.of(priority));
+			recipe.cache.fromNetwork(buffer);
+			return recipe;
 		}
 	}
 }

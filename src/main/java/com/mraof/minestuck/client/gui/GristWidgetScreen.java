@@ -19,8 +19,8 @@ import java.util.Objects;
 @ParametersAreNonnullByDefault
 public class GristWidgetScreen extends MachineScreen<GristWidgetMenu>
 {
-	private static final ResourceLocation BACKGROUND_TEXTURE = new ResourceLocation(Minestuck.MOD_ID, "textures/gui/widget.png");
-	private static final ResourceLocation PROGRESS_BAR_TEXTURE = new ResourceLocation(Minestuck.MOD_ID, "textures/gui/progress/widget.png");
+	private static final ResourceLocation BACKGROUND_TEXTURE = ResourceLocation.fromNamespaceAndPath(Minestuck.MOD_ID, "textures/gui/widget.png");
+	private static final ResourceLocation PROGRESS_BAR_TEXTURE = ResourceLocation.fromNamespaceAndPath(Minestuck.MOD_ID, "textures/gui/progress/widget.png");
 	private static final int PROGRESS_BAR_X = 54;
 	private static final int PROGRESS_BAR_Y = 23;
 	private static final int PROGRESS_BAR_WIDTH = 71;
@@ -36,7 +36,6 @@ public class GristWidgetScreen extends MachineScreen<GristWidgetMenu>
 	@Override
 	public void render(GuiGraphics guiGraphics, int mouseX, int mouseY, float partialTicks)
 	{
-		this.renderBackground(guiGraphics);
 		super.render(guiGraphics, mouseX, mouseY, partialTicks);
 		this.renderTooltip(guiGraphics, mouseX, mouseY);
 	}

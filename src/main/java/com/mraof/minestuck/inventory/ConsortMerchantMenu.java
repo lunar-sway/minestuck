@@ -51,7 +51,7 @@ public class ConsortMerchantMenu extends AbstractContainerMenu
 	public static void write(FriendlyByteBuf buffer, ConsortEntity consort)
 	{
 		buffer.writeUtf(consort.getConsortType().getName());
-		buffer.writeUtf(consort.merchantType.getName());
+		buffer.writeUtf(consort.merchantType.getSerializedName());
 	}
 	
 	@Override
@@ -72,8 +72,11 @@ public class ConsortMerchantMenu extends AbstractContainerMenu
 	public void removed(Player playerIn)
 	{
 		super.removed(playerIn);
+		
+		// The inventory (except for the hotbar) fails to sync normally while this menu is open
+		// because this menu doesn't have inventory slots. For this reason, sync the inventory when this menu is closed.
 		if(playerIn instanceof ServerPlayer player)
-			player.inventoryMenu.sendAllDataToRemote();	//TODO is this still needed?
+			player.inventoryMenu.sendAllDataToRemote();
 	}
 	
 	public int getPrice(int index)

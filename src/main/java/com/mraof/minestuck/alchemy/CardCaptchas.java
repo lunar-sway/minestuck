@@ -2,16 +2,15 @@ package com.mraof.minestuck.alchemy;
 
 import com.google.common.collect.BiMap;
 import com.google.common.collect.HashBiMap;
-import com.mraof.minestuck.Minestuck;
-import com.mraof.minestuck.item.MSItems;
 import com.mraof.minestuck.world.storage.MSExtraData;
+import net.minecraft.core.registries.BuiltInRegistries;
 import net.minecraft.nbt.CompoundTag;
 import net.minecraft.resources.ResourceLocation;
 import net.minecraft.server.MinecraftServer;
 import net.minecraft.util.RandomSource;
 import net.minecraft.world.item.Item;
-import net.minecraftforge.fml.common.Mod;
-import net.minecraftforge.registries.ForgeRegistries;
+import org.apache.logging.log4j.LogManager;
+import org.apache.logging.log4j.Logger;
 
 import javax.annotation.Nonnull;
 import javax.annotation.Nullable;
@@ -25,19 +24,18 @@ import java.util.Objects;
  * The captcha is arrived at by hashing the registry name string, which gets some additional randomization via world seed.
  * Two worlds with the same seed will produce the same captcha for a given registered item, expect in some rare instances where there was hash collision.
  */
-@Mod.EventBusSubscriber(modid = Minestuck.MOD_ID, bus = Mod.EventBusSubscriber.Bus.FORGE)
 public final class CardCaptchas
 {
 	//TODO use of the character "#" not canonically accurate and suggests there are more punch holes in a captchalogue card then there actually are
 	
 	public static final String AVAILABLE_CHARACTERS = "ABCDEFGHIJKLMNOPQRSTUVWXYZabcdefghijklmnopqrstuvwxyz0123456789!?";
 	public static final String EMPTY_CARD_CAPTCHA = "00000000";
-	
 	private final BiMap<Item, String> captchasMap = HashBiMap.create();
+	private static final Logger LOGGER = LogManager.getLogger();
 	
 	public CardCaptchas()
 	{
-		this.setupPredeterminedCaptchas();
+	
 	}
 	
 	/**
@@ -49,8 +47,20 @@ public final class CardCaptchas
 		MSExtraData data = MSExtraData.get(server);
 		CardCaptchas captchas = data.getCardCaptchas();
 		
-		if(captchas.captchasMap.containsKey(item))
+		if(PredeterminedCardCaptchas.getData().containsKey(item))
+		{
+			if(captchas.captchasMap.containsKey(item))
+			{
+				LOGGER.warn("Conflict: Item {} already has Code '{}', removing generated Code '{}' from data.", item, PredeterminedCardCaptchas.getData().get(item), captchas.captchasMap.get(item));
+				captchas.captchasMap.remove(item);
+				data.setDirty();
+			}
+			return PredeterminedCardCaptchas.getData().get(item);
+		}
+		else if(captchas.captchasMap.containsKey(item))
+		{
 			return captchas.captchasMap.get(item);
+		}
 		else
 		{
 			String captcha = captchas.createCaptchaForItem(item, server.overworld().getSeed());
@@ -63,7 +73,23 @@ public final class CardCaptchas
 	@Nullable
 	public static Item getItemFromCaptcha(String captcha, MinecraftServer server)
 	{
-		return MSExtraData.get(server).getCardCaptchas().captchasMap.inverse().get(captcha);
+		MSExtraData data = MSExtraData.get(server);
+		CardCaptchas captchas = data.getCardCaptchas();
+		
+		if(PredeterminedCardCaptchas.getData().inverse().containsKey(captcha))
+		{
+			if(captchas.captchasMap.inverse().containsKey(captcha))
+			{
+				LOGGER.warn("Conflict: Code '{}' already has assigned to Item {}, removing code '{}' reference to Item {}.", captcha, PredeterminedCardCaptchas.getData().inverse().get(captcha), captcha, captchas.captchasMap.inverse().get(captcha));
+				captchas.captchasMap.inverse().remove(captcha);
+				data.setDirty();
+			}
+			return PredeterminedCardCaptchas.getData().inverse().get(captcha);
+		}
+		else
+		{
+			return captchas.captchasMap.inverse().get(captcha);
+		}
 	}
 	
 	public CompoundTag serialize()
@@ -71,7 +97,7 @@ public final class CardCaptchas
 		CompoundTag tag = new CompoundTag();
 		for(Map.Entry<Item, String> entry : captchasMap.entrySet())
 		{
-			String itemName = Objects.requireNonNull(ForgeRegistries.ITEMS.getKey(entry.getKey())).toString();
+			String itemName = Objects.requireNonNull(BuiltInRegistries.ITEM.getKey(entry.getKey())).toString();
 			tag.putString(itemName, entry.getValue());
 		}
 		return tag;
@@ -85,19 +111,11 @@ public final class CardCaptchas
 			ResourceLocation itemId = ResourceLocation.tryParse(itemName);
 			if(itemId == null)
 				continue;
-			Item item = ForgeRegistries.ITEMS.getValue(itemId);
+			Item item = BuiltInRegistries.ITEM.get(itemId);
 			if(item == null)
 				continue;
 			captchasMap.put(item, tag.getString(itemName));
 		}
-	}
-	
-	
-	
-	private void setupPredeterminedCaptchas()
-	{
-		predetermineCaptcha(MSItems.GENERIC_OBJECT.get(), EMPTY_CARD_CAPTCHA);
-		predetermineCaptcha(MSItems.SORD.get(), "SUPRePIC");
 	}
 	
 	/**
@@ -106,7 +124,8 @@ public final class CardCaptchas
 	 */
 	private String createCaptchaForItem(Item item, long seed)
 	{
-		ResourceLocation itemId = Objects.requireNonNull(ForgeRegistries.ITEMS.getKey(item));
+		
+		ResourceLocation itemId = Objects.requireNonNull(BuiltInRegistries.ITEM.getKey(item));
 		
 		RandomSource itemRandom = RandomSource.create(seed)
 				.forkPositional().fromHashOf("minestuck:item_captchas")
@@ -117,15 +136,10 @@ public final class CardCaptchas
 		String cutHash = shuffledHash.substring(shuffledHash.length() - 16); //last 16 characters of hash
 		String captcha = captchaFromHash(cutHash);
 		
-		if(captchasMap.containsValue(captcha))
+		if(captchasMap.containsValue(captcha) || PredeterminedCardCaptchas.getData().containsValue(captcha))
 			return generateBackupCaptcha(itemRandom);
 		
 		return captcha;
-	}
-	
-	private void predetermineCaptcha(Item item, String captcha)
-	{
-		captchasMap.put(item, captcha);
 	}
 	
 	private static String createHash(String registryName)
@@ -216,7 +230,7 @@ public final class CardCaptchas
 			String captchaString = captcha.toString();
 			
 			//checks to make sure the captcha has not been created before
-			if(!captchasMap.containsValue(captchaString))
+			if(!captchasMap.containsValue(captchaString) && !PredeterminedCardCaptchas.getData().containsValue(captchaString))
 			{
 				return captchaString;
 			}

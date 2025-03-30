@@ -1,10 +1,15 @@
 package com.mraof.minestuck.api.alchemy;
 
+import com.google.common.base.Suppliers;
+import com.mojang.serialization.Codec;
 import com.mraof.minestuck.Minestuck;
-import com.mraof.minestuck.util.LazyInstance;
 import net.minecraft.Util;
+import net.minecraft.core.HolderSet;
+import net.minecraft.network.RegistryFriendlyByteBuf;
 import net.minecraft.network.chat.Component;
 import net.minecraft.network.chat.MutableComponent;
+import net.minecraft.network.codec.ByteBufCodecs;
+import net.minecraft.network.codec.StreamCodec;
 import net.minecraft.resources.ResourceLocation;
 import net.minecraft.tags.TagKey;
 import net.minecraft.world.item.Item;
@@ -12,14 +17,17 @@ import net.minecraft.world.item.ItemStack;
 
 import javax.annotation.Nullable;
 import javax.annotation.ParametersAreNonnullByDefault;
-import java.util.List;
 import java.util.Objects;
+import java.util.Optional;
 import java.util.function.Supplier;
 
 @ParametersAreNonnullByDefault
 public final class GristType implements Comparable<GristType>
 {
-	public static final ResourceLocation DUMMY_ID = new ResourceLocation(Minestuck.MOD_ID, "dummy");
+	public static final StreamCodec<RegistryFriendlyByteBuf, GristType> STREAM_CODEC = ByteBufCodecs.registry(GristTypes.REGISTRY_KEY);
+	public static final Codec<GristType> CODEC = GristTypes.REGISTRY.byNameCodec();
+	
+	public static final ResourceLocation DUMMY_ID = ResourceLocation.fromNamespaceAndPath(Minestuck.MOD_ID, "dummy");
 	public static final ResourceLocation DUMMY_ICON_LOCATION = makeIconPath(DUMMY_ID);
 	
 	public static final String FORMAT = "grist.format";
@@ -32,8 +40,8 @@ public final class GristType implements Comparable<GristType>
 	@Nullable
 	private final ResourceLocation textureOverrideId;
 	
-	private final LazyInstance<String> translationKey = new LazyInstance<>(() -> Util.makeDescriptionId("grist", GristType.this.getId()));
-	private final LazyInstance<ResourceLocation> icon = new LazyInstance<>(() -> makeIconPath(GristType.this.getTextureId()));
+	private final Supplier<String> translationKey = Suppliers.memoize(() -> Util.makeDescriptionId("grist", GristType.this.getId()));
+	private final Supplier<ResourceLocation> icon = Suppliers.memoize(() -> makeIconPath(GristType.this.getTextureId()));
 	
 	public GristType(Properties properties)
 	{
@@ -52,7 +60,7 @@ public final class GristType implements Comparable<GristType>
 	@Nullable
 	public ResourceLocation getId()
 	{
-		return GristTypes.getRegistry().getKey(this);
+		return GristTypes.REGISTRY.getKey(this);
 	}
 	
 	public ResourceLocation getIdOrThrow()
@@ -122,10 +130,9 @@ public final class GristType implements Comparable<GristType>
 		return candyItem.get();
 	}
 	
-	public List<GristType> getSecondaryTypes()
+	public Optional<HolderSet.Named<GristType>> getSecondaryTypes()
 	{
-		return Objects.requireNonNull(GristTypes.getRegistry().tags())
-				.getTag(this.getSecondaryTypesTag()).stream().toList();
+		return GristTypes.REGISTRY.getTag(this.getSecondaryTypesTag());
 	}
 	
 	public TagKey<GristType> getSecondaryTypesTag()

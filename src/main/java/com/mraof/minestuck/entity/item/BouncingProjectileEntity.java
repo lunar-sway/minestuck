@@ -7,8 +7,9 @@ import com.mraof.minestuck.util.MSSoundEvents;
 import net.minecraft.core.BlockPos;
 import net.minecraft.core.Direction;
 import net.minecraft.nbt.CompoundTag;
-import net.minecraft.network.protocol.Packet;
-import net.minecraft.network.protocol.game.ClientGamePacketListener;
+import net.minecraft.network.syncher.EntityDataAccessor;
+import net.minecraft.network.syncher.EntityDataSerializers;
+import net.minecraft.network.syncher.SynchedEntityData;
 import net.minecraft.sounds.SoundSource;
 import net.minecraft.world.entity.Entity;
 import net.minecraft.world.entity.EntityType;
@@ -23,13 +24,13 @@ import net.minecraft.world.phys.BlockHitResult;
 import net.minecraft.world.phys.EntityHitResult;
 import net.minecraft.world.phys.HitResult;
 import net.minecraft.world.phys.Vec3;
-import net.minecraftforge.network.NetworkHooks;
 
 public class BouncingProjectileEntity extends ThrowableItemProjectile
 {
 	private int bounce;
-	public int maxTick = 0;
 	private int inBlockTicks = 0;
+	
+	private static final EntityDataAccessor<Integer> LIFESPAN = SynchedEntityData.defineId(BouncingProjectileEntity.class, EntityDataSerializers.INT);
 	
 	public BouncingProjectileEntity(EntityType<? extends BouncingProjectileEntity> type, Level level)
 	{
@@ -44,7 +45,14 @@ public class BouncingProjectileEntity extends ThrowableItemProjectile
 	public BouncingProjectileEntity(EntityType<? extends BouncingProjectileEntity> type, LivingEntity owner, Level level, int maxTick)
 	{
 		super(type, owner, level);
-		this.maxTick = maxTick;
+		setLifespan(maxTick);
+	}
+	
+	@Override
+	protected void defineSynchedData(SynchedEntityData.Builder builder)
+	{
+		super.defineSynchedData(builder);
+		builder.define(LIFESPAN, 200);
 	}
 	
 	@Override
@@ -119,7 +127,7 @@ public class BouncingProjectileEntity extends ThrowableItemProjectile
 	{
 		if(getOwner() instanceof Player player)
 		{
-			player.getCooldowns().addCooldown(getItemRaw().getItem(), 5);
+			player.getCooldowns().addCooldown(getItem().getItem(), 5);
 			this.discard();
 		}
 	}
@@ -136,7 +144,7 @@ public class BouncingProjectileEntity extends ThrowableItemProjectile
 		else
 			this.setDeltaMovement(getDeltaMovement().scale(1.005));
 		
-		if(this.tickCount >= maxTick || inBlockTicks >= 2)
+		if(this.tickCount >= getLifespan() || inBlockTicks >= 2)
 		{
 			resetThrower();
 		}
@@ -149,7 +157,7 @@ public class BouncingProjectileEntity extends ThrowableItemProjectile
 	{
 		super.readAdditionalSaveData(compound);
 		bounce = compound.getInt("bounce");
-		maxTick = compound.getInt("maxTick");
+		setLifespan(compound.getInt("maxTick"));
 		inBlockTicks = compound.getInt("inBlockTicks");
 	}
 	
@@ -158,14 +166,8 @@ public class BouncingProjectileEntity extends ThrowableItemProjectile
 	{
 		super.addAdditionalSaveData(compound);
 		compound.putInt("bounce", bounce);
-		compound.putInt("maxTick", maxTick);
+		compound.putInt("maxTick", getLifespan());
 		compound.putInt("inBlockTicks", inBlockTicks);
-	}
-	
-	@Override
-	public Packet<ClientGamePacketListener> getAddEntityPacket()
-	{
-		return NetworkHooks.getEntitySpawningPacket(this);
 	}
 	
 	@Override
@@ -176,7 +178,17 @@ public class BouncingProjectileEntity extends ThrowableItemProjectile
 	
 	public ItemStack getItemFromItemStack()
 	{
-		ItemStack itemstack = this.getItemRaw();
+		ItemStack itemstack = this.getItem();
 		return itemstack.isEmpty() ? new ItemStack(this.getDefaultItem()) : itemstack;
+	}
+	
+	public int getLifespan()
+	{
+		return entityData.get(LIFESPAN);
+	}
+	
+	public void setLifespan(int v)
+	{
+		entityData.set(LIFESPAN, v);
 	}
 }

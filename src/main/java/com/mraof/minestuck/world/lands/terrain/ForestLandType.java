@@ -98,6 +98,8 @@ public class ForestLandType extends TerrainLandType
 		
 		builder.addFeature(GenerationStep.Decoration.UNDERGROUND_STRUCTURES, MSPlacedFeatures.CEILING_ROOTS, LandBiomeType.any());
 		
+		builder.addFeature(GenerationStep.Decoration.VEGETAL_DECORATION, MSPlacedFeatures.TREE_STUMP, LandBiomeType.NORMAL);
+		
 		switch(this.type)
 		{
 			case FOREST -> builder.addFeature(GenerationStep.Decoration.VEGETAL_DECORATION, MSPlacedFeatures.FOREST_LAND_TREES, LandBiomeType.NORMAL);

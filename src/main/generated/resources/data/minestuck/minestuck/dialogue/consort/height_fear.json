@@ -1,0 +1,56 @@
+{
+  "conditioned_nodes": [
+    {
+      "condition": {
+        "type": "minestuck:at_or_above_y",
+        "y": 78.0
+      },
+      "node": {
+        "animation": {
+          "emotion": "anxious"
+        },
+        "gui": "minestuck:textures/gui/dialogue/dialogue.png",
+        "message": "minestuck.dialogue.consort.height_fear.panic",
+        "responses": []
+      }
+    },
+    {
+      "condition": {
+        "type": "minestuck:title_land_type",
+        "land_type": "minestuck:towers"
+      },
+      "node": {
+        "animation": {},
+        "gui": "minestuck:textures/gui/dialogue/dialogue.png",
+        "message": "minestuck.dialogue.consort.height_fear.towers.1",
+        "responses": [
+          {
+            "condition": {
+              "type": "minestuck:always_true"
+            },
+            "hide_if_failed": true,
+            "message": "minestuck.arrow",
+            "next_dialogue": "minestuck:consort/height_fear.towers.2",
+            "triggers": []
+          }
+        ]
+      }
+    }
+  ],
+  "default_node": {
+    "animation": {},
+    "gui": "minestuck:textures/gui/dialogue/dialogue.png",
+    "message": "minestuck.dialogue.consort.height_fear.rock.1",
+    "responses": [
+      {
+        "condition": {
+          "type": "minestuck:always_true"
+        },
+        "hide_if_failed": true,
+        "message": "minestuck.arrow",
+        "next_dialogue": "minestuck:consort/height_fear.rock.2",
+        "triggers": []
+      }
+    ]
+  }
+}

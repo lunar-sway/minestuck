@@ -27,7 +27,7 @@ import javax.annotation.ParametersAreNonnullByDefault;
 @MethodsReturnNonnullByDefault
 public class GristToast implements Toast
 {
-	private static final ResourceLocation TEXTURE = new ResourceLocation("minestuck", "textures/gui/toasts.png");
+	private static final ResourceLocation TEXTURE = ResourceLocation.fromNamespaceAndPath("minestuck", "textures/gui/toasts.png");
 	
 	
 	private static final int GRIST_VIAL_OUTLINE_OFFSETX = 29;

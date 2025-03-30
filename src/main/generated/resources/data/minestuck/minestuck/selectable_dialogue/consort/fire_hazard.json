@@ -1,0 +1,25 @@
+{
+  "condition": {
+    "type": "minestuck:list",
+    "conditions": [
+      {
+        "type": "minestuck:terrain_land_type",
+        "land_type": "minestuck:shade"
+      },
+      {
+        "type": "minestuck:list",
+        "conditions": [
+          {
+            "type": "minestuck:title_land_type",
+            "land_type": "minestuck:thunder"
+          }
+        ],
+        "list_type": "none"
+      }
+    ],
+    "list_type": "all"
+  },
+  "dialogue": "minestuck:consort/fire_hazard",
+  "dialogue_weight": 10,
+  "keep_on_reset": false
+}

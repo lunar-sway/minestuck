@@ -1,11 +1,11 @@
 package com.mraof.minestuck.block.machine;
 
+import com.mojang.serialization.MapCodec;
 import com.mraof.minestuck.block.BlockUtil;
 import com.mraof.minestuck.blockentity.MSBlockEntityTypes;
 import com.mraof.minestuck.blockentity.machine.PowerHubBlockEntity;
 import net.minecraft.core.BlockPos;
 import net.minecraft.core.Direction;
-import net.minecraft.world.InteractionHand;
 import net.minecraft.world.InteractionResult;
 import net.minecraft.world.entity.player.Player;
 import net.minecraft.world.item.context.BlockPlaceContext;
@@ -34,8 +34,13 @@ public class PowerHubBlock extends HorizontalDirectionalBlock implements EntityB
 	}
 	
 	@Override
-	@SuppressWarnings("deprecation")
-	public InteractionResult use(BlockState state, Level level, BlockPos pos, Player player, InteractionHand handIn, BlockHitResult hit)
+	protected MapCodec<PowerHubBlock> codec()
+	{
+		return null; //todo
+	}
+	
+	@Override
+	protected InteractionResult useWithoutItem(BlockState state, Level level, BlockPos pos, Player player, BlockHitResult hit)
 	{
 		BlockEntity blockEntity = level.getBlockEntity(pos);
 		if(blockEntity instanceof PowerHubBlockEntity powerHubBlockEntity && !level.isClientSide)

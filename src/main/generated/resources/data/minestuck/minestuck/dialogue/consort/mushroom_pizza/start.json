@@ -1,0 +1,35 @@
+{
+  "node": {
+    "animation": {},
+    "gui": "minestuck:textures/gui/dialogue/dialogue.png",
+    "message": "minestuck.dialogue.consort.mushroom_pizza.start",
+    "responses": [
+      {
+        "condition": {
+          "type": "minestuck:always_true"
+        },
+        "hide_if_failed": true,
+        "message": "minestuck.dialogue.consort.mushroom_pizza.start.on",
+        "next_dialogue": {
+          "id": "minestuck:consort/mushroom_pizza/on",
+          "player_message": "minestuck.dialogue.consort.mushroom_pizza.start.on.reply",
+          "set_as_entrypoint": false
+        },
+        "triggers": []
+      },
+      {
+        "condition": {
+          "type": "minestuck:always_true"
+        },
+        "hide_if_failed": true,
+        "message": "minestuck.dialogue.consort.mushroom_pizza.start.off",
+        "next_dialogue": {
+          "id": "minestuck:consort/mushroom_pizza/off",
+          "player_message": "minestuck.dialogue.consort.mushroom_pizza.start.off.reply",
+          "set_as_entrypoint": false
+        },
+        "triggers": []
+      }
+    ]
+  }
+}

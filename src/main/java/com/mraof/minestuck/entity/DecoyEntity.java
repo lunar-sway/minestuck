@@ -3,9 +3,8 @@ package com.mraof.minestuck.entity;
 import com.mraof.minestuck.computer.editmode.ServerEditHandler;
 import net.minecraft.nbt.CompoundTag;
 import net.minecraft.network.FriendlyByteBuf;
+import net.minecraft.network.RegistryFriendlyByteBuf;
 import net.minecraft.network.chat.Component;
-import net.minecraft.network.protocol.Packet;
-import net.minecraft.network.protocol.game.ClientGamePacketListener;
 import net.minecraft.server.level.ServerLevel;
 import net.minecraft.server.level.ServerPlayer;
 import net.minecraft.tags.DamageTypeTags;
@@ -18,15 +17,14 @@ import net.minecraft.world.food.FoodData;
 import net.minecraft.world.item.ItemStack;
 import net.minecraft.world.level.GameType;
 import net.minecraft.world.level.Level;
-import net.minecraftforge.common.util.FakePlayer;
-import net.minecraftforge.entity.IEntityAdditionalSpawnData;
-import net.minecraftforge.network.NetworkHooks;
+import net.neoforged.neoforge.common.util.FakePlayer;
+import net.neoforged.neoforge.entity.IEntityWithComplexSpawn;
 import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.Logger;
 
 import java.util.UUID;
 
-public class DecoyEntity extends Mob implements IEntityAdditionalSpawnData
+public class DecoyEntity extends Mob implements IEntityWithComplexSpawn
 {
 	private static final Logger LOGGER = LogManager.getLogger();
 	
@@ -43,9 +41,9 @@ public class DecoyEntity extends Mob implements IEntityAdditionalSpawnData
 	
 	public Inventory inventory;
 	
-	public DecoyEntity(Level level)
+	public DecoyEntity(EntityType<? extends DecoyEntity> type, Level level)
 	{
-		super(MSEntityTypes.PLAYER_DECOY.get(), level);
+		super(type, level);
 		inventory = new Inventory(null);
 		if(!level.isClientSide)    //If not spawned the way it should
 			markedForDespawn = true;
@@ -81,7 +79,7 @@ public class DecoyEntity extends Mob implements IEntityAdditionalSpawnData
 	}
 	
 	@Override
-	public EntityDimensions getDimensions(Pose poseIn)
+	protected EntityDimensions getDefaultDimensions(Pose pPose)
 	{
 		return EntityType.PLAYER.getDimensions();
 	}
@@ -131,7 +129,7 @@ public class DecoyEntity extends Mob implements IEntityAdditionalSpawnData
 	}
 	
 	@Override
-	public void writeSpawnData(FriendlyByteBuf buffer)
+	public void writeSpawnData(RegistryFriendlyByteBuf buffer)
 	{
 		buffer.writeUtf(username, 16);
 		buffer.writeUUID(playerId);
@@ -139,7 +137,7 @@ public class DecoyEntity extends Mob implements IEntityAdditionalSpawnData
 	}
 	
 	@Override
-	public void readSpawnData(FriendlyByteBuf additionalData)
+	public void readSpawnData(RegistryFriendlyByteBuf additionalData)
 	{
 		username = additionalData.readUtf(16);
 		playerId = additionalData.readUUID();
@@ -148,12 +146,6 @@ public class DecoyEntity extends Mob implements IEntityAdditionalSpawnData
 		this.setYRot(yHeadRot);    //I don't know how much of this that is necessary
 		yRotO = getYRot();
 		yBodyRot = getYRot();
-	}
-	
-	@Override
-	public Packet<ClientGamePacketListener> getAddEntityPacket()
-	{
-		return NetworkHooks.getEntitySpawningPacket(this);
 	}
 	
 	public UUID getPlayerID()

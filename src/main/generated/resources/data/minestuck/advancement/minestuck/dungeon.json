@@ -1,0 +1,39 @@
+{
+  "parent": "minestuck:minestuck/return_node",
+  "criteria": {
+    "imp_dungeon": {
+      "conditions": {
+        "player": [
+          {
+            "condition": "minecraft:entity_properties",
+            "entity": "this",
+            "predicate": {
+              "location": {
+                "structures": "minestuck:imp_dungeon"
+              }
+            }
+          }
+        ]
+      },
+      "trigger": "minecraft:location"
+    }
+  },
+  "display": {
+    "description": {
+      "translate": "advancements.minestuck.dungeon.description"
+    },
+    "icon": {
+      "count": 1,
+      "id": "minestuck:frost_bricks"
+    },
+    "title": {
+      "translate": "advancements.minestuck.dungeon.title"
+    }
+  },
+  "requirements": [
+    [
+      "imp_dungeon"
+    ]
+  ],
+  "sends_telemetry_event": true
+}

@@ -1,0 +1,19 @@
+{
+  "variants": {
+    "facing=east": {
+      "model": "minestuck:block/carved_wooden_leaf",
+      "y": 90
+    },
+    "facing=north": {
+      "model": "minestuck:block/carved_wooden_leaf"
+    },
+    "facing=south": {
+      "model": "minestuck:block/carved_wooden_leaf",
+      "y": 180
+    },
+    "facing=west": {
+      "model": "minestuck:block/carved_wooden_leaf",
+      "y": 270
+    }
+  }
+}

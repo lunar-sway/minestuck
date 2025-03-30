@@ -42,6 +42,8 @@ public class CakeFeature extends Feature<ProbabilityFeatureConfiguration>
 			cake = MSBlocks.NEGATIVE_CAKE.get();
 		else if (f < 0.5F)
 			cake = MSBlocks.CARROT_CAKE.get();
+		else if (f < 0.6F)
+			cake = MSBlocks.CHOCOLATEY_CAKE.get();
 		else if(rand.nextFloat() < 0.01)
 			cake = MSBlocks.REVERSE_CAKE.get();
 		else
@@ -49,12 +51,10 @@ public class CakeFeature extends Feature<ProbabilityFeatureConfiguration>
 		
 		BlockState state = cake.defaultBlockState().setValue(CakeBlock.BITES, bites);
 		
-		if(state.canSurvive(level, pos) && !level.getBlockState(pos).liquid())
-		{
-			setBlock(level, pos, state);
-			return true;
-		}
+		if(!state.canSurvive(level, pos))
+			return false;
 		
-		return false;
+		setBlock(level, pos, state);
+		return true;
 	}
 }

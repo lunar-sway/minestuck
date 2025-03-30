@@ -3,7 +3,9 @@ package com.mraof.minestuck.blockentity;
 import com.mraof.minestuck.advancements.MSCriteriaTriggers;
 import com.mraof.minestuck.util.ColorHandler;
 import com.mraof.minestuck.util.Teleport;
+import net.minecraft.MethodsReturnNonnullByDefault;
 import net.minecraft.core.BlockPos;
+import net.minecraft.core.HolderLookup;
 import net.minecraft.nbt.CompoundTag;
 import net.minecraft.network.Connection;
 import net.minecraft.network.protocol.Packet;
@@ -16,6 +18,7 @@ import net.minecraft.world.level.levelgen.Heightmap;
 import net.minecraft.world.phys.AABB;
 import net.minecraft.world.phys.Vec3;
 
+@MethodsReturnNonnullByDefault
 public class ReturnNodeBlockEntity extends OnCollisionTeleporterBlockEntity<ServerPlayer>
 {
 	//Only used client-side
@@ -47,20 +50,14 @@ public class ReturnNodeBlockEntity extends OnCollisionTeleporterBlockEntity<Serv
 			player.setPortalCooldown();
 			player.setDeltaMovement(Vec3.ZERO);
 			player.fallDistance = 0;
-			MSCriteriaTriggers.RETURN_NODE.trigger(player);
+			MSCriteriaTriggers.RETURN_NODE.get().trigger(player);
 		}
 	}
 	
 	@Override
-	public AABB getRenderBoundingBox()
+	public CompoundTag getUpdateTag(HolderLookup.Provider provider)
 	{
-		return new AABB(this.getBlockPos().offset(-1, 0, -1), this.getBlockPos().offset(1, 1, 1));
-	}
-	
-	@Override
-	public CompoundTag getUpdateTag()
-	{
-		CompoundTag nbt = super.getUpdateTag();
+		CompoundTag nbt = super.getUpdateTag(provider);
 		nbt.putInt("color", ColorHandler.getColorForDimension((ServerLevel) level));
 		return nbt;
 	}
@@ -70,17 +67,16 @@ public class ReturnNodeBlockEntity extends OnCollisionTeleporterBlockEntity<Serv
 	{
 		return ClientboundBlockEntityDataPacket.create(this);
 	}
-	
 	@Override
-	public void handleUpdateTag(CompoundTag tag)
+	public void handleUpdateTag(CompoundTag tag, HolderLookup.Provider lookupProvider)
 	{
 		this.color = tag.getInt("color");
 	}
 	
 	@Override
-	public void onDataPacket(Connection net, ClientboundBlockEntityDataPacket pkt)
+	public void onDataPacket(Connection net, ClientboundBlockEntityDataPacket pkt, HolderLookup.Provider provider)
 	{
-		handleUpdateTag(pkt.getTag());
+		handleUpdateTag(pkt.getTag(), provider);
 	}
 	
 }

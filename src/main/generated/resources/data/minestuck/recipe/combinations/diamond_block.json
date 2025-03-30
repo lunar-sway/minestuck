@@ -1,0 +1,11 @@
+{
+  "type": "minestuck:combination",
+  "input1": {
+    "item": "minecraft:diamond"
+  },
+  "input2": {
+    "item": "minecraft:stone"
+  },
+  "mode": "or",
+  "output": "minecraft:diamond_block"
+}

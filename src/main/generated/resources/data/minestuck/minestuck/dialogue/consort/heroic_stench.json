@@ -1,0 +1,23 @@
+{
+  "conditioned_nodes": [
+    {
+      "condition": {
+        "type": "minestuck:player_entered"
+      },
+      "node": {
+        "animation": {
+          "emotion": "anxious"
+        },
+        "gui": "minestuck:textures/gui/dialogue/dialogue.png",
+        "message": "minestuck.dialogue.consort.heroic_stench",
+        "responses": []
+      }
+    }
+  ],
+  "default_node": {
+    "animation": {},
+    "gui": "minestuck:textures/gui/dialogue/dialogue.png",
+    "message": "minestuck.dialogue.consort.heroic_stench.leech",
+    "responses": []
+  }
+}
