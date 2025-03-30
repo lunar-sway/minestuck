@@ -3,7 +3,6 @@ package com.mraof.minestuck.data;
 import com.google.gson.JsonElement;
 import com.mojang.serialization.JsonOps;
 import com.mraof.minestuck.Minestuck;
-import com.mraof.minestuck.entity.MSAttributes;
 import com.mraof.minestuck.player.Rung;
 import com.mraof.minestuck.player.Rungs;
 import net.minecraft.MethodsReturnNonnullByDefault;
@@ -11,8 +10,6 @@ import net.minecraft.data.CachedOutput;
 import net.minecraft.data.DataProvider;
 import net.minecraft.data.PackOutput;
 import net.minecraft.resources.ResourceLocation;
-import net.minecraft.world.entity.ai.attributes.AttributeModifier;
-import net.minecraft.world.entity.ai.attributes.Attributes;
 
 import javax.annotation.ParametersAreNonnullByDefault;
 import java.nio.file.Path;
@@ -42,13 +39,7 @@ public class RungsProvider implements DataProvider
 	protected void createRungs()
 	{
 		//Grist capacity is achieved by multiplying the previous by 1.25 and then rounding the result down to get an integer number
-		//At max rung, the player will have three rows of hearts, 200% damage, 75% damage reduction from underlings, 592% additional damage towards underlings, and 62.5% fall damage reduction
-		add(0xFF4FD400, 0xFDFF2B, 0, 60,
-				new Rung.EcheladderAttribute(Attributes.MAX_HEALTH, HEALTH_BOOST_ID, 0.8163265306D, 0, AttributeModifier.Operation.ADD_VALUE),
-				new Rung.EcheladderAttribute(Attributes.ATTACK_DAMAGE, DAMAGE_BOOST_ID, 0.02040816326530612D, 0, AttributeModifier.Operation.ADD_MULTIPLIED_BASE),
-				new Rung.EcheladderAttribute(MSAttributes.UNDERLING_PROTECTION_MODIFIER, UNDERLING_PROTECTION_ID, -0.015306122448979D, 1, AttributeModifier.Operation.ADD_VALUE),
-				new Rung.EcheladderAttribute(MSAttributes.UNDERLING_DAMAGE_MODIFIER, UNDERLING_DAMAGE_ID, 0.04D, 1, AttributeModifier.Operation.ADD_VALUE),
-				new Rung.EcheladderAttribute(Attributes.FALL_DAMAGE_MULTIPLIER, FALL_DAMAGE_REDUCTION_ID, -0.01275D, 0, AttributeModifier.Operation.ADD_VALUE)); //0
+		add(0xFF4FD400, 0xFDFF2B, 0, 60); //0
 		add(0xFFFF0000, 0x404040, 50, 75);
 		add(0xFF956C4C, 0xB6FF00, 75, 93);
 		add(0xFF7DB037, 0x775716, 105, 116);
@@ -102,13 +93,7 @@ public class RungsProvider implements DataProvider
 	
 	private void add(int backgroundColor, int textColor, long boondollars, long gristCapacity)
 	{
-		rungs.add(new Rung(rungIterate, backgroundColor, textColor, rungRequirement(rungIterate), boondollars, gristCapacity, List.of()));
-		rungIterate++;
-	}
-	
-	private void add(int backgroundColor, int textColor, long boondollars, long gristCapacity, Rung.EcheladderAttribute... attributes)
-	{
-		rungs.add(new Rung(rungIterate, backgroundColor, textColor, rungRequirement(rungIterate), boondollars, gristCapacity, List.of(attributes)));
+		rungs.add(new Rung(rungIterate, backgroundColor, textColor, rungRequirement(rungIterate), boondollars, gristCapacity));
 		rungIterate++;
 	}
 	

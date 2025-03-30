@@ -13,8 +13,7 @@ import net.minecraft.world.entity.ai.attributes.AttributeModifier;
 
 import java.util.List;
 
-public record Rung(int rung, int backgroundColor, int textColor, long expRequirement, long boondollars,
-				   long gristCapacity, List<EcheladderAttribute> attributes)
+public record Rung(int rung, int backgroundColor, int textColor, long expRequirement, long boondollars, long gristCapacity)
 {
 	public static final Codec<Rung> CODEC = RecordCodecBuilder.create(instance -> instance.group(
 			Codec.INT.fieldOf("rung").forGetter(Rung::rung),
@@ -22,8 +21,7 @@ public record Rung(int rung, int backgroundColor, int textColor, long expRequire
 			Codec.INT.fieldOf("text_color").forGetter(Rung::textColor),
 			Codec.LONG.fieldOf("exp_requirement").forGetter(Rung::expRequirement),
 			Codec.LONG.fieldOf("boondollars").forGetter(Rung::boondollars),
-			Codec.LONG.fieldOf("grist_capacity").forGetter(Rung::gristCapacity),
-			EcheladderAttribute.LIST_CODEC.optionalFieldOf("attributes", List.of()).forGetter(Rung::attributes)
+			Codec.LONG.fieldOf("grist_capacity").forGetter(Rung::gristCapacity)
 	).apply(instance, Rung::new));
 	public static final Codec<List<Rung>> LIST_CODEC = Codec.list(CODEC);
 	
@@ -41,8 +39,8 @@ public record Rung(int rung, int backgroundColor, int textColor, long expRequire
 		public static final MapCodec<EcheladderAttribute> CODEC = RecordCodecBuilder.mapCodec(instance -> instance.group(
 				Attribute.CODEC.fieldOf("attribute").forGetter(EcheladderAttribute::attribute),
 				ResourceLocation.CODEC.fieldOf("id").forGetter(EcheladderAttribute::id),
-				Codec.DOUBLE.fieldOf("rung_multiplier").forGetter(EcheladderAttribute::rungMultiplier),
-				Codec.FLOAT.fieldOf("starting_value").forGetter(EcheladderAttribute::startingValue),
+				Codec.DOUBLE.fieldOf("change_per_rung").forGetter(EcheladderAttribute::rungMultiplier),
+				Codec.FLOAT.fieldOf("value").forGetter(EcheladderAttribute::startingValue),
 				AttributeModifier.Operation.CODEC.fieldOf("operation").forGetter(EcheladderAttribute::operation)
 		).apply(instance, EcheladderAttribute::new));
 		

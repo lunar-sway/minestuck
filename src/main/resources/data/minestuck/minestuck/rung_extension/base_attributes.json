@@ -1,0 +1,40 @@
+{
+  "__comment": "At max rung, the player will have three rows of hearts, 200% damage, 75% damage reduction from underlings, 592% additional damage towards underlings, and 62.5% fall damage reduction",
+  "attributes": [
+    {
+      "attribute": "minecraft:generic.max_health",
+      "id": "minestuck:echeladder_health_boost",
+      "operation": "add_value",
+      "value": 0.0,
+      "change_per_rung": 0.8163265306
+    },
+    {
+      "attribute": "minecraft:generic.attack_damage",
+      "id": "minestuck:echeladder_damage_boost",
+      "operation": "add_multiplied_base",
+      "value": 0.0,
+      "change_per_rung": 0.02040816326530612
+    },
+    {
+      "attribute": "minestuck:player.underling_protection_modifier",
+      "id": "minestuck:echeladder_underling_protection",
+      "operation": "add_value",
+      "value": 1.0,
+      "change_per_rung": -0.015306122448979
+    },
+    {
+      "attribute": "minestuck:player.underling_damage_modifier",
+      "id": "minestuck:echeladder_underling_damage",
+      "operation": "add_value",
+      "value": 1.0,
+      "change_per_rung": 0.04
+    },
+    {
+      "attribute": "minecraft:generic.fall_damage_multiplier",
+      "id": "minestuck:echeladder_fall_damage_reduction",
+      "operation": "add_value",
+      "value": 0.0,
+      "change_per_rung": -0.01275
+    }
+  ]
+}

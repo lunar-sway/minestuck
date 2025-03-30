@@ -116,9 +116,6 @@ public class Rungs
 	{
 		List<Rung.EcheladderAttribute> attributes = new ArrayList<>();
 		
-		for(Rung rungIterate : RUNGS.subList(0, rung))
-			attributes.addAll(rungIterate.attributes());
-		
 		for(RungExtension extension : RUNG_EXTENSION_LIST)
 		{
 			if(extension.requiredAspect().isEmpty() || extension.requiredAspect().get() == aspect)
