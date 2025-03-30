@@ -32,60 +32,29 @@ public final class SessionRenderHelper
 	{
 		poseStack.pushPose();
 		poseStack.mulPose(getRotationQuaternion(level));
-		drawVeil(poseStack.last().pose());
+		drawVeil(poseStack);
 		poseStack.popPose();
 	}
 	
-	public static void drawVeil(Matrix4f matrix)
+	public static void drawVeil(PoseStack poseStack)
 	{
+		TextureAtlasSprite sprite = LandSkySpriteUploader.getInstance().getMeteorSprite();
 		Random random = new Random(10842L);
-		
-		RenderSystem.setShader(GameRenderer::getPositionShader);
-		BufferBuilder buffer = Tesselator.getInstance().begin(VertexFormat.Mode.QUADS, DefaultVertexFormat.POSITION);
 		
 		for(int count = 0; count < 1500; count++)
 		{
-			float spreadFactor = 0.1F;
-			float x = random.nextFloat() * 2 - 1;
-			float y = random.nextFloat() * 2 - 1;
-			float z = (random.nextFloat() - random.nextFloat()) * spreadFactor;
+			poseStack.pushPose();
 			float size = 0.15F + random.nextFloat() * 0.1F;
-			float l = x * x + y * y + z * z;
 			
-			if(l < 1.0D && l > 0.01D && Math.abs(z / spreadFactor) < 0.4F)
-			{
-				l = 1 / (float) Math.sqrt(l);
-				x = x * l;
-				y = y * l;
-				z = z * l;
-				float drawnX = x * 100;
-				float drawnY = y * 100;
-				float drawnZ = z * 100;
-				double d8 = Math.atan2(x, z);
-				float d9 = (float) Math.sin(d8);
-				float d10 = (float) Math.cos(d8);
-				double d11 = Math.atan2(Math.sqrt(x * x + z * z), y);
-				float d12 = (float) Math.sin(d11);
-				float d13 = (float) Math.cos(d11);
-				double d14 = random.nextDouble() * Math.PI * 2.0D;
-				float d15 = (float) Math.sin(d14);
-				float d16 = (float) Math.cos(d14);
-				
-				for(int vertex = 0; vertex < 4; vertex++)
-				{
-					float d18 = ((vertex & 2) - 1) * size;
-					float d19 = ((vertex + 1 & 2) - 1) * size;
-					float d21 = d18 * d16 - d19 * d15;
-					float d22 = d19 * d16 + d18 * d15;
-					float d24 = -d21 * d13;
-					float vertexX = d24 * d9 - d22 * d10;
-					float vertexY = d21 * d12;
-					float vertexZ = d22 * d9 + d24 * d10;
-					buffer.addVertex(matrix, drawnX + vertexX, drawnY + vertexY, drawnZ + vertexZ);
-				}
-			}
+			float degree = (count / 1500F) * 360F;
+			poseStack.mulPose(Axis.ZP.rotationDegrees(degree + random.nextFloat())); //Z axis forms a ring
+			poseStack.mulPose(Axis.XP.rotationDegrees((float) (random.nextGaussian() * 1D))); //X axis offset from center of ring
+			Matrix4f matrix = poseStack.last().pose();
+			
+			drawSprite(matrix, size, sprite);
+			
+			poseStack.popPose();
 		}
-		BufferUploader.drawWithShader(buffer.buildOrThrow());
 	}
 	
 	public static void drawRotatingSkaia(PoseStack poseStack, ClientLevel level, float skaiaSize)
@@ -102,22 +71,27 @@ public final class SessionRenderHelper
 		drawSprite(matrix, size, sprite);
 	}
 	
-	public static void drawRotatingProspit(PoseStack poseStack, ClientLevel level, float size)
+	public static void drawRotatingProspit(PoseStack poseStack, ClientLevel level, float size, boolean spinning)
 	{
 		poseStack.pushPose();
 		poseStack.mulPose(getRotationQuaternion(level));
-		drawProspit(poseStack, level, size);
+		drawProspit(poseStack, level, size, spinning);
 		poseStack.popPose();
 	}
 	
-	public static void drawProspit(PoseStack poseStack, ClientLevel level, float size)
+	public static void drawProspit(PoseStack poseStack, ClientLevel level, float size, boolean spinning)
 	{
 		TextureAtlasSprite sprite = LandSkySpriteUploader.getInstance().getProspitSprite();
 		poseStack.pushPose();
 		Matrix4f matrix = poseStack.last().pose();
-		float rotateSpeed = (level.getGameTime() % 100000F) * 0.000001F;
-		matrix.rotateY(rotateSpeed * 360);
-		poseStack.mulPose(Axis.XP.rotation(0.26F));
+		
+		if(spinning) //Land perspective
+		{
+			float rotateSpeed = (level.getGameTime() % 100000F) * 0.000001F;
+			matrix.rotateY(rotateSpeed * 360);
+			poseStack.mulPose(Axis.XP.rotation(0.26F));
+		} else
+			poseStack.mulPose(Axis.XP.rotation(0.05F));
 		
 		drawSprite(matrix, size, sprite);
 		poseStack.popPose();

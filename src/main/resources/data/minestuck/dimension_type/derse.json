@@ -13,7 +13,7 @@
   "height": 256,
   "logical_height" : 256,
   "infiniburn" : "#minecraft:infiniburn_overworld",
-  "effects" : "minestuck:prospit_effects",
+  "effects" : "minestuck:derse_effects",
   "ambient_light" : 6,
   "monster_spawn_light_level": {
     "type": "uniform",

@@ -8,10 +8,8 @@ import net.minecraft.client.renderer.FogRenderer;
 import net.minecraft.client.renderer.GameRenderer;
 import org.joml.Matrix4f;
 
-public final class ProspitSkyRenderer
+public final class DerseSkyRenderer
 {
-	//TODO edges of chunks are visible due to lack of fog
-	
 	public static void render(Matrix4f modelViewMatrix, ClientLevel level)
 	{
 		PoseStack poseStack = new PoseStack();
@@ -26,9 +24,13 @@ public final class ProspitSkyRenderer
 		RenderSystem.blendFunc(GlStateManager.SourceFactor.SRC_ALPHA, GlStateManager.DestFactor.ONE_MINUS_SRC_ALPHA);
 		RenderSystem.setShaderColor(1, 1, 1, 1);
 		
+		SessionRenderHelper.drawRotatingSkaia(poseStack, level, 5.0F);
+		SessionRenderHelper.drawRotatingProspit(poseStack, level, 0.5F, false);
 		SessionRenderHelper.drawRotatingVeil(poseStack, level);
-		SessionRenderHelper.drawRotatingDerse(poseStack, level, 0.5F);
-		SessionRenderHelper.drawRotatingSkaia(poseStack, level, 200.0F);
+		
+		//TODO offset location everything is rendered from
+		//modelViewMatrix.translate(10.0F, 100.0F, 0.0F);
+		//poseStack.translate(0.0F, 12.0F, 0.0F); //offsets all celestial bodies
 		
 		RenderSystem.disableBlend();
 		RenderSystem.depthMask(true);

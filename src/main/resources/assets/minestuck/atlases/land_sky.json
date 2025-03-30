@@ -16,6 +16,11 @@
             "sprite": "minestuck:derse"
         },
         {
+            "type": "single",
+            "resource": "minestuck:environment/meteor",
+            "sprite": "minestuck:meteor"
+        },
+        {
             "type": "directory",
             "source": "environment/planets",
             "prefix": "planets/"

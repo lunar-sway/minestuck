@@ -12,14 +12,10 @@ import net.minecraft.client.renderer.FogRenderer;
 import net.minecraft.client.renderer.GameRenderer;
 import net.minecraft.util.Mth;
 import net.minecraft.world.phys.Vec3;
-import org.apache.logging.log4j.LogManager;
-import org.apache.logging.log4j.Logger;
 import org.joml.Matrix4f;
 
 public final class LandSkyRenderer
 {
-	private static final Logger LOGGER = LogManager.getLogger();
-	
 	public static void render(int ticks, float partialTicks, Matrix4f modelViewMatrix, ClientLevel level, Minecraft mc)
 	{
 		PoseStack poseStack = new PoseStack();
@@ -52,14 +48,14 @@ public final class LandSkyRenderer
 		
 		//TODO increase alpha levels at high altitudes
 		//TODO hide veil when behind any other celestial bodies besides derse
-		SessionRenderHelper.drawSkaia(matrix, 20.0F);
-		SessionRenderHelper.drawProspit(poseStack, level, 5.0F);
+		SessionRenderHelper.drawSkaia(matrix, 17.0F);
 		
 		if(starBrightness > 0)
 		{
 			RenderSystem.setShaderColor(starBrightness, starBrightness, starBrightness, starBrightness);
 			SessionRenderHelper.drawRotatingVeil(poseStack, level);
 			RenderSystem.setShaderColor(starBrightness * 2, starBrightness * 2, starBrightness * 2, starBrightness * 2);
+			SessionRenderHelper.drawProspit(poseStack, level, 4.25F, true);
 			SessionRenderHelper.drawRotatingDerse(poseStack, level, 1.0F);
 			SessionRenderHelper.drawLands(mc, poseStack, level.dimension());
 		}
