@@ -64,6 +64,6 @@ public class DiskManagerScreen extends ThemedScreen
 	private void ejectDisk(ItemStack stack)
 	{
 		PacketDistributor.sendToServer(EjectDiskPacket.create(computer, stack));
-		recreateButtons();
+		minecraft.setScreen(null);
 	}
 }

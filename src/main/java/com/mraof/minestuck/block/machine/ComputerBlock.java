@@ -5,8 +5,8 @@ import com.mraof.minestuck.block.MSBlockShapes;
 import com.mraof.minestuck.block.MSProperties;
 import com.mraof.minestuck.blockentity.ComputerBlockEntity;
 import com.mraof.minestuck.client.gui.MSScreenFactories;
+import com.mraof.minestuck.computer.ProgramTypes;
 import com.mraof.minestuck.computer.theme.MSComputerThemes;
-import com.mraof.minestuck.item.components.MSItemComponents;
 import com.mraof.minestuck.player.IdentifierHandler;
 import com.mraof.minestuck.skaianet.client.SkaiaClient;
 import com.mraof.minestuck.util.MSSoundEvents;
@@ -17,10 +17,10 @@ import net.minecraft.resources.ResourceLocation;
 import net.minecraft.sounds.SoundSource;
 import net.minecraft.util.StringRepresentable;
 import net.minecraft.world.InteractionHand;
-import net.minecraft.world.InteractionResult;
 import net.minecraft.world.ItemInteractionResult;
 import net.minecraft.world.entity.player.Player;
 import net.minecraft.world.item.ItemStack;
+import net.minecraft.world.item.Items;
 import net.minecraft.world.level.BlockGetter;
 import net.minecraft.world.level.Level;
 import net.minecraft.world.level.block.Block;
@@ -79,21 +79,27 @@ public class ComputerBlock extends MachineBlock implements EntityBlock
 	@Override
 	protected ItemInteractionResult useItemOn(ItemStack stack, BlockState state, Level level, BlockPos pos, Player player, InteractionHand hand, BlockHitResult hitResult)
 	{
-		if(player.isShiftKeyDown())
+		if(hand == InteractionHand.OFF_HAND)
 			return ItemInteractionResult.PASS_TO_DEFAULT_BLOCK_INTERACTION;
 		
-		ItemStack heldItem = player.getItemInHand(hand);
+		if(player.isShiftKeyDown())
+		{
+			BlockState newState = state.setValue(STATE, State.OFF);
+			level.setBlock(pos, newState, Block.UPDATE_CLIENTS);
+			
+			return ItemInteractionResult.SUCCESS;
+		}
+		
 		if(state.getValue(STATE) == State.OFF)
 		{
-			if(!heldItem.has(MSItemComponents.PROGRAM_TYPE))
-				return ItemInteractionResult.SKIP_DEFAULT_BLOCK_INTERACTION;
-			
 			turnOn(state, level, pos, player);
+			return ItemInteractionResult.SUCCESS; //do not allow additional actions if computer is just being turned on
 		}
 		
 		if(!(level.getBlockEntity(pos) instanceof ComputerBlockEntity blockEntity))
 			return ItemInteractionResult.FAIL;
 		
+		ItemStack heldItem = player.getItemInHand(hand);
 		if(blockEntity.tryInsertDisk(player, heldItem))
 			return ItemInteractionResult.SUCCESS;
 		//insertion of code handled in ReadableSburbCodeItem onItemUseFirst()
@@ -104,39 +110,33 @@ public class ComputerBlock extends MachineBlock implements EntityBlock
 		return ItemInteractionResult.SUCCESS;
 	}
 	
-	@Override
-	protected InteractionResult useWithoutItem(BlockState state, Level level, BlockPos pos, Player player, BlockHitResult hitResult)
-	{
-		//TODO move this to useItemOn()
-		if(player.isShiftKeyDown())
-			return InteractionResult.PASS;
-		
-		if(state.getValue(STATE) == State.OFF)
-			turnOn(state, level, pos, player);
-		
-		if(!(level.getBlockEntity(pos) instanceof ComputerBlockEntity blockEntity))
-			return InteractionResult.FAIL;
-		
-		if(level.isClientSide && SkaiaClient.requestData(blockEntity))
-			MSScreenFactories.displayComputerScreen(blockEntity);
-		
-		return InteractionResult.SUCCESS;
-	}
-	
 	private void turnOn(BlockState state, Level level, BlockPos pos, Player player)
 	{
 		if(level.isClientSide)
 			return;
 		
 		level.playSound(null, pos, MSSoundEvents.COMPUTER_BOOT.get(), SoundSource.BLOCKS);
-		BlockState newState = state.setValue(STATE, State.ON);
-		level.setBlock(pos, newState, Block.UPDATE_CLIENTS);
 		
 		if(level.getBlockEntity(pos) instanceof ComputerBlockEntity computer)
 		{
-			computer.initializeOwner(Objects.requireNonNull(IdentifierHandler.encode(player)));
+			//defaults to ON, unless the computer is broken or has a game disk
+			ComputerBlock.State computerState = State.ON;
+			boolean hasSBURBProgram = computer.installedPrograms().anyMatch(programType -> programType == ProgramTypes.SBURB_CLIENT.get() || programType == ProgramTypes.SBURB_CLIENT.get());
+			boolean isBSOD = computer.getDisks().stream().anyMatch(disk -> disk.is(Items.MUSIC_DISC_11));
 			
-			computer.setTheme(defaultTheme);
+			if(hasSBURBProgram)
+				computerState = State.GAME_LOADED;
+			if(isBSOD)
+				computerState = State.BROKEN;
+			
+			BlockState newState = state.setValue(STATE, computerState);
+			level.setBlock(pos, newState, Block.UPDATE_CLIENTS);
+			
+			if(computer.getOwner() == null)
+			{
+				computer.initializeOwner(Objects.requireNonNull(IdentifierHandler.encode(player)));
+				computer.setTheme(defaultTheme);
+			}
 		}
 	}
 	
@@ -144,23 +144,23 @@ public class ComputerBlock extends MachineBlock implements EntityBlock
 	@Override
 	public BlockEntity newBlockEntity(BlockPos pos, BlockState state)
 	{
-		return state.getValue(STATE) != State.OFF ? new ComputerBlockEntity(pos, state) : null;
+		return new ComputerBlockEntity(pos, state);
 	}
 	
 	@Override
 	protected void onRemove(BlockState state, Level level, BlockPos pos, BlockState newState, boolean isMoving)
 	{
 		if(!newState.is(state.getBlock()))
-			dropItems(level, pos, state);
+			dropItems(level, pos);
 		super.onRemove(state, level, pos, newState, isMoving);
 	}
 	
-	private void dropItems(Level level, BlockPos pos, BlockState state)
+	private void dropItems(Level level, BlockPos pos)
 	{
 		if(level.getBlockEntity(pos) instanceof ComputerBlockEntity computer)
 		{
 			computer.closeAll();
-			computer.dropItems();
+			computer.dropItems(true);
 		}
 	}
 	

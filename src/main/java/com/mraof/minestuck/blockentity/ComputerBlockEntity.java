@@ -42,10 +42,7 @@ import org.apache.logging.log4j.Logger;
 
 import javax.annotation.Nullable;
 import javax.annotation.ParametersAreNonnullByDefault;
-import java.util.HashMap;
-import java.util.Map;
-import java.util.Objects;
-import java.util.Optional;
+import java.util.*;
 import java.util.function.Function;
 import java.util.function.Supplier;
 import java.util.stream.Stream;
@@ -175,9 +172,10 @@ public final class ComputerBlockEntity extends BlockEntity implements ISburbComp
 			programType.eventHandler().onLoad(this);
 	}
 	
-	public boolean isBroken()
+	public boolean isBrokenOrOff()
 	{
-		return getBlockState().getValue(ComputerBlock.STATE) == ComputerBlock.State.BROKEN;
+		ComputerBlock.State state = getBlockState().getValue(ComputerBlock.STATE);
+		return state == ComputerBlock.State.BROKEN || state == ComputerBlock.State.OFF;
 	}
 	
 	public boolean hasExistingProgram(ProgramType<?> programType)
@@ -220,12 +218,13 @@ public final class ComputerBlockEntity extends BlockEntity implements ISburbComp
 		return this.disks.stream().anyMatch(stack -> stack.is(diskItem));
 	}
 	
-	public void dropItems()
+	public void dropItems(boolean blockRemoved)
 	{
-		this.disks.forEach(this::dropDisk);
+		List<ItemStack> disks = new ArrayList<>(this.disks);
+		disks.forEach(disk -> dropDisk(disk, blockRemoved));
 	}
 	
-	public void dropDisk(ItemStack stack)
+	public void dropDisk(ItemStack stack, boolean blockRemoved)
 	{
 		if(this.level == null)
 			return;
@@ -241,7 +240,15 @@ public final class ComputerBlockEntity extends BlockEntity implements ISburbComp
 			}
 		}
 		
-		this.level.playSound(null, this.getBlockPos(), MSSoundEvents.COMPUTER_DISK_REMOVE.get(), SoundSource.BLOCKS);
+		if(!blockRemoved)
+		{
+			boolean hasSBURBProgram = hasExistingProgram(ProgramTypes.SBURB_CLIENT.get()) || hasExistingProgram(ProgramTypes.SBURB_SERVER.get());
+			
+			if(!hasSBURBProgram)
+				setComputerBlockState(ComputerBlock.State.ON);
+			
+			this.level.playSound(null, this.getBlockPos(), MSSoundEvents.COMPUTER_DISK_REMOVE.get(), SoundSource.BLOCKS);
+		}
 		
 		for(ItemStack disk : this.disks)
 		{
@@ -266,13 +273,6 @@ public final class ComputerBlockEntity extends BlockEntity implements ISburbComp
 	public Stream<ProgramType<?>> installedPrograms()
 	{
 		return this.existingPrograms.keySet().stream();
-	}
-	
-	public NonNullList<ItemStack> getProgramDisks()
-	{
-		NonNullList<ItemStack> list = NonNullList.create();
-		list.addAll(this.disks.stream().filter(stack -> stack.has(MSItemComponents.PROGRAM_TYPE)).toList());
-		return list;
 	}
 	
 	public NonNullList<ItemStack> getBlankDisks()
@@ -330,7 +330,7 @@ public final class ComputerBlockEntity extends BlockEntity implements ISburbComp
 	
 	public boolean tryInsertDisk(Player player, ItemStack stackInHand)
 	{
-		if(isBroken() || level == null || stackInHand.isEmpty())
+		if(isBrokenOrOff() || level == null || stackInHand.isEmpty())
 			return false;
 		
 		@Nullable
@@ -355,7 +355,7 @@ public final class ComputerBlockEntity extends BlockEntity implements ISburbComp
 		} else if(holdingDisc11Disk && !level.isClientSide)
 		{
 			closeAll();
-			level.setBlock(getBlockPos(), getBlockState().setValue(ComputerBlock.STATE, ComputerBlock.State.BROKEN), Block.UPDATE_CLIENTS);
+			setComputerBlockState(ComputerBlock.State.BROKEN);
 			takeDisk(stackInHand);
 			return true;
 		} else if(holdingProgramDisk)
@@ -364,7 +364,7 @@ public final class ComputerBlockEntity extends BlockEntity implements ISburbComp
 			if(!level.isClientSide && !hasExistingProgram(programType))
 			{
 				insertNewProgramInstance(programType);
-				level.setBlock(getBlockPos(), getBlockState().setValue(ComputerBlock.STATE, ComputerBlock.State.GAME_LOADED), Block.UPDATE_CLIENTS);
+				setComputerBlockState(ComputerBlock.State.GAME_LOADED);
 				takeDisk(stackInHand);
 				programType.eventHandler().onDiskInserted(this);
 			}
@@ -388,6 +388,12 @@ public final class ComputerBlockEntity extends BlockEntity implements ISburbComp
 		this.guiCallback = guiCallback;
 	}
 	
+	public void setComputerBlockState(ComputerBlock.State state)
+	{
+		level.setBlock(getBlockPos(), getBlockState().setValue(ComputerBlock.STATE, state), Block.UPDATE_CLIENTS);
+		markDirtyAndResend();
+	}
+	
 	private void markDirtyAndResend()
 	{
 		setChanged();
@@ -403,7 +409,7 @@ public final class ComputerBlockEntity extends BlockEntity implements ISburbComp
 	
 	public boolean canAccessComputer(ServerPlayer player)
 	{
-		if(this.isBroken())
+		if(this.isBrokenOrOff())
 			return false;
 		if(ServerEditHandler.isInEditmode(player))
 			return false;

@@ -60,7 +60,7 @@ public class ComputerScreen extends ThemedScreen
 	{
 		super.render(guiGraphics, mouseX, mouseY, partialTicks);
 		
-		boolean bsod = computer.isBroken();
+		boolean bsod = computer.isBrokenOrOff();
 		
 		if(!bsod)
 		{
@@ -75,13 +75,13 @@ public class ComputerScreen extends ThemedScreen
 		if(program != null)
 			program.updateGui(this);
 		
-		boolean shouldShowIcons = this.program == null && !this.computer.isBroken();
+		boolean shouldShowIcons = this.program == null && !this.computer.isBrokenOrOff();
 		this.icons.forEach(icon -> icon.visible = shouldShowIcons);
 	}
 	
 	protected void setProgram(ProgramType<?> programType)
 	{
-		if(computer.isBroken())
+		if(computer.isBrokenOrOff())
 			return;
 		
 		program = new TypedProgramGui<>(programType);

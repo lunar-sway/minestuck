@@ -76,7 +76,7 @@ public abstract class ThemedScreen extends Screen
 	{
 		super.renderBackground(guiGraphics, mouseX, mouseY, partialTicks);
 		
-		boolean bsod = computer.isBroken();
+		boolean bsod = computer.isBrokenOrOff();
 		
 		guiGraphics.blit(GUI_MAIN, xOffset, yOffset, 0, 0, GUI_WIDTH, GUI_HEIGHT);
 		

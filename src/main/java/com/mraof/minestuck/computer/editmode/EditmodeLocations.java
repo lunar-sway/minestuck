@@ -310,6 +310,6 @@ public final class EditmodeLocations implements INBTSerializable<CompoundTag>
 	
 	private static boolean isComputerSourceInvalid(ComputerBlockEntity computer)
 	{
-		return computer.isBroken() || !computer.hasExistingProgram(ProgramTypes.SBURB_CLIENT.get());
+		return computer.isBrokenOrOff() || !computer.hasExistingProgram(ProgramTypes.SBURB_CLIENT.get());
 	}
 }
