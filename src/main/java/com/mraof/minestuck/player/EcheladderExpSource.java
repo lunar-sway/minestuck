@@ -199,6 +199,7 @@ public interface EcheladderExpSource
 						.ifPresent(listBuilder::add);
 			}
 			
+			INSTANCE_LIST.clear();
 			INSTANCE_LIST.addAll(listBuilder.build());
 			LOGGER.info("Loaded {} echeladder exp sources", INSTANCE_LIST.size());
 		}
