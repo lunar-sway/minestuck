@@ -19,14 +19,14 @@
       "attribute": "minestuck:player.underling_protection_modifier",
       "id": "minestuck:echeladder_underling_protection",
       "operation": "add_value",
-      "value": 1.0,
+      "value": 0.0,
       "change_per_rung": -0.015306122448979
     },
     {
       "attribute": "minestuck:player.underling_damage_modifier",
       "id": "minestuck:echeladder_underling_damage",
       "operation": "add_value",
-      "value": 1.0,
+      "value": 0.0,
       "change_per_rung": 0.04
     },
     {

@@ -237,12 +237,12 @@ public final class Echeladder implements INBTSerializable<CompoundTag>
 	
 	public static double getUnderlingDamageModifier(int rung)
 	{
-		return getAttributeAmount(rung, RungsProvider.UNDERLING_DAMAGE_ID);
+		return 1D + getAttributeAmount(rung, RungsProvider.UNDERLING_DAMAGE_ID);
 	}
 	
 	public static double getUnderlingProtectionModifier(int rung)
 	{
-		return getAttributeAmount(rung, RungsProvider.UNDERLING_PROTECTION_ID);
+		return 1D + getAttributeAmount(rung, RungsProvider.UNDERLING_PROTECTION_ID);
 	}
 	
 	private static double getAttributeAmount(int rung, ResourceLocation id)
