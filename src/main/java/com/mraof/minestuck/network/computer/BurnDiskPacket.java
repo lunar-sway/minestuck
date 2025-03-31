@@ -54,8 +54,6 @@ public record BurnDiskPacket(BlockPos computerPos, boolean isClientDisk) impleme
 		if(!computer.getProgramData(ProgramTypes.DISK_BURNER).map(DiskBurnerData::hasAllCode).orElse(false))
 			return;
 		
-		//TODO should remove blank disk
-		if(computer.canTakeDisk(MSItems.BLANK_DISK.get()))
-			computer.dropDisk(disk.getDefaultInstance(), false);
+		computer.tryDropDisk(MSItems.BLANK_DISK.get().getDefaultInstance(), disk.getDefaultInstance());
 	}
 }

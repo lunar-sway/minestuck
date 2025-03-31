@@ -50,7 +50,6 @@ public record EjectDiskPacket(BlockPos computerPos, ItemStack itemStack) impleme
 		if(computer.getProgramData(ProgramTypes.SETTINGS).isEmpty())
 			return;
 		
-		if(computer.canTakeDisk(itemStack.getItem()))
-			computer.dropDisk(itemStack, false);
+		computer.tryDropDisk(itemStack);
 	}
 }

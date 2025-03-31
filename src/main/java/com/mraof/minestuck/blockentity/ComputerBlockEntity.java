@@ -55,7 +55,6 @@ public final class ComputerBlockEntity extends BlockEntity implements ISburbComp
 	public static final String DISK_REJECT = "block.minestuck.computer.disk_reject";
 	
 	private static final Logger LOGGER = LogManager.getLogger();
-	//TODO turn into config
 	private static final int DISK_CAPACITY = 4;
 	private static final Codec<NonNullList<ItemStack>> DISK_LIST_CODEC = NonNullList.codecOf(ItemStack.SINGLE_ITEM_CODEC);
 	
@@ -214,26 +213,42 @@ public final class ComputerBlockEntity extends BlockEntity implements ISburbComp
 		return this.getProgramData(ProgramTypes.SBURB_SERVER);
 	}
 	
-	public boolean canTakeDisk(Item diskItem)
+	public void tryDropDisk(ItemStack diskToDrop)
 	{
-		return this.disks.stream().anyMatch(stack -> stack.is(diskItem));
+		tryDropDisk(diskToDrop, diskToDrop);
 	}
 	
-	public void dropItems(boolean blockRemoved)
+	public void tryDropDisk(ItemStack diskToDelete, ItemStack diskToDrop)
 	{
-		List<ItemStack> disks = new ArrayList<>(this.disks);
-		disks.forEach(disk -> dropDisk(disk, blockRemoved));
+		for(ItemStack disk : new ArrayList<>(this.disks))
+		{
+			if(disk.is(diskToDelete.getItem()))
+			{
+				dropDisk(disk, diskToDrop, false);
+				break;
+			}
+		}
 	}
 	
-	public void dropDisk(ItemStack stack, boolean blockRemoved)
+	public void dropAllDisks(boolean blockRemoved)
+	{
+		new ArrayList<>(this.disks).forEach(disk -> dropDisk(disk, disk, blockRemoved));
+	}
+	
+	/**
+	 * @param diskToDelete What ItemStack is removed from disks
+	 * @param diskToDrop What ItemStack is placed in the world. May not be the same as diskToDelete
+	 * @param blockRemoved If the block is not being removed it will play a disk eject sound and may update the blockstate
+	 */
+	public void dropDisk(ItemStack diskToDelete, ItemStack diskToDrop, boolean blockRemoved)
 	{
 		if(this.level == null)
 			return;
 		
 		//TODO client is not being updated to remove existing program
-		if(stack.has(MSItemComponents.PROGRAM_TYPE))
+		if(diskToDelete.has(MSItemComponents.PROGRAM_TYPE))
 		{
-			Holder<ProgramType<?>> typeHolder = stack.getComponents().get(MSItemComponents.PROGRAM_TYPE.get());
+			Holder<ProgramType<?>> typeHolder = diskToDelete.getComponents().get(MSItemComponents.PROGRAM_TYPE.get());
 			if(typeHolder != null)
 			{
 				typeHolder.value().eventHandler().onClosed(this);
@@ -253,7 +268,7 @@ public final class ComputerBlockEntity extends BlockEntity implements ISburbComp
 		
 		for(ItemStack disk : this.disks)
 		{
-			if(disk.is(stack.getItem()))
+			if(disk.is(diskToDelete.getItem()))
 			{
 				this.disks.remove(disk);
 				break;
@@ -261,7 +276,7 @@ public final class ComputerBlockEntity extends BlockEntity implements ISburbComp
 		}
 		
 		BlockPos pos = this.getBlockPos();
-		Containers.dropItemStack(this.level, pos.getX(), pos.getY(), pos.getZ(), stack);
+		Containers.dropItemStack(this.level, pos.getX(), pos.getY(), pos.getZ(), diskToDrop);
 		this.markDirtyAndResend();
 	}
 	
