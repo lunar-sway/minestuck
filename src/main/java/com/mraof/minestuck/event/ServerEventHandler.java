@@ -5,13 +5,13 @@ import com.mraof.minestuck.MinestuckConfig;
 import com.mraof.minestuck.block.MSBlocks;
 import com.mraof.minestuck.effects.CreativeShockEffect;
 import com.mraof.minestuck.effects.MSEffects;
+import com.mraof.minestuck.entity.MSAttributes;
 import com.mraof.minestuck.entity.underling.UnderlingEntity;
 import com.mraof.minestuck.entry.EntryEvent;
 import com.mraof.minestuck.inventory.captchalogue.CaptchaDeckHandler;
 import com.mraof.minestuck.inventory.captchalogue.HashMapModus;
 import com.mraof.minestuck.inventory.captchalogue.Modus;
 import com.mraof.minestuck.item.MSItems;
-import com.mraof.minestuck.player.Echeladder;
 import com.mraof.minestuck.player.EnumAspect;
 import com.mraof.minestuck.player.IdentifierHandler;
 import com.mraof.minestuck.player.Title;
@@ -28,7 +28,6 @@ import net.minecraft.world.entity.Entity;
 import net.minecraft.world.entity.EquipmentSlot;
 import net.minecraft.world.entity.LivingEntity;
 import net.minecraft.world.entity.item.ItemEntity;
-import net.minecraft.world.entity.monster.*;
 import net.minecraft.world.item.ItemStack;
 import net.minecraft.world.item.Items;
 import net.minecraft.world.phys.AABB;
@@ -112,12 +111,12 @@ public class ServerEventHandler
 			if(attackerIsRealPlayer && injured instanceof UnderlingEntity)
 			{
 				//Increase damage to underling
-				double modifier = Echeladder.get((ServerPlayer) attacker).getUnderlingDamageModifier();
+				double modifier = ((ServerPlayer) attacker).getAttributeValue(MSAttributes.UNDERLING_DAMAGE_MODIFIER);
 				event.setAmount((float) (event.getAmount() * modifier));
 			} else if (injuredIsRealPlayer && attacker instanceof UnderlingEntity)
 			{
 				//Decrease damage to player
-				double modifier = Echeladder.get((ServerPlayer) injured).getUnderlingProtectionModifier();
+				double modifier = ((ServerPlayer) injured).getAttributeValue(MSAttributes.UNDERLING_PROTECTION_MODIFIER);
 				event.setAmount((float) (event.getAmount() * modifier));
 			}
 		}

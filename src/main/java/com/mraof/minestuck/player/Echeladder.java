@@ -195,7 +195,8 @@ public final class Echeladder implements INBTSerializable<CompoundTag>
 	
 	public void updateEcheladderBonuses(ServerPlayer player)
 	{
-		Rungs.getRelevantAttributes(rung).forEach(attribute -> attribute.updateAttribute(player, rung));
+		EnumAspect aspect = Title.getTitle(player).map(Title::heroAspect).orElse(null);
+		Rungs.getRelevantAttributes(aspect, rung).forEach(attribute -> attribute.updateAttribute(player, rung));
 	}
 	
 	@Override
@@ -236,17 +237,17 @@ public final class Echeladder implements INBTSerializable<CompoundTag>
 	
 	public static double getUnderlingDamageModifier(int rung)
 	{
-		return getAttributeAmount(rung, RungsProvider.UNDERLING_DAMAGE_ID);
+		return 1D + getAttributeAmount(rung, RungsProvider.UNDERLING_DAMAGE_ID);
 	}
 	
 	public static double getUnderlingProtectionModifier(int rung)
 	{
-		return getAttributeAmount(rung, RungsProvider.UNDERLING_PROTECTION_ID);
+		return 1D + getAttributeAmount(rung, RungsProvider.UNDERLING_PROTECTION_ID);
 	}
 	
 	private static double getAttributeAmount(int rung, ResourceLocation id)
 	{
-		for(Rung.EcheladderAttribute echeladderAttribute : Rungs.getRelevantAttributes(rung))
+		for(Rung.EcheladderAttribute echeladderAttribute : Rungs.getRelevantAttributes(null, rung))
 		{
 			if(echeladderAttribute.id().equals(id))
 				return echeladderAttribute.getAmount(rung);
