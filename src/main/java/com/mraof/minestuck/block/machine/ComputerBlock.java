@@ -134,6 +134,7 @@ public class ComputerBlock extends MachineBlock implements EntityBlock
 			
 			if(computer.getOwner() == null)
 			{
+				//TODO add 1 in 10 chance of a different theme if the computers default theme is actually the default
 				computer.initializeOwner(Objects.requireNonNull(IdentifierHandler.encode(player)));
 				computer.setTheme(defaultTheme);
 			}

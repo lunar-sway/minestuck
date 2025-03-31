@@ -34,13 +34,11 @@ public final class SettingsAppGui implements ProgramGui<ProgramType.EmptyData>
 	
 	private static void openThemeScreen(ComputerBlockEntity computer)
 	{
-		Minecraft.getInstance().setScreen(null);
 		Minecraft.getInstance().setScreen(new ComputerThemeScreen(computer));
 	}
 	
 	private void openDiskManagerScreen(ComputerBlockEntity computer)
 	{
-		Minecraft.getInstance().setScreen(null);
 		Minecraft.getInstance().setScreen(new DiskManagerScreen(computer));
 	}
 	

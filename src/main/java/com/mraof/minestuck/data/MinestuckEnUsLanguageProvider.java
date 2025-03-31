@@ -2254,7 +2254,7 @@ public class MinestuckEnUsLanguageProvider extends MinestuckLanguageProvider
 		add(SylladexScreen.EMPTY_SYLLADEX_2, "This will empty your sylladex.");
 		add(SylladexScreen.EMPTY_SYLLADEX_BUTTON, "Empty Sylladex");
 		add(AlchemiterScreen.TITLE, "Alchemiter");
-		add(ComputerBlockEntity.DISK_REJECT, "Cant fit any more disks in the computer!");
+		add(ComputerBlockEntity.DISK_REJECT, "Cannot fit any more disks in the computer!");
 		add(CruxtruderBlockEntity.EMPTY, "The cruxtruder gives off an empty click. Perhaps it needs some sort of material to function?");
 		add(MiniCruxtruderBlockEntity.TITLE, "Miniature Cruxtruder");
 		add(MiniTotemLatheBlockEntity.TITLE, "Miniature Totem Lathe");

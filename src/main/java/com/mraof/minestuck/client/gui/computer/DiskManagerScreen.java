@@ -2,14 +2,12 @@ package com.mraof.minestuck.client.gui.computer;
 
 import com.mraof.minestuck.blockentity.ComputerBlockEntity;
 import com.mraof.minestuck.computer.ProgramType;
-import com.mraof.minestuck.item.MSItems;
 import com.mraof.minestuck.item.components.MSItemComponents;
 import com.mraof.minestuck.network.computer.EjectDiskPacket;
 import net.minecraft.client.gui.GuiGraphics;
 import net.minecraft.core.Holder;
 import net.minecraft.network.chat.Component;
 import net.minecraft.world.item.ItemStack;
-import net.minecraft.world.item.Items;
 import net.neoforged.neoforge.network.PacketDistributor;
 
 import javax.annotation.ParametersAreNonnullByDefault;
@@ -47,7 +45,7 @@ public class DiskManagerScreen extends ThemedScreen
 			Holder<ProgramType<?>> programTypeHolder = disk.getComponents().get(MSItemComponents.PROGRAM_TYPE.get());
 			if(programTypeHolder != null)
 				diskButtons.add(new ButtonListHelper.ButtonData(Component.literal("Eject ").append(programTypeHolder.value().name()), () -> ejectDisk(disk)));
-			else if(disk.is(MSItems.BLANK_DISK) || disk.is(Items.MUSIC_DISC_11))
+			else
 				diskButtons.add(new ButtonListHelper.ButtonData(Component.literal("Eject ").append(disk.getDisplayName()), () -> ejectDisk(disk)));
 		});
 		

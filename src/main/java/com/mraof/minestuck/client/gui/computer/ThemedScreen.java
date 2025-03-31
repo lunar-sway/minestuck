@@ -24,8 +24,8 @@ import javax.annotation.ParametersAreNonnullByDefault;
 @ParametersAreNonnullByDefault
 public abstract class ThemedScreen extends Screen
 {
-	public static final ResourceLocation GUI_MAIN = ResourceLocation.fromNamespaceAndPath(Minestuck.MOD_ID, "textures/gui/sburb.png");
-	public static final ResourceLocation GUI_BSOD = ResourceLocation.fromNamespaceAndPath(Minestuck.MOD_ID, "textures/gui/bsod_message.png");
+	public static final ResourceLocation GUI_MAIN = Minestuck.id("textures/gui/sburb.png");
+	public static final ResourceLocation GUI_BSOD = Minestuck.id("textures/gui/bsod_message.png");
 	
 	public static final int GUI_WIDTH = 176;
 	public static final int GUI_HEIGHT = 166;

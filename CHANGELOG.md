@@ -16,6 +16,7 @@ The format is based on [Keep a Changelog](https://keepachangelog.com/en/1.1.0/).
 - Added 2 tracks october and endless chasm by triagegremlin
 - Added 2 tracks the note desolation plays and desolate strife by Caldw3ll
 - New Disk Manager utility in Settings computer program
+- Computer programs now have a tooltip when hovered over in computer gui
 - Computer sound effects
 - New computer related advancement
 

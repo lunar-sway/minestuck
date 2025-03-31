@@ -276,11 +276,9 @@ public final class ComputerBlockEntity extends BlockEntity implements ISburbComp
 		return this.existingPrograms.keySet().stream();
 	}
 	
-	public NonNullList<ItemStack> getBlankDisks()
+	public boolean hasBlankDisks()
 	{
-		NonNullList<ItemStack> list = NonNullList.create();
-		list.addAll(this.disks.stream().filter(stack -> stack.is(MSItems.BLANK_DISK.get())).toList());
-		return list;
+		return this.disks.stream().anyMatch(stack -> stack.is(MSItems.BLANK_DISK.get()));
 	}
 	
 	public NonNullList<ItemStack> getDisks()

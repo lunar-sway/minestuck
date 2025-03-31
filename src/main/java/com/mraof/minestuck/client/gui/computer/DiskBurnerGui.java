@@ -33,7 +33,7 @@ public final class DiskBurnerGui implements ProgramGui<DiskBurnerData>
 		{
 			this.message = Component.translatable(NEED_CODE);
 			this.buttonListHelper.updateButtons(List.of());
-		} else if(gui.computer.getBlankDisks().isEmpty())
+		} else if(!gui.computer.hasBlankDisks())
 		{
 			this.message = Component.translatable(NO_DISKS);
 			this.buttonListHelper.updateButtons(List.of());
