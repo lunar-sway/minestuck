@@ -14,6 +14,7 @@ public final class MSBiomeProvider
 	public static void register(BootstrapContext<Biome> context)
 	{
 		context.register(MSBiomes.SKAIA, skaiaBiome());
+		context.register(MSBiomes.VEIL, veilBiome());
 		
 		MSBiomes.DEFAULT_LAND.createForDataGen(context);
 		MSBiomes.HIGH_HUMID_LAND.createForDataGen(context);
@@ -37,5 +38,21 @@ public final class MSBiomeProvider
 		ambience.fogColor(0xCDCDFF).skyColor(0x7AA4FF);
 		
 		return new Biome.BiomeBuilder().hasPrecipitation(false).temperature(0.5F).downfall(0.5F).specialEffects(ambience.build()).mobSpawnSettings(spawnInfo.build()).generationSettings(genSettings.build()).build();
+	}
+	
+	private static Biome veilBiome()
+	{
+		MobSpawnSettings.Builder spawnInfo = new MobSpawnSettings.Builder();
+		BiomeGenerationSettings.PlainBuilder genSettings = new BiomeGenerationSettings.PlainBuilder();
+		
+		BiomeSpecialEffects.Builder ambience = new BiomeSpecialEffects.Builder()
+				.waterColor(0x3F76E4)
+				.waterFogColor(0x050533);
+		ambience.fogColor(0x000000)
+				.skyColor(0x000000);
+		
+		return new Biome.BiomeBuilder().hasPrecipitation(false)
+				.temperature(0.5F).downfall(0.5F)
+				.specialEffects(ambience.build()).mobSpawnSettings(spawnInfo.build()).generationSettings(genSettings.build()).build();
 	}
 }

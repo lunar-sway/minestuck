@@ -21,6 +21,7 @@ public class MSDimensions
 	
 	public static ResourceKey<Level> SKAIA = ResourceKey.create(Registries.DIMENSION, ResourceLocation.fromNamespaceAndPath(Minestuck.MOD_ID, "skaia"));
 	public static final ResourceLocation LAND_EFFECTS = ResourceLocation.fromNamespaceAndPath(Minestuck.MOD_ID, "land");
+	public static ResourceKey<Level> VEIL = ResourceKey.create(Registries.DIMENSION, Minestuck.id("veil"));
 	
 	public static boolean isLandDimension(MinecraftServer server, ResourceKey<Level> levelKey)
 	{
@@ -35,9 +36,14 @@ public class MSDimensions
 		return dimension == SKAIA;
 	}
 	
+	public static boolean isVeil(ResourceKey<Level> dimension)
+	{
+		return dimension == VEIL;
+	}
+	
 	public static boolean isInMedium(MinecraftServer server, ResourceKey<Level> dimension)
 	{
-		return isLandDimension(server, dimension) || isSkaia(dimension);
+		return isLandDimension(server, dimension) || isSkaia(dimension) || isVeil(dimension);
 	}
 	
 	public static void sendLandTypesToAll(MinecraftServer server)

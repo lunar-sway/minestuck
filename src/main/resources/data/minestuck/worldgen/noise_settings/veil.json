@@ -1,0 +1,64 @@
+{
+    "sea_level": 0,
+    "disable_mob_generation": false,
+    "default_block": {
+        "Name": "minecraft:stone"
+    },
+    "default_fluid": {
+        "Properties": {
+            "level": "0"
+        },
+        "Name": "minecraft:water"
+    },
+    "noise": {
+        "size_vertical": 2,
+        "size_horizontal": 1,
+        "min_y": 0,
+        "height": 160
+    },
+    "noise_router": {
+        "barrier": "zero",
+        "fluid_level_floodedness": "zero",
+        "fluid_level_spread": "zero",
+        "lava": "zero",
+        "temperature": "zero",
+        "vegetation": "zero",
+        "continents": "zero",
+        "erosion": "zero",
+        "depth": "minestuck:veil/depth",
+        "ridges": "minestuck:veil/ridges",
+        "initial_density_without_jaggedness": "minestuck:veil/initial_density",
+        "final_density": "minestuck:veil/final_density",
+        "vein_toggle": "zero",
+        "vein_ridged": "zero",
+        "vein_gap": "zero"
+    },
+    "surface_rule": {
+        "type": "sequence",
+        "sequence": [
+            {
+                "type": "condition",
+                "if_true": {
+                    "type": "vertical_gradient",
+                    "random_name": "bedrock_floor",
+                    "true_at_and_below": {
+                        "above_bottom": 0
+                    },
+                    "false_at_and_above": {
+                        "above_bottom": 5
+                    }
+                },
+                "then_run": {
+                    "type": "block",
+                    "result_state": {
+                        "Name": "minecraft:bedrock"
+                    }
+                }
+            }
+        ]
+    },
+    "spawn_target": [],
+    "aquifers_enabled": false,
+    "ore_veins_enabled": false,
+    "legacy_random_source": true
+}
