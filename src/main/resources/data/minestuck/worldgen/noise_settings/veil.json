@@ -2,7 +2,7 @@
     "sea_level": 0,
     "disable_mob_generation": false,
     "default_block": {
-        "Name": "minecraft:stone"
+        "Name": "minestuck:meteoric_stone"
     },
     "default_fluid": {
         "Properties": {

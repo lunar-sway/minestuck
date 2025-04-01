@@ -162,6 +162,9 @@ public final class MSBlocks
 	public static final DeferredBlock<Block> PERFECTLY_GENERIC_HANGING_SIGN = REGISTER.register("perfectly_generic_hanging_sign", () -> new MSHangingSignBlock(MSWoodTypes.PERFECTLY_GENERIC, ofFullCopy(Blocks.OAK_HANGING_SIGN)));
 	public static final DeferredBlock<Block> PERFECTLY_GENERIC_WALL_HANGING_SIGN = REGISTER.register("perfectly_generic_wall_hanging_sign", () -> new MSWallHangingSignBlock(MSWoodTypes.PERFECTLY_GENERIC, ofFullCopy(Blocks.OAK_WALL_HANGING_SIGN)));
 	
+	//The Veil
+	public static final DeferredBlock<Block> METEORIC_STONE = REGISTER.register("meteoric_stone", () -> new Block(Block.Properties.of().mapColor(MapColor.STONE).instrument(NoteBlockInstrument.BASEDRUM).requiresCorrectToolForDrops().strength(1.5F, 5.0F)));
+	
 	//Land Environment
 	//Aspect Terrain Dirt
 	public static final DeferredBlock<Block> BLUE_DIRT = REGISTER.register("blue_dirt", () -> new Block(Block.Properties.of().mapColor(MapColor.COLOR_BLUE).strength(0.5F).sound(SoundType.GRAVEL)));

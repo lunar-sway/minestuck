@@ -258,6 +258,8 @@ public final class MSBlockLootTables extends BlockLootSubProvider
 		add(PERFECTLY_GENERIC_DOOR.get(), this::createDoorTable);
 		dropSelf(PERFECTLY_GENERIC_TRAPDOOR.get());
 		
+		dropSelf(METEORIC_STONE.get());
+		
 		dropSelf(BLUE_DIRT.get());
 		dropSelf(THOUGHT_DIRT.get());
 		
