@@ -8,6 +8,7 @@ import net.minecraft.world.level.biome.Biome;
 import net.minecraft.world.level.biome.BiomeGenerationSettings;
 import net.minecraft.world.level.biome.BiomeSpecialEffects;
 import net.minecraft.world.level.biome.MobSpawnSettings;
+import net.minecraft.world.level.levelgen.GenerationStep;
 
 public final class MSBiomeProvider
 {
@@ -43,7 +44,9 @@ public final class MSBiomeProvider
 	private static Biome veilBiome()
 	{
 		MobSpawnSettings.Builder spawnInfo = new MobSpawnSettings.Builder();
+		
 		BiomeGenerationSettings.PlainBuilder genSettings = new BiomeGenerationSettings.PlainBuilder();
+		genSettings.addFeature(GenerationStep.Decoration.LOCAL_MODIFICATIONS, MSPlacedFeatureProvider.VEIL_CRATER_REF);
 		
 		BiomeSpecialEffects.Builder ambience = new BiomeSpecialEffects.Builder()
 				.waterColor(0x3F76E4)

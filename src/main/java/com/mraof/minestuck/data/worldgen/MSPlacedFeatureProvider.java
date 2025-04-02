@@ -6,6 +6,7 @@ import com.mraof.minestuck.block.MSBlocks;
 import com.mraof.minestuck.world.gen.feature.MSCFeatures;
 import com.mraof.minestuck.world.gen.feature.OreGeneration;
 import net.minecraft.core.Direction;
+import net.minecraft.core.Holder;
 import net.minecraft.core.HolderGetter;
 import net.minecraft.core.registries.Registries;
 import net.minecraft.data.worldgen.BootstrapContext;
@@ -30,12 +31,17 @@ import static com.mraof.minestuck.world.gen.feature.MSPlacedFeatures.*;
 
 public final class MSPlacedFeatureProvider
 {
+	public static Holder.Reference<PlacedFeature> VEIL_CRATER_REF;
+	
 	public static void register(BootstrapContext<PlacedFeature> context)
 	{
 		HolderGetter<ConfiguredFeature<?, ?>> features = context.lookup(Registries.CONFIGURED_FEATURE);
 		
 		context.register(RETURN_NODE, placed(features, MSCFeatures.RETURN_NODE,
 				worldGenModifiers(RarityFilter.onAverageOnceEvery(128), PlacementUtils.HEIGHTMAP)));
+		
+		VEIL_CRATER_REF = context.register(VEIL_CRATER, placed(features, MSCFeatures.VEIL_CRATER,
+				worldGenModifiers(RarityFilter.onAverageOnceEvery(35), PlacementUtils.HEIGHTMAP)));
 		
 		context.register(COG, placed(features, MSCFeatures.COG,
 				worldGenModifiers(RarityFilter.onAverageOnceEvery(2))));
