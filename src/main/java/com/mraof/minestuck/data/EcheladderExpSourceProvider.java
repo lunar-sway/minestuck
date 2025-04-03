@@ -4,6 +4,7 @@ import com.google.gson.JsonElement;
 import com.mojang.serialization.JsonOps;
 import com.mraof.minestuck.Minestuck;
 import com.mraof.minestuck.player.EcheladderExpSource;
+import com.mraof.minestuck.player.EcheladderExpSources;
 import net.minecraft.MethodsReturnNonnullByDefault;
 import net.minecraft.data.CachedOutput;
 import net.minecraft.data.DataProvider;
@@ -95,7 +96,7 @@ public class EcheladderExpSourceProvider implements DataProvider
 		for(Map.Entry<String, EcheladderExpSource> source : expSources.entrySet())
 		{
 			Path path = getPath(source.getKey());
-			JsonElement jsonData = EcheladderExpSource.CODEC.encodeStart(JsonOps.INSTANCE, source.getValue()).getOrThrow();
+			JsonElement jsonData = EcheladderExpSources.CODEC.encodeStart(JsonOps.INSTANCE, source.getValue()).getOrThrow();
 			futures.add(DataProvider.saveStable(cache, jsonData, path));
 		}
 		return CompletableFuture.allOf(futures.toArray(new CompletableFuture[0]));

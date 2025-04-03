@@ -38,7 +38,7 @@ public class EcheladderScreen extends PlayerStatsScreen
 	private static final ResourceLocation guiEcheladder = ResourceLocation.fromNamespaceAndPath("minestuck", "textures/gui/echeladder.png");
 	
 	
-	private static final int LADDER_X_OFFSET = 163, ladderYOffset = 25;
+	private static final int LADDER_X_OFFSET = 163;
 	private static final int ROWS = 12;
 	private static final int RUNG_Y = 14;
 	
@@ -105,7 +105,7 @@ public class EcheladderScreen extends PlayerStatsScreen
 		
 		List<Component> tooltip = drawEffectIconsAndText(guiGraphics, currentRung, mouseX, mouseY);
 		
-		if(fromRung > currentRung)
+		if(fromRung < currentRung)
 		{
 			for(int rung = Math.max(fromRung, currentRung - 4); rung <= currentRung; rung++)
 			{
@@ -168,7 +168,7 @@ public class EcheladderScreen extends PlayerStatsScreen
 			
 			int y = yOffset + 177 + scroll - i * RUNG_Y;
 			int rung = scrollIndex / RUNG_Y + i;
-			if(rung > (finalRung + 1))
+			if(rung > finalRung)
 				break;
 			
 			//TODO broke the animation for previous rung flashing
@@ -278,12 +278,12 @@ public class EcheladderScreen extends PlayerStatsScreen
 	
 	private int textColor(int rung)
 	{
-		return finalRung > rung ? Rungs.getTextColor(rung) : 0xFFFFFF;
+		return finalRung >= rung ? Rungs.getTextColor(rung) : 0xFFFFFF;
 	}
 	
 	private int backgroundColor(int rung, int textColor)
 	{
-		return finalRung > rung ? Rungs.getBackgroundColor(rung) : ~textColor;
+		return finalRung >= rung ? Rungs.getBackgroundColor(rung) : ~textColor;
 	}
 	
 	private void updateScrollAndAnimation(int ycor)
@@ -302,8 +302,10 @@ public class EcheladderScreen extends PlayerStatsScreen
 	
 	private int getTicksForRungAnimation(int rungs)
 	{
-		if(rungs < 5) return TIME_FOR_RUNG + (rungs - 1) * (TIME_TILL_NEXT);
-		else return TIME_FOR_SHOW_ONLY;
+		if(rungs < 5)
+			return TIME_FOR_RUNG + (rungs - 1) * (TIME_TILL_NEXT);
+		else
+			return TIME_FOR_SHOW_ONLY;
 	}
 	
 	@Override
@@ -326,7 +328,8 @@ public class EcheladderScreen extends PlayerStatsScreen
 			else scrollIndex -= RUNG_Y;
 			scrollIndex = Mth.clamp(scrollIndex, 0, maxScroll);
 			return true;
-		} else return super.mouseScrolled(mouseX, mouseY, scrollX, scrollY);
+		} else
+			return super.mouseScrolled(mouseX, mouseY, scrollX, scrollY);
 	}
 	
 	@Override
