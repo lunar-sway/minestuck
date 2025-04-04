@@ -48,11 +48,11 @@ public final class SessionRenderHelper
 			
 			float degree = (count / 1500F) * 360F;
 			poseStack.mulPose(Axis.ZP.rotationDegrees(degree + random.nextFloat())); //Z axis forms a ring
-			poseStack.mulPose(Axis.XP.rotationDegrees((float) (random.nextGaussian() * 1D))); //X axis offset from center of ring
+			poseStack.mulPose(Axis.XP.rotationDegrees((float) (random.nextGaussian()))); //X axis offset from center of ring
+			poseStack.mulPose(Axis.YP.rotationDegrees((float) (random.nextGaussian()))); //Y axis offset from radius of ring for 3D effect
 			Matrix4f matrix = poseStack.last().pose();
 			
 			drawSprite(matrix, size, sprite);
-			
 			poseStack.popPose();
 		}
 	}
@@ -89,7 +89,7 @@ public final class SessionRenderHelper
 		{
 			float rotateSpeed = (level.getGameTime() % 100000F) * 0.000001F;
 			matrix.rotateY(rotateSpeed * 360);
-			poseStack.mulPose(Axis.XP.rotation(0.26F));
+			poseStack.mulPose(Axis.XP.rotation(0.25F));
 		} else
 			poseStack.mulPose(Axis.XP.rotation(0.05F));
 		
@@ -101,16 +101,19 @@ public final class SessionRenderHelper
 	{
 		poseStack.pushPose();
 		poseStack.mulPose(getRotationQuaternion(level));
-		drawDerse(poseStack, level, size);
+		drawDerse(poseStack, level, size, false);
 		poseStack.popPose();
 	}
 	
-	public static void drawDerse(PoseStack poseStack, ClientLevel level, float size)
+	public static void drawDerse(PoseStack poseStack, ClientLevel level, float size, boolean flipSide)
 	{
 		TextureAtlasSprite sprite = LandSkySpriteUploader.getInstance().getDerseSprite();
 		poseStack.pushPose();
 		Matrix4f matrix = poseStack.last().pose();
-		poseStack.mulPose(Axis.ZP.rotationDegrees(180));
+		if(flipSide)
+			poseStack.mulPose(Axis.ZP.rotationDegrees(90));
+		else
+			poseStack.mulPose(Axis.ZP.rotationDegrees(180));
 		poseStack.mulPose(Axis.XP.rotation(0.05F));
 		
 		drawSprite(matrix, size, sprite);
@@ -184,7 +187,7 @@ public final class SessionRenderHelper
 		return (float) (d0 * 2.0D + d1) / 3.0F;
 	}
 	
-	private static Quaternionf getRotationQuaternion(ClientLevel level)
+	public static Quaternionf getRotationQuaternion(ClientLevel level)
 	{
 		return Axis.ZP.rotationDegrees(calculateRotationDegree(level) * 360.0F);
 	}

@@ -149,6 +149,7 @@ public class ClientProxy
 		event.register(MSDimensions.LAND_EFFECTS, new LandRenderInfo());
 		event.register(MSDimensions.PROSPIT_EFFECTS, new ProspitSpecialEffects());
 		event.register(MSDimensions.DERSE_EFFECTS, new DerseSpecialEffects());
+		event.register(MSDimensions.VEIL_EFFECTS, new VeilSpecialEffects());
 	}
 	
 	private static void registerArmorModels()

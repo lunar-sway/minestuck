@@ -25,6 +25,7 @@ public class MSDimensions
 	public static final ResourceLocation LAND_EFFECTS =  Minestuck.id("land");
 	public static final ResourceLocation PROSPIT_EFFECTS =  Minestuck.id("prospit_effects");
 	public static final ResourceLocation DERSE_EFFECTS =  Minestuck.id("derse_effects");
+	public static final ResourceLocation VEIL_EFFECTS =  Minestuck.id("veil_effects");
 	
 	public static boolean isLandDimension(MinecraftServer server, ResourceKey<Level> levelKey)
 	{

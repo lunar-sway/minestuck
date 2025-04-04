@@ -43,22 +43,34 @@ public final class LandSkyRenderer
 		
 		RenderSystem.enableBlend();
 		RenderSystem.defaultBlendFunc();
-		RenderSystem.blendFuncSeparate(GlStateManager.SourceFactor.SRC_ALPHA, GlStateManager.DestFactor.ONE, GlStateManager.SourceFactor.ONE, GlStateManager.DestFactor.ZERO);
-		RenderSystem.setShaderColor(1.0F, 1.0F, 1.0F, skaiaBrightness);
 		
-		//TODO increase alpha levels at high altitudes
-		//TODO hide veil when behind any other celestial bodies besides derse
-		SessionRenderHelper.drawSkaia(matrix, 17.0F);
+		//must use this method, otherwise Lands render with their black border
+		RenderSystem.blendFuncSeparate(GlStateManager.SourceFactor.SRC_ALPHA, GlStateManager.DestFactor.ONE, GlStateManager.SourceFactor.ONE, GlStateManager.DestFactor.ZERO);
 		
 		if(starBrightness > 0)
 		{
-			RenderSystem.setShaderColor(starBrightness, starBrightness, starBrightness, starBrightness);
+			RenderSystem.setShaderColor(starBrightness, starBrightness, starBrightness, starBrightness); //at max height with full sky clearness, values will be 0.5F
 			SessionRenderHelper.drawRotatingVeil(poseStack, level);
+			
+			poseStack.pushPose();
+			
+			poseStack.translate(0, -1, 0);
 			RenderSystem.setShaderColor(starBrightness * 2, starBrightness * 2, starBrightness * 2, starBrightness * 2);
-			SessionRenderHelper.drawProspit(poseStack, level, 4.25F, true);
 			SessionRenderHelper.drawRotatingDerse(poseStack, level, 1.0F);
 			SessionRenderHelper.drawLands(mc, poseStack, level.dimension());
+			
+			poseStack.popPose();
 		}
+		
+		poseStack.pushPose();
+		
+		poseStack.translate(0, -1, 0);
+		if(starBrightness > 0)
+			SessionRenderHelper.drawProspit(poseStack, level, 4.25F, true);
+		RenderSystem.setShaderColor(1.0F, 1.0F, 1.0F, skaiaBrightness);
+		SessionRenderHelper.drawSkaia(matrix, 17.0F);
+		
+		poseStack.popPose();
 		
 		RenderSystem.disableBlend();
 		underneathBuffer(partialTicks, level, mc, poseStack, tesselator);

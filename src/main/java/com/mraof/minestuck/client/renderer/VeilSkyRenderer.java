@@ -8,7 +8,7 @@ import net.minecraft.client.renderer.FogRenderer;
 import net.minecraft.client.renderer.GameRenderer;
 import org.joml.Matrix4f;
 
-public final class DerseSkyRenderer
+public final class VeilSkyRenderer
 {
 	public static void render(Matrix4f modelViewMatrix, ClientLevel level)
 	{
@@ -25,17 +25,16 @@ public final class DerseSkyRenderer
 		RenderSystem.setShaderColor(1, 1, 1, 1);
 		
 		poseStack.pushPose();
-		RenderSystem.disableCull();
 		
-		poseStack.translate(5, 120, 0);
+		poseStack.translate(0, 99, 0);
 		SessionRenderHelper.drawVeil(poseStack);
+		SessionRenderHelper.drawDerse(poseStack, level, 1.25F, true);
 		
-		poseStack.translate(-5, -49, 0);
-		SessionRenderHelper.drawSkaia(poseStack.last().pose(), 5.0F);
-		SessionRenderHelper.drawProspit(poseStack, level, 0.5F, false);
+		poseStack.translate(0, -49, 0);
+		SessionRenderHelper.drawProspit(poseStack, level, 0.75F, false);
+		SessionRenderHelper.drawSkaia(poseStack.last().pose(), 6.0F);
 		
 		poseStack.popPose();
-		RenderSystem.enableCull();
 		
 		RenderSystem.disableBlend();
 		RenderSystem.depthMask(true);
