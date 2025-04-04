@@ -72,10 +72,10 @@ public class SmallRuinPiece extends ScatteredFeaturePiece
 			return;
 
 		StructureBlockRegistry blocks = StructureBlockRegistry.getOrDefault(chunkGeneratorIn);
-		BlockState wallBlock = blocks.getBlockState("structure_primary");
-		BlockState wallDecor = blocks.getBlockState("structure_primary_decorative");
-		BlockState floorBlock = blocks.getBlockState("structure_secondary");
-		BlockState wallTorch = blocks.getBlockState("wall_torch");
+		BlockState wallBlock = blocks.getBlockState(StructureBlockRegistry.STRUCTURE_PRIMARY);
+		BlockState wallDecor = blocks.getBlockState(StructureBlockRegistry.STRUCTURE_PRIMARY_DECORATIVE);
+		BlockState floorBlock = blocks.getBlockState(StructureBlockRegistry.STRUCTURE_SECONDARY);
+		BlockState wallTorch = blocks.getBlockState(StructureBlockRegistry.WALL_TORCH);
 
 		for(int z = 0; z < 8; z++)
 			for(int x = 0; x < 7; x++)
@@ -110,13 +110,13 @@ public class SmallRuinPiece extends ScatteredFeaturePiece
 			placedChest = generateChest(level, boundingBoxIn, randomIn, 3, 1, 6, this.getOrientation().getOpposite(), MSLootTables.BASIC_MEDIUM_CHEST);
 
 		if(torches[0])
-			this.placeBlock(level, wallTorch.setValue(WallTorchBlock.FACING, Direction.EAST), 1, 2, 3, boundingBoxIn);
+			this.placeBlock(level, StructureBlockRegistry.getModifiedTorch(wallTorch, Direction.EAST), 1, 2, 3, boundingBoxIn);
 		if(torches[1])
-			this.placeBlock(level, wallTorch.setValue(WallTorchBlock.FACING, Direction.WEST), 5, 2, 3, boundingBoxIn);
+			this.placeBlock(level, StructureBlockRegistry.getModifiedTorch(wallTorch, Direction.WEST), 5, 2, 3, boundingBoxIn);
 		if(torches[2])
-			this.placeBlock(level, wallTorch.setValue(WallTorchBlock.FACING, Direction.EAST), 1, 2, 6, boundingBoxIn);
+			this.placeBlock(level, StructureBlockRegistry.getModifiedTorch(wallTorch, Direction.EAST), 1, 2, 6, boundingBoxIn);
 		if(torches[3])
-			this.placeBlock(level, wallTorch.setValue(WallTorchBlock.FACING, Direction.WEST), 5, 2, 6, boundingBoxIn);
+			this.placeBlock(level, StructureBlockRegistry.getModifiedTorch(wallTorch, Direction.WEST), 5, 2, 6, boundingBoxIn);
 
 		if(!placedOgres[0])
 			placedOgres[0] = placeUnderling(this.boundingBox.minX() - 3, this.boundingBox.minZ() - 3, boundingBoxIn, level, randomIn);
