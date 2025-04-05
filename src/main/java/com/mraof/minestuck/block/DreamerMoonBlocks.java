@@ -129,16 +129,6 @@ public class DreamerMoonBlocks
 	public static final ItemBlockPair<WallBlock,BlockItem> PROSPIT_REFINED_CORE_WALL = ItemBlockPair.register("prospit_refined_core_wall",
 			() -> new WallBlock(Block.Properties.ofFullCopy(PROSPIT_REFINED_CORE.asBlock())));
 
-	public static final ItemBlockPair<Block,BlockItem> PROSPIT_FERROSTRATA_CRUXITE_ORE = ItemBlockPair.register("prospit_ferrostrata_cruxite_ore",
-			() -> new Block(Block.Properties.ofFullCopy(MSBlocks.STONE_CRUXITE_ORE.get())));
-	public static final ItemBlockPair<Block,BlockItem> PROSPIT_FERROSTRATA_URANIUM_ORE = ItemBlockPair.register("prospit_ferrostrata_uranium_ore",
-			() -> new Block(Block.Properties.ofFullCopy(MSBlocks.STONE_URANIUM_ORE.get())));
-		
-	public static final ItemBlockPair<Block,BlockItem> PROSPIT_CORE_CRUXITE_ORE = ItemBlockPair.register("prospit_core_cruxite_ore",
-			() -> new Block(Block.Properties.ofFullCopy(MSBlocks.STONE_CRUXITE_ORE.get())));
-	public static final ItemBlockPair<Block,BlockItem> PROSPIT_CORE_URANIUM_ORE = ItemBlockPair.register("prospit_core_uranium_ore",
-			() -> new Block(Block.Properties.ofFullCopy(MSBlocks.DEEPSLATE_URANIUM_ORE.get())));
-
 	public static final ItemBlockPair<RotatedPillarBlock,BlockItem> PROSPIT_CABLE = ItemBlockPair.register("prospit_cable",
 			() -> new RotatedPillarBlock(Block.Properties.ofFullCopy(PROSPIT_FERROSTRATA.asBlock())));
 	public static final ItemBlockPair<RotatedPillarBlock,BlockItem> PROSPIT_THICK_CABLE = ItemBlockPair.register("prospit_thick_cable",
@@ -322,16 +312,6 @@ public class DreamerMoonBlocks
 	public static final ItemBlockPair<WallBlock,BlockItem> DERSE_REFINED_CORE_WALL = ItemBlockPair.register("derse_refined_core_wall",
 			() -> new WallBlock(Block.Properties.ofFullCopy(DERSE_REFINED_CORE.asBlock())));
 	
-	public static final ItemBlockPair<Block,BlockItem> DERSE_METALLITH_CRUXITE_ORE = ItemBlockPair.register("derse_metallith_cruxite_ore",
-			() -> new Block(Block.Properties.ofFullCopy(MSBlocks.STONE_CRUXITE_ORE.get())));
-	public static final ItemBlockPair<Block,BlockItem> DERSE_METALLITH_URANIUM_ORE = ItemBlockPair.register("derse_metallith_uranium_ore",
-			() -> new Block(Block.Properties.ofFullCopy(MSBlocks.STONE_URANIUM_ORE.get())));
-	
-	public static final ItemBlockPair<Block,BlockItem> DERSE_CORE_CRUXITE_ORE = ItemBlockPair.register("derse_core_cruxite_ore",
-			() -> new Block(Block.Properties.ofFullCopy(MSBlocks.STONE_CRUXITE_ORE.get())));
-	public static final ItemBlockPair<Block,BlockItem> DERSE_CORE_URANIUM_ORE = ItemBlockPair.register("derse_core_uranium_ore",
-			() -> new Block(Block.Properties.ofFullCopy(MSBlocks.DEEPSLATE_URANIUM_ORE.get())));
-
 	public static final ItemBlockPair<RotatedPillarBlock,BlockItem> DERSE_CABLE = ItemBlockPair.register("derse_cable",
 			() -> new RotatedPillarBlock(Block.Properties.ofFullCopy(DERSE_METALLITH.asBlock())));
 	public static final ItemBlockPair<RotatedPillarBlock,BlockItem> DERSE_THICK_CABLE = ItemBlockPair.register("derse_thick_cable",

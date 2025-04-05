@@ -49,10 +49,6 @@ public class DreamerMoonBlocksData
 		provider.add(PROSPIT_REFINED_CORE_STAIRS,"Refined Prospit Core Stairs");
 		provider.add(PROSPIT_REFINED_CORE_SLAB,"Refined Prospit Core Slab");
 		provider.add(PROSPIT_REFINED_CORE_WALL,"Refined Prospit Core Wall");
-		provider.add(PROSPIT_FERROSTRATA_CRUXITE_ORE,"Prospit Ferrostrata Cruxite Ore");
-		provider.add(PROSPIT_FERROSTRATA_URANIUM_ORE,"Prospit Ferrostrata Uranium Ore");
-		provider.add(PROSPIT_CORE_CRUXITE_ORE,"Prospit Core Cruxite Ore");
-		provider.add(PROSPIT_CORE_URANIUM_ORE,"Prospit Core Uranium Ore");
 		provider.add(PROSPIT_CABLE,"Prospit Cable");
 		provider.add(PROSPIT_THICK_CABLE,"Thick Prospit Cable");
 		provider.add(PROSPIT_PILLAR,"Prospit Pillar");
@@ -119,10 +115,6 @@ public class DreamerMoonBlocksData
 		provider.add(DERSE_REFINED_CORE_STAIRS,"Refined Derse Core Stairs");
 		provider.add(DERSE_REFINED_CORE_SLAB,"Refined Derse Core Slab");
 		provider.add(DERSE_REFINED_CORE_WALL,"Refined Derse Core Wall");
-		provider.add(DERSE_METALLITH_CRUXITE_ORE,"Derse Metallith Cruxite Ore");
-		provider.add(DERSE_METALLITH_URANIUM_ORE,"Derse Metallith Uranium Ore");
-		provider.add(DERSE_CORE_CRUXITE_ORE,"Derse Core Cruxite Ore");
-		provider.add(DERSE_CORE_URANIUM_ORE,"Derse Core Uranium Ore");
 		provider.add(DERSE_CABLE,"Derse Cable");
 		provider.add(DERSE_THICK_CABLE,"Thick Derse Cable");
 		provider.add(DERSE_PILLAR,"Derse Pillar");
@@ -192,10 +184,6 @@ public class DreamerMoonBlocksData
 		provider.stairsWithItem(PROSPIT_REFINED_CORE_STAIRS::asBlock,PROSPIT_REFINED_CORE.blockHolder());
 		provider.slabWithItem(PROSPIT_REFINED_CORE_SLAB::asBlock,PROSPIT_REFINED_CORE.blockHolder());
 		provider.wallWithItem(PROSPIT_REFINED_CORE_WALL::asBlock,PROSPIT_REFINED_CORE.blockHolder());
-		provider.simpleBlockWithItem(PROSPIT_FERROSTRATA_CRUXITE_ORE);
-		provider.simpleBlockWithItem(PROSPIT_FERROSTRATA_URANIUM_ORE);
-		provider.simpleBlockWithItem(PROSPIT_CORE_CRUXITE_ORE);
-		provider.simpleBlockWithItem(PROSPIT_CORE_URANIUM_ORE);
 		provider.axisWithItem(PROSPIT_CABLE.blockHolder(),
 				id -> provider.models().cubeColumn(
 						id.getPath(),
@@ -278,10 +266,6 @@ public class DreamerMoonBlocksData
 		provider.stairsWithItem(DERSE_REFINED_CORE_STAIRS::asBlock,DERSE_REFINED_CORE.blockHolder());
 		provider.slabWithItem(DERSE_REFINED_CORE_SLAB::asBlock,DERSE_REFINED_CORE.blockHolder());
 		provider.wallWithItem(DERSE_REFINED_CORE_WALL::asBlock,DERSE_REFINED_CORE.blockHolder());
-		provider.simpleBlockWithItem(DERSE_METALLITH_CRUXITE_ORE);
-		provider.simpleBlockWithItem(DERSE_METALLITH_URANIUM_ORE);
-		provider.simpleBlockWithItem(DERSE_CORE_CRUXITE_ORE);
-		provider.simpleBlockWithItem(DERSE_CORE_URANIUM_ORE);
 		provider.axisWithItem(DERSE_CABLE.blockHolder(),
 				id -> provider.models().cubeColumn(
 						id.getPath(),
@@ -372,10 +356,6 @@ public class DreamerMoonBlocksData
 		provider.dropSelf(PROSPIT_REFINED_CORE_STAIRS.asBlock());
 		provider.add(PROSPIT_REFINED_CORE_SLAB.asBlock(), provider::createSlabItemTable);
 		provider.dropSelf(PROSPIT_REFINED_CORE_WALL.asBlock());
-		provider.add(PROSPIT_FERROSTRATA_CRUXITE_ORE.asBlock(), provider::cruxiteOreDrop);
-		provider.add(PROSPIT_FERROSTRATA_URANIUM_ORE.asBlock(), provider::uraniumOreDrop);
-		provider.add(PROSPIT_CORE_CRUXITE_ORE.asBlock(), provider::cruxiteOreDrop);
-		provider.add(PROSPIT_CORE_URANIUM_ORE.asBlock(), provider::uraniumOreDrop);
 		provider.dropSelf(PROSPIT_CABLE.asBlock());
 		provider.dropSelf(PROSPIT_THICK_CABLE.asBlock());
 		provider.dropSelf(PROSPIT_PILLAR.asBlock());
@@ -447,10 +427,6 @@ public class DreamerMoonBlocksData
 		provider.dropSelf(DERSE_REFINED_CORE_STAIRS.asBlock());
 		provider.add(DERSE_REFINED_CORE_SLAB.asBlock(), provider::createSlabItemTable);
 		provider.dropSelf(DERSE_REFINED_CORE_WALL.asBlock());
-		provider.add(DERSE_METALLITH_CRUXITE_ORE.asBlock(), provider::cruxiteOreDrop);
-		provider.add(DERSE_METALLITH_URANIUM_ORE.asBlock(), provider::uraniumOreDrop);
-		provider.add(DERSE_CORE_CRUXITE_ORE.asBlock(), provider::cruxiteOreDrop);
-		provider.add(DERSE_CORE_URANIUM_ORE.asBlock(), provider::uraniumOreDrop);
 		provider.dropSelf(DERSE_CABLE.asBlock());
 		provider.dropSelf(DERSE_THICK_CABLE.asBlock());
 		provider.dropSelf(DERSE_PILLAR.asBlock());
@@ -493,8 +469,8 @@ public class DreamerMoonBlocksData
 		
 		//PROSPIT
 		//blocks
-		provider.tag(MINEABLE_WITH_PICKAXE).add(PROSPIT_GILDING.asBlock(), PROSPIT_GILDED_PATH.asBlock(), PROSPIT_FERROSTRATA.asBlock(), PROSPIT_ROUGH_FERROSTRATA.asBlock(), PROSPIT_REFINED_FERROSTRATA.asBlock(), PROSPIT_CORE.asBlock(), PROSPIT_ROUGH_CORE.asBlock(), PROSPIT_REFINED_CORE.asBlock(), PROSPIT_FERROSTRATA_CRUXITE_ORE.asBlock(), PROSPIT_FERROSTRATA_URANIUM_ORE.asBlock(), PROSPIT_CORE_CRUXITE_ORE.asBlock(), PROSPIT_CORE_URANIUM_ORE.asBlock(), PROSPIT_CABLE.asBlock(), PROSPIT_THICK_CABLE.asBlock(), PROSPIT_PILLAR.asBlock(), PROSPIT_DOOR.asBlock(), PROSPIT_TRAPDOOR.asBlock(), PROSPIT_BRICK.asBlock(), PROSPIT_CRACKED_BRICK.asBlock(), PROSPIT_CHISELED_BRICK.asBlock(), PROSPIT_PAVING_BRICK.asBlock(), PROSPIT_FANCY_BRICK.asBlock(), PROSPIT_TARNISHED_BRICK.asBlock(), PROSPIT_STACKED_BRICK.asBlock(), PROSPIT_TILES.asBlock(), PROSPIT_CORE_BRICK.asBlock(), PROSPIT_CRACKED_CORE_BRICK.asBlock(), PROSPIT_CORE_TILES.asBlock(), PROSPIT_CRACKED_CORE_TILES.asBlock(), PROSPIT_CHISELED_CORE.asBlock());
-		provider.needsWoodPickaxe(PROSPIT_GILDING.asBlock(), PROSPIT_GILDED_PATH.asBlock(), PROSPIT_FERROSTRATA.asBlock(), PROSPIT_ROUGH_FERROSTRATA.asBlock(), PROSPIT_REFINED_FERROSTRATA.asBlock(), PROSPIT_CORE.asBlock(), PROSPIT_ROUGH_CORE.asBlock(), PROSPIT_REFINED_CORE.asBlock(), PROSPIT_FERROSTRATA_CRUXITE_ORE.asBlock(), PROSPIT_FERROSTRATA_URANIUM_ORE.asBlock(), PROSPIT_CORE_CRUXITE_ORE.asBlock(), PROSPIT_CORE_URANIUM_ORE.asBlock(), PROSPIT_CABLE.asBlock(), PROSPIT_THICK_CABLE.asBlock(), PROSPIT_PILLAR.asBlock(), PROSPIT_DOOR.asBlock(), PROSPIT_TRAPDOOR.asBlock(), PROSPIT_BRICK.asBlock(), PROSPIT_CRACKED_BRICK.asBlock(), PROSPIT_CHISELED_BRICK.asBlock(), PROSPIT_PAVING_BRICK.asBlock(), PROSPIT_FANCY_BRICK.asBlock(), PROSPIT_TARNISHED_BRICK.asBlock(), PROSPIT_STACKED_BRICK.asBlock(), PROSPIT_TILES.asBlock(), PROSPIT_CORE_BRICK.asBlock(), PROSPIT_CRACKED_CORE_BRICK.asBlock(), PROSPIT_CORE_TILES.asBlock(), PROSPIT_CRACKED_CORE_TILES.asBlock(), PROSPIT_CHISELED_CORE.asBlock());
+		provider.tag(MINEABLE_WITH_PICKAXE).add(PROSPIT_GILDING.asBlock(), PROSPIT_GILDED_PATH.asBlock(), PROSPIT_FERROSTRATA.asBlock(), PROSPIT_ROUGH_FERROSTRATA.asBlock(), PROSPIT_REFINED_FERROSTRATA.asBlock(), PROSPIT_CORE.asBlock(), PROSPIT_ROUGH_CORE.asBlock(), PROSPIT_REFINED_CORE.asBlock(), PROSPIT_CABLE.asBlock(), PROSPIT_THICK_CABLE.asBlock(), PROSPIT_PILLAR.asBlock(), PROSPIT_DOOR.asBlock(), PROSPIT_TRAPDOOR.asBlock(), PROSPIT_BRICK.asBlock(), PROSPIT_CRACKED_BRICK.asBlock(), PROSPIT_CHISELED_BRICK.asBlock(), PROSPIT_PAVING_BRICK.asBlock(), PROSPIT_FANCY_BRICK.asBlock(), PROSPIT_TARNISHED_BRICK.asBlock(), PROSPIT_STACKED_BRICK.asBlock(), PROSPIT_TILES.asBlock(), PROSPIT_CORE_BRICK.asBlock(), PROSPIT_CRACKED_CORE_BRICK.asBlock(), PROSPIT_CORE_TILES.asBlock(), PROSPIT_CRACKED_CORE_TILES.asBlock(), PROSPIT_CHISELED_CORE.asBlock());
+		provider.needsWoodPickaxe(PROSPIT_GILDING.asBlock(), PROSPIT_GILDED_PATH.asBlock(), PROSPIT_FERROSTRATA.asBlock(), PROSPIT_ROUGH_FERROSTRATA.asBlock(), PROSPIT_REFINED_FERROSTRATA.asBlock(), PROSPIT_CORE.asBlock(), PROSPIT_ROUGH_CORE.asBlock(), PROSPIT_REFINED_CORE.asBlock(), PROSPIT_CABLE.asBlock(), PROSPIT_THICK_CABLE.asBlock(), PROSPIT_PILLAR.asBlock(), PROSPIT_DOOR.asBlock(), PROSPIT_TRAPDOOR.asBlock(), PROSPIT_BRICK.asBlock(), PROSPIT_CRACKED_BRICK.asBlock(), PROSPIT_CHISELED_BRICK.asBlock(), PROSPIT_PAVING_BRICK.asBlock(), PROSPIT_FANCY_BRICK.asBlock(), PROSPIT_TARNISHED_BRICK.asBlock(), PROSPIT_STACKED_BRICK.asBlock(), PROSPIT_TILES.asBlock(), PROSPIT_CORE_BRICK.asBlock(), PROSPIT_CRACKED_CORE_BRICK.asBlock(), PROSPIT_CORE_TILES.asBlock(), PROSPIT_CRACKED_CORE_TILES.asBlock(), PROSPIT_CHISELED_CORE.asBlock());
 		
 		//stairs
 		provider.tag(MINEABLE_WITH_PICKAXE).add(PROSPIT_FERROSTRATA_STAIRS.asBlock(), PROSPIT_ROUGH_FERROSTRATA_STAIRS.asBlock(), PROSPIT_REFINED_FERROSTRATA_STAIRS.asBlock(), PROSPIT_CORE_STAIRS.asBlock(), PROSPIT_ROUGH_CORE_STAIRS.asBlock(), PROSPIT_REFINED_CORE_STAIRS.asBlock(), PROSPIT_BRICK_STAIRS.asBlock(), PROSPIT_CRACKED_BRICK_STAIRS.asBlock(), PROSPIT_TARNISHED_BRICK_STAIRS.asBlock(), PROSPIT_CORE_BRICK_STAIRS.asBlock(), PROSPIT_CRACKED_CORE_BRICK_STAIRS.asBlock(), PROSPIT_CORE_TILE_STAIRS.asBlock());
@@ -519,8 +495,8 @@ public class DreamerMoonBlocksData
 		
 		//DERSE
 		//blocks
-		provider.tag(MINEABLE_WITH_PICKAXE).add(DERSE_PLATING.asBlock(), DERSE_PLATED_PATH.asBlock(), DERSE_METALLITH.asBlock(), DERSE_ROUGH_METALLITH.asBlock(), DERSE_REFINED_METALLITH.asBlock(), DERSE_CORE.asBlock(), DERSE_ROUGH_CORE.asBlock(), DERSE_REFINED_CORE.asBlock(), DERSE_METALLITH_CRUXITE_ORE.asBlock(), DERSE_METALLITH_URANIUM_ORE.asBlock(), DERSE_CORE_CRUXITE_ORE.asBlock(), DERSE_CORE_URANIUM_ORE.asBlock(), DERSE_CABLE.asBlock(), DERSE_THICK_CABLE.asBlock(), DERSE_PILLAR.asBlock(), DERSE_DOOR.asBlock(), DERSE_TRAPDOOR.asBlock(), DERSE_BRICK.asBlock(), DERSE_CRACKED_BRICK.asBlock(), DERSE_CHISELED_BRICK.asBlock(), DERSE_PAVING_BRICK.asBlock(), DERSE_FANCY_BRICK.asBlock(), DERSE_TARNISHED_BRICK.asBlock(), DERSE_STACKED_BRICK.asBlock(), DERSE_TILES.asBlock(), DERSE_CORE_BRICK.asBlock(), DERSE_CRACKED_CORE_BRICK.asBlock(), DERSE_CORE_TILES.asBlock(), DERSE_CRACKED_CORE_TILES.asBlock(), DERSE_CHISELED_CORE.asBlock());
-		provider.needsWoodPickaxe(DERSE_PLATING.asBlock(), DERSE_PLATED_PATH.asBlock(), DERSE_METALLITH.asBlock(), DERSE_ROUGH_METALLITH.asBlock(), DERSE_REFINED_METALLITH.asBlock(), DERSE_CORE.asBlock(), DERSE_ROUGH_CORE.asBlock(), DERSE_REFINED_CORE.asBlock(), DERSE_METALLITH_CRUXITE_ORE.asBlock(), DERSE_METALLITH_URANIUM_ORE.asBlock(), DERSE_CORE_CRUXITE_ORE.asBlock(), DERSE_CORE_URANIUM_ORE.asBlock(), DERSE_CABLE.asBlock(), DERSE_THICK_CABLE.asBlock(), DERSE_PILLAR.asBlock(), DERSE_DOOR.asBlock(), DERSE_TRAPDOOR.asBlock(), DERSE_BRICK.asBlock(), DERSE_CRACKED_BRICK.asBlock(), DERSE_CHISELED_BRICK.asBlock(), DERSE_PAVING_BRICK.asBlock(), DERSE_FANCY_BRICK.asBlock(), DERSE_TARNISHED_BRICK.asBlock(), DERSE_STACKED_BRICK.asBlock(), DERSE_TILES.asBlock(), DERSE_CORE_BRICK.asBlock(), DERSE_CRACKED_CORE_BRICK.asBlock(), DERSE_CORE_TILES.asBlock(), DERSE_CRACKED_CORE_TILES.asBlock(), DERSE_CHISELED_CORE.asBlock());
+		provider.tag(MINEABLE_WITH_PICKAXE).add(DERSE_PLATING.asBlock(), DERSE_PLATED_PATH.asBlock(), DERSE_METALLITH.asBlock(), DERSE_ROUGH_METALLITH.asBlock(), DERSE_REFINED_METALLITH.asBlock(), DERSE_CORE.asBlock(), DERSE_ROUGH_CORE.asBlock(), DERSE_REFINED_CORE.asBlock(), DERSE_CABLE.asBlock(), DERSE_THICK_CABLE.asBlock(), DERSE_PILLAR.asBlock(), DERSE_DOOR.asBlock(), DERSE_TRAPDOOR.asBlock(), DERSE_BRICK.asBlock(), DERSE_CRACKED_BRICK.asBlock(), DERSE_CHISELED_BRICK.asBlock(), DERSE_PAVING_BRICK.asBlock(), DERSE_FANCY_BRICK.asBlock(), DERSE_TARNISHED_BRICK.asBlock(), DERSE_STACKED_BRICK.asBlock(), DERSE_TILES.asBlock(), DERSE_CORE_BRICK.asBlock(), DERSE_CRACKED_CORE_BRICK.asBlock(), DERSE_CORE_TILES.asBlock(), DERSE_CRACKED_CORE_TILES.asBlock(), DERSE_CHISELED_CORE.asBlock());
+		provider.needsWoodPickaxe(DERSE_PLATING.asBlock(), DERSE_PLATED_PATH.asBlock(), DERSE_METALLITH.asBlock(), DERSE_ROUGH_METALLITH.asBlock(), DERSE_REFINED_METALLITH.asBlock(), DERSE_CORE.asBlock(), DERSE_ROUGH_CORE.asBlock(), DERSE_REFINED_CORE.asBlock(), DERSE_CABLE.asBlock(), DERSE_THICK_CABLE.asBlock(), DERSE_PILLAR.asBlock(), DERSE_DOOR.asBlock(), DERSE_TRAPDOOR.asBlock(), DERSE_BRICK.asBlock(), DERSE_CRACKED_BRICK.asBlock(), DERSE_CHISELED_BRICK.asBlock(), DERSE_PAVING_BRICK.asBlock(), DERSE_FANCY_BRICK.asBlock(), DERSE_TARNISHED_BRICK.asBlock(), DERSE_STACKED_BRICK.asBlock(), DERSE_TILES.asBlock(), DERSE_CORE_BRICK.asBlock(), DERSE_CRACKED_CORE_BRICK.asBlock(), DERSE_CORE_TILES.asBlock(), DERSE_CRACKED_CORE_TILES.asBlock(), DERSE_CHISELED_CORE.asBlock());
 		
 		//stairs
 		provider.tag(MINEABLE_WITH_PICKAXE).add(DERSE_METALLITH_STAIRS.asBlock(), DERSE_ROUGH_METALLITH_STAIRS.asBlock(), DERSE_REFINED_METALLITH_STAIRS.asBlock(), DERSE_CORE_STAIRS.asBlock(), DERSE_ROUGH_CORE_STAIRS.asBlock(), DERSE_REFINED_CORE_STAIRS.asBlock(), DERSE_BRICK_STAIRS.asBlock(), DERSE_CRACKED_BRICK_STAIRS.asBlock(), DERSE_TARNISHED_BRICK_STAIRS.asBlock(), DERSE_CORE_BRICK_STAIRS.asBlock(), DERSE_CRACKED_CORE_BRICK_STAIRS.asBlock(), DERSE_CORE_TILE_STAIRS.asBlock());
