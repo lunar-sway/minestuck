@@ -49,8 +49,8 @@ public final class MSBiomeProvider
 		BiomeGenerationSettings.PlainBuilder genSettings = new BiomeGenerationSettings.PlainBuilder();
 		
 		BiomeSpecialEffects.Builder ambience = new BiomeSpecialEffects.Builder()
-				.waterColor(0xDCAD00)
-				.waterFogColor(0x050533)
+				.waterColor(0x00ffd0)
+				.waterFogColor(0x00c2b8)
 				.grassColorOverride(0xFFB300)
 				.foliageColorOverride(0xEBC100);
 		ambience.fogColor(0x000000)
@@ -70,8 +70,8 @@ public final class MSBiomeProvider
 		BiomeGenerationSettings.PlainBuilder genSettings = new BiomeGenerationSettings.PlainBuilder();
 		
 		BiomeSpecialEffects.Builder ambience = new BiomeSpecialEffects.Builder()
-				.waterColor(0x3F76E4)
-				.waterFogColor(0x050533);
+				.waterColor(0x2600fc)
+				.waterFogColor(0x2000d6);
 		ambience.fogColor(0x000000)
 				.skyColor(0x000000);
 		
