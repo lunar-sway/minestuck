@@ -1,0 +1,10 @@
+{
+  "type": "minecraft:stonecutting",
+  "ingredient": {
+    "item": "minestuck:prospit_core_brick"
+  },
+  "result": {
+    "count": 2,
+    "id": "minestuck:prospit_core_brick_slab"
+  }
+}

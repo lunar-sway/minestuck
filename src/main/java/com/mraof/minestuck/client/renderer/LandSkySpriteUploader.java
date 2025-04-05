@@ -22,7 +22,10 @@ public class LandSkySpriteUploader extends TextureAtlasHolder
 {
 	public static final int VARIANT_COUNT = 3;
 	
-	private static final ResourceLocation SKAIA = ResourceLocation.fromNamespaceAndPath(Minestuck.MOD_ID, "skaia");
+	private static final ResourceLocation SKAIA = Minestuck.id("skaia");
+	private static final ResourceLocation PROSPIT = Minestuck.id("prospit");
+	private static final ResourceLocation DERSE = Minestuck.id("derse");
+	private static final ResourceLocation METEOR = Minestuck.id("meteor");
 	
 	private static LandSkySpriteUploader INSTANCE;
 	
@@ -45,6 +48,21 @@ public class LandSkySpriteUploader extends TextureAtlasHolder
 	public TextureAtlasSprite getSkaiaSprite()
 	{
 		return getSprite(SKAIA);
+	}
+	
+	public TextureAtlasSprite getProspitSprite()
+	{
+		return getSprite(PROSPIT);
+	}
+	
+	public TextureAtlasSprite getDerseSprite()
+	{
+		return getSprite(DERSE);
+	}
+	
+	public TextureAtlasSprite getMeteorSprite()
+	{
+		return getSprite(METEOR);
 	}
 	
 	public TextureAtlasSprite getPlanetSprite(TerrainLandType type, int index)

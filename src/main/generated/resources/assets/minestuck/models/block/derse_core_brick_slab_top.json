@@ -1,0 +1,8 @@
+{
+  "parent": "minecraft:block/slab_top",
+  "textures": {
+    "bottom": "minestuck:block/derse_core_brick",
+    "side": "minestuck:block/derse_core_brick",
+    "top": "minestuck:block/derse_core_brick"
+  }
+}

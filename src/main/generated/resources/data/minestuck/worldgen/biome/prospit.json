@@ -1,0 +1,35 @@
+{
+  "carvers": {},
+  "downfall": 0.5,
+  "effects": {
+    "fog_color": 0,
+    "foliage_color": 15450368,
+    "grass_color": 16757504,
+    "sky_color": 0,
+    "water_color": 65488,
+    "water_fog_color": 49848
+  },
+  "features": [],
+  "has_precipitation": false,
+  "spawn_costs": {},
+  "spawners": {
+    "ambient": [],
+    "axolotls": [],
+    "creature": [],
+    "minestuck:consort": [],
+    "minestuck:underling": [],
+    "misc": [],
+    "monster": [
+      {
+        "type": "minestuck:prospitian_pawn",
+        "maxCount": 10,
+        "minCount": 1,
+        "weight": 2
+      }
+    ],
+    "underground_water_creature": [],
+    "water_ambient": [],
+    "water_creature": []
+  },
+  "temperature": 0.5
+}

@@ -66,6 +66,7 @@ public class MinestuckEnUsLanguageProvider extends MinestuckLanguageProvider
 	{
 		SkaiaBlocksData.addEnUsTranslations(this);
 		AspectTreeBlocksData.addEnUsTranslations(this);
+		DreamerMoonBlocksData.addEnUsTranslations(this);
 		
 		add("message.shift_for_more_info", "Press §eSHIFT§r for more info");
 		
