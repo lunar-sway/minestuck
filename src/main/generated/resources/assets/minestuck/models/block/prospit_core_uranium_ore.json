@@ -1,6 +1,0 @@
-{
-  "parent": "minecraft:block/cube_all",
-  "textures": {
-    "all": "minestuck:block/prospit_core_uranium_ore"
-  }
-}
