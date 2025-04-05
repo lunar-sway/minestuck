@@ -562,7 +562,7 @@ public class DreamerMoonBlocksData
 		
 		//PROSPIT_FERROSTRATA_SLAB
 		CommonRecipes.slabRecipe(PROSPIT_FERROSTRATA_SLAB, PROSPIT_FERROSTRATA).save(recipeSaver);
-		SingleItemRecipeBuilder.stonecutting(Ingredient.of(PROSPIT_FERROSTRATA), RecipeCategory.BUILDING_BLOCKS, PROSPIT_FERROSTRATA_SLAB)
+		SingleItemRecipeBuilder.stonecutting(Ingredient.of(PROSPIT_FERROSTRATA), RecipeCategory.BUILDING_BLOCKS, PROSPIT_FERROSTRATA_SLAB, 2)
 				.unlockedBy("has_prospit_ferrostrata", has(PROSPIT_FERROSTRATA)).save(recipeSaver, Minestuck.id("prospit_ferrostrata_slab_from_stonecutting"));
 		
 		//PROSPIT_FERROSTRATA_WALL
@@ -589,7 +589,7 @@ public class DreamerMoonBlocksData
 		
 		//PROSPIT_ROUGH_FERROSTRATA_SLAB
 		CommonRecipes.slabRecipe(PROSPIT_ROUGH_FERROSTRATA_SLAB, PROSPIT_ROUGH_FERROSTRATA).save(recipeSaver);
-		SingleItemRecipeBuilder.stonecutting(Ingredient.of(PROSPIT_ROUGH_FERROSTRATA), RecipeCategory.BUILDING_BLOCKS, PROSPIT_ROUGH_FERROSTRATA_SLAB)
+		SingleItemRecipeBuilder.stonecutting(Ingredient.of(PROSPIT_ROUGH_FERROSTRATA), RecipeCategory.BUILDING_BLOCKS, PROSPIT_ROUGH_FERROSTRATA_SLAB, 2)
 				.unlockedBy("has_prospit_ferrostrata", has(PROSPIT_ROUGH_FERROSTRATA)).save(recipeSaver, Minestuck.id("prospit_rough_ferrostrata_slab_from_stonecutting"));
 		
 		//PROSPIT_ROUGH_FERROSTRATA_WALL
@@ -608,7 +608,7 @@ public class DreamerMoonBlocksData
 		
 		//PROSPIT_REFINED_FERROSTRATA_SLAB
 		CommonRecipes.stairsRecipe(PROSPIT_REFINED_FERROSTRATA_SLAB, PROSPIT_REFINED_FERROSTRATA).save(recipeSaver);
-		SingleItemRecipeBuilder.stonecutting(Ingredient.of(PROSPIT_REFINED_FERROSTRATA), RecipeCategory.BUILDING_BLOCKS, PROSPIT_REFINED_FERROSTRATA_SLAB)
+		SingleItemRecipeBuilder.stonecutting(Ingredient.of(PROSPIT_REFINED_FERROSTRATA), RecipeCategory.BUILDING_BLOCKS, PROSPIT_REFINED_FERROSTRATA_SLAB, 2)
 				.unlockedBy("has_prospit_refined_ferrostrata", has(PROSPIT_REFINED_FERROSTRATA)).save(recipeSaver, Minestuck.id("prospit_refined_ferrostrata_slab_from_stonecutting"));
 		
 		//PROSPIT_REFINED_FERROSTRATA_WALL
@@ -627,7 +627,7 @@ public class DreamerMoonBlocksData
 		
 		//PROSPIT_CORE_SLAB
 		CommonRecipes.slabRecipe(PROSPIT_CORE_SLAB, PROSPIT_CORE).save(recipeSaver);
-		SingleItemRecipeBuilder.stonecutting(Ingredient.of(PROSPIT_CORE), RecipeCategory.BUILDING_BLOCKS, PROSPIT_CORE_SLAB)
+		SingleItemRecipeBuilder.stonecutting(Ingredient.of(PROSPIT_CORE), RecipeCategory.BUILDING_BLOCKS, PROSPIT_CORE_SLAB, 2)
 				.unlockedBy("has_prospit_core", has(PROSPIT_CORE)).save(recipeSaver, Minestuck.id("prospit_core_slab_from_stonecutting"));
 		
 		//PROSPIT_CORE_WALL
@@ -644,7 +644,7 @@ public class DreamerMoonBlocksData
 		
 		//PROSPIT_ROUGH_CORE_SLAB
 		CommonRecipes.slabRecipe(PROSPIT_ROUGH_CORE_SLAB, PROSPIT_ROUGH_CORE).save(recipeSaver);
-		SingleItemRecipeBuilder.stonecutting(Ingredient.of(PROSPIT_ROUGH_CORE), RecipeCategory.BUILDING_BLOCKS, PROSPIT_ROUGH_CORE_SLAB)
+		SingleItemRecipeBuilder.stonecutting(Ingredient.of(PROSPIT_ROUGH_CORE), RecipeCategory.BUILDING_BLOCKS, PROSPIT_ROUGH_CORE_SLAB, 2)
 				.unlockedBy("has_prospit_core", has(PROSPIT_ROUGH_CORE)).save(recipeSaver, Minestuck.id("prospit_rough_core_slab_from_stonecutting"));
 		
 		//PROSPIT_ROUGH_CORE_WALL
@@ -666,7 +666,7 @@ public class DreamerMoonBlocksData
 		
 		//PROSPIT_REFINED_CORE_SLAB
 		CommonRecipes.slabRecipe(PROSPIT_REFINED_CORE_SLAB, PROSPIT_REFINED_CORE).save(recipeSaver);
-		SingleItemRecipeBuilder.stonecutting(Ingredient.of(PROSPIT_REFINED_CORE), RecipeCategory.BUILDING_BLOCKS, PROSPIT_REFINED_CORE_SLAB)
+		SingleItemRecipeBuilder.stonecutting(Ingredient.of(PROSPIT_REFINED_CORE), RecipeCategory.BUILDING_BLOCKS, PROSPIT_REFINED_CORE_SLAB, 2)
 				.unlockedBy("has_prospit_refined_core", has(PROSPIT_REFINED_CORE)).save(recipeSaver, Minestuck.id("prospit_refined_core_slab_from_stonecutting"));
 		
 		//PROSPIT_REFINED_CORE_WALL
@@ -777,7 +777,7 @@ public class DreamerMoonBlocksData
 		
 		//PROSPIT_BRICK_SLAB
 		CommonRecipes.slabRecipe(PROSPIT_BRICK_SLAB, PROSPIT_BRICK).save(recipeSaver);
-		SingleItemRecipeBuilder.stonecutting(Ingredient.of(PROSPIT_BRICK), RecipeCategory.BUILDING_BLOCKS, PROSPIT_BRICK_SLAB)
+		SingleItemRecipeBuilder.stonecutting(Ingredient.of(PROSPIT_BRICK), RecipeCategory.BUILDING_BLOCKS, PROSPIT_BRICK_SLAB, 2)
 				.unlockedBy("has_prospit_brick", has(PROSPIT_BRICK)).save(recipeSaver, Minestuck.id("prospit_brick_slab_from_stonecutting"));
 		
 		//PROSPIT_BRICK_WALL
@@ -792,7 +792,7 @@ public class DreamerMoonBlocksData
 		
 		//PROSPIT_CRACKED_BRICK_SLAB
 		CommonRecipes.slabRecipe(PROSPIT_CRACKED_BRICK_SLAB, PROSPIT_CRACKED_BRICK).save(recipeSaver);
-		SingleItemRecipeBuilder.stonecutting(Ingredient.of(PROSPIT_CRACKED_BRICK), RecipeCategory.BUILDING_BLOCKS, PROSPIT_CRACKED_BRICK_SLAB)
+		SingleItemRecipeBuilder.stonecutting(Ingredient.of(PROSPIT_CRACKED_BRICK), RecipeCategory.BUILDING_BLOCKS, PROSPIT_CRACKED_BRICK_SLAB, 2)
 				.unlockedBy("has_prospit_brick", has(PROSPIT_CRACKED_BRICK)).save(recipeSaver, Minestuck.id("prospit_cracked_brick_slab_from_stonecutting"));
 		
 		//PROSPIT_CRACKED_BRICK_WALL
@@ -807,7 +807,7 @@ public class DreamerMoonBlocksData
 		
 		//PROSPIT_TARNISHED_BRICK_SLAB
 		CommonRecipes.slabRecipe(PROSPIT_TARNISHED_BRICK_SLAB, PROSPIT_TARNISHED_BRICK).save(recipeSaver);
-		SingleItemRecipeBuilder.stonecutting(Ingredient.of(PROSPIT_TARNISHED_BRICK), RecipeCategory.BUILDING_BLOCKS, PROSPIT_TARNISHED_BRICK_SLAB)
+		SingleItemRecipeBuilder.stonecutting(Ingredient.of(PROSPIT_TARNISHED_BRICK), RecipeCategory.BUILDING_BLOCKS, PROSPIT_TARNISHED_BRICK_SLAB, 2)
 				.unlockedBy("has_prospit_brick", has(PROSPIT_TARNISHED_BRICK)).save(recipeSaver, Minestuck.id("prospit_tarnished_brick_slab_from_stonecutting"));
 		
 		//PROSPIT_TARNISHED_BRICK_WALL
@@ -859,7 +859,7 @@ public class DreamerMoonBlocksData
 		
 		//PROSPIT_CORE_BRICK_SLAB
 		CommonRecipes.slabRecipe(PROSPIT_CORE_BRICK_SLAB, PROSPIT_CORE_BRICK).save(recipeSaver);
-		SingleItemRecipeBuilder.stonecutting(Ingredient.of(PROSPIT_CORE_BRICK), RecipeCategory.BUILDING_BLOCKS, PROSPIT_CORE_BRICK_SLAB)
+		SingleItemRecipeBuilder.stonecutting(Ingredient.of(PROSPIT_CORE_BRICK), RecipeCategory.BUILDING_BLOCKS, PROSPIT_CORE_BRICK_SLAB, 2)
 				.unlockedBy("has_prospit_core_brick", has(PROSPIT_CORE_BRICK)).save(recipeSaver, Minestuck.id("prospit_core_brick_slab_from_stonecutting"));
 		
 		//PROSPIT_CORE_BRICK_WALL
@@ -874,7 +874,7 @@ public class DreamerMoonBlocksData
 		
 		//PROSPIT_CRACKED_CORE_BRICK_SLAB
 		CommonRecipes.slabRecipe(PROSPIT_CRACKED_CORE_BRICK_SLAB, PROSPIT_CRACKED_CORE_BRICK).save(recipeSaver);
-		SingleItemRecipeBuilder.stonecutting(Ingredient.of(PROSPIT_CRACKED_CORE_BRICK), RecipeCategory.BUILDING_BLOCKS, PROSPIT_CRACKED_CORE_BRICK_SLAB)
+		SingleItemRecipeBuilder.stonecutting(Ingredient.of(PROSPIT_CRACKED_CORE_BRICK), RecipeCategory.BUILDING_BLOCKS, PROSPIT_CRACKED_CORE_BRICK_SLAB, 2)
 				.unlockedBy("has_prospit_brick", has(PROSPIT_CRACKED_CORE_BRICK)).save(recipeSaver, Minestuck.id("prospit_cracked_core_brick_slab_from_stonecutting"));
 		
 		//PROSPIT_CRACKED_CORE_BRICK_WALL
@@ -889,13 +889,365 @@ public class DreamerMoonBlocksData
 		
 		//PROSPIT_CORE_TILE_SLAB
 		CommonRecipes.slabRecipe(PROSPIT_CORE_TILE_SLAB, PROSPIT_CORE_TILES).save(recipeSaver);
-		SingleItemRecipeBuilder.stonecutting(Ingredient.of(PROSPIT_CORE_TILES), RecipeCategory.BUILDING_BLOCKS, PROSPIT_CORE_TILE_SLAB)
+		SingleItemRecipeBuilder.stonecutting(Ingredient.of(PROSPIT_CORE_TILES), RecipeCategory.BUILDING_BLOCKS, PROSPIT_CORE_TILE_SLAB, 2)
 				.unlockedBy("has_prospit_brick", has(PROSPIT_CORE_TILES)).save(recipeSaver, Minestuck.id("prospit_core_tile_slab_from_stonecutting"));
 		
 		//PROSPIT_CORE_TILE_WALL
 		CommonRecipes.wallRecipe(PROSPIT_CORE_TILE_WALL, PROSPIT_CORE_TILES).save(recipeSaver);
 		SingleItemRecipeBuilder.stonecutting(Ingredient.of(PROSPIT_CORE_TILES), RecipeCategory.BUILDING_BLOCKS, PROSPIT_CORE_TILE_WALL)
 				.unlockedBy("has_prospit_brick", has(PROSPIT_CORE_TILES)).save(recipeSaver, Minestuck.id("prospit_core_tile_wall_from_stonecutting"));
+		
+		//DERSE_PLATING - no recipe
+		//DERSE_PLATED_PATH
+		SingleItemRecipeBuilder.stonecutting(Ingredient.of(DERSE_PLATING), RecipeCategory.BUILDING_BLOCKS, DERSE_PLATED_PATH)
+				.unlockedBy("has_derse_plating", has(DERSE_PLATING)).save(recipeSaver, Minestuck.id("derse_plated_path_from_stonecutting"));
+		
+		//DERSE_METALLITH
+		SimpleCookingRecipeBuilder.smelting(Ingredient.of(DERSE_ROUGH_METALLITH), RecipeCategory.BUILDING_BLOCKS, DERSE_METALLITH, 0.1f, 200)
+				.unlockedBy("has_derse_metallith", has(DERSE_METALLITH)).save(recipeSaver);
+		
+		//DERSE_METALLITH_STAIRS
+		CommonRecipes.stairsRecipe(DERSE_METALLITH_STAIRS, DERSE_METALLITH).save(recipeSaver);
+		SingleItemRecipeBuilder.stonecutting(Ingredient.of(DERSE_METALLITH), RecipeCategory.BUILDING_BLOCKS, DERSE_METALLITH_STAIRS)
+				.unlockedBy("has_derse_metallith", has(DERSE_METALLITH)).save(recipeSaver, Minestuck.id("derse_metallith_stairs_from_stonecutting"));
+		
+		//DERSE_METALLITH_SLAB
+		CommonRecipes.slabRecipe(DERSE_METALLITH_SLAB, DERSE_METALLITH).save(recipeSaver);
+		SingleItemRecipeBuilder.stonecutting(Ingredient.of(DERSE_METALLITH), RecipeCategory.BUILDING_BLOCKS, DERSE_METALLITH_SLAB, 2)
+				.unlockedBy("has_derse_metallith", has(DERSE_METALLITH)).save(recipeSaver, Minestuck.id("derse_metallith_slab_from_stonecutting"));
+		
+		//DERSE_METALLITH_WALL
+		CommonRecipes.wallRecipe(DERSE_METALLITH_WALL, DERSE_METALLITH).save(recipeSaver);
+		SingleItemRecipeBuilder.stonecutting(Ingredient.of(DERSE_METALLITH), RecipeCategory.BUILDING_BLOCKS, DERSE_METALLITH_WALL)
+				.unlockedBy("has_derse_metallith", has(DERSE_METALLITH)).save(recipeSaver, Minestuck.id("derse_metallith_wall_from_stonecutting"));
+		
+		//DERSE_METALLITH_BUTTON
+		CommonRecipes.buttonRecipe(DERSE_METALLITH_BUTTON, DERSE_METALLITH).save(recipeSaver);
+		SingleItemRecipeBuilder.stonecutting(Ingredient.of(DERSE_METALLITH), RecipeCategory.BUILDING_BLOCKS, DERSE_METALLITH_BUTTON)
+				.unlockedBy("has_derse_metallith", has(DERSE_METALLITH)).save(recipeSaver, Minestuck.id("derse_metallith_button_from_stonecutting"));
+		
+		//DERSE_METALLITH_PRESSURE_PLATE
+		CommonRecipes.buttonRecipe(DERSE_METALLITH_PRESSURE_PLATE, DERSE_METALLITH).save(recipeSaver);
+		SingleItemRecipeBuilder.stonecutting(Ingredient.of(DERSE_METALLITH), RecipeCategory.BUILDING_BLOCKS, DERSE_METALLITH_PRESSURE_PLATE)
+				.unlockedBy("has_derse_metallith", has(DERSE_METALLITH)).save(recipeSaver, Minestuck.id("derse_metallith_pressure_plate_from_stonecutting"));
+		
+		//DERSE_ROUGH_METALLITH - no recipe
+		
+		//DERSE_ROUGH_METALLITH_STAIRS
+		CommonRecipes.stairsRecipe(DERSE_ROUGH_METALLITH_STAIRS, DERSE_ROUGH_METALLITH).save(recipeSaver);
+		SingleItemRecipeBuilder.stonecutting(Ingredient.of(DERSE_ROUGH_METALLITH), RecipeCategory.BUILDING_BLOCKS, DERSE_ROUGH_METALLITH_STAIRS)
+				.unlockedBy("has_derse_rough_metallith", has(DERSE_ROUGH_METALLITH)).save(recipeSaver, Minestuck.id("derse_rough_metallith_stairs_from_stonecutting"));
+		
+		//DERSE_ROUGH_METALLITH_SLAB
+		CommonRecipes.slabRecipe(DERSE_ROUGH_METALLITH_SLAB, DERSE_ROUGH_METALLITH).save(recipeSaver);
+		SingleItemRecipeBuilder.stonecutting(Ingredient.of(DERSE_ROUGH_METALLITH), RecipeCategory.BUILDING_BLOCKS, DERSE_ROUGH_METALLITH_SLAB, 2)
+				.unlockedBy("has_derse_metallith", has(DERSE_ROUGH_METALLITH)).save(recipeSaver, Minestuck.id("derse_rough_metallith_slab_from_stonecutting"));
+		
+		//DERSE_ROUGH_METALLITH_WALL
+		CommonRecipes.wallRecipe(DERSE_ROUGH_METALLITH_WALL, DERSE_ROUGH_METALLITH).save(recipeSaver);
+		SingleItemRecipeBuilder.stonecutting(Ingredient.of(DERSE_ROUGH_METALLITH), RecipeCategory.BUILDING_BLOCKS, DERSE_ROUGH_METALLITH_WALL)
+				.unlockedBy("has_derse_metallith", has(DERSE_ROUGH_METALLITH)).save(recipeSaver, Minestuck.id("derse_rough_metallith_wall_from_stonecutting"));
+		
+		//DERSE_REFINED_METALLITH
+		SimpleCookingRecipeBuilder.smelting(Ingredient.of(DERSE_METALLITH), RecipeCategory.BUILDING_BLOCKS, DERSE_REFINED_METALLITH, 0.1f, 200)
+				.unlockedBy("has_derse_rough_metallith", has(DERSE_ROUGH_METALLITH)).save(recipeSaver);
+		
+		//DERSE_REFINED_METALLITH_STAIRS
+		CommonRecipes.stairsRecipe(DERSE_REFINED_METALLITH_STAIRS, DERSE_REFINED_METALLITH).save(recipeSaver);
+		SingleItemRecipeBuilder.stonecutting(Ingredient.of(DERSE_REFINED_METALLITH), RecipeCategory.BUILDING_BLOCKS, DERSE_REFINED_METALLITH_STAIRS)
+				.unlockedBy("has_derse_refined_metallith", has(DERSE_REFINED_METALLITH)).save(recipeSaver, Minestuck.id("derse_refined_metallith_stairs_from_stonecutting"));
+		
+		//DERSE_REFINED_METALLITH_SLAB
+		CommonRecipes.stairsRecipe(DERSE_REFINED_METALLITH_SLAB, DERSE_REFINED_METALLITH).save(recipeSaver);
+		SingleItemRecipeBuilder.stonecutting(Ingredient.of(DERSE_REFINED_METALLITH), RecipeCategory.BUILDING_BLOCKS, DERSE_REFINED_METALLITH_SLAB, 2)
+				.unlockedBy("has_derse_refined_metallith", has(DERSE_REFINED_METALLITH)).save(recipeSaver, Minestuck.id("derse_refined_metallith_slab_from_stonecutting"));
+		
+		//DERSE_REFINED_METALLITH_WALL
+		CommonRecipes.stairsRecipe(DERSE_REFINED_METALLITH_WALL, DERSE_REFINED_METALLITH).save(recipeSaver);
+		SingleItemRecipeBuilder.stonecutting(Ingredient.of(DERSE_REFINED_METALLITH), RecipeCategory.BUILDING_BLOCKS, DERSE_REFINED_METALLITH_WALL)
+				.unlockedBy("has_derse_refined_metallith", has(DERSE_REFINED_METALLITH)).save(recipeSaver, Minestuck.id("derse_refined_metallith_wall_from_stonecutting"));
+		
+		//DERSE_CORE
+		SimpleCookingRecipeBuilder.smelting(Ingredient.of(DERSE_ROUGH_CORE), RecipeCategory.BUILDING_BLOCKS, DERSE_CORE, 0.1f, 200)
+				.unlockedBy("has_derse_core", has(DERSE_CORE)).save(recipeSaver);
+		
+		//DERSE_CORE_STAIRS
+		CommonRecipes.stairsRecipe(DERSE_CORE_STAIRS, DERSE_CORE).save(recipeSaver);
+		SingleItemRecipeBuilder.stonecutting(Ingredient.of(DERSE_CORE), RecipeCategory.BUILDING_BLOCKS, DERSE_CORE_STAIRS)
+				.unlockedBy("has_derse_core", has(DERSE_CORE)).save(recipeSaver, Minestuck.id("derse_core_stairs_from_stonecutting"));
+		
+		//DERSE_CORE_SLAB
+		CommonRecipes.slabRecipe(DERSE_CORE_SLAB, DERSE_CORE).save(recipeSaver);
+		SingleItemRecipeBuilder.stonecutting(Ingredient.of(DERSE_CORE), RecipeCategory.BUILDING_BLOCKS, DERSE_CORE_SLAB, 2)
+				.unlockedBy("has_derse_core", has(DERSE_CORE)).save(recipeSaver, Minestuck.id("derse_core_slab_from_stonecutting"));
+		
+		//DERSE_CORE_WALL
+		CommonRecipes.wallRecipe(DERSE_CORE_WALL, DERSE_CORE).save(recipeSaver);
+		SingleItemRecipeBuilder.stonecutting(Ingredient.of(DERSE_CORE), RecipeCategory.BUILDING_BLOCKS, DERSE_CORE_WALL)
+				.unlockedBy("has_derse_core", has(DERSE_CORE)).save(recipeSaver, Minestuck.id("derse_core_wall_from_stonecutting"));
+		
+		//DERSE_ROUGH_CORE - no recipe
+		
+		//DERSE_ROUGH_CORE_STAIRS
+		CommonRecipes.stairsRecipe(DERSE_ROUGH_CORE_STAIRS, DERSE_ROUGH_CORE).save(recipeSaver);
+		SingleItemRecipeBuilder.stonecutting(Ingredient.of(DERSE_ROUGH_CORE), RecipeCategory.BUILDING_BLOCKS, DERSE_ROUGH_CORE_STAIRS)
+				.unlockedBy("has_derse_rough_core", has(DERSE_ROUGH_CORE)).save(recipeSaver, Minestuck.id("derse_rough_core_stairs_from_stonecutting"));
+		
+		//DERSE_ROUGH_CORE_SLAB
+		CommonRecipes.slabRecipe(DERSE_ROUGH_CORE_SLAB, DERSE_ROUGH_CORE).save(recipeSaver);
+		SingleItemRecipeBuilder.stonecutting(Ingredient.of(DERSE_ROUGH_CORE), RecipeCategory.BUILDING_BLOCKS, DERSE_ROUGH_CORE_SLAB, 2)
+				.unlockedBy("has_derse_core", has(DERSE_ROUGH_CORE)).save(recipeSaver, Minestuck.id("derse_rough_core_slab_from_stonecutting"));
+		
+		//DERSE_ROUGH_CORE_WALL
+		CommonRecipes.wallRecipe(DERSE_ROUGH_CORE_WALL, DERSE_ROUGH_CORE).save(recipeSaver);
+		SingleItemRecipeBuilder.stonecutting(Ingredient.of(DERSE_ROUGH_CORE), RecipeCategory.BUILDING_BLOCKS, DERSE_ROUGH_CORE_WALL)
+				.unlockedBy("has_derse_core", has(DERSE_ROUGH_CORE)).save(recipeSaver, Minestuck.id("derse_rough_core_wall_from_stonecutting"));
+		
+		//DERSE_REFINED_CORE
+		ShapedRecipeBuilder.shaped(RecipeCategory.BUILDING_BLOCKS, DERSE_REFINED_CORE)
+				.define('#', DERSE_ROUGH_CORE)
+				.pattern("##")
+				.pattern("##")
+				.unlockedBy("has_derse_rough_core", has(DERSE_ROUGH_CORE));
+		
+		//DERSE_REFINED_CORE_STAIRS
+		CommonRecipes.stairsRecipe(DERSE_REFINED_CORE_STAIRS, DERSE_REFINED_CORE).save(recipeSaver);
+		SingleItemRecipeBuilder.stonecutting(Ingredient.of(DERSE_REFINED_CORE), RecipeCategory.BUILDING_BLOCKS, DERSE_REFINED_CORE_STAIRS)
+				.unlockedBy("has_derse_refined_core", has(DERSE_REFINED_CORE)).save(recipeSaver, Minestuck.id("derse_refined_core_stairs_from_stonecutting"));
+		
+		//DERSE_REFINED_CORE_SLAB
+		CommonRecipes.slabRecipe(DERSE_REFINED_CORE_SLAB, DERSE_REFINED_CORE).save(recipeSaver);
+		SingleItemRecipeBuilder.stonecutting(Ingredient.of(DERSE_REFINED_CORE), RecipeCategory.BUILDING_BLOCKS, DERSE_REFINED_CORE_SLAB, 2)
+				.unlockedBy("has_derse_refined_core", has(DERSE_REFINED_CORE)).save(recipeSaver, Minestuck.id("derse_refined_core_slab_from_stonecutting"));
+		
+		//DERSE_REFINED_CORE_WALL
+		CommonRecipes.wallRecipe(DERSE_REFINED_CORE_WALL, DERSE_REFINED_CORE).save(recipeSaver);
+		SingleItemRecipeBuilder.stonecutting(Ingredient.of(DERSE_REFINED_CORE), RecipeCategory.BUILDING_BLOCKS, DERSE_REFINED_CORE_WALL)
+				.unlockedBy("has_derse_refined_core", has(DERSE_REFINED_CORE)).save(recipeSaver, Minestuck.id("derse_refined_core_wall_from_stonecutting"));
+		
+		//DERSE_METALLITH_CRUXITE_ORE - no recipe
+		//DERSE_METALLITH_URANIUM_ORE - no recipe
+		//DERSE_CORE_CRUXITE_ORE - no recipe
+		//DERSE_CORE_URANIUM_ORE - no recipe
+		//DERSE_CABLE
+		ShapedRecipeBuilder.shaped(RecipeCategory.BUILDING_BLOCKS, DERSE_CABLE)
+				.define('#', DERSE_RESIDUE)
+				.pattern("##")
+				.pattern("##")
+				.unlockedBy("has_derse_dross", has(DERSE_RESIDUE));
+		
+		//DERSE_THICK_CABLE
+		ShapedRecipeBuilder.shaped(RecipeCategory.BUILDING_BLOCKS, DERSE_THICK_CABLE)
+				.define('#', DERSE_CABLE)
+				.pattern("##")
+				.pattern("##")
+				.unlockedBy("has_derse_cable", has(DERSE_CABLE));
+		
+		//DERSE_PILLAR
+		ShapedRecipeBuilder.shaped(RecipeCategory.BUILDING_BLOCKS, DERSE_PILLAR, 2)
+				.define('#', DERSE_ROUGH_METALLITH)
+				.pattern("#")
+				.pattern("#")
+				.unlockedBy("has_derse_rough_metallith", has(DERSE_ROUGH_METALLITH));
+		
+		//DERSE_DOOR
+		ShapedRecipeBuilder.shaped(RecipeCategory.BUILDING_BLOCKS, DERSE_DOOR, 3)
+				.define('#', DERSE_REFINED_METALLITH)
+				.pattern("##")
+				.pattern("##")
+				.pattern("##")
+				.unlockedBy("has_derse_refined_metallith", has(DERSE_REFINED_METALLITH));
+		
+		//DERSE_TRAPDOOR
+		ShapedRecipeBuilder.shaped(RecipeCategory.BUILDING_BLOCKS, DERSE_TRAPDOOR, 2)
+				.define('#', DERSE_REFINED_METALLITH)
+				.pattern("###")
+				.pattern("###")
+				.unlockedBy("has_derse_refined_metallith", has(DERSE_REFINED_METALLITH));
+		
+		//DERSE_BRICK
+		ShapedRecipeBuilder.shaped(RecipeCategory.BUILDING_BLOCKS, DERSE_BRICK, 4)
+				.define('#', DERSE_ROUGH_METALLITH)
+				.pattern("##")
+				.pattern("##")
+				.unlockedBy("has_derse_rough_metallith", has(DERSE_ROUGH_METALLITH));
+		SingleItemRecipeBuilder.stonecutting(Ingredient.of(DERSE_ROUGH_METALLITH), RecipeCategory.BUILDING_BLOCKS, DERSE_BRICK)
+				.unlockedBy("has_derse_rough_metallith", has(DERSE_ROUGH_METALLITH)).save(recipeSaver, Minestuck.id("derse_brick_from_stonecutting"));
+		
+		//DERSE_CRACKED_BRICK
+		SimpleCookingRecipeBuilder.smelting(Ingredient.of(DERSE_BRICK), RecipeCategory.BUILDING_BLOCKS, DERSE_CRACKED_BRICK, 0.1f, 200)
+				.unlockedBy("has_derse_brick", has(DERSE_BRICK)).save(recipeSaver);
+		
+		//DERSE_CHISELED_BRICK
+		ShapedRecipeBuilder.shaped(RecipeCategory.BUILDING_BLOCKS, DERSE_CHISELED_BRICK)
+				.define('#', DERSE_BRICK_SLAB)
+				.pattern("#")
+				.pattern("#")
+				.unlockedBy("has_derse_brick", has(DERSE_BRICK));
+		SingleItemRecipeBuilder.stonecutting(Ingredient.of(DERSE_METALLITH), RecipeCategory.BUILDING_BLOCKS, DERSE_CHISELED_BRICK)
+				.unlockedBy("has_derse_metallith", has(DERSE_METALLITH)).save(recipeSaver, Minestuck.id("derse_chiseled_brick_from_raw_stonecutting"));
+		SingleItemRecipeBuilder.stonecutting(Ingredient.of(DERSE_BRICK), RecipeCategory.BUILDING_BLOCKS, DERSE_CHISELED_BRICK)
+				.unlockedBy("has_derse_brick", has(DERSE_BRICK)).save(recipeSaver, Minestuck.id("derse_chiseled_brick_from_stonecutting"));
+		
+		//DERSE_PAVING_BRICK
+		SingleItemRecipeBuilder.stonecutting(Ingredient.of(DERSE_METALLITH), RecipeCategory.BUILDING_BLOCKS, DERSE_PAVING_BRICK)
+				.unlockedBy("has_derse_metallith", has(DERSE_METALLITH)).save(recipeSaver, Minestuck.id("derse_paving_brick_from_raw_stonecutting"));
+		SingleItemRecipeBuilder.stonecutting(Ingredient.of(DERSE_BRICK), RecipeCategory.BUILDING_BLOCKS, DERSE_PAVING_BRICK)
+				.unlockedBy("has_derse_brick", has(DERSE_BRICK)).save(recipeSaver, Minestuck.id("derse_paving_brick_from_stonecutting"));
+		
+		//DERSE_FANCY_BRICK
+		SingleItemRecipeBuilder.stonecutting(Ingredient.of(DERSE_METALLITH), RecipeCategory.BUILDING_BLOCKS, DERSE_FANCY_BRICK)
+				.unlockedBy("has_derse_metallith", has(DERSE_METALLITH)).save(recipeSaver, Minestuck.id("derse_fancy_brick_from_raw_stonecutting"));
+		SingleItemRecipeBuilder.stonecutting(Ingredient.of(DERSE_BRICK), RecipeCategory.BUILDING_BLOCKS, DERSE_FANCY_BRICK)
+				.unlockedBy("has_derse_brick", has(DERSE_BRICK)).save(recipeSaver, Minestuck.id("derse_fancy_brick_from_stonecutting"));
+		
+		//DERSE_TARNISHED_BRICK
+		ShapelessRecipeBuilder.shapeless(RecipeCategory.BUILDING_BLOCKS, DERSE_TARNISHED_BRICK, 1)
+				.requires(DERSE_BRICK)
+				.requires(DERSE_RESIDUE)
+				.unlockedBy("has_derse_brick", has(DERSE_BRICK))
+				.unlockedBy("has_derse_dross", has(DERSE_RESIDUE))
+				.save(recipeSaver, Minestuck.id("derse_tarnished_brick_shapeless_recipe"));
+		
+		//DERSE_STACKED_BRICK
+		SingleItemRecipeBuilder.stonecutting(Ingredient.of(DERSE_METALLITH), RecipeCategory.BUILDING_BLOCKS, DERSE_STACKED_BRICK)
+				.unlockedBy("has_derse_metallith", has(DERSE_METALLITH)).save(recipeSaver, Minestuck.id("derse_stacked_brick_from_raw_stonecutting"));
+		SingleItemRecipeBuilder.stonecutting(Ingredient.of(DERSE_BRICK), RecipeCategory.BUILDING_BLOCKS, DERSE_STACKED_BRICK)
+				.unlockedBy("has_derse_brick", has(DERSE_BRICK)).save(recipeSaver, Minestuck.id("derse_stacked_brick_from_stonecutting"));
+		
+		//DERSE_TILES
+		SingleItemRecipeBuilder.stonecutting(Ingredient.of(DERSE_METALLITH), RecipeCategory.BUILDING_BLOCKS, DERSE_TILES)
+				.unlockedBy("has_derse_metallith", has(DERSE_METALLITH)).save(recipeSaver, Minestuck.id("derse_tiles_from_raw_stonecutting"));
+		SingleItemRecipeBuilder.stonecutting(Ingredient.of(DERSE_BRICK), RecipeCategory.BUILDING_BLOCKS, DERSE_TILES)
+				.unlockedBy("has_derse_brick", has(DERSE_BRICK)).save(recipeSaver, Minestuck.id("derse_tiles_from_stonecutting"));
+		
+		//DERSE_BRICK_STAIRS
+		CommonRecipes.stairsRecipe(DERSE_BRICK_STAIRS, DERSE_BRICK).save(recipeSaver);
+		SingleItemRecipeBuilder.stonecutting(Ingredient.of(DERSE_BRICK), RecipeCategory.BUILDING_BLOCKS, DERSE_BRICK_STAIRS)
+				.unlockedBy("has_derse_brick", has(DERSE_BRICK)).save(recipeSaver, Minestuck.id("derse_brick_stairs_from_stonecutting"));
+		
+		//DERSE_BRICK_SLAB
+		CommonRecipes.slabRecipe(DERSE_BRICK_SLAB, DERSE_BRICK).save(recipeSaver);
+		SingleItemRecipeBuilder.stonecutting(Ingredient.of(DERSE_BRICK), RecipeCategory.BUILDING_BLOCKS, DERSE_BRICK_SLAB, 2)
+				.unlockedBy("has_derse_brick", has(DERSE_BRICK)).save(recipeSaver, Minestuck.id("derse_brick_slab_from_stonecutting"));
+		
+		//DERSE_BRICK_WALL
+		CommonRecipes.wallRecipe(DERSE_BRICK_WALL, DERSE_BRICK).save(recipeSaver);
+		SingleItemRecipeBuilder.stonecutting(Ingredient.of(DERSE_BRICK), RecipeCategory.BUILDING_BLOCKS, DERSE_BRICK_WALL)
+				.unlockedBy("has_derse_brick", has(DERSE_BRICK)).save(recipeSaver, Minestuck.id("derse_brick_wall_from_stonecutting"));
+		
+		//DERSE_CRACKED_BRICK_STAIRS
+		CommonRecipes.stairsRecipe(DERSE_CRACKED_BRICK_STAIRS, DERSE_CRACKED_BRICK).save(recipeSaver);
+		SingleItemRecipeBuilder.stonecutting(Ingredient.of(DERSE_CRACKED_BRICK), RecipeCategory.BUILDING_BLOCKS, DERSE_CRACKED_BRICK_STAIRS)
+				.unlockedBy("has_derse_brick", has(DERSE_CRACKED_BRICK)).save(recipeSaver, Minestuck.id("derse_cracked_brick_stairs_from_stonecutting"));
+		
+		//DERSE_CRACKED_BRICK_SLAB
+		CommonRecipes.slabRecipe(DERSE_CRACKED_BRICK_SLAB, DERSE_CRACKED_BRICK).save(recipeSaver);
+		SingleItemRecipeBuilder.stonecutting(Ingredient.of(DERSE_CRACKED_BRICK), RecipeCategory.BUILDING_BLOCKS, DERSE_CRACKED_BRICK_SLAB, 2)
+				.unlockedBy("has_derse_brick", has(DERSE_CRACKED_BRICK)).save(recipeSaver, Minestuck.id("derse_cracked_brick_slab_from_stonecutting"));
+		
+		//DERSE_CRACKED_BRICK_WALL
+		CommonRecipes.wallRecipe(DERSE_CRACKED_BRICK_WALL, DERSE_CRACKED_BRICK).save(recipeSaver);
+		SingleItemRecipeBuilder.stonecutting(Ingredient.of(DERSE_CRACKED_BRICK), RecipeCategory.BUILDING_BLOCKS, DERSE_CRACKED_BRICK_WALL)
+				.unlockedBy("has_derse_brick", has(DERSE_CRACKED_BRICK)).save(recipeSaver, Minestuck.id("derse_cracked_brick_wall_from_stonecutting"));
+		
+		//DERSE_TARNISHED_BRICK_STAIRS
+		CommonRecipes.stairsRecipe(DERSE_TARNISHED_BRICK_STAIRS, DERSE_TARNISHED_BRICK).save(recipeSaver);
+		SingleItemRecipeBuilder.stonecutting(Ingredient.of(DERSE_TARNISHED_BRICK), RecipeCategory.BUILDING_BLOCKS, DERSE_TARNISHED_BRICK_STAIRS)
+				.unlockedBy("has_derse_brick", has(DERSE_TARNISHED_BRICK)).save(recipeSaver, Minestuck.id("derse_tarnished_brick_stairs_from_stonecutting"));
+		
+		//DERSE_TARNISHED_BRICK_SLAB
+		CommonRecipes.slabRecipe(DERSE_TARNISHED_BRICK_SLAB, DERSE_TARNISHED_BRICK).save(recipeSaver);
+		SingleItemRecipeBuilder.stonecutting(Ingredient.of(DERSE_TARNISHED_BRICK), RecipeCategory.BUILDING_BLOCKS, DERSE_TARNISHED_BRICK_SLAB, 2)
+				.unlockedBy("has_derse_brick", has(DERSE_TARNISHED_BRICK)).save(recipeSaver, Minestuck.id("derse_tarnished_brick_slab_from_stonecutting"));
+		
+		//DERSE_TARNISHED_BRICK_WALL
+		CommonRecipes.wallRecipe(DERSE_TARNISHED_BRICK_WALL, DERSE_TARNISHED_BRICK).save(recipeSaver);
+		SingleItemRecipeBuilder.stonecutting(Ingredient.of(DERSE_TARNISHED_BRICK), RecipeCategory.BUILDING_BLOCKS, DERSE_TARNISHED_BRICK_WALL)
+				.unlockedBy("has_derse_brick", has(DERSE_TARNISHED_BRICK)).save(recipeSaver, Minestuck.id("derse_tarnished_brick_wall_from_stonecutting"));
+		
+		//DERSE_CORE_BRICK
+		ShapedRecipeBuilder.shaped(RecipeCategory.BUILDING_BLOCKS, DERSE_CORE_BRICK, 4)
+				.define('#', DERSE_REFINED_CORE)
+				.pattern("##")
+				.pattern("##")
+				.unlockedBy("has_derse_refined_core", has(DERSE_REFINED_CORE));
+		SingleItemRecipeBuilder.stonecutting(Ingredient.of(DERSE_REFINED_CORE), RecipeCategory.BUILDING_BLOCKS, DERSE_CORE_BRICK)
+				.unlockedBy("has_derse_refined_core", has(DERSE_REFINED_CORE)).save(recipeSaver, Minestuck.id("derse_core_brick_from_stonecutting"));
+		
+		//DERSE_CRACKED_CORE_BRICK
+		SimpleCookingRecipeBuilder.smelting(Ingredient.of(DERSE_CORE_BRICK), RecipeCategory.BUILDING_BLOCKS, DERSE_CRACKED_CORE_BRICK, 0.1f, 200)
+				.unlockedBy("has_derse_core_brick", has(DERSE_CORE_BRICK)).save(recipeSaver);
+		
+		//DERSE_CORE_TILES
+		ShapedRecipeBuilder.shaped(RecipeCategory.BUILDING_BLOCKS, DERSE_CORE_TILES, 4)
+				.define('#', DERSE_CORE_BRICK)
+				.pattern("##")
+				.pattern("##")
+				.unlockedBy("has_derse_refined_core", has(DERSE_CORE_BRICK));
+		SingleItemRecipeBuilder.stonecutting(Ingredient.of(DERSE_CORE_BRICK), RecipeCategory.BUILDING_BLOCKS, DERSE_CORE_TILES)
+				.unlockedBy("has_derse_refined_core", has(DERSE_CORE_BRICK)).save(recipeSaver, Minestuck.id("derse_core_tiles_stonecutting"));
+		
+		//DERSE_CRACKED_CORE_TILES
+		SimpleCookingRecipeBuilder.smelting(Ingredient.of(DERSE_CORE_TILES), RecipeCategory.BUILDING_BLOCKS, DERSE_CRACKED_CORE_TILES, 0.1f, 200)
+				.unlockedBy("has_derse_core_brick", has(DERSE_CORE_BRICK)).save(recipeSaver);
+		
+		//DERSE_CHISELED_CORE
+		ShapedRecipeBuilder.shaped(RecipeCategory.BUILDING_BLOCKS, DERSE_CHISELED_CORE)
+				.define('#', DERSE_CORE_BRICK_SLAB)
+				.pattern("#")
+				.pattern("#")
+				.unlockedBy("has_derse_core_brick", has(DERSE_CORE_BRICK));
+		SingleItemRecipeBuilder.stonecutting(Ingredient.of(DERSE_CORE), RecipeCategory.BUILDING_BLOCKS, DERSE_CHISELED_CORE)
+				.unlockedBy("has_derse_core", has(DERSE_CORE)).save(recipeSaver, Minestuck.id("derse_chiseled_core_from_raw_stonecutting"));
+		SingleItemRecipeBuilder.stonecutting(Ingredient.of(DERSE_CORE_BRICK), RecipeCategory.BUILDING_BLOCKS, DERSE_CHISELED_CORE)
+				.unlockedBy("has_derse_core_brick", has(DERSE_CORE_BRICK)).save(recipeSaver, Minestuck.id("derse_chiseled_core_from_stonecutting"));
+		
+		//DERSE_CORE_BRICK_STAIRS
+		CommonRecipes.stairsRecipe(DERSE_CORE_BRICK_STAIRS, DERSE_CORE_BRICK).save(recipeSaver);
+		SingleItemRecipeBuilder.stonecutting(Ingredient.of(DERSE_CORE_BRICK), RecipeCategory.BUILDING_BLOCKS, DERSE_CORE_BRICK_STAIRS)
+				.unlockedBy("has_derse_core_brick", has(DERSE_CORE_BRICK)).save(recipeSaver, Minestuck.id("derse_core_brick_stairs_from_stonecutting"));
+		
+		//DERSE_CORE_BRICK_SLAB
+		CommonRecipes.slabRecipe(DERSE_CORE_BRICK_SLAB, DERSE_CORE_BRICK).save(recipeSaver);
+		SingleItemRecipeBuilder.stonecutting(Ingredient.of(DERSE_CORE_BRICK), RecipeCategory.BUILDING_BLOCKS, DERSE_CORE_BRICK_SLAB, 2)
+				.unlockedBy("has_derse_core_brick", has(DERSE_CORE_BRICK)).save(recipeSaver, Minestuck.id("derse_core_brick_slab_from_stonecutting"));
+		
+		//DERSE_CORE_BRICK_WALL
+		CommonRecipes.wallRecipe(DERSE_CORE_BRICK_WALL, DERSE_CORE_BRICK).save(recipeSaver);
+		SingleItemRecipeBuilder.stonecutting(Ingredient.of(DERSE_CORE_BRICK), RecipeCategory.BUILDING_BLOCKS, DERSE_CORE_BRICK_WALL)
+				.unlockedBy("has_derse_core_brick", has(DERSE_CORE_BRICK)).save(recipeSaver, Minestuck.id("derse_core_brick_wall_from_stonecutting"));
+		
+		//DERSE_CRACKED_CORE_BRICK_STAIRS
+		CommonRecipes.stairsRecipe(DERSE_CRACKED_CORE_BRICK_STAIRS, DERSE_CRACKED_CORE_BRICK).save(recipeSaver);
+		SingleItemRecipeBuilder.stonecutting(Ingredient.of(DERSE_CRACKED_CORE_BRICK), RecipeCategory.BUILDING_BLOCKS, DERSE_CRACKED_CORE_BRICK_STAIRS)
+				.unlockedBy("has_derse_cracked_core_brick", has(DERSE_CRACKED_CORE_BRICK)).save(recipeSaver, Minestuck.id("derse_cracked_core_brick_stairs_from_stonecutting"));
+		
+		//DERSE_CRACKED_CORE_BRICK_SLAB
+		CommonRecipes.slabRecipe(DERSE_CRACKED_CORE_BRICK_SLAB, DERSE_CRACKED_CORE_BRICK).save(recipeSaver);
+		SingleItemRecipeBuilder.stonecutting(Ingredient.of(DERSE_CRACKED_CORE_BRICK), RecipeCategory.BUILDING_BLOCKS, DERSE_CRACKED_CORE_BRICK_SLAB, 2)
+				.unlockedBy("has_derse_brick", has(DERSE_CRACKED_CORE_BRICK)).save(recipeSaver, Minestuck.id("derse_cracked_core_brick_slab_from_stonecutting"));
+		
+		//DERSE_CRACKED_CORE_BRICK_WALL
+		CommonRecipes.stairsRecipe(DERSE_CRACKED_CORE_BRICK_WALL, DERSE_CRACKED_CORE_BRICK).save(recipeSaver);
+		SingleItemRecipeBuilder.stonecutting(Ingredient.of(DERSE_CRACKED_CORE_BRICK), RecipeCategory.BUILDING_BLOCKS, DERSE_CRACKED_CORE_BRICK_WALL)
+				.unlockedBy("has_derse_brick", has(DERSE_CRACKED_CORE_BRICK)).save(recipeSaver, Minestuck.id("derse_cracked_core_brick_wall_from_stonecutting"));
+		
+		//DERSE_CORE_TILE_STAIRS
+		CommonRecipes.stairsRecipe(DERSE_CORE_TILE_STAIRS, DERSE_CORE_TILES).save(recipeSaver);
+		SingleItemRecipeBuilder.stonecutting(Ingredient.of(DERSE_CORE_TILES), RecipeCategory.BUILDING_BLOCKS, DERSE_CORE_TILE_STAIRS)
+				.unlockedBy("has_derse_brick", has(DERSE_CORE_TILES)).save(recipeSaver, Minestuck.id("derse_core_tile_stairs_from_stonecutting"));
+		
+		//DERSE_CORE_TILE_SLAB
+		CommonRecipes.slabRecipe(DERSE_CORE_TILE_SLAB, DERSE_CORE_TILES).save(recipeSaver);
+		SingleItemRecipeBuilder.stonecutting(Ingredient.of(DERSE_CORE_TILES), RecipeCategory.BUILDING_BLOCKS, DERSE_CORE_TILE_SLAB, 2)
+				.unlockedBy("has_derse_brick", has(DERSE_CORE_TILES)).save(recipeSaver, Minestuck.id("derse_core_tile_slab_from_stonecutting"));
+		
+		//DERSE_CORE_TILE_WALL
+		CommonRecipes.wallRecipe(DERSE_CORE_TILE_WALL, DERSE_CORE_TILES).save(recipeSaver);
+		SingleItemRecipeBuilder.stonecutting(Ingredient.of(DERSE_CORE_TILES), RecipeCategory.BUILDING_BLOCKS, DERSE_CORE_TILE_WALL)
+				.unlockedBy("has_derse_brick", has(DERSE_CORE_TILES)).save(recipeSaver, Minestuck.id("derse_core_tile_wall_from_stonecutting"));
+		
 		
 		addGristCosts(recipeSaver);
 		addCombinations(recipeSaver);
