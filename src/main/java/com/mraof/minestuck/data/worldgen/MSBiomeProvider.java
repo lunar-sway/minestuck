@@ -53,8 +53,8 @@ public final class MSBiomeProvider
 				.waterFogColor(0x050533)
 				.grassColorOverride(0xFFB300)
 				.foliageColorOverride(0xEBC100);
-		ambience.fogColor(0xCDCDFF)
-				.skyColor(0x7AA4FF);
+		ambience.fogColor(0x000000)
+				.skyColor(0x000000);
 		
 		return new Biome.BiomeBuilder().hasPrecipitation(false)
 				.temperature(0.5F)
@@ -72,8 +72,8 @@ public final class MSBiomeProvider
 		BiomeSpecialEffects.Builder ambience = new BiomeSpecialEffects.Builder()
 				.waterColor(0x3F76E4)
 				.waterFogColor(0x050533);
-		ambience.fogColor(0xCDCDFF)
-				.skyColor(0x7AA4FF);
+		ambience.fogColor(0x000000)
+				.skyColor(0x000000);
 		
 		return new Biome.BiomeBuilder().hasPrecipitation(false)
 				.temperature(0.5F).downfall(0.5F)

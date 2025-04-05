@@ -19,10 +19,13 @@ import net.neoforged.neoforge.network.PacketDistributor;
 public class MSDimensions
 {
 	
-	public static ResourceKey<Level> SKAIA = ResourceKey.create(Registries.DIMENSION, ResourceLocation.fromNamespaceAndPath(Minestuck.MOD_ID, "skaia"));
-	public static ResourceKey<Level> PROSPIT = ResourceKey.create(Registries.DIMENSION, ResourceLocation.fromNamespaceAndPath(Minestuck.MOD_ID, "prospit"));
-	public static ResourceKey<Level> DERSE = ResourceKey.create(Registries.DIMENSION, ResourceLocation.fromNamespaceAndPath(Minestuck.MOD_ID, "derse"));
-	public static final ResourceLocation LAND_EFFECTS = ResourceLocation.fromNamespaceAndPath(Minestuck.MOD_ID, "land");
+	public static ResourceKey<Level> SKAIA = ResourceKey.create(Registries.DIMENSION, Minestuck.id("skaia"));
+	public static ResourceKey<Level> PROSPIT = ResourceKey.create(Registries.DIMENSION,  Minestuck.id("prospit"));
+	public static ResourceKey<Level> DERSE = ResourceKey.create(Registries.DIMENSION,  Minestuck.id("derse"));
+	public static final ResourceLocation LAND_EFFECTS =  Minestuck.id("land");
+	public static final ResourceLocation PROSPIT_EFFECTS =  Minestuck.id("prospit_effects");
+	public static final ResourceLocation DERSE_EFFECTS =  Minestuck.id("derse_effects");
+	public static final ResourceLocation VEIL_EFFECTS =  Minestuck.id("veil_effects");
 	
 	public static boolean isLandDimension(MinecraftServer server, ResourceKey<Level> levelKey)
 	{
