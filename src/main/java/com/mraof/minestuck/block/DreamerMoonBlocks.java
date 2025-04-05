@@ -39,7 +39,7 @@ public class DreamerMoonBlocks
 	
 	public static final ItemBlockPair<Block,BlockItem> PROSPIT_GILDED_PATH = ItemBlockPair.register("prospit_gilded_path",
 			() -> new Block(Block.Properties.ofFullCopy(Blocks.DIRT_PATH)
-					.mapColor(MapColor.COLOR_YELLOW)
+					.mapColor(MapColor.GOLD)
 					.instrument(NoteBlockInstrument.XYLOPHONE)
 					.sound(SoundType.COPPER_GRATE)
 					.requiresCorrectToolForDrops()
@@ -94,7 +94,7 @@ public class DreamerMoonBlocks
 	
 	public static final ItemBlockPair<Block,BlockItem> PROSPIT_CORE = ItemBlockPair.register("prospit_core",
 			() -> new Block(Block.Properties.ofFullCopy(Blocks.DEEPSLATE)
-					.mapColor(MapColor.SAND)
+					.mapColor(MapColor.TERRACOTTA_YELLOW)
 					.instrument(NoteBlockInstrument.BANJO)
 					.sound(SoundType.HEAVY_CORE)
 			));
@@ -107,7 +107,7 @@ public class DreamerMoonBlocks
 	
 	public static final ItemBlockPair<Block,BlockItem> PROSPIT_ROUGH_CORE = ItemBlockPair.register("prospit_rough_core",
 			() -> new Block(Block.Properties.ofFullCopy(Blocks.COBBLED_DEEPSLATE)
-					.mapColor(MapColor.SAND)
+					.mapColor(MapColor.TERRACOTTA_RED)
 					.instrument(NoteBlockInstrument.BANJO)
 					.sound(SoundType.HEAVY_CORE)
 			));
@@ -120,7 +120,7 @@ public class DreamerMoonBlocks
 	
 	public static final ItemBlockPair<Block,BlockItem> PROSPIT_REFINED_CORE = ItemBlockPair.register("prospit_refined_core",
 			() -> new Block(Block.Properties.ofFullCopy(Blocks.POLISHED_DEEPSLATE)
-					.mapColor(MapColor.SAND)
+					.mapColor(MapColor.TERRACOTTA_RED)
 					.instrument(NoteBlockInstrument.BANJO)
 					.sound(SoundType.HEAVY_CORE)
 			));
@@ -202,32 +202,32 @@ public class DreamerMoonBlocks
 			() -> new Block(Block.Properties.ofFullCopy(PROSPIT_CORE.asBlock())));
 	
 	public static final ItemBlockPair<StairBlock,BlockItem> PROSPIT_CORE_BRICK_STAIRS = ItemBlockPair.register("prospit_core_brick_stairs",
-			() -> new StairBlock(PROSPIT_BRICK.asBlock().defaultBlockState(), Block.Properties.ofFullCopy(PROSPIT_BRICK.asBlock())));
+			() -> new StairBlock(PROSPIT_BRICK.asBlock().defaultBlockState(), Block.Properties.ofFullCopy(PROSPIT_CORE_BRICK.asBlock())));
 	public static final ItemBlockPair<SlabBlock,BlockItem> PROSPIT_CORE_BRICK_SLAB = ItemBlockPair.register("prospit_core_brick_slab",
-			() -> new SlabBlock(Block.Properties.ofFullCopy(PROSPIT_BRICK.asBlock())));
+			() -> new SlabBlock(Block.Properties.ofFullCopy(PROSPIT_CORE_BRICK.asBlock())));
 	public static final ItemBlockPair<WallBlock,BlockItem> PROSPIT_CORE_BRICK_WALL = ItemBlockPair.register("prospit_core_brick_wall",
-			() -> new WallBlock(Block.Properties.ofFullCopy(PROSPIT_BRICK.asBlock())));
+			() -> new WallBlock(Block.Properties.ofFullCopy(PROSPIT_CORE_BRICK.asBlock())));
 	
 	public static final ItemBlockPair<StairBlock,BlockItem> PROSPIT_CRACKED_CORE_BRICK_STAIRS = ItemBlockPair.register("prospit_cracked_core_brick_stairs",
-			() -> new StairBlock(PROSPIT_CRACKED_BRICK.asBlock().defaultBlockState(), Block.Properties.ofFullCopy(PROSPIT_CRACKED_BRICK.asBlock())));
+			() -> new StairBlock(PROSPIT_CRACKED_BRICK.asBlock().defaultBlockState(), Block.Properties.ofFullCopy(PROSPIT_CRACKED_CORE_BRICK.asBlock())));
 	public static final ItemBlockPair<SlabBlock,BlockItem> PROSPIT_CRACKED_CORE_BRICK_SLAB = ItemBlockPair.register("prospit_cracked_core_brick_slab",
-			() -> new SlabBlock(Block.Properties.ofFullCopy(PROSPIT_CRACKED_BRICK.asBlock())));
+			() -> new SlabBlock(Block.Properties.ofFullCopy(PROSPIT_CRACKED_CORE_BRICK.asBlock())));
 	public static final ItemBlockPair<WallBlock,BlockItem> PROSPIT_CRACKED_CORE_BRICK_WALL = ItemBlockPair.register("prospit_cracked_core_brick_wall",
-			() -> new WallBlock(Block.Properties.ofFullCopy(PROSPIT_CRACKED_BRICK.asBlock())));
+			() -> new WallBlock(Block.Properties.ofFullCopy(PROSPIT_CRACKED_CORE_BRICK.asBlock())));
 	
 	public static final ItemBlockPair<StairBlock,BlockItem> PROSPIT_CORE_TILE_STAIRS = ItemBlockPair.register("prospit_core_tile_stairs",
-			() -> new StairBlock(PROSPIT_CORE_TILES.asBlock().defaultBlockState(), Block.Properties.ofFullCopy(PROSPIT_TARNISHED_BRICK.asBlock())));
+			() -> new StairBlock(PROSPIT_CORE_TILES.asBlock().defaultBlockState(), Block.Properties.ofFullCopy(PROSPIT_CORE_TILES.asBlock())));
 	public static final ItemBlockPair<SlabBlock,BlockItem> PROSPIT_CORE_TILE_SLAB = ItemBlockPair.register("prospit_core_tile_slab",
-			() -> new SlabBlock(Block.Properties.ofFullCopy(PROSPIT_TARNISHED_BRICK.asBlock())));
+			() -> new SlabBlock(Block.Properties.ofFullCopy(PROSPIT_CORE_TILES.asBlock())));
 	public static final ItemBlockPair<WallBlock,BlockItem> PROSPIT_CORE_TILE_WALL = ItemBlockPair.register("prospit_core_tile_wall",
-			() -> new WallBlock(Block.Properties.ofFullCopy(PROSPIT_TARNISHED_BRICK.asBlock())));
+			() -> new WallBlock(Block.Properties.ofFullCopy(PROSPIT_CORE_TILES.asBlock())));
 	
 	
 	//DERSE
 
 	public static final ItemBlockPair<Block,BlockItem> DERSE_PLATING = ItemBlockPair.register("derse_plating",
 			() -> new Block(Block.Properties.ofFullCopy(Blocks.DIRT)
-					.mapColor(MapColor.GOLD)
+					.mapColor(MapColor.COLOR_PURPLE)
 					.instrument(NoteBlockInstrument.XYLOPHONE)
 					.sound(SoundType.COPPER_GRATE)
 					.requiresCorrectToolForDrops()
@@ -235,7 +235,7 @@ public class DreamerMoonBlocks
 	
 	public static final ItemBlockPair<Block,BlockItem> DERSE_PLATED_PATH = ItemBlockPair.register("derse_plated_path",
 			() -> new Block(Block.Properties.ofFullCopy(Blocks.DIRT_PATH)
-					.mapColor(MapColor.COLOR_YELLOW)
+					.mapColor(MapColor.COLOR_PURPLE)
 					.instrument(NoteBlockInstrument.XYLOPHONE)
 					.sound(SoundType.COPPER_GRATE)
 					.requiresCorrectToolForDrops()
@@ -243,7 +243,7 @@ public class DreamerMoonBlocks
 	
 	public static final ItemBlockPair<Block,BlockItem> DERSE_METALLITH = ItemBlockPair.register("derse_metallith",
 			() -> new Block(Block.Properties.ofFullCopy(Blocks.STONE)
-					.mapColor(MapColor.SAND)
+					.mapColor(MapColor.COLOR_MAGENTA)
 					.instrument(NoteBlockInstrument.BANJO)
 					.sound(SoundType.COPPER_BULB)
 					.requiresCorrectToolForDrops()
@@ -261,7 +261,7 @@ public class DreamerMoonBlocks
 	
 	public static final ItemBlockPair<Block,BlockItem> DERSE_ROUGH_METALLITH = ItemBlockPair.register("derse_rough_metallith",
 			() -> new Block(Block.Properties.ofFullCopy(Blocks.COBBLESTONE)
-					.mapColor(MapColor.SAND)
+					.mapColor(MapColor.COLOR_MAGENTA)
 					.instrument(NoteBlockInstrument.BANJO)
 					.sound(SoundType.COPPER_BULB)
 			));
@@ -274,7 +274,7 @@ public class DreamerMoonBlocks
 	
 	public static final ItemBlockPair<Block,BlockItem> DERSE_REFINED_METALLITH = ItemBlockPair.register("derse_refined_metallith",
 			() -> new Block(Block.Properties.ofFullCopy(Blocks.SMOOTH_STONE)
-					.mapColor(MapColor.SAND)
+					.mapColor(MapColor.COLOR_MAGENTA)
 					.instrument(NoteBlockInstrument.BANJO)
 					.sound(SoundType.COPPER_BULB)
 			));
@@ -287,7 +287,7 @@ public class DreamerMoonBlocks
 	
 	public static final ItemBlockPair<Block,BlockItem> DERSE_CORE = ItemBlockPair.register("derse_core",
 			() -> new Block(Block.Properties.ofFullCopy(Blocks.DEEPSLATE)
-					.mapColor(MapColor.SAND)
+					.mapColor(MapColor.TERRACOTTA_CYAN)
 					.instrument(NoteBlockInstrument.BANJO)
 					.sound(SoundType.HEAVY_CORE)
 			));
@@ -300,7 +300,7 @@ public class DreamerMoonBlocks
 	
 	public static final ItemBlockPair<Block,BlockItem> DERSE_ROUGH_CORE = ItemBlockPair.register("derse_rough_core",
 			() -> new Block(Block.Properties.ofFullCopy(Blocks.COBBLED_DEEPSLATE)
-					.mapColor(MapColor.SAND)
+					.mapColor(MapColor.TERRACOTTA_CYAN)
 					.instrument(NoteBlockInstrument.BANJO)
 					.sound(SoundType.HEAVY_CORE)
 			));
@@ -313,7 +313,7 @@ public class DreamerMoonBlocks
 	
 	public static final ItemBlockPair<Block,BlockItem> DERSE_REFINED_CORE = ItemBlockPair.register("derse_refined_core",
 			() -> new Block(Block.Properties.ofFullCopy(Blocks.POLISHED_DEEPSLATE)
-					.mapColor(MapColor.SAND)
+					.mapColor(MapColor.TERRACOTTA_CYAN)
 					.instrument(NoteBlockInstrument.BANJO)
 					.sound(SoundType.HEAVY_CORE)
 			));
@@ -396,24 +396,24 @@ public class DreamerMoonBlocks
 			() -> new Block(Block.Properties.ofFullCopy(DERSE_CORE.asBlock())));
 	
 	public static final ItemBlockPair<StairBlock,BlockItem> DERSE_CORE_BRICK_STAIRS = ItemBlockPair.register("derse_core_brick_stairs",
-			() -> new StairBlock(DERSE_BRICK.asBlock().defaultBlockState(), Block.Properties.ofFullCopy(DERSE_BRICK.asBlock())));
+			() -> new StairBlock(DERSE_BRICK.asBlock().defaultBlockState(), Block.Properties.ofFullCopy(DERSE_CORE_BRICK.asBlock())));
 	public static final ItemBlockPair<SlabBlock,BlockItem> DERSE_CORE_BRICK_SLAB = ItemBlockPair.register("derse_core_brick_slab",
-			() -> new SlabBlock(Block.Properties.ofFullCopy(DERSE_BRICK.asBlock())));
+			() -> new SlabBlock(Block.Properties.ofFullCopy(DERSE_CORE_BRICK.asBlock())));
 	public static final ItemBlockPair<WallBlock,BlockItem> DERSE_CORE_BRICK_WALL = ItemBlockPair.register("derse_core_brick_wall",
-			() -> new WallBlock(Block.Properties.ofFullCopy(DERSE_BRICK.asBlock())));
+			() -> new WallBlock(Block.Properties.ofFullCopy(DERSE_CORE_BRICK.asBlock())));
 	
 	public static final ItemBlockPair<StairBlock,BlockItem> DERSE_CRACKED_CORE_BRICK_STAIRS = ItemBlockPair.register("derse_cracked_core_brick_stairs",
-			() -> new StairBlock(DERSE_CRACKED_BRICK.asBlock().defaultBlockState(), Block.Properties.ofFullCopy(DERSE_CRACKED_BRICK.asBlock())));
+			() -> new StairBlock(DERSE_CRACKED_BRICK.asBlock().defaultBlockState(), Block.Properties.ofFullCopy(DERSE_CRACKED_CORE_BRICK.asBlock())));
 	public static final ItemBlockPair<SlabBlock,BlockItem> DERSE_CRACKED_CORE_BRICK_SLAB = ItemBlockPair.register("derse_cracked_core_brick_slab",
-			() -> new SlabBlock(Block.Properties.ofFullCopy(DERSE_CRACKED_BRICK.asBlock())));
+			() -> new SlabBlock(Block.Properties.ofFullCopy(DERSE_CRACKED_CORE_BRICK.asBlock())));
 	public static final ItemBlockPair<WallBlock,BlockItem> DERSE_CRACKED_CORE_BRICK_WALL = ItemBlockPair.register("derse_cracked_core_brick_wall",
-			() -> new WallBlock(Block.Properties.ofFullCopy(DERSE_CRACKED_BRICK.asBlock())));
+			() -> new WallBlock(Block.Properties.ofFullCopy(DERSE_CRACKED_CORE_BRICK.asBlock())));
 	
 	public static final ItemBlockPair<StairBlock,BlockItem> DERSE_CORE_TILE_STAIRS = ItemBlockPair.register("derse_core_tile_stairs",
-			() -> new StairBlock(DERSE_CORE_TILES.asBlock().defaultBlockState(), Block.Properties.ofFullCopy(DERSE_TARNISHED_BRICK.asBlock())));
+			() -> new StairBlock(DERSE_CORE_TILES.asBlock().defaultBlockState(), Block.Properties.ofFullCopy(DERSE_CORE_TILES.asBlock())));
 	public static final ItemBlockPair<SlabBlock,BlockItem> DERSE_CORE_TILE_SLAB = ItemBlockPair.register("derse_core_tile_slab",
-			() -> new SlabBlock(Block.Properties.ofFullCopy(DERSE_TARNISHED_BRICK.asBlock())));
+			() -> new SlabBlock(Block.Properties.ofFullCopy(DERSE_CORE_TILES.asBlock())));
 	public static final ItemBlockPair<WallBlock,BlockItem> DERSE_CORE_TILE_WALL = ItemBlockPair.register("derse_core_tile_wall",
-			() -> new WallBlock(Block.Properties.ofFullCopy(DERSE_TARNISHED_BRICK.asBlock())));
+			() -> new WallBlock(Block.Properties.ofFullCopy(DERSE_CORE_TILES.asBlock())));
 	
 }
