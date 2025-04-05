@@ -1476,6 +1476,8 @@ public final class MSCreativeTabs
 		output.accept(DreamerMoonBlocks.PROSPIT_PILLAR.asItem());
 		output.accept(DreamerMoonBlocks.PROSPIT_DOOR.asItem());
 		output.accept(DreamerMoonBlocks.PROSPIT_TRAPDOOR.asItem());
+		output.accept(DreamerMoonBlocks.PROSPIT_FERROSTRATA_PRESSURE_PLATE.asItem());
+		output.accept(DreamerMoonBlocks.PROSPIT_FERROSTRATA_BUTTON.asItem());
 		output.accept(DreamerMoonBlocks.PROSPIT_BRICK.asItem());
 		output.accept(DreamerMoonBlocks.PROSPIT_CRACKED_BRICK.asItem());
 		output.accept(DreamerMoonBlocks.PROSPIT_CHISELED_BRICK.asItem());
@@ -1543,6 +1545,8 @@ public final class MSCreativeTabs
 		output.accept(DreamerMoonBlocks.DERSE_PILLAR.asItem());
 		output.accept(DreamerMoonBlocks.DERSE_DOOR.asItem());
 		output.accept(DreamerMoonBlocks.DERSE_TRAPDOOR.asItem());
+		output.accept(DreamerMoonBlocks.DERSE_METALLITH_PRESSURE_PLATE.asItem());
+		output.accept(DreamerMoonBlocks.DERSE_METALLITH_BUTTON.asItem());
 		output.accept(DreamerMoonBlocks.DERSE_BRICK.asItem());
 		output.accept(DreamerMoonBlocks.DERSE_CRACKED_BRICK.asItem());
 		output.accept(DreamerMoonBlocks.DERSE_CHISELED_BRICK.asItem());
