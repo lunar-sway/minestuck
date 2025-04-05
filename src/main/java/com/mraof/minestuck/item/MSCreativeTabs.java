@@ -1467,10 +1467,6 @@ public final class MSCreativeTabs
 		output.accept(DreamerMoonBlocks.PROSPIT_REFINED_CORE_STAIRS.asItem());
 		output.accept(DreamerMoonBlocks.PROSPIT_REFINED_CORE_SLAB.asItem());
 		output.accept(DreamerMoonBlocks.PROSPIT_REFINED_CORE_WALL.asItem());
-		output.accept(DreamerMoonBlocks.PROSPIT_FERROSTRATA_CRUXITE_ORE.asItem());
-		output.accept(DreamerMoonBlocks.PROSPIT_FERROSTRATA_URANIUM_ORE.asItem());
-		output.accept(DreamerMoonBlocks.PROSPIT_CORE_CRUXITE_ORE.asItem());
-		output.accept(DreamerMoonBlocks.PROSPIT_CORE_URANIUM_ORE.asItem());
 		output.accept(DreamerMoonBlocks.PROSPIT_CABLE.asItem());
 		output.accept(DreamerMoonBlocks.PROSPIT_THICK_CABLE.asItem());
 		output.accept(DreamerMoonBlocks.PROSPIT_PILLAR.asItem());
@@ -1536,10 +1532,6 @@ public final class MSCreativeTabs
 		output.accept(DreamerMoonBlocks.DERSE_REFINED_CORE_STAIRS.asItem());
 		output.accept(DreamerMoonBlocks.DERSE_REFINED_CORE_SLAB.asItem());
 		output.accept(DreamerMoonBlocks.DERSE_REFINED_CORE_WALL.asItem());
-		output.accept(DreamerMoonBlocks.DERSE_METALLITH_CRUXITE_ORE.asItem());
-		output.accept(DreamerMoonBlocks.DERSE_METALLITH_URANIUM_ORE.asItem());
-		output.accept(DreamerMoonBlocks.DERSE_CORE_CRUXITE_ORE.asItem());
-		output.accept(DreamerMoonBlocks.DERSE_CORE_URANIUM_ORE.asItem());
 		output.accept(DreamerMoonBlocks.DERSE_CABLE.asItem());
 		output.accept(DreamerMoonBlocks.DERSE_THICK_CABLE.asItem());
 		output.accept(DreamerMoonBlocks.DERSE_PILLAR.asItem());
