@@ -2,7 +2,7 @@ package com.mraof.minestuck.command;
 
 import com.mojang.brigadier.CommandDispatcher;
 import com.mojang.brigadier.arguments.IntegerArgumentType;
-import com.mraof.minestuck.world.gen.structure.wfc.ProspitStructure;
+import com.mraof.minestuck.world.gen.structure.wfc.ProspitWFCDemoStructure;
 import com.mraof.minestuck.world.gen.structure.wfc.WFC;
 import com.mraof.minestuck.world.gen.structure.wfc.WFCData;
 import com.mraof.minestuck.world.gen.structure.wfc.WFCUtil;
@@ -79,12 +79,12 @@ public final class WFCPerformanceTestCommand
 		WFCUtil.PerformanceMeasurer performanceMeasurer = new WFCUtil.PerformanceMeasurer();
 		
 		PositionalRandomFactory randomFactory = RandomSource.create(1L).forkPositional();
-		WFCUtil.PositionTransform middleTransform = new WFCUtil.PositionTransform(BlockPos.ZERO, ProspitStructure.CELL_SIZE);
+		WFCUtil.PositionTransform middleTransform = new WFCUtil.PositionTransform(BlockPos.ZERO, ProspitWFCDemoStructure.CELL_SIZE);
 		
-		WFCData.EntryPalette centerPalette = paletteLookup.getOrThrow(ProspitStructure.Palettes.NORMAL).value().build(ProspitStructure.CELL_SIZE, templateManager);
-		WFCData.EntryPalette borderPalette = paletteLookup.getOrThrow(ProspitStructure.Palettes.BORDER).value().build(ProspitStructure.CELL_SIZE, templateManager);
+		WFCData.EntryPalette centerPalette = paletteLookup.getOrThrow(ProspitWFCDemoStructure.Palettes.NORMAL).value().build(ProspitWFCDemoStructure.CELL_SIZE, templateManager);
+		WFCData.EntryPalette borderPalette = paletteLookup.getOrThrow(ProspitWFCDemoStructure.Palettes.BORDER).value().build(ProspitWFCDemoStructure.CELL_SIZE, templateManager);
 		
-		WFC.InfiniteModularGeneration.generateModule(middleTransform, ProspitStructure.WFC_DIMENSIONS,
+		WFC.InfiniteModularGeneration.generateModule(middleTransform, ProspitWFCDemoStructure.WFC_DIMENSIONS,
 				centerPalette, borderPalette, randomFactory, DUMMY_PIECE_ACCESSOR, performanceMeasurer);
 		
 		System.out.printf("Measured performance: %s%n", performanceMeasurer);

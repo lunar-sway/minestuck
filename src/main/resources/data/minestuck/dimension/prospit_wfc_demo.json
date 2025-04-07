@@ -1,12 +1,12 @@
 {
-    "type": "minestuck:prospit",
+    "type": "minestuck:prospit_wfc_demo",
     "generator": {
         "type": "noise",
         "seed": 0,
-        "settings": "minestuck:prospit",
+        "settings": "minestuck:prospit_wfc_demo",
         "biome_source": {
             "type":  "minecraft:fixed",
-            "biome": "minestuck:prospit"
+            "biome": "minestuck:prospit_wfc_demo"
         }
     }
 }

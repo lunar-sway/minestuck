@@ -26,7 +26,7 @@ import static com.mraof.minestuck.world.gen.structure.MSStructures.asType;
 
 @ParametersAreNonnullByDefault
 @MethodsReturnNonnullByDefault
-public final class ProspitStructure
+public final class ProspitWFCDemoStructure
 {
 	public static final WFCUtil.CellSize CELL_SIZE = new WFCUtil.CellSize(8, 8);
 	public static final int WIDTH_IN_PIECES = 16, HEIGHT_IN_PIECES = 14;
@@ -38,7 +38,7 @@ public final class ProspitStructure
 	{
 	}
 	
-	public static final ResourceKey<Structure> STRUCTURE = ResourceKey.create(Registries.STRUCTURE, Minestuck.id("prospit_terrain"));
+	public static final ResourceKey<Structure> STRUCTURE = ResourceKey.create(Registries.STRUCTURE, Minestuck.id("prospit_wfc_demo"));
 	
 	public static final Supplier<StructurePlacementType<FixedPlacement>> FIXED_PLACEMENT_TYPE = MSStructures.PLACEMENT_REGISTER.register("fixed",
 			() -> () -> FixedPlacement.CODEC);
@@ -65,7 +65,7 @@ public final class ProspitStructure
 		}
 	}
 	
-	public static final Supplier<StructureType<TerrainStructure>> STRUCTURE_TYPE = MSStructures.TYPE_REGISTER.register("prospit_terrain",
+	public static final Supplier<StructureType<TerrainStructure>> STRUCTURE_TYPE = MSStructures.TYPE_REGISTER.register("prospit_wfc_demo",
 			() -> asType(TerrainStructure.CODEC));
 	
 	public static final class TerrainStructure extends Structure
@@ -101,7 +101,7 @@ public final class ProspitStructure
 			WFCData.EntryPalette centerPalette = paletteLookup.getOrThrow(centerPaletteKey).value().build(CELL_SIZE, templateManager);
 			WFCData.EntryPalette borderPalette = paletteLookup.getOrThrow(Palettes.BORDER).value().build(CELL_SIZE, templateManager);
 			
-			WFC.InfiniteModularGeneration.generateModule(middleTransform, ProspitStructure.WFC_DIMENSIONS,
+			WFC.InfiniteModularGeneration.generateModule(middleTransform, ProspitWFCDemoStructure.WFC_DIMENSIONS,
 					centerPalette, borderPalette, randomFactory, piecesBuilder, null);
 		}
 	}

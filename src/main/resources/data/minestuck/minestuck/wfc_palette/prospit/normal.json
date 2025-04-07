@@ -15,7 +15,7 @@
     { "prototype": "minestuck:prospit/t_corridor", "weight": 4 },
     { "prototype": "minestuck:prospit/t_corridor_window", "weight": 5 },
     {
-      "prototype": { "type": "template", "template": "minestuck:prospit/room" },
+      "prototype": { "type": "template", "template": "minestuck:prospit_wfc_demo/room" },
       "weight": 1
     },
     { "prototype": "minestuck:prospit/interior_stairs", "weight": 4 },

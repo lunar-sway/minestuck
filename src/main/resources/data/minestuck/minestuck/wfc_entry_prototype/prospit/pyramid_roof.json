@@ -1,5 +1,5 @@
 {
   "type": "template",
-  "template": "minestuck:prospit/pyramid_roof",
+  "template": "minestuck:prospit_wfc_demo/pyramid_roof",
   "symmetry": "symmetric"
 }
