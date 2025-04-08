@@ -8,6 +8,7 @@ import com.mraof.minestuck.blockentity.machine.AlchemiterBlockEntity;
 import com.mraof.minestuck.blockentity.machine.PunchDesignixBlockEntity;
 import com.mraof.minestuck.blockentity.redstone.*;
 import com.mraof.minestuck.client.gui.captchalouge.*;
+import com.mraof.minestuck.client.gui.computer.ComputerScreen;
 import com.mraof.minestuck.entity.dialogue.Dialogue;
 import com.mraof.minestuck.inventory.MSMenuTypes;
 import com.mraof.minestuck.inventory.captchalogue.Modus;

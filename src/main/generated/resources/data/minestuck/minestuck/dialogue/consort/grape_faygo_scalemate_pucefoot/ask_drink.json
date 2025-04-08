@@ -1,0 +1,53 @@
+{
+  "node": {
+    "animation": {},
+    "gui": "minestuck:textures/gui/dialogue/dialogue.png",
+    "message": "minestuck.dialogue.consort.grape_faygo_scalemate_pucefoot.ask_drink",
+    "responses": [
+      {
+        "condition": {
+          "type": "minestuck:always_true"
+        },
+        "hide_if_failed": true,
+        "message": "minestuck.dialogue.consort.grape_faygo_scalemate_pucefoot.ask_drink.scalemate_confused",
+        "next_dialogue": "minestuck:consort/grape_faygo_scalemate_pucefoot/explain_scalemate",
+        "triggers": []
+      },
+      {
+        "condition": {
+          "type": "minestuck:player_item",
+          "item": "minestuck:grape_faygo"
+        },
+        "hide_if_failed": false,
+        "message": "minestuck.dialogue.consort.grape_faygo_scalemate_pucefoot.ask_drink.exchange",
+        "next_dialogue": {
+          "id": "minestuck:consort/grape_faygo_scalemate_pucefoot/happy",
+          "player_message": "minestuck.dialogue.consort.grape_faygo_scalemate_pucefoot.ask_drink.yes.reply",
+          "set_as_entrypoint": false
+        },
+        "triggers": [
+          {
+            "type": "minestuck:take_item",
+            "item": "minestuck:grape_faygo"
+          },
+          {
+            "type": "minestuck:give_item",
+            "item": "minestuck:scalemate_pucefoot"
+          },
+          {
+            "type": "minestuck:set_dialogue",
+            "new_path": "minestuck:consort/grape_faygo_scalemate_pucefoot/satisfied"
+          }
+        ]
+      },
+      {
+        "condition": {
+          "type": "minestuck:always_true"
+        },
+        "hide_if_failed": true,
+        "message": "minestuck.dialogue.consort.grape_faygo_scalemate_pucefoot.ask_drink.no",
+        "triggers": []
+      }
+    ]
+  }
+}

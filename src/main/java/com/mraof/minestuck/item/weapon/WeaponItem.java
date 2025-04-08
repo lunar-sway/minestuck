@@ -51,7 +51,7 @@ public class WeaponItem extends TieredItem
 	
 	public WeaponItem(Builder builder, Properties properties)
 	{
-		super(builder.tier, properties);
+		super(builder.tier, builder.updateProperties(properties));
 		toolTypes = builder.toolType;
 		toolActions = builder.toolActions;
 		efficiency = builder.efficiency;
@@ -64,24 +64,6 @@ public class WeaponItem extends TieredItem
 		useAction = builder.useAction;
 		itemUsageEffects = ImmutableList.copyOf(builder.itemUsageEffects);
 		tickEffects = ImmutableList.copyOf(builder.tickEffects);
-		
-		properties.attributes(DiggerItem.createAttributes(builder.tier, builder.attackDamage, builder.attackSpeed));
-		
-		ArrayList<TagKey<Block>> mineableBlocks = new ArrayList<>();
-		for(MSToolType toolType : toolTypes)
-		{
-			if(toolType.mineableBlocks() != null)
-				mineableBlocks.add(toolType.mineableBlocks());
-			toolActions.addAll(List.of(toolType.abilities()));
-		}
-		if(!mineableBlocks.isEmpty())
-			properties.component(DataComponents.TOOL, createToolProperties(builder.tier, mineableBlocks));
-	}
-	
-	public static Tool createToolProperties(Tier tier, List<TagKey<Block>> mineableBlocks) {
-		
-		return new Tool(Streams.concat(mineableBlocks.stream().map(tag -> Tool.Rule.minesAndDrops(tag, tier.getSpeed())), Stream.of(Tool.Rule.deniesDrops(tier.getIncorrectBlocksForDrops()))).toList(),
-				1.0F, 1);
 	}
 	
 	public boolean canAttackBlock(BlockState state, Level level, BlockPos pos, Player player)
@@ -205,6 +187,8 @@ public class WeaponItem extends TieredItem
 		public Builder set(MSToolType... toolTypes)
 		{
 			this.toolType = List.of(toolTypes);
+			for(MSToolType toolType : this.toolType)
+				toolActions.addAll(List.of(toolType.abilities()));
 			return this;
 		}
 		
@@ -280,5 +264,25 @@ public class WeaponItem extends TieredItem
 			set(ItemRightClickEffect.ACTIVE_HAND);
 			return this;
 		}
+		
+		private Properties updateProperties(Properties properties)
+		{
+			properties.attributes(DiggerItem.createAttributes(this.tier, this.attackDamage, this.attackSpeed));
+			ArrayList<TagKey<Block>> mineableBlocks = new ArrayList<>();
+			for(MSToolType toolType : this.toolType)
+			{
+				if(toolType.mineableBlocks() != null)
+					mineableBlocks.add(toolType.mineableBlocks());
+			}
+			if(!mineableBlocks.isEmpty())
+				properties.component(DataComponents.TOOL, createToolProperties(this.tier, mineableBlocks));
+			return properties;
+		}
+	}
+	
+	private static Tool createToolProperties(Tier tier, List<TagKey<Block>> mineableBlocks)
+	{
+		return new Tool(Streams.concat(mineableBlocks.stream().map(tag -> Tool.Rule.minesAndDrops(tag, tier.getSpeed())), Stream.of(Tool.Rule.deniesDrops(tier.getIncorrectBlocksForDrops()))).toList(),
+				1.0F, 1);
 	}
 }

@@ -6,6 +6,7 @@ import com.mraof.minestuck.data.dialogue.DialogueProvider.NodeBuilder;
 import com.mraof.minestuck.data.dialogue.DialogueProvider.NodeSelectorBuilder;
 import com.mraof.minestuck.data.dialogue.DialogueProvider.ResponseBuilder;
 import com.mraof.minestuck.entity.consort.EnumConsort;
+import com.mraof.minestuck.entity.dialogue.DialogueAnimationData;
 import com.mraof.minestuck.entity.dialogue.DialogueMessage;
 import com.mraof.minestuck.entity.dialogue.RandomlySelectableDialogue;
 import com.mraof.minestuck.entity.dialogue.Trigger;
@@ -83,6 +84,46 @@ public final class CarapacianSoldierDialogue
 		
 		provider.addRandomlySelectable("propaganda", defaultWeight(all(isInSkaia(), isDersite())),
 				descriptionNode(l.defaultKeyMsg("They already knew that the propaganda surrounding Prospitians was fake but it was still surprising to see that they didn't have horns or cool fangs or blood red eyes. Kind of a bummer honestly.")));
+		
+		provider.addRandomlySelectable("teeth", defaultWeight(alwaysTrue()),
+				descriptionNode(l.defaultKeyMsg("They find it curious that certain carapacians have sharp jagged teeth when the vast majority have rounded ones.")));
+		
+		provider.addRandomlySelectable("foreign_land", defaultWeight(alwaysTrue()),
+				descriptionNode(l.defaultKeyMsg("They describe how rare it is for a Prospitian to visit Derse or a Dersite to visit Prospit. The presence of someone from the other kingdom can be unnerving.")));
+		
+		provider.addRandomlySelectable("poor_frogs", defaultWeight(isProspitian()),
+				descriptionNode(l.defaultKeyMsg("They lament how Dersites treat frogs and frog paraphernalia. Croaks and ribbits are in the top 5 best sounds to exist, why would you want to squish an animal that makes those sorts of sounds?")));
+		
+		provider.addRandomlySelectable("meditative_travel", defaultWeight(isDersite()),
+				descriptionNode(l.defaultKeyMsg("They say that not everyone enjoys how far the travel is from Derse to Skaia, but that they do. It can be nice to just close your eyes while in the shuttle or stare out into the inky blackness.")));
+		
+		provider.addRandomlySelectable("skaia_dense", defaultWeight(alwaysTrue()),
+				descriptionNode(l.defaultKeyMsg("They comment on how you can't really see the Battlefield from beyond Skaia. And when you are on the Battlefield you can't see much of the Medium.")));
+		
+		provider.addRandomlySelectable("remember_cloning", defaultWeight(alwaysTrue()), new FolderedDialogue(builder ->
+		{
+			var goodToKnow = l.subMsg("good_to_know", "Oh, good to know.");
+			
+			var made = builder.add("made", descriptionNode(l.defaultKeyMsg("Made."))
+					.animation(DialogueAnimationData.ANGRY_EMOTION)
+					.addDescription(l.subMsg("made.desc", "They clearly don't want to talk about this more.")));
+			
+			var veil = builder.add("veil", new ChainBuilder()
+					.node(descriptionNode(l.defaultKeyMsg("They ask if you have seen the ring of asteroids orbiting Skaia. That is the Veil.")))
+					.node(descriptionNode(l.defaultKeyMsg("It is not uncommon for the asteroids in the Veil to have buildings on them, built onto the surface. Some even contain sprawling complexes under the surface.")))
+					.node(descriptionNode(l.defaultKeyMsg("Included amongst those facilities are laboratories where carapacians from both kingdoms get made."))
+							.addResponse(new ResponseBuilder(l.subMsg("huh", "\"Made\"?"))
+									.nextDialogue(made))
+							.addClosingResponse(goodToKnow)));
+			
+			builder.addStart(
+					descriptionNode(l.defaultKeyMsg("They shudder, remembering events from early in their life. They never want to go back."))
+							.animation(DialogueAnimationData.ANXIOUS_EMOTION)
+							.addResponse(new ResponseBuilder(l.subMsg("go_where", "Go back to where?"))
+									.nextDialogue(veil))
+							.addClosingResponse(l.subMsg("bye", "Goodbye."))
+			);
+		}));
 		
 		provider.addRandomlySelectable("sword_barter", weighted(40, isHolding(MSItems.REGISWORD.get())), new FolderedDialogue(builder ->
 		{

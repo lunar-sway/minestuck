@@ -2,8 +2,8 @@ package com.mraof.minestuck.skaianet.client;
 
 import com.mraof.minestuck.Minestuck;
 import com.mraof.minestuck.blockentity.ComputerBlockEntity;
-import com.mraof.minestuck.client.gui.ComputerScreen;
 import com.mraof.minestuck.client.gui.MSScreenFactories;
+import com.mraof.minestuck.client.gui.computer.ComputerScreen;
 import com.mraof.minestuck.network.computer.SkaianetInfoPackets;
 import com.mraof.minestuck.skaianet.LandChain;
 import net.minecraft.client.Minecraft;
@@ -53,10 +53,10 @@ public final class SkaiaClient
 	 */
 	public static boolean requestData(ComputerBlockEntity computer)
 	{
-		boolean b = playerStateMap.get(computer.ownerId) != null;
+		boolean b = playerStateMap.get(computer.clientSideOwnerId()) != null;
 		if(!b)
 		{
-			PacketDistributor.sendToServer(new SkaianetInfoPackets.Request(computer.ownerId));
+			PacketDistributor.sendToServer(new SkaianetInfoPackets.Request(computer.clientSideOwnerId()));
 			be = computer;
 		}
 		return b;
@@ -107,11 +107,12 @@ public final class SkaiaClient
 		if(playerStateMap.get(playerId).hasPrimaryConnectionAsClient())
 			return false;
 		
-		return connections.stream().anyMatch(c -> c.client().id() == playerId);
+		return connections.stream().noneMatch(c -> c.client().id() == playerId);
 	}
 	
 	//Methods called from the actionPerformed method in the gui.
 	
+	@Nullable
 	public static ReducedConnection getClientConnection(int client)
 	{
 		for(ReducedConnection c : connections)
@@ -133,7 +134,7 @@ public final class SkaiaClient
 		Screen gui = Minecraft.getInstance().screen;
 		if(gui instanceof ComputerScreen computerScreen)
 			computerScreen.updateGui();
-		else if(be != null && be.ownerId == data.playerId())
+		else if(be != null && be.clientSideOwnerId() == data.playerId())
 		{
 			if(!Minecraft.getInstance().player.isShiftKeyDown())
 				MSScreenFactories.displayComputerScreen(be);

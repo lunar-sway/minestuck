@@ -1,0 +1,9 @@
+{
+  "condition": {
+    "type": "minestuck:terrain_land_type_tag",
+    "land_type_tag": "minestuck:rock"
+  },
+  "dialogue": "minestuck:consort/moon_mist_faygo_scalemate_pumpkinsnuffle/start",
+  "dialogue_weight": 10,
+  "keep_on_reset": false
+}

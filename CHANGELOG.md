@@ -10,6 +10,11 @@ The format is based on [Keep a Changelog](https://keepachangelog.com/en/1.1.0/).
 
 ### Added
 
+- New consort dialogue
+- New carapacian dialogue
+- Message when entering edit mode to remind players of the exit keybind
+- Added 2 tracks october and endless chasm by triagegremlin
+- Added 2 tracks the note desolation plays and desolate strife by Caldw3ll
 - Rung progress bar is now white when it would otherwise be too dark to see progress clearly
 - Most vanilla enemy mobs now provide Echeladder exp
 - Echeladder exp is provided when gaining the advancements for obtaining a legendary weapon/obtaining a netherite hoe/entering the Nether/entering the End
@@ -24,8 +29,27 @@ The format is based on [Keep a Changelog](https://keepachangelog.com/en/1.1.0/).
 
 ### Fixed
 
-- Signs now mineable with axe
-- Non-color data will now be preserved on dowels going through a totem lathe 
+- Wall Signs now mineable with axe
+- Non-color data will now be preserved on dowels going through a totem lathe
+- Item stack data will now be preserved on disks inserted into a computer
+- Fix disk insertion and computer screen for computer easter egg
+- Carved totems in alchemiter model now have correct uv mapping
+
+### Contributors for this release
+
+- Cibernet, Dweblenod, kirderf1, glubtier, blankMushroom, hadean, ThalliumSulfate, triagegremlin, Caldw3ll
+
+## [1.20.4-1.12.2.1] - 2025-03-16
+
+### Fixed
+
+- Shade stone no longer has texture of shade stone cruxite ore
+- Carved totems in alchemiter model now have correct uv mapping
+- Removed collision from buttons
+- Fixed many blocks not having a correct tool
+- Color selection button is available in the SBURB Client program before connection again instead of after
+- Fixed untranslated key when using /gutter show command
+- Fixed widget rendering in Color Selection screen
 
 ### Removed
 
@@ -33,7 +57,7 @@ The format is based on [Keep a Changelog](https://keepachangelog.com/en/1.1.0/).
 
 ### Contributors for this release
 
-- Cibernet, Dweblenod, kirderf1, glubtier
+- Dweblenod, blankMushroom, kirderf1
 
 ## [1.20.4-1.12.2.0] - 2024-10-06
 

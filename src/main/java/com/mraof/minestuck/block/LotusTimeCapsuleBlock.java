@@ -1,6 +1,6 @@
 package com.mraof.minestuck.block;
 
-import com.mraof.minestuck.block.machine.MultiMachineBlock;
+import com.mraof.minestuck.block.machine.MachineBlock;
 import com.mraof.minestuck.entity.LotusFlowerEntity;
 import net.minecraft.MethodsReturnNonnullByDefault;
 import net.minecraft.core.BlockPos;
@@ -19,13 +19,13 @@ import java.util.Map;
 
 @ParametersAreNonnullByDefault
 @MethodsReturnNonnullByDefault
-public class LotusTimeCapsuleBlock extends MultiMachineBlock<LotusTimeCapsuleMultiblock>
+public class LotusTimeCapsuleBlock extends MachineBlock
 {
 	protected final Map<Direction, VoxelShape> shape;
 	
-	public LotusTimeCapsuleBlock(LotusTimeCapsuleMultiblock machine, CustomVoxelShape shape, Properties properties)
+	public LotusTimeCapsuleBlock(CustomVoxelShape shape, Properties properties)
 	{
-		super(machine, properties);
+		super(properties);
 		this.shape = shape.createRotatedShapes();
 	}
 	

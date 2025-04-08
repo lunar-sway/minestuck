@@ -10,7 +10,7 @@ import com.mraof.minestuck.block.plant.MSPottedSaplings;
 import com.mraof.minestuck.blockentity.MSBlockEntityTypes;
 import com.mraof.minestuck.command.MSSuggestionProviders;
 import com.mraof.minestuck.command.argument.MSArgumentTypes;
-import com.mraof.minestuck.computer.ProgramData;
+import com.mraof.minestuck.computer.ProgramTypes;
 import com.mraof.minestuck.computer.editmode.DeployList;
 import com.mraof.minestuck.effects.MSEffects;
 import com.mraof.minestuck.entity.MSAttributes;
@@ -71,8 +71,6 @@ public class Minestuck
 		modContainer.registerConfig(ModConfig.Type.CLIENT, MinestuckConfig.clientSpec);
 		modContainer.registerConfig(ModConfig.Type.SERVER, MinestuckConfig.serverSpec);
 		
-		//GeckoLib.initialize(eventBus); FIXME
-		
 		MSItemComponents.REGISTRY.register(eventBus);
 		MSItemTypes.ARMOR_MATERIAL_REGISTRY.register(eventBus);
 		MSBlocks.REGISTER.register(eventBus);
@@ -99,6 +97,7 @@ public class Minestuck
 		MSLootTables.MODIFIER_REGISTER.register(eventBus);
 		
 		ModusTypes.REGISTER.register(eventBus);
+		ProgramTypes.REGISTER.register(eventBus);
 		Conditions.REGISTER.register(eventBus);
 		Triggers.REGISTER.register(eventBus);
 		
@@ -147,8 +146,6 @@ public class Minestuck
 		MSDispenserBehaviours.registerBehaviours();
 		
 		MSPottedSaplings.addSaplingsToPot();
-		
-		ProgramData.init();
 		
 		BlockCopier.addStep(new ComputerBlockProcess());
 		BlockCopier.addStep(new TransportalizerBlockProcess());
