@@ -1,0 +1,10 @@
+{
+  "aspect": "doom",
+  "effects": [
+    {
+      "effect": "minecraft:resistance",
+      "amplifier": 0,
+      "rung": 28
+    }
+  ]
+}

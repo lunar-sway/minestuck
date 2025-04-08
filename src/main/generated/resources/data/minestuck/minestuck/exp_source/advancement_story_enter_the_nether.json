@@ -1,0 +1,5 @@
+{
+  "type": "minestuck:advancement_earned",
+  "advancement_id": "minecraft:story/enter_the_nether",
+  "amount": 200
+}

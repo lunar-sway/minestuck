@@ -15,10 +15,17 @@ The format is based on [Keep a Changelog](https://keepachangelog.com/en/1.1.0/).
 - Message when entering edit mode to remind players of the exit keybind
 - Added 2 tracks october and endless chasm by triagegremlin
 - Added 2 tracks the note desolation plays and desolate strife by Caldw3ll
+- Rung progress bar is now white when it would otherwise be too dark to see progress clearly
+- Most vanilla enemy mobs now provide Echeladder exp
+- Echeladder exp is provided when gaining the advancements for obtaining a legendary weapon/obtaining a netherite hoe/entering the Nether/entering the End
+- Echeladder now provides fall damage resistance
 
 ### Changed
 
 - Knitting needle crafting recipe now produces one item instead of two
+- There is no longer a threshold under which certain experience sources will stop contributing. After the incoming exp has been modified for the given rung, there is a 1 in 2/exp chance that 1 exp will be added.
+- Echeladder related attributes now scale linearly instead of exponentially, with minor tweaks to values on each rung
+- Tweaks to Echeladder GUI
 
 ### Fixed
 
@@ -43,6 +50,10 @@ The format is based on [Keep a Changelog](https://keepachangelog.com/en/1.1.0/).
 - Color selection button is available in the SBURB Client program before connection again instead of after
 - Fixed untranslated key when using /gutter show command
 - Fixed widget rendering in Color Selection screen
+
+### Removed
+
+- Removed "aspectEffects" config option as it is redundant to modifying rungs.json
 
 ### Contributors for this release
 

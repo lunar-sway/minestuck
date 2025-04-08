@@ -1,0 +1,20 @@
+{
+  "aspect": "heart",
+  "effects": [
+    {
+      "effect": "minecraft:absorption",
+      "amplifier": 0,
+      "rung": 14
+    },
+    {
+      "effect": "minecraft:absorption",
+      "amplifier": 1,
+      "rung": 28
+    },
+    {
+      "effect": "minecraft:absorption",
+      "amplifier": 2,
+      "rung": 42
+    }
+  ]
+}

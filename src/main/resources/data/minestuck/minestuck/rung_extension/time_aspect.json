@@ -1,0 +1,15 @@
+{
+  "aspect": "time",
+  "effects": [
+    {
+      "effect": "minecraft:haste",
+      "amplifier": 0,
+      "rung": 13
+    },
+    {
+      "effect": "minecraft:haste",
+      "amplifier": 1,
+      "rung": 26
+    }
+  ]
+}
