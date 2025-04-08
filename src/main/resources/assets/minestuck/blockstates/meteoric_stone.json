@@ -1,0 +1,31 @@
+{
+    "variants": {
+        "": [
+            {
+                "model": "minestuck:block/meteoric_stone",
+                "weight": 8
+            },
+            {
+                "model": "minestuck:block/meteoric_stone",
+                "y": 90,
+                "weight": 8
+            },
+            {
+                "model": "minestuck:block/meteoric_stone",
+                "y": 180,
+                "weight": 8
+            },
+            {
+                "model": "minestuck:block/meteoric_stone",
+                "y": 270,
+                "weight": 8
+            },
+            {
+                "model": "minestuck:block/meteoric_stone_1"
+            },
+            {
+                "model": "minestuck:block/meteoric_stone_2"
+            }
+        ]
+    }
+}

@@ -819,6 +819,10 @@ public class MSItems
 	public static final DeferredItem<BlockItem> GENERIC_OBJECT = registerBlockItem(MSBlocks.GENERIC_OBJECT);
 	
 	
+	//The Veil
+	public static final DeferredItem<BlockItem> METEORIC_STONE = registerBlockItem(MSBlocks.METEORIC_STONE);
+	
+	
 	//Land Environment
 	public static final DeferredItem<BlockItem> BLUE_DIRT = registerBlockItem(MSBlocks.BLUE_DIRT);
 	public static final DeferredItem<BlockItem> THOUGHT_DIRT = registerBlockItem(MSBlocks.THOUGHT_DIRT);

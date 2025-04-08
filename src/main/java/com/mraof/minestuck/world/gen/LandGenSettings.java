@@ -123,7 +123,7 @@ public final class LandGenSettings
 		DensityFunction depth = MSDensityFunctions.depth(offset(continents));
 		DensityFunction factor = factor(continents, erosion);
 		DensityFunction initialDensity = MSDensityFunctions.initialDensity(depth, factor);
-		DensityFunction finalDensity = MSDensityFunctions.finalDensity(depth, factor, DensityFunctions.zero(), noises.getOrThrow(Noises.JAGGED), 320);
+		DensityFunction finalDensity = MSDensityFunctions.finalDensity(depth, factor, DensityFunctions.zero(), noises.getOrThrow(Noises.JAGGED), 320, 0.25F);
 		
 		return new NoiseRouter(
 				DensityFunctions.zero(), DensityFunctions.constant(-1), DensityFunctions.zero(), DensityFunctions.zero(),	// aquifer info

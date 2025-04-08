@@ -17,6 +17,8 @@ public final class MSPlacedFeatures
 {
 	public static final ResourceKey<PlacedFeature> RETURN_NODE = key("return_node");
 	
+	public static final ResourceKey<PlacedFeature> VEIL_CRATER = key("veil_crater");
+	
 	public static final ResourceKey<PlacedFeature> COG = key("cog/regular");
 	public static final ResourceKey<PlacedFeature> UNCOMMON_COG = key("cog/sparse");
 	public static final ResourceKey<PlacedFeature> FLOOR_COG = key("cog/floor_regular");

@@ -263,6 +263,8 @@ public final class MSCreativeTabs
 		output.accept(SkaiaBlocks.WHITE_CROWN_STAINED_GLASS);
 		output.accept(SkaiaBlocks.WHITE_PAWN_STAINED_GLASS);
 		
+		output.accept(MSItems.METEORIC_STONE.get());
+		
 		output.accept(MSItems.CRUXITE_BLOCK.get());
 		output.accept(MSItems.CRUXITE_STAIRS.get());
 		output.accept(MSItems.CRUXITE_SLAB.get());

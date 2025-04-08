@@ -159,6 +159,13 @@ public class MSBlockStateProvider extends BlockStateProvider
 		
 		simpleBlockWithItem(MSBlocks.GENERIC_OBJECT);
 		
+		//The Veil
+		{
+			//the 2 variants and blockstate model are created manually
+			ModelFile baseModel = models().cubeAll("meteoric_stone", texture("meteoric_stone"));
+			simpleBlockItem(MSBlocks.METEORIC_STONE.get(), baseModel);
+		}
+		
 		//Land Environment
 		weightedVariantsWithItem(MSBlocks.BLUE_DIRT, new int[]{12, 6, 1, 1},
 				i -> models().cubeAll("blue_dirt" + i, texture("blue_dirt/" + i)));

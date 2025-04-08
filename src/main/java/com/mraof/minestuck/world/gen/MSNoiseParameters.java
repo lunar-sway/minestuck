@@ -10,6 +10,8 @@ public final class MSNoiseParameters
 {
 	public static final ResourceKey<NormalNoise.NoiseParameters> SKAIA_RIDGES = key("skaia/ridges");
 	
+	public static final ResourceKey<NormalNoise.NoiseParameters> VEIL_RIDGES = key("veil/ridges");
+	
 	public static final ResourceKey<NormalNoise.NoiseParameters> LAND_CONTINENTS = key("land/continents");
 	public static final ResourceKey<NormalNoise.NoiseParameters> LAND_EROSION = key("land/erosion");
 	

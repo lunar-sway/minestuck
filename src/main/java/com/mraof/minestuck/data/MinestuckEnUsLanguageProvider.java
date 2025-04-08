@@ -156,6 +156,8 @@ public class MinestuckEnUsLanguageProvider extends MinestuckLanguageProvider
 		addBlock(MSBlocks.PERFECTLY_GENERIC_SIGN, "Perfectly Generic Sign");
 		addBlock(MSBlocks.PERFECTLY_GENERIC_HANGING_SIGN, "Perfectly Generic Hanging Sign");
 		
+		addBlock(MSBlocks.METEORIC_STONE, "Meteoric Stone");
+		
 		addBlock(MSBlocks.BLUE_DIRT, "Blue Dirt");
 		addBlock(MSBlocks.THOUGHT_DIRT, "Thought Dirt");
 		
