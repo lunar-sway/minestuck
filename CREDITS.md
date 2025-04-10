@@ -66,6 +66,11 @@ and ["Emissary of Dance"](src/main/resources/assets/minestuck/sounds/records/emi
 
 - Vigil
 
+- [Computer Boot](src/main/resources/assets/minestuck/sounds/random/computer_boot.ogg),
+[Computer Disk Insert](src/main/resources/assets/minestuck/sounds/random/computer_disk_insert.ogg)
+and [Computer Disk Remove](src/main/resources/assets/minestuck/sounds/random/computer_disk_remove.ogg) edited by heartsremedy
+from [Pixabay CD Whirring In Drive](https://pixabay.com/sv/sound-effects/cd-whirring-in-drive-26799/)
+
 - [Frog sound effects](src/main/resources/assets/minestuck/sounds/mob/frog/) edited by Cibernet
 from [soundbible.com](https://soundbible.com/1336-Frog-Croaking.html) by snottyboy
 
