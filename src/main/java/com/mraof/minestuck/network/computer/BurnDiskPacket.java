@@ -11,6 +11,7 @@ import net.minecraft.network.FriendlyByteBuf;
 import net.minecraft.network.codec.ByteBufCodecs;
 import net.minecraft.network.codec.StreamCodec;
 import net.minecraft.server.level.ServerPlayer;
+import net.minecraft.world.Containers;
 import net.minecraft.world.item.Item;
 import net.minecraft.world.level.Level;
 import net.neoforged.neoforge.network.handling.IPayloadContext;
@@ -54,6 +55,10 @@ public record BurnDiskPacket(BlockPos computerPos, boolean isClientDisk) impleme
 		if(!computer.getProgramData(ProgramTypes.DISK_BURNER).map(DiskBurnerData::hasAllCode).orElse(false))
 			return;
 		
-		computer.tryDropDisk(MSItems.BLANK_DISK.get().getDefaultInstance(), disk.getDefaultInstance());
+		if(computer.tryConsumeBlankDisk())
+		{
+			BlockPos pos = computer.getBlockPos();
+			Containers.dropItemStack(level, pos.getX(), pos.getY(), pos.getZ(), disk.getDefaultInstance());
+		}
 	}
 }

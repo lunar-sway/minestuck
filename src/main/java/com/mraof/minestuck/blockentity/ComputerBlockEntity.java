@@ -229,21 +229,17 @@ public final class ComputerBlockEntity extends BlockEntity implements ISburbComp
 		}
 	}
 	
-	public void tryDropDisk(ItemStack diskToDelete, ItemStack diskToDrop)
+	public boolean tryConsumeBlankDisk()
 	{
-		if(this.level == null)
-			return;
-		
 		for(int index = 0; index < this.disks.size(); index++)
 		{
-			if(this.disks.get(index).is(diskToDelete.getItem()))
+			if(this.disks.get(index).is(MSItems.BLANK_DISK))
 			{
 				removeDisk(index);
-				BlockPos pos = this.getBlockPos();
-				Containers.dropItemStack(this.level, pos.getX(), pos.getY(), pos.getZ(), diskToDrop);
-				return;
+				return true;
 			}
 		}
+		return false;
 	}
 	
 	public void dropAllDisks()
