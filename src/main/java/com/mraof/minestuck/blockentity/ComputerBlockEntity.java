@@ -32,7 +32,6 @@ import net.minecraft.server.level.ServerPlayer;
 import net.minecraft.sounds.SoundSource;
 import net.minecraft.world.Containers;
 import net.minecraft.world.entity.player.Player;
-import net.minecraft.world.item.Item;
 import net.minecraft.world.item.ItemStack;
 import net.minecraft.world.item.Items;
 import net.minecraft.world.level.block.Block;
@@ -43,7 +42,10 @@ import org.apache.logging.log4j.Logger;
 
 import javax.annotation.Nullable;
 import javax.annotation.ParametersAreNonnullByDefault;
-import java.util.*;
+import java.util.HashMap;
+import java.util.Map;
+import java.util.Objects;
+import java.util.Optional;
 import java.util.function.Function;
 import java.util.function.Supplier;
 import java.util.stream.Stream;
@@ -213,38 +215,53 @@ public final class ComputerBlockEntity extends BlockEntity implements ISburbComp
 		return this.getProgramData(ProgramTypes.SBURB_SERVER);
 	}
 	
-	public void tryDropDisk(ItemStack diskToDrop)
-	{
-		tryDropDisk(diskToDrop, diskToDrop);
-	}
-	
-	public void tryDropDisk(ItemStack diskToDelete, ItemStack diskToDrop)
-	{
-		for(ItemStack disk : new ArrayList<>(this.disks))
-		{
-			if(disk.is(diskToDelete.getItem()))
-			{
-				dropDisk(disk, diskToDrop, false);
-				break;
-			}
-		}
-	}
-	
-	public void dropAllDisks(boolean blockRemoved)
-	{
-		new ArrayList<>(this.disks).forEach(disk -> dropDisk(disk, disk, blockRemoved));
-	}
-	
-	/**
-	 * @param diskToDelete What ItemStack is removed from disks
-	 * @param diskToDrop What ItemStack is placed in the world. May not be the same as diskToDelete
-	 * @param blockRemoved If the block is not being removed it will play a disk eject sound and may update the blockstate
-	 */
-	public void dropDisk(ItemStack diskToDelete, ItemStack diskToDrop, boolean blockRemoved)
+	public void tryEjectDisk(int diskIndex)
 	{
 		if(this.level == null)
 			return;
 		
+		if(0 <= diskIndex && diskIndex < this.disks.size())
+		{
+			ItemStack disk = this.disks.get(diskIndex);
+			removeDisk(diskIndex);
+			BlockPos pos = this.getBlockPos();
+			Containers.dropItemStack(this.level, pos.getX(), pos.getY(), pos.getZ(), disk);
+		}
+	}
+	
+	public void tryDropDisk(ItemStack diskToDelete, ItemStack diskToDrop)
+	{
+		if(this.level == null)
+			return;
+		
+		for(int index = 0; index < this.disks.size(); index++)
+		{
+			if(this.disks.get(index).is(diskToDelete.getItem()))
+			{
+				removeDisk(index);
+				BlockPos pos = this.getBlockPos();
+				Containers.dropItemStack(this.level, pos.getX(), pos.getY(), pos.getZ(), diskToDrop);
+				return;
+			}
+		}
+	}
+	
+	public void dropAllDisks()
+	{
+		if(this.level == null)
+			return;
+		
+		for(ItemStack disk : this.disks)
+		{
+			BlockPos pos = this.getBlockPos();
+			Containers.dropItemStack(this.level, pos.getX(), pos.getY(), pos.getZ(), disk);
+		}
+		this.disks.clear();
+	}
+	
+	private void removeDisk(int index)
+	{
+		ItemStack diskToDelete = this.disks.get(index);
 		//TODO client is not being updated to remove existing program
 		if(diskToDelete.has(MSItemComponents.PROGRAM_TYPE))
 		{
@@ -256,27 +273,15 @@ public final class ComputerBlockEntity extends BlockEntity implements ISburbComp
 			}
 		}
 		
-		if(!blockRemoved)
-		{
-			boolean hasSBURBProgram = hasExistingProgram(ProgramTypes.SBURB_CLIENT.get()) || hasExistingProgram(ProgramTypes.SBURB_SERVER.get());
-			
-			if(!hasSBURBProgram)
-				setComputerBlockState(ComputerBlock.State.ON);
-			
-			this.level.playSound(null, this.getBlockPos(), MSSoundEvents.COMPUTER_DISK_REMOVE.get(), SoundSource.BLOCKS);
-		}
+		boolean hasSBURBProgram = hasExistingProgram(ProgramTypes.SBURB_CLIENT.get()) || hasExistingProgram(ProgramTypes.SBURB_SERVER.get());
 		
-		for(ItemStack disk : this.disks)
-		{
-			if(disk.is(diskToDelete.getItem()))
-			{
-				this.disks.remove(disk);
-				break;
-			}
-		}
+		if(!hasSBURBProgram)
+			setComputerBlockState(ComputerBlock.State.ON);
 		
-		BlockPos pos = this.getBlockPos();
-		Containers.dropItemStack(this.level, pos.getX(), pos.getY(), pos.getZ(), diskToDrop);
+		this.level.playSound(null, this.getBlockPos(), MSSoundEvents.COMPUTER_DISK_REMOVE.get(), SoundSource.BLOCKS);
+		
+		this.disks.remove(index);
+		
 		this.markDirtyAndResend();
 	}
 	

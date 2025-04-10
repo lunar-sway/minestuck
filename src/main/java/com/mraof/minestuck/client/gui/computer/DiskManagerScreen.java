@@ -7,12 +7,12 @@ import com.mraof.minestuck.network.computer.EjectDiskPacket;
 import net.minecraft.client.gui.GuiGraphics;
 import net.minecraft.core.Holder;
 import net.minecraft.network.chat.Component;
-import net.minecraft.world.item.ItemStack;
 import net.neoforged.neoforge.network.PacketDistributor;
 
 import javax.annotation.ParametersAreNonnullByDefault;
 import java.util.ArrayList;
 import java.util.List;
+import java.util.concurrent.atomic.AtomicInteger;
 
 /**
  * Shows the disks loaded into the computer and allows for them to be ejected.
@@ -41,10 +41,12 @@ public class DiskManagerScreen extends ThemedScreen
 	{
 		List<ButtonListHelper.ButtonData> diskButtons = new ArrayList<>();
 		
+		AtomicInteger i = new AtomicInteger();
 		computer.getDisks().forEach(disk -> {
+			int diskIndex = i.getAndIncrement();
 			Holder<ProgramType<?>> programTypeHolder = disk.getComponents().get(MSItemComponents.PROGRAM_TYPE.get());
 			Component diskName = programTypeHolder != null ? programTypeHolder.value().name() : disk.getDisplayName();
-			diskButtons.add(new ButtonListHelper.ButtonData(Component.literal("Eject ").append(diskName), () -> ejectDisk(disk)));
+			diskButtons.add(new ButtonListHelper.ButtonData(Component.literal("Eject ").append(diskName), () -> ejectDisk(diskIndex)));
 		});
 		
 		this.buttonListHelper.updateButtons(diskButtons);
@@ -57,9 +59,9 @@ public class DiskManagerScreen extends ThemedScreen
 		ProgramGui.drawHeaderMessage(Component.translatable(TITLE), guiGraphics, this);
 	}
 	
-	private void ejectDisk(ItemStack stack)
+	private void ejectDisk(int index)
 	{
-		PacketDistributor.sendToServer(EjectDiskPacket.create(computer, stack));
+		PacketDistributor.sendToServer(EjectDiskPacket.create(computer, index));
 		minecraft.setScreen(null);
 	}
 }
