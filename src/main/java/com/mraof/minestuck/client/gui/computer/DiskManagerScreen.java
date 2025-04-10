@@ -43,10 +43,8 @@ public class DiskManagerScreen extends ThemedScreen
 		
 		computer.getDisks().forEach(disk -> {
 			Holder<ProgramType<?>> programTypeHolder = disk.getComponents().get(MSItemComponents.PROGRAM_TYPE.get());
-			if(programTypeHolder != null)
-				diskButtons.add(new ButtonListHelper.ButtonData(Component.literal("Eject ").append(programTypeHolder.value().name()), () -> ejectDisk(disk)));
-			else
-				diskButtons.add(new ButtonListHelper.ButtonData(Component.literal("Eject ").append(disk.getDisplayName()), () -> ejectDisk(disk)));
+			Component diskName = programTypeHolder != null ? programTypeHolder.value().name() : disk.getDisplayName();
+			diskButtons.add(new ButtonListHelper.ButtonData(Component.literal("Eject ").append(diskName), () -> ejectDisk(disk)));
 		});
 		
 		this.buttonListHelper.updateButtons(diskButtons);
