@@ -29,5 +29,6 @@ public class MSCommands
 		EntryCommand.register(dispatcher);
 		ReviewDialogueCommand.register(dispatcher, event.getBuildContext());
 		SetDialogueCommand.register(dispatcher);
+		WFCPerformanceTestCommand.register(dispatcher);
 	}
 }
