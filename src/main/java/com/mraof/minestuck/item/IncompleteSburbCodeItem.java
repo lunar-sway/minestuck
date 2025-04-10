@@ -5,6 +5,7 @@ import com.mraof.minestuck.item.components.HieroglyphCode;
 import com.mraof.minestuck.item.components.MSItemComponents;
 import com.mraof.minestuck.util.MSTags;
 import net.minecraft.client.gui.screens.Screen;
+import net.minecraft.core.BlockPos;
 import net.minecraft.network.chat.Component;
 import net.minecraft.sounds.SoundEvents;
 import net.minecraft.sounds.SoundSource;
@@ -50,9 +51,9 @@ public class IncompleteSburbCodeItem extends ReadableSburbCodeItem
 	}
 	
 	@Override
-	protected boolean useOnComputer(ItemStack heldStack, Player player, InteractionHand hand, DiskBurnerData diskBurnerData)
+	protected boolean useOnComputer(ItemStack heldStack, Player player, InteractionHand hand, BlockPos pos, DiskBurnerData diskBurnerData)
 	{
-		boolean success = super.useOnComputer(heldStack, player, hand, diskBurnerData);
+		boolean success = super.useOnComputer(heldStack, player, hand, pos, diskBurnerData);
 		boolean changedItem = false;
 		
 		// adds any new hieroglyph and paradox info from the computer to the item

@@ -2,6 +2,8 @@ package com.mraof.minestuck.computer;
 
 import com.mraof.minestuck.blockentity.ComputerBlockEntity;
 import net.minecraft.nbt.CompoundTag;
+import net.minecraft.network.chat.Component;
+import net.minecraft.network.chat.MutableComponent;
 import net.minecraft.resources.ResourceLocation;
 import net.minecraft.server.MinecraftServer;
 
@@ -33,6 +35,12 @@ public final class ProgramType<D extends ProgramType.Data>
 	{
 		ResourceLocation key = ProgramTypes.REGISTRY.getKey(this);
 		return key != null ? key.toString() : "unknown";
+	}
+	
+	public MutableComponent name()
+	{
+		ResourceLocation key = ProgramTypes.REGISTRY.getKey(this);
+		return key != null ? Component.translatable("minestuck.program." + key.getPath()) : Component.literal("Unknown Program");
 	}
 	
 	public interface Data

@@ -11,6 +11,7 @@ import com.mraof.minestuck.block.machine.TransportalizerBlock;
 import com.mraof.minestuck.block.redstone.AreaEffectBlock;
 import com.mraof.minestuck.block.redstone.SummonerBlock;
 import com.mraof.minestuck.block.redstone.WirelessRedstoneReceiverBlock;
+import com.mraof.minestuck.blockentity.ComputerBlockEntity;
 import com.mraof.minestuck.blockentity.TransportalizerBlockEntity;
 import com.mraof.minestuck.blockentity.machine.*;
 import com.mraof.minestuck.blockentity.redstone.RedstoneClockBlockEntity;
@@ -2145,6 +2146,7 @@ public class MinestuckEnUsLanguageProvider extends MinestuckLanguageProvider
 		addAdvancement(MSAdvancementProvider.INTELLIBEAM, "Captcha Captured", "Use an Intellibeam Laserstation to decode a particularly challenging captcha");
 		addAdvancement(MSAdvancementProvider.LEGENDARY_WEAPON, "Legendary Weapon", "Obtain a Zilly, Welsh, or Denizen tier weapon");
 		addAdvancement(MSAdvancementProvider.BUY_OUT_SHOP, "Beware the Buyer", "Purchase every item available from a consort merchant");
+		addAdvancement(MSAdvancementProvider.BRICK_COMPUTER, "Brick Your Computer", "Did you try turning it on and off again?");
 		
 		addLand(FungiLandType.FUNGI, "Fungi");
 		addLand(FungiLandType.DANK, "Dank");
@@ -2252,6 +2254,7 @@ public class MinestuckEnUsLanguageProvider extends MinestuckLanguageProvider
 		add(SylladexScreen.EMPTY_SYLLADEX_2, "This will empty your sylladex.");
 		add(SylladexScreen.EMPTY_SYLLADEX_BUTTON, "Empty Sylladex");
 		add(AlchemiterScreen.TITLE, "Alchemiter");
+		add(ComputerBlockEntity.DISK_REJECT, "Cannot fit any more disks in the computer!");
 		add(CruxtruderBlockEntity.EMPTY, "The cruxtruder gives off an empty click. Perhaps it needs some sort of material to function?");
 		add(MiniCruxtruderBlockEntity.TITLE, "Miniature Cruxtruder");
 		add(MiniTotemLatheBlockEntity.TITLE, "Miniature Totem Lathe");
@@ -2290,6 +2293,7 @@ public class MinestuckEnUsLanguageProvider extends MinestuckLanguageProvider
 		add(ComputerThemeScreen.TITLE, "Computer Themes");
 		add(ComputerThemeScreen.SELECTED_THEME, "Selected theme:");
 		add(ComputerThemeScreen.DONE_MESSAGE, "DONE");
+		add(DiskManagerScreen.TITLE, "Disk Manager");
 		add(TransportalizerScreen.TITLE, "Transportalizer");
 		add(TransportalizerScreen.DESTINATION_CODE_MESSAGE, "Transportalizer destination code");
 		add(TransportalizerScreen.DONE_MESSAGE, "DONE");
@@ -2365,6 +2369,8 @@ public class MinestuckEnUsLanguageProvider extends MinestuckLanguageProvider
 		add(HashMapModus.MESSAGE, "[HASHMAP] %s %% %s -> %s");
 		
 		add(ButtonListHelper.CLEAR_BUTTON, "Clear message");
+		add(SburbClientGui.NAME, "SBURB Client");
+		add(SburbServerGui.NAME, "SBURB Server");
 		add(SburbClientGui.CLOSE_BUTTON, "Disconnect");
 		add(SburbServerGui.EDIT_BUTTON, "Activate edit mode");
 		add(SburbServerGui.GIVE_BUTTON, "Give items");
@@ -2379,13 +2385,16 @@ public class MinestuckEnUsLanguageProvider extends MinestuckLanguageProvider
 		add(SburbServerGui.SERVER_ACTIVE, "Server with your name exists");
 		add(SburbClientGui.RESUME_CLIENT, "Waiting for server...");
 		add(SburbServerGui.RESUME_SERVER, "Waiting for client...");
+		add(DiskBurnerGui.NAME, "Disk Burner");
 		add(DiskBurnerGui.NEED_CODE, "Requires code to burn disks");
 		add(DiskBurnerGui.NO_DISKS, "Insert disk to burn");
 		add(DiskBurnerGui.BURN_CLIENT_DISK, "Burn Client Disk");
 		add(DiskBurnerGui.BURN_SERVER_DISK, "Burn Server Disk");
 		add(DiskBurnerGui.CHOOSE, "Choose disk type to write");
 		add(ComputerInteractions.STOP_RESUME, "Stopped resuming");
+		add(SettingsAppGui.NAME, "Settings");
 		add(SettingsAppGui.THEME, "Choose Theme");
+		add(SettingsAppGui.DISK_MANAGER, "Disk Manager");
 		add(SettingsAppGui.TITLE, "Sburb Settings");
 		
 		add(EntryProcess.WRONG_DIMENSION, "Entry not permitted from this dimension");
@@ -2528,6 +2537,10 @@ public class MinestuckEnUsLanguageProvider extends MinestuckLanguageProvider
 		addSubtitles("projectile_bounce", "Projectile bounces");
 		addSubtitles("tool_revise", "Server uses Revise tool");
 		addSubtitles("tool_recycle", "Server recycles blocks");
+		addSubtitles("computer_boot", "Computer booting up");
+		addSubtitles("computer_disk_insert", "Disk inserted");
+		addSubtitles("computer_disk_remove", "Disk removed");
+		addSubtitles("computer_keyboard", "Typing on computer");
 		addSubtitles("alchemiter_resonate", "Alchemize!");
 		addSubtitles("transportalizer_teleport", "Transportalize!");
 		addSubtitles("totem_lathe_lathe", "Latheify!");
