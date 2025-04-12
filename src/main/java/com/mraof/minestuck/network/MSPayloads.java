@@ -35,6 +35,7 @@ public final class MSPayloads
 		PayloadRegistrar registrar = event.registrar(Minestuck.MOD_ID).versioned("2");
 		
 		//Player Data Packets
+		registerPlayToClient(registrar, RungDisplayDataPacket.ID, RungDisplayDataPacket.STREAM_CODEC);
 		registerPlayToClient(registrar, EcheladderDataPacket.ID, EcheladderDataPacket.STREAM_CODEC);
 		registerPlayToClient(registrar, BoondollarDataPacket.ID, BoondollarDataPacket.STREAM_CODEC);
 		registerPlayToClient(registrar, GristCachePacket.ID, GristCachePacket.STREAM_CODEC);

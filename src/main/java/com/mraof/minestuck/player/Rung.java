@@ -4,6 +4,9 @@ import com.mojang.serialization.Codec;
 import com.mojang.serialization.MapCodec;
 import com.mojang.serialization.codecs.RecordCodecBuilder;
 import net.minecraft.core.Holder;
+import net.minecraft.network.FriendlyByteBuf;
+import net.minecraft.network.codec.ByteBufCodecs;
+import net.minecraft.network.codec.StreamCodec;
 import net.minecraft.resources.ResourceLocation;
 import net.minecraft.server.level.ServerPlayer;
 import net.minecraft.world.effect.MobEffect;
@@ -60,5 +63,14 @@ public record Rung(int rung, int backgroundColor, int textColor, long expRequire
 				attributeInstance.removeModifier(attributeModifier.id());
 			attributeInstance.addPermanentModifier(attributeModifier);
 		}
+	}
+	
+	public record DisplayData(int backgroundColor, int textColor, long gristCapacity)
+	{
+		public static final StreamCodec<FriendlyByteBuf, DisplayData> STREAM_CODEC = StreamCodec.composite(
+				ByteBufCodecs.INT, DisplayData::backgroundColor,
+				ByteBufCodecs.INT, DisplayData::textColor,
+				ByteBufCodecs.VAR_LONG, DisplayData::gristCapacity,
+				DisplayData::new);
 	}
 }

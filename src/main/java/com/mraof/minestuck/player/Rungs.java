@@ -10,6 +10,7 @@ import com.mojang.serialization.JsonOps;
 import com.mojang.serialization.MapCodec;
 import com.mojang.serialization.codecs.RecordCodecBuilder;
 import com.mraof.minestuck.Minestuck;
+import com.mraof.minestuck.network.RungDisplayDataPacket;
 import com.mraof.minestuck.util.MSAttachments;
 import net.minecraft.resources.ResourceLocation;
 import net.minecraft.server.level.ServerPlayer;
@@ -22,8 +23,10 @@ import net.minecraft.world.effect.MobEffectInstance;
 import net.neoforged.bus.api.SubscribeEvent;
 import net.neoforged.fml.common.EventBusSubscriber;
 import net.neoforged.neoforge.event.AddReloadListenerEvent;
+import net.neoforged.neoforge.event.OnDatapackSyncEvent;
 import net.neoforged.neoforge.event.server.ServerStoppedEvent;
 import net.neoforged.neoforge.event.tick.PlayerTickEvent;
+import net.neoforged.neoforge.network.PacketDistributor;
 import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.Logger;
 
@@ -56,16 +59,6 @@ public class Rungs
 	public static long getProgressReq(int rung)
 	{
 		return getRung(rung).expRequirement();
-	}
-	
-	public static int getBackgroundColor(int rung)
-	{
-		return getRung(rung).backgroundColor();
-	}
-	
-	public static int getTextColor(int rung)
-	{
-		return getRung(rung).textColor();
 	}
 	
 	@SubscribeEvent
@@ -241,5 +234,22 @@ public class Rungs
 					innerCodec.forGetter(RungReq::value)
 			).apply(instance, RungReq::new));
 		}
+	}
+	
+	@SubscribeEvent
+	private static void onDatapackSync(OnDatapackSyncEvent event)
+	{
+		if (event.getPlayer() != null)
+			PacketDistributor.sendToPlayer(event.getPlayer(), createDisplayDataPacket());
+		else
+			PacketDistributor.sendToAllPlayers(createDisplayDataPacket());
+	}
+	
+	private static RungDisplayDataPacket createDisplayDataPacket()
+	{
+		List<Rung.DisplayData> rungList = RUNGS.stream().map(rung ->
+				new Rung.DisplayData(rung.backgroundColor(), rung.textColor(), rung.gristCapacity())
+		).toList();
+		return new RungDisplayDataPacket(rungList);
 	}
 }

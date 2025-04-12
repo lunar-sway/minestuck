@@ -3,6 +3,7 @@ package com.mraof.minestuck.client.gui.playerStats;
 import com.google.common.collect.ImmutableList;
 import com.mojang.blaze3d.systems.RenderSystem;
 import com.mraof.minestuck.MinestuckConfig;
+import com.mraof.minestuck.client.ClientRungData;
 import com.mraof.minestuck.data.RungsProvider;
 import com.mraof.minestuck.player.ClientPlayerData;
 import com.mraof.minestuck.player.Rung;
@@ -55,7 +56,6 @@ public class EcheladderScreen extends PlayerStatsScreen
 	
 	public static int lastRung = -1;    //The current rung last time the gui was opened. Used to determine which rung to display increments from next time the gui is opened
 	public static int animatedRung;    //The rung animated to or the latest to be animated
-	private final int finalRung;
 	private boolean showLastRung = true;
 	private int fromRung;    //First rung to display increments from; (actually the one right before that one)
 	private int animationCycle;    //Ticks left on the animation cycle
@@ -67,9 +67,7 @@ public class EcheladderScreen extends PlayerStatsScreen
 		guiWidth = 250;
 		guiHeight = 202;
 		
-		finalRung = Rungs.finalRung();
-		
-		maxScroll = (finalRung + 1) * RUNG_Y - 154;
+		maxScroll = (ClientRungData.getFinalRung() + 1) * RUNG_Y - 154;
 	}
 	
 	private static double attackBonus(int rung)
@@ -200,12 +198,12 @@ public class EcheladderScreen extends PlayerStatsScreen
 			
 			int y = yOffset + 177 + scroll - i * RUNG_Y;
 			int rung = scrollIndex / RUNG_Y + i;
-			if(rung > finalRung)
+			if(rung > ClientRungData.getFinalRung())
 				break;
 			
 			//TODO broke the animation for previous rung flashing
-			int textColor = currentRung >= rung ? textColor(rung) : 0xFFFFFF;
-			int backgroundColor = backgroundColor(rung, textColor);
+			int textColor = currentRung >= rung ? ClientRungData.textColor(rung) : 0xFFFFFF;
+			int backgroundColor = ClientRungData.backgroundColor(rung, textColor);
 			if(rung <= currentRung - (showLastRung ? 0 : 1))
 			{
 				//full bar
@@ -254,7 +252,7 @@ public class EcheladderScreen extends PlayerStatsScreen
 		//guiGraphics.drawString("Rep: " + ClientPlayerData.getConsortReputation(), xOffset + 75 + mc.fontRenderer.getCharWidth('='), yOffset + 12, BLUE);
 		
 		guiGraphics.drawString(font, I18n.get(CACHE), textOffset, yOffset + 138, GREY, false);
-		guiGraphics.drawString(font, String.valueOf(Rungs.getGristCapacity(currentRung)), textOffset + 2, yOffset + 147, BLUE, false);
+		guiGraphics.drawString(font, String.valueOf(ClientRungData.getGristCapacity(currentRung)), textOffset + 2, yOffset + 147, BLUE, false);
 		
 		if(mouseInBounds(mouseY, yOffset + 39, mouseX, textOffset + 2, mc.font.width(attack + "%")))
 			return ImmutableList.of(Component.translatable(DAMAGE_UNDERLING), Component.literal(Math.round(attack * getUnderlingDamageModifier(currentRung)) + "%"));
@@ -266,8 +264,8 @@ public class EcheladderScreen extends PlayerStatsScreen
 	@Nullable
 	private List<Component> drawGainedRungBonuses(GuiGraphics guiGraphics, int rung, int index, int mouseX, int mouseY)
 	{
-		int textColor = textColor(rung);
-		int bg = backgroundColor(rung, textColor);
+		int textColor = ClientRungData.textColor(rung);
+		int bg = ClientRungData.backgroundColor(rung, textColor);
 		
 		int xMod = 32 * (index % 2);
 		int yMod = 15 * (index / 2);
@@ -306,16 +304,6 @@ public class EcheladderScreen extends PlayerStatsScreen
 	private boolean mouseInBounds(int mouseY, int minY, int mouseX, int minX, int xDiff)
 	{
 		return (mouseY >= minY && mouseY < minY + mc.font.lineHeight) && (mouseX >= minX && mouseX < minX + xDiff);
-	}
-	
-	private int textColor(int rung)
-	{
-		return finalRung >= rung ? Rungs.getTextColor(rung) : 0xFFFFFF;
-	}
-	
-	private int backgroundColor(int rung, int textColor)
-	{
-		return finalRung >= rung ? Rungs.getBackgroundColor(rung) : ~textColor;
 	}
 	
 	private void updateScrollAndAnimation(int ycor)
