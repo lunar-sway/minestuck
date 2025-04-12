@@ -1572,6 +1572,8 @@ public class MSBlockStateProvider extends BlockStateProvider
 				i -> models().getExistingFile(id("pink_frosted_top_large_cake" + i)));
 		cake(MSBlocks.CHOCOLATEY_CAKE);
 		flatItem(MSItems.CHOCOLATEY_CAKE, MSBlockStateProvider::itemTexture);
+		cakeAlt(MSBlocks.MOON_CAKE);
+		flatItem(MSItems.MOON_CAKE, MSBlockStateProvider::itemTexture);
 		
 		//Explosives
 		{
@@ -2114,12 +2116,73 @@ public class MSBlockStateProvider extends BlockStateProvider
 		}
 	}
 	
+	private ModelFile cakeAltModel(ResourceLocation id, int bites)
+	{
+		if(bites == 0)
+		{
+			return models().getBuilder(id.getPath() + "_uneaten")
+					.texture("particle", texture(id.withSuffix("_side")))
+					.texture("bottom", texture(id.withSuffix("_bottom")))
+					.texture("top", texture(id.withSuffix("_top")))
+					.texture("side", texture(id.withSuffix("_side")))
+					.texture("north", texture(id.withSuffix("_north")))
+					.texture("south", texture(id.withSuffix("_south")))
+					.texture("east", texture(id.withSuffix("_east")))
+					.texture("west", texture(id.withSuffix("_west")))
+					.element()
+					.from(1, 0, 1).to(15, 8, 15)
+					.allFaces((direction, faceBuilder) -> {
+						if(direction == Direction.UP) faceBuilder.texture("#top");
+						else if(direction == Direction.DOWN) faceBuilder.texture("#bottom").cullface(Direction.DOWN);
+						else if(direction == Direction.NORTH) faceBuilder.texture("#north");
+						else if(direction == Direction.SOUTH) faceBuilder.texture("#south");
+						else if(direction == Direction.EAST) faceBuilder.texture("#east");
+						else if(direction == Direction.WEST) faceBuilder.texture("#west");
+						else
+							faceBuilder.texture("#side");
+					})
+					.end();
+		} else
+		{
+			return models().getBuilder(id.getPath() + "_slice" + bites)
+					.texture("particle", texture(id.withSuffix("_side")))
+					.texture("bottom", texture(id.withSuffix("_bottom")))
+					.texture("top", texture(id.withSuffix("_top")))
+					.texture("north", texture(id.withSuffix("_north")))
+					.texture("south", texture(id.withSuffix("_south")))
+					.texture("east", texture(id.withSuffix("_east")))
+					.texture("side", texture(id.withSuffix("_side")))
+					.texture("inside", texture(id.withSuffix("_inner")))
+					.element()
+					.from(1 + 2 * bites, 0, 1).to(15, 8, 15)
+					.allFaces((direction, faceBuilder) -> {
+						if(direction == Direction.UP) faceBuilder.texture("#top");
+						else if(direction == Direction.DOWN) faceBuilder.texture("#bottom").cullface(Direction.DOWN);
+						else if(direction == Direction.NORTH) faceBuilder.texture("#north");
+						else if(direction == Direction.SOUTH) faceBuilder.texture("#south");
+						else if(direction == Direction.EAST) faceBuilder.texture("#east");
+						else if(direction == Direction.WEST) faceBuilder.texture("#inside");
+						else faceBuilder.texture("#side");
+					})
+					.end();
+		}
+	}
+	
 	private void cake(DeferredBlock<?> block)
 	{
 		ResourceLocation id = block.getId();
 		getVariantBuilder(block.get()).forAllStates(state -> {
 			int bites = state.getValue(CakeBlock.BITES);
 			return ConfiguredModel.builder().modelFile(cakeModel(id, bites)).build();
+		});
+	}
+	
+	private void cakeAlt(DeferredBlock<?> block)
+	{
+		ResourceLocation id = block.getId();
+		getVariantBuilder(block.get()).forAllStates(state -> {
+			int bites = state.getValue(CakeBlock.BITES);
+			return ConfiguredModel.builder().modelFile(cakeAltModel(id, bites)).build();
 		});
 	}
 	
