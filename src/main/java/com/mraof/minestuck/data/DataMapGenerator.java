@@ -88,6 +88,7 @@ public class DataMapGenerator extends DataMapProvider
 		compostables.add(MSItems.LARGE_CAKE, new Compostable(1.0f), false);
 		compostables.add(MSItems.PINK_FROSTED_TOP_LARGE_CAKE, new Compostable(1.0f), false);
 		compostables.add(MSItems.CHOCOLATEY_CAKE, new Compostable(1.0f), false);
+		compostables.add(MSItems.MOON_CAKE, new Compostable(1.0f), false);
 
 		//weapons
 		compostables.add(MSItems.FUDGESICKLE, new Compostable(1.0f), false);

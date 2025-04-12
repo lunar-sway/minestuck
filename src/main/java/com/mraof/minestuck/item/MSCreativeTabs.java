@@ -393,6 +393,7 @@ public final class MSCreativeTabs
 		output.accept(MSItems.NEGATIVE_CAKE.get());
 		output.accept(MSItems.CARROT_CAKE.get());
 		output.accept(MSItems.CHOCOLATEY_CAKE.get());
+		output.accept(MSItems.MOON_CAKE.get());
 		
 		output.accept(MSItems.PRIMED_TNT.get());
 		output.accept(MSItems.UNSTABLE_TNT.get());

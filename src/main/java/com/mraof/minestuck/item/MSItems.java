@@ -1600,6 +1600,7 @@ public class MSItems
 	public static final DeferredItem<BlockItem> LARGE_CAKE = registerBlockItem(MSBlocks.LARGE_CAKE);
 	public static final DeferredItem<BlockItem> PINK_FROSTED_TOP_LARGE_CAKE = registerBlockItem(MSBlocks.PINK_FROSTED_TOP_LARGE_CAKE);
 	public static final DeferredItem<BlockItem> CHOCOLATEY_CAKE = registerBlockItem(MSBlocks.CHOCOLATEY_CAKE, new Item.Properties().stacksTo(1));
+	public static final DeferredItem<BlockItem> MOON_CAKE = registerBlockItem(MSBlocks.MOON_CAKE, new Item.Properties().stacksTo(1));
 	
 	//Explosives
 	public static final DeferredItem<BlockItem> PRIMED_TNT = registerBlockItem(MSBlocks.PRIMED_TNT);
