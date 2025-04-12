@@ -1,0 +1,60 @@
+{
+  "node": {
+    "animation": {},
+    "gui": "minestuck:textures/gui/dialogue/dialogue.png",
+    "message": "minestuck.dialogue.consort.computer_expert.sure",
+    "responses": [
+      {
+        "condition": {
+          "type": "minestuck:item_tag_match_exclude",
+          "exclusion_item": "minecraft:music_disc_11",
+          "tag": "c:music_discs"
+        },
+        "fail_tooltip": "minestuck.dialogue.consort.computer_expert.sure.give_item.condition",
+        "hide_if_failed": false,
+        "message": {
+          "arguments": [
+            "matched_item"
+          ],
+          "key": "minestuck.dialogue.consort.computer_expert.sure.yes"
+        },
+        "next_dialogue": {
+          "id": "minestuck:consort/computer_expert/done",
+          "reply_messages": [
+            {
+              "type": "description",
+              "message": "minestuck.dialogue.consort.computer_expert.sure.desc"
+            }
+          ],
+          "set_as_entrypoint": false
+        },
+        "triggers": [
+          {
+            "type": "minestuck:take_matched_item"
+          },
+          {
+            "type": "minestuck:give_item",
+            "item": "minecraft:music_disc_11"
+          },
+          {
+            "type": "minestuck:set_flag",
+            "flag": "helpingPlayer",
+            "player_specific": true
+          },
+          {
+            "type": "minestuck:set_dialogue",
+            "new_path": "minestuck:consort/computer_expert/done"
+          }
+        ]
+      },
+      {
+        "condition": {
+          "type": "minestuck:always_true"
+        },
+        "hide_if_failed": true,
+        "message": "minestuck.dialogue.no",
+        "triggers": []
+      }
+    ]
+  }
+}

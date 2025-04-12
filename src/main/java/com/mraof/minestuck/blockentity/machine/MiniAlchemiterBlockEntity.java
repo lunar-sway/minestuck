@@ -1,6 +1,5 @@
 package com.mraof.minestuck.blockentity.machine;
 
-import com.mraof.minestuck.alchemy.AlchemyHelper;
 import com.mraof.minestuck.alchemy.GristHelper;
 import com.mraof.minestuck.api.alchemy.GristSet;
 import com.mraof.minestuck.api.alchemy.GristType;
@@ -10,6 +9,7 @@ import com.mraof.minestuck.block.MSBlocks;
 import com.mraof.minestuck.blockentity.MSBlockEntityTypes;
 import com.mraof.minestuck.event.AlchemyEvent;
 import com.mraof.minestuck.inventory.MiniAlchemiterMenu;
+import com.mraof.minestuck.item.components.EncodedItemComponent;
 import com.mraof.minestuck.player.GristCache;
 import com.mraof.minestuck.player.IdentifierHandler;
 import com.mraof.minestuck.player.PlayerIdentifier;
@@ -79,15 +79,15 @@ public class MiniAlchemiterBlockEntity extends MachineProcessBlockEntity impleme
 	{
 		if(!level.hasNeighborSignal(this.getBlockPos()) && !itemHandler.getStackInSlot(INPUT).isEmpty() && this.owner != null)
 		{
-			//Check owner's cache: Do they have everything they need?
-			ItemStack newItem = AlchemyHelper.getDecodedItem(itemHandler.getStackInSlot(INPUT));
+			ItemStack newItem = EncodedItemComponent.getEncodedOrBlank(itemHandler.getStackInSlot(INPUT));
 			
 			if(newItem.isEmpty())
 				return false;
-			if(!itemHandler.getStackInSlot(OUTPUT).isEmpty() && (itemHandler.getStackInSlot(OUTPUT).getItem() != newItem.getItem() || itemHandler.getStackInSlot(OUTPUT).getMaxStackSize() <= itemHandler.getStackInSlot(OUTPUT).getCount()))
-			{
+			ItemStack existingOutput = itemHandler.getStackInSlot(OUTPUT);
+			if(!existingOutput.isEmpty() && (!ItemStack.isSameItemSameComponents(existingOutput, newItem)
+					|| existingOutput.getMaxStackSize() < existingOutput.getCount() + newItem.getCount()))
 				return false;
-			}
+			
 			GristSet cost = GristCostRecipe.findCostForItem(newItem, wildcardGrist, false, level);
 			
 			return GristCache.get(level, owner).canAfford(cost);
@@ -100,10 +100,8 @@ public class MiniAlchemiterBlockEntity extends MachineProcessBlockEntity impleme
 	
 	private void processContents()
 	{
-		ItemStack newItem = AlchemyHelper.getDecodedItem(itemHandler.getStackInSlot(INPUT));
-		
-		if (newItem.isEmpty())
-			newItem = new ItemStack(MSBlocks.GENERIC_OBJECT.get());
+		ItemStack card = itemHandler.getStackInSlot(INPUT);
+		ItemStack newItem = EncodedItemComponent.getEncodedOrBlank(card);
 		
 		GristSet cost = GristCostRecipe.findCostForItem(newItem, wildcardGrist, false, level);
 		Objects.requireNonNull(cost);
@@ -184,13 +182,10 @@ public class MiniAlchemiterBlockEntity extends MachineProcessBlockEntity impleme
 		ItemStack input = itemHandler.getStackInSlot(INPUT);
 		if(!input.isEmpty() && owner != null)
 		{
-			ItemStack newItem = AlchemyHelper.getDecodedItem(input);
+			ItemStack newItem = EncodedItemComponent.getEncodedOrBlank(input);
+			
 			if (newItem.isEmpty())
-			{
-				if(!AlchemyHelper.hasDecodedItem(input))
-					newItem = new ItemStack(MSBlocks.GENERIC_OBJECT.get());
-				else return 0;
-			}
+				return 0;
 			ItemStack output = itemHandler.getStackInSlot(OUTPUT);
 			if (!output.isEmpty() && (output.getItem() != newItem.getItem() || output.getMaxStackSize() <= output.getCount()))
 			{

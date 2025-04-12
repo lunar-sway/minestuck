@@ -1,9 +1,7 @@
 package com.mraof.minestuck.item.armor;
 
-import com.mraof.minestuck.client.model.armor.IronLassArmorModel;
 import com.mraof.minestuck.util.MSParticleType;
 import com.mraof.minestuck.util.MSSoundEvents;
-import net.minecraft.client.model.HumanoidModel;
 import net.minecraft.core.Holder;
 import net.minecraft.sounds.SoundSource;
 import net.minecraft.world.entity.Entity;
@@ -14,23 +12,20 @@ import net.minecraft.world.item.ArmorItem;
 import net.minecraft.world.item.ArmorMaterial;
 import net.minecraft.world.item.ItemStack;
 import net.minecraft.world.phys.Vec3;
-import net.neoforged.neoforge.client.extensions.common.IClientItemExtensions;
-import net.neoforged.neoforge.registries.DeferredHolder;
-import org.jetbrains.annotations.NotNull;
 import software.bernie.geckolib.animatable.GeoItem;
 import software.bernie.geckolib.animatable.SingletonGeoAnimatable;
-import software.bernie.geckolib.constant.DataTickets;
 import software.bernie.geckolib.animatable.instance.AnimatableInstanceCache;
 import software.bernie.geckolib.animation.AnimatableManager;
 import software.bernie.geckolib.animation.AnimationController;
-import software.bernie.geckolib.renderer.GeoArmorRenderer;
+import software.bernie.geckolib.constant.DataTickets;
 import software.bernie.geckolib.util.GeckoLibUtil;
 
-import java.util.function.Consumer;
+import javax.annotation.ParametersAreNonnullByDefault;
 
 import static software.bernie.geckolib.constant.DefaultAnimations.FLY;
 import static software.bernie.geckolib.constant.DefaultAnimations.IDLE;
 
+@ParametersAreNonnullByDefault
 public class IronLassArmorItem extends ArmorItem implements GeoItem
 {
 	private final AnimatableInstanceCache cache = GeckoLibUtil.createInstanceCache(this);
@@ -80,25 +75,6 @@ public class IronLassArmorItem extends ArmorItem implements GeoItem
 			}
 		}
 		return true;
-	}
-	
-	@Override
-	public void initializeClient(Consumer<IClientItemExtensions> consumer)
-	{
-		consumer.accept(new IClientItemExtensions()
-		{
-			private GeoArmorRenderer<?> renderer;
-			
-			@Override
-			public @NotNull HumanoidModel<?> getHumanoidArmorModel(LivingEntity livingEntity, ItemStack itemStack, EquipmentSlot equipmentSlot, HumanoidModel<?> original)
-			{
-				if(this.renderer == null)
-					this.renderer = new GeoArmorRenderer<>(new IronLassArmorModel());
-				
-				this.renderer.prepForRender(livingEntity, itemStack, equipmentSlot, original);
-				return this.renderer;
-			}
-		});
 	}
 	
 	@Override

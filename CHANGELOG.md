@@ -16,13 +16,50 @@ The format is based on [Keep a Changelog](https://keepachangelog.com/en/1.1.0/).
 
 - Updated to run with Minecraft 1.21 / Neoforge 21.0
 
+### Added
+
+- New consort dialogue
+- New carapacian dialogue
+- Message when entering edit mode to remind players of the exit keybind
+- Added 2 tracks october and endless chasm by triagegremlin
+- Added 2 tracks the note desolation plays and desolate strife by Caldw3ll
+- New Disk Manager utility in Settings computer program
+- Computer programs now have a tooltip when hovered over in computer gui
+- Computer sound effects
+- New computer related advancement
+
 ### Changed
 
 - Knitting needle crafting recipe now produces one item instead of two
 
+### Fixed
+
+- Wall Signs now mineable with axe
+- Non-color data will now be preserved on dowels going through a totem lathe
+- Item stack data will now be preserved on disks inserted into a computer
+- Fix disk insertion and computer screen for computer easter egg
+- Carved totems in alchemiter model now have correct uv mapping
+
 ### Contributors for this release
 
-- Cibernet, Dweblenod, kirderf1, glubtier, rose_bushes_, v_sabitron
+- Cibernet, Dweblenod, kirderf1, glubtier, blankMushroom, hadean, ThalliumSulfate, triagegremlin, Caldw3ll, heartsremedy
+
+## [1.20.4-1.12.2.1] - 2025-03-16
+
+### Fixed
+
+- Shade stone no longer has texture of shade stone cruxite ore
+- Carved totems in alchemiter model now have correct uv mapping
+- Removed collision from buttons
+- Fixed many blocks not having a correct tool
+- Color selection button is available in the SBURB Client program before connection again instead of after
+- Fixed untranslated key when using /gutter show command
+- Fixed widget rendering in Color Selection screen
+
+### Contributors for this release
+
+- Cibernet, Dweblenod, blankMushroom, kirderf1, glubtier, rose_bushes_, v_sabitron
+
 
 ## [1.20.4-1.12.2.0] - 2024-10-06
 

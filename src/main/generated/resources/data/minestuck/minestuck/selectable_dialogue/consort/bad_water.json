@@ -1,0 +1,31 @@
+{
+  "condition": {
+    "type": "minestuck:list",
+    "conditions": [
+      {
+        "type": "minestuck:terrain_land_type",
+        "land_type": "minestuck:shade"
+      },
+      {
+        "type": "minestuck:terrain_land_type",
+        "land_type": "minestuck:heat"
+      },
+      {
+        "type": "minestuck:terrain_land_type",
+        "land_type": "minestuck:wood"
+      },
+      {
+        "type": "minestuck:terrain_land_type",
+        "land_type": "minestuck:rainbow"
+      },
+      {
+        "type": "minestuck:terrain_land_type",
+        "land_type": "minestuck:end"
+      }
+    ],
+    "list_type": "any"
+  },
+  "dialogue": "minestuck:consort/bad_water",
+  "dialogue_weight": 10,
+  "keep_on_reset": false
+}

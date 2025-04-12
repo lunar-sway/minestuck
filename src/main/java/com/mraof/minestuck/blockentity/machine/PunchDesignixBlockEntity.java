@@ -1,16 +1,19 @@
 package com.mraof.minestuck.blockentity.machine;
 
 import com.mraof.minestuck.advancements.MSCriteriaTriggers;
-import com.mraof.minestuck.alchemy.AlchemyHelper;
 import com.mraof.minestuck.alchemy.CardCaptchas;
+import com.mraof.minestuck.api.alchemy.recipe.combination.CombinationInput;
 import com.mraof.minestuck.api.alchemy.recipe.combination.CombinationMode;
 import com.mraof.minestuck.api.alchemy.recipe.combination.CombinationRecipe;
-import com.mraof.minestuck.api.alchemy.recipe.combination.CombinerContainer;
 import com.mraof.minestuck.block.MSBlocks;
 import com.mraof.minestuck.block.machine.PunchDesignixBlock;
 import com.mraof.minestuck.blockentity.MSBlockEntityTypes;
 import com.mraof.minestuck.client.gui.MSScreenFactories;
+import com.mraof.minestuck.item.CaptchaCardItem;
 import com.mraof.minestuck.item.MSItems;
+import com.mraof.minestuck.item.components.CaptchaCodeComponent;
+import com.mraof.minestuck.item.components.EncodedItemComponent;
+import com.mraof.minestuck.item.components.MSItemComponents;
 import net.minecraft.core.BlockPos;
 import net.minecraft.core.Direction;
 import net.minecraft.core.HolderLookup;
@@ -152,16 +155,16 @@ public class PunchDesignixBlockEntity extends BlockEntity
 			}
 		} else
 		{
-			if(AlchemyHelper.isReadableCard(heldStack))
+			if(CaptchaCardItem.isUnpunchedCard(heldStack))
 			{
-				setCaptcha(CardCaptchas.getCaptcha(AlchemyHelper.getDecodedItem(heldStack).getItem(), player.getServer()));
-				effects(false);
-			} else if(heldStack.is(MSItems.CAPTCHA_CARD.get()) && AlchemyHelper.getDecodedItem(heldStack).isEmpty())
-			{
-				setCaptcha(CardCaptchas.EMPTY_CARD_CAPTCHA);
-				effects(false);
-			} else if(heldStack.is(MSItems.CAPTCHA_CARD.get()) && !AlchemyHelper.isReadableCard(heldStack))
-				player.displayClientMessage(Component.translatable(REJECT_CARD), true); //card unreadable
+				CaptchaCodeComponent captchaCode = heldStack.get(MSItemComponents.CAPTCHA_CODE);
+				if(captchaCode != null)
+				{
+					setCaptcha(captchaCode.code());
+					effects(false);
+				} else
+					player.displayClientMessage(Component.translatable(REJECT_CARD), true); //card unreadable
+			}
 		}
 	}
 	
@@ -172,19 +175,20 @@ public class PunchDesignixBlockEntity extends BlockEntity
 		if(itemFromCaptcha != null && !getCard().isEmpty())
 		{
 			ItemStack captchaItemStack = itemFromCaptcha.getDefaultInstance();
-			ItemStack storedStackInCard = AlchemyHelper.getDecodedItem(getCard());
+			EncodedItemComponent encodedItemComponent = getCard().get(MSItemComponents.ENCODED_ITEM);
+			ItemStack storedStackInCard = encodedItemComponent != null ? encodedItemComponent.asItemStack() : ItemStack.EMPTY;
+			
 			ItemStack output;
 			
-			if(AlchemyHelper.isPunchedCard(getCard())) //|| combination. A temporary new captcha card containing captchaItemStack is made
-			{
-				output = CombinationRecipe.findResult(new CombinerContainer.Wrapper(AlchemyHelper.createCard(captchaItemStack), getCard(), CombinationMode.OR), player.level());
-			} else
+			if(!storedStackInCard.isEmpty())
+				output = CombinationRecipe.findResult(new CombinationInput(captchaItemStack, storedStackInCard, CombinationMode.OR), player.level());
+			else
 				output = captchaItemStack;
 			
 			if(!output.isEmpty())
 			{
 				MSCriteriaTriggers.PUNCH_DESIGNIX.get().trigger(player, captchaItemStack, storedStackInCard, output);
-				setCard(AlchemyHelper.createPunchedCard(output));
+				setCard(CaptchaCardItem.createPunchedCard(output.getItem()));
 				effects(true);
 			}
 		}

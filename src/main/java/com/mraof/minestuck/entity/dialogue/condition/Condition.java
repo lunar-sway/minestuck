@@ -11,6 +11,7 @@ import com.mraof.minestuck.entity.consort.ConsortReputation;
 import com.mraof.minestuck.entity.consort.EnumConsort;
 import com.mraof.minestuck.entity.dialogue.DialogueComponent;
 import com.mraof.minestuck.entity.dialogue.DialogueEntity;
+import com.mraof.minestuck.entity.dialogue.DialogueNodes;
 import com.mraof.minestuck.player.*;
 import com.mraof.minestuck.skaianet.SburbPlayerData;
 import com.mraof.minestuck.world.MSDimensions;
@@ -18,11 +19,13 @@ import com.mraof.minestuck.world.lands.LandTypePair;
 import com.mraof.minestuck.world.lands.LandTypes;
 import com.mraof.minestuck.world.lands.terrain.TerrainLandType;
 import com.mraof.minestuck.world.lands.title.TitleLandType;
+import net.minecraft.advancements.AdvancementHolder;
 import net.minecraft.core.Holder;
 import net.minecraft.core.HolderSet;
 import net.minecraft.core.registries.BuiltInRegistries;
 import net.minecraft.core.registries.Registries;
 import net.minecraft.network.chat.Component;
+import net.minecraft.resources.ResourceLocation;
 import net.minecraft.server.level.ServerLevel;
 import net.minecraft.server.level.ServerPlayer;
 import net.minecraft.tags.TagKey;
@@ -657,7 +660,7 @@ public interface Condition
 	record PlayerIsClass(EnumClass enumClass) implements Condition
 	{
 		static final MapCodec<PlayerIsClass> CODEC = RecordCodecBuilder.mapCodec(instance -> instance.group(
-				Title.CLASS_CODEC.fieldOf("class").forGetter(PlayerIsClass::enumClass)
+				EnumClass.CODEC.fieldOf("class").forGetter(PlayerIsClass::enumClass)
 		).apply(instance, PlayerIsClass::new));
 		
 		@Override
@@ -688,7 +691,7 @@ public interface Condition
 	record PlayerIsAspect(EnumAspect enumAspect) implements Condition
 	{
 		static final MapCodec<PlayerIsAspect> CODEC = RecordCodecBuilder.mapCodec(instance -> instance.group(
-				Title.ASPECT_CODEC.fieldOf("aspect").forGetter(PlayerIsAspect::enumAspect)
+				EnumAspect.CODEC.fieldOf("aspect").forGetter(PlayerIsAspect::enumAspect)
 		).apply(instance, PlayerIsAspect::new));
 		
 		@Override
@@ -810,6 +813,39 @@ public interface Condition
 		}
 	}
 	
+	record PlayerHasAdvancement(ResourceLocation advancementId) implements Condition
+	{
+		static final MapCodec<PlayerHasAdvancement> CODEC = RecordCodecBuilder.mapCodec(instance -> instance.group(
+				ResourceLocation.CODEC.fieldOf("advancement_id").forGetter(PlayerHasAdvancement::advancementId)
+		).apply(instance, PlayerHasAdvancement::new));
+		
+		@Override
+		public MapCodec<PlayerHasAdvancement> codec()
+		{
+			return CODEC;
+		}
+		
+		@Override
+		public boolean test(LivingEntity entity, ServerPlayer player)
+		{
+			if(player == null)
+				return false;
+			
+			AdvancementHolder holder = player.server.getAdvancements().get(advancementId);
+			
+			if(holder == null)
+				return false;
+			
+			return player.getAdvancements().getOrStartProgress(holder).isDone();
+		}
+		
+		@Override
+		public Component getFailureTooltip()
+		{
+			return Component.literal("Player has not completed advancement");
+		}
+	}
+	
 	record CustomHasScore(int value, String ownerName, String objectiveName) implements Condition
 	{
 		static final MapCodec<CustomHasScore> CODEC = RecordCodecBuilder.mapCodec(instance -> instance.group(
@@ -853,6 +889,57 @@ public interface Condition
 		public Component getFailureTooltip()
 		{
 			return Component.literal("A custom scoreboard value does not match");
+		}
+	}
+	
+	record CustomHasTag(boolean checkPlayer, String tagName) implements Condition
+	{
+		static final MapCodec<CustomHasTag> CODEC = RecordCodecBuilder.mapCodec(instance -> instance.group(
+				Codec.BOOL.optionalFieldOf("check_player", true).forGetter(CustomHasTag::checkPlayer),
+				Codec.STRING.fieldOf("tag_name").forGetter(CustomHasTag::tagName)
+		).apply(instance, CustomHasTag::new));
+		
+		@Override
+		public MapCodec<CustomHasTag> codec()
+		{
+			return CODEC;
+		}
+		
+		@Override
+		public boolean test(LivingEntity entity, ServerPlayer player)
+		{
+			if(player == null)
+				return false;
+			
+			if(checkPlayer)
+				return player.getTags().contains(tagName);
+			else
+				return entity.getTags().contains(tagName);
+		}
+		
+		@Override
+		public Component getFailureTooltip()
+		{
+			return Component.literal("The target does not have the correct tag");
+		}
+	}
+	
+	record DialogueExists(ResourceLocation dialogueId) implements Condition
+	{
+		static final MapCodec<DialogueExists> CODEC = RecordCodecBuilder.mapCodec(instance -> instance.group(
+				ResourceLocation.CODEC.fieldOf("dialogue_id").forGetter(DialogueExists::dialogueId)
+		).apply(instance, DialogueExists::new));
+		
+		@Override
+		public MapCodec<DialogueExists> codec()
+		{
+			return CODEC;
+		}
+		
+		@Override
+		public boolean test(LivingEntity entity, ServerPlayer player)
+		{
+			return DialogueNodes.getInstance().getDialogue(dialogueId) != null;
 		}
 	}
 	
@@ -917,25 +1004,6 @@ public interface Condition
 			LevelData levelData = entity.level().getLevelData();
 			Vec3 spawn = Vec3.atCenterOf(levelData.getSpawnPos());
 			return entity.distanceToSqr(spawn) <= maxDistance * maxDistance;
-		}
-	}
-	
-	enum HasPlayerEntered implements Condition
-	{
-		INSTANCE;
-		static final MapCodec<HasPlayerEntered> CODEC = MapCodec.unit(INSTANCE);
-		
-		
-		@Override
-		public MapCodec<HasPlayerEntered> codec()
-		{
-			return CODEC;
-		}
-		
-		@Override
-		public boolean test(LivingEntity entity, ServerPlayer player)
-		{
-			return SburbPlayerData.get(player).hasEntered();
 		}
 	}
 	

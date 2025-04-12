@@ -2,10 +2,14 @@ package com.mraof.minestuck.item;
 
 import com.mraof.minestuck.blockentity.ComputerBlockEntity;
 import com.mraof.minestuck.client.gui.MSScreenFactories;
+import com.mraof.minestuck.computer.DiskBurnerData;
+import com.mraof.minestuck.computer.ProgramTypes;
+import com.mraof.minestuck.util.MSSoundEvents;
 import com.mraof.minestuck.util.MSTags;
 import net.minecraft.client.gui.screens.Screen;
 import net.minecraft.core.BlockPos;
 import net.minecraft.network.chat.Component;
+import net.minecraft.sounds.SoundSource;
 import net.minecraft.world.InteractionHand;
 import net.minecraft.world.InteractionResult;
 import net.minecraft.world.InteractionResultHolder;
@@ -18,6 +22,7 @@ import net.minecraft.world.level.Level;
 import net.minecraft.world.level.block.Block;
 
 import java.util.List;
+import java.util.Optional;
 import java.util.Set;
 
 /**
@@ -59,9 +64,10 @@ public abstract class ReadableSburbCodeItem extends Item
 		InteractionHand hand = context.getHand();
 		BlockPos pos = context.getClickedPos();
 		
-		if(player != null && level.getBlockEntity(pos) instanceof ComputerBlockEntity blockEntity)
+		if(player != null && level.getBlockEntity(pos) instanceof ComputerBlockEntity computer)
 		{
-			if(useOnComputer(heldStack, player, hand, blockEntity))
+			Optional<DiskBurnerData> diskBurnerData = computer.getProgramData(ProgramTypes.DISK_BURNER);
+			if(diskBurnerData.isPresent() && useOnComputer(heldStack, player, hand, pos, diskBurnerData.get()))
 				return InteractionResult.sidedSuccess(level.isClientSide);
 			else
 				return InteractionResult.FAIL;
@@ -70,32 +76,14 @@ public abstract class ReadableSburbCodeItem extends Item
 		return InteractionResult.PASS;
 	}
 	
-	protected boolean useOnComputer(ItemStack heldStack, Player player, InteractionHand hand, ComputerBlockEntity blockEntity)
+	protected boolean useOnComputer(ItemStack heldStack, Player player, InteractionHand hand, BlockPos pos, DiskBurnerData diskBurnerData)
 	{
-		boolean newInfo = false;
-		
-		if(getParadoxInfo(heldStack) && !blockEntity.hasParadoxInfoStored)
-		{
-			blockEntity.hasParadoxInfoStored = true;
-			newInfo = true;
-		}
-		
-		//for each block in the item's list, adds it to the block entity should it not exist there yet
-		for(Block iterateBlock : getRecordedBlocks(heldStack))
-		{
-			if(iterateBlock.defaultBlockState().is(MSTags.Blocks.GREEN_HIEROGLYPHS))
-				newInfo |= blockEntity.hieroglyphsStored.add(iterateBlock);
-		}
+		boolean newInfo = diskBurnerData.recordNewInfo(getParadoxInfo(heldStack), getRecordedBlocks(heldStack));
 		
 		if(newInfo)
-		{
-			blockEntity.setChanged();
-			blockEntity.markBlockForUpdate();
-			
-			return true;
-		}
+			player.level().playSound(null, pos, MSSoundEvents.COMPUTER_KEYBOARD.get(), SoundSource.BLOCKS);
 		
-		return false;
+		return newInfo;
 	}
 	
 	public static class Completed extends ReadableSburbCodeItem

@@ -41,14 +41,16 @@ import java.util.Map;
  */
 @ParametersAreNonnullByDefault
 @MethodsReturnNonnullByDefault
-public class TotemLatheBlock extends MultiMachineBlock<TotemLatheMultiblock> implements EditmodeDestroyable
+public class TotemLatheBlock extends MachineBlock implements EditmodeDestroyable
 {
 	protected final Map<Direction, VoxelShape> shape;
 	protected final BlockPos mainPos;
+	protected final TotemLatheMultiblock multiblock;
 	
-	public TotemLatheBlock(TotemLatheMultiblock machine, CustomVoxelShape shape, BlockPos mainPos, Properties properties)
+	public TotemLatheBlock(TotemLatheMultiblock multiblock, CustomVoxelShape shape, BlockPos mainPos, Properties properties)
 	{
-		super(machine, properties);
+		super(properties);
+		this.multiblock = multiblock;
 		this.shape = shape.createRotatedShapes();
 		this.mainPos = mainPos;
 	}
@@ -89,13 +91,13 @@ public class TotemLatheBlock extends MultiMachineBlock<TotemLatheMultiblock> imp
 	@Override
 	public void destroyFull(BlockState state, Level level, BlockPos pos)
 	{
-		var placement = this.machine.findPlacementFromSlot(level, this.getMainPos(state, pos));
+		var placement = this.multiblock.findPlacementFromSlot(level, this.getMainPos(state, pos));
 		if(placement.isPresent())
-			this.machine.removeAt(level, placement.get());
+			this.multiblock.removeAt(level, placement.get());
 		else
 		{
-			for(var placementGuess : this.machine.guessPlacement(pos, state))
-				this.machine.removeAt(level, placementGuess);
+			for(var placementGuess : this.multiblock.guessPlacement(pos, state))
+				this.multiblock.removeAt(level, placementGuess);
 		}
 	}
 	
@@ -134,7 +136,7 @@ public class TotemLatheBlock extends MultiMachineBlock<TotemLatheMultiblock> imp
 		}
 		
 		@Override
-		public VoxelShape getShape(BlockState state, BlockGetter worldIn, BlockPos pos, CollisionContext context)
+		protected VoxelShape getShape(BlockState state, BlockGetter worldIn, BlockPos pos, CollisionContext context)
 		{
 			if(state.getValue(DOWEL).equals(EnumDowelType.CARVED_DOWEL))
 			{

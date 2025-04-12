@@ -1,0 +1,67 @@
+package com.mraof.minestuck.client.gui.computer;
+
+import com.mraof.minestuck.computer.ProgramType;
+import net.minecraft.client.gui.GuiGraphics;
+import net.minecraft.network.chat.Component;
+
+import java.util.HashMap;
+import java.util.Objects;
+import java.util.function.Supplier;
+
+/**
+ * @author Kirderf1
+ */
+public interface ProgramGui<D>
+{
+	/**
+	 * Called when the gui is created or if the player pressed the switch
+	 * program button.
+	 */
+	default void onInit(ThemedScreen screen)
+	{
+	}
+	
+	/**
+	 * Called when some related data have changed that may affect the program.
+	 */
+	default void onUpdate(ThemedScreen screen, D data)
+	{
+	}
+	
+	/**
+	 * Called when the gui is to be rendered.
+	 */
+	void render(GuiGraphics guiGraphics, ThemedScreen screen);
+	
+	static void drawHeaderMessage(Component message, GuiGraphics guiGraphics, ThemedScreen gui)
+	{
+		guiGraphics.drawString(gui.getMinecraft().font, message,
+				(gui.width - ComputerScreen.GUI_WIDTH) / 2 + 15, (gui.height - ComputerScreen.GUI_HEIGHT) / 2 + 45,
+				gui.selectedTheme.data().textColor(), false);
+	}
+	
+	final class Registry
+	{
+		private static final HashMap<ProgramType<?>, Supplier<? extends ProgramGui<?>>> programs = new HashMap<>();
+		
+		/**
+		 * Should only be used client-side
+		 */
+		public static <D extends ProgramType.Data> void register(Supplier<ProgramType<D>> programType, Supplier<? extends ProgramGui<D>> factory)
+		{
+			if(programs.containsKey(programType.get()))
+				throw new IllegalArgumentException("Program type " + programType.get() + " is already registered!");
+			programs.put(programType.get(), factory);
+		}
+		
+		/**
+		 * Creates and returns a new computer program gui for the given type.
+		 * Should only be used in a client-side context due to gui sidedness!
+		 */
+		@SuppressWarnings("unchecked")
+		public static <D extends ProgramType.Data> ProgramGui<D> createGuiInstance(ProgramType<D> programType)
+		{
+			return (ProgramGui<D>) Objects.requireNonNull(programs.get(programType)).get();
+		}
+	}
+}

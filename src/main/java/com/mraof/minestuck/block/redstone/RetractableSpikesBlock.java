@@ -73,7 +73,7 @@ public class RetractableSpikesBlock extends Block
 	}
 	
 	@Override
-	public void tick(BlockState state, ServerLevel worldIn, BlockPos pos, RandomSource random)
+	protected void tick(BlockState state, ServerLevel worldIn, BlockPos pos, RandomSource random)
 	{
 		super.tick(state, worldIn, pos, random);
 		
@@ -117,17 +117,15 @@ public class RetractableSpikesBlock extends Block
 		return InteractionResult.PASS;
 	}
 	
-	@SuppressWarnings("deprecation")
 	@Override
-	public void neighborChanged(BlockState state, Level level, BlockPos pos, Block blockIn, BlockPos fromPos, boolean isMoving)
+	protected void neighborChanged(BlockState state, Level level, BlockPos pos, Block blockIn, BlockPos fromPos, boolean isMoving)
 	{
 		super.neighborChanged(state, level, pos, blockIn, fromPos, isMoving);
 		tryExtendSpikes(level, pos, state, false);
 	}
 	
-	@SuppressWarnings("deprecation")
 	@Override
-	public void onPlace(BlockState state, Level level, BlockPos pos, BlockState oldState, boolean isMoving)
+	protected void onPlace(BlockState state, Level level, BlockPos pos, BlockState oldState, boolean isMoving)
 	{
 		super.onPlace(state, level, pos, oldState, isMoving);
 		tryExtendSpikes(level, pos, state, false);
