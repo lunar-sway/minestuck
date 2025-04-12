@@ -84,9 +84,8 @@ public class EcheladderScreen extends PlayerStatsScreen
 		updateScrollAndAnimation(mouseY);
 		
 		int speedFactor = MinestuckConfig.CLIENT.echeladderAnimation.get().getSpeed();
-		int currentRung;
 		
-		currentRung = getCurrentRung(speedFactor);
+		int currentRung = calculateRungAnimationStep(speedFactor);
 		
 		super.render(guiGraphics, mouseX, mouseY, partialTicks);
 		
@@ -104,7 +103,7 @@ public class EcheladderScreen extends PlayerStatsScreen
 		
 		if(fromRung < currentRung)
 		{
-			for(int rung = Math.max(fromRung, currentRung - 4); rung <= currentRung; rung++)
+			for(int rung = Math.max(fromRung, currentRung - 4) + 1; rung <= currentRung; rung++)
 			{
 				int index = rung - 1 - Math.max(fromRung, currentRung - 4);
 				List<Component> newTooltip = drawGainedRungBonuses(guiGraphics, rung, index, mouseX, mouseY);
@@ -119,8 +118,9 @@ public class EcheladderScreen extends PlayerStatsScreen
 			guiGraphics.renderComponentTooltip(font, tooltip, mouseX, mouseY);
 	}
 	
-	private int getCurrentRung(int speedFactor)
+	private int calculateRungAnimationStep(int speedFactor)
 	{
+		showLastRung = true;
 		int currentRung;
 		if(animationCycle == 0)
 		{
@@ -168,12 +168,11 @@ public class EcheladderScreen extends PlayerStatsScreen
 			if(rung > ClientRungData.getFinalRungIndex())
 				break;
 			
-			//TODO broke the animation for previous rung flashing
-			int textColor;
-			textColor = currentRung >= rung ? ClientRungData.getData(rung).textColor() : 0xFFFFFF;
+			int textColor = 0xFFFFFF;
 			int backgroundColor = ClientRungData.getData(rung).backgroundColor();
 			if(rung <= currentRung - (showLastRung ? 0 : 1))
 			{
+				textColor = ClientRungData.getData(rung).textColor();
 				//full bar
 				guiGraphics.fill(xOffset + 90, y, xOffset + 236, y + 12, backgroundColor);
 			} else if(rung == currentRung + 1 && animationCycle == 0)
@@ -234,6 +233,7 @@ public class EcheladderScreen extends PlayerStatsScreen
 	@Nullable
 	private List<Component> drawGainedRungBonuses(GuiGraphics guiGraphics, int rung, int index, int mouseX, int mouseY)
 	{
+		List<Component> tooltips = null;
 		Rung.DisplayData prevRungData = ClientRungData.getData(rung - 1);
 		Rung.DisplayData rungData = ClientRungData.getData(rung);
 		
@@ -250,8 +250,15 @@ public class EcheladderScreen extends PlayerStatsScreen
 		int strX = xOffset + 20 + xMod - mc.font.width(str) / 2, strY = yOffset + 52 + yMod;
 		guiGraphics.drawString(font, str, strX, strY, textColor, false);
 		
+		if(mouseInBounds(mouseY, strY, mouseX, strX, mc.font.width(str)))
+		{
+			int diff = (int) Math.round(100 * (1 + rungData.attributes().attackBonus()) * rungData.attributes().underlingDamageMod());
+			diff -= Math.round(100 * (1 + prevRungData.attributes().attackBonus()) * prevRungData.attributes().underlingDamageMod());
+			tooltips = Collections.singletonList(Component.translatable(DAMAGE_UNDERLING_INCREASE, diff));
+		}
+		
 		double d = (rungData.attributes().healthBoost() - prevRungData.attributes().healthBoost()) / 2D;
-		str = "+" + (d == 0 ? d : d + "!");
+		str = String.format(Locale.ROOT, "+%.1f!", d);
 		guiGraphics.fill(minX, yOffset + 104 + yMod, maxX, yOffset + 116 + yMod, bg);
 		strX = xOffset + 20 + xMod - mc.font.width(str) / 2;
 		strY = yOffset + 106 + yMod;
@@ -259,19 +266,12 @@ public class EcheladderScreen extends PlayerStatsScreen
 		
 		if(mouseInBounds(mouseY, strY, mouseX, strX, mc.font.width(str)))
 		{
-			int diff = (int) Math.round(100 * rungData.attributes().attackBonus() * rungData.attributes().underlingDamageMod());
-			diff -= Math.round(100 * prevRungData.attributes().attackBonus() * prevRungData.attributes().underlingDamageMod());
-			return Collections.singletonList(Component.translatable(DAMAGE_UNDERLING_INCREASE, diff));
-		}
-		
-		if(mouseInBounds(mouseY, strY, mouseX, strX, mc.font.width(str)))
-		{
 			int diff = (int) Math.round(1000 * prevRungData.attributes().underlingProtectionMod());
 			diff -= Math.round(1000 * rungData.attributes().underlingProtectionMod());
-			return Collections.singletonList(Component.translatable(PROTECTION_UNDERLING_INCREASE, diff / 10D));
+			tooltips = Collections.singletonList(Component.translatable(PROTECTION_UNDERLING_INCREASE, diff / 10D));
 		}
 		
-		return null;
+		return tooltips;
 	}
 	
 	private boolean mouseInBounds(int mouseY, int minY, int mouseX, int minX, int xDiff)
