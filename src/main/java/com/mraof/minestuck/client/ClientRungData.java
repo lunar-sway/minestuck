@@ -14,31 +14,18 @@ import java.util.List;
 @EventBusSubscriber(modid = Minestuck.MOD_ID, bus = EventBusSubscriber.Bus.GAME, value = Dist.CLIENT)
 public final class ClientRungData
 {
+	private static final Rung.DisplayData DUMMY_DATA = new Rung.DisplayData(0xFFFFFF, 0x000000, 0,
+			new Rung.DisplayAttributes(0D, 0D, 1D, 1D));
 	private static List<Rung.DisplayData> RUNG_LIST = Collections.emptyList();
 	
-	public static List<Rung.DisplayData> getRungList()
+	public static int getFinalRungIndex()
 	{
-		return RUNG_LIST;
+		return RUNG_LIST.size() - 1;
 	}
 	
-	public static int getFinalRung()
+	public static Rung.DisplayData getData(int rungIndex)
 	{
-		return getRungList().size() - 1;
-	}
-	
-	public static int textColor(int rung)
-	{
-		return rung < getRungList().size() ? getRungList().get(rung).textColor() : 0xFFFFFF;
-	}
-	
-	public static int backgroundColor(int rung, int textColor)
-	{
-		return rung < getRungList().size() ? getRungList().get(rung).backgroundColor() : ~textColor;
-	}
-	
-	public static long getGristCapacity(int rung)
-	{
-		return rung < getRungList().size() ? getRungList().get(rung).gristCapacity() : 0;
+		return rungIndex < RUNG_LIST.size() ? RUNG_LIST.get(rungIndex) : DUMMY_DATA;
 	}
 	
 	public static void onPacket(RungDisplayDataPacket packet)

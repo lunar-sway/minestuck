@@ -65,12 +65,24 @@ public record Rung(int rung, int backgroundColor, int textColor, long expRequire
 		}
 	}
 	
-	public record DisplayData(int backgroundColor, int textColor, long gristCapacity)
+	public record DisplayData(int backgroundColor, int textColor, long gristCapacity, DisplayAttributes attributes)
 	{
 		public static final StreamCodec<FriendlyByteBuf, DisplayData> STREAM_CODEC = StreamCodec.composite(
 				ByteBufCodecs.INT, DisplayData::backgroundColor,
 				ByteBufCodecs.INT, DisplayData::textColor,
 				ByteBufCodecs.VAR_LONG, DisplayData::gristCapacity,
+				DisplayAttributes.STREAM_CODEC, DisplayData::attributes,
 				DisplayData::new);
+	}
+	
+	public record DisplayAttributes(double attackBonus, double healthBoost,
+									double underlingDamageMod, double underlingProtectionMod)
+	{
+		public static final StreamCodec<FriendlyByteBuf, DisplayAttributes> STREAM_CODEC = StreamCodec.composite(
+				ByteBufCodecs.DOUBLE, DisplayAttributes::attackBonus,
+				ByteBufCodecs.DOUBLE, DisplayAttributes::healthBoost,
+				ByteBufCodecs.DOUBLE, DisplayAttributes::underlingDamageMod,
+				ByteBufCodecs.DOUBLE, DisplayAttributes::underlingProtectionMod,
+				DisplayAttributes::new);
 	}
 }

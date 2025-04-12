@@ -10,6 +10,7 @@ import com.mojang.serialization.JsonOps;
 import com.mojang.serialization.MapCodec;
 import com.mojang.serialization.codecs.RecordCodecBuilder;
 import com.mraof.minestuck.Minestuck;
+import com.mraof.minestuck.data.RungsProvider;
 import com.mraof.minestuck.network.RungDisplayDataPacket;
 import com.mraof.minestuck.util.MSAttachments;
 import net.minecraft.resources.ResourceLocation;
@@ -247,9 +248,23 @@ public class Rungs
 	
 	private static RungDisplayDataPacket createDisplayDataPacket()
 	{
-		List<Rung.DisplayData> rungList = RUNGS.stream().map(rung ->
-				new Rung.DisplayData(rung.backgroundColor(), rung.textColor(), rung.gristCapacity())
+		List<Rung.DisplayData> rungList = RUNGS.stream().map(rung -> {
+			Rung.DisplayAttributes attributes = new Rung.DisplayAttributes(getAttributeAmount(rung.rung(), RungsProvider.DAMAGE_BOOST_ID), getAttributeAmount(rung.rung(), RungsProvider.HEALTH_BOOST_ID),
+					1D + getAttributeAmount(rung.rung(), RungsProvider.UNDERLING_DAMAGE_ID), 1D + getAttributeAmount(rung.rung(), RungsProvider.UNDERLING_PROTECTION_ID));
+					return new Rung.DisplayData(rung.backgroundColor(), rung.textColor(), rung.gristCapacity(), attributes);
+				}
 		).toList();
 		return new RungDisplayDataPacket(rungList);
+	}
+	
+	private static double getAttributeAmount(int rung, ResourceLocation id)
+	{
+		for(Rung.EcheladderAttribute echeladderAttribute : getRelevantAttributes(null, rung))
+		{
+			if(echeladderAttribute.id().equals(id))
+				return echeladderAttribute.getAmount(rung);
+		}
+		
+		return 0;
 	}
 }
