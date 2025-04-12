@@ -12,35 +12,15 @@ import net.neoforged.bus.api.EventPriority;
 import net.neoforged.bus.api.SubscribeEvent;
 import net.neoforged.fml.common.EventBusSubscriber;
 import net.neoforged.neoforge.common.util.FakePlayer;
-import net.neoforged.neoforge.event.AddReloadListenerEvent;
 import net.neoforged.neoforge.event.entity.living.LivingDeathEvent;
 import net.neoforged.neoforge.event.entity.player.AdvancementEvent;
-import net.neoforged.neoforge.event.server.ServerStoppedEvent;
 
 import javax.annotation.ParametersAreNonnullByDefault;
-import java.util.List;
-import java.util.Objects;
 
 @ParametersAreNonnullByDefault
 @EventBusSubscriber(bus = EventBusSubscriber.Bus.GAME)
 public interface EcheladderExpSource
 {
-	static List<EcheladderExpSource> instance()
-	{
-		return Objects.requireNonNull(EcheladderExpSources.INSTANCE_LIST);
-	}
-	
-	@SubscribeEvent
-	static void onResourceReload(AddReloadListenerEvent event)
-	{
-		event.addListener(new EcheladderExpSources.Loader());
-	}
-	
-	@SubscribeEvent
-	static void onServerStopped(ServerStoppedEvent event)
-	{
-		EcheladderExpSources.INSTANCE_LIST.clear();
-	}
 	
 	MapCodec<? extends EcheladderExpSource> codec();
 	
@@ -51,7 +31,7 @@ public interface EcheladderExpSource
 	{
 		if(event.getSource().getEntity() instanceof ServerPlayer player && !(player instanceof FakePlayer))
 		{
-			for(EcheladderExpSource source : EcheladderExpSources.INSTANCE_LIST)
+			for(EcheladderExpSource source : EcheladderExpSources.instance())
 			{
 				if(source instanceof KillEntity killEntitySource && killEntitySource.matches(event.getEntity().getType()))
 				{
@@ -121,7 +101,7 @@ public interface EcheladderExpSource
 	@SubscribeEvent
 	static void onAdvancementGained(AdvancementEvent.AdvancementEarnEvent event)
 	{
-		for(EcheladderExpSource source : EcheladderExpSources.INSTANCE_LIST)
+		for(EcheladderExpSource source : EcheladderExpSources.instance())
 		{
 			if(source instanceof AdvancementEarned advancementSource && advancementSource.matches(event.getAdvancement().id()))
 			{
