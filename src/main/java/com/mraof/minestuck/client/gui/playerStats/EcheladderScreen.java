@@ -3,8 +3,9 @@ package com.mraof.minestuck.client.gui.playerStats;
 import com.google.common.collect.ImmutableList;
 import com.mojang.blaze3d.systems.RenderSystem;
 import com.mraof.minestuck.MinestuckConfig;
+import com.mraof.minestuck.data.RungsProvider;
 import com.mraof.minestuck.player.ClientPlayerData;
-import com.mraof.minestuck.player.Echeladder;
+import com.mraof.minestuck.player.Rung;
 import com.mraof.minestuck.player.Rungs;
 import net.minecraft.client.gui.GuiGraphics;
 import net.minecraft.client.renderer.texture.TextureAtlasSprite;
@@ -69,6 +70,37 @@ public class EcheladderScreen extends PlayerStatsScreen
 		finalRung = Rungs.finalRung();
 		
 		maxScroll = (finalRung + 1) * RUNG_Y - 154;
+	}
+	
+	private static double attackBonus(int rung)
+	{
+		return getAttributeAmount(rung, RungsProvider.DAMAGE_BOOST_ID);
+	}
+	
+	private static double healthBoost(int rung)
+	{
+		return getAttributeAmount(rung, RungsProvider.HEALTH_BOOST_ID);
+	}
+	
+	private static double getUnderlingDamageModifier(int rung)
+	{
+		return 1D + getAttributeAmount(rung, RungsProvider.UNDERLING_DAMAGE_ID);
+	}
+	
+	private static double getUnderlingProtectionModifier(int rung)
+	{
+		return 1D + getAttributeAmount(rung, RungsProvider.UNDERLING_PROTECTION_ID);
+	}
+	
+	private static double getAttributeAmount(int rung, ResourceLocation id)
+	{
+		for(Rung.EcheladderAttribute echeladderAttribute : Rungs.getRelevantAttributes(null, rung))
+		{
+			if(echeladderAttribute.id().equals(id))
+				return echeladderAttribute.getAmount(rung);
+		}
+		
+		return 0;
 	}
 	
 	@Override
@@ -209,11 +241,11 @@ public class EcheladderScreen extends PlayerStatsScreen
 		String msg = title.getString();
 		guiGraphics.drawString(font, msg, xOffset + 168 - mc.font.width(msg) / 2F, yOffset + 12, GREY, false);
 		
-		int attack = (int) Math.round(100 * (1 + Echeladder.attackBonus(currentRung)));
+		int attack = (int) Math.round(100 * (1 + attackBonus(currentRung)));
 		guiGraphics.drawString(font, I18n.get(ATTACK), textOffset, yOffset + 30, GREY, false);
 		guiGraphics.drawString(font, attack + "%", textOffset + 2, yOffset + 39, BLUE, false);
 		
-		double health = Echeladder.healthBoost(currentRung) / 2D;
+		double health = healthBoost(currentRung) / 2D;
 		guiGraphics.drawString(font, I18n.get(HEALTH), textOffset, yOffset + 84, GREY, false);
 		guiGraphics.drawString(font, "+" + String.format(Locale.ROOT, "%.1f", health), textOffset + 2, yOffset + 93, BLUE, false);
 		
@@ -225,9 +257,9 @@ public class EcheladderScreen extends PlayerStatsScreen
 		guiGraphics.drawString(font, String.valueOf(Rungs.getGristCapacity(currentRung)), textOffset + 2, yOffset + 147, BLUE, false);
 		
 		if(mouseInBounds(mouseY, yOffset + 39, mouseX, textOffset + 2, mc.font.width(attack + "%")))
-			return ImmutableList.of(Component.translatable(DAMAGE_UNDERLING), Component.literal(Math.round(attack * Echeladder.getUnderlingDamageModifier(currentRung)) + "%"));
+			return ImmutableList.of(Component.translatable(DAMAGE_UNDERLING), Component.literal(Math.round(attack * getUnderlingDamageModifier(currentRung)) + "%"));
 		if(mouseInBounds(mouseY, yOffset + 93, mouseX, textOffset + 2, mc.font.width(String.valueOf(health))))
-			return ImmutableList.of(Component.translatable(PROTECTION_UNDERLING), Component.literal(String.format(Locale.ROOT, "%.1f", 100 * Echeladder.getUnderlingProtectionModifier(currentRung)) + "%"));
+			return ImmutableList.of(Component.translatable(PROTECTION_UNDERLING), Component.literal(String.format(Locale.ROOT, "%.1f", 100 * getUnderlingProtectionModifier(currentRung)) + "%"));
 		return null;
 	}
 	
@@ -242,12 +274,12 @@ public class EcheladderScreen extends PlayerStatsScreen
 		int minX = xOffset + 5 + xMod;
 		int maxX = xOffset + 35 + xMod;
 		
-		String str = "+" + (Math.round(100 * Echeladder.attackBonus(rung)) - Math.round(100 * Echeladder.attackBonus(rung - 1))) + "%!";
+		String str = "+" + (Math.round(100 * attackBonus(rung)) - Math.round(100 * attackBonus(rung - 1))) + "%!";
 		guiGraphics.fill(minX, yOffset + 50 + yMod, maxX, yOffset + 62 + yMod, bg);
 		int strX = xOffset + 20 + xMod - mc.font.width(str) / 2, strY = yOffset + 52 + yMod;
 		guiGraphics.drawString(font, str, strX, strY, textColor, false);
 		
-		double d = (Echeladder.healthBoost(rung) - Echeladder.healthBoost(rung - 1)) / 2D;
+		double d = (healthBoost(rung) - healthBoost(rung - 1)) / 2D;
 		str = "+" + (d == 0 ? d : d + "!");
 		guiGraphics.fill(minX, yOffset + 104 + yMod, maxX, yOffset + 116 + yMod, bg);
 		strX = xOffset + 20 + xMod - mc.font.width(str) / 2;
@@ -256,15 +288,15 @@ public class EcheladderScreen extends PlayerStatsScreen
 		
 		if(mouseInBounds(mouseY, strY, mouseX, strX, mc.font.width(str)))
 		{
-			int diff = (int) Math.round(100 * Echeladder.attackBonus(rung) * Echeladder.getUnderlingDamageModifier(rung));
-			diff -= Math.round(100 * Echeladder.attackBonus(rung - 1) * Echeladder.getUnderlingDamageModifier(rung - 1));
+			int diff = (int) Math.round(100 * attackBonus(rung) * getUnderlingDamageModifier(rung));
+			diff -= Math.round(100 * attackBonus(rung - 1) * getUnderlingDamageModifier(rung - 1));
 			return Collections.singletonList(Component.translatable(DAMAGE_UNDERLING_INCREASE, diff));
 		}
 		
 		if(mouseInBounds(mouseY, strY, mouseX, strX, mc.font.width(str)))
 		{
-			int diff = (int) Math.round(1000 * Echeladder.getUnderlingProtectionModifier(rung - 1));
-			diff -= Math.round(1000 * Echeladder.getUnderlingProtectionModifier(rung));
+			int diff = (int) Math.round(1000 * getUnderlingProtectionModifier(rung - 1));
+			diff -= Math.round(1000 * getUnderlingProtectionModifier(rung));
 			return Collections.singletonList(Component.translatable(PROTECTION_UNDERLING_INCREASE, diff / 10D));
 		}
 		

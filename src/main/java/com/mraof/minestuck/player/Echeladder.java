@@ -5,7 +5,6 @@ import com.mraof.minestuck.MinestuckConfig;
 import com.mraof.minestuck.advancements.MSCriteriaTriggers;
 import com.mraof.minestuck.computer.editmode.EditData;
 import com.mraof.minestuck.computer.editmode.ServerEditHandler;
-import com.mraof.minestuck.data.RungsProvider;
 import com.mraof.minestuck.network.EcheladderDataPacket;
 import com.mraof.minestuck.skaianet.SburbPlayerData;
 import com.mraof.minestuck.util.MSAttachments;
@@ -16,7 +15,6 @@ import net.minecraft.nbt.CompoundTag;
 import net.minecraft.nbt.ListTag;
 import net.minecraft.nbt.StringTag;
 import net.minecraft.nbt.Tag;
-import net.minecraft.resources.ResourceLocation;
 import net.minecraft.server.MinecraftServer;
 import net.minecraft.server.level.ServerPlayer;
 import net.minecraft.sounds.SoundSource;
@@ -183,16 +181,6 @@ public final class Echeladder implements INBTSerializable<CompoundTag>
 		return ((float) progress) / Rungs.getProgressReq(rung);
 	}
 	
-	public double getUnderlingDamageModifier()
-	{
-		return getUnderlingDamageModifier(rung);
-	}
-	
-	public double getUnderlingProtectionModifier()
-	{
-		return getUnderlingProtectionModifier(rung);
-	}
-	
 	public void updateEcheladderBonuses(ServerPlayer player)
 	{
 		EnumAspect aspect = Title.getTitle(player).map(Title::heroAspect).orElse(null);
@@ -223,37 +211,6 @@ public final class Echeladder implements INBTSerializable<CompoundTag>
 		
 		for(Tag tag : nbt.getList("rungBonuses", Tag.TAG_STRING))
 			usedBonuses.add(EcheladderBonusType.fromString(tag.getAsString()));
-	}
-	
-	public static double attackBonus(int rung)
-	{
-		return getAttributeAmount(rung, RungsProvider.DAMAGE_BOOST_ID);
-	}
-	
-	public static double healthBoost(int rung)
-	{
-		return getAttributeAmount(rung, RungsProvider.HEALTH_BOOST_ID);
-	}
-	
-	public static double getUnderlingDamageModifier(int rung)
-	{
-		return 1D + getAttributeAmount(rung, RungsProvider.UNDERLING_DAMAGE_ID);
-	}
-	
-	public static double getUnderlingProtectionModifier(int rung)
-	{
-		return 1D + getAttributeAmount(rung, RungsProvider.UNDERLING_PROTECTION_ID);
-	}
-	
-	private static double getAttributeAmount(int rung, ResourceLocation id)
-	{
-		for(Rung.EcheladderAttribute echeladderAttribute : Rungs.getRelevantAttributes(null, rung))
-		{
-			if(echeladderAttribute.id().equals(id))
-				return echeladderAttribute.getAmount(rung);
-		}
-		
-		return 0;
 	}
 	
 	public long getGristCapacity()
