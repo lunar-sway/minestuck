@@ -8,8 +8,6 @@ The format is based on [Keep a Changelog](https://keepachangelog.com/en/1.1.0/).
 
 ## Added
 - Prospit and Derse dimensions and block sets
-- "golden garrison" music track (Prospit theme)
-- "voidal sandbox" music track (Derse theme)
 
 ## Changed
 - New texture of skaia
@@ -24,7 +22,7 @@ The format is based on [Keep a Changelog](https://keepachangelog.com/en/1.1.0/).
 
 ### Contributors for this release
 
-- Cibernet, Dweblenod, kirderf1, glubtier, rose_bushes_
+- Cibernet, Dweblenod, kirderf1, glubtier, rose_bushes_, v_sabitron
 
 ## [1.20.4-1.12.2.0] - 2024-10-06
 
