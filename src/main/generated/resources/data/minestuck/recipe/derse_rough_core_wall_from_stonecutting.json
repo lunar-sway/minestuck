@@ -1,0 +1,10 @@
+{
+  "type": "minecraft:stonecutting",
+  "ingredient": {
+    "item": "minestuck:derse_rough_core"
+  },
+  "result": {
+    "count": 1,
+    "id": "minestuck:derse_rough_core_wall"
+  }
+}

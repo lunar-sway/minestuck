@@ -4,6 +4,7 @@ import com.mraof.minestuck.advancements.MSCriteriaTriggers;
 import com.mraof.minestuck.alchemy.recipe.generator.recipe.InterpreterTypes;
 import com.mraof.minestuck.api.alchemy.GristTypes;
 import com.mraof.minestuck.block.AspectTreeBlocks;
+import com.mraof.minestuck.block.DreamerMoonBlocks;
 import com.mraof.minestuck.block.MSBlocks;
 import com.mraof.minestuck.block.SkaiaBlocks;
 import com.mraof.minestuck.block.plant.MSPottedSaplings;
@@ -122,6 +123,7 @@ public class Minestuck
 		
 		SkaiaBlocks.init();
 		AspectTreeBlocks.init();
+		DreamerMoonBlocks.init();
 	}
 	
 	/**

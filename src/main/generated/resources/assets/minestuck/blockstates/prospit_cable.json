@@ -1,0 +1,16 @@
+{
+  "variants": {
+    "axis=x": {
+      "model": "minestuck:block/prospit_cable",
+      "x": 90,
+      "y": 90
+    },
+    "axis=y": {
+      "model": "minestuck:block/prospit_cable"
+    },
+    "axis=z": {
+      "model": "minestuck:block/prospit_cable",
+      "x": 90
+    }
+  }
+}

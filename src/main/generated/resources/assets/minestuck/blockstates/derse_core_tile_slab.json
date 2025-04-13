@@ -1,0 +1,13 @@
+{
+  "variants": {
+    "type=bottom": {
+      "model": "minestuck:block/derse_core_tiles_slab"
+    },
+    "type=double": {
+      "model": "minestuck:block/derse_core_tiles"
+    },
+    "type=top": {
+      "model": "minestuck:block/derse_core_tiles_slab_top"
+    }
+  }
+}

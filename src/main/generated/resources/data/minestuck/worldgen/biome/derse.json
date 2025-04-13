@@ -1,0 +1,33 @@
+{
+  "carvers": {},
+  "downfall": 0.5,
+  "effects": {
+    "fog_color": 0,
+    "sky_color": 0,
+    "water_color": 2490620,
+    "water_fog_color": 2097366
+  },
+  "features": [],
+  "has_precipitation": false,
+  "spawn_costs": {},
+  "spawners": {
+    "ambient": [],
+    "axolotls": [],
+    "creature": [],
+    "minestuck:consort": [],
+    "minestuck:underling": [],
+    "misc": [],
+    "monster": [
+      {
+        "type": "minestuck:dersite_pawn",
+        "maxCount": 10,
+        "minCount": 1,
+        "weight": 2
+      }
+    ],
+    "underground_water_creature": [],
+    "water_ambient": [],
+    "water_creature": []
+  },
+  "temperature": 0.5
+}

@@ -15,17 +15,24 @@ The format is based on [Keep a Changelog](https://keepachangelog.com/en/1.1.0/).
 - Message when entering edit mode to remind players of the exit keybind
 - Added 2 tracks october and endless chasm by triagegremlin
 - Added 2 tracks the note desolation plays and desolate strife by Caldw3ll
-- Rung progress bar is now white when it would otherwise be too dark to see progress clearly
-- Most vanilla enemy mobs now provide Echeladder exp
-- Echeladder exp is provided when gaining the advancements for obtaining a legendary weapon/obtaining a netherite hoe/entering the Nether/entering the End
+- New Disk Manager utility in Settings computer program
+- Computer programs now have a tooltip when hovered over in computer gui
+- Computer sound effects
+- New computer related advancement
+- Added Moon Cake
+- Work-in-progresss Prospit and Derse dimensions and block sets (not accessible through normal gameplay)
 - Echeladder now provides fall damage resistance
 
 ### Changed
 
-- Knitting needle crafting recipe now produces one item instead of two
+- Updated land skybox rendering
+- Most vanilla enemy mobs now provide Echeladder exp
+- Echeladder exp is provided when gaining the advancements for obtaining a legendary weapon/obtaining a netherite hoe/entering the Nether/entering the End
 - There is no longer a threshold under which certain experience sources will stop contributing. After the incoming exp has been modified for the given rung, there is a 1 in 2/exp chance that 1 exp will be added.
 - Echeladder related attributes now scale linearly instead of exponentially, with minor tweaks to values on each rung
 - Tweaks to Echeladder GUI
+- Knitting needle crafting recipe now produces one item instead of two
+- Updated coarse end stone texture
 
 ### Fixed
 
@@ -34,10 +41,11 @@ The format is based on [Keep a Changelog](https://keepachangelog.com/en/1.1.0/).
 - Item stack data will now be preserved on disks inserted into a computer
 - Fix disk insertion and computer screen for computer easter egg
 - Carved totems in alchemiter model now have correct uv mapping
+- Rung progress bar is now white when it would otherwise be too dark to see progress clearly
 
 ### Contributors for this release
 
-- Cibernet, Dweblenod, kirderf1, glubtier, blankMushroom, hadean, ThalliumSulfate, triagegremlin, Caldw3ll
+- Cibernet, Dweblenod, kirderf1, glubtier, blankMushroom, hadean, ThalliumSulfate, triagegremlin, Caldw3ll, heartsremedy, rose_bushes_, v_sabitron
 
 ## [1.20.4-1.12.2.1] - 2025-03-16
 
@@ -58,6 +66,7 @@ The format is based on [Keep a Changelog](https://keepachangelog.com/en/1.1.0/).
 ### Contributors for this release
 
 - Dweblenod, blankMushroom, kirderf1
+
 
 ## [1.20.4-1.12.2.0] - 2024-10-06
 

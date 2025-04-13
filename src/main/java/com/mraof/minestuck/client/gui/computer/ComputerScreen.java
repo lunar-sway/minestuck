@@ -5,80 +5,54 @@ import com.mraof.minestuck.Minestuck;
 import com.mraof.minestuck.blockentity.ComputerBlockEntity;
 import com.mraof.minestuck.computer.ProgramType;
 import com.mraof.minestuck.computer.ProgramTypes;
-import com.mraof.minestuck.computer.theme.ComputerTheme;
-import com.mraof.minestuck.computer.theme.ComputerThemes;
 import net.minecraft.client.Minecraft;
 import net.minecraft.client.gui.GuiGraphics;
-import net.minecraft.client.gui.components.Button;
-import net.minecraft.client.gui.components.Renderable;
-import net.minecraft.client.gui.components.events.GuiEventListener;
-import net.minecraft.client.gui.narration.NarratableEntry;
-import net.minecraft.client.gui.screens.Screen;
+import net.minecraft.client.gui.components.Tooltip;
 import net.minecraft.network.chat.Component;
 import net.minecraft.resources.ResourceLocation;
 import net.neoforged.neoforge.client.gui.widget.ExtendedButton;
 import org.lwjgl.glfw.GLFW;
 
+import javax.annotation.Nullable;
 import javax.annotation.ParametersAreNonnullByDefault;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Objects;
 import java.util.Optional;
 
-//TODO continually check that player is in reach of the computer
+/**
+ * The screen that is shown whenever the computer is first opened. Equivalent to the desktop.
+ * Upon closing any program, the player will be taken here.
+ */
 @ParametersAreNonnullByDefault
-public class ComputerScreen extends Screen
+public class ComputerScreen extends ThemedScreen
 {
+	//TODO continually check that player is in reach of the computer
 	public static final String TITLE = "minestuck.computer";
-	public static final ResourceLocation guiMain = ResourceLocation.fromNamespaceAndPath(Minestuck.MOD_ID, "textures/gui/sburb.png");
-	public static final ResourceLocation guiBsod = ResourceLocation.fromNamespaceAndPath(Minestuck.MOD_ID, "textures/gui/bsod_message.png");
 	
-	public static final int xSize = 176;
-	public static final int ySize = 166;
-	
-	public final ComputerBlockEntity be;
 	private final List<ComputerIcon> icons;
-	private PowerButton powerButton;
+	@Nullable
 	private TypedProgramGui<?> program;
-	private ComputerTheme cachedTheme;
 	
-	public ComputerScreen(Minecraft mc, ComputerBlockEntity be)
+	public ComputerScreen(Minecraft mc, ComputerBlockEntity computer)
 	{
-		super(Component.translatable(TITLE));
+		super(computer, Component.translatable(TITLE));
 		
 		this.minecraft = mc;
 		this.font = minecraft.font;
-		this.be = be;
 		this.icons = new ArrayList<>();
-		this.cachedTheme = ComputerThemes.instance().lookup(be.getTheme());
-		be.setGuiCallback(this::updateGui);
+		
+		computer.setGuiCallback(this::updateGui);
 	}
 	
 	@Override
 	public void init()
 	{
 		genIcons();
-		powerButton = addRenderableWidget(new PowerButton());
+		super.init();
+		if(program != null)
+			program.gui.onInit(this);
 		updateGui();
-	}
-	
-	@Override
-	public void renderBackground(GuiGraphics guiGraphics, int mouseX, int mouseY, float partialTicks)
-	{
-		super.renderBackground(guiGraphics, mouseX, mouseY, partialTicks);
-		
-		boolean bsod = be.isBroken();
-		int xOffset = (this.width / 2) - (xSize / 2);
-		int yOffset = (this.height / 2) - (ySize / 2);
-		
-		//outside gui bits
-		RenderSystem.setShaderColor(1, 1, 1, 1);
-		guiGraphics.blit(guiMain, xOffset, yOffset, 0, 0, xSize, ySize);
-		
-		if(bsod)
-			guiGraphics.blit(guiBsod, xOffset+9, yOffset+38, 0, 0, 158, 120);
-		else
-			guiGraphics.blit(this.getTheme().data().texturePath(), xOffset + 9, yOffset + 38, 0, 0, 158, 120);
 	}
 	
 	@Override
@@ -86,9 +60,7 @@ public class ComputerScreen extends Screen
 	{
 		super.render(guiGraphics, mouseX, mouseY, partialTicks);
 		
-		boolean bsod = be.isBroken();
-		int xOffset = (this.width / 2) - (xSize / 2);
-		int yOffset = (this.height / 2) - (ySize / 2);
+		boolean bsod = computer.isBrokenOrOff();
 		
 		if(!bsod)
 		{
@@ -96,32 +68,20 @@ public class ComputerScreen extends Screen
 			if(program != null)
 				program.gui.render(guiGraphics, this);
 		}
-		
-		//corner bits (goes on top of computer screen slightly)
-		guiGraphics.blit(guiMain, xOffset + 9, yOffset + 38, xSize, 0, 3, 3);
-		guiGraphics.blit(guiMain, xOffset + 164, yOffset + 38, xSize + 3, 0, 3, 3);
-	}
-	
-	public ComputerTheme getTheme()
-	{
-		return cachedTheme;
 	}
 	
 	public void updateGui()
 	{
-		if(!this.cachedTheme.id().equals(be.getTheme()))
-			this.cachedTheme = ComputerThemes.instance().lookup(be.getTheme());
-		
 		if(program != null)
 			program.updateGui(this);
 		
-		boolean shouldShowIcons = this.program == null && !this.be.isBroken();
+		boolean shouldShowIcons = this.program == null && !this.computer.isBrokenOrOff();
 		this.icons.forEach(icon -> icon.visible = shouldShowIcons);
 	}
 	
 	protected void setProgram(ProgramType<?> programType)
 	{
-		if(be.isBroken())
+		if(computer.isBrokenOrOff())
 			return;
 		
 		program = new TypedProgramGui<>(programType);
@@ -143,13 +103,13 @@ public class ComputerScreen extends Screen
 	
 	private void genIcons()
 	{
-		var xOffset = (width-xSize)/2;
-		var yOffset = (height-ySize)/2;
+		var xOffset = (width - GUI_WIDTH) / 2;
+		var yOffset = (height - GUI_HEIGHT) / 2;
 		
 		icons.clear();
 		
 		int programCount = 0;
-		for(ProgramType<?> programType : be.installedPrograms().sorted(ProgramTypes.DISPLAY_ORDER_SORTER).toList())
+		for(ProgramType<?> programType : computer.installedPrograms().sorted(ProgramTypes.DISPLAY_ORDER_SORTER).toList())
 		{
 			icons.add(addRenderableWidget(new ComputerIcon(
 					xOffset + 15 + Math.floorDiv(programCount, 5) * 20,
@@ -158,9 +118,6 @@ public class ComputerScreen extends Screen
 			programCount++;
 		}
 	}
-	
-	@Override
-	public boolean shouldCloseOnEsc() { return false; }
 	
 	@Override
 	public boolean keyPressed(int pKeyCode, int pScanCode, int pModifiers)
@@ -178,16 +135,6 @@ public class ComputerScreen extends Screen
 		return super.keyPressed(pKeyCode, pScanCode, pModifiers);
 	}
 	
-	// make this method public so that programs can add widgets
-	@Override
-	public <T extends GuiEventListener & Renderable & NarratableEntry> T addRenderableWidget(T button) {return super.addRenderableWidget(button);}
-	
-	@Override
-	public boolean isPauseScreen()
-	{
-		return false;
-	}
-	
 	private static final class TypedProgramGui<D extends ProgramType.Data>
 	{
 		private final ProgramType<D> type;
@@ -201,7 +148,7 @@ public class ComputerScreen extends Screen
 		
 		void updateGui(ComputerScreen screen)
 		{
-			Optional<D> programData = screen.be.getProgramData(this.type);
+			Optional<D> programData = screen.computer.getProgramData(this.type);
 			if(programData.isPresent())
 				this.gui.onUpdate(screen, programData.get());
 			else
@@ -220,29 +167,19 @@ public class ComputerScreen extends Screen
 			
 			ResourceLocation programKey = Objects.requireNonNullElse(ProgramTypes.REGISTRY.getKey(programType), Minestuck.id("invalid"));
 			this.icon = programKey.withPath(name -> "textures/gui/desktop_icon/" + name + ".png");
+			
+			setTooltip(Tooltip.create(programType.name()));
 		}
 		
 		@Override
 		public void renderWidget(GuiGraphics guiGraphics, int mouseX, int mouseY, float partialTick)
 		{
-			if(!visible) return;
+			if(!visible)
+				return;
+			
 			RenderSystem.setShaderColor(1, 1, 1, 1);
 			
 			guiGraphics.blit(this.icon, getX(), getY(), WIDTH, HEIGHT, 0, 0, WIDTH, HEIGHT, WIDTH, HEIGHT);
 		}
-	}
-	
-	//TODO make this button have its own texture instead of just using screen  main
-	private class PowerButton extends Button
-	{
-		public PowerButton()
-		{
-			super(builder(Component.empty(), b -> minecraft.setScreen(null))
-					.pos((ComputerScreen.this.width-xSize)/2+143, (ComputerScreen.this.height-ySize)/2+3)
-					.size(29, 29));
-		}
-		
-		@Override
-		public void renderWidget(GuiGraphics guiGraphics, int mouseX, int mouseY, float pt) { /* invisible */ }
 	}
 }

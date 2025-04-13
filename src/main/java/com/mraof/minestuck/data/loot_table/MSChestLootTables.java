@@ -467,6 +467,7 @@ public final class MSChestLootTables implements LootTableSubProvider
 						.add(LootItem.lootTableItem(MSBlocks.NEGATIVE_CAKE).setWeight(2).setQuality(1))
 						.add(LootItem.lootTableItem(MSBlocks.CARROT_CAKE).setWeight(3).setQuality(1))
 						.add(LootItem.lootTableItem(MSBlocks.CHOCOLATEY_CAKE).setWeight(4).setQuality(1))
+						.add(LootItem.lootTableItem(MSBlocks.MOON_CAKE).setWeight(4).setQuality(1))
 						.add(LootItem.lootTableItem(Items.COOKIE).setWeight(5).setQuality(0).apply(countRange(2, 5)))
 						.add(LootItem.lootTableItem(MSItems.CANDY_CORN).setWeight(3).setQuality(0))
 				));
