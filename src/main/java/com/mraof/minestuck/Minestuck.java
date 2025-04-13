@@ -14,6 +14,7 @@ import com.mraof.minestuck.command.argument.MSArgumentTypes;
 import com.mraof.minestuck.computer.ProgramTypes;
 import com.mraof.minestuck.computer.editmode.DeployList;
 import com.mraof.minestuck.effects.MSEffects;
+import com.mraof.minestuck.entity.MSAttributes;
 import com.mraof.minestuck.entity.MSEntityTypes;
 import com.mraof.minestuck.entity.dialogue.Triggers;
 import com.mraof.minestuck.entity.dialogue.condition.Conditions;
@@ -31,6 +32,7 @@ import com.mraof.minestuck.item.MSItems;
 import com.mraof.minestuck.item.components.MSItemComponents;
 import com.mraof.minestuck.item.crafting.MSRecipeTypes;
 import com.mraof.minestuck.item.loot.MSLootTables;
+import com.mraof.minestuck.player.EcheladderExpSources;
 import com.mraof.minestuck.player.KindAbstratusList;
 import com.mraof.minestuck.util.MSAttachments;
 import com.mraof.minestuck.util.MSParticleType;
@@ -100,6 +102,8 @@ public class Minestuck
 		Conditions.REGISTER.register(eventBus);
 		Triggers.REGISTER.register(eventBus);
 		
+		EcheladderExpSources.REGISTER.register(eventBus);
+		
 		MSFeatures.REGISTER.register(eventBus);
 		
 		MSStructures.PIECE_REGISTER.register(eventBus);
@@ -115,6 +119,7 @@ public class Minestuck
 		MSCreativeTabs.REGISTER.register(eventBus);
 		
 		MSAttachments.REGISTER.register(eventBus);
+		MSAttributes.REGISTER.register(eventBus);
 		
 		SkaiaBlocks.init();
 		AspectTreeBlocks.init();

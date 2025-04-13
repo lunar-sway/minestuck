@@ -21,10 +21,16 @@ The format is based on [Keep a Changelog](https://keepachangelog.com/en/1.1.0/).
 - New computer related advancement
 - Added Moon Cake
 - Work-in-progresss Prospit and Derse dimensions and block sets (not accessible through normal gameplay)
+- Echeladder now provides fall damage resistance
 
 ### Changed
 
 - Updated land skybox rendering
+- Most vanilla enemy mobs now provide Echeladder exp
+- Echeladder exp is provided when gaining the advancements for obtaining a legendary weapon/obtaining a netherite hoe/entering the Nether/entering the End
+- There is no longer a threshold under which certain experience sources will stop contributing. After the incoming exp has been modified for the given rung, there is a 1 in 2/exp chance that 1 exp will be added.
+- Echeladder related attributes now scale linearly instead of exponentially, with minor tweaks to values on each rung
+- Tweaks to Echeladder GUI
 - Knitting needle crafting recipe now produces one item instead of two
 - Updated coarse end stone texture
 
@@ -35,6 +41,7 @@ The format is based on [Keep a Changelog](https://keepachangelog.com/en/1.1.0/).
 - Item stack data will now be preserved on disks inserted into a computer
 - Fix disk insertion and computer screen for computer easter egg
 - Carved totems in alchemiter model now have correct uv mapping
+- Rung progress bar is now white when it would otherwise be too dark to see progress clearly
 
 ### Contributors for this release
 
@@ -51,6 +58,10 @@ The format is based on [Keep a Changelog](https://keepachangelog.com/en/1.1.0/).
 - Color selection button is available in the SBURB Client program before connection again instead of after
 - Fixed untranslated key when using /gutter show command
 - Fixed widget rendering in Color Selection screen
+
+### Removed
+
+- Removed "aspectEffects" config option as it is redundant to modifying rungs.json
 
 ### Contributors for this release
 

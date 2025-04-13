@@ -2,12 +2,12 @@ package com.mraof.minestuck.item.weapon;
 
 import com.google.common.collect.ImmutableList;
 import com.mraof.minestuck.effects.CreativeShockEffect;
+import com.mraof.minestuck.entity.MSAttributes;
 import com.mraof.minestuck.entity.underling.UnderlingEntity;
 import com.mraof.minestuck.event.ServerEventHandler;
 import com.mraof.minestuck.item.MSItems;
 import com.mraof.minestuck.item.loot.MSLootTables;
 import com.mraof.minestuck.network.PushPlayerPacket;
-import com.mraof.minestuck.player.Echeladder;
 import com.mraof.minestuck.player.EnumAspect;
 import com.mraof.minestuck.player.Title;
 import com.mraof.minestuck.util.MSDamageSources;
@@ -256,7 +256,7 @@ public interface OnHitEffect
 				
 				if(target instanceof UnderlingEntity)
 				{
-					float modifier = (float) (Echeladder.get(serverPlayer).getUnderlingDamageModifier());
+					float modifier = (float) serverPlayer.getAttributeValue(MSAttributes.UNDERLING_DAMAGE_MODIFIER);
 					
 					if(isMissingAspectBonus)
 						modifier /= 1.2F;
