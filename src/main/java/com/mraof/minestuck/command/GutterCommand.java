@@ -18,6 +18,7 @@ import static net.minecraft.commands.Commands.literal;
 //TODO how about a player argument to be able to pick which session to target
 public class GutterCommand
 {
+	public static final String SHOW = "commands.minestuck.gutter.show";
 	public static final SimpleCommandExceptionType NO_SESSION_EXCEPTION = new SimpleCommandExceptionType(Component.literal("Cannot find gutter because you are not in a session."));
 	
 	public static void register(CommandDispatcher<CommandSourceStack> dispatcher)
@@ -42,7 +43,7 @@ public class GutterCommand
 		double multiplier = gutter.gutterMultiplierForSession();
 		long capacity = gutter.getRemainingCapacity();
 		Component gutterContentText = gutter.getCache().asTextComponent();
-		source.sendSuccess(() -> Component.literal("Gutter modifier: %s, remaining capacity: %s, grist contained: %s".formatted(multiplier, capacity, gutterContentText)), false);
+		source.sendSuccess(() -> Component.translatable(SHOW, multiplier, capacity, gutterContentText), true);
 		
 		return 1;
 	}

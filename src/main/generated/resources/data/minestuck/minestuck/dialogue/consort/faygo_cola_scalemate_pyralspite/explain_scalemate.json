@@ -1,0 +1,18 @@
+{
+  "node": {
+    "animation": {},
+    "gui": "minestuck:textures/gui/dialogue/dialogue.png",
+    "message": "minestuck.dialogue.consort.faygo_cola_scalemate_pyralspite.explain_scalemate",
+    "responses": [
+      {
+        "condition": {
+          "type": "minestuck:always_true"
+        },
+        "hide_if_failed": true,
+        "message": "minestuck.dialogue.consort.faygo_cola_scalemate_pyralspite.explain_scalemate.return",
+        "next_dialogue": "minestuck:consort/faygo_cola_scalemate_pyralspite/ask_drink",
+        "triggers": []
+      }
+    ]
+  }
+}

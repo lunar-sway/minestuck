@@ -1,0 +1,12 @@
+{
+    "type": "minestuck:veil",
+    "generator": {
+        "type": "noise",
+        "seed": 0,
+        "settings": "minestuck:veil",
+        "biome_source": {
+            "type":  "minecraft:fixed",
+            "biome": "minestuck:veil"
+        }
+    }
+}

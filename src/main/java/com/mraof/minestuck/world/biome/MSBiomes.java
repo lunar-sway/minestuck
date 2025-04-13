@@ -9,6 +9,9 @@ import net.minecraft.world.level.biome.Biome;
 public final class MSBiomes
 {
 	public static final ResourceKey<Biome> SKAIA = ResourceKey.create(Registries.BIOME, ResourceLocation.fromNamespaceAndPath(Minestuck.MOD_ID, "skaia"));
+	public static final ResourceKey<Biome> PROSPIT = ResourceKey.create(Registries.BIOME, ResourceLocation.fromNamespaceAndPath(Minestuck.MOD_ID, "prospit"));
+	public static final ResourceKey<Biome> DERSE = ResourceKey.create(Registries.BIOME, ResourceLocation.fromNamespaceAndPath(Minestuck.MOD_ID, "derse"));
+	public static final ResourceKey<Biome> VEIL = ResourceKey.create(Registries.BIOME, Minestuck.id("veil"));
 	public static final ResourceKey<Biome> PROSPIT_WFC_DEMO = ResourceKey.create(Registries.BIOME, Minestuck.id("prospit_wfc_demo"));
 	
 	public static final LandBiomeSetType DEFAULT_LAND = new LandBiomeSetType(Minestuck.MOD_ID, "default", true, 0.7F, 0.5F);

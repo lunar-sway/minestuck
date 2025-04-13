@@ -23,6 +23,8 @@ public final class MSFeatures
 	
 	public static final Supplier<Feature<SimpleTemplateFeature.Config>> SIMPLE_TEMPLATE = REGISTER.register("simple_template", () -> new SimpleTemplateFeature(SimpleTemplateFeature.Config.CODEC));
 	
+	public static final Supplier<Feature<NoneFeatureConfiguration>> VEIL_CRATER = REGISTER.register("veil_crater", () -> new VeilCraterFeature(NoneFeatureConfiguration.CODEC));
+	
 	public static final Supplier<Feature<NoneFeatureConfiguration>> FLOOR_COG = REGISTER.register("floor_cog", () -> new FloorCogFeature(NoneFeatureConfiguration.CODEC));
 	
 	public static final Supplier<Feature<NoneFeatureConfiguration>> SURFACE_FOSSIL = REGISTER.register("surface_fossil", () -> new SurfaceFossilsFeature(NoneFeatureConfiguration.CODEC));

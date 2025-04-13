@@ -3,6 +3,7 @@ package com.mraof.minestuck.item;
 import com.mraof.minestuck.Minestuck;
 import com.mraof.minestuck.block.EnumCassetteType;
 import com.mraof.minestuck.block.MSBlocks;
+import com.mraof.minestuck.computer.ProgramTypes;
 import com.mraof.minestuck.effects.MSEffects;
 import com.mraof.minestuck.entity.MSEntityTypes;
 import com.mraof.minestuck.entity.item.MetalBoatEntity;
@@ -13,6 +14,7 @@ import com.mraof.minestuck.item.armor.PrismarineArmorItem;
 import com.mraof.minestuck.item.artifact.CruxiteAppleItem;
 import com.mraof.minestuck.item.artifact.CruxitePotionItem;
 import com.mraof.minestuck.item.block.*;
+import com.mraof.minestuck.item.components.MSItemComponents;
 import com.mraof.minestuck.item.components.PosterComponent;
 import com.mraof.minestuck.item.foods.*;
 import com.mraof.minestuck.item.weapon.*;
@@ -475,15 +477,15 @@ public class MSItems
 	public static final DeferredItem<Item> RAW_URANIUM = REGISTER.register("raw_uranium", () -> new Item(new Item.Properties()));
 	public static final DeferredItem<Item> ENERGY_CORE = REGISTER.register("energy_core", () -> new Item(new Item.Properties()));
 	
-	public static final DeferredItem<Item> CRUXITE_APPLE = REGISTER.register("cruxite_apple", () -> new CruxiteAppleItem(new Item.Properties().stacksTo(1).rarity(Rarity.UNCOMMON))); //TODO have to fix Cruxite artifact classes
+	public static final DeferredItem<Item> CRUXITE_APPLE = REGISTER.register("cruxite_apple", () -> new CruxiteAppleItem(new Item.Properties().stacksTo(1).rarity(Rarity.UNCOMMON)));
 	public static final DeferredItem<Item> CRUXITE_POTION = REGISTER.register("cruxite_potion", () -> new CruxitePotionItem(new Item.Properties().stacksTo(1).rarity(Rarity.UNCOMMON)));
 	
 	public static final DeferredItem<Item> SBURB_CODE = REGISTER.register("sburb_code", () -> new IncompleteSburbCodeItem(new Item.Properties().stacksTo(1)));
 	public static final DeferredItem<Item> COMPLETED_SBURB_CODE = REGISTER.register("completed_sburb_code", () -> new ReadableSburbCodeItem.Completed(new Item.Properties().stacksTo(1).rarity(Rarity.UNCOMMON)));
 	public static final DeferredItem<Item> COMPUTER_PARTS = REGISTER.register("computer_parts", () -> new Item(new Item.Properties()));
 	public static final DeferredItem<Item> BLANK_DISK = REGISTER.register("blank_disk", () -> new Item(new Item.Properties()));
-	public static final DeferredItem<Item> CLIENT_DISK = REGISTER.register("client_disk", () -> new Item(new Item.Properties().stacksTo(1)));
-	public static final DeferredItem<Item> SERVER_DISK = REGISTER.register("server_disk", () -> new Item(new Item.Properties().stacksTo(1)));
+	public static final DeferredItem<Item> CLIENT_DISK = REGISTER.register("client_disk", () -> new Item(new Item.Properties().stacksTo(1).component(MSItemComponents.PROGRAM_TYPE, ProgramTypes.SBURB_CLIENT)));
+	public static final DeferredItem<Item> SERVER_DISK = REGISTER.register("server_disk", () -> new Item(new Item.Properties().stacksTo(1).component(MSItemComponents.PROGRAM_TYPE, ProgramTypes.SBURB_SERVER)));
 	
 	public static final DeferredItem<Item> CAPTCHA_CARD = REGISTER.register("captcha_card", () -> new CaptchaCardItem(new Item.Properties()));
 	public static final DeferredItem<Item> STACK_MODUS_CARD = REGISTER.register("stack_modus_card", () -> new Item(new Item.Properties().stacksTo(1)));
@@ -560,8 +562,7 @@ public class MSItems
 	public static final DeferredItem<Item> SURPRISE_EMBRYO = REGISTER.register("surprise_embryo", () -> new SurpriseEmbryoItem(new Item.Properties().food(MSFoods.SURPRISE_EMBRYO)));
 	public static final DeferredItem<Item> UNKNOWABLE_EGG = REGISTER.register("unknowable_egg", () -> new UnknowableEggItem(new Item.Properties().stacksTo(16).food(MSFoods.UNKNOWABLE_EGG)));
 	public static final DeferredItem<Item> BREADCRUMBS = REGISTER.register("breadcrumbs", () -> new Item(new Item.Properties().food(MSFoods.BREADCRUMBS)));
-	
-	
+
 	//Other Land Items
 	public static final DeferredItem<Item> GOLDEN_GRASSHOPPER = REGISTER.register("golden_grasshopper", () -> new Item(new Item.Properties()));
 	public static final DeferredItem<Item> BUG_NET = REGISTER.register("bug_net", () -> new BugNetItem(new Item.Properties().durability(64)));
@@ -815,6 +816,10 @@ public class MSItems
 	public static final DeferredItem<BlockItem> URANIUM_PRESSURE_PLATE = registerBlockItem(MSBlocks.URANIUM_PRESSURE_PLATE);
 	
 	public static final DeferredItem<BlockItem> GENERIC_OBJECT = registerBlockItem(MSBlocks.GENERIC_OBJECT);
+	
+	
+	//The Veil
+	public static final DeferredItem<BlockItem> METEORIC_STONE = registerBlockItem(MSBlocks.METEORIC_STONE);
 	
 	
 	//Land Environment
@@ -1601,6 +1606,7 @@ public class MSItems
 	public static final DeferredItem<BlockItem> LARGE_CAKE = registerBlockItem(MSBlocks.LARGE_CAKE);
 	public static final DeferredItem<BlockItem> PINK_FROSTED_TOP_LARGE_CAKE = registerBlockItem(MSBlocks.PINK_FROSTED_TOP_LARGE_CAKE);
 	public static final DeferredItem<BlockItem> CHOCOLATEY_CAKE = registerBlockItem(MSBlocks.CHOCOLATEY_CAKE, new Item.Properties().stacksTo(1));
+	public static final DeferredItem<BlockItem> MOON_CAKE = registerBlockItem(MSBlocks.MOON_CAKE, new Item.Properties().stacksTo(1));
 	
 	//Explosives
 	public static final DeferredItem<BlockItem> PRIMED_TNT = registerBlockItem(MSBlocks.PRIMED_TNT);
@@ -1632,7 +1638,7 @@ public class MSItems
 	public static final DeferredItem<BlockItem> PERFECTLY_GENERIC_TRAPDOOR = registerBlockItem(MSBlocks.PERFECTLY_GENERIC_TRAPDOOR);
 	public static final DeferredItem<Item> PERFECTLY_GENERIC_HANGING_SIGN = REGISTER.register("perfectly_generic_hanging_sign", () -> new HangingSignItem(MSBlocks.PERFECTLY_GENERIC_HANGING_SIGN.get(), MSBlocks.PERFECTLY_GENERIC_WALL_HANGING_SIGN.get(), new Item.Properties().stacksTo(16)));
 	public static final DeferredItem<Item> PERFECTLY_GENERIC_SIGN = REGISTER.register("perfectly_generic_sign", () -> new SignItem(new Item.Properties().stacksTo(16), MSBlocks.PERFECTLY_GENERIC_SIGN.get(), MSBlocks.PERFECTLY_GENERIC_WALL_SIGN.get()));
-	
+
 	/**
 	 * Helper function to register a standard BlockItem with just the source block, no item properties
 	 */
@@ -1657,4 +1663,3 @@ public class MSItems
 		return REGISTER.register(block.getId().getPath(), () -> function.apply(block.get())); //assumed getKey() will be non-null due to the way DeferredRegistry works
 	}
 }
-	

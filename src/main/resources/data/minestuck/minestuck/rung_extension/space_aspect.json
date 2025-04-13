@@ -1,0 +1,25 @@
+{
+  "aspect": "space",
+  "effects": [
+    {
+      "effect": "minecraft:jump_boost",
+      "amplifier": 0,
+      "rung": 10
+    },
+    {
+      "effect": "minecraft:jump_boost",
+      "amplifier": 1,
+      "rung": 20
+    },
+    {
+      "effect": "minecraft:jump_boost",
+      "amplifier": 2,
+      "rung": 30
+    },
+    {
+      "effect": "minecraft:jump_boost",
+      "amplifier": 3,
+      "rung": 40
+    }
+  ]
+}

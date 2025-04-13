@@ -1,0 +1,8 @@
+{
+  "node": {
+    "animation": {},
+    "gui": "minestuck:textures/gui/dialogue/dialogue.png",
+    "message": "minestuck.dialogue.consort.faygo_cola_scalemate_pyralspite.scoundrel",
+    "responses": []
+  }
+}

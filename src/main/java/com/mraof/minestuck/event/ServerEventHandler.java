@@ -5,13 +5,13 @@ import com.mraof.minestuck.MinestuckConfig;
 import com.mraof.minestuck.block.MSBlocks;
 import com.mraof.minestuck.effects.CreativeShockEffect;
 import com.mraof.minestuck.effects.MSEffects;
+import com.mraof.minestuck.entity.MSAttributes;
 import com.mraof.minestuck.entity.underling.UnderlingEntity;
 import com.mraof.minestuck.entry.EntryEvent;
 import com.mraof.minestuck.inventory.captchalogue.CaptchaDeckHandler;
 import com.mraof.minestuck.inventory.captchalogue.HashMapModus;
 import com.mraof.minestuck.inventory.captchalogue.Modus;
 import com.mraof.minestuck.item.MSItems;
-import com.mraof.minestuck.player.Echeladder;
 import com.mraof.minestuck.player.EnumAspect;
 import com.mraof.minestuck.player.IdentifierHandler;
 import com.mraof.minestuck.player.Title;
@@ -28,7 +28,6 @@ import net.minecraft.world.entity.Entity;
 import net.minecraft.world.entity.EquipmentSlot;
 import net.minecraft.world.entity.LivingEntity;
 import net.minecraft.world.entity.item.ItemEntity;
-import net.minecraft.world.entity.monster.*;
 import net.minecraft.world.item.ItemStack;
 import net.minecraft.world.item.Items;
 import net.minecraft.world.phys.AABB;
@@ -76,24 +75,6 @@ public class ServerEventHandler
 	@SubscribeEvent(priority=EventPriority.LOWEST, receiveCanceled=false)
 	public static void onEntityDeath(LivingDeathEvent event)
 	{
-		if(event.getEntity() instanceof Enemy && event.getSource().getEntity() instanceof ServerPlayer player)
-		{
-			if(!(player instanceof FakePlayer))
-			{
-				int exp = 0;
-				if(event.getEntity() instanceof Zombie || event.getEntity() instanceof Skeleton)
-					exp = 1;
-				else if(event.getEntity() instanceof Creeper || event.getEntity() instanceof Spider || event.getEntity() instanceof Silverfish)
-					exp = 2;
-				else if(event.getEntity() instanceof EnderMan || event.getEntity() instanceof Blaze || event.getEntity() instanceof Witch || event.getEntity() instanceof Guardian)
-					exp = 3;
-				else if(event.getEntity() instanceof Slime)
-					exp = Math.min(((Slime) event.getEntity()).getSize() - 1, 9);
-				
-				if(exp > 0)
-					Echeladder.get(player).increaseProgress(exp);
-			}
-		}
 		if(event.getEntity() instanceof ServerPlayer)
 		{
 			TitleSelectionHook.cancelSelection((ServerPlayer) event.getEntity());
@@ -124,22 +105,19 @@ public class ServerEventHandler
 			Entity attacker = event.getSource().getEntity();
 			Entity injured = event.getEntity();
 			
-			if(injured != null)
+			boolean attackerIsRealPlayer = attacker instanceof ServerPlayer && !(attacker instanceof FakePlayer);
+			boolean injuredIsRealPlayer = injured instanceof ServerPlayer && !(injured instanceof FakePlayer);
+			
+			if(attackerIsRealPlayer && injured instanceof UnderlingEntity)
 			{
-				boolean attackerIsRealPlayer = attacker instanceof ServerPlayer && !(attacker instanceof FakePlayer);
-				boolean injuredIsRealPlayer = injured instanceof ServerPlayer && !(injured instanceof FakePlayer);
-				
-				if(attackerIsRealPlayer && injured instanceof UnderlingEntity)
-				{
-					//Increase damage to underling
-					double modifier = Echeladder.get((ServerPlayer) attacker).getUnderlingDamageModifier();
-					event.setAmount((float) (event.getAmount() * modifier));
-				} else if (injuredIsRealPlayer && attacker instanceof UnderlingEntity)
-				{
-					//Decrease damage to player
-					double modifier = Echeladder.get((ServerPlayer) injured).getUnderlingProtectionModifier();
-					event.setAmount((float) (event.getAmount() * modifier));
-				}
+				//Increase damage to underling
+				double modifier = ((ServerPlayer) attacker).getAttributeValue(MSAttributes.UNDERLING_DAMAGE_MODIFIER);
+				event.setAmount((float) (event.getAmount() * modifier));
+			} else if (injuredIsRealPlayer && attacker instanceof UnderlingEntity)
+			{
+				//Decrease damage to player
+				double modifier = ((ServerPlayer) injured).getAttributeValue(MSAttributes.UNDERLING_PROTECTION_MODIFIER);
+				event.setAmount((float) (event.getAmount() * modifier));
 			}
 		}
 		

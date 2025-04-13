@@ -9,8 +9,8 @@ import com.mojang.brigadier.exceptions.CommandSyntaxException;
 import com.mojang.brigadier.exceptions.DynamicCommandExceptionType;
 import com.mojang.brigadier.exceptions.SimpleCommandExceptionType;
 import com.mraof.minestuck.api.alchemy.DefaultMutableGristSet;
-import com.mraof.minestuck.api.alchemy.MutableGristSet;
 import com.mraof.minestuck.api.alchemy.GristType;
+import com.mraof.minestuck.api.alchemy.MutableGristSet;
 import com.mraof.minestuck.api.alchemy.NonNegativeGristSet;
 import net.minecraft.commands.CommandBuildContext;
 import net.minecraft.commands.CommandSourceStack;
@@ -72,7 +72,7 @@ public class GristSetArgument implements ArgumentType<MutableGristSet>
 					else break;
 				} else {
 					reader.setCursor(start2);
-					throw DUPLICATE_TYPE.createWithContext(reader, type);
+					throw DUPLICATE_TYPE.createWithContext(reader, type.toString());
 				}
 			} else
 			{

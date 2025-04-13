@@ -1,0 +1,53 @@
+{
+  "node": {
+    "animation": {},
+    "gui": "minestuck:textures/gui/dialogue/dialogue.png",
+    "message": "minestuck.dialogue.consort.candy_apple_faygo_scalemate_applescab.ask_drink",
+    "responses": [
+      {
+        "condition": {
+          "type": "minestuck:always_true"
+        },
+        "hide_if_failed": true,
+        "message": "minestuck.dialogue.consort.candy_apple_faygo_scalemate_applescab.ask_drink.scalemate_confused",
+        "next_dialogue": "minestuck:consort/candy_apple_faygo_scalemate_applescab/explain_scalemate",
+        "triggers": []
+      },
+      {
+        "condition": {
+          "type": "minestuck:player_item",
+          "item": "minestuck:candy_apple_faygo"
+        },
+        "hide_if_failed": false,
+        "message": "minestuck.dialogue.consort.candy_apple_faygo_scalemate_applescab.ask_drink.exchange",
+        "next_dialogue": {
+          "id": "minestuck:consort/candy_apple_faygo_scalemate_applescab/happy",
+          "player_message": "minestuck.dialogue.consort.candy_apple_faygo_scalemate_applescab.ask_drink.yes.reply",
+          "set_as_entrypoint": false
+        },
+        "triggers": [
+          {
+            "type": "minestuck:take_item",
+            "item": "minestuck:candy_apple_faygo"
+          },
+          {
+            "type": "minestuck:give_item",
+            "item": "minestuck:scalemate_applescab"
+          },
+          {
+            "type": "minestuck:set_dialogue",
+            "new_path": "minestuck:consort/candy_apple_faygo_scalemate_applescab/satisfied"
+          }
+        ]
+      },
+      {
+        "condition": {
+          "type": "minestuck:always_true"
+        },
+        "hide_if_failed": true,
+        "message": "minestuck.dialogue.consort.candy_apple_faygo_scalemate_applescab.ask_drink.no",
+        "triggers": []
+      }
+    ]
+  }
+}

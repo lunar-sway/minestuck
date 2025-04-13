@@ -29,15 +29,17 @@ import java.util.Optional;
 
 @ParametersAreNonnullByDefault
 @MethodsReturnNonnullByDefault
-public class AlchemiterBlock extends MultiMachineBlock<AlchemiterMultiblock> implements EditmodeDestroyable
+public class AlchemiterBlock extends MachineBlock implements EditmodeDestroyable
 {
 	protected final Map<Direction, VoxelShape> shape;
 	protected final boolean recursive, corner;
 	protected final BlockPos mainPos;
+	protected final AlchemiterMultiblock multiblock;
 	
-	public AlchemiterBlock(AlchemiterMultiblock machine, CustomVoxelShape shape, boolean recursive, boolean corner, BlockPos mainPos, Properties properties)
+	public AlchemiterBlock(AlchemiterMultiblock multiblock, CustomVoxelShape shape, boolean recursive, boolean corner, BlockPos mainPos, Properties properties)
 	{
-		super(machine, properties);
+		super(properties);
+		this.multiblock = multiblock;
 		this.shape = shape.createRotatedShapes();
 		this.recursive = recursive;
 		this.corner = corner;
@@ -86,13 +88,13 @@ public class AlchemiterBlock extends MultiMachineBlock<AlchemiterMultiblock> imp
 	public void destroyFull(BlockState state, Level level, BlockPos pos)
 	{
 		var placement = this.getMainPos(state, pos, level)
-				.flatMap(mainPos -> this.machine.findPlacementFromPad(level, mainPos));
+				.flatMap(mainPos -> this.multiblock.findPlacementFromPad(level, mainPos));
 		if(placement.isPresent())
-			this.machine.removeAt(level, placement.get());
+			this.multiblock.removeAt(level, placement.get());
 		else
 		{
-			for(var placementGuess : this.machine.guessPlacement(pos, state))
-				this.machine.removeAt(level, placementGuess);
+			for(var placementGuess : this.multiblock.guessPlacement(pos, state))
+				this.multiblock.removeAt(level, placementGuess);
 		}
 	}
 	
