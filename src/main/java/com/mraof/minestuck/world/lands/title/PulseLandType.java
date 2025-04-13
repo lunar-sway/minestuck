@@ -36,12 +36,12 @@ public class PulseLandType extends TitleLandType
 	@Override
 	public void registerBlocks(StructureBlockRegistry registry)
 	{
-		registry.setBlock("structure_wool_2", Blocks.RED_WOOL);
-		registry.setBlock("carpet", Blocks.BROWN_CARPET);
+		registry.setBlock(StructureBlockRegistry.STRUCTURE_WOOL_2, Blocks.RED_WOOL);
+		registry.setBlock(StructureBlockRegistry.CARPET, Blocks.BROWN_CARPET);
 		
-		registry.setBlock("ocean", MSBlocks.BLOOD);
-		registry.setBlock("river", MSBlocks.BLOOD);
-		registry.setBlock("slime", MSBlocks.COAGULATED_BLOOD);
+		registry.setBlock(StructureBlockRegistry.OCEAN, MSBlocks.BLOOD);
+		registry.setBlock(StructureBlockRegistry.RIVER, MSBlocks.BLOOD);
+		registry.setBlock(StructureBlockRegistry.SLIME, MSBlocks.COAGULATED_BLOOD);
 	}
 	
 	@Override
@@ -60,7 +60,7 @@ public class PulseLandType extends TitleLandType
 	public void addBiomeGeneration(LandBiomeGenBuilder builder, StructureBlockRegistry blocks, LandBiomeSetType biomeSet)
 	{
 		builder.addFeature(GenerationStep.Decoration.UNDERGROUND_ORES, MSPlacedFeatures.COAGULATED_BLOOD_DISK,
-				FeatureModifier.withTargets(BlockPredicate.matchesBlocks(blocks.getBlockState("surface").getBlock(), blocks.getBlockState("upper").getBlock())), LandBiomeType.ROUGH);
+				FeatureModifier.withTargets(BlockPredicate.matchesBlocks(blocks.getBlockState(StructureBlockRegistry.SURFACE).getBlock(), blocks.getBlockState(StructureBlockRegistry.UPPER).getBlock())), LandBiomeType.ROUGH);
 		builder.addFeature(GenerationStep.Decoration.VEGETAL_DECORATION, MSPlacedFeatures.BLOOD_TREE, LandBiomeType.anyExcept(LandBiomeType.OCEAN));
 		
 	}

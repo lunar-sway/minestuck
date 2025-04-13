@@ -25,6 +25,8 @@ import net.minecraft.world.level.levelgen.placement.CountPlacement;
 import net.minecraft.world.level.levelgen.placement.HeightRangePlacement;
 import net.minecraft.world.level.levelgen.placement.InSquarePlacement;
 
+import static com.mraof.minestuck.world.gen.structure.blocks.StructureBlockRegistry.*;
+
 public class SandLandType extends TerrainLandType
 {
 	public static final String SAND = "minestuck.sand";
@@ -66,33 +68,48 @@ public class SandLandType extends TerrainLandType
 	{
 		if(type == Variant.SAND || type == Variant.LUSH_DESERTS)
 		{
-			registry.setBlock("ground", Blocks.SANDSTONE);
-			registry.setBlock("upper", Blocks.SAND);
-			registry.setBlock("structure_primary", Blocks.SMOOTH_SANDSTONE);
-			registry.setBlock("structure_primary_decorative", Blocks.CHISELED_SANDSTONE);
-			registry.setBlock("structure_primary_stairs", Blocks.SANDSTONE_STAIRS);
-			registry.setBlock("village_path", Blocks.RED_SAND);
-			registry.setBlock("cruxite_ore", MSBlocks.SANDSTONE_CRUXITE_ORE);
-			registry.setBlock("uranium_ore", MSBlocks.SANDSTONE_URANIUM_ORE);
+			registry.setBlock(GROUND, Blocks.SANDSTONE);
+			registry.setBlock(GROUND_SLAB, Blocks.SANDSTONE_SLAB);
+			registry.setBlock(UPPER, Blocks.SAND);
+			registry.setBlock(STRUCTURE_PRIMARY, Blocks.SMOOTH_SANDSTONE);
+			registry.setBlock(STRUCTURE_PRIMARY_DECORATIVE, Blocks.CHISELED_SANDSTONE);
+			registry.setBlock(STRUCTURE_PRIMARY_STAIRS, Blocks.SANDSTONE_STAIRS);
+			registry.setBlock(VILLAGE_PATH, Blocks.RED_SAND);
+			registry.setBlock(CRUXITE_ORE, MSBlocks.SANDSTONE_CRUXITE_ORE);
+			registry.setBlock(URANIUM_ORE, MSBlocks.SANDSTONE_URANIUM_ORE);
 		} else
 		{
-			registry.setBlock("ground", Blocks.RED_SANDSTONE);
-			registry.setBlock("upper", Blocks.RED_SAND);
-			registry.setBlock("structure_primary", Blocks.SMOOTH_RED_SANDSTONE);
-			registry.setBlock("structure_primary_decorative", Blocks.CHISELED_RED_SANDSTONE);
-			registry.setBlock("structure_primary_stairs", Blocks.RED_SANDSTONE_STAIRS);
-			registry.setBlock("village_path", Blocks.SAND);
-			registry.setBlock("cruxite_ore", MSBlocks.RED_SANDSTONE_CRUXITE_ORE);
-			registry.setBlock("uranium_ore", MSBlocks.RED_SANDSTONE_URANIUM_ORE);
+			registry.setBlock(GROUND, Blocks.RED_SANDSTONE);
+			registry.setBlock(GROUND_SLAB, Blocks.RED_SANDSTONE_SLAB);
+			registry.setBlock(UPPER, Blocks.RED_SAND);
+			registry.setBlock(STRUCTURE_PRIMARY, Blocks.SMOOTH_RED_SANDSTONE);
+			registry.setBlock(STRUCTURE_PRIMARY_DECORATIVE, Blocks.CHISELED_RED_SANDSTONE);
+			registry.setBlock(STRUCTURE_PRIMARY_STAIRS, Blocks.RED_SANDSTONE_STAIRS);
+			registry.setBlock(VILLAGE_PATH, Blocks.SAND);
+			registry.setBlock(CRUXITE_ORE, MSBlocks.RED_SANDSTONE_CRUXITE_ORE);
+			registry.setBlock(URANIUM_ORE, MSBlocks.RED_SANDSTONE_URANIUM_ORE);
 		}
-		registry.setBlock("structure_secondary", Blocks.STONE_BRICKS);
-		registry.setBlock("structure_secondary_decorative", Blocks.CHISELED_STONE_BRICKS);
-		registry.setBlock("structure_secondary_stairs", Blocks.STONE_BRICK_STAIRS);
-		registry.setBlock("structure_planks", Blocks.ACACIA_PLANKS);
-		registry.setBlock("structure_planks_slab", Blocks.ACACIA_SLAB);
-		registry.setBlockState("river", registry.getBlockState("upper"));
-		registry.setBlock("structure_wool_1", Blocks.YELLOW_WOOL);
-		registry.setBlock("structure_wool_3", Blocks.MAGENTA_WOOL);
+		
+		registry.setBlockState(RIVER, registry.getBlockState(UPPER));
+		
+		registry.setBlock(STRUCTURE_SECONDARY, Blocks.STONE_BRICKS);
+		registry.setBlock(STRUCTURE_SECONDARY_DECORATIVE, Blocks.CHISELED_STONE_BRICKS);
+		registry.setBlock(STRUCTURE_SECONDARY_STAIRS, Blocks.STONE_BRICK_STAIRS);
+		
+		registry.setBlock(STRUCTURE_WOOD, Blocks.ACACIA_WOOD);
+		registry.setBlock(STRUCTURE_LOG, Blocks.ACACIA_LOG);
+		registry.setBlock(STRUCTURE_STRIPPED_WOOD, Blocks.STRIPPED_ACACIA_WOOD);
+		registry.setBlock(STRUCTURE_STRIPPED_LOG, Blocks.STRIPPED_ACACIA_LOG);
+		registry.setBlock(STRUCTURE_PLANKS, Blocks.ACACIA_PLANKS);
+		registry.setBlock(STRUCTURE_PLANKS_STAIRS, Blocks.ACACIA_STAIRS);
+		registry.setBlock(STRUCTURE_PLANKS_SLAB, Blocks.ACACIA_SLAB);
+		registry.setBlock(STRUCTURE_PLANKS_FENCE, Blocks.ACACIA_FENCE);
+		registry.setBlock(STRUCTURE_PLANKS_FENCE_GATE, Blocks.ACACIA_FENCE_GATE);
+		registry.setBlock(STRUCTURE_PLANKS_DOOR, Blocks.ACACIA_DOOR);
+		registry.setBlock(STRUCTURE_PLANKS_TRAPDOOR, Blocks.ACACIA_TRAPDOOR);
+		
+		registry.setBlock(STRUCTURE_WOOL_1, Blocks.YELLOW_WOOL);
+		registry.setBlock(STRUCTURE_WOOL_3, Blocks.MAGENTA_WOOL);
 	}
 	
 	@Override

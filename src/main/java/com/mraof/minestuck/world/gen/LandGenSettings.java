@@ -88,7 +88,7 @@ public final class LandGenSettings
 		
 		SurfaceRules.RuleSource surfaceRule = SurfaceRules.sequence(bedrockFloor, landTypes.getTerrain().getSurfaceRule(blockRegistry));
 		
-		NoiseGeneratorSettings settings = new NoiseGeneratorSettings(noiseSettings, blockRegistry.getBlockState("ground"), blockRegistry.getBlockState("ocean"),
+		NoiseGeneratorSettings settings = new NoiseGeneratorSettings(noiseSettings, blockRegistry.getBlockState(StructureBlockRegistry.GROUND), blockRegistry.getBlockState(StructureBlockRegistry.OCEAN),
 				makeLandNoiseRouter(noises, densityFunctions),
 				surfaceRule, List.of(), 64, false, true, false, false);
 		
