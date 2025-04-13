@@ -4,10 +4,12 @@ import com.mraof.minestuck.blockentity.ComputerBlockEntity;
 import com.mraof.minestuck.client.gui.MSScreenFactories;
 import com.mraof.minestuck.computer.DiskBurnerData;
 import com.mraof.minestuck.computer.ProgramTypes;
+import com.mraof.minestuck.util.MSSoundEvents;
 import com.mraof.minestuck.util.MSTags;
 import net.minecraft.client.gui.screens.Screen;
 import net.minecraft.core.BlockPos;
 import net.minecraft.network.chat.Component;
+import net.minecraft.sounds.SoundSource;
 import net.minecraft.world.InteractionHand;
 import net.minecraft.world.InteractionResult;
 import net.minecraft.world.InteractionResultHolder;
@@ -65,7 +67,7 @@ public abstract class ReadableSburbCodeItem extends Item
 		if(player != null && level.getBlockEntity(pos) instanceof ComputerBlockEntity computer)
 		{
 			Optional<DiskBurnerData> diskBurnerData = computer.getProgramData(ProgramTypes.DISK_BURNER);
-			if(diskBurnerData.isPresent() && useOnComputer(heldStack, player, hand, diskBurnerData.get()))
+			if(diskBurnerData.isPresent() && useOnComputer(heldStack, player, hand, pos, diskBurnerData.get()))
 				return InteractionResult.sidedSuccess(level.isClientSide);
 			else
 				return InteractionResult.FAIL;
@@ -74,9 +76,14 @@ public abstract class ReadableSburbCodeItem extends Item
 		return InteractionResult.PASS;
 	}
 	
-	protected boolean useOnComputer(ItemStack heldStack, Player player, InteractionHand hand, DiskBurnerData diskBurnerData)
+	protected boolean useOnComputer(ItemStack heldStack, Player player, InteractionHand hand, BlockPos pos, DiskBurnerData diskBurnerData)
 	{
-		return diskBurnerData.recordNewInfo(getParadoxInfo(heldStack), getRecordedBlocks(heldStack));
+		boolean newInfo = diskBurnerData.recordNewInfo(getParadoxInfo(heldStack), getRecordedBlocks(heldStack));
+		
+		if(newInfo)
+			player.level().playSound(null, pos, MSSoundEvents.COMPUTER_KEYBOARD.get(), SoundSource.BLOCKS);
+		
+		return newInfo;
 	}
 	
 	public static class Completed extends ReadableSburbCodeItem

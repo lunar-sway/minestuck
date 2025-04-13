@@ -1,0 +1,25 @@
+{
+  "aspect": "light",
+  "effects": [
+    {
+      "effect": "minecraft:luck",
+      "amplifier": 0,
+      "rung": 10
+    },
+    {
+      "effect": "minecraft:luck",
+      "amplifier": 1,
+      "rung": 20
+    },
+    {
+      "effect": "minecraft:luck",
+      "amplifier": 2,
+      "rung": 30
+    },
+    {
+      "effect": "minecraft:luck",
+      "amplifier": 3,
+      "rung": 40
+    }
+  ]
+}

@@ -16,6 +16,7 @@ public final class ButtonListHelper
 	public static final String CLEAR_BUTTON = "minestuck.clear_button";
 	
 	private final Map<Button, Runnable> buttonMap = new HashMap<>();
+	private List<ButtonData> buttonsData = List.of();
 	private final List<Button> buttons = new ArrayList<>(4);
 	private Button upButton, downButton;
 	
@@ -25,34 +26,33 @@ public final class ButtonListHelper
 	{
 	}
 	
-	private void onButtonPressed(ComputerScreen screen, Button button)
+	private void onButtonPressed(Button button)
 	{
 		Runnable runnable = buttonMap.get(button);
 		
 		if(runnable != null)
 			runnable.run();
 		
-		screen.updateGui();
+		updateButtons();
 	}
 	
-	private void onArrowPressed(ComputerScreen screen, boolean reverse)
+	private void onArrowPressed(boolean reverse)
 	{
 		if(reverse) index--;
 		else index++;
 		
-		screen.updateGui();
+		updateButtons();
 	}
 	
-	public void init(ComputerScreen gui)
+	public void init(ThemedScreen gui)
 	{
-		var xOffset = (gui.width - ComputerScreen.xSize) / 2;
-		var yOffset = (gui.height - ComputerScreen.ySize) / 2;
+		gui.setOffsets();
 		
 		buttonMap.clear();
 		buttons.clear();
 		for(int i = 0; i < 4; i++)
 		{
-			ExtendedButton button = new ExtendedButton(xOffset + 14, yOffset + 60 + i * 24, 120, 20, Component.empty(), clieckedButton -> onButtonPressed(gui, clieckedButton));
+			ExtendedButton button = new ExtendedButton(gui.xOffset + 14, gui.yOffset + 60 + i * 24, 120, 20, Component.empty(), this::onButtonPressed);
 			gui.addRenderableWidget(button);
 			buttons.add(button);
 		}
@@ -61,7 +61,13 @@ public final class ButtonListHelper
 		downButton = gui.addRenderableWidget(new ArrowButton(false, gui));
 	}
 	
-	public void updateButtons(List<ButtonData> buttonsData)
+	public void updateButtons(List<ButtonData> buttonsDataIn)
+	{
+		this.buttonsData = buttonsDataIn;
+		updateButtons();
+	}
+	
+	private void updateButtons()
 	{
 		downButton.active = buttonsData.size() >= index + 4;
 		upButton.active = index > 0;
@@ -87,11 +93,11 @@ public final class ButtonListHelper
 	private class ArrowButton extends ExtendedButton
 	{
 		boolean reverse;
-		ComputerScreen gui;
+		ThemedScreen gui;
 		
-		ArrowButton(boolean reverse, ComputerScreen gui)
+		ArrowButton(boolean reverse, ThemedScreen gui)
 		{
-			super((gui.width - ComputerScreen.xSize) / 2 + 140, (gui.height - ComputerScreen.ySize) / 2 + (reverse ? 60 : 132), 20, 20, Component.empty(), b -> onArrowPressed(gui, reverse));
+			super((gui.width - ComputerScreen.GUI_WIDTH) / 2 + 140, (gui.height - ComputerScreen.GUI_HEIGHT) / 2 + (reverse ? 60 : 132), 20, 20, Component.empty(), b -> onArrowPressed(reverse));
 			this.reverse = reverse;
 			this.gui = gui;
 		}
@@ -100,7 +106,7 @@ public final class ButtonListHelper
 		public void renderWidget(GuiGraphics guiGraphics, int mouseX, int mouseY, float partialTick)
 		{
 			RenderSystem.setShaderColor(1, 1, 1, 1);
-			guiGraphics.blit(gui.getTheme().data().texturePath(), getX(), getY(), 158, reverse ? 0 : 20, 20, 20);
+			guiGraphics.blit(gui.selectedTheme.data().texturePath(), getX(), getY(), 158, reverse ? 0 : 20, 20, 20);
 		}
 	}
 }

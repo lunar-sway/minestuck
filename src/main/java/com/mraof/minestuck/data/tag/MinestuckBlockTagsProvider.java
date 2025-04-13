@@ -3,6 +3,7 @@ package com.mraof.minestuck.data.tag;
 import com.mraof.minestuck.Minestuck;
 import com.mraof.minestuck.block.MSBlocks;
 import com.mraof.minestuck.data.AspectTreeBlocksData;
+import com.mraof.minestuck.data.DreamerMoonBlocksData;
 import com.mraof.minestuck.data.SkaiaBlocksData;
 import com.mraof.minestuck.util.ExtraModTags;
 import com.mraof.minestuck.util.MSTags;
@@ -40,6 +41,7 @@ public final class MinestuckBlockTagsProvider extends BlockTagsProvider
 	{
 		SkaiaBlocksData.addToBlockTags(this);
 		AspectTreeBlocksData.addToBlockTags(this);
+		DreamerMoonBlocksData.addToBlockTags(this);
 		
 		tag(INCORRECT_FOR_SBAHJ_TOOL).addTag(INCORRECT_FOR_WOODEN_TOOL);
 		tag(INCORRECT_FOR_PAPER_TOOL).addTag(INCORRECT_FOR_WOODEN_TOOL);

@@ -35,6 +35,7 @@ public class MSBlockStateProvider extends BlockStateProvider
 	{
 		SkaiaBlocksData.addModels(this);
 		AspectTreeBlocksData.addModels(this);
+		DreamerMoonBlocksData.addModels(this);
 		
 		simpleBlockWithItem(MSBlocks.STONE_CRUXITE_ORE);
 		simpleBlockWithItem(MSBlocks.NETHERRACK_CRUXITE_ORE);
@@ -1578,6 +1579,8 @@ public class MSBlockStateProvider extends BlockStateProvider
 				i -> models().getExistingFile(id("pink_frosted_top_large_cake" + i)));
 		cake(MSBlocks.CHOCOLATEY_CAKE);
 		flatItem(MSItems.CHOCOLATEY_CAKE, MSBlockStateProvider::itemTexture);
+		cakeAlt(MSBlocks.MOON_CAKE);
+		flatItem(MSItems.MOON_CAKE, MSBlockStateProvider::itemTexture);
 		
 		//Explosives
 		{
@@ -1718,14 +1721,14 @@ public class MSBlockStateProvider extends BlockStateProvider
 	}
 	
 	@SuppressWarnings("SameParameterValue")
-	private void variantsWithItem(DeferredBlock<?> block, int count, IntFunction<ModelFile> modelProvider)
+	public void variantsWithItem(DeferredBlock<?> block, int count, IntFunction<ModelFile> modelProvider)
 	{
 		ConfiguredModel[] models = variantModels(count, modelProvider);
 		getVariantBuilder(block.get()).partialState().setModels(models);
 		simpleBlockItem(block.get(), models[0].model);
 	}
 	
-	private void weightedVariantsWithItem(DeferredBlock<?> block, int[] weights, IntFunction<ModelFile> modelProvider)
+	public void weightedVariantsWithItem(DeferredBlock<?> block, int[] weights, IntFunction<ModelFile> modelProvider)
 	{
 		ConfiguredModel[] models = weightedVariantModels(weights, modelProvider);
 		getVariantBuilder(block.get()).partialState().setModels(models);
@@ -1852,7 +1855,7 @@ public class MSBlockStateProvider extends BlockStateProvider
 	 * While the standard directional block (with {@link MSBlockStateProvider#directionalUp(DeferredBlock, Function, Property[])}) has the down-facing state rotated 180 degrees along the y-axis,
 	 * blocks with this function are instead not rotated in both the up-facing state and the down-facing state.
 	 */
-	private void unflippedColumnWithItem(DeferredBlock<?> block, Function<ResourceLocation, ModelFile> modelProvider)
+	public void unflippedColumnWithItem(DeferredBlock<?> block, Function<ResourceLocation, ModelFile> modelProvider)
 	{
 		var model = modelProvider.apply(block.getId());
 		getVariantBuilder(block.get())
@@ -1915,7 +1918,7 @@ public class MSBlockStateProvider extends BlockStateProvider
 		slabWithItem(block, sourceBlock.getId().getPath(), texture(sourceBlock));
 	}
 	
-	private void slabWithItem(Supplier<SlabBlock> block, String baseName, ResourceLocation texture)
+	public void slabWithItem(Supplier<SlabBlock> block, String baseName, ResourceLocation texture)
 	{
 		slabWithItem(block, baseName, texture, texture);
 	}
@@ -1934,7 +1937,7 @@ public class MSBlockStateProvider extends BlockStateProvider
 		wallWithItem(block, sourceBlock.getId().getPath(), texture(sourceBlock));
 	}
 	
-	private void wallWithItem(Supplier<WallBlock> block, String baseName, ResourceLocation texture)
+	public void wallWithItem(Supplier<WallBlock> block, String baseName, ResourceLocation texture)
 	{
 		wallBlock(block.get(), texture);
 		
@@ -2008,7 +2011,7 @@ public class MSBlockStateProvider extends BlockStateProvider
 		buttonWithItem(block, sourceBlock.getId().getPath(), texture(sourceBlock));
 	}
 	
-	private void buttonWithItem(Supplier<ButtonBlock> block, String baseName, ResourceLocation texture)
+	public void buttonWithItem(Supplier<ButtonBlock> block, String baseName, ResourceLocation texture)
 	{
 		ModelFile buttonInventory = models().buttonInventory(baseName + "_button_inventory", texture);
 		buttonBlock(block.get(), texture);
@@ -2020,7 +2023,7 @@ public class MSBlockStateProvider extends BlockStateProvider
 		pressurePlateWithItem(block, sourceBlock.getId().getPath(), texture(sourceBlock));
 	}
 	
-	private void pressurePlateWithItem(Supplier<PressurePlateBlock> block, String baseName, ResourceLocation texture)
+	public void pressurePlateWithItem(Supplier<PressurePlateBlock> block, String baseName, ResourceLocation texture)
 	{
 		ModelFile pressurePlateInventory = models().pressurePlate(baseName + "_pressure_plate", texture);
 		pressurePlateBlock(block.get(), texture);
@@ -2120,12 +2123,73 @@ public class MSBlockStateProvider extends BlockStateProvider
 		}
 	}
 	
+	private ModelFile cakeAltModel(ResourceLocation id, int bites)
+	{
+		if(bites == 0)
+		{
+			return models().getBuilder(id.getPath() + "_uneaten")
+					.texture("particle", texture(id.withSuffix("_side")))
+					.texture("bottom", texture(id.withSuffix("_bottom")))
+					.texture("top", texture(id.withSuffix("_top")))
+					.texture("side", texture(id.withSuffix("_side")))
+					.texture("north", texture(id.withSuffix("_north")))
+					.texture("south", texture(id.withSuffix("_south")))
+					.texture("east", texture(id.withSuffix("_east")))
+					.texture("west", texture(id.withSuffix("_west")))
+					.element()
+					.from(1, 0, 1).to(15, 8, 15)
+					.allFaces((direction, faceBuilder) -> {
+						if(direction == Direction.UP) faceBuilder.texture("#top");
+						else if(direction == Direction.DOWN) faceBuilder.texture("#bottom").cullface(Direction.DOWN);
+						else if(direction == Direction.NORTH) faceBuilder.texture("#north");
+						else if(direction == Direction.SOUTH) faceBuilder.texture("#south");
+						else if(direction == Direction.EAST) faceBuilder.texture("#east");
+						else if(direction == Direction.WEST) faceBuilder.texture("#west");
+						else
+							faceBuilder.texture("#side");
+					})
+					.end();
+		} else
+		{
+			return models().getBuilder(id.getPath() + "_slice" + bites)
+					.texture("particle", texture(id.withSuffix("_side")))
+					.texture("bottom", texture(id.withSuffix("_bottom")))
+					.texture("top", texture(id.withSuffix("_top")))
+					.texture("north", texture(id.withSuffix("_north")))
+					.texture("south", texture(id.withSuffix("_south")))
+					.texture("east", texture(id.withSuffix("_east")))
+					.texture("side", texture(id.withSuffix("_side")))
+					.texture("inside", texture(id.withSuffix("_inner")))
+					.element()
+					.from(1 + 2 * bites, 0, 1).to(15, 8, 15)
+					.allFaces((direction, faceBuilder) -> {
+						if(direction == Direction.UP) faceBuilder.texture("#top");
+						else if(direction == Direction.DOWN) faceBuilder.texture("#bottom").cullface(Direction.DOWN);
+						else if(direction == Direction.NORTH) faceBuilder.texture("#north");
+						else if(direction == Direction.SOUTH) faceBuilder.texture("#south");
+						else if(direction == Direction.EAST) faceBuilder.texture("#east");
+						else if(direction == Direction.WEST) faceBuilder.texture("#inside");
+						else faceBuilder.texture("#side");
+					})
+					.end();
+		}
+	}
+	
 	private void cake(DeferredBlock<?> block)
 	{
 		ResourceLocation id = block.getId();
 		getVariantBuilder(block.get()).forAllStates(state -> {
 			int bites = state.getValue(CakeBlock.BITES);
 			return ConfiguredModel.builder().modelFile(cakeModel(id, bites)).build();
+		});
+	}
+	
+	private void cakeAlt(DeferredBlock<?> block)
+	{
+		ResourceLocation id = block.getId();
+		getVariantBuilder(block.get()).forAllStates(state -> {
+			int bites = state.getValue(CakeBlock.BITES);
+			return ConfiguredModel.builder().modelFile(cakeAltModel(id, bites)).build();
 		});
 	}
 	

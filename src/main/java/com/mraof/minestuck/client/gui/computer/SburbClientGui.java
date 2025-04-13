@@ -18,6 +18,7 @@ import java.util.Optional;
 
 public final class SburbClientGui implements ProgramGui<SburbClientData>
 {
+	public static final String NAME = "minestuck.program.sburb_client";
 	public static final String CLOSE_BUTTON = "minestuck.program.close_button"; //also used in SburbServer
 	public static final String RESUME_BUTTON = "minestuck.program.resume_button"; //also used in SburbServer
 	public static final String SELECT_COLOR = "minestuck.program.client.select_color_button";
@@ -30,15 +31,15 @@ public final class SburbClientGui implements ProgramGui<SburbClientData>
 	private Component message;
 	
 	@Override
-	public void onInit(ComputerScreen gui)
+	public void onInit(ThemedScreen gui)
 	{
 		this.buttonListHelper.init(gui);
 	}
 	
 	@Override
-	public void onUpdate(ComputerScreen gui, SburbClientData data)
+	public void onUpdate(ThemedScreen gui, SburbClientData data)
 	{
-		ComputerBlockEntity computer = gui.be;
+		ComputerBlockEntity computer = gui.computer;
 		Component message;
 		List<ButtonListHelper.ButtonData> list = new ArrayList<>();
 		Optional<String> eventMessage = data.getEventMessage();
@@ -126,7 +127,7 @@ public final class SburbClientGui implements ProgramGui<SburbClientData>
 	}
 	
 	@Override
-	public void render(GuiGraphics guiGraphics, ComputerScreen gui)
+	public void render(GuiGraphics guiGraphics, ThemedScreen gui)
 	{
 		ProgramGui.drawHeaderMessage(this.message, guiGraphics, gui);
 	}

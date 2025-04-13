@@ -1,0 +1,7 @@
+{
+  "parent": "minecraft:block/cube_column",
+  "textures": {
+    "end": "minestuck:block/derse_thick_cable_top",
+    "side": "minestuck:block/derse_thick_cable"
+  }
+}

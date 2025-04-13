@@ -1,0 +1,8 @@
+{
+  "parent": "minecraft:block/outer_stairs",
+  "textures": {
+    "bottom": "minestuck:block/derse_refined_core",
+    "side": "minestuck:block/derse_refined_core",
+    "top": "minestuck:block/derse_refined_core"
+  }
+}

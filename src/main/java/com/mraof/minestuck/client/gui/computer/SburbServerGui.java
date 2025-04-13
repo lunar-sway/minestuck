@@ -22,6 +22,7 @@ import java.util.OptionalInt;
 
 public final class SburbServerGui implements ProgramGui<SburbServerData>
 {
+	public static final String NAME = "minestuck.program.sburb_server";
 	public static final String CLOSE_BUTTON = SburbClientGui.CLOSE_BUTTON;
 	public static final String EDIT_BUTTON = "minestuck.program.server.edit_button";
 	public static final String GIVE_BUTTON = "minestuck.program.server.give_button";
@@ -36,15 +37,15 @@ public final class SburbServerGui implements ProgramGui<SburbServerData>
 	private Component message;
 	
 	@Override
-	public void onInit(ComputerScreen gui)
+	public void onInit(ThemedScreen gui)
 	{
 		this.buttonListHelper.init(gui);
 	}
 	
 	@Override
-	public void onUpdate(ComputerScreen gui, SburbServerData data)
+	public void onUpdate(ThemedScreen gui, SburbServerData data)
 	{
-		ComputerBlockEntity computer = gui.be;
+		ComputerBlockEntity computer = gui.computer;
 		Component message;
 		List<ButtonListHelper.ButtonData> list = new ArrayList<>();
 		
@@ -126,7 +127,7 @@ public final class SburbServerGui implements ProgramGui<SburbServerData>
 	}
 	
 	@Override
-	public void render(GuiGraphics guiGraphics, ComputerScreen gui)
+	public void render(GuiGraphics guiGraphics, ThemedScreen gui)
 	{
 		ProgramGui.drawHeaderMessage(this.message, guiGraphics, gui);
 	}

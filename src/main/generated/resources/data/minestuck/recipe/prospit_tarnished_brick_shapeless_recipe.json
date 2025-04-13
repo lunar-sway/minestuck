@@ -1,0 +1,16 @@
+{
+  "type": "minecraft:crafting_shapeless",
+  "category": "building",
+  "ingredients": [
+    {
+      "item": "minestuck:prospit_brick"
+    },
+    {
+      "item": "minestuck:prospit_dross"
+    }
+  ],
+  "result": {
+    "count": 1,
+    "id": "minestuck:prospit_tarnished_brick"
+  }
+}
