@@ -4,14 +4,6 @@ All notable changes to this project will be documented in this file.
 
 The format is based on [Keep a Changelog](https://keepachangelog.com/en/1.1.0/).
 
-## [Unreleased dream-moons]
-
-## Added
-- Prospit and Derse dimensions and block sets
-
-## Changed
-- New texture of skaia
-
 ## [Unreleased 1.21]
 
 - Updated to run with Minecraft 1.21 / Neoforge 21.0
@@ -27,10 +19,14 @@ The format is based on [Keep a Changelog](https://keepachangelog.com/en/1.1.0/).
 - Computer programs now have a tooltip when hovered over in computer gui
 - Computer sound effects
 - New computer related advancement
+- Added Moon Cake
+- Work-in-progresss Prospit and Derse dimensions and block sets (not accessible through normal gameplay)
 
 ### Changed
 
+- Updated land skybox rendering
 - Knitting needle crafting recipe now produces one item instead of two
+- Updated coarse end stone texture
 
 ### Fixed
 
@@ -42,7 +38,7 @@ The format is based on [Keep a Changelog](https://keepachangelog.com/en/1.1.0/).
 
 ### Contributors for this release
 
-- Cibernet, Dweblenod, kirderf1, glubtier, blankMushroom, hadean, ThalliumSulfate, triagegremlin, Caldw3ll, heartsremedy
+- Cibernet, Dweblenod, kirderf1, glubtier, blankMushroom, hadean, ThalliumSulfate, triagegremlin, Caldw3ll, heartsremedy, rose_bushes_, v_sabitron
 
 ## [1.20.4-1.12.2.1] - 2025-03-16
 
@@ -58,7 +54,7 @@ The format is based on [Keep a Changelog](https://keepachangelog.com/en/1.1.0/).
 
 ### Contributors for this release
 
-- Cibernet, Dweblenod, blankMushroom, kirderf1, glubtier, rose_bushes_, v_sabitron
+- Dweblenod, blankMushroom, kirderf1
 
 
 ## [1.20.4-1.12.2.0] - 2024-10-06
