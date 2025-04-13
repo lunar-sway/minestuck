@@ -10,16 +10,16 @@ The format is based on [Keep a Changelog](https://keepachangelog.com/en/1.1.0/).
 
 ### Added
 
-- New consort dialogue
-- New carapacian dialogue
-- Message when entering edit mode to remind players of the exit keybind
-- Added 2 tracks october and endless chasm by triagegremlin
-- Added 2 tracks the note desolation plays and desolate strife by Caldw3ll
-- New Disk Manager utility in Settings computer program
-- Computer programs now have a tooltip when hovered over in computer gui
-- Computer sound effects
-- New computer related advancement
 - Added Moon Cake
+- New consort and carapacian dialogue
+- Added 2 tracks by triagegremling: october and endless chasm
+- Added 2 tracks by Caldw3ll: the note desolation plays and desolate strife
+- New Disk Manager utility in Settings computer program for ejecting disks
+- Computer interaction sound effects
+- New computer related advancement
+- Message when entering edit mode to remind players of the exit keybind
+- Computer programs now have a tooltip when hovered over in computer gui
+- Data files for echeladder rungs and rung effects
 - Echeladder now provides fall damage resistance
 - Some work-in-progress content not accessible through normal gameplay:
   - Prospit and Derse dimensions and block sets
