@@ -20,9 +20,9 @@ The format is based on [Keep a Changelog](https://keepachangelog.com/en/1.1.0/).
 - Computer sound effects
 - New computer related advancement
 - Added Moon Cake
-- Work-in-progresss Prospit and Derse dimensions and block sets (not accessible through normal gameplay)
+- Work-in-progress Prospit and Derse dimensions and block sets (not accessible through normal gameplay)
+- Work-in-progress Veil dimension and meteoric stone block (not accessible through normal gameplay)
 - Echeladder now provides fall damage resistance
-- The Veil dimension
 
 ### Changed
 
