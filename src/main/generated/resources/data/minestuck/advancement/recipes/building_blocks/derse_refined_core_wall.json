@@ -1,0 +1,32 @@
+{
+  "parent": "minecraft:recipes/root",
+  "criteria": {
+    "has_derse_refined_core": {
+      "conditions": {
+        "items": [
+          {
+            "items": "minestuck:derse_refined_core"
+          }
+        ]
+      },
+      "trigger": "minecraft:inventory_changed"
+    },
+    "has_the_recipe": {
+      "conditions": {
+        "recipe": "minestuck:derse_refined_core_wall"
+      },
+      "trigger": "minecraft:recipe_unlocked"
+    }
+  },
+  "requirements": [
+    [
+      "has_the_recipe",
+      "has_derse_refined_core"
+    ]
+  ],
+  "rewards": {
+    "recipes": [
+      "minestuck:derse_refined_core_wall"
+    ]
+  }
+}

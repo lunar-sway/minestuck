@@ -1,0 +1,13 @@
+{
+  "variants": {
+    "type=bottom": {
+      "model": "minestuck:block/prospit_core_tiles_slab"
+    },
+    "type=double": {
+      "model": "minestuck:block/prospit_core_tiles"
+    },
+    "type=top": {
+      "model": "minestuck:block/prospit_core_tiles_slab_top"
+    }
+  }
+}

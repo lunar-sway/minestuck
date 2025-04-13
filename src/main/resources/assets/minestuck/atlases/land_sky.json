@@ -6,6 +6,21 @@
             "sprite": "minestuck:skaia"
         },
         {
+            "type": "single",
+            "resource": "minestuck:environment/prospit",
+            "sprite": "minestuck:prospit"
+        },
+        {
+            "type": "single",
+            "resource": "minestuck:environment/derse",
+            "sprite": "minestuck:derse"
+        },
+        {
+            "type": "single",
+            "resource": "minestuck:environment/meteor",
+            "sprite": "minestuck:meteor"
+        },
+        {
             "type": "directory",
             "source": "environment/planets",
             "prefix": "planets/"

@@ -1,0 +1,7 @@
+{
+  "parent": "minecraft:block/cube_column",
+  "textures": {
+    "end": "minestuck:block/prospit_thick_cable_top",
+    "side": "minestuck:block/prospit_thick_cable"
+  }
+}

@@ -562,8 +562,7 @@ public class MSItems
 	public static final DeferredItem<Item> SURPRISE_EMBRYO = REGISTER.register("surprise_embryo", () -> new SurpriseEmbryoItem(new Item.Properties().food(MSFoods.SURPRISE_EMBRYO)));
 	public static final DeferredItem<Item> UNKNOWABLE_EGG = REGISTER.register("unknowable_egg", () -> new UnknowableEggItem(new Item.Properties().stacksTo(16).food(MSFoods.UNKNOWABLE_EGG)));
 	public static final DeferredItem<Item> BREADCRUMBS = REGISTER.register("breadcrumbs", () -> new Item(new Item.Properties().food(MSFoods.BREADCRUMBS)));
-	
-	
+
 	//Other Land Items
 	public static final DeferredItem<Item> GOLDEN_GRASSHOPPER = REGISTER.register("golden_grasshopper", () -> new Item(new Item.Properties()));
 	public static final DeferredItem<Item> BUG_NET = REGISTER.register("bug_net", () -> new BugNetItem(new Item.Properties().durability(64)));
@@ -1603,6 +1602,7 @@ public class MSItems
 	public static final DeferredItem<BlockItem> LARGE_CAKE = registerBlockItem(MSBlocks.LARGE_CAKE);
 	public static final DeferredItem<BlockItem> PINK_FROSTED_TOP_LARGE_CAKE = registerBlockItem(MSBlocks.PINK_FROSTED_TOP_LARGE_CAKE);
 	public static final DeferredItem<BlockItem> CHOCOLATEY_CAKE = registerBlockItem(MSBlocks.CHOCOLATEY_CAKE, new Item.Properties().stacksTo(1));
+	public static final DeferredItem<BlockItem> MOON_CAKE = registerBlockItem(MSBlocks.MOON_CAKE, new Item.Properties().stacksTo(1));
 	
 	//Explosives
 	public static final DeferredItem<BlockItem> PRIMED_TNT = registerBlockItem(MSBlocks.PRIMED_TNT);
@@ -1634,7 +1634,7 @@ public class MSItems
 	public static final DeferredItem<BlockItem> PERFECTLY_GENERIC_TRAPDOOR = registerBlockItem(MSBlocks.PERFECTLY_GENERIC_TRAPDOOR);
 	public static final DeferredItem<Item> PERFECTLY_GENERIC_HANGING_SIGN = REGISTER.register("perfectly_generic_hanging_sign", () -> new HangingSignItem(MSBlocks.PERFECTLY_GENERIC_HANGING_SIGN.get(), MSBlocks.PERFECTLY_GENERIC_WALL_HANGING_SIGN.get(), new Item.Properties().stacksTo(16)));
 	public static final DeferredItem<Item> PERFECTLY_GENERIC_SIGN = REGISTER.register("perfectly_generic_sign", () -> new SignItem(new Item.Properties().stacksTo(16), MSBlocks.PERFECTLY_GENERIC_SIGN.get(), MSBlocks.PERFECTLY_GENERIC_WALL_SIGN.get()));
-	
+
 	/**
 	 * Helper function to register a standard BlockItem with just the source block, no item properties
 	 */

@@ -3,6 +3,7 @@ package com.mraof.minestuck.data.recipe;
 import com.mraof.minestuck.Minestuck;
 import com.mraof.minestuck.block.MSBlocks;
 import com.mraof.minestuck.data.AspectTreeBlocksData;
+import com.mraof.minestuck.data.DreamerMoonBlocksData;
 import com.mraof.minestuck.data.SkaiaBlocksData;
 import com.mraof.minestuck.item.MSItems;
 import com.mraof.minestuck.util.ExtraModTags;
@@ -40,6 +41,7 @@ public class MinestuckRecipeProvider extends RecipeProvider
 	{
 		SkaiaBlocksData.addRecipes(recipeBuilder);
 		AspectTreeBlocksData.addRecipes(recipeBuilder);
+		DreamerMoonBlocksData.addRecipes(recipeBuilder);
 		
 		ShapelessRecipeBuilder.shapeless(RecipeCategory.MISC, MSItems.RAW_CRUXITE.get(), 9).requires(MSBlocks.CRUXITE_BLOCK.get()).unlockedBy("has_raw_cruxite", has(MSItems.RAW_CRUXITE.get())).unlockedBy("has_cruxite_block", has(MSBlocks.CRUXITE_BLOCK.get())).save(recipeBuilder, ResourceLocation.fromNamespaceAndPath(Minestuck.MOD_ID, "raw_cruxite_from_block"));
 		ShapedRecipeBuilder.shaped(RecipeCategory.BUILDING_BLOCKS, MSBlocks.CRUXITE_BLOCK.get()).define('#', MSItems.RAW_CRUXITE.get()).pattern("###").pattern("###").pattern("###").unlockedBy("has_raw_cruxite", has(MSItems.RAW_CRUXITE.get())).save(recipeBuilder);

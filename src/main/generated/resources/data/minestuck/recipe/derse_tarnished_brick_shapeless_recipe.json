@@ -1,0 +1,16 @@
+{
+  "type": "minecraft:crafting_shapeless",
+  "category": "building",
+  "ingredients": [
+    {
+      "item": "minestuck:derse_brick"
+    },
+    {
+      "item": "minestuck:derse_residue"
+    }
+  ],
+  "result": {
+    "count": 1,
+    "id": "minestuck:derse_tarnished_brick"
+  }
+}
