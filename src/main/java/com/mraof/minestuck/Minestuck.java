@@ -42,6 +42,7 @@ import com.mraof.minestuck.world.gen.MSWorldGenTypes;
 import com.mraof.minestuck.world.gen.feature.MSFeatures;
 import com.mraof.minestuck.world.gen.feature.MSStructureProcessorTypes;
 import com.mraof.minestuck.world.gen.structure.MSStructures;
+import com.mraof.minestuck.world.gen.structure.wfc.ProspitWFCDemoStructure;
 import com.mraof.minestuck.world.lands.LandTypes;
 import net.minecraft.resources.ResourceLocation;
 import net.neoforged.bus.api.IEventBus;
@@ -124,6 +125,7 @@ public class Minestuck
 		SkaiaBlocks.init();
 		AspectTreeBlocks.init();
 		DreamerMoonBlocks.init();
+		ProspitWFCDemoStructure.init();
 	}
 	
 	/**

@@ -178,7 +178,7 @@ public final class MSStructures
 	}
 	
 	
-	private static <S extends Structure> StructureType<S> asType(MapCodec<S> codec)
+	public static <S extends Structure> StructureType<S> asType(MapCodec<S> codec)
 	{
 		return () -> codec;
 	}
