@@ -37,6 +37,9 @@ public final class MSPlacedFeatureProvider
 		context.register(RETURN_NODE, placed(features, MSCFeatures.RETURN_NODE,
 				worldGenModifiers(RarityFilter.onAverageOnceEvery(128), PlacementUtils.HEIGHTMAP)));
 		
+		context.register(VEIL_CRATER, placed(features, MSCFeatures.VEIL_CRATER,
+				worldGenModifiers(RarityFilter.onAverageOnceEvery(35), PlacementUtils.HEIGHTMAP)));
+		
 		context.register(COG, placed(features, MSCFeatures.COG,
 				worldGenModifiers(RarityFilter.onAverageOnceEvery(2))));
 		context.register(UNCOMMON_COG, placed(features, MSCFeatures.COG,

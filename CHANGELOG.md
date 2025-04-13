@@ -20,7 +20,8 @@ The format is based on [Keep a Changelog](https://keepachangelog.com/en/1.1.0/).
 - Computer sound effects
 - New computer related advancement
 - Added Moon Cake
-- Work-in-progresss Prospit and Derse dimensions and block sets (not accessible through normal gameplay)
+- Work-in-progress Prospit and Derse dimensions and block sets (not accessible through normal gameplay)
+- Work-in-progress Veil dimension and meteoric stone block (not accessible through normal gameplay)
 - Echeladder now provides fall damage resistance
 
 ### Changed
@@ -43,6 +44,10 @@ The format is based on [Keep a Changelog](https://keepachangelog.com/en/1.1.0/).
 - Carved totems in alchemiter model now have correct uv mapping
 - Rung progress bar is now white when it would otherwise be too dark to see progress clearly
 
+### Removed
+
+- Removed "aspectEffects" config option as it is redundant to modifying rungs.json
+
 ### Contributors for this release
 
 - Cibernet, Dweblenod, kirderf1, glubtier, blankMushroom, hadean, ThalliumSulfate, triagegremlin, Caldw3ll, heartsremedy, rose_bushes_, v_sabitron
@@ -59,14 +64,9 @@ The format is based on [Keep a Changelog](https://keepachangelog.com/en/1.1.0/).
 - Fixed untranslated key when using /gutter show command
 - Fixed widget rendering in Color Selection screen
 
-### Removed
-
-- Removed "aspectEffects" config option as it is redundant to modifying rungs.json
-
 ### Contributors for this release
 
 - Dweblenod, blankMushroom, kirderf1
-
 
 ## [1.20.4-1.12.2.0] - 2024-10-06
 

@@ -22,6 +22,8 @@ public class MSDimensions
 	public static ResourceKey<Level> SKAIA = ResourceKey.create(Registries.DIMENSION, Minestuck.id("skaia"));
 	public static ResourceKey<Level> PROSPIT = ResourceKey.create(Registries.DIMENSION,  Minestuck.id("prospit"));
 	public static ResourceKey<Level> DERSE = ResourceKey.create(Registries.DIMENSION,  Minestuck.id("derse"));
+	public static ResourceKey<Level> VEIL = ResourceKey.create(Registries.DIMENSION, Minestuck.id("veil"));
+	
 	public static final ResourceLocation LAND_EFFECTS =  Minestuck.id("land");
 	public static final ResourceLocation PROSPIT_EFFECTS =  Minestuck.id("prospit_effects");
 	public static final ResourceLocation DERSE_EFFECTS =  Minestuck.id("derse_effects");
@@ -50,9 +52,14 @@ public class MSDimensions
 		return dimension == DERSE;
 	}
 	
+	public static boolean isVeil(ResourceKey<Level> dimension)
+	{
+		return dimension == VEIL;
+	}
+	
 	public static boolean isInMedium(MinecraftServer server, ResourceKey<Level> dimension)
 	{
-		return isLandDimension(server, dimension) || isSkaia(dimension);
+		return isLandDimension(server, dimension) || isSkaia(dimension) || isVeil(dimension);
 	}
 	
 	public static void sendLandTypesToAll(MinecraftServer server)
