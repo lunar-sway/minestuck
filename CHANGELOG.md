@@ -6,6 +6,14 @@ The format is based on [Keep a Changelog](https://keepachangelog.com/en/1.1.0/).
 
 ## [Unreleased]
 
+### Fixed
+
+- Fix multiplayer crash with grist cache screen
+
+### Contributors for this release
+
+- kirderf1
+
 ## [1.21.1-1.13.0.0] - 2025-04-13
 
 - Updated to run with Minecraft 1.21 / Neoforge 21.1
