@@ -264,8 +264,7 @@ public class MinestuckRecipeProvider extends RecipeProvider
 				.unlockedBy("has_raw_cruxite", has(MSItems.RAW_CRUXITE.get())).save(recipeBuilder);
 		CommonRecipes.wallRecipe(MSBlocks.CRUXITE_WALL, MSBlocks.CRUXITE_BLOCK).group("cruxite_blocks")
 				.unlockedBy("has_raw_cruxite", has(MSItems.RAW_CRUXITE.get())).save(recipeBuilder);
-		CommonRecipes.buttonRecipe(MSBlocks.CRUXITE_BUTTON, MSBlocks.CRUXITE_BLOCK)
-				.unlockedBy("has_raw_cruxite", has(MSItems.RAW_CRUXITE.get())).save(recipeBuilder);
+		CommonRecipes.buttonRecipe(MSBlocks.CRUXITE_BUTTON, MSItems.RAW_CRUXITE).save(recipeBuilder);
 		CommonRecipes.pressurePlateRecipe(MSBlocks.CRUXITE_PRESSURE_PLATE, MSBlocks.CRUXITE_BLOCK).group("cruxite_blocks")
 				.unlockedBy("has_raw_cruxite", has(MSItems.RAW_CRUXITE.get())).save(recipeBuilder);
 		ShapedRecipeBuilder.shaped(RecipeCategory.BUILDING_BLOCKS, MSBlocks.CRUXITE_DOOR.get(), 3).define('#', MSBlocks.SMOOTH_CRUXITE_BLOCK.get()).pattern("## ").pattern("## ").pattern("## ").group("cruxite_blocks").unlockedBy("has_raw_cruxite", has(MSItems.RAW_CRUXITE.get())).save(recipeBuilder);
