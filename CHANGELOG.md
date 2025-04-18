@@ -12,10 +12,11 @@ The format is based on [Keep a Changelog](https://keepachangelog.com/en/1.1.0/).
 - Color selection button is available in the SBURB Client program before connection again instead of after
 - Cruxite button now uses raw cruxite instead of cruxite block, which resolves a conflict with storage block breakdown
 - The block model for the holopad with card now renders with cutout
+- Carved totems in alchemiter model now have correct uv mapping
 
 ### Contributors for this release
 
-- kirderf1
+- kirderf1, blankMushroom
 
 ## [1.20.1-1.12.1.0] - 2024-09-08
 
