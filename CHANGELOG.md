@@ -9,6 +9,7 @@ The format is based on [Keep a Changelog](https://keepachangelog.com/en/1.1.0/).
 ### Fixed
 
 - Fix crash with Geckolib 4.7.1+ mentioning giclops.animation.json
+- Color selection button is available in the SBURB Client program before connection again instead of after
 - Cruxite button now uses raw cruxite instead of cruxite block, which resolves a conflict with storage block breakdown
 - The block model for the holopad with card now renders with cutout
 
