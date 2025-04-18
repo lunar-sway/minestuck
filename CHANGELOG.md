@@ -6,6 +6,8 @@ The format is based on [Keep a Changelog](https://keepachangelog.com/en/1.1.0/).
 
 ## [Unreleased]
 
+## [1.20.1-1.12.1.1] - 2025-04-18
+
 ### Fixed
 
 - Fix crash with Geckolib 4.7.1+ mentioning giclops.animation.json
