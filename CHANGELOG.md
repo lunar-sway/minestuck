@@ -69,7 +69,6 @@ The format is based on [Keep a Changelog](https://keepachangelog.com/en/1.1.0/).
 - Non-color data will now be preserved on dowels going through a totem lathe
 - Item stack data will now be preserved on disks inserted into a computer
 - Fix disk insertion and computer screen for computer easter egg
-- Carved totems in alchemiter model now have correct uv mapping
 - Rung progress bar is now white when it would otherwise be too dark to see progress clearly
 
 ### Removed
