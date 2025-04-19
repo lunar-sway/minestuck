@@ -874,3 +874,99 @@ The format is based on [Keep a Changelog](https://keepachangelog.com/en/1.1.0/).
 ### Contributors for this release
 
 - kirderf1
+
+## [1.16.5-1.8.0.0] - 2022-07-17
+
+### Added
+
+- Toggler block: toggles a specific blockstate that many puzzle blocks have been modified to possess or been given (if they are new), can be toggled itself to instead shut off powered redstone blocks
+- Remote Comparator block: checks for blocks at a specific distance and gives off redstone if it matches the type that is directly behind it, can be toggled to additionally matches blockstates
+- Structure Core block: records data to specific structures and can permanently shut down specific blocks functionality (summoners and area effect blocks) if otherwise set to read data from said structures, intended for actual use in the Tiered Dungeons update
+- Pushable Block: can be pushed in a horizontal direction if right clicked, imagined with sokoban/zelda/portal style puzzles in mind, can absorb platform blocks but cannot be pushed into their way, destroys small plants and any blocks listed in the block tag "pushable_block_replacable"
+- Block Pressure Plate: will give off redstone if a player(who is not crouching) or a block with a full faced bottom side are directly above it
+
+### Changed
+
+- Implemented new land structure blocks into their respective terrain land components, expanding and fixing components of structure block registries for said terrain lands in the process (fungi lands now have mycelium stone as their ground material)
+- Increased functionality for the Sendificator for it to now be able to teleport items to coordinates in the same dimension after being set by a player, using uranium as fuel similar to the uranium cooker
+- Area effect block can be shut down by the structure core when in READ_AND_WIPE mode
+- Area effect block now works as an offset, allowing it to change the area of effect upon rotation
+- Area effect GUI now also has a way to set the effect type/amplifier and change whether all mobs or just players are affected
+- Item Magnet can now be machine toggled to push entities away instead of pulling them closer. Can also move the new pushable blocks upwards (turning them into a falling block entity)
+- Platform block/platform generator now use new blockstate properties to reduce the amount of block updates they caused, with the platform blocks being able to check whether they are being supported and the generators able to more reliable create and remove the platform blocks, including a block tag for blocks that should absorb the platforms
+- Platform block now has the ability to replace blocks like grass/fire/liquid
+- Summoner now has a gui for improved capacity to set the summoned entity among other small utility
+- The area at which Remote Observer can observe is now variable.
+- Remote Observer now has a blacklist entity type tag for entities it shouldnt be able to detect
+- Remote Observer type `IS_ENTITY_IN_WATER` has been split into a type for if an entity is submerged in water and a type for it the player is wet(in bubble column/water/rain)
+- Remote Observer can now check for sprinting + entities on ground
+- Stat storer alchemy recipe now uses computer parts instead of comparator
+- If a Toggler block is in Discharge mode and interacts with a Stat storer, it will also reset the active stat type value to 0, increasing its capacity for automation
+- Variable Solid Switch now has an alchemy recipe of Solid Switch || Comparator
+- Redstone Clock now has an alchemy recipe of Clock && Comparator
+- Fragile Stone alchemy recipe now uses && instead of ||
+- Fragile stone now has a stonecutting recipe from stone
+- Retractable Spikes now has an alchemy recipe of Spikes && Sticky Piston
+- Wireless Redstone Transmitter now works as an offset, allowing it to power different receivers depending on rotation
+- Wireless Redstone Transmitter now uses computer parts instead of quartz in its crafting recipe
+- Expanded the list of blocks that the Rotator can rotate (now includes repeaters and comparators for advanced redstone)
+- Rotator now has a crafting recipe
+- Updated some preexisting block textures related to terrain lands
+- Renamed "Mossy Coarse Stone" to "Mossy Coarse Stone Bricks"
+
+### Fixed
+
+- Fixed issue with the redstone clock tick speed resetting every time it was unloaded
+
+### Contributors for this release
+
+- Badadamadaba, Dweblenod, SipherNil, Riotmode, kirderf1
+
+## [1.16.5-1.7.0.3] - 2022-05-14
+
+### Fixed
+
+- Fix client-side editmode crash related to item tooltips
+- Fix sylladex not immediately syncing when switching modus
+
+### Contributors for this release
+
+- kirderf1
+
+## [1.16.5-1.7.0.2] - 2022-04-21
+
+### Added
+
+- New combination recipes and grist costs
+
+### Changes
+
+- Allow crouch interaction for more puzzle blocks
+
+### Fixed
+
+- Fix stone tablet placement crash
+- Fix some data sync problems with puzzle blocks
+- Fix some title generation issues
+- Fix data checker render issue
+
+### Contributors for this release
+
+- kirderf1, Dweblenod
+
+## [1.16.5-1.7.0.1] - 2022-04-15
+
+### Fixed
+
+- Fix server crash from remote observers
+- Fix server crash from daggers
+- Fix an interaction with area effect blocks outside of single player
+- Added command argument serialization, which fixed some logged warnings and possibly some under-the-hood improvements
+
+### Removed
+
+- Remove loot entry from `minestuck:chests/medium_basic` that didn't serve a purpose and caused log warnings
+
+### Contributors for this release
+
+- kirderf1
