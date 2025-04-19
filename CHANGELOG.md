@@ -626,7 +626,7 @@ The format is based on [Keep a Changelog](https://keepachangelog.com/en/1.1.0/).
 
 ### Contributors for this release
 
-- kirderf1, Dweblenod, Akisephila, rose_bushes_, Hadean, Emma "Dilemma", Carnie, Riotmode, sipherNil, blankMushroom, Caldw3ll, Amiwyn, LunaticCat, Doro, SarahK
+- kirderf1, Dweblenod, Akisephila, rose_bushes_, Hadean, Emma "Dilemma", Carnie, Riotmode, sipherNil, blankMushroom, Caldw3ll, Amiwyn, LunaticCat, DORO, SarahK
 
 ## [1.19.2-1.9.3.0] - 2023-03-24
 
@@ -722,7 +722,7 @@ The format is based on [Keep a Changelog](https://keepachangelog.com/en/1.1.0/).
 
 ### Contributors for this release
 
-- Riotmode, rose_bushes_, Dweblenod, kirderf1, Doro, Akisephila, blankMushroom
+- Riotmode, rose_bushes_, Dweblenod, kirderf1, DORO, Akisephila, blankMushroom
 
 ## [1.18.2-1.9.0.2] - 2023-01-09
 
@@ -740,6 +740,136 @@ The format is based on [Keep a Changelog](https://keepachangelog.com/en/1.1.0/).
 ### Fixed
 
 - Fix crash on player death
+
+### Contributors for this release
+
+- kirderf1
+
+## [1.18.2-1.9.0.0] - 2022-12-27
+
+### Added
+
+- Grist toast notifications
+- New hats
+- Added Music Sword
+- Added cassettes for additional vanilla tracks
+- Added Green Stone Brick Embedded Ladder, which is now used in frog temples
+- Villager trades for minestuck-related items
+
+### Changed
+
+- Sburb code is now written down in parts
+- Sburb disks are now obtained using the new disk burner program
+- Add functionality to Mine and Grist
+- Blank disks can now be crafted
+- Lotus flower now uses a loot table
+- Tweak overworld loot slightly
+
+### Fixed
+
+- Fix compatibility issue with TerraBlender
+- Fixed item for large machines not being used up in survival,
+  and made other small improvements to placing large machines
+- Add missing usage message to oW THE EDGE
+- Fix frog temple generation performance issue
+
+### Contributors for this release
+
+- kirderf1, Dweblenod, Riotmode, LunaticCat, Caldw3ll
+
+## [1.18.2-1.8.1.2] - 2022-11-15
+
+### Fixed
+
+- Fix transportalizer bug where they stop working as destination after being unloaded
+- Fix item deletion bug in the captcha deck screen
+- Fix captchalogue dupe bug
+- Fix up focus on transportalizer text box
+- Fix horn position in the lich model
+
+### Contributors for this release
+
+- kirderf1
+
+## [1.18.2-1.8.1.1] - 2022-11-01
+
+### Fixed
+
+- Fix basilisk-related crash
+- Fix geckolib-related crash
+- Bumped up minimum forge version
+
+### Contributors for this release
+
+- kirderf1
+
+## [1.18.2-1.8.1.0] - 2022-10-30
+
+- Updated to Minecraft 1.18.2
+- Minestuck has a new dependency: Infiniverse
+
+### Added
+
+- New music track "Lillypad Rain" that plays in frogs and clockwork lands
+- New music tracks "Sickest Fires", "Rancorous Gambligant", "What Goes Up" that plays in all lands
+- New music track "Rise Up" that may be used in the future
+- Sound effects for magic effects and lotus flower loot spawn
+- Combination and grist cost recipes for new vanilla items
+
+### Changed
+
+- Starting moduses are now defined through datapacks
+- Land and skaia world gen has been revamped somewhat to fit the new worldgen system
+- World height has been increased for lands
+- Ore generation in land and the overworld has been adapted to the new world heights
+- Minestuck versions of iron/gold ore will drop raw iron/gold
+- New ore textures
+- Grist and vitality gel no longer have fire immunity
+- A number of other technical entites now have fire immunity
+- Changed sound and other properties of some block groups
+- Changed system behind grist layer generation
+- Ignore fog density in custom fluids for spectators
+- Changed strawberry stem block drops to match that of vanilla stem blocks
+- Grist type secondary drops are now handled by grist type data tags
+- Grist layer spawn categories are now handled by grist type data tags
+- Petrified flora now uses block tag `minestuck:petrified_flora_placeable` for placeable blocks
+- Kundler surprise egg now uses a new data loot table `minestuck:kundler_suprises` for its drop
+- Frogs now uses item tag `minestuck:bugs` for lure/tempt behavior instead of a hardcoded list of items
+- Hungry consort dialogue now matches items against a new item tag `minestuck:consort_snacks` instead of a hardcoded list of items
+- Changed registry id of `mossy_coarse_stone` block to `mossy_coarse_stone_bricks`
+- Changed registry id of `castle_brick` blocks to `chess_brick`
+- Changed registry id of `stone_slab` to `stone_tablet`
+- Renamed `minestuck:portable_block_replacable` block tag to `minestuck:portable_block_replaceable`
+- Renamed `minestuck:land_aspect` loot condition to `minestuck:land_type`
+- Changed conditions used for spawning mobs using summoner block
+- Block property change for gate and return node blocks: the "main" block is now a different block and not just a different state
+
+### Fixed
+
+- Fixed poster being wrongly rotated when loading
+- Fixed flowing light water texture animation
+- Added missing model for cassette "Far" inside cassette player
+- Strawberry stem now properly uses cutout render type
+- Fix some display problems with stone tablets
+- Lava blocks in "ocean rundowns" in heat lands now properly flow on generation
+- Fixed redstone power related block updating for a few puzzle blocks
+- Fix some interactions with the totem lathe
+
+### Removed
+
+- Removed wyrm entity
+- Removed vein blocks
+- "startingModusTypes" config option was replaced by new datapack file
+
+### Contributors for this release
+
+- kirderf1, Amiwyn, Dweblenod, sipherNil, Caldw3ll, FrostyMac, DORO
+
+## [1.16.5-1.8.0.1] - 2022-07-28
+
+### Fixed
+
+- Patched issue with infinite loop when checking whether all players in a session have entered and completed connections
 
 ### Contributors for this release
 
