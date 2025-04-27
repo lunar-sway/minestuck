@@ -81,13 +81,13 @@ public class TurtleVillagePieces
 			}
 
 			StructureBlockRegistry blocks = StructureBlockRegistry.getOrDefault(chunkGeneratorIn);
-			BlockState primary = blocks.getBlockState("structure_primary");
-			BlockState secondary = blocks.getBlockState("structure_secondary");
-			BlockState fluid = blocks.getBlockState("ocean");
-			BlockState stairsN = blocks.getStairs("structure_primary_stairs", Direction.NORTH, false);
-			BlockState stairsE = blocks.getStairs("structure_primary_stairs", Direction.EAST, false);
-			BlockState stairsS = blocks.getStairs("structure_primary_stairs", Direction.SOUTH, false);
-			BlockState stairsW = blocks.getStairs("structure_primary_stairs", Direction.WEST, false);
+			BlockState primary = blocks.getBlockState(StructureBlockRegistry.STRUCTURE_PRIMARY);
+			BlockState secondary = blocks.getBlockState(StructureBlockRegistry.STRUCTURE_SECONDARY);
+			BlockState fluid = blocks.getBlockState(StructureBlockRegistry.OCEAN);
+			BlockState stairsN = blocks.getStairs(StructureBlockRegistry.STRUCTURE_PRIMARY_STAIRS, Direction.NORTH, false);
+			BlockState stairsE = blocks.getStairs(StructureBlockRegistry.STRUCTURE_PRIMARY_STAIRS, Direction.EAST, false);
+			BlockState stairsS = blocks.getStairs(StructureBlockRegistry.STRUCTURE_PRIMARY_STAIRS, Direction.SOUTH, false);
+			BlockState stairsW = blocks.getStairs(StructureBlockRegistry.STRUCTURE_PRIMARY_STAIRS, Direction.WEST, false);
 
 			this.generateBox(level, structureBoundingBoxIn, 0, 4, 0, 2, 4, 0, primary, primary, false);
 			this.generateBox(level, structureBoundingBoxIn, 0, 4, 1, 0, 4, 2, primary, primary, false);
@@ -181,8 +181,8 @@ public class TurtleVillagePieces
 			}
 
 			StructureBlockRegistry blocks = StructureBlockRegistry.getOrDefault(chunkGeneratorIn);
-			BlockState buildBlock = blocks.getBlockState("structure_primary");
-			BlockState lightBlock = blocks.getBlockState("light_block");
+			BlockState buildBlock = blocks.getBlockState(StructureBlockRegistry.STRUCTURE_PRIMARY);
+			BlockState lightBlock = blocks.getBlockState(StructureBlockRegistry.LIGHT_BLOCK);
 
 			this.generateAirBox(level, structureBoundingBoxIn, 1, 1, 2, 6, 4, 7);
 			this.generateAirBox(level, structureBoundingBoxIn, 3, 3, 1, 4, 4, 1);
@@ -252,11 +252,11 @@ public class TurtleVillagePieces
 			}
 
 			StructureBlockRegistry blocks = StructureBlockRegistry.getOrDefault(chunkGeneratorIn);
-			BlockState primaryBlock = blocks.getBlockState("structure_primary");
-			BlockState primaryDecorBlock = blocks.getBlockState("structure_primary_decorative");
-			BlockState secondaryBlock = blocks.getBlockState("structure_secondary");
-			BlockState lightBlock = blocks.getBlockState("light_block");
-			BlockState glassBlock = blocks.getBlockState("glass");
+			BlockState primaryBlock = blocks.getBlockState(StructureBlockRegistry.STRUCTURE_PRIMARY);
+			BlockState primaryDecorBlock = blocks.getBlockState(StructureBlockRegistry.STRUCTURE_PRIMARY_DECORATIVE);
+			BlockState secondaryBlock = blocks.getBlockState(StructureBlockRegistry.STRUCTURE_SECONDARY);
+			BlockState lightBlock = blocks.getBlockState(StructureBlockRegistry.LIGHT_BLOCK);
+			BlockState glassBlock = blocks.getBlockState(StructureBlockRegistry.GLASS);
 
 			this.generateAirBox(level, structureBoundingBoxIn, 6, 1, 1, 7, 3, 3);
 			this.generateAirBox(level, structureBoundingBoxIn, 1, 1, 4, 12, 4, 13);
@@ -359,11 +359,11 @@ public class TurtleVillagePieces
 			}
 
 			StructureBlockRegistry blocks = StructureBlockRegistry.getOrDefault(chunkGeneratorIn);
-			BlockState primaryBlock = blocks.getBlockState("structure_primary");
-			BlockState secondaryBlock = blocks.getBlockState("structure_secondary");
-			BlockState lightBlock = blocks.getBlockState("light_block");
-			BlockState glassBlock1 = blocks.getBlockState("stained_glass_1");
-			BlockState glassBlock2 = blocks.getBlockState("stained_glass_2");
+			BlockState primaryBlock = blocks.getBlockState(StructureBlockRegistry.STRUCTURE_PRIMARY);
+			BlockState secondaryBlock = blocks.getBlockState(StructureBlockRegistry.STRUCTURE_SECONDARY);
+			BlockState lightBlock = blocks.getBlockState(StructureBlockRegistry.LIGHT_BLOCK);
+			BlockState glassBlock1 = blocks.getBlockState(StructureBlockRegistry.STAINED_GLASS_1);
+			BlockState glassBlock2 = blocks.getBlockState(StructureBlockRegistry.STAINED_GLASS_2);
 
 			this.generateAirBox(level, structureBoundingBoxIn, 1, 1, 2, 9, 5, 4);
 			this.generateAirBox(level, structureBoundingBoxIn, 1, 1, 5, 9, 4, 6);

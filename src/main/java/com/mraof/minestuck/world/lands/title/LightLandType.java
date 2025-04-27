@@ -34,10 +34,10 @@ public class LightLandType extends TitleLandType
 	@Override
 	public void registerBlocks(StructureBlockRegistry registry)
 	{
-		registry.setBlock("structure_wool_2", Blocks.ORANGE_WOOL);
-		registry.setBlock("carpet", Blocks.ORANGE_CARPET);
-		registry.setBlock("torch", Blocks.TORCH);
-		registry.setBlock("slime", MSBlocks.GLOWY_GOOP);
+		registry.setBlock(StructureBlockRegistry.STRUCTURE_WOOL_2, Blocks.ORANGE_WOOL);
+		registry.setBlock(StructureBlockRegistry.CARPET, Blocks.ORANGE_CARPET);
+		registry.setBlock(StructureBlockRegistry.TORCH, Blocks.TORCH);
+		registry.setBlock(StructureBlockRegistry.SLIME, MSBlocks.GLOWY_GOOP);
 	}
 	
 	@Override
@@ -50,7 +50,7 @@ public class LightLandType extends TitleLandType
 	@Override
 	public void addBiomeGeneration(LandBiomeGenBuilder builder, StructureBlockRegistry blocks, LandBiomeSetType biomeSet)
 	{
-		BlockState lightBlock = blocks.getBlockState("light_block");
+		BlockState lightBlock = blocks.getBlockState(StructureBlockRegistry.LIGHT_BLOCK);
 		
 		builder.addFeature(GenerationStep.Decoration.LOCAL_MODIFICATIONS, MSPlacedFeatures.MIXED_PILLARS_EXTRA, FeatureModifier.withState(lightBlock), LandBiomeType.ROUGH);
 		builder.addFeature(GenerationStep.Decoration.LOCAL_MODIFICATIONS, MSPlacedFeatures.SMALL_PILLAR, FeatureModifier.withState(lightBlock), LandBiomeType.anyExcept(LandBiomeType.ROUGH));
