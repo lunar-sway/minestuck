@@ -54,9 +54,9 @@ public class FrogEntity extends PathfinderMob
 	private static final EntityDataAccessor<Integer> SKIN_COLOR = SynchedEntityData.defineId(FrogEntity.class, EntityDataSerializers.INT);
 	private static final EntityDataAccessor<Integer> EYE_COLOR = SynchedEntityData.defineId(FrogEntity.class, EntityDataSerializers.INT);
 	private static final EntityDataAccessor<Integer> BELLY_COLOR = SynchedEntityData.defineId(FrogEntity.class, EntityDataSerializers.INT);
-	private static final EntityDataAccessor<EyeTypes> EYE_TYPE = SynchedEntityData.defineId(FrogEntity.class, EntityDataSerializer.forValueType(NeoForgeStreamCodecs.enumCodec(EyeTypes.class)));
-	private static final EntityDataAccessor<BellyTypes> BELLY_TYPE = SynchedEntityData.defineId(FrogEntity.class, EntityDataSerializer.forValueType(NeoForgeStreamCodecs.enumCodec(BellyTypes.class)));
-	private static final EntityDataAccessor<FrogVariants> VARIANT = SynchedEntityData.defineId(FrogEntity.class, EntityDataSerializer.forValueType(NeoForgeStreamCodecs.enumCodec(FrogVariants.class)));
+	private static final EntityDataAccessor<Integer> EYE_TYPE = SynchedEntityData.defineId(FrogEntity.class, EntityDataSerializers.INT);
+	private static final EntityDataAccessor<Integer> BELLY_TYPE = SynchedEntityData.defineId(FrogEntity.class, EntityDataSerializers.INT);
+	private static final EntityDataAccessor<Integer> VARIANT = SynchedEntityData.defineId(FrogEntity.class, EntityDataSerializers.INT);
 	
 	private static final ResourceLocation GENETIC_SIZE_ATTRIBUTE_KEY = Minestuck.id("genetic_size");
 	
@@ -77,12 +77,12 @@ public class FrogEntity extends PathfinderMob
 	protected void defineSynchedData(SynchedEntityData.Builder builder)
 	{
 		super.defineSynchedData(builder);
-		builder.define(VARIANT, FrogVariants.DEFAULT);
+		builder.define(VARIANT, FrogVariants.DEFAULT.ordinal());
 		builder.define(SKIN_COLOR, random(34277));
 		builder.define(EYE_COLOR, random(15967496));
 		builder.define(BELLY_COLOR, random(28350));
-		builder.define(EYE_TYPE, EyeTypes.LIGHT);
-		builder.define(BELLY_TYPE, BellyTypes.SOLID);
+		builder.define(EYE_TYPE, EyeTypes.LIGHT.ordinal());
+		builder.define(BELLY_TYPE, BellyTypes.SOLID.ordinal());
 	}
 	
 	@Override
@@ -496,32 +496,32 @@ public class FrogEntity extends PathfinderMob
 	
 	public void setEyeType(EyeTypes i)
 	{
-		this.entityData.set(EYE_TYPE, i);
+		this.entityData.set(EYE_TYPE, i.ordinal());
 	}
 	
 	public EyeTypes getEyeType()
 	{
-		return this.entityData.get(EYE_TYPE);
+		return EyeTypes.values()[this.entityData.get(EYE_TYPE)];
 	}
 	
 	public void setBellyType(BellyTypes i)
 	{
-		this.entityData.set(BELLY_TYPE, i);
+		this.entityData.set(BELLY_TYPE, i.ordinal());
 	}
 	
 	public BellyTypes getBellyType()
 	{
-		return this.entityData.get(BELLY_TYPE);
+		return BellyTypes.values()[this.entityData.get(BELLY_TYPE)];
 	}
 	
 	public void setFrogVariant(FrogVariants i)
 	{
-		this.entityData.set(VARIANT, i);
+		this.entityData.set(VARIANT, i.ordinal());
 	}
 	
 	public FrogVariants getFrogVariant()
 	{
-		return this.entityData.get(VARIANT);
+		return FrogVariants.values()[this.entityData.get(VARIANT)];
 	}
 	
 	public void setFrogSize(double size, boolean regenHealth)
