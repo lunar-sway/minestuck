@@ -1,0 +1,14 @@
+{
+  "fallback": "minecraft:empty",
+  "elements": [
+    {
+      "weight": 1,
+      "element": {
+        "element_type": "minecraft:single_pool_element",
+        "projection": "rigid",
+        "location": "minestuck:derse_bunker/bunker_derse_entry_lower",
+        "processors": "minecraft:empty"
+      }
+    }
+  ]
+}

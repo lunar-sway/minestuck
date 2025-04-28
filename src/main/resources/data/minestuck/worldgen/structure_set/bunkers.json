@@ -1,0 +1,22 @@
+{
+  "structures": [
+    {
+      "structure": "minestuck:derse_bunker",
+      "weight": 1
+    },
+    {
+      "structure": "minestuck:prospit_bunker",
+      "weight": 1
+    },
+    {
+      "structure": "minestuck:imp_bunker",
+      "weight": 3
+    }
+  ],
+  "placement": {
+    "type": "minecraft:random_spread",
+    "salt": 1481098009,
+    "spacing": 100,
+    "separation": 5
+  }
+}
