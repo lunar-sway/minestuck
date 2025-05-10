@@ -5,7 +5,7 @@
       "weight": 1,
       "element": {
         "location": "minestuck:derse_bunker/bunker_derse_decorator_001",
-        "processors": "minecraft:empty",
+        "processors": "minestuck:structure_block_registry",
         "projection": "rigid",
         "element_type": "minecraft:single_pool_element"
       }
@@ -14,7 +14,7 @@
       "weight": 1,
       "element": {
         "location": "minestuck:derse_bunker/bunker_derse_decorator_002",
-        "processors": "minecraft:empty",
+        "processors": "minestuck:structure_block_registry",
         "projection": "rigid",
         "element_type": "minecraft:single_pool_element"
       }
@@ -23,7 +23,7 @@
       "weight": 1,
       "element": {
         "location": "minestuck:derse_bunker/bunker_derse_decorator_003",
-        "processors": "minecraft:empty",
+        "processors": "minestuck:structure_block_registry",
         "projection": "rigid",
         "element_type": "minecraft:single_pool_element"
       }
@@ -32,7 +32,7 @@
       "weight": 1,
       "element": {
         "location": "minestuck:derse_bunker/bunker_derse_decorator_004",
-        "processors": "minecraft:empty",
+        "processors": "minestuck:structure_block_registry",
         "projection": "rigid",
         "element_type": "minecraft:single_pool_element"
       }
@@ -41,7 +41,7 @@
       "weight": 1,
       "element": {
         "location": "minestuck:derse_bunker/bunker_derse_decorator_005",
-        "processors": "minecraft:empty",
+        "processors": "minestuck:structure_block_registry",
         "projection": "rigid",
         "element_type": "minecraft:single_pool_element"
       }

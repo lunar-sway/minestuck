@@ -2,28 +2,28 @@
   "fallback": "minecraft:empty",
   "elements": [
     {
-      "weight": 75,
+      "weight": 1,
       "element": {
         "location": "minestuck:prospit_bunker/bunker_prospit_decorator_006",
-        "processors": "minecraft:empty",
+        "processors": "minestuck:structure_block_registry",
         "projection": "rigid",
         "element_type": "minecraft:single_pool_element"
       }
     },
     {
-      "weight": 50,
+      "weight": 1,
       "element": {
         "location": "minestuck:prospit_bunker/bunker_prospit_decorator_007",
-        "processors": "minecraft:empty",
+        "processors": "minestuck:structure_block_registry",
         "projection": "rigid",
         "element_type": "minecraft:single_pool_element"
       }
     },
     {
-      "weight": 25,
+      "weight": 1,
       "element": {
         "location": "minestuck:prospit_bunker/bunker_prospit_decorator_008",
-        "processors": "minecraft:empty",
+        "processors": "minestuck:structure_block_registry",
         "projection": "rigid",
         "element_type": "minecraft:single_pool_element"
       }

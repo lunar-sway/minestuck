@@ -7,7 +7,7 @@
         "element_type": "minecraft:single_pool_element",
         "projection": "rigid",
         "location": "minestuck:derse_bunker/bunker_derse_entry_lower",
-        "processors": "minecraft:empty"
+        "processors": "minestuck:structure_block_registry"
       }
     }
   ]
