@@ -8,7 +8,7 @@
   "start_height": {
     "absolute": 0
   },
-  "start_pool": "minestuck:derse_pool/derse_entry",
+  "start_pool": "minestuck:derse_bunker/derse_entry",
   "step": "surface_structures",
   "use_expansion_hack": false
 }

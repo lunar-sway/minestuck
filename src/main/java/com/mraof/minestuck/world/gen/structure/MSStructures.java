@@ -57,13 +57,13 @@ public final class MSStructures
 			PIECE_REGISTER.register("small_ruin", () -> contextless(SmallRuinPiece::new));
 	
 	public static final ResourceKey<Structure> PROSPIT_BUNKER = key("prospit_bunker");
-	public static final ResourceKey<StructureTemplatePool> PROSPIT_BUNKER_START_POOL = templateKey("prospit_pool/prospit_entry"); //prospit_bunker_start_pool
+	public static final ResourceKey<StructureTemplatePool> PROSPIT_BUNKER_START_POOL = templateKey("prospit_bunker/prospit_entry");
 	
 	public static final ResourceKey<Structure> DERSE_BUNKER = key("derse_bunker");
-	public static final ResourceKey<StructureTemplatePool> DERSE_BUNKER_START_POOL = templateKey("derse_pool/derse_entry"); //derse_bunker_start_pool
+	public static final ResourceKey<StructureTemplatePool> DERSE_BUNKER_START_POOL = templateKey("derse_bunker/derse_entry");
 	
 	public static final ResourceKey<Structure> IMP_BUNKER = key("imp_bunker");
-	public static final ResourceKey<StructureTemplatePool> IMP_BUNKER_START_POOL = templateKey("imp_pool/imp_entry"); //imp_bunker_start_pool
+	public static final ResourceKey<StructureTemplatePool> IMP_BUNKER_START_POOL = templateKey("imp_bunker/imp_entry");
 	
 	public static final class ImpDungeon
 	{

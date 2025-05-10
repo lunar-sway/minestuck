@@ -8,7 +8,7 @@
   "start_height": {
     "absolute": 0
   },
-  "start_pool": "minestuck:prospit_pool/prospit_entry",
+  "start_pool": "minestuck:prospit_bunker/prospit_entry",
   "step": "surface_structures",
   "use_expansion_hack": false
 }

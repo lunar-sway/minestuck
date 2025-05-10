@@ -8,7 +8,7 @@
   "start_height": {
     "absolute": 0
   },
-  "start_pool": "minestuck:imp_pool/imp_entry",
+  "start_pool": "minestuck:imp_bunker/imp_entry",
   "step": "surface_structures",
   "use_expansion_hack": false
 }
