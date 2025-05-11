@@ -6,6 +6,19 @@ The format is based on [Keep a Changelog](https://keepachangelog.com/en/1.1.0/).
 
 ## [Unreleased]
 
+### Added
+
+- Added 3 bunker structures to Lands
+
+### Changed
+
+- Reduced imp dungeon generation frequency
+- Imp dungeons will not spawn near villages
+
+### Contributors for this release
+
+- TangleKat, pancake, Dweblenod
+
 ## [1.20.1-1.12.1.1] - 2025-04-18
 
 ### Fixed
