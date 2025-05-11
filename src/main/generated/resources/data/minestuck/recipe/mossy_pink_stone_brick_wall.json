@@ -1,0 +1,18 @@
+{
+  "type": "minecraft:crafting_shaped",
+  "category": "building",
+  "group": "stone_wall",
+  "key": {
+    "#": {
+      "item": "minestuck:mossy_pink_stone_bricks"
+    }
+  },
+  "pattern": [
+    "###",
+    "###"
+  ],
+  "result": {
+    "count": 6,
+    "id": "minestuck:mossy_pink_stone_brick_wall"
+  }
+}

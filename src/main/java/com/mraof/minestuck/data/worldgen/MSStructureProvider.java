@@ -2,14 +2,17 @@ package com.mraof.minestuck.data.worldgen;
 
 import com.mraof.minestuck.Minestuck;
 import com.mraof.minestuck.util.MSTags;
+import com.mraof.minestuck.world.biome.MSBiomes;
 import com.mraof.minestuck.world.gen.structure.*;
 import com.mraof.minestuck.world.gen.structure.castle.CastleStructure;
 import com.mraof.minestuck.world.gen.structure.gate.GateStructure;
 import com.mraof.minestuck.world.gen.structure.gate.LandGatePlacement;
 import com.mraof.minestuck.world.gen.structure.village.ConsortVillageStructure;
+import com.mraof.minestuck.world.gen.structure.wfc.ProspitWFCDemoStructure;
 import net.minecraft.core.HolderGetter;
+import net.minecraft.core.HolderSet;
 import net.minecraft.core.registries.Registries;
-import net.minecraft.data.worldgen.BootstapContext;
+import net.minecraft.data.worldgen.BootstrapContext;
 import net.minecraft.resources.ResourceKey;
 import net.minecraft.resources.ResourceLocation;
 import net.minecraft.world.level.biome.Biome;
@@ -26,7 +29,7 @@ import static com.mraof.minestuck.world.gen.structure.MSStructures.*;
 
 public final class MSStructureProvider
 {
-	public static void registerStructures(BootstapContext<Structure> context)
+	public static void registerStructures(BootstrapContext<Structure> context)
 	{
 		HolderGetter<Biome> biomes = context.lookup(Registries.BIOME);
 		
@@ -52,9 +55,13 @@ public final class MSStructureProvider
 		// Skaia
 		context.register(SkaiaCastle.KEY, new CastleStructure(new Structure.StructureSettings(biomes.getOrThrow(MSTags.Biomes.HAS_SKAIA_CASTLE),
 				Map.of(), GenerationStep.Decoration.SURFACE_STRUCTURES, TerrainAdjustment.NONE)));
+		
+		context.register(ProspitWFCDemoStructure.STRUCTURE, new ProspitWFCDemoStructure.TerrainStructure(
+				new Structure.StructureSettings(HolderSet.direct(biomes.getOrThrow(MSBiomes.PROSPIT_WFC_DEMO)),
+						Map.of(), GenerationStep.Decoration.SURFACE_STRUCTURES, TerrainAdjustment.NONE)));
 	}
 	
-	public static void registerStructureSets(BootstapContext<StructureSet> context)
+	public static void registerStructureSets(BootstrapContext<StructureSet> context)
 	{
 		HolderGetter<Structure> structures = context.lookup(Registries.STRUCTURE);
 		
@@ -69,10 +76,13 @@ public final class MSStructureProvider
 		// Skaia
 		context.register(key("skaia_castle"), new StructureSet(structures.getOrThrow(SkaiaCastle.KEY),
 				new RandomSpreadStructurePlacement(50, 40, RandomSpreadType.LINEAR, 6729346)));
+		
+		context.register(key("prospit_wfc_demo"), new StructureSet(structures.getOrThrow(ProspitWFCDemoStructure.STRUCTURE),
+				new ProspitWFCDemoStructure.FixedPlacement()));
 	}
 	
 	private static ResourceKey<StructureSet> key(String path)
 	{
-		return ResourceKey.create(Registries.STRUCTURE_SET, new ResourceLocation(Minestuck.MOD_ID, path));
+		return ResourceKey.create(Registries.STRUCTURE_SET, ResourceLocation.fromNamespaceAndPath(Minestuck.MOD_ID, path));
 	}
 }

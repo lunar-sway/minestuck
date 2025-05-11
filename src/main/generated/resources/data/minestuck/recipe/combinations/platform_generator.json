@@ -1,0 +1,11 @@
+{
+  "type": "minestuck:combination",
+  "input1": {
+    "item": "minecraft:piston"
+  },
+  "input2": {
+    "item": "minecraft:shield"
+  },
+  "mode": "or",
+  "output": "minestuck:platform_generator"
+}

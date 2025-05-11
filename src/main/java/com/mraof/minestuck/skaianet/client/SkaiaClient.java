@@ -2,9 +2,9 @@ package com.mraof.minestuck.skaianet.client;
 
 import com.mraof.minestuck.Minestuck;
 import com.mraof.minestuck.blockentity.ComputerBlockEntity;
-import com.mraof.minestuck.client.gui.ComputerScreen;
 import com.mraof.minestuck.client.gui.MSScreenFactories;
-import com.mraof.minestuck.network.computer.SkaianetInfoPacket;
+import com.mraof.minestuck.client.gui.computer.ComputerScreen;
+import com.mraof.minestuck.network.computer.SkaianetInfoPackets;
 import com.mraof.minestuck.skaianet.LandChain;
 import net.minecraft.client.Minecraft;
 import net.minecraft.client.gui.screens.Screen;
@@ -12,7 +12,7 @@ import net.minecraft.resources.ResourceKey;
 import net.minecraft.world.level.Level;
 import net.neoforged.api.distmarker.Dist;
 import net.neoforged.bus.api.SubscribeEvent;
-import net.neoforged.fml.common.Mod;
+import net.neoforged.fml.common.EventBusSubscriber;
 import net.neoforged.neoforge.client.event.ClientPlayerNetworkEvent;
 import net.neoforged.neoforge.network.PacketDistributor;
 
@@ -22,7 +22,7 @@ import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 
-@Mod.EventBusSubscriber(modid = Minestuck.MOD_ID, bus = Mod.EventBusSubscriber.Bus.FORGE, value = Dist.CLIENT)
+@EventBusSubscriber(modid = Minestuck.MOD_ID, bus = EventBusSubscriber.Bus.GAME, value = Dist.CLIENT)
 public final class SkaiaClient
 {
 	private static final Map<Integer, ReducedPlayerState> playerStateMap = new HashMap<>();
@@ -53,10 +53,10 @@ public final class SkaiaClient
 	 */
 	public static boolean requestData(ComputerBlockEntity computer)
 	{
-		boolean b = playerStateMap.get(computer.ownerId) != null;
+		boolean b = playerStateMap.get(computer.clientSideOwnerId()) != null;
 		if(!b)
 		{
-			PacketDistributor.SERVER.noArg().send(new SkaianetInfoPacket.Request(computer.ownerId));
+			PacketDistributor.sendToServer(new SkaianetInfoPackets.Request(computer.clientSideOwnerId()));
 			be = computer;
 		}
 		return b;
@@ -107,11 +107,12 @@ public final class SkaiaClient
 		if(playerStateMap.get(playerId).hasPrimaryConnectionAsClient())
 			return false;
 		
-		return connections.stream().anyMatch(c -> c.client().id() == playerId);
+		return connections.stream().noneMatch(c -> c.client().id() == playerId);
 	}
 	
 	//Methods called from the actionPerformed method in the gui.
 	
+	@Nullable
 	public static ReducedConnection getClientConnection(int client)
 	{
 		for(ReducedConnection c : connections)
@@ -120,7 +121,7 @@ public final class SkaiaClient
 		return null;
 	}
 	
-	public static void handlePacket(SkaianetInfoPacket.Data data)
+	public static void handlePacket(SkaianetInfoPackets.Data data)
 	{
 		if(playerId == -1)
 			playerId = data.playerId();	//The first info packet is expected to be regarding the receiving player.
@@ -133,7 +134,7 @@ public final class SkaiaClient
 		Screen gui = Minecraft.getInstance().screen;
 		if(gui instanceof ComputerScreen computerScreen)
 			computerScreen.updateGui();
-		else if(be != null && be.ownerId == data.playerId())
+		else if(be != null && be.clientSideOwnerId() == data.playerId())
 		{
 			if(!Minecraft.getInstance().player.isShiftKeyDown())
 				MSScreenFactories.displayComputerScreen(be);
@@ -141,7 +142,7 @@ public final class SkaiaClient
 		}
 	}
 	
-	public static void handlePacket(SkaianetInfoPacket.LandChains packet)
+	public static void handlePacket(SkaianetInfoPackets.LandChains packet)
 	{
 		landChainMap.clear();
 		for(LandChain landChain : packet.landChains())
@@ -150,7 +151,7 @@ public final class SkaiaClient
 		}
 	}
 	
-	public static void handlePacket(SkaianetInfoPacket.HasEntered packet)
+	public static void handlePacket(SkaianetInfoPackets.HasEntered packet)
 	{
 		hasEntered = packet.hasEntered();
 	}

@@ -1,10 +1,17 @@
 {
   "node": {
+    "animation": {},
+    "gui": "minestuck:textures/gui/dialogue/dialogue.png",
     "message": "minestuck.dialogue.consort.frog_variants.1",
     "responses": [
       {
+        "condition": {
+          "type": "minestuck:always_true"
+        },
+        "hide_if_failed": true,
         "message": "minestuck.arrow",
-        "next_dialogue": "minestuck:consort/frog_variants.2"
+        "next_dialogue": "minestuck:consort/frog_variants.2",
+        "triggers": []
       }
     ]
   }

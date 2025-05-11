@@ -4,54 +4,46 @@ import com.mraof.minestuck.Minestuck;
 import com.mraof.minestuck.blockentity.ComputerBlockEntity;
 import com.mraof.minestuck.network.MSPacket;
 import com.mraof.minestuck.player.IdentifierHandler;
+import com.mraof.minestuck.player.PlayerIdentifier;
 import com.mraof.minestuck.skaianet.ComputerInteractions;
 import net.minecraft.core.BlockPos;
 import net.minecraft.network.FriendlyByteBuf;
+import net.minecraft.network.codec.ByteBufCodecs;
+import net.minecraft.network.codec.StreamCodec;
+import net.minecraft.network.protocol.common.custom.CustomPacketPayload;
 import net.minecraft.resources.ResourceLocation;
 import net.minecraft.server.level.ServerPlayer;
+import net.neoforged.neoforge.network.handling.IPayloadContext;
 
-public class ConnectToSburbServerPacket implements MSPacket.PlayToServer
+public record ConnectToSburbServerPacket(BlockPos computerPos, int serverPlayerId) implements MSPacket.PlayToServer
 {
-	public static final ResourceLocation ID = Minestuck.id("connect_to_sburb_server");
+	public static final Type<ConnectToSburbServerPacket> ID = new Type<>(Minestuck.id("connect_to_sburb_server"));
+	public static final StreamCodec<FriendlyByteBuf, ConnectToSburbServerPacket> STREAM_CODEC = StreamCodec.composite(
+			BlockPos.STREAM_CODEC,
+			ConnectToSburbServerPacket::computerPos,
+			ByteBufCodecs.INT,
+			ConnectToSburbServerPacket::serverPlayerId,
+			ConnectToSburbServerPacket::new
+	);
 	
-	private final BlockPos pos;
-	private final int serverPlayer;
-	
-	private ConnectToSburbServerPacket(BlockPos pos, int serverPlayer)
+	public static ConnectToSburbServerPacket create(ComputerBlockEntity be, int serverPlayerId)
 	{
-		this.pos = pos;
-		this.serverPlayer = serverPlayer;
-	}
-	
-	public static ConnectToSburbServerPacket create(ComputerBlockEntity be, int serverPlayer)
-	{
-		return new ConnectToSburbServerPacket(be.getBlockPos(), serverPlayer);
+		return new ConnectToSburbServerPacket(be.getBlockPos(), serverPlayerId);
 	}
 	
 	@Override
-	public ResourceLocation id()
+	public Type<? extends CustomPacketPayload> type()
 	{
 		return ID;
 	}
 	
 	@Override
-	public void write(FriendlyByteBuf buffer)
+	public void execute(IPayloadContext context, ServerPlayer player)
 	{
-		buffer.writeBlockPos(pos);
-		buffer.writeInt(serverPlayer);
-	}
-	
-	public static ConnectToSburbServerPacket read(FriendlyByteBuf buffer)
-	{
-		BlockPos computer = buffer.readBlockPos();
-		int server = buffer.readInt();
-		return new ConnectToSburbServerPacket(computer, server);
-	}
-	
-	@Override
-	public void execute(ServerPlayer player)
-	{
-		ComputerBlockEntity.forNetworkIfPresent(player, pos,
-				computer -> ComputerInteractions.get(player.server).connectToServerPlayer(computer, IdentifierHandler.getById(serverPlayer)));
+		ComputerBlockEntity.getAccessibleComputer(player, computerPos)
+				.ifPresent(computer -> {
+					PlayerIdentifier serverPlayer = IdentifierHandler.getById(serverPlayerId);
+					ComputerInteractions.get(player.server).connectToServerPlayer(computer, serverPlayer);
+				});
 	}
 }

@@ -1,5 +1,6 @@
 package com.mraof.minestuck.world.lands;
 
+import net.minecraft.core.BlockPos;
 import net.minecraft.server.MinecraftServer;
 import net.minecraft.util.Mth;
 import net.minecraft.world.Difficulty;
@@ -64,15 +65,14 @@ public class LandWorldInfo implements ServerLevelData
 	}
 	
 	@Override
-	public int getXSpawn()
+	public void setSpawn(BlockPos spawnPoint, float spawnAngle)
 	{
-		return 0;
 	}
 	
 	@Override
-	public int getZSpawn()
+	public BlockPos getSpawnPos()
 	{
-		return 0;
+		return new BlockPos(0, 0, 0);
 	}
 	
 	@Override
@@ -81,37 +81,29 @@ public class LandWorldInfo implements ServerLevelData
 		return dayTime;
 	}
 	
+	@Override
+	public float getDayTimeFraction()
+	{
+		return 0;
+	}
+	
+	@Override
+	public float getDayTimePerTick()
+	{
+		return 0;
+	}
+	
+	@Override
+	public void setDayTimeFraction(float dayTimeFraction)
+	{
+	}
+	
+	@Override
+	public void setDayTimePerTick(float dayTimePerTick)
+	{
+	}
+	
 	// Calls to wrapped info
-	
-	@Override
-	public void setXSpawn(int x)
-	{
-		wrapped.setXSpawn(x);
-	}
-	
-	@Override
-	public void setYSpawn(int y)
-	{
-		wrapped.setYSpawn(y);
-	}
-	
-	@Override
-	public void setZSpawn(int z)
-	{
-		wrapped.setZSpawn(z);
-	}
-	
-	@Override
-	public void setSpawnAngle(float angle)
-	{
-		wrapped.setSpawnAngle(angle);
-	}
-	
-	@Override
-	public int getYSpawn()
-	{
-		return wrapped.getYSpawn();
-	}
 	
 	@Override
 	public float getSpawnAngle()
@@ -271,9 +263,9 @@ public class LandWorldInfo implements ServerLevelData
 	}
 	
 	@Override
-	public boolean getAllowCommands()
+	public boolean isAllowCommands()
 	{
-		return wrapped.getAllowCommands();
+		return wrapped.isAllowCommands();
 	}
 	
 	@Override

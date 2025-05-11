@@ -1,6 +1,7 @@
 package com.mraof.minestuck.alchemy.recipe.generator.recipe;
 
 import com.mojang.serialization.Codec;
+import com.mojang.serialization.MapCodec;
 import net.minecraft.MethodsReturnNonnullByDefault;
 import net.minecraft.core.registries.BuiltInRegistries;
 import net.minecraft.resources.ResourceLocation;
@@ -30,9 +31,9 @@ public sealed interface RecipeSource
 		
 		static final Codec<Type> CODEC = StringRepresentable.fromEnum(Type::values);
 		
-		private final Supplier<Codec<? extends RecipeSource>> sourceCodec;
+		private final Supplier<MapCodec<? extends RecipeSource>> sourceCodec;
 		
-		Type(Supplier<Codec<? extends RecipeSource>> sourceCodec)
+		Type(Supplier<MapCodec<? extends RecipeSource>> sourceCodec)
 		{
 			this.sourceCodec = sourceCodec;
 		}
@@ -46,8 +47,8 @@ public sealed interface RecipeSource
 	
 	record SingleRecipe(ResourceLocation recipe) implements RecipeSource
 	{
-		static final Codec<SingleRecipe> CODEC = ResourceLocation.CODEC.fieldOf("recipe")
-				.xmap(SingleRecipe::new, SingleRecipe::recipe).codec();
+		static final MapCodec<SingleRecipe> CODEC = ResourceLocation.CODEC.fieldOf("recipe")
+				.xmap(SingleRecipe::new, SingleRecipe::recipe);
 		
 		@Override
 		public Collection<RecipeHolder<?>> findRecipes(RecipeManager recipeManager)
@@ -71,8 +72,8 @@ public sealed interface RecipeSource
 	
 	record BySerializer(RecipeSerializer<?> serializer) implements RecipeSource
 	{
-		static final Codec<BySerializer> CODEC = BuiltInRegistries.RECIPE_SERIALIZER.byNameCodec().fieldOf("serializer")
-				.xmap(BySerializer::new, BySerializer::serializer).codec();
+		static final MapCodec<BySerializer> CODEC = BuiltInRegistries.RECIPE_SERIALIZER.byNameCodec().fieldOf("serializer")
+				.xmap(BySerializer::new, BySerializer::serializer);
 		
 		@Override
 		public Collection<RecipeHolder<?>> findRecipes(RecipeManager recipeManager)
@@ -95,8 +96,8 @@ public sealed interface RecipeSource
 	
 	record ByType(RecipeType<?> recipeType) implements RecipeSource
 	{
-		static final Codec<ByType> CODEC = BuiltInRegistries.RECIPE_TYPE.byNameCodec().fieldOf("recipe_type")
-				.xmap(ByType::new, ByType::recipeType).codec();
+		static final MapCodec<ByType> CODEC = BuiltInRegistries.RECIPE_TYPE.byNameCodec().fieldOf("recipe_type")
+				.xmap(ByType::new, ByType::recipeType);
 		
 		@Override
 		public List<RecipeHolder<?>> findRecipes(RecipeManager recipeManager)

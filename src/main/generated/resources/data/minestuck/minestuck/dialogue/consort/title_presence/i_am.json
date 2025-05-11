@@ -1,10 +1,13 @@
 {
   "node": {
+    "animation": {},
+    "gui": "minestuck:textures/gui/dialogue/dialogue.png",
     "message": {
       "arguments": [
         "entity_sound_2"
       ],
       "key": "minestuck.dialogue.consort.title_presence.i_am"
-    }
+    },
+    "responses": []
   }
 }

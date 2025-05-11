@@ -27,6 +27,9 @@ public class Teleport	//TODO there might still be things that vanilla does that 
 	 */
 	public static Entity teleportEntity(Entity entity, ServerLevel level, double x, double y, double z, float yaw, float pitch)
 	{
+		if(!entity.canChangeDimensions(entity.level(), level))
+			return null;
+		
 		if(entity instanceof ServerPlayer player)
 		{
 			ChunkPos chunkpos = new ChunkPos(BlockPos.containing(x, y, z));

@@ -59,7 +59,7 @@ public class FireballShootGoal<T extends AttackingAnimatedEntity> extends Animat
 			{
 				if(iteratedEntity != this.entity && iteratedEntity.getType() == this.entity.getType() && !iteratedEntity.existingCooldownIsLonger(GROUP_SHOOT_COOLDOWN))
 				{
-					iteratedEntity.setCooldown(GROUP_SHOOT_COOLDOWN + phasedAnimation.getTotalAnimationLength()); //plays at beginning to prevent overlapping
+					iteratedEntity.setCooldown(GROUP_SHOOT_COOLDOWN + phasedAnimation.getTotalAnimationLength(speed)); //plays at beginning to prevent overlapping
 				}
 			}
 		}
@@ -78,7 +78,7 @@ public class FireballShootGoal<T extends AttackingAnimatedEntity> extends Animat
 			double distanceY = initialTargetPos.getY() - (attacker.getY() + (double) (attacker.getBbHeight() / 2.0F));
 			double distanceZ = initialTargetPos.getZ() - attacker.getZ();
 			
-			SmallFireball fireball = new SmallFireball(level, attacker, distanceX, distanceY, distanceZ);
+			SmallFireball fireball = new SmallFireball(level, attacker, new Vec3(distanceX, distanceY, distanceZ));
 			double bbHeight = attacker.getBbHeight();
 			Vec3 viewVec = attacker.getViewVector(1.0F);
 			double x = (attacker.getBoundingBox().minX + attacker.getBoundingBox().maxX) / 2.0F + viewVec.x * bbHeight;

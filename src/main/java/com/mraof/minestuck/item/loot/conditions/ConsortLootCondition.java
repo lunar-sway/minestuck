@@ -1,6 +1,7 @@
 package com.mraof.minestuck.item.loot.conditions;
 
 import com.mojang.serialization.Codec;
+import com.mojang.serialization.MapCodec;
 import com.mojang.serialization.codecs.RecordCodecBuilder;
 import com.mraof.minestuck.entity.consort.EnumConsort;
 import com.mraof.minestuck.item.loot.MSLootTables;
@@ -16,7 +17,7 @@ import java.util.List;
 @MethodsReturnNonnullByDefault
 public class ConsortLootCondition implements LootItemCondition
 {
-	public static final Codec<ConsortLootCondition> CODEC = RecordCodecBuilder.create(instance ->
+	public static final MapCodec<ConsortLootCondition> CODEC = RecordCodecBuilder.mapCodec(instance ->
 			instance.group(EnumConsort.SINGLE_OR_LIST_CODEC.fieldOf("consort").forGetter(condition -> condition.consorts))
 					.apply(instance, ConsortLootCondition::new));
 	

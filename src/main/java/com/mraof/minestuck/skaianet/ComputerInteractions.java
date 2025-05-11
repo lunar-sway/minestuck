@@ -3,16 +3,20 @@ package com.mraof.minestuck.skaianet;
 import com.mraof.minestuck.blockentity.ComputerBlockEntity;
 import com.mraof.minestuck.computer.ComputerReference;
 import com.mraof.minestuck.computer.ISburbComputer;
+import com.mraof.minestuck.computer.SburbClientData;
+import com.mraof.minestuck.computer.SburbServerData;
 import com.mraof.minestuck.player.PlayerIdentifier;
 import net.minecraft.nbt.CompoundTag;
 import net.minecraft.nbt.Tag;
 import net.minecraft.server.MinecraftServer;
 import net.minecraft.server.level.ServerPlayer;
 
+import java.util.Objects;
 import java.util.Optional;
 
 /**
  * Forms the point of interaction for sburb computer programs, and maintains the lists of computers waiting to connect.
+
  * @author kirderf1
  */
 public final class ComputerInteractions
@@ -49,12 +53,12 @@ public final class ComputerInteractions
 	
 	private static boolean isValidClientResuming(ISburbComputer computer)
 	{
-		return computer.getClientBoolean("isResuming");
+		return computer.getSburbClientData().map(SburbClientData::isResuming).orElse(false);
 	}
 	
 	private static boolean isValidServerOpenOrResuming(ISburbComputer computer)
 	{
-		return computer.getServerBoolean("isOpen");
+		return computer.getSburbServerData().map(SburbServerData::isOpen).orElse(false);
 	}
 	
 	public static ComputerInteractions get(MinecraftServer mcServer)
@@ -79,6 +83,10 @@ public final class ComputerInteractions
 	
 	public void connectToServerPlayer(ISburbComputer computer, PlayerIdentifier serverPlayer)
 	{
+		Optional<ClientAccess> client = ClientAccess.tryGet(computer);
+		if(client.isEmpty())
+			return;
+		
 		PlayerIdentifier player = computer.getOwner();
 		
 		if(computer.createReference().isInNether())
@@ -87,83 +95,95 @@ public final class ComputerInteractions
 		if(isClientActive(player))
 			return;
 		
-		openedServers.useComputerAndRemoveOnSuccess(serverPlayer, serverComputer ->
-				skaianetData.connections.tryConnect(computer, serverComputer));
+		openedServers.useAsServerAndRemoveOnSuccess(serverPlayer, server ->
+				skaianetData.connections.tryConnect(client.get(), server));
 	}
 	
-	public void resumeClientConnection(ISburbComputer computer)
+	public void resumeClientConnection(ISburbComputer clientComputer)
 	{
-		PlayerIdentifier player = computer.getOwner();
-		if(computer.createReference().isInNether() || isClientActive(player))
+		Optional<ClientAccess> client = ClientAccess.tryGet(clientComputer);
+		if(client.isEmpty())
+			return;
+		
+		PlayerIdentifier player = clientComputer.getOwner();
+		if(clientComputer.createReference().isInNether() || isClientActive(player))
 			return;
 		
 		if(!skaianetData.connections.hasPrimaryConnectionForClient(player))
 			return;
 		
-		Optional<PlayerIdentifier> server = skaianetData.connections.primaryPartnerForClient(player);
-		if(server.isPresent() && resumingServers.contains(server.get()))
+		Optional<PlayerIdentifier> serverPlayer = skaianetData.connections.primaryPartnerForClient(player);
+		if(serverPlayer.isPresent() && resumingServers.contains(serverPlayer.get()))
 		{
-			resumingServers.useComputerAndRemoveOnSuccess(server.get(), otherComputer ->
-					skaianetData.connections.tryConnect(computer, otherComputer));
+			resumingServers.useAsServerAndRemoveOnSuccess(serverPlayer.get(), server ->
+					skaianetData.connections.tryConnect(client.get(), server));
 			return;
 		}
-		if(server.isPresent() && openedServers.contains(server.get()))
+		if(serverPlayer.isPresent() && openedServers.contains(serverPlayer.get()))
 		{
-			openedServers.useComputerAndRemoveOnSuccess(server.get(), otherComputer ->
-					skaianetData.connections.tryConnect(computer, otherComputer));
+			openedServers.useAsServerAndRemoveOnSuccess(serverPlayer.get(), server ->
+					skaianetData.connections.tryConnect(client.get(), server));
 			return;
 		}
 		
-		computer.putClientBoolean("isResuming", true);
-		resumingClients.put(player, computer.createReference());
+		client.get().data().setIsResuming(true);
+		resumingClients.put(player, clientComputer.createReference());
 	}
 	
-	public void resumeServerConnection(ISburbComputer computer)
+	public void resumeServerConnection(ISburbComputer serverComputer)
 	{
-		PlayerIdentifier player = computer.getOwner();
-		if(computer.createReference().isInNether() || hasResumingServer(player))
+		Optional<ServerAccess> server = ServerAccess.tryGet(serverComputer);
+		if(server.isEmpty())
 			return;
 		
-		Optional<PlayerIdentifier> client = skaianetData.connections.primaryPartnerForServer(player);
-		if(client.isEmpty())
+		PlayerIdentifier player = serverComputer.getOwner();
+		if(serverComputer.createReference().isInNether() || hasResumingServer(player))
 			return;
 		
-		if(resumingClients.contains(client.get()))
+		Optional<PlayerIdentifier> clientPlayer = skaianetData.connections.primaryPartnerForServer(player);
+		if(clientPlayer.isEmpty())
+			return;
+		
+		if(resumingClients.contains(clientPlayer.get()))
 		{
-			resumingClients.useComputerAndRemoveOnSuccess(client.get(), otherComputer ->
-					skaianetData.connections.tryConnect(otherComputer, computer));
+			resumingClients.useAsClientAndRemoveOnSuccess(clientPlayer.get(), client ->
+					skaianetData.connections.tryConnect(client, server.get()));
 			return;
 		}
 		
-		computer.putServerBoolean("isOpen", true);
-		resumingServers.put(player, computer.createReference());
+		server.get().data().setIsOpen(true);
+		resumingServers.put(player, serverComputer.createReference());
 	}
 	
-	public void openServer(ISburbComputer computer)
+	public void openServer(ISburbComputer serverComputer)
 	{
-		PlayerIdentifier player = computer.getOwner();
-		if(computer.createReference().isInNether() || hasResumingServer(player))
+		Optional<ServerAccess> server = ServerAccess.tryGet(serverComputer);
+		if(server.isEmpty())
+			return;
+		
+		PlayerIdentifier player = serverComputer.getOwner();
+		if(serverComputer.createReference().isInNether() || hasResumingServer(player))
 			return;
 		
 		Optional<PlayerIdentifier> primaryClient = skaianetData.connections.primaryPartnerForServer(player);
 		if(primaryClient.isPresent() && resumingClients.contains(primaryClient.get()))
 		{
-			resumingClients.useComputerAndRemoveOnSuccess(primaryClient.get(), clientComputer ->
-					skaianetData.connections.tryConnect(clientComputer, computer));
+			resumingClients.useAsClientAndRemoveOnSuccess(primaryClient.get(), client ->
+					skaianetData.connections.tryConnect(client, server.get()));
 			return;
 		}
 		
-		computer.putServerBoolean("isOpen", true);
-		openedServers.put(player, computer.createReference());
+		server.get().data().setIsOpen(true);
+		openedServers.put(player, serverComputer.createReference());
 	}
 	
 	public void closeClientConnectionRemotely(PlayerIdentifier player)
 	{
 		if(resumingClients.contains(player))
 		{
-			resumingClients.useComputerAndRemoveOnSuccess(player, computer -> {
-				computer.putClientBoolean("isResuming", false);
-				computer.putClientMessage(STOP_RESUME);
+			resumingClients.useAsClientAndRemoveOnSuccess(player, client -> {
+				client.data().setIsResuming(false);
+				client.data().setEventMessage(STOP_RESUME);
 				return true;
 			});
 		} else
@@ -179,8 +199,10 @@ public final class ComputerInteractions
 		if(resumingClients.contains(computer))
 		{
 			resumingClients.remove(owner);
-			computer.putClientBoolean("isResuming", false);
-			computer.putClientMessage(STOP_RESUME);
+			computer.getSburbClientData().ifPresent(sburbClientData -> {
+				sburbClientData.setIsResuming(false);
+				sburbClientData.setEventMessage(STOP_RESUME);
+			});
 		} else
 		{
 			skaianetData.connections.getClientConnection(computer).ifPresent(connection ->
@@ -203,22 +225,24 @@ public final class ComputerInteractions
 		if(map.contains(computer))
 		{
 			map.remove(owner);
-			computer.putServerBoolean("isOpen", false);
-			computer.putServerMessage(STOP_RESUME);
+			computer.getSburbServerData().ifPresent(sburbServerData -> {
+				sburbServerData.setIsOpen(false);
+				sburbServerData.setEventMessage(STOP_RESUME);
+			});
 		}
 	}
 	
 	public void movingComputer(ComputerBlockEntity oldBE, ComputerBlockEntity newBE)
 	{
 		ComputerReference oldRef = ComputerReference.of(oldBE), newRef = ComputerReference.of(newBE);
-		if(!oldBE.owner.equals(newBE.owner))
-			throw new IllegalStateException("Moving computers with different owners! (" + oldBE.owner + " and " + newBE.owner + ")");
+		if(!Objects.equals(oldBE.getOwner(), newBE.getOwner()))
+			throw new IllegalStateException("Moving computers with different owners! (" + oldBE.getOwner() + " and " + newBE.getOwner() + ")");
 		
 		skaianetData.connections.activeConnections().forEach(c -> c.updateComputer(oldBE, newRef));
 		
-		resumingClients.replace(oldBE.owner, oldRef, newRef);
-		resumingServers.replace(oldBE.owner, oldRef, newRef);
-		openedServers.replace(oldBE.owner, oldRef, newRef);
+		resumingClients.replace(oldBE.getOwner(), oldRef, newRef);
+		resumingServers.replace(oldBE.getOwner(), oldRef, newRef);
+		openedServers.replace(oldBE.getOwner(), oldRef, newRef);
 	}
 	
 	public boolean isClientActive(PlayerIdentifier player)

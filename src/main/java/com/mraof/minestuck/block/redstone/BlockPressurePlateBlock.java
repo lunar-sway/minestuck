@@ -44,9 +44,8 @@ public class BlockPressurePlateBlock extends Block
 		}
 	}
 	
-	@SuppressWarnings("deprecation")
 	@Override
-	public void tick(BlockState state, ServerLevel level, BlockPos pos, RandomSource random)
+	protected void tick(BlockState state, ServerLevel level, BlockPos pos, RandomSource random)
 	{
 		super.tick(state, level, pos, random);
 		
@@ -65,16 +64,14 @@ public class BlockPressurePlateBlock extends Block
 		}
 	}
 	
-	@SuppressWarnings("deprecation")
 	@Override
-	public boolean isSignalSource(BlockState state)
+	protected boolean isSignalSource(BlockState state)
 	{
 		return state.getValue(POWERED);
 	}
 	
-	@SuppressWarnings("deprecation")
 	@Override
-	public int getSignal(BlockState blockState, BlockGetter blockAccess, BlockPos pos, Direction side)
+	protected int getSignal(BlockState blockState, BlockGetter blockAccess, BlockPos pos, Direction side)
 	{
 		return blockState.getValue(POWERED) ? 15 : 0;
 	}
@@ -85,17 +82,15 @@ public class BlockPressurePlateBlock extends Block
 		return true;
 	}
 	
-	@SuppressWarnings("deprecation")
 	@Override
-	public void neighborChanged(BlockState state, Level level, BlockPos pos, Block blockIn, BlockPos fromPos, boolean isMoving)
+	protected void neighborChanged(BlockState state, Level level, BlockPos pos, Block blockIn, BlockPos fromPos, boolean isMoving)
 	{
 		super.neighborChanged(state, level, pos, blockIn, fromPos, isMoving);
 		tryDepressPlate(level, pos, state);
 	}
 	
-	@SuppressWarnings("deprecation")
 	@Override
-	public void onPlace(BlockState state, Level level, BlockPos pos, BlockState oldState, boolean isMoving)
+	protected void onPlace(BlockState state, Level level, BlockPos pos, BlockState oldState, boolean isMoving)
 	{
 		super.onPlace(state, level, pos, oldState, isMoving);
 		tryDepressPlate(level, pos, state);

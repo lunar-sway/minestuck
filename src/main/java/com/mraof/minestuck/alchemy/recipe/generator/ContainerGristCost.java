@@ -1,10 +1,10 @@
 package com.mraof.minestuck.alchemy.recipe.generator;
 
 import com.mojang.serialization.Codec;
+import com.mojang.serialization.MapCodec;
 import com.mojang.serialization.codecs.RecordCodecBuilder;
 import com.mraof.minestuck.api.alchemy.GristSet;
 import com.mraof.minestuck.api.alchemy.GristType;
-import com.mraof.minestuck.api.alchemy.ImmutableGristSet;
 import com.mraof.minestuck.api.alchemy.recipe.GristCostRecipe;
 import com.mraof.minestuck.api.alchemy.recipe.JeiGristCost;
 import com.mraof.minestuck.api.alchemy.recipe.generator.GeneratedCostProvider;
@@ -12,14 +12,14 @@ import com.mraof.minestuck.api.alchemy.recipe.generator.GeneratorCallback;
 import com.mraof.minestuck.item.crafting.MSRecipeTypes;
 import net.minecraft.MethodsReturnNonnullByDefault;
 import net.minecraft.core.registries.BuiltInRegistries;
-import net.minecraft.network.FriendlyByteBuf;
+import net.minecraft.network.RegistryFriendlyByteBuf;
+import net.minecraft.network.codec.StreamCodec;
 import net.minecraft.resources.ResourceLocation;
-import net.minecraft.util.ExtraCodecs;
-import net.minecraft.world.Container;
 import net.minecraft.world.item.Item;
 import net.minecraft.world.item.ItemStack;
 import net.minecraft.world.item.crafting.Ingredient;
 import net.minecraft.world.item.crafting.RecipeSerializer;
+import net.minecraft.world.item.crafting.SingleRecipeInput;
 import net.minecraft.world.level.Level;
 import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.Logger;
@@ -39,13 +39,13 @@ public final class ContainerGristCost implements GristCostRecipe
 	private static final Logger LOGGER = LogManager.getLogger();
 	
 	private final Ingredient ingredient;
-	private final ImmutableGristSet addedCost;
+	private final GristSet.Immutable addedCost;
 	@Nullable
 	private final Integer priority;
 	private final GeneratedGristCostCache cache = new GeneratedGristCostCache();
 	
 	@SuppressWarnings("OptionalUsedAsFieldOrParameterType")
-	public ContainerGristCost(Ingredient ingredient, ImmutableGristSet addedCost, Optional<Integer> priority)
+	public ContainerGristCost(Ingredient ingredient, GristSet.Immutable addedCost, Optional<Integer> priority)
 	{
 		this.ingredient = ingredient;
 		this.addedCost = addedCost;
@@ -53,7 +53,7 @@ public final class ContainerGristCost implements GristCostRecipe
 	}
 	
 	@Nullable
-	private GristSet generateCost(GeneratorCallback callback, ImmutableGristSet addedCost, ResourceLocation recipeId)
+	private GristSet generateCost(GeneratorCallback callback, GristSet.Immutable addedCost, ResourceLocation recipeId)
 	{
 		ItemStack container = ingredient.getItems().length > 0 ? ingredient.getItems()[0].getCraftingRemainingItem() : ItemStack.EMPTY;
 		if(!container.isEmpty())
@@ -78,9 +78,9 @@ public final class ContainerGristCost implements GristCostRecipe
 	}
 	
 	@Override
-	public boolean matches(Container inv, Level level)
+	public boolean matches(SingleRecipeInput input, Level level)
 	{
-		return cache.getCachedCost() != null && ingredient.test(inv.getItem(0));
+		return cache.getCachedCost() != null && ingredient.test(input.item());
 	}
 	
 	@Override
@@ -118,31 +118,36 @@ public final class ContainerGristCost implements GristCostRecipe
 	
 	public static class Serializer implements RecipeSerializer<ContainerGristCost>
 	{
-		private static final Codec<ContainerGristCost> CODEC = RecordCodecBuilder.create(instance ->
+		private static final MapCodec<ContainerGristCost> CODEC = RecordCodecBuilder.mapCodec(instance ->
 				instance.group(
 						Ingredient.CODEC_NONEMPTY.fieldOf("ingredient").forGetter(recipe -> recipe.ingredient),
-						ImmutableGristSet.MAP_CODEC.fieldOf("grist_cost").forGetter(recipe -> recipe.addedCost),
-						ExtraCodecs.strictOptionalField(Codec.INT, "priority").forGetter(recipe -> Optional.ofNullable(recipe.priority))
+						GristSet.Codecs.MAP_CODEC.fieldOf("grist_cost").forGetter(recipe -> recipe.addedCost),
+						Codec.INT.optionalFieldOf("priority").forGetter(recipe -> Optional.ofNullable(recipe.priority))
 				).apply(instance, ContainerGristCost::new));
+		private static final StreamCodec<RegistryFriendlyByteBuf, ContainerGristCost> STREAM_CODEC = StreamCodec.of(Serializer::toNetwork, Serializer::fromNetwork);
 		
 		@Override
-		public Codec<ContainerGristCost> codec()
+		public MapCodec<ContainerGristCost> codec()
 		{
 			return CODEC;
 		}
 		
 		@Override
-		public void toNetwork(FriendlyByteBuf buffer, ContainerGristCost recipe)
+		public StreamCodec<RegistryFriendlyByteBuf, ContainerGristCost> streamCodec()
 		{
-			recipe.ingredient.toNetwork(buffer);
+			return STREAM_CODEC;
+		}
+		
+		private static void toNetwork(RegistryFriendlyByteBuf buffer, ContainerGristCost recipe)
+		{
+			Ingredient.CONTENTS_STREAM_CODEC.encode(buffer, recipe.ingredient);
 			buffer.writeInt(recipe.getPriority());
 			recipe.cache.toNetwork(buffer);
 		}
 		
-		@Override
-		public ContainerGristCost fromNetwork(FriendlyByteBuf buffer)
+		private static ContainerGristCost fromNetwork(RegistryFriendlyByteBuf buffer)
 		{
-			Ingredient ingredient = Ingredient.fromNetwork(buffer);
+			Ingredient ingredient = Ingredient.CONTENTS_STREAM_CODEC.decode(buffer);
 			int priority = buffer.readInt();
 			
 			var recipe = new ContainerGristCost(ingredient, GristSet.EMPTY, Optional.of(priority));

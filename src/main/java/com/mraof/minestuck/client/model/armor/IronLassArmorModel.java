@@ -10,18 +10,18 @@ public class IronLassArmorModel extends GeoModel<IronLassArmorItem>
 	@Override
 	public ResourceLocation getModelResource(IronLassArmorItem animatable)
 	{
-		return new ResourceLocation(Minestuck.MOD_ID, "geo/iron_lass_armor.geo.json");
+		return ResourceLocation.fromNamespaceAndPath(Minestuck.MOD_ID, "geo/iron_lass_armor.geo.json");
 	}
 	
 	@Override
 	public ResourceLocation getTextureResource(IronLassArmorItem animatable)
 	{
-		return new ResourceLocation(Minestuck.MOD_ID, "textures/models/armor/iron_lass.png");
+		return ResourceLocation.fromNamespaceAndPath(Minestuck.MOD_ID, "textures/models/armor/iron_lass.png");
 	}
 	
 	@Override
 	public ResourceLocation getAnimationResource(IronLassArmorItem animatable)
 	{
-		return new ResourceLocation(Minestuck.MOD_ID, "animations/iron_lass.animation.json");
+		return ResourceLocation.fromNamespaceAndPath(Minestuck.MOD_ID, "animations/iron_lass.animation.json");
 	}
 }

@@ -3,5 +3,7 @@
     "type": "minestuck:title_land_type",
     "land_type": "minestuck:silence"
   },
-  "dialogue": "minestuck:consort/silent_underlings"
+  "dialogue": "minestuck:consort/silent_underlings",
+  "dialogue_weight": 10,
+  "keep_on_reset": false
 }

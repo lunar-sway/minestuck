@@ -1,5 +1,8 @@
 {
   "node": {
-    "message": "minestuck.dialogue.consort.keep_swimming"
+    "animation": {},
+    "gui": "minestuck:textures/gui/dialogue/dialogue.png",
+    "message": "minestuck.dialogue.consort.keep_swimming",
+    "responses": []
   }
 }

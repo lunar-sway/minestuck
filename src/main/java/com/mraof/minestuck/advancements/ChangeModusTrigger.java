@@ -11,7 +11,6 @@ import net.minecraft.advancements.critereon.ContextAwarePredicate;
 import net.minecraft.advancements.critereon.EntityPredicate;
 import net.minecraft.advancements.critereon.SimpleCriterionTrigger;
 import net.minecraft.server.level.ServerPlayer;
-import net.minecraft.util.ExtraCodecs;
 
 import javax.annotation.ParametersAreNonnullByDefault;
 import java.util.Optional;
@@ -34,8 +33,8 @@ public class ChangeModusTrigger extends SimpleCriterionTrigger<ChangeModusTrigge
 	public record Instance(Optional<ContextAwarePredicate> player, Optional<ModusType<?>> modusType) implements SimpleCriterionTrigger.SimpleInstance
 	{
 		private static final Codec<Instance> CODEC = RecordCodecBuilder.create(instance -> instance.group(
-				ExtraCodecs.strictOptionalField(EntityPredicate.ADVANCEMENT_CODEC, "player").forGetter(Instance::player),
-				ExtraCodecs.strictOptionalField(ModusTypes.REGISTRY.byNameCodec(), "modus").forGetter(Instance::modusType)
+				EntityPredicate.ADVANCEMENT_CODEC.optionalFieldOf("player").forGetter(Instance::player),
+				ModusTypes.REGISTRY.byNameCodec().optionalFieldOf("modus").forGetter(Instance::modusType)
 		).apply(instance, Instance::new));
 		
 		public static Criterion<Instance> any()

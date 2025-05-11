@@ -9,7 +9,9 @@
         "animation": {
           "emotion": "happy"
         },
-        "message": "minestuck.dialogue.consort.generic_thanks.player_helped"
+        "gui": "minestuck:textures/gui/dialogue/dialogue.png",
+        "message": "minestuck.dialogue.consort.generic_thanks.player_helped",
+        "responses": []
       }
     }
   ],
@@ -17,6 +19,8 @@
     "animation": {
       "emotion": "happy"
     },
-    "message": "minestuck.dialogue.consort.generic_thanks.other_helped"
+    "gui": "minestuck:textures/gui/dialogue/dialogue.png",
+    "message": "minestuck.dialogue.consort.generic_thanks.other_helped",
+    "responses": []
   }
 }

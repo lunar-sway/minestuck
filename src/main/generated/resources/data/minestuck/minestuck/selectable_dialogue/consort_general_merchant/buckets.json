@@ -4,5 +4,6 @@
     "land_type": "minestuck:buckets"
   },
   "dialogue": "minestuck:consort_general_merchant/buckets",
+  "dialogue_weight": 10,
   "keep_on_reset": true
 }

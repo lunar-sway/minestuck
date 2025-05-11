@@ -1,0 +1,11 @@
+{
+  "type": "minestuck:combination",
+  "input1": {
+    "item": "minestuck:orange_faygo"
+  },
+  "input2": {
+    "item": "minecraft:tnt"
+  },
+  "mode": "or",
+  "output": "minestuck:redpop_faygo"
+}

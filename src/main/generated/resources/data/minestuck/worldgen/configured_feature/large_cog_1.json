@@ -5,10 +5,8 @@
       "heightmap": "WORLD_SURFACE_WG",
       "offset": {
         "type": "minecraft:uniform",
-        "value": {
-          "max_inclusive": 0,
-          "min_inclusive": -3
-        }
+        "max_inclusive": 0,
+        "min_inclusive": -3
       },
       "query_type": "min"
     },

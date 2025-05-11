@@ -1,0 +1,8 @@
+{
+  "parent": "minecraft:block/inner_stairs",
+  "textures": {
+    "bottom": "minestuck:block/derse_rough_core",
+    "side": "minestuck:block/derse_rough_core",
+    "top": "minestuck:block/derse_rough_core"
+  }
+}

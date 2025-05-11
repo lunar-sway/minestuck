@@ -1,0 +1,21 @@
+{
+  "type": "minecraft:crafting_shaped",
+  "category": "equipment",
+  "key": {
+    "l": {
+      "tag": "c:leathers"
+    },
+    "s": {
+      "tag": "c:rods/wooden"
+    }
+  },
+  "pattern": [
+    "  s",
+    " s ",
+    "l  "
+  ],
+  "result": {
+    "count": 1,
+    "id": "minestuck:bear_poking_stick"
+  }
+}

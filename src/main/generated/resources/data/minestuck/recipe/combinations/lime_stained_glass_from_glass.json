@@ -1,0 +1,11 @@
+{
+  "type": "minestuck:combination",
+  "input1": {
+    "item": "minecraft:glass"
+  },
+  "input2": {
+    "tag": "c:dyes/lime"
+  },
+  "mode": "and",
+  "output": "minecraft:lime_stained_glass"
+}

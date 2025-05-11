@@ -23,7 +23,7 @@ public enum GristTypeSpawnCategory    //Which categories can a certain grist typ
 	
 	GristTypeSpawnCategory(String name)
 	{
-		this.tagKey = TagKey.create(GristTypes.REGISTRY_KEY, new ResourceLocation(Minestuck.MOD_ID, "spawnable_" + name));
+		this.tagKey = TagKey.create(GristTypes.REGISTRY_KEY, ResourceLocation.fromNamespaceAndPath(Minestuck.MOD_ID, "spawnable_" + name));
 	}
 	
 	public TagKey<GristType> getTagKey()

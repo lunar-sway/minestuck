@@ -3,9 +3,10 @@ package com.mraof.minestuck.blockentity.machine;
 import com.mraof.minestuck.blockentity.MSBlockEntityTypes;
 import com.mraof.minestuck.inventory.OptionalPosHolder;
 import com.mraof.minestuck.inventory.SendificatorMenu;
-import com.mraof.minestuck.util.ExtraForgeTags;
+import com.mraof.minestuck.util.ExtraModTags;
 import net.minecraft.core.BlockPos;
 import net.minecraft.core.Direction;
+import net.minecraft.core.HolderLookup;
 import net.minecraft.nbt.CompoundTag;
 import net.minecraft.network.chat.Component;
 import net.minecraft.server.level.ServerPlayer;
@@ -75,9 +76,9 @@ public class SendificatorBlockEntity extends MachineProcessBlockEntity implement
 	}
 	
 	@Override
-	public void load(CompoundTag compound)
+	public void loadAdditional(CompoundTag compound, HolderLookup.Provider provider)
 	{
-		super.load(compound);
+		super.loadAdditional(compound, provider);
 		
 		this.progressTracker.load(compound);
 		
@@ -93,9 +94,9 @@ public class SendificatorBlockEntity extends MachineProcessBlockEntity implement
 	}
 	
 	@Override
-	public void saveAdditional(CompoundTag compound)
+	public void saveAdditional(CompoundTag compound, HolderLookup.Provider provider)
 	{
-		super.saveAdditional(compound);
+		super.saveAdditional(compound, provider);
 		
 		this.progressTracker.save(compound);
 		
@@ -112,7 +113,7 @@ public class SendificatorBlockEntity extends MachineProcessBlockEntity implement
 	@Override
 	protected ItemStackHandler createItemHandler()
 	{
-		return new MachineProcessBlockEntity.CustomHandler(2, (index, stack) -> index == 0 || stack.is(ExtraForgeTags.Items.URANIUM_CHUNKS));
+		return new MachineProcessBlockEntity.CustomHandler(2, (index, stack) -> index == 0 || stack.is(ExtraModTags.Items.URANIUM_CHUNKS));
 	}
 	
 	@Override
@@ -130,7 +131,7 @@ public class SendificatorBlockEntity extends MachineProcessBlockEntity implement
 		
 		ItemStack fuel = itemHandler.getStackInSlot(1);
 		ItemStack input = itemHandler.getStackInSlot(0);
-		return canBeRefueled() && fuel.is(ExtraForgeTags.Items.URANIUM_CHUNKS) || !input.isEmpty();
+		return canBeRefueled() && fuel.is(ExtraModTags.Items.URANIUM_CHUNKS) || !input.isEmpty();
 	}
 	
 	/**
@@ -141,7 +142,7 @@ public class SendificatorBlockEntity extends MachineProcessBlockEntity implement
 		if(canBeRefueled())
 		{
 			//checks for a uranium itemstack in the lower(fuel) item slot, increases the fuel value if some is found and then removes one count from the fuel stack
-			if(itemHandler.getStackInSlot(1).is(ExtraForgeTags.Items.URANIUM_CHUNKS))
+			if(itemHandler.getStackInSlot(1).is(ExtraModTags.Items.URANIUM_CHUNKS))
 			{
 				//Refill fuel
 				addFuel((short) FUEL_INCREASE);

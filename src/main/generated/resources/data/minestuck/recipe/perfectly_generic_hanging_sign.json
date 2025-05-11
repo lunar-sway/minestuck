@@ -1,0 +1,21 @@
+{
+  "type": "minecraft:crafting_shaped",
+  "category": "misc",
+  "key": {
+    "c": {
+      "item": "minecraft:chain"
+    },
+    "w": {
+      "item": "minestuck:generic_object"
+    }
+  },
+  "pattern": [
+    "c c",
+    "www",
+    "www"
+  ],
+  "result": {
+    "count": 6,
+    "id": "minestuck:perfectly_generic_hanging_sign"
+  }
+}

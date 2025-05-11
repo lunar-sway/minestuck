@@ -1,0 +1,22 @@
+{
+  "type": "minecraft:crafting_shaped",
+  "category": "misc",
+  "group": "aspect_hanging_sign",
+  "key": {
+    "c": {
+      "item": "minecraft:chain"
+    },
+    "w": {
+      "item": "minestuck:life_aspect_stripped_log"
+    }
+  },
+  "pattern": [
+    "c c",
+    "www",
+    "www"
+  ],
+  "result": {
+    "count": 6,
+    "id": "minestuck:life_aspect_hanging_sign"
+  }
+}

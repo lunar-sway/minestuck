@@ -1,6 +1,7 @@
 package com.mraof.minestuck.client.gui;
 
 import com.mojang.blaze3d.systems.RenderSystem;
+import com.mraof.minestuck.Minestuck;
 import com.mraof.minestuck.blockentity.machine.MiniCruxtruderBlockEntity;
 import com.mraof.minestuck.inventory.MiniCruxtruderMenu;
 import net.minecraft.client.gui.GuiGraphics;
@@ -14,8 +15,8 @@ import javax.annotation.ParametersAreNonnullByDefault;
 @ParametersAreNonnullByDefault
 public class MiniCruxtruderScreen extends AbstractContainerScreen<MiniCruxtruderMenu>
 {
-	private static final ResourceLocation BACKGROUND = new ResourceLocation("minestuck:textures/gui/cruxtruder.png");
-	private static final ResourceLocation PROGRESS_BAR = new ResourceLocation("minestuck:textures/gui/progress/cruxtruder.png");
+	private static final ResourceLocation BACKGROUND = Minestuck.id("textures/gui/cruxtruder.png");
+	private static final ResourceLocation PROGRESS_BAR = Minestuck.id("textures/gui/progress/cruxtruder.png");
 	
 	public static final int PROGRESS_BAR_X = 82;
 	public static final int PROGRESS_BAR_Y = 42;

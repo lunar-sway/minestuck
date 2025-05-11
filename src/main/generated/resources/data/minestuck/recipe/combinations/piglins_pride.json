@@ -1,0 +1,11 @@
+{
+  "type": "minestuck:combination",
+  "input1": {
+    "item": "minestuck:diamond_dagger"
+  },
+  "input2": {
+    "item": "minecraft:netherite_ingot"
+  },
+  "mode": "and",
+  "output": "minestuck:piglins_pride"
+}

@@ -2,5 +2,7 @@
   "condition": {
     "type": "minestuck:is_consort_in_home_land"
   },
-  "dialogue": "minestuck:consort/await_hero"
+  "dialogue": "minestuck:consort/await_hero",
+  "dialogue_weight": 10,
+  "keep_on_reset": false
 }

@@ -1,0 +1,27 @@
+{
+  "type": "minecraft:crafting_shaped",
+  "category": "redstone",
+  "key": {
+    "c": {
+      "item": "minecraft:comparator"
+    },
+    "e": {
+      "item": "minestuck:plutonium_core"
+    },
+    "i": {
+      "item": "minecraft:iron_ingot"
+    },
+    "q": {
+      "item": "minestuck:computer_parts"
+    }
+  },
+  "pattern": [
+    "cqc",
+    "iei",
+    "iii"
+  ],
+  "result": {
+    "count": 1,
+    "id": "minestuck:wireless_redstone_transmitter"
+  }
+}

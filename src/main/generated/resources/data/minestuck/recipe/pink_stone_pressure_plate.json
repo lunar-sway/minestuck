@@ -1,0 +1,17 @@
+{
+  "type": "minecraft:crafting_shaped",
+  "category": "building",
+  "group": "stone_pressure_plate",
+  "key": {
+    "#": {
+      "item": "minestuck:pink_stone"
+    }
+  },
+  "pattern": [
+    "##"
+  ],
+  "result": {
+    "count": 1,
+    "id": "minestuck:pink_stone_pressure_plate"
+  }
+}

@@ -1,0 +1,17 @@
+{
+  "type": "minecraft:crafting_shaped",
+  "category": "building",
+  "group": "stone_pressure_plate",
+  "key": {
+    "#": {
+      "item": "minestuck:brown_stone"
+    }
+  },
+  "pattern": [
+    "##"
+  ],
+  "result": {
+    "count": 1,
+    "id": "minestuck:brown_stone_pressure_plate"
+  }
+}

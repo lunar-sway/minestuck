@@ -1,49 +1,23 @@
 package com.mraof.minestuck.block.fluid;
 
-import com.mraof.minestuck.fluid.IMSFog;
 import com.mraof.minestuck.fluid.MSFluidType;
 import net.minecraft.core.BlockPos;
 import net.minecraft.core.particles.ParticleTypes;
-import net.minecraft.sounds.SoundEvents;
 import net.minecraft.sounds.SoundSource;
 import net.minecraft.util.RandomSource;
-import net.minecraft.world.entity.Entity;
 import net.minecraft.world.level.Level;
-import net.minecraft.world.level.LevelReader;
 import net.minecraft.world.level.block.LiquidBlock;
 import net.minecraft.world.level.block.state.BlockState;
 import net.minecraft.world.level.material.FlowingFluid;
-import net.minecraft.world.phys.Vec3;
 
-import java.util.function.Supplier;
-
-/**
- * This class allows for implementing most fluid blocks in the game
- */
-public class MSLiquidBlock extends LiquidBlock implements IMSFog
+public class MSLiquidBlock extends LiquidBlock
 {
-	protected final Vec3 fogColor;
-	protected final float fogDensity;
 	protected final boolean underwaterParticles;
 	
-	public MSLiquidBlock(Supplier<? extends FlowingFluid> fluid, Vec3 fogColor, float fogDensity, boolean underwaterParticles, Properties properties)
+	public MSLiquidBlock(FlowingFluid fluid, boolean underwaterParticles, Properties properties)
 	{
 		super(fluid, properties);
-		this.fogColor = fogColor;
-		this.fogDensity = fogDensity;
 		this.underwaterParticles = underwaterParticles;
-	}
-	
-	@Override
-	public float getMSFogDensity()
-	{
-		return fogDensity;
-	}
-	
-	@Override
-	public Vec3 getMSFogColor(LevelReader level, BlockPos pos, Entity entity, Vec3 originalColor, double partialTicks)
-	{
-		return fogColor;
 	}
 	
 	@Override
@@ -63,7 +37,7 @@ public class MSLiquidBlock extends LiquidBlock implements IMSFog
 	{
 		if(rand.nextInt(96) == 0)
 		{
-			FlowingFluid fluid = this.getFluid();
+			FlowingFluid fluid = this.fluid;
 			
 			if(fluid.getFluidType() instanceof MSFluidType fluidType)
 			{

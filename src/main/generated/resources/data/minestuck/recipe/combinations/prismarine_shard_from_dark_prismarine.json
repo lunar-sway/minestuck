@@ -1,0 +1,11 @@
+{
+  "type": "minestuck:combination",
+  "input1": {
+    "item": "minecraft:dark_prismarine"
+  },
+  "input2": {
+    "item": "minecraft:flint"
+  },
+  "mode": "or",
+  "output": "minecraft:prismarine_shard"
+}

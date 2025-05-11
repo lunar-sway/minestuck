@@ -1,0 +1,11 @@
+{
+  "type": "minestuck:combination",
+  "input1": {
+    "tag": "minecraft:leaves"
+  },
+  "input2": {
+    "item": "minecraft:warped_fungus"
+  },
+  "mode": "and",
+  "output": "minecraft:warped_wart_block"
+}

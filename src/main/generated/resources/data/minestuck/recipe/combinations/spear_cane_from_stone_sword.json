@@ -1,0 +1,11 @@
+{
+  "type": "minestuck:combination",
+  "input1": {
+    "item": "minestuck:iron_cane"
+  },
+  "input2": {
+    "item": "minecraft:stone_sword"
+  },
+  "mode": "or",
+  "output": "minestuck:spear_cane"
+}

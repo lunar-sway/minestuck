@@ -1,9 +1,16 @@
 {
   "node": {
+    "animation": {},
+    "gui": "minestuck:textures/gui/dialogue/dialogue.png",
     "message": "minestuck.dialogue.consort.rabbit.food_shortage.other_way",
     "responses": [
       {
-        "message": "minestuck.dots"
+        "condition": {
+          "type": "minestuck:always_true"
+        },
+        "hide_if_failed": true,
+        "message": "minestuck.dots",
+        "triggers": []
       }
     ]
   }

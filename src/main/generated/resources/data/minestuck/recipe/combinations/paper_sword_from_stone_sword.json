@@ -1,0 +1,11 @@
+{
+  "type": "minestuck:combination",
+  "input1": {
+    "item": "minecraft:paper"
+  },
+  "input2": {
+    "item": "minecraft:stone_sword"
+  },
+  "mode": "or",
+  "output": "minestuck:paper_sword"
+}

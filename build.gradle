@@ -1,8 +1,8 @@
 plugins {
     id 'eclipse'
     id 'maven-publish'
-    id 'net.neoforged.gradle.userdev' version '7.0.80'
-    id 'net.neoforged.gradle.mixin' version '7.0.80'
+    id 'net.neoforged.gradle.userdev' version '7.0.165'
+    id 'net.neoforged.gradle.mixin' version '7.0.165'
 }
 
 repositories {
@@ -46,7 +46,7 @@ version = project.getProperty('mc_ms_version')
 group = 'com.mraof.minestuck'
 archivesBaseName = 'Minestuck'
 
-java.toolchain.languageVersion = JavaLanguageVersion.of(17)
+java.toolchain.languageVersion = JavaLanguageVersion.of(21)
 
 compileJava.options.encoding = 'UTF-8'
 compileTestJava.options.encoding = "UTF-8"
@@ -66,12 +66,12 @@ runs {
     client {
         // Add an uuid arg if you have specified it in a relevant gradle.properties file. NOTE: Do not use the gradle.properties file in the project! (because that one is supposed to be shared among all devs) Create one in your "gradle user home" instead.
         if (project.hasProperty('mc_uuid')) {
-            programArguments.addAll '--uuid', project.getProperty('mc_uuid')
+            arguments '--uuid', project.getProperty('mc_uuid')
         }
 
         // Add an username arg if you have specified it in a relevant gradle.properties file. Note that specifying a uuid and a non-matching username (or no username specified) may cause single-player worlds to freeze up when exiting the world.
         if (project.hasProperty('mc_username')) {
-            programArguments.addAll '--username', project.getProperty('mc_username')
+            arguments '--username', project.getProperty('mc_username')
         }
     }
     server {
@@ -79,7 +79,7 @@ runs {
     gameTestServer {
     }
     data {
-        programArguments.addAll '--mod', 'minestuck', '--all', '--output', file('src/main/generated/resources/').getAbsolutePath(), '--existing', file('src/main/resources/').getAbsolutePath()
+        arguments '--mod', 'minestuck', '--all', '--output', file('src/main/generated/resources/').getAbsolutePath(), '--existing', file('src/main/resources/').getAbsolutePath()
     }
 }
 
@@ -106,7 +106,6 @@ mixin {
     config 'mixins.minestuck.json'
 }
 
-// Example for how to get properties into the manifest for reading by the runtime..
 jar {
     manifest {
         attributes([
@@ -118,27 +117,5 @@ jar {
                 "Implementation-Vendor" :"Minestuck Dev Team",
                 "Implementation-Timestamp": new Date().format("yyyy-MM-dd'T'HH:mm:ssZ")
         ])
-    }
-}
-
-// Example configuration to allow publishing using the maven-publish task
-// we define a custom artifact that is sourced from the reobfJar output task
-// and then declare that to be published
-// Note you'll need to add a repository here
-def reobfFile = file("$buildDir/reobfJar/output.jar")
-def reobfArtifact = artifacts.add('default', reobfFile) {
-    type 'jar'
-    builtBy 'reobfJar'
-}
-publishing {
-    publications {
-        mavenJava(MavenPublication) {
-            artifact reobfArtifact
-        }
-    }
-    repositories {
-        maven {
-            url "file:///${project.projectDir}/mcmodsrepo"
-        }
     }
 }

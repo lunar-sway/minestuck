@@ -3,15 +3,18 @@ package com.mraof.minestuck.inventory.captchalogue;
 import com.mraof.minestuck.Minestuck;
 import com.mraof.minestuck.MinestuckConfig;
 import com.mraof.minestuck.advancements.MSCriteriaTriggers;
-import com.mraof.minestuck.alchemy.AlchemyHelper;
 import com.mraof.minestuck.computer.editmode.ServerEditHandler;
 import com.mraof.minestuck.item.BoondollarsItem;
+import com.mraof.minestuck.item.CaptchaCardItem;
 import com.mraof.minestuck.item.MSItems;
-import com.mraof.minestuck.network.data.ModusDataPacket;
+import com.mraof.minestuck.item.components.CardStoredItemComponent;
+import com.mraof.minestuck.item.components.MSItemComponents;
+import com.mraof.minestuck.network.CaptchaDeckPackets;
 import com.mraof.minestuck.player.ClientPlayerData;
 import com.mraof.minestuck.player.PlayerBoondollars;
 import com.mraof.minestuck.player.PlayerData;
 import com.mraof.minestuck.util.MSAttachments;
+import net.minecraft.core.HolderLookup;
 import net.minecraft.core.NonNullList;
 import net.minecraft.nbt.CompoundTag;
 import net.minecraft.resources.ResourceLocation;
@@ -21,12 +24,13 @@ import net.minecraft.world.entity.item.ItemEntity;
 import net.minecraft.world.entity.player.Player;
 import net.minecraft.world.inventory.Slot;
 import net.minecraft.world.item.ItemStack;
+import net.minecraft.world.item.enchantment.EnchantmentEffectComponents;
 import net.minecraft.world.item.enchantment.EnchantmentHelper;
 import net.minecraft.world.level.GameRules;
 import net.neoforged.bus.api.EventPriority;
 import net.neoforged.bus.api.SubscribeEvent;
 import net.neoforged.fml.LogicalSide;
-import net.neoforged.fml.common.Mod;
+import net.neoforged.fml.common.EventBusSubscriber;
 import net.neoforged.neoforge.common.util.INBTSerializable;
 import net.neoforged.neoforge.event.entity.living.LivingDropsEvent;
 import net.neoforged.neoforge.event.entity.player.PlayerEvent;
@@ -38,7 +42,7 @@ import java.util.List;
 import java.util.Optional;
 
 //todo this class could use some spring cleaning
-@Mod.EventBusSubscriber(modid = Minestuck.MOD_ID, bus = Mod.EventBusSubscriber.Bus.FORGE)
+@EventBusSubscriber(modid = Minestuck.MOD_ID, bus = EventBusSubscriber.Bus.GAME)
 public final class CaptchaDeckHandler
 {
 	private static final Logger LOGGER = LogManager.getLogger();
@@ -62,7 +66,7 @@ public final class CaptchaDeckHandler
 		
 		ModusHolder modusHolder = getHolder(player);
 		if(modusHolder.modus != null)
-			player.connection.send(ModusDataPacket.create(modusHolder.modus));
+			player.connection.send(CaptchaDeckPackets.ModusData.create(modusHolder.modus, player.registryAccess()));
 		
 		if(modusHolder.modus == null && !modusHolder.givenModus)
 			CaptchaDeckHandler.tryGiveStartingModus(modusHolder, player);
@@ -82,7 +86,7 @@ public final class CaptchaDeckHandler
 	
 	public static void launchItem(ServerPlayer player, ItemStack item)
 	{
-		if(item.getItem().equals(MSItems.CAPTCHA_CARD.get()) && !AlchemyHelper.hasDecodedItem(item))
+		if(item.is(MSItems.CAPTCHA_CARD) && !item.has(MSItemComponents.ENCODED_ITEM) && !item.has(MSItemComponents.CARD_STORED_ITEM))
 			while(item.getCount() > 0)
 			{
 				if(getModus(player).increaseSize(player))
@@ -116,8 +120,7 @@ public final class CaptchaDeckHandler
 			ItemStack newItem = changeModus(player, stack, modus, type);
 			containerMenu.setMenuItem(newItem);
 		}
-		else if(stack.getItem().equals(MSItems.CAPTCHA_CARD.get()) && !AlchemyHelper.isPunchedCard(stack)
-				&& modus != null)
+		else if(CaptchaCardItem.isUnpunchedCard(stack) && modus != null)
 		{
 			consumeCards(player, stack, modus);
 		}
@@ -159,7 +162,7 @@ public final class CaptchaDeckHandler
 	
 	private static void consumeCards(ServerPlayer player, ItemStack cards, Modus modus)
 	{
-		ItemStack content = AlchemyHelper.getDecodedItem(cards, true);
+		ItemStack content = CardStoredItemComponent.getContainedRealItem(cards);
 		
 		int failed = 0;
 		for(int i = 0; i < cards.getCount(); i++)
@@ -222,8 +225,7 @@ public final class CaptchaDeckHandler
 		
 		if(modus != null && !stack.isEmpty())
 		{
-			if(stack.is(MSItems.CAPTCHA_CARD) && AlchemyHelper.hasDecodedItem(stack)
-					&& !AlchemyHelper.isPunchedCard(stack))
+			if(CaptchaCardItem.isUnpunchedCard(stack) && stack.has(MSItemComponents.CARD_STORED_ITEM))
 				handleCardCaptchalogue(player, modus, stack);
 			else putInModus(player, modus, stack);
 			
@@ -233,7 +235,7 @@ public final class CaptchaDeckHandler
 	
 	private static void handleCardCaptchalogue(ServerPlayer player, Modus modus, ItemStack card)
 	{
-		ItemStack stackInCard = AlchemyHelper.getDecodedItem(card, true);
+		ItemStack stackInCard = CardStoredItemComponent.getContainedRealItem(card);
 		boolean spentCard = modus.increaseSize(player);
 		
 		if(spentCard)
@@ -326,13 +328,17 @@ public final class CaptchaDeckHandler
 				};
 		
 		for(ItemStack stack : stacks)
-			if(!stack.isEmpty() && !EnchantmentHelper.hasVanishingCurse(stack))
+		{
+			if(!stack.isEmpty() && !EnchantmentHelper.has(stack, EnchantmentEffectComponents.PREVENT_EQUIPMENT_DROP))
+			{
 				if(size > cardsToKeep && MinestuckConfig.SERVER.dropItemsInCards.get())
 				{
-					ItemStack card = AlchemyHelper.createCard(stack, player.server);
+					ItemStack card = CaptchaCardItem.createCardWithItem(stack, player.server);
 					player.drop(card, true, false);
 					size--;
 				} else player.drop(stack, true, false);
+			}
+		}
 		
 		int stackLimit = new ItemStack(MSItems.CAPTCHA_CARD.get()).getMaxStackSize();
 		for(; size > cardsToKeep; size = Math.max(size - stackLimit, cardsToKeep))
@@ -345,12 +351,12 @@ public final class CaptchaDeckHandler
 		} else
 		{
 			modus.initModus(null, player, null, size);
-			player.connection.send(ModusDataPacket.create(modus));
+			player.connection.send(CaptchaDeckPackets.ModusData.create(modus, player.registryAccess()));
 		}
 	}
 	
 	@Nullable
-	public static CompoundTag writeToNBT(@Nullable Modus modus)
+	public static CompoundTag writeToNBT(@Nullable Modus modus, HolderLookup.Provider provider)
 	{
 		if(modus == null)
 			return null;
@@ -358,18 +364,18 @@ public final class CaptchaDeckHandler
 		ResourceLocation name = ModusTypes.REGISTRY.getKey(modus.getType());
 		if(name != null)
 		{
-			CompoundTag nbt = modus.writeToNBT(new CompoundTag());
+			CompoundTag nbt = modus.writeToNBT(new CompoundTag(), provider);
 			nbt.putString("type", name.toString());
 			return nbt;
 		} else return null;
 	}
 	
-	public static Modus readFromNBT(CompoundTag nbt, LogicalSide side)
+	public static Modus readFromNBT(CompoundTag nbt, LogicalSide side, HolderLookup.Provider provider)
 	{
 		if(nbt == null)
 			return null;
 		Modus modus;
-		ResourceLocation name = new ResourceLocation(nbt.getString("type"));
+		ResourceLocation name = ResourceLocation.parse(nbt.getString("type"));
 		
 		if(side.isClient() && ClientPlayerData.getModus() != null && name.equals(ModusTypes.REGISTRY.getKey(ClientPlayerData.getModus().getType())))
 			modus = ClientPlayerData.getModus();
@@ -382,7 +388,7 @@ public final class CaptchaDeckHandler
 				return null;
 			}
 		}
-		modus.readFromNBT(nbt);
+		modus.readFromNBT(nbt, provider);
 		return modus;
 	}
 	
@@ -402,13 +408,13 @@ public final class CaptchaDeckHandler
 	
 	private static boolean canMergeItemStacks(ItemStack stack1, ItemStack stack2)
 	{
-		return ItemStack.isSameItemSameTags(stack1, stack2)
+		return ItemStack.isSameItemSameComponents(stack1, stack2)
 				&& stack1.isStackable() && stack1.getCount() + stack2.getCount() < stack1.getMaxStackSize();
 	}
 	
 	private static boolean canPlayerUseModus(ServerPlayer player)
 	{
-		return !player.isSpectator() && ServerEditHandler.getData(player) == null;
+		return !player.isSpectator() && !ServerEditHandler.isInEditmode(player);
 	}
 	
 	private static void setModus(ModusHolder modusHolder, ServerPlayer player, @Nullable Modus modus)
@@ -419,7 +425,7 @@ public final class CaptchaDeckHandler
 		modusHolder.modus = modus;
 		if(modus != null)
 			modusHolder.givenModus = true;
-		player.connection.send(ModusDataPacket.create(modus));
+		player.connection.send(CaptchaDeckPackets.ModusData.create(modus, player.registryAccess()));
 	}
 	
 	private static void tryGiveStartingModus(ModusHolder modusHolder, ServerPlayer player)
@@ -460,11 +466,11 @@ public final class CaptchaDeckHandler
 		private Modus modus = null;
 		
 		@Override
-		public CompoundTag serializeNBT()
+		public CompoundTag serializeNBT(HolderLookup.Provider provider)
 		{
 			CompoundTag nbt = new CompoundTag();
 			
-			CompoundTag modusTag = writeToNBT(modus);
+			CompoundTag modusTag = writeToNBT(modus, provider);
 			if(modusTag != null)
 				nbt.put("modus", modusTag);
 			else
@@ -474,11 +480,11 @@ public final class CaptchaDeckHandler
 		}
 		
 		@Override
-		public void deserializeNBT(CompoundTag nbt)
+		public void deserializeNBT(HolderLookup.Provider provider, CompoundTag nbt)
 		{
 			if (nbt.contains("modus"))
 			{
-				this.modus = readFromNBT(nbt.getCompound("modus"), LogicalSide.SERVER);
+				this.modus = readFromNBT(nbt.getCompound("modus"), LogicalSide.SERVER, provider);
 				givenModus = true;
 			}
 			else
@@ -486,3 +492,4 @@ public final class CaptchaDeckHandler
 		}
 	}
 }
+

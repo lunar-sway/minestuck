@@ -1,10 +1,17 @@
 {
   "node": {
+    "animation": {},
+    "gui": "minestuck:textures/gui/dialogue/dialogue.png",
     "message": "minestuck.dialogue.consort.why_monsters.why_punish.1",
     "responses": [
       {
+        "condition": {
+          "type": "minestuck:always_true"
+        },
+        "hide_if_failed": true,
         "message": "minestuck.arrow",
-        "next_dialogue": "minestuck:consort/why_monsters/why_punish.2"
+        "next_dialogue": "minestuck:consort/why_monsters/why_punish.2",
+        "triggers": []
       }
     ]
   }

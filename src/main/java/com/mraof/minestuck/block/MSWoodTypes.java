@@ -4,10 +4,10 @@ import com.mraof.minestuck.Minestuck;
 import net.minecraft.core.registries.Registries;
 import net.minecraft.world.level.block.state.properties.WoodType;
 import net.neoforged.bus.api.SubscribeEvent;
-import net.neoforged.fml.common.Mod;
+import net.neoforged.fml.common.EventBusSubscriber;
 import net.neoforged.neoforge.registries.RegisterEvent;
 
-@Mod.EventBusSubscriber(bus = Mod.EventBusSubscriber.Bus.MOD, modid = Minestuck.MOD_ID)
+@EventBusSubscriber(bus = EventBusSubscriber.Bus.MOD, modid = Minestuck.MOD_ID)
 public class MSWoodTypes
 {
 	public static final WoodType CARVED = new WoodType(Minestuck.MOD_ID + ":carved", MSBlockSetType.CARVED);

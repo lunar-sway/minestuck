@@ -1,5 +1,7 @@
 {
   "node": {
+    "animation": {},
+    "gui": "minestuck:textures/gui/dialogue/dialogue.png",
     "messages": [
       {
         "type": "entity",
@@ -12,15 +14,25 @@
     ],
     "responses": [
       {
+        "condition": {
+          "type": "minestuck:always_true"
+        },
+        "hide_if_failed": true,
         "message": "minestuck.dialogue.consort.book_purpose.fact_2.request_more",
         "next_dialogue": {
           "id": "minestuck:consort/book_purpose/buy_my_products",
           "reply_messages": [],
           "set_as_entrypoint": true
-        }
+        },
+        "triggers": []
       },
       {
-        "message": "minestuck.dialogue.goodbye"
+        "condition": {
+          "type": "minestuck:always_true"
+        },
+        "hide_if_failed": true,
+        "message": "minestuck.dialogue.goodbye",
+        "triggers": []
       }
     ]
   }

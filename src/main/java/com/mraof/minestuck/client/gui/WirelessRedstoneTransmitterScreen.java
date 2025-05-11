@@ -1,7 +1,7 @@
 package com.mraof.minestuck.client.gui;
 
 import com.mraof.minestuck.blockentity.redstone.WirelessRedstoneTransmitterBlockEntity;
-import com.mraof.minestuck.network.WirelessRedstoneTransmitterPacket;
+import com.mraof.minestuck.network.block.WirelessRedstoneTransmitterSettingsPacket;
 import net.minecraft.client.gui.GuiGraphics;
 import net.minecraft.client.gui.components.EditBox;
 import net.minecraft.client.gui.screens.Screen;
@@ -14,7 +14,7 @@ import net.neoforged.neoforge.network.PacketDistributor;
 public class WirelessRedstoneTransmitterScreen extends Screen
 {
 	public static final String TITLE = "minestuck.wireless_redstone";
-	private static final ResourceLocation GUI_BACKGROUND = new ResourceLocation("minestuck", "textures/gui/generic_medium.png");
+	private static final ResourceLocation GUI_BACKGROUND = ResourceLocation.fromNamespaceAndPath("minestuck", "textures/gui/generic_medium.png");
 	
 	private static final int GUI_WIDTH = 150;
 	private static final int GUI_HEIGHT = 98;
@@ -77,7 +77,7 @@ public class WirelessRedstoneTransmitterScreen extends Screen
 	
 	private void finish()
 	{
-		PacketDistributor.SERVER.noArg().send(new WirelessRedstoneTransmitterPacket(parseBlockPos(), be.getBlockPos()));
+		PacketDistributor.sendToServer(new WirelessRedstoneTransmitterSettingsPacket(parseBlockPos(), be.getBlockPos()));
 		onClose();
 	}
 	

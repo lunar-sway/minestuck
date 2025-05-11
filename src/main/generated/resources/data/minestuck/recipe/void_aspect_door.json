@@ -1,0 +1,19 @@
+{
+  "type": "minecraft:crafting_shaped",
+  "category": "building",
+  "group": "wooden_door",
+  "key": {
+    "#": {
+      "item": "minestuck:void_aspect_planks"
+    }
+  },
+  "pattern": [
+    "## ",
+    "## ",
+    "## "
+  ],
+  "result": {
+    "count": 3,
+    "id": "minestuck:void_aspect_door"
+  }
+}

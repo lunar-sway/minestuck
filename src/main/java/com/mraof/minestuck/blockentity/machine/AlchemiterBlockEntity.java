@@ -1,7 +1,6 @@
 package com.mraof.minestuck.blockentity.machine;
 
 import com.mraof.minestuck.MinestuckConfig;
-import com.mraof.minestuck.alchemy.AlchemyHelper;
 import com.mraof.minestuck.alchemy.GristHelper;
 import com.mraof.minestuck.api.alchemy.GristSet;
 import com.mraof.minestuck.api.alchemy.GristType;
@@ -14,6 +13,7 @@ import com.mraof.minestuck.blockentity.IColored;
 import com.mraof.minestuck.blockentity.MSBlockEntityTypes;
 import com.mraof.minestuck.client.gui.MSScreenFactories;
 import com.mraof.minestuck.event.AlchemyEvent;
+import com.mraof.minestuck.item.components.EncodedItemComponent;
 import com.mraof.minestuck.player.GristCache;
 import com.mraof.minestuck.player.IdentifierHandler;
 import com.mraof.minestuck.util.ColorHandler;
@@ -22,6 +22,7 @@ import com.mraof.minestuck.util.MSSoundEvents;
 import net.minecraft.MethodsReturnNonnullByDefault;
 import net.minecraft.core.BlockPos;
 import net.minecraft.core.Direction;
+import net.minecraft.core.HolderLookup;
 import net.minecraft.nbt.CompoundTag;
 import net.minecraft.network.protocol.Packet;
 import net.minecraft.network.protocol.game.ClientGamePacketListener;
@@ -41,11 +42,10 @@ import net.minecraft.world.level.block.state.BlockState;
 import net.neoforged.neoforge.common.NeoForge;
 import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.Logger;
+import software.bernie.geckolib.animatable.GeoAnimatable;
 import software.bernie.geckolib.animatable.GeoBlockEntity;
-import software.bernie.geckolib.core.animatable.GeoAnimatable;
-import software.bernie.geckolib.core.animatable.instance.AnimatableInstanceCache;
-import software.bernie.geckolib.core.animation.*;
-import software.bernie.geckolib.core.object.PlayState;
+import software.bernie.geckolib.animatable.instance.AnimatableInstanceCache;
+import software.bernie.geckolib.animation.*;
 import software.bernie.geckolib.util.GeckoLibUtil;
 
 import javax.annotation.Nullable;
@@ -105,9 +105,7 @@ public class AlchemiterBlockEntity extends BlockEntity implements IColored, Gris
 	
 	public ItemStack getOutput()
 	{
-		if (!AlchemyHelper.hasDecodedItem(dowel))
-			return new ItemStack(MSBlocks.GENERIC_OBJECT.get());
-		else return AlchemyHelper.getDecodedItem(dowel);
+		return EncodedItemComponent.getEncodedOrBlank(dowel);
 	}
 	
 	/**
@@ -181,9 +179,9 @@ public class AlchemiterBlockEntity extends BlockEntity implements IColored, Gris
 	}
 	
 	@Override
-	public void load(CompoundTag nbt)
+	protected void loadAdditional(CompoundTag nbt, HolderLookup.Provider pRegistries)
 	{
-		super.load(nbt);
+		super.loadAdditional(nbt, pRegistries);
 		
 		wildcardGrist = GristHelper.parseGristType(nbt.get("gristType")).orElseGet(GristTypes.BUILD);
 		
@@ -202,8 +200,7 @@ public class AlchemiterBlockEntity extends BlockEntity implements IColored, Gris
 		broken = nbt.getBoolean("broken");
 		
 		ItemStack oldDowel = dowel;
-		if(nbt.contains("dowel"))
-			dowel = ItemStack.of(nbt.getCompound("dowel"));
+		dowel = ItemStack.parseOptional(pRegistries, nbt.getCompound("dowel"));
 		
 		//This a slight hack to force a rerender (since it at the time of writing normally happens before we get the update packet). This should not be done normally
 		if(level != null && level.isClientSide && !ItemStack.matches(oldDowel, dowel))
@@ -211,23 +208,20 @@ public class AlchemiterBlockEntity extends BlockEntity implements IColored, Gris
 	}
 	
 	@Override
-	public void saveAdditional(CompoundTag compound)
+	public void saveAdditional(CompoundTag compound, HolderLookup.Provider provider)
 	{
-		super.saveAdditional(compound);
+		super.saveAdditional(compound, provider);
 		
 		compound.put("gristType", GristHelper.encodeGristType(wildcardGrist));
 		compound.putBoolean("broken", isBroken());
-		
-		if(dowel!= null)
-			compound.put("dowel", dowel.save(new CompoundTag()));
+		compound.put("dowel", dowel.saveOptional(provider));
 	}
 	
 	@Override
-	public CompoundTag getUpdateTag()
+	public CompoundTag getUpdateTag(HolderLookup.Provider provider)
 	{
-		return saveWithoutMetadata();
+		return saveWithoutMetadata(provider);
 	}
-	
 	
 	@Override
 	public Packet<ClientGamePacketListener> getUpdatePacket()
@@ -281,6 +275,9 @@ public class AlchemiterBlockEntity extends BlockEntity implements IColored, Gris
 	
 	public void processContents(int quantity, ServerPlayer player)
 	{
+		if(this.isBroken())
+			return;
+		
 		ItemStack newItem = getOutput();
 		//Clamp quantity
 		quantity = Math.min(newItem.getMaxStackSize() * MinestuckConfig.SERVER.alchemiterMaxStacks.get(), Math.max(1, quantity));

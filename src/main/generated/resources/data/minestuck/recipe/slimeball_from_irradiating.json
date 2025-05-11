@@ -1,0 +1,13 @@
+{
+  "type": "minestuck:irradiating",
+  "category": "misc",
+  "cookingtime": 20,
+  "experience": 0.1,
+  "ingredient": {
+    "item": "minecraft:mushroom_stew"
+  },
+  "result": {
+    "count": 1,
+    "id": "minecraft:slime_ball"
+  }
+}

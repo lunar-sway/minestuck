@@ -4,5 +4,6 @@
     "entity_type": "minestuck:iguana"
   },
   "dialogue": "minestuck:consort/whoops",
-  "dialogue_weight": 4
+  "dialogue_weight": 4,
+  "keep_on_reset": false
 }

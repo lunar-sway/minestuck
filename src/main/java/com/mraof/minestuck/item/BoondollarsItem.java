@@ -1,9 +1,8 @@
 package com.mraof.minestuck.item;
 
+import com.mraof.minestuck.item.components.MSItemComponents;
 import com.mraof.minestuck.player.PlayerBoondollars;
 import com.mraof.minestuck.player.PlayerData;
-import net.minecraft.nbt.CompoundTag;
-import net.minecraft.nbt.Tag;
 import net.minecraft.network.chat.Component;
 import net.minecraft.server.level.ServerPlayer;
 import net.minecraft.world.InteractionHand;
@@ -14,7 +13,6 @@ import net.minecraft.world.item.ItemStack;
 import net.minecraft.world.item.TooltipFlag;
 import net.minecraft.world.level.Level;
 
-import javax.annotation.Nullable;
 import javax.annotation.ParametersAreNonnullByDefault;
 import java.util.List;
 
@@ -39,7 +37,7 @@ public class BoondollarsItem extends Item
 	}
 	
 	@Override
-	public void appendHoverText(ItemStack stack, @Nullable Level level, List<Component> tooltip, TooltipFlag flagIn)
+	public void appendHoverText(ItemStack stack, TooltipContext context, List<Component> tooltip, TooltipFlag flagIn)
 	{
 		long amount = getCount(stack);
 		tooltip.add(Component.translatable("item.minestuck.boondollars.amount", amount));
@@ -47,20 +45,12 @@ public class BoondollarsItem extends Item
 	
 	public static long getCount(ItemStack stack)
 	{
-		if(!stack.hasTag() || !stack.getTag().contains("value", Tag.TAG_ANY_NUMERIC))
-			return 1;
-		else return stack.getTag().getInt("value");
+		return stack.getOrDefault(MSItemComponents.VALUE, 1L);
 	}
 	
-	public static ItemStack setCount(ItemStack stack, int value)
+	public static ItemStack setCount(ItemStack stack, long value)
 	{
-		CompoundTag nbt = stack.getTag();
-		if(nbt == null)
-		{
-			nbt = new CompoundTag();
-			stack.setTag(nbt);
-		}
-		nbt.putInt("value", value);
+		stack.set(MSItemComponents.VALUE, value);
 		return stack;
 	}
 }

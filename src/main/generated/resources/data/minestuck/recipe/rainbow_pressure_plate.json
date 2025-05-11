@@ -1,0 +1,17 @@
+{
+  "type": "minecraft:crafting_shaped",
+  "category": "building",
+  "group": "stone_pressure_plate",
+  "key": {
+    "#": {
+      "item": "minestuck:rainbow_planks"
+    }
+  },
+  "pattern": [
+    "##"
+  ],
+  "result": {
+    "count": 1,
+    "id": "minestuck:rainbow_pressure_plate"
+  }
+}

@@ -13,7 +13,7 @@ import net.minecraft.core.registries.Registries;
 import net.minecraft.data.DataGenerator;
 import net.minecraft.data.PackOutput;
 import net.neoforged.bus.api.SubscribeEvent;
-import net.neoforged.fml.common.Mod;
+import net.neoforged.fml.common.EventBusSubscriber;
 import net.neoforged.neoforge.common.data.DatapackBuiltinEntriesProvider;
 import net.neoforged.neoforge.common.data.ExistingFileHelper;
 import net.neoforged.neoforge.data.event.GatherDataEvent;
@@ -22,7 +22,7 @@ import net.neoforged.neoforge.registries.NeoForgeRegistries;
 import java.util.Set;
 import java.util.concurrent.CompletableFuture;
 
-@Mod.EventBusSubscriber(modid = Minestuck.MOD_ID, bus = Mod.EventBusSubscriber.Bus.MOD)
+@EventBusSubscriber(modid = Minestuck.MOD_ID, bus = EventBusSubscriber.Bus.MOD)
 public final class MinestuckData
 {
 	@SubscribeEvent
@@ -47,17 +47,21 @@ public final class MinestuckData
 		gen.addProvider(event.includeServer(), new TitleLandTypeTagsProvider(output, lookupProvider, fileHelper));
 		gen.addProvider(event.includeServer(), new MSDamageTypeProvider.Tags(output, lookupProvider, fileHelper));
 		
-		gen.addProvider(event.includeServer(), new MinestuckRecipeProvider(output));
+		gen.addProvider(event.includeServer(), new DataMapGenerator(output, event.getLookupProvider()));
+		
+		gen.addProvider(event.includeServer(), new MinestuckRecipeProvider(output, event.getLookupProvider()));
 		gen.addProvider(event.includeServer(), new GeneratedGristCostConfigProvider(output, Minestuck.MOD_ID));
 		
 		gen.addProvider(event.includeServer(), new ComputerThemeProvider(output));
 		
 		gen.addProvider(event.includeServer(), new BoondollarPriceProvider(output, Minestuck.MOD_ID));
-		gen.addProvider(event.includeServer(), MinestuckLootTableProvider.create(output));
-		gen.addProvider(event.includeServer(), new MSLootModifiers(output));
+		gen.addProvider(event.includeServer(), MinestuckLootTableProvider.create(output, event.getLookupProvider()));
+		gen.addProvider(event.includeServer(), new MSLootModifiers(output, event.getLookupProvider()));
 		gen.addProvider(event.includeServer(), MSAdvancementProvider.create(output, lookupProvider, fileHelper));
 		
 		gen.addProvider(event.includeServer(), new StartingModusProvider(output, Minestuck.MOD_ID));
+		gen.addProvider(event.includeServer(), new EcheladderExpSourceProvider(output));
+		gen.addProvider(event.includeServer(), new RungsProvider(output));
 		
 		gen.addProvider(event.includeClient(), new MSBlockStateProvider(output, fileHelper));
 		gen.addProvider(event.includeClient(), new MinestuckItemModelProvider(output, fileHelper));

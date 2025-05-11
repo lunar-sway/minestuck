@@ -1,0 +1,19 @@
+{
+  "variants": {
+    "facing=east": {
+      "model": "minestuck:block/shadewood_ladder",
+      "y": 90
+    },
+    "facing=north": {
+      "model": "minestuck:block/shadewood_ladder"
+    },
+    "facing=south": {
+      "model": "minestuck:block/shadewood_ladder",
+      "y": 180
+    },
+    "facing=west": {
+      "model": "minestuck:block/shadewood_ladder",
+      "y": 270
+    }
+  }
+}

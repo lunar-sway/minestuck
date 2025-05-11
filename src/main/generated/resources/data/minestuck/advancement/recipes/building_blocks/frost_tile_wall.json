@@ -1,0 +1,32 @@
+{
+  "parent": "minecraft:recipes/root",
+  "criteria": {
+    "has_frost_tile": {
+      "conditions": {
+        "items": [
+          {
+            "items": "minestuck:frost_tile"
+          }
+        ]
+      },
+      "trigger": "minecraft:inventory_changed"
+    },
+    "has_the_recipe": {
+      "conditions": {
+        "recipe": "minestuck:frost_tile_wall"
+      },
+      "trigger": "minecraft:recipe_unlocked"
+    }
+  },
+  "requirements": [
+    [
+      "has_the_recipe",
+      "has_frost_tile"
+    ]
+  ],
+  "rewards": {
+    "recipes": [
+      "minestuck:frost_tile_wall"
+    ]
+  }
+}

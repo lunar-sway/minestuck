@@ -13,7 +13,7 @@ import net.minecraft.world.level.levelgen.structure.templatesystem.StructureTemp
 
 public class CastIronPlatformFeature extends Feature<NoneFeatureConfiguration>
 {
-	private static final ResourceLocation CAST_IRON_PLATFORM = new ResourceLocation(Minestuck.MOD_ID, "cast_platform");
+	private static final ResourceLocation CAST_IRON_PLATFORM = ResourceLocation.fromNamespaceAndPath(Minestuck.MOD_ID, "cast_platform");
 	
 	public CastIronPlatformFeature(Codec<NoneFeatureConfiguration> codec)
 	{

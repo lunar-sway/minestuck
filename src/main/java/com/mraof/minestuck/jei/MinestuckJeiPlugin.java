@@ -36,14 +36,16 @@ public class MinestuckJeiPlugin implements IModPlugin
 	@Override
 	public ResourceLocation getPluginUid()
 	{
-		return new ResourceLocation(Minestuck.MOD_ID, "minestuck");
+		return ResourceLocation.fromNamespaceAndPath(Minestuck.MOD_ID, "minestuck");
 	}
 	
 	@Override
 	public void registerItemSubtypes(ISubtypeRegistration subtypeRegistry)
 	{
+		/* FIXME
 		subtypeRegistry.useNbtForSubtypes(MSItems.CAPTCHA_CARD.get());
 		subtypeRegistry.useNbtForSubtypes(MSBlocks.CRUXITE_DOWEL.get().asItem());
+		 */
 	}
 	
 	@Override

@@ -1,0 +1,166 @@
+{
+  "values": {
+    "#minestuck:leaves/aspect": {
+      "chance": 0.2
+    },
+    "#minestuck:saplings/aspect": {
+      "chance": 0.2
+    },
+    "minestuck:apple_cake": {
+      "chance": 1.0
+    },
+    "minestuck:blooming_cactus": {
+      "chance": 0.5
+    },
+    "minestuck:blue_cake": {
+      "chance": 1.0
+    },
+    "minestuck:bug_mac": {
+      "chance": 1.0
+    },
+    "minestuck:carrot_cake": {
+      "chance": 1.0
+    },
+    "minestuck:choco_loco_woodsplitter": {
+      "chance": 1.0
+    },
+    "minestuck:chocolate_beetle": {
+      "chance": 0.1
+    },
+    "minestuck:chocolatey_cake": {
+      "chance": 1.0
+    },
+    "minestuck:cicada": {
+      "chance": 0.1
+    },
+    "minestuck:cocoa_wart": {
+      "chance": 0.65
+    },
+    "minestuck:cold_cake": {
+      "chance": 1.0
+    },
+    "minestuck:cone_of_flies": {
+      "chance": 0.1
+    },
+    "minestuck:crop_chop": {
+      "chance": 1.0
+    },
+    "minestuck:desert_bush": {
+      "chance": 0.5
+    },
+    "minestuck:desert_fruit": {
+      "chance": 0.5
+    },
+    "minestuck:doctor_deterrent": {
+      "chance": 1.0
+    },
+    "minestuck:end_grass": {
+      "chance": 0.5
+    },
+    "minestuck:end_leaves": {
+      "chance": 0.2
+    },
+    "minestuck:end_sapling": {
+      "chance": 0.2
+    },
+    "minestuck:french_fry": {
+      "chance": 0.85
+    },
+    "minestuck:frost_leaves_flowering": {
+      "chance": 0.2
+    },
+    "minestuck:frost_sapling": {
+      "chance": 0.2
+    },
+    "minestuck:fuchsia_cake": {
+      "chance": 1.0
+    },
+    "minestuck:fudgesickle": {
+      "chance": 1.0
+    },
+    "minestuck:fungal_spore": {
+      "chance": 0.5
+    },
+    "minestuck:glowing_mushroom": {
+      "chance": 0.65
+    },
+    "minestuck:glowing_mushroom_vines": {
+      "chance": 0.65
+    },
+    "minestuck:grasshopper": {
+      "chance": 0.1
+    },
+    "minestuck:grub_sauce": {
+      "chance": 0.85
+    },
+    "minestuck:hot_cake": {
+      "chance": 1.0
+    },
+    "minestuck:large_cake": {
+      "chance": 1.0
+    },
+    "minestuck:melonsbane": {
+      "chance": 1.0
+    },
+    "minestuck:moon_cake": {
+      "chance": 1.0
+    },
+    "minestuck:morel_mushroom": {
+      "chance": 0.65
+    },
+    "minestuck:negative_cake": {
+      "chance": 1.0
+    },
+    "minestuck:onion": {
+      "chance": 0.5
+    },
+    "minestuck:paradises_portabello": {
+      "chance": 1.0
+    },
+    "minestuck:pink_frosted_top_large_cake": {
+      "chance": 1.0
+    },
+    "minestuck:quench_crusher": {
+      "chance": 1.0
+    },
+    "minestuck:rainbow_leaves": {
+      "chance": 0.2
+    },
+    "minestuck:rainbow_sapling": {
+      "chance": 0.2
+    },
+    "minestuck:red_cake": {
+      "chance": 1.0
+    },
+    "minestuck:reverse_cake": {
+      "chance": 1.0
+    },
+    "minestuck:shadewood_leaves": {
+      "chance": 0.2
+    },
+    "minestuck:shadewood_sapling": {
+      "chance": 0.2
+    },
+    "minestuck:shroomy_shadewood_leaves": {
+      "chance": 0.2
+    },
+    "minestuck:sporeo": {
+      "chance": 0.85
+    },
+    "minestuck:stale_baguette": {
+      "chance": 1.0
+    },
+    "minestuck:strawberry": {
+      "chance": 0.65
+    },
+    "minestuck:strawberry_chunk": {
+      "chance": 0.5
+    },
+    "minestuck:surprise_embryo": {
+      "chance": 0.85
+    },
+    "minestuck:sushroom": {
+      "chance": 0.65
+    }
+  }
+}

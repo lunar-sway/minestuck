@@ -1,0 +1,32 @@
+{
+  "parent": "minecraft:recipes/root",
+  "criteria": {
+    "has_cactus": {
+      "conditions": {
+        "items": [
+          {
+            "items": "minestuck:wooden_cactus"
+          }
+        ]
+      },
+      "trigger": "minecraft:inventory_changed"
+    },
+    "has_the_recipe": {
+      "conditions": {
+        "recipe": "minestuck:spruce_planks_from_wooden_cactus"
+      },
+      "trigger": "minecraft:recipe_unlocked"
+    }
+  },
+  "requirements": [
+    [
+      "has_the_recipe",
+      "has_cactus"
+    ]
+  ],
+  "rewards": {
+    "recipes": [
+      "minestuck:spruce_planks_from_wooden_cactus"
+    ]
+  }
+}

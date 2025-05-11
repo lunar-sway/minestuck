@@ -13,7 +13,6 @@ import net.minecraft.world.level.block.state.BlockState;
 import net.minecraft.world.phys.Vec3;
 import net.minecraft.world.phys.shapes.CollisionContext;
 import net.minecraft.world.phys.shapes.VoxelShape;
-import net.neoforged.neoforge.common.PlantType;
 
 public class GlowingMushroomBlock extends BushBlock
 {
@@ -37,8 +36,7 @@ public class GlowingMushroomBlock extends BushBlock
 	}
 	
 	@Override
-	@SuppressWarnings("deprecation")
-	public void tick(BlockState state, ServerLevel level, BlockPos pos, RandomSource random)
+	protected void tick(BlockState state, ServerLevel level, BlockPos pos, RandomSource random)
 	{
 		super.tick(state, level, pos, random);
 		if(canSpread(level, pos, state) && random.nextInt(25) == 0)
@@ -66,12 +64,6 @@ public class GlowingMushroomBlock extends BushBlock
 		}
 	}
 	
-	@Override
-	public PlantType getPlantType(BlockGetter level, BlockPos pos)
-	{
-		return PlantType.CAVE;
-	}
-	
 	public boolean canSpread(Level level, BlockPos pos, BlockState state)
 	{
 		BlockState soil = level.getBlockState(pos.below());
@@ -79,7 +71,7 @@ public class GlowingMushroomBlock extends BushBlock
 	}
 	
 	@Override
-	public VoxelShape getShape(BlockState pState, BlockGetter pLevel, BlockPos pPos, CollisionContext pContext)
+	protected VoxelShape getShape(BlockState pState, BlockGetter pLevel, BlockPos pPos, CollisionContext pContext)
 	{
 		Vec3 vec3 = pState.getOffset(pLevel, pPos);
 		return SHAPE.move(vec3.x, vec3.y, vec3.z);

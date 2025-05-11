@@ -1106,7 +1106,7 @@ public final class ImpDungeonPieces
 			BlockPos pos = new BlockPos(getWorldX(xPos, zPos), getWorldY(yPos), getWorldZ(xPos, zPos));
 			OgreEntity ogre = MSEntityTypes.OGRE.get().create(level.getLevel());
 			ogre.moveTo(pos.getX(), pos.getY(), pos.getZ(), rand.nextFloat() * 360F, 0);
-			ogre.finalizeSpawn(level, null, MobSpawnType.STRUCTURE, null, null);
+			ogre.finalizeSpawn(level, null, MobSpawnType.STRUCTURE, null);
 			ogre.restrictTo(pos, 2);
 			level.addFreshEntity(ogre);
 		}

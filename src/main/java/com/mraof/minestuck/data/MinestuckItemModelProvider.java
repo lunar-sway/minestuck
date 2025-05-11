@@ -24,6 +24,8 @@ public class MinestuckItemModelProvider extends ItemModelProvider
 	@Override
 	protected void registerModels()
 	{
+		DreamerMoonBlocksData.addItems(this);
+		
 		//Hammers
 		handheldItem(MSItems.CLAW_HAMMER);
 		handheldItem(MSItems.SLEDGE_HAMMER);
@@ -602,7 +604,7 @@ public class MinestuckItemModelProvider extends ItemModelProvider
 		simpleItem(MSItems.SCALEMATE_WITNESS);
 		
 		simpleItem(MSItems.PLUSH_MUTATED_CAT);
-		
+	
 		//Incredibly Useful Items
 		handheldItem(MSItems.URANIUM_POWERED_STICK);
 		simpleItem(MSItems.IRON_BOAT);
@@ -659,7 +661,7 @@ public class MinestuckItemModelProvider extends ItemModelProvider
 	private ItemModelBuilder simpleItem(Supplier<? extends Item> item, String textureName)
 	{
 		return withExistingParent(id(item).getPath(),
-				new ResourceLocation("item/generated"))
+				ResourceLocation.withDefaultNamespace("item/generated"))
 				.texture("layer0", texture(textureName));
 	}
 	
@@ -671,7 +673,7 @@ public class MinestuckItemModelProvider extends ItemModelProvider
 	private ItemModelBuilder handheldItem(Supplier<? extends Item> item, String textureName)
 	{
 		return withExistingParent(id(item).getPath(),
-				new ResourceLocation("item/handheld"))
+				ResourceLocation.withDefaultNamespace("item/handheld"))
 				.texture("layer0", texture(textureName));
 	}
 	
@@ -727,7 +729,7 @@ public class MinestuckItemModelProvider extends ItemModelProvider
 	
 	private static ResourceLocation id(String path)
 	{
-		return new ResourceLocation(Minestuck.MOD_ID, path);
+		return ResourceLocation.fromNamespaceAndPath(Minestuck.MOD_ID, path);
 	}
 	
 	private static ResourceLocation id(Supplier<? extends Item> item)

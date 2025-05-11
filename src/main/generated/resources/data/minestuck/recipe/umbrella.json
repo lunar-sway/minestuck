@@ -1,0 +1,21 @@
+{
+  "type": "minecraft:crafting_shaped",
+  "category": "equipment",
+  "key": {
+    "s": {
+      "tag": "c:rods/wooden"
+    },
+    "w": {
+      "item": "minecraft:black_wool"
+    }
+  },
+  "pattern": [
+    " w ",
+    "wsw",
+    " s "
+  ],
+  "result": {
+    "count": 1,
+    "id": "minestuck:umbrella"
+  }
+}

@@ -1,8 +1,8 @@
 package com.mraof.minestuck.item.loot.functions;
 
-import com.mojang.serialization.Codec;
+import com.mojang.serialization.MapCodec;
 import com.mojang.serialization.codecs.RecordCodecBuilder;
-import com.mraof.minestuck.item.IncompleteSburbCodeItem;
+import com.mraof.minestuck.item.components.HieroglyphCode;
 import com.mraof.minestuck.item.loot.MSLootTables;
 import com.mraof.minestuck.util.MSTags;
 import net.minecraft.MethodsReturnNonnullByDefault;
@@ -26,7 +26,7 @@ import java.util.*;
 @MethodsReturnNonnullByDefault
 public class SetSburbCodeFragments extends LootItemConditionalFunction
 {
-	public static final Codec<SetSburbCodeFragments> CODEC = RecordCodecBuilder.create(instance ->
+	public static final MapCodec<SetSburbCodeFragments> CODEC = RecordCodecBuilder.mapCodec(instance ->
 			commonFields(instance).apply(instance, SetSburbCodeFragments::new));
 	public SetSburbCodeFragments(List<LootItemCondition> conditionsIn)
 	{
@@ -34,7 +34,7 @@ public class SetSburbCodeFragments extends LootItemConditionalFunction
 	}
 	
 	@Override
-	public LootItemFunctionType getType()
+	public LootItemFunctionType<SetSburbCodeFragments> getType()
 	{
 		return MSLootTables.SET_SBURB_CODE_FRAGMENT_FUNCTION.get();
 	}
@@ -42,7 +42,8 @@ public class SetSburbCodeFragments extends LootItemConditionalFunction
 	@Override
 	protected ItemStack run(ItemStack stack, LootContext context)
 	{
-		return IncompleteSburbCodeItem.setRecordedInfo(stack, pickRandomHieroglyphs(context.getRandom()));
+		HieroglyphCode.setBlocks(stack, pickRandomHieroglyphs(context.getRandom()));
+		return stack;
 	}
 	
 	private Set<Block> pickRandomHieroglyphs(RandomSource random)

@@ -9,7 +9,6 @@ import net.minecraft.core.BlockPos;
 import net.minecraft.core.Direction;
 import net.minecraft.core.particles.DustParticleOptions;
 import net.minecraft.util.RandomSource;
-import net.minecraft.world.InteractionHand;
 import net.minecraft.world.InteractionResult;
 import net.minecraft.world.entity.player.Player;
 import net.minecraft.world.level.Level;
@@ -23,11 +22,13 @@ import net.minecraft.world.level.block.state.properties.BooleanProperty;
 import net.minecraft.world.phys.BlockHitResult;
 
 import javax.annotation.Nullable;
+import javax.annotation.ParametersAreNonnullByDefault;
 
 /**
  * When activated with redstone, the block on top of it will be teleported to preset coordinates relative to the direction it is facing,
  * provided the destination is not occupied and the block being teleported could have been moved via piston.
  */
+@ParametersAreNonnullByDefault
 public class BlockTeleporterBlock extends MSHorizontalDirectionalBlock implements EntityBlock
 {
 	public static final BooleanProperty POWERED = BlockStateProperties.POWERED;
@@ -38,35 +39,35 @@ public class BlockTeleporterBlock extends MSHorizontalDirectionalBlock implement
 		registerDefaultState(stateDefinition.any().setValue(FACING, Direction.NORTH).setValue(POWERED, false));
 	}
 	
-	@SuppressWarnings("deprecation")
 	@Override
-	public InteractionResult use(BlockState state, Level level, BlockPos pos, Player player, InteractionHand hand, BlockHitResult hit)
+	protected InteractionResult useWithoutItem(BlockState state, Level level, BlockPos pos, Player player, BlockHitResult hit)
 	{
-		if(CreativeShockEffect.doesCreativeShockLimit(player, CreativeShockEffect.LIMIT_MACHINE_INTERACTIONS))
+		if(!canInteract(player))
 			return InteractionResult.PASS;
 		
-		if(level.getBlockEntity(pos) instanceof BlockTeleporterBlockEntity be)
-		{
-			if(level.isClientSide)
-				MSScreenFactories.displayBlockTeleporterScreen(be);
-			
-			return InteractionResult.sidedSuccess(level.isClientSide);
-		}
+		if(!(level.getBlockEntity(pos) instanceof BlockTeleporterBlockEntity be))
+			return InteractionResult.PASS;
 		
-		return InteractionResult.PASS;
+		if(level.isClientSide)
+			MSScreenFactories.displayBlockTeleporterScreen(be);
+		
+		return InteractionResult.sidedSuccess(level.isClientSide);
 	}
 	
-	@SuppressWarnings("deprecation")
+	public static boolean canInteract(Player player)
+	{
+		return !CreativeShockEffect.doesCreativeShockLimit(player, CreativeShockEffect.LIMIT_MACHINE_INTERACTIONS);
+	}
+	
 	@Override
-	public void neighborChanged(BlockState state, Level level, BlockPos pos, Block blockIn, BlockPos fromPos, boolean isMoving)
+	protected void neighborChanged(BlockState state, Level level, BlockPos pos, Block blockIn, BlockPos fromPos, boolean isMoving)
 	{
 		super.neighborChanged(state, level, pos, blockIn, fromPos, isMoving);
 		updatePower(level, pos);
 	}
 	
-	@SuppressWarnings("deprecation")
 	@Override
-	public void onPlace(BlockState state, Level level, BlockPos pos, BlockState oldState, boolean isMoving)
+	protected void onPlace(BlockState state, Level level, BlockPos pos, BlockState oldState, boolean isMoving)
 	{
 		super.onPlace(state, level, pos, oldState, isMoving);
 		updatePower(level, pos);

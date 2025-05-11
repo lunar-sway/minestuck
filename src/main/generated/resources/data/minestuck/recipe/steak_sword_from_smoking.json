@@ -1,0 +1,13 @@
+{
+  "type": "minecraft:smoking",
+  "category": "food",
+  "cookingtime": 100,
+  "experience": 0.5,
+  "ingredient": {
+    "item": "minestuck:beef_sword"
+  },
+  "result": {
+    "count": 1,
+    "id": "minestuck:steak_sword"
+  }
+}

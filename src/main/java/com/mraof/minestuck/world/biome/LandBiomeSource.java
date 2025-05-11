@@ -4,6 +4,7 @@ package com.mraof.minestuck.world.biome;
 import com.mojang.serialization.Codec;
 import com.mojang.serialization.Decoder;
 import com.mojang.serialization.Encoder;
+import com.mojang.serialization.MapCodec;
 import com.mraof.minestuck.world.gen.LandGenSettings;
 import net.minecraft.core.Holder;
 import net.minecraft.world.level.biome.Biome;
@@ -14,7 +15,7 @@ import java.util.stream.Stream;
 
 public final class LandBiomeSource extends BiomeSource
 {
-	public static final Codec<LandBiomeSource> CODEC = Codec.of(Encoder.error("LandBiomeProvider is not serializable."), Decoder.error("LandBiomeProvider is not serializable."));
+	public static final MapCodec<LandBiomeSource> CODEC = Codec.<LandBiomeSource>of(Encoder.error("LandBiomeProvider is not serializable."), Decoder.error("LandBiomeProvider is not serializable.")).fieldOf("source");
 	
 	private final LandBiomeAccess biomes;
 	private final Climate.ParameterList<Holder<Biome>> parameters;
@@ -37,7 +38,7 @@ public final class LandBiomeSource extends BiomeSource
 	}
 	
 	@Override
-	protected Codec<? extends BiomeSource> codec()
+	protected MapCodec<? extends BiomeSource> codec()
 	{
 		return CODEC;
 	}

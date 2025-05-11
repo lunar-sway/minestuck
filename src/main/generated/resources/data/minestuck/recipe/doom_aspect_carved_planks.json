@@ -1,0 +1,21 @@
+{
+  "type": "minecraft:crafting_shaped",
+  "category": "building",
+  "group": "aspect_carved_planks",
+  "key": {
+    "#": {
+      "item": "minestuck:doom_aspect_planks"
+    },
+    "$": {
+      "item": "minestuck:doom_aspect_stripped_log"
+    }
+  },
+  "pattern": [
+    "#$",
+    "$#"
+  ],
+  "result": {
+    "count": 8,
+    "id": "minestuck:doom_aspect_carved_planks"
+  }
+}

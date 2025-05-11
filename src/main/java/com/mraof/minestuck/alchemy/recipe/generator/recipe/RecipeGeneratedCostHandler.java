@@ -8,14 +8,13 @@ import com.mojang.serialization.JsonOps;
 import com.mojang.serialization.codecs.RecordCodecBuilder;
 import com.mraof.minestuck.Minestuck;
 import com.mraof.minestuck.api.alchemy.GristSet;
-import com.mraof.minestuck.api.alchemy.ImmutableGristSet;
 import com.mraof.minestuck.api.alchemy.recipe.JeiGristCost;
 import com.mraof.minestuck.api.alchemy.recipe.generator.GeneratedCostProvider;
 import com.mraof.minestuck.api.alchemy.recipe.generator.GeneratorCallback;
 import com.mraof.minestuck.api.alchemy.recipe.generator.GristCostResult;
 import com.mraof.minestuck.api.alchemy.recipe.generator.LookupTracker;
 import net.minecraft.MethodsReturnNonnullByDefault;
-import net.minecraft.network.FriendlyByteBuf;
+import net.minecraft.network.RegistryFriendlyByteBuf;
 import net.minecraft.resources.ResourceLocation;
 import net.minecraft.server.packs.resources.ResourceManager;
 import net.minecraft.server.packs.resources.SimplePreparableReloadListener;
@@ -26,7 +25,7 @@ import net.minecraft.world.item.crafting.RecipeHolder;
 import net.minecraft.world.item.crafting.RecipeManager;
 import net.neoforged.bus.api.EventPriority;
 import net.neoforged.bus.api.SubscribeEvent;
-import net.neoforged.fml.common.Mod;
+import net.neoforged.fml.common.EventBusSubscriber;
 import net.neoforged.neoforge.event.AddReloadListenerEvent;
 import org.apache.commons.lang3.tuple.Pair;
 import org.apache.logging.log4j.LogManager;
@@ -45,7 +44,7 @@ import java.util.function.BiConsumer;
  */
 @ParametersAreNonnullByDefault
 @MethodsReturnNonnullByDefault
-@Mod.EventBusSubscriber(modid = Minestuck.MOD_ID, bus = Mod.EventBusSubscriber.Bus.FORGE)
+@EventBusSubscriber(modid = Minestuck.MOD_ID, bus = EventBusSubscriber.Bus.GAME)
 public class RecipeGeneratedCostHandler extends SimplePreparableReloadListener<List<RecipeGeneratedCostHandler.SourceEntry>> implements GeneratedCostProvider
 {
 	private static final Logger LOGGER = LogManager.getLogger();
@@ -53,7 +52,7 @@ public class RecipeGeneratedCostHandler extends SimplePreparableReloadListener<L
 	public static final String PATH = "minestuck/grist_cost_generation_recipes.json";
 	
 	private final RecipeManager recipeManager;
-	private Map<Item, ImmutableGristSet> generatedCosts = Collections.emptyMap();
+	private Map<Item, GristSet.Immutable> generatedCosts = Collections.emptyMap();
 	private RecipeGeneratedCostProcess process = null;
 	
 	private RecipeGeneratedCostHandler(RecipeManager recipeManager)
@@ -61,7 +60,7 @@ public class RecipeGeneratedCostHandler extends SimplePreparableReloadListener<L
 		this.recipeManager = recipeManager;
 	}
 	
-	private RecipeGeneratedCostHandler(Map<Item, ImmutableGristSet> generatedCosts)
+	private RecipeGeneratedCostHandler(Map<Item, GristSet.Immutable> generatedCosts)
 	{
 		recipeManager = null;
 		this.generatedCosts = generatedCosts;
@@ -77,33 +76,33 @@ public class RecipeGeneratedCostHandler extends SimplePreparableReloadListener<L
 	 * Returns an immutable map of all grist costs generated from recipes.
 	 * If called before grist cost generation has finished, an empty map will be returned.
 	 */
-	public Map<Item, ImmutableGristSet> getMap()
+	public Map<Item, GristSet.Immutable> getMap()
 	{
 		return generatedCosts;
 	}
 	
-	void write(FriendlyByteBuf buffer)
+	void write(RegistryFriendlyByteBuf buffer)
 	{
 		buffer.writeInt(generatedCosts.size());
-		for(Map.Entry<Item, ImmutableGristSet> entry : generatedCosts.entrySet())
+		for(Map.Entry<Item, GristSet.Immutable> entry : generatedCosts.entrySet())
 		{
 			buffer.writeVarInt(Item.getId(entry.getKey()));
-			GristSet.write(entry.getValue(), buffer);
+			GristSet.Codecs.STREAM_CODEC.encode(buffer, entry.getValue());
 		}
 	}
 	
 	@Nullable
-	static RecipeGeneratedCostHandler read(FriendlyByteBuf buffer)
+	static RecipeGeneratedCostHandler read(RegistryFriendlyByteBuf buffer)
 	{
 		if(buffer.readableBytes() == 0)
 			return null;
 		
 		int size = buffer.readInt();
-		ImmutableMap.Builder<Item, ImmutableGristSet> builder = new ImmutableMap.Builder<>();
+		ImmutableMap.Builder<Item, GristSet.Immutable> builder = new ImmutableMap.Builder<>();
 		for(int i = 0; i < size; i++)
 		{
 			Item item = Item.byId(buffer.readVarInt());
-			ImmutableGristSet cost = GristSet.read(buffer);
+			GristSet.Immutable cost = GristSet.Codecs.STREAM_CODEC.decode(buffer);
 			builder.put(item, cost);
 		}
 		return new RecipeGeneratedCostHandler(builder.build());
@@ -112,7 +111,7 @@ public class RecipeGeneratedCostHandler extends SimplePreparableReloadListener<L
 	List<JeiGristCost> createJeiCosts()
 	{
 		List<JeiGristCost> costs = new ArrayList<>();
-		for(Map.Entry<Item, ImmutableGristSet> entries : generatedCosts.entrySet())
+		for(Map.Entry<Item, GristSet.Immutable> entries : generatedCosts.entrySet())
 		{
 			if(entries.getValue() != null)
 				costs.add(new JeiGristCost.Set(Ingredient.of(entries.getKey()), entries.getValue()));
@@ -126,7 +125,7 @@ public class RecipeGeneratedCostHandler extends SimplePreparableReloadListener<L
 		List<SourceEntry> sources = new ArrayList<>();
 		for(String namespace : resourceManagerIn.getNamespaces())
 		{
-			resourceManagerIn.getResource(new ResourceLocation(namespace, PATH)).ifPresent(resource -> {
+			resourceManagerIn.getResource(ResourceLocation.fromNamespaceAndPath(namespace, PATH)).ifPresent(resource -> {
 				try(
 						Reader reader = resource.openAsReader()
 				)

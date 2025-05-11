@@ -9,7 +9,6 @@ import net.minecraft.core.BlockPos;
 import net.minecraft.core.Direction;
 import net.minecraft.core.particles.DustParticleOptions;
 import net.minecraft.util.RandomSource;
-import net.minecraft.world.InteractionHand;
 import net.minecraft.world.InteractionResult;
 import net.minecraft.world.entity.player.Player;
 import net.minecraft.world.level.BlockGetter;
@@ -42,35 +41,30 @@ public class RemoteObserverBlock extends Block implements EntityBlock
 	}
 	
 	@Override
-	@SuppressWarnings("deprecation")
-	public InteractionResult use(BlockState state, Level level, BlockPos pos, Player player, InteractionHand hand, BlockHitResult hit)
+	protected InteractionResult useWithoutItem(BlockState state, Level level, BlockPos pos, Player player, BlockHitResult hit)
 	{
-		if(!CreativeShockEffect.doesCreativeShockLimit(player, CreativeShockEffect.LIMIT_MACHINE_INTERACTIONS))
-		{
-			if(level.getBlockEntity(pos) instanceof RemoteObserverBlockEntity be)
-			{
-				if(level.isClientSide)
-				{
-					MSScreenFactories.displayRemoteObserverScreen(be);
-				}
-				
-				return InteractionResult.SUCCESS;
-			}
-		}
+		if(!canInteract(player) || !(level.getBlockEntity(pos) instanceof RemoteObserverBlockEntity be))
+			return InteractionResult.FAIL;
 		
-		return InteractionResult.FAIL;
+		if(level.isClientSide)
+			MSScreenFactories.displayRemoteObserverScreen(be);
+		
+		return InteractionResult.SUCCESS;
 	}
 	
-	@SuppressWarnings("deprecation")
+	public static boolean canInteract(Player player)
+	{
+		return !CreativeShockEffect.doesCreativeShockLimit(player, CreativeShockEffect.LIMIT_MACHINE_INTERACTIONS);
+	}
+	
 	@Override
-	public boolean isSignalSource(BlockState state)
+	protected boolean isSignalSource(BlockState state)
 	{
 		return state.getValue(POWERED);
 	}
 	
-	@SuppressWarnings("deprecation")
 	@Override
-	public int getSignal(BlockState blockState, BlockGetter level, BlockPos pos, Direction side)
+	protected int getSignal(BlockState blockState, BlockGetter level, BlockPos pos, Direction side)
 	{
 		return blockState.getValue(POWERED) ? 15 : 0;
 	}

@@ -5,19 +5,21 @@ import com.mraof.minestuck.block.EnumCassetteType;
 import com.mraof.minestuck.block.MSBlocks;
 import net.minecraft.core.BlockPos;
 import net.minecraft.world.InteractionResult;
+import net.minecraft.world.item.Item;
 import net.minecraft.world.item.ItemStack;
-import net.minecraft.world.item.RecordItem;
 import net.minecraft.world.item.context.UseOnContext;
 import net.minecraft.world.level.Level;
 import net.minecraft.world.level.block.state.BlockState;
 
-public class CassetteItem extends RecordItem
+public class CassetteItem extends Item
 {
 	public final EnumCassetteType cassetteID;
+	private final int comparatorValue;
 	
-	public CassetteItem(int comparatorValueIn, EnumCassetteType cassetteName, Properties builder, int lengthInTicks)
+	public CassetteItem(int comparatorValue, EnumCassetteType cassetteName, Properties builder, int lengthInTicks)
 	{
-		super(comparatorValueIn, cassetteName::getSoundEvent, builder, lengthInTicks);
+		super(builder);
+		this.comparatorValue = comparatorValue;
 		this.cassetteID = cassetteName;
 	}
 	
@@ -41,5 +43,10 @@ public class CassetteItem extends RecordItem
 		{
 			return InteractionResult.PASS;
 		}
+	}
+	
+	public int getComparatorValue()
+	{
+		return this.comparatorValue;
 	}
 }

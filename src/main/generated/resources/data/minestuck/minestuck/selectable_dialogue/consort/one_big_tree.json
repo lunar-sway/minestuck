@@ -3,5 +3,7 @@
     "type": "minestuck:terrain_land_type",
     "land_type": "minestuck:wood"
   },
-  "dialogue": "minestuck:consort/one_big_tree"
+  "dialogue": "minestuck:consort/one_big_tree",
+  "dialogue_weight": 10,
+  "keep_on_reset": false
 }

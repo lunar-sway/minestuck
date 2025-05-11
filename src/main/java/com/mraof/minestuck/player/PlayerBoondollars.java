@@ -1,14 +1,14 @@
 package com.mraof.minestuck.player;
 
 import com.mraof.minestuck.Minestuck;
-import com.mraof.minestuck.network.data.BoondollarDataPacket;
+import com.mraof.minestuck.network.BoondollarDataPacket;
 import com.mraof.minestuck.util.MSAttachments;
 import net.minecraft.server.level.ServerPlayer;
 import net.neoforged.bus.api.SubscribeEvent;
-import net.neoforged.fml.common.Mod;
+import net.neoforged.fml.common.EventBusSubscriber;
 import net.neoforged.neoforge.event.entity.player.PlayerEvent;
 
-@Mod.EventBusSubscriber(modid = Minestuck.MOD_ID, bus = Mod.EventBusSubscriber.Bus.FORGE)
+@EventBusSubscriber(modid = Minestuck.MOD_ID, bus = EventBusSubscriber.Bus.GAME)
 public final class PlayerBoondollars
 {
 	public static long getBoondollars(PlayerData playerData)

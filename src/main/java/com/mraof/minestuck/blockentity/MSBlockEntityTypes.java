@@ -10,24 +10,25 @@ import net.minecraft.core.registries.BuiltInRegistries;
 import net.minecraft.world.level.block.entity.BlockEntityType;
 import net.minecraft.world.level.block.entity.SignBlockEntity;
 import net.neoforged.bus.api.SubscribeEvent;
-import net.neoforged.fml.common.Mod;
+import net.neoforged.fml.common.EventBusSubscriber;
 import net.neoforged.neoforge.capabilities.Capabilities;
 import net.neoforged.neoforge.capabilities.RegisterCapabilitiesEvent;
 import net.neoforged.neoforge.registries.DeferredRegister;
 
 import java.util.function.Supplier;
 
-@Mod.EventBusSubscriber(modid = Minestuck.MOD_ID, bus = Mod.EventBusSubscriber.Bus.MOD)
-public class MSBlockEntityTypes
+@EventBusSubscriber(modid = Minestuck.MOD_ID, bus = EventBusSubscriber.Bus.MOD)
+public final class MSBlockEntityTypes
 {
 	public static final DeferredRegister<BlockEntityType<?>> REGISTER = DeferredRegister.create(BuiltInRegistries.BLOCK_ENTITY_TYPE, Minestuck.MOD_ID);
 	
-	public static final Supplier<BlockEntityType<ComputerBlockEntity>> COMPUTER = REGISTER.register("computer", () -> BlockEntityType.Builder.of(ComputerBlockEntity::new, MSBlocks.COMPUTER.get(), MSBlocks.CROCKERTOP.get(), MSBlocks.HUBTOP.get(), MSBlocks.LAPTOP.get(), MSBlocks.LUNCHTOP.get()).build(null));
+	public static final Supplier<BlockEntityType<ComputerBlockEntity>> COMPUTER = REGISTER.register("computer", () -> BlockEntityType.Builder.of(ComputerBlockEntity::new,
+			MSBlocks.COMPUTER.get(), MSBlocks.LAPTOP.get(), MSBlocks.CROCKERTOP.get(), MSBlocks.HUBTOP.get(), MSBlocks.LUNCHTOP.get(), MSBlocks.OLD_COMPUTER.get()).build(null));
 	public static final Supplier<BlockEntityType<MiniCruxtruderBlockEntity>> MINI_CRUXTRUDER = REGISTER.register("mini_cruxtruder", () -> BlockEntityType.Builder.of(MiniCruxtruderBlockEntity::new, MSBlocks.MINI_CRUXTRUDER.get()).build(null));
 	public static final Supplier<BlockEntityType<MiniTotemLatheBlockEntity>> MINI_TOTEM_LATHE = REGISTER.register("mini_totem_lathe", () -> BlockEntityType.Builder.of(MiniTotemLatheBlockEntity::new, MSBlocks.MINI_TOTEM_LATHE.get()).build(null));
 	public static final Supplier<BlockEntityType<MiniAlchemiterBlockEntity>> MINI_ALCHEMITER = REGISTER.register("mini_alchemiter", () -> BlockEntityType.Builder.of(MiniAlchemiterBlockEntity::new, MSBlocks.MINI_ALCHEMITER.get()).build(null));
 	public static final Supplier<BlockEntityType<MiniPunchDesignixBlockEntity>> MINI_PUNCH_DESIGNIX = REGISTER.register("mini_punch_designix", () -> BlockEntityType.Builder.of(MiniPunchDesignixBlockEntity::new, MSBlocks.MINI_PUNCH_DESIGNIX.get()).build(null));
-	public static final Supplier<BlockEntityType<CruxtruderBlockEntity>> CRUXTRUDER = REGISTER.register("cruxtruder", () -> BlockEntityType.Builder.of(CruxtruderBlockEntity::new, MSBlocks.CRUXTRUDER.CENTER.get()).build(null));
+	public static final Supplier<BlockEntityType<CruxtruderBlockEntity>> CRUXTRUDER = REGISTER.register("cruxtruder", () -> BlockEntityType.Builder.of(CruxtruderBlockEntity::new, MSBlocks.CRUXTRUDER.TUBE.get()).build(null));
 	public static final Supplier<BlockEntityType<TotemLatheBlockEntity>> TOTEM_LATHE = REGISTER.register("totem_lathe", () -> BlockEntityType.Builder.of(TotemLatheBlockEntity::new, MSBlocks.TOTEM_LATHE.CARD_SLOT.get()).build(null));
 	public static final Supplier<BlockEntityType<TotemLatheDowelBlockEntity>> TOTEM_LATHE_DOWEL = REGISTER.register("totem_lathe_dowel", () -> BlockEntityType.Builder.of(TotemLatheDowelBlockEntity::new, MSBlocks.TOTEM_LATHE.DOWEL_ROD.get()).build(null));
 	public static final Supplier<BlockEntityType<AlchemiterBlockEntity>> ALCHEMITER = REGISTER.register("alchemiter", () -> BlockEntityType.Builder.of(AlchemiterBlockEntity::new, MSBlocks.ALCHEMITER.TOTEM_PAD.get()).build(null));

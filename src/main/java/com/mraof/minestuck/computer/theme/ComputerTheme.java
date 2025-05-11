@@ -23,7 +23,7 @@ public record ComputerTheme(ResourceLocation id, Data data)
 						Codec.INT.fieldOf("text_color").forGetter(Data::textColor)
 				).apply(instance, Data::new));
 		
-		public static final Data DEFAULT = new Data(new ResourceLocation(Minestuck.MOD_ID, "textures/gui/theme/default.png"), 0x404040);
+		public static final Data DEFAULT = new Data(ResourceLocation.fromNamespaceAndPath(Minestuck.MOD_ID, "textures/gui/theme/default.png"), 0x404040);
 	}
 	
 	public MutableComponent name()

@@ -1,0 +1,18 @@
+{
+  "type": "minecraft:crafting_shaped",
+  "category": "building",
+  "group": "wooden_trapdoor",
+  "key": {
+    "#": {
+      "item": "minestuck:rage_aspect_planks"
+    }
+  },
+  "pattern": [
+    "###",
+    "###"
+  ],
+  "result": {
+    "count": 2,
+    "id": "minestuck:rage_aspect_trapdoor"
+  }
+}

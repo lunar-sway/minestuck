@@ -1,5 +1,6 @@
 package com.mraof.minestuck.entity.underling;
 
+import com.mraof.minestuck.Minestuck;
 import com.mraof.minestuck.alchemy.GristHelper;
 import com.mraof.minestuck.api.alchemy.GristAmount;
 import com.mraof.minestuck.api.alchemy.GristType;
@@ -17,6 +18,7 @@ import com.mraof.minestuck.player.IdentifierHandler;
 import com.mraof.minestuck.player.PlayerIdentifier;
 import com.mraof.minestuck.util.MSTags;
 import net.minecraft.core.BlockPos;
+import net.minecraft.core.Holder;
 import net.minecraft.nbt.CompoundTag;
 import net.minecraft.nbt.Tag;
 import net.minecraft.network.chat.Component;
@@ -48,21 +50,22 @@ import net.neoforged.neoforge.common.util.FakePlayer;
 import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.Logger;
 import software.bernie.geckolib.animatable.GeoEntity;
-import software.bernie.geckolib.core.animatable.instance.AnimatableInstanceCache;
+import software.bernie.geckolib.animatable.instance.AnimatableInstanceCache;
 import software.bernie.geckolib.util.GeckoLibUtil;
 
 import javax.annotation.Nonnull;
 import javax.annotation.Nullable;
+import javax.annotation.ParametersAreNonnullByDefault;
 import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.Map;
-import java.util.UUID;
 
+@ParametersAreNonnullByDefault
 public abstract class UnderlingEntity extends AttackingAnimatedEntity implements Enemy, GeoEntity
 {
 	private static final Logger LOGGER = LogManager.getLogger();
 	
-	public static final UUID GRIST_MODIFIER_ID = UUID.fromString("08B6DEFC-E3F4-11EA-87D0-0242AC130003");
+	public static final ResourceLocation GRIST_MODIFIER_ID = Minestuck.id("grist_type");
 	private static final EntityDataAccessor<String> GRIST_TYPE = SynchedEntityData.defineId(UnderlingEntity.class, EntityDataSerializers.STRING);
 	
 	private final AnimatableInstanceCache cache = GeckoLibUtil.createInstanceCache(this);
@@ -71,7 +74,7 @@ public abstract class UnderlingEntity extends AttackingAnimatedEntity implements
 	public boolean dropCandy;
 	private int consortRep;
 	
-	private static final float maxSharedProgress = 2;    //The multiplier for the maximum amount progress that can be gathered from each enemy with the group fight bonus
+	private static final float MAX_SHARED_PROGRESS = 2;    //The multiplier for the maximum amount progress that can be gathered from each enemy with the group fight bonus
 	
 	protected Map<PlayerIdentifier, Double> damageMap = new HashMap<>();    //Map that stores how much damage each player did to this to this underling. Null is used for environmental or other non-player damage
 	
@@ -127,10 +130,10 @@ public abstract class UnderlingEntity extends AttackingAnimatedEntity implements
 	}
 	
 	@Override
-	protected void defineSynchedData()
+	protected void defineSynchedData(SynchedEntityData.Builder builder)
 	{
-		super.defineSynchedData();
-		entityData.define(GRIST_TYPE, String.valueOf(GristTypes.REGISTRY.getKey(GristTypes.ARTIFACT.get())));
+		super.defineSynchedData(builder);
+		builder.define(GRIST_TYPE, String.valueOf(GristTypes.REGISTRY.getKey(GristTypes.ARTIFACT.get())));
 	}
 	
 	protected void applyGristType(GristType type)
@@ -154,11 +157,11 @@ public abstract class UnderlingEntity extends AttackingAnimatedEntity implements
 	{
 	}
 	
-	protected void applyGristModifier(Attribute attribute, double modifier, AttributeModifier.Operation operation)
+	protected void applyGristModifier(Holder<Attribute> attribute, double modifier, AttributeModifier.Operation operation)
 	{
 		getAttribute(attribute).removeModifier(GRIST_MODIFIER_ID);
 		//Does not need to be saved because this bonus should already be applied when the grist type has been set
-		getAttribute(attribute).addTransientModifier(new AttributeModifier(GRIST_MODIFIER_ID, "Grist Bonus", modifier, operation));
+		getAttribute(attribute).addTransientModifier(new AttributeModifier(GRIST_MODIFIER_ID, modifier, operation));
 	}
 	
 	@Nonnull
@@ -321,9 +324,10 @@ public abstract class UnderlingEntity extends AttackingAnimatedEntity implements
 		return worldIn.getDifficulty() != Difficulty.PEACEFUL && checkMobSpawnRules(type, worldIn, reason, pos, randomIn);
 	}
 	
+	@SuppressWarnings("deprecation") // Overriding is fine
 	@Nullable
 	@Override
-	public SpawnGroupData finalizeSpawn(ServerLevelAccessor worldIn, DifficultyInstance difficultyIn, MobSpawnType reason, @Nullable SpawnGroupData spawnDataIn, @Nullable CompoundTag dataTag)
+	public SpawnGroupData finalizeSpawn(ServerLevelAccessor worldIn, DifficultyInstance difficultyIn, MobSpawnType reason, @Nullable SpawnGroupData spawnDataIn)
 	{
 		if(!(spawnDataIn instanceof UnderlingData))
 		{
@@ -334,7 +338,7 @@ public abstract class UnderlingEntity extends AttackingAnimatedEntity implements
 			applyGristType(((UnderlingData) spawnDataIn).type);
 		}
 		
-		return super.finalizeSpawn(worldIn, difficultyIn, reason, spawnDataIn, dataTag);
+		return super.finalizeSpawn(worldIn, difficultyIn, reason, spawnDataIn);
 	}
 	
 	public void onEntityDamaged(DamageSource source, float amount)
@@ -363,7 +367,7 @@ public abstract class UnderlingEntity extends AttackingAnimatedEntity implements
 		if(totalDamage < this.getMaxHealth())
 			totalDamage = this.getMaxHealth();
 		
-		int maxProgress = (int) (progress * maxSharedProgress);
+		int maxProgress = (int) (progress * MAX_SHARED_PROGRESS);
 		damageMap.remove(null);
 		PlayerIdentifier[] playerList = damageMap.keySet().toArray(new PlayerIdentifier[0]);
 		double[] modifiers = new double[playerList.length];
@@ -379,7 +383,7 @@ public abstract class UnderlingEntity extends AttackingAnimatedEntity implements
 		if(playerList.length > 0)
 			LOGGER.debug("{} players are splitting on {} progress from {}", playerList.length, progress, getType());
 		
-		if(totalModifier > maxSharedProgress)
+		if(totalModifier > MAX_SHARED_PROGRESS)
 		{
 			for(int i = 0; i < playerList.length; i++)
 				Echeladder.get(playerList[i], level())

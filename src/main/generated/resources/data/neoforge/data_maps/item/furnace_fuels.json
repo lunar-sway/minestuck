@@ -1,0 +1,649 @@
+{
+  "values": {
+    "#minestuck:logs/aspect": {
+      "burn_time": 300
+    },
+    "#minestuck:logs/cindered": {
+      "burn_time": 300
+    },
+    "#minestuck:logs/dead": {
+      "burn_time": 300
+    },
+    "#minestuck:logs/end": {
+      "burn_time": 300
+    },
+    "#minestuck:logs/flowery_vine": {
+      "burn_time": 300
+    },
+    "#minestuck:logs/frost": {
+      "burn_time": 300
+    },
+    "#minestuck:logs/glowing": {
+      "burn_time": 300
+    },
+    "#minestuck:logs/petrified": {
+      "burn_time": 300
+    },
+    "#minestuck:logs/rainbow": {
+      "burn_time": 300
+    },
+    "#minestuck:logs/shadewood": {
+      "burn_time": 300
+    },
+    "#minestuck:logs/vine": {
+      "burn_time": 300
+    },
+    "#minestuck:saplings/aspect": {
+      "burn_time": 100
+    },
+    "#minestuck:wood/aspect": {
+      "burn_time": 300
+    },
+    "minestuck:blood_aspect_bookshelf": {
+      "burn_time": 300
+    },
+    "minestuck:blood_aspect_button": {
+      "burn_time": 100
+    },
+    "minestuck:blood_aspect_carved_planks": {
+      "burn_time": 300
+    },
+    "minestuck:blood_aspect_door": {
+      "burn_time": 200
+    },
+    "minestuck:blood_aspect_fence": {
+      "burn_time": 300
+    },
+    "minestuck:blood_aspect_fence_gate": {
+      "burn_time": 300
+    },
+    "minestuck:blood_aspect_ladder": {
+      "burn_time": 300
+    },
+    "minestuck:blood_aspect_pressure_plate": {
+      "burn_time": 300
+    },
+    "minestuck:blood_aspect_slab": {
+      "burn_time": 150
+    },
+    "minestuck:blood_aspect_stairs": {
+      "burn_time": 300
+    },
+    "minestuck:blood_aspect_trapdoor": {
+      "burn_time": 300
+    },
+    "minestuck:breath_aspect_bookshelf": {
+      "burn_time": 300
+    },
+    "minestuck:breath_aspect_button": {
+      "burn_time": 100
+    },
+    "minestuck:breath_aspect_carved_planks": {
+      "burn_time": 300
+    },
+    "minestuck:breath_aspect_door": {
+      "burn_time": 200
+    },
+    "minestuck:breath_aspect_fence": {
+      "burn_time": 300
+    },
+    "minestuck:breath_aspect_fence_gate": {
+      "burn_time": 300
+    },
+    "minestuck:breath_aspect_ladder": {
+      "burn_time": 300
+    },
+    "minestuck:breath_aspect_pressure_plate": {
+      "burn_time": 300
+    },
+    "minestuck:breath_aspect_slab": {
+      "burn_time": 150
+    },
+    "minestuck:breath_aspect_stairs": {
+      "burn_time": 300
+    },
+    "minestuck:breath_aspect_trapdoor": {
+      "burn_time": 300
+    },
+    "minestuck:cindered_bookshelf": {
+      "burn_time": 300
+    },
+    "minestuck:cindered_button": {
+      "burn_time": 100
+    },
+    "minestuck:cindered_door": {
+      "burn_time": 200
+    },
+    "minestuck:cindered_fence": {
+      "burn_time": 300
+    },
+    "minestuck:cindered_fence_gate": {
+      "burn_time": 300
+    },
+    "minestuck:cindered_ladder": {
+      "burn_time": 300
+    },
+    "minestuck:cindered_pressure_plate": {
+      "burn_time": 300
+    },
+    "minestuck:cindered_slab": {
+      "burn_time": 150
+    },
+    "minestuck:cindered_stairs": {
+      "burn_time": 300
+    },
+    "minestuck:cindered_trapdoor": {
+      "burn_time": 300
+    },
+    "minestuck:dead_bookshelf": {
+      "burn_time": 300
+    },
+    "minestuck:dead_button": {
+      "burn_time": 100
+    },
+    "minestuck:dead_door": {
+      "burn_time": 200
+    },
+    "minestuck:dead_fence": {
+      "burn_time": 300
+    },
+    "minestuck:dead_fence_gate": {
+      "burn_time": 300
+    },
+    "minestuck:dead_ladder": {
+      "burn_time": 300
+    },
+    "minestuck:dead_planks_slab": {
+      "burn_time": 150
+    },
+    "minestuck:dead_planks_stairs": {
+      "burn_time": 300
+    },
+    "minestuck:dead_pressure_plate": {
+      "burn_time": 300
+    },
+    "minestuck:dead_trapdoor": {
+      "burn_time": 300
+    },
+    "minestuck:doom_aspect_bookshelf": {
+      "burn_time": 300
+    },
+    "minestuck:doom_aspect_button": {
+      "burn_time": 100
+    },
+    "minestuck:doom_aspect_carved_planks": {
+      "burn_time": 300
+    },
+    "minestuck:doom_aspect_door": {
+      "burn_time": 200
+    },
+    "minestuck:doom_aspect_fence": {
+      "burn_time": 300
+    },
+    "minestuck:doom_aspect_fence_gate": {
+      "burn_time": 300
+    },
+    "minestuck:doom_aspect_ladder": {
+      "burn_time": 300
+    },
+    "minestuck:doom_aspect_pressure_plate": {
+      "burn_time": 300
+    },
+    "minestuck:doom_aspect_slab": {
+      "burn_time": 150
+    },
+    "minestuck:doom_aspect_stairs": {
+      "burn_time": 300
+    },
+    "minestuck:doom_aspect_trapdoor": {
+      "burn_time": 300
+    },
+    "minestuck:end_bookshelf": {
+      "burn_time": 300
+    },
+    "minestuck:end_button": {
+      "burn_time": 100
+    },
+    "minestuck:end_door": {
+      "burn_time": 200
+    },
+    "minestuck:end_fence": {
+      "burn_time": 300
+    },
+    "minestuck:end_fence_gate": {
+      "burn_time": 300
+    },
+    "minestuck:end_ladder": {
+      "burn_time": 300
+    },
+    "minestuck:end_planks_slab": {
+      "burn_time": 150
+    },
+    "minestuck:end_planks_stairs": {
+      "burn_time": 300
+    },
+    "minestuck:end_pressure_plate": {
+      "burn_time": 300
+    },
+    "minestuck:end_trapdoor": {
+      "burn_time": 300
+    },
+    "minestuck:frost_bookshelf": {
+      "burn_time": 300
+    },
+    "minestuck:frost_button": {
+      "burn_time": 100
+    },
+    "minestuck:frost_door": {
+      "burn_time": 200
+    },
+    "minestuck:frost_fence": {
+      "burn_time": 300
+    },
+    "minestuck:frost_fence_gate": {
+      "burn_time": 300
+    },
+    "minestuck:frost_ladder": {
+      "burn_time": 300
+    },
+    "minestuck:frost_pressure_plate": {
+      "burn_time": 300
+    },
+    "minestuck:frost_slab": {
+      "burn_time": 150
+    },
+    "minestuck:frost_stairs": {
+      "burn_time": 300
+    },
+    "minestuck:frost_trapdoor": {
+      "burn_time": 300
+    },
+    "minestuck:glowing_bookshelf": {
+      "burn_time": 300
+    },
+    "minestuck:glowing_button": {
+      "burn_time": 100
+    },
+    "minestuck:glowing_door": {
+      "burn_time": 200
+    },
+    "minestuck:glowing_fence": {
+      "burn_time": 300
+    },
+    "minestuck:glowing_fence_gate": {
+      "burn_time": 300
+    },
+    "minestuck:glowing_ladder": {
+      "burn_time": 300
+    },
+    "minestuck:glowing_pressure_plate": {
+      "burn_time": 300
+    },
+    "minestuck:glowing_slab": {
+      "burn_time": 150
+    },
+    "minestuck:glowing_stairs": {
+      "burn_time": 300
+    },
+    "minestuck:glowing_trapdoor": {
+      "burn_time": 300
+    },
+    "minestuck:heart_aspect_bookshelf": {
+      "burn_time": 300
+    },
+    "minestuck:heart_aspect_button": {
+      "burn_time": 100
+    },
+    "minestuck:heart_aspect_carved_planks": {
+      "burn_time": 300
+    },
+    "minestuck:heart_aspect_door": {
+      "burn_time": 200
+    },
+    "minestuck:heart_aspect_fence": {
+      "burn_time": 300
+    },
+    "minestuck:heart_aspect_fence_gate": {
+      "burn_time": 300
+    },
+    "minestuck:heart_aspect_ladder": {
+      "burn_time": 300
+    },
+    "minestuck:heart_aspect_pressure_plate": {
+      "burn_time": 300
+    },
+    "minestuck:heart_aspect_slab": {
+      "burn_time": 150
+    },
+    "minestuck:heart_aspect_stairs": {
+      "burn_time": 300
+    },
+    "minestuck:heart_aspect_trapdoor": {
+      "burn_time": 300
+    },
+    "minestuck:hope_aspect_bookshelf": {
+      "burn_time": 300
+    },
+    "minestuck:hope_aspect_button": {
+      "burn_time": 100
+    },
+    "minestuck:hope_aspect_carved_planks": {
+      "burn_time": 300
+    },
+    "minestuck:hope_aspect_door": {
+      "burn_time": 200
+    },
+    "minestuck:hope_aspect_fence": {
+      "burn_time": 300
+    },
+    "minestuck:hope_aspect_fence_gate": {
+      "burn_time": 300
+    },
+    "minestuck:hope_aspect_ladder": {
+      "burn_time": 300
+    },
+    "minestuck:hope_aspect_pressure_plate": {
+      "burn_time": 300
+    },
+    "minestuck:hope_aspect_slab": {
+      "burn_time": 150
+    },
+    "minestuck:hope_aspect_stairs": {
+      "burn_time": 300
+    },
+    "minestuck:hope_aspect_trapdoor": {
+      "burn_time": 300
+    },
+    "minestuck:life_aspect_bookshelf": {
+      "burn_time": 300
+    },
+    "minestuck:life_aspect_button": {
+      "burn_time": 100
+    },
+    "minestuck:life_aspect_carved_planks": {
+      "burn_time": 300
+    },
+    "minestuck:life_aspect_door": {
+      "burn_time": 200
+    },
+    "minestuck:life_aspect_fence": {
+      "burn_time": 300
+    },
+    "minestuck:life_aspect_fence_gate": {
+      "burn_time": 300
+    },
+    "minestuck:life_aspect_ladder": {
+      "burn_time": 300
+    },
+    "minestuck:life_aspect_pressure_plate": {
+      "burn_time": 300
+    },
+    "minestuck:life_aspect_slab": {
+      "burn_time": 150
+    },
+    "minestuck:life_aspect_stairs": {
+      "burn_time": 300
+    },
+    "minestuck:life_aspect_trapdoor": {
+      "burn_time": 300
+    },
+    "minestuck:light_aspect_bookshelf": {
+      "burn_time": 300
+    },
+    "minestuck:light_aspect_button": {
+      "burn_time": 100
+    },
+    "minestuck:light_aspect_carved_planks": {
+      "burn_time": 300
+    },
+    "minestuck:light_aspect_door": {
+      "burn_time": 200
+    },
+    "minestuck:light_aspect_fence": {
+      "burn_time": 300
+    },
+    "minestuck:light_aspect_fence_gate": {
+      "burn_time": 300
+    },
+    "minestuck:light_aspect_ladder": {
+      "burn_time": 300
+    },
+    "minestuck:light_aspect_pressure_plate": {
+      "burn_time": 300
+    },
+    "minestuck:light_aspect_slab": {
+      "burn_time": 150
+    },
+    "minestuck:light_aspect_stairs": {
+      "burn_time": 300
+    },
+    "minestuck:light_aspect_trapdoor": {
+      "burn_time": 300
+    },
+    "minestuck:mind_aspect_bookshelf": {
+      "burn_time": 300
+    },
+    "minestuck:mind_aspect_button": {
+      "burn_time": 100
+    },
+    "minestuck:mind_aspect_carved_planks": {
+      "burn_time": 300
+    },
+    "minestuck:mind_aspect_door": {
+      "burn_time": 200
+    },
+    "minestuck:mind_aspect_fence": {
+      "burn_time": 300
+    },
+    "minestuck:mind_aspect_fence_gate": {
+      "burn_time": 300
+    },
+    "minestuck:mind_aspect_ladder": {
+      "burn_time": 300
+    },
+    "minestuck:mind_aspect_pressure_plate": {
+      "burn_time": 300
+    },
+    "minestuck:mind_aspect_slab": {
+      "burn_time": 150
+    },
+    "minestuck:mind_aspect_stairs": {
+      "burn_time": 300
+    },
+    "minestuck:mind_aspect_trapdoor": {
+      "burn_time": 300
+    },
+    "minestuck:rage_aspect_bookshelf": {
+      "burn_time": 300
+    },
+    "minestuck:rage_aspect_button": {
+      "burn_time": 100
+    },
+    "minestuck:rage_aspect_carved_planks": {
+      "burn_time": 300
+    },
+    "minestuck:rage_aspect_door": {
+      "burn_time": 200
+    },
+    "minestuck:rage_aspect_fence": {
+      "burn_time": 300
+    },
+    "minestuck:rage_aspect_fence_gate": {
+      "burn_time": 300
+    },
+    "minestuck:rage_aspect_ladder": {
+      "burn_time": 300
+    },
+    "minestuck:rage_aspect_pressure_plate": {
+      "burn_time": 300
+    },
+    "minestuck:rage_aspect_slab": {
+      "burn_time": 150
+    },
+    "minestuck:rage_aspect_stairs": {
+      "burn_time": 300
+    },
+    "minestuck:rage_aspect_trapdoor": {
+      "burn_time": 300
+    },
+    "minestuck:rainbow_bookshelf": {
+      "burn_time": 300
+    },
+    "minestuck:rainbow_button": {
+      "burn_time": 100
+    },
+    "minestuck:rainbow_door": {
+      "burn_time": 200
+    },
+    "minestuck:rainbow_fence": {
+      "burn_time": 300
+    },
+    "minestuck:rainbow_fence_gate": {
+      "burn_time": 300
+    },
+    "minestuck:rainbow_ladder": {
+      "burn_time": 300
+    },
+    "minestuck:rainbow_planks_slab": {
+      "burn_time": 150
+    },
+    "minestuck:rainbow_planks_stairs": {
+      "burn_time": 300
+    },
+    "minestuck:rainbow_pressure_plate": {
+      "burn_time": 300
+    },
+    "minestuck:rainbow_trapdoor": {
+      "burn_time": 300
+    },
+    "minestuck:shadewood_bookshelf": {
+      "burn_time": 300
+    },
+    "minestuck:shadewood_button": {
+      "burn_time": 100
+    },
+    "minestuck:shadewood_door": {
+      "burn_time": 200
+    },
+    "minestuck:shadewood_fence": {
+      "burn_time": 300
+    },
+    "minestuck:shadewood_fence_gate": {
+      "burn_time": 300
+    },
+    "minestuck:shadewood_ladder": {
+      "burn_time": 300
+    },
+    "minestuck:shadewood_pressure_plate": {
+      "burn_time": 300
+    },
+    "minestuck:shadewood_slab": {
+      "burn_time": 150
+    },
+    "minestuck:shadewood_stairs": {
+      "burn_time": 300
+    },
+    "minestuck:shadewood_trapdoor": {
+      "burn_time": 300
+    },
+    "minestuck:space_aspect_bookshelf": {
+      "burn_time": 300
+    },
+    "minestuck:space_aspect_button": {
+      "burn_time": 100
+    },
+    "minestuck:space_aspect_carved_planks": {
+      "burn_time": 300
+    },
+    "minestuck:space_aspect_door": {
+      "burn_time": 200
+    },
+    "minestuck:space_aspect_fence": {
+      "burn_time": 300
+    },
+    "minestuck:space_aspect_fence_gate": {
+      "burn_time": 300
+    },
+    "minestuck:space_aspect_ladder": {
+      "burn_time": 300
+    },
+    "minestuck:space_aspect_pressure_plate": {
+      "burn_time": 300
+    },
+    "minestuck:space_aspect_slab": {
+      "burn_time": 150
+    },
+    "minestuck:space_aspect_stairs": {
+      "burn_time": 300
+    },
+    "minestuck:space_aspect_trapdoor": {
+      "burn_time": 300
+    },
+    "minestuck:time_aspect_bookshelf": {
+      "burn_time": 300
+    },
+    "minestuck:time_aspect_button": {
+      "burn_time": 100
+    },
+    "minestuck:time_aspect_carved_planks": {
+      "burn_time": 300
+    },
+    "minestuck:time_aspect_door": {
+      "burn_time": 200
+    },
+    "minestuck:time_aspect_fence": {
+      "burn_time": 300
+    },
+    "minestuck:time_aspect_fence_gate": {
+      "burn_time": 300
+    },
+    "minestuck:time_aspect_ladder": {
+      "burn_time": 300
+    },
+    "minestuck:time_aspect_pressure_plate": {
+      "burn_time": 300
+    },
+    "minestuck:time_aspect_slab": {
+      "burn_time": 150
+    },
+    "minestuck:time_aspect_stairs": {
+      "burn_time": 300
+    },
+    "minestuck:time_aspect_trapdoor": {
+      "burn_time": 300
+    },
+    "minestuck:void_aspect_bookshelf": {
+      "burn_time": 300
+    },
+    "minestuck:void_aspect_button": {
+      "burn_time": 100
+    },
+    "minestuck:void_aspect_carved_planks": {
+      "burn_time": 300
+    },
+    "minestuck:void_aspect_door": {
+      "burn_time": 200
+    },
+    "minestuck:void_aspect_fence": {
+      "burn_time": 300
+    },
+    "minestuck:void_aspect_fence_gate": {
+      "burn_time": 300
+    },
+    "minestuck:void_aspect_ladder": {
+      "burn_time": 300
+    },
+    "minestuck:void_aspect_pressure_plate": {
+      "burn_time": 300
+    },
+    "minestuck:void_aspect_slab": {
+      "burn_time": 150
+    },
+    "minestuck:void_aspect_stairs": {
+      "burn_time": 300
+    },
+    "minestuck:void_aspect_trapdoor": {
+      "burn_time": 300
+    }
+  }
+}

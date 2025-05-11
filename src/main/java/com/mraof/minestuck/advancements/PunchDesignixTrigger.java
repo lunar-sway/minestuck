@@ -9,7 +9,6 @@ import net.minecraft.advancements.critereon.EntityPredicate;
 import net.minecraft.advancements.critereon.ItemPredicate;
 import net.minecraft.advancements.critereon.SimpleCriterionTrigger;
 import net.minecraft.server.level.ServerPlayer;
-import net.minecraft.util.ExtraCodecs;
 import net.minecraft.world.item.ItemStack;
 
 import javax.annotation.ParametersAreNonnullByDefault;
@@ -35,10 +34,10 @@ public class PunchDesignixTrigger extends SimpleCriterionTrigger<PunchDesignixTr
 						   Optional<ItemPredicate> target, Optional<ItemPredicate> output) implements SimpleCriterionTrigger.SimpleInstance
 	{
 		private static final Codec<Instance> CODEC = RecordCodecBuilder.create(instance -> instance.group(
-				ExtraCodecs.strictOptionalField(EntityPredicate.ADVANCEMENT_CODEC, "player").forGetter(Instance::player),
-				ExtraCodecs.strictOptionalField(ItemPredicate.CODEC, "input").forGetter(Instance::input),
-				ExtraCodecs.strictOptionalField(ItemPredicate.CODEC, "target").forGetter(Instance::target),
-				ExtraCodecs.strictOptionalField(ItemPredicate.CODEC, "output").forGetter(Instance::output)
+				EntityPredicate.ADVANCEMENT_CODEC.optionalFieldOf("player").forGetter(Instance::player),
+				ItemPredicate.CODEC.optionalFieldOf("input").forGetter(Instance::input),
+				ItemPredicate.CODEC.optionalFieldOf("target").forGetter(Instance::target),
+				ItemPredicate.CODEC.optionalFieldOf("output").forGetter(Instance::output)
 		).apply(instance, Instance::new));
 		
 		public static Criterion<Instance> any()
@@ -53,9 +52,9 @@ public class PunchDesignixTrigger extends SimpleCriterionTrigger<PunchDesignixTr
 		
 		public boolean test(ItemStack input, ItemStack target, ItemStack output)
 		{
-			return (this.input.isEmpty() || this.input.get().matches(input))
-					&& (this.target.isEmpty() || this.target.get().matches(target))
-					&& (this.output.isEmpty() || this.output.get().matches(output));
+			return (this.input.isEmpty() || this.input.get().test(input))
+					&& (this.target.isEmpty() || this.target.get().test(target))
+					&& (this.output.isEmpty() || this.output.get().test(output));
 		}
 	}
 }

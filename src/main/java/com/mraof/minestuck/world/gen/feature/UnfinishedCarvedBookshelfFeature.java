@@ -14,7 +14,7 @@ import net.minecraft.world.level.levelgen.structure.templatesystem.StructureTemp
 
 public class UnfinishedCarvedBookshelfFeature extends Feature<NoneFeatureConfiguration>
 {
-	private static final ResourceLocation UNFINISHED_CARVED_BOOKSHELF = new ResourceLocation(Minestuck.MOD_ID, "unfinished_carved_bookshelf");
+	private static final ResourceLocation UNFINISHED_CARVED_BOOKSHELF = ResourceLocation.fromNamespaceAndPath(Minestuck.MOD_ID, "unfinished_carved_bookshelf");
 	
 	public UnfinishedCarvedBookshelfFeature(Codec<NoneFeatureConfiguration> codec)
 	{

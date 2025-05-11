@@ -1,0 +1,11 @@
+{
+  "type": "minestuck:combination",
+  "input1": {
+    "item": "minecraft:dirt"
+  },
+  "input2": {
+    "item": "minecraft:blue_dye"
+  },
+  "mode": "or",
+  "output": "minestuck:blue_dirt"
+}

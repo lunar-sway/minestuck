@@ -3,7 +3,7 @@ package com.mraof.minestuck;
 import com.mraof.minestuck.computer.editmode.DeployList;
 import net.minecraft.server.MinecraftServer;
 import net.neoforged.bus.api.SubscribeEvent;
-import net.neoforged.fml.common.Mod;
+import net.neoforged.fml.common.EventBusSubscriber;
 import net.neoforged.fml.event.config.ModConfigEvent;
 import net.neoforged.neoforge.common.ModConfigSpec;
 import net.neoforged.neoforge.common.ModConfigSpec.*;
@@ -13,7 +13,7 @@ import org.apache.commons.lang3.tuple.Pair;
 import java.util.ArrayList;
 import java.util.List;
 
-@Mod.EventBusSubscriber(modid = Minestuck.MOD_ID, bus = Mod.EventBusSubscriber.Bus.MOD)
+@EventBusSubscriber(modid = Minestuck.MOD_ID, bus = EventBusSubscriber.Bus.MOD)
 public class MinestuckConfig
 {
 	//Uses the singleton design pattern, much like the forge config
@@ -93,7 +93,6 @@ public class MinestuckConfig
 		//Mechanics
 		public final BooleanValue hardMode;
 		public final BooleanValue echeladderProgress;
-		public final BooleanValue aspectEffects;
 		public final BooleanValue playerSelectedTitle;
 		public final IntValue preEntryRungLimit;
 		public final BooleanValue rungHealthOnRespawn;
@@ -130,8 +129,6 @@ public class MinestuckConfig
 					.defineInRange("preEntryRungLimit", 6, 0, 49);
 			rungHealthOnRespawn = builder.comment("If true, players will respawn with full health, rung bonuses included. If false, health will be left alone (typically meaning that you respawn with 10 hearts)")
 					.define("rungHealthOnRespawn", true);
-			aspectEffects = builder.comment("If this is true, players will gain certain potion effects once they reach a certain rung based on their aspect.")
-					.define("aspectEffects", true);
 			playerSelectedTitle = builder.comment("Enable this to let players select their own title. They will however not be able to select the Lord or Muse as class.")
 					.define("playerSelectedTitle", true);
 			dialogueRenewalSpeed = builder.comment("Determines how quickly consort dialogue and store stocks are renewed.")

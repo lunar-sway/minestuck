@@ -21,17 +21,16 @@ import net.minecraft.world.level.Level;
 import net.neoforged.neoforge.entity.PartEntity;
 import org.joml.Vector3d;
 import software.bernie.geckolib.animatable.GeoEntity;
-import software.bernie.geckolib.core.animation.*;
-import software.bernie.geckolib.core.object.PlayState;
+import software.bernie.geckolib.animation.*;
 
 import javax.annotation.ParametersAreNonnullByDefault;
 
 @ParametersAreNonnullByDefault
 public class BasiliskEntity extends UnderlingEntity implements GeoEntity
 {
-	public static final PhasedMobAnimation TAIL_SWING_PROPERTIES = new PhasedMobAnimation(new MobAnimation(MobAnimation.Action.SWING, 12, true, false), 2, 4, 6);
-	public static final PhasedMobAnimation BITE_PROPERTIES = new PhasedMobAnimation(new MobAnimation(MobAnimation.Action.BITE, 10, true, false), 2, 4, 5);
-	public static final PhasedMobAnimation SHOOT_PROPERTIES = new PhasedMobAnimation(new MobAnimation(MobAnimation.Action.SHOOT, 14, true, true), 1, 4, 6);
+	public static final PhasedMobAnimation TAIL_SWING_PROPERTIES = new PhasedMobAnimation(new MobAnimation(MobAnimation.Action.SWING, 12, true, false), 1, 2, 3, 6);
+	public static final PhasedMobAnimation BITE_PROPERTIES = new PhasedMobAnimation(new MobAnimation(MobAnimation.Action.BITE, 10, true, false), 1, 2, 3, 5);
+	public static final PhasedMobAnimation SHOOT_PROPERTIES = new PhasedMobAnimation(new MobAnimation(MobAnimation.Action.SHOOT, 14, true, true), 1, 4, 6, 7);
 	private static final RawAnimation RUN_ANIMATION = RawAnimation.begin().thenLoop("run");
 	private static final RawAnimation WALK_ANIMATION = RawAnimation.begin().thenLoop("walk");
 	private static final RawAnimation DIE_ANIMATION = RawAnimation.begin().then("die", Animation.LoopType.PLAY_ONCE);
@@ -79,7 +78,7 @@ public class BasiliskEntity extends UnderlingEntity implements GeoEntity
 	{
 		return UnderlingEntity.underlingAttributes().add(Attributes.MAX_HEALTH, 85)
 				.add(Attributes.KNOCKBACK_RESISTANCE, 0.6).add(Attributes.MOVEMENT_SPEED, 0.25)
-				.add(Attributes.ATTACK_DAMAGE, 6);
+				.add(Attributes.ATTACK_DAMAGE, 6).add(Attributes.ATTACK_SPEED, 0.5);
 	}
 	
 	@Override
@@ -126,8 +125,8 @@ public class BasiliskEntity extends UnderlingEntity implements GeoEntity
 	protected void onGristTypeUpdated(GristType type)
 	{
 		super.onGristTypeUpdated(type);
-		applyGristModifier(Attributes.MAX_HEALTH, 20 * type.getPower(), AttributeModifier.Operation.ADDITION);
-		applyGristModifier(Attributes.ATTACK_DAMAGE, 2.7 * type.getPower(), AttributeModifier.Operation.ADDITION);
+		applyGristModifier(Attributes.MAX_HEALTH, 20 * type.getPower(), AttributeModifier.Operation.ADD_VALUE);
+		applyGristModifier(Attributes.ATTACK_DAMAGE, 2.7 * type.getPower(), AttributeModifier.Operation.ADD_VALUE);
 		this.xpReward = (int) (6 * type.getPower() + 4);
 	}
 	
@@ -223,7 +222,8 @@ public class BasiliskEntity extends UnderlingEntity implements GeoEntity
 	public void registerControllers(AnimatableManager.ControllerRegistrar controllers)
 	{
 		controllers.add(new AnimationController<>(this, "idleAnimation", BasiliskEntity::idleAnimation));
-		controllers.add(new AnimationController<>(this, "walkAnimation", BasiliskEntity::walkAnimation).setAnimationSpeed(0.5));
+		controllers.add(new AnimationController<>(this, "walkAnimation", BasiliskEntity::walkAnimation)
+				.setAnimationSpeedHandler(entity -> MobAnimation.getAttributeAffectedSpeed(entity, Attributes.MOVEMENT_SPEED) * 3.5));
 		controllers.add(new AnimationController<>(this, "deathAnimation", BasiliskEntity::deathAnimation));
 		controllers.add(new AnimationController<>(this, "attackAnimation", BasiliskEntity::attackAnimation));
 	}
@@ -235,7 +235,7 @@ public class BasiliskEntity extends UnderlingEntity implements GeoEntity
 	
 	private static PlayState walkAnimation(AnimationState<BasiliskEntity> state)
 	{
-		if(!state.isMoving())
+		if(!MobAnimation.isEntityMovingHorizontally(state.getAnimatable()))
 		{
 			return PlayState.STOP;
 		}
@@ -243,12 +243,11 @@ public class BasiliskEntity extends UnderlingEntity implements GeoEntity
 		if(state.getAnimatable().isAggressive())
 		{
 			state.getController().setAnimation(RUN_ANIMATION);
-			return PlayState.CONTINUE;
 		} else
 		{
 			state.getController().setAnimation(WALK_ANIMATION);
-			return PlayState.CONTINUE;
 		}
+		return PlayState.CONTINUE;
 	}
 	
 	private static PlayState deathAnimation(AnimationState<BasiliskEntity> state)
@@ -280,6 +279,7 @@ public class BasiliskEntity extends UnderlingEntity implements GeoEntity
 		}
 		
 		state.getController().forceAnimationReset();
+		state.getController().setAnimationSpeed(MobAnimation.getAttributeAffectedSpeed(state.getAnimatable(), Attributes.ATTACK_SPEED)); //Setting animation speed on stop so it doesn't jump around when attack speed changes mid-attack
 		return PlayState.STOP;
 	}
 }

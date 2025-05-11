@@ -1,0 +1,11 @@
+{
+  "type": "minestuck:combination",
+  "input1": {
+    "item": "minestuck:item_magnet"
+  },
+  "input2": {
+    "item": "minecraft:chest"
+  },
+  "mode": "or",
+  "output": "minestuck:grist_collector"
+}

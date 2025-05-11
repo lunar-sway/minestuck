@@ -1,5 +1,8 @@
 {
   "node": {
-    "message": "minestuck.dialogue.consort.splinters.2"
+    "animation": {},
+    "gui": "minestuck:textures/gui/dialogue/dialogue.png",
+    "message": "minestuck.dialogue.consort.splinters.2",
+    "responses": []
   }
 }

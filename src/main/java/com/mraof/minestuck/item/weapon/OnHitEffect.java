@@ -2,12 +2,12 @@ package com.mraof.minestuck.item.weapon;
 
 import com.google.common.collect.ImmutableList;
 import com.mraof.minestuck.effects.CreativeShockEffect;
+import com.mraof.minestuck.entity.MSAttributes;
 import com.mraof.minestuck.entity.underling.UnderlingEntity;
 import com.mraof.minestuck.event.ServerEventHandler;
 import com.mraof.minestuck.item.MSItems;
 import com.mraof.minestuck.item.loot.MSLootTables;
-import com.mraof.minestuck.network.ClientMovementPacket;
-import com.mraof.minestuck.player.Echeladder;
+import com.mraof.minestuck.network.PushPlayerPacket;
 import com.mraof.minestuck.player.EnumAspect;
 import com.mraof.minestuck.player.Title;
 import com.mraof.minestuck.util.MSDamageSources;
@@ -24,18 +24,17 @@ import net.minecraft.sounds.SoundEvent;
 import net.minecraft.sounds.SoundEvents;
 import net.minecraft.sounds.SoundSource;
 import net.minecraft.util.Mth;
-import net.minecraft.world.InteractionHand;
 import net.minecraft.world.damagesource.DamageSource;
 import net.minecraft.world.effect.MobEffectInstance;
 import net.minecraft.world.effect.MobEffects;
 import net.minecraft.world.entity.EntityType;
+import net.minecraft.world.entity.EquipmentSlot;
 import net.minecraft.world.entity.LivingEntity;
 import net.minecraft.world.entity.ai.attributes.Attributes;
 import net.minecraft.world.entity.decoration.ArmorStand;
 import net.minecraft.world.entity.item.ItemEntity;
 import net.minecraft.world.entity.player.Player;
 import net.minecraft.world.item.ItemStack;
-import net.minecraft.world.item.enchantment.EnchantmentHelper;
 import net.minecraft.world.level.Level;
 import net.minecraft.world.level.storage.loot.LootParams;
 import net.minecraft.world.level.storage.loot.LootTable;
@@ -78,7 +77,7 @@ public interface OnHitEffect
 		{
 			target.playSound(SoundEvents.GLASS_BREAK, 1.5F, 1F);
 			target.hurt(player.damageSources().playerAttack(player), 2);
-			stack.hurtAndBreak(2, attacker, entity -> entity.broadcastBreakEvent(InteractionHand.MAIN_HAND));
+			stack.hurtAndBreak(2, attacker, EquipmentSlot.MAINHAND);
 			
 			ItemEntity shardEntity = new ItemEntity(target.level(), target.getX(), target.getY(), target.getZ(), new ItemStack(MSItems.ICE_SHARD.get(), 1));
 			target.level().addFreshEntity(shardEntity);
@@ -88,7 +87,7 @@ public interface OnHitEffect
 		if(!attacker.level().isClientSide && target.getHealth() <= 0 && attacker.getRandom().nextFloat() <= 0.20)
 		{
 			ServerLevel serverWorld = (ServerLevel) target.level();
-			LootTable lootTable = serverWorld.getServer().getLootData().getLootTable(MSLootTables.KUNDLER_SUPRISES);
+			LootTable lootTable = serverWorld.getServer().reloadableRegistries().getLootTable(MSLootTables.KUNDLER_SUPRISES);
 			List<ItemStack> loot = lootTable.getRandomItems(new LootParams.Builder(serverWorld).create(LootContextParamSets.EMPTY));
 			if(!loot.isEmpty())
 			{
@@ -170,8 +169,8 @@ public interface OnHitEffect
 			boolean lastHitWasCrit = ServerEventHandler.wasLastHitCrit(playerAttacker);
 			if(slowMoving && !lastHitWasCrit && playerAttacker.onGround())
 			{
-				float attackDamage = (float) playerAttacker.getAttribute(Attributes.ATTACK_DAMAGE).getValue();
-				float sweepEnchantMod = 1.0F + EnchantmentHelper.getSweepingDamageRatio(playerAttacker) * attackDamage;
+				float attackDamage = (float) playerAttacker.getAttributeValue(Attributes.ATTACK_DAMAGE);
+				float sweepEnchantMod = 1.0F + (float) playerAttacker.getAttributeValue(Attributes.SWEEPING_DAMAGE_RATIO) * attackDamage;
 				
 				for(LivingEntity livingEntity : playerAttacker.level().getEntitiesOfClass(LivingEntity.class, target.getBoundingBox().inflate(1.0D, 0.25D, 1.0D)))
 				{
@@ -243,7 +242,7 @@ public interface OnHitEffect
 	
 	static OnHitEffect setOnFire(int duration)
 	{
-		return (itemStack, target, attacker) -> target.setSecondsOnFire(duration);
+		return (itemStack, target, attacker) -> target.igniteForSeconds(duration);
 	}
 	
 	static OnHitEffect armorBypassingDamageMod(float additionalDamage, EnumAspect aspect)
@@ -257,7 +256,7 @@ public interface OnHitEffect
 				
 				if(target instanceof UnderlingEntity)
 				{
-					float modifier = (float) (Echeladder.get(serverPlayer).getUnderlingDamageModifier());
+					float modifier = (float) serverPlayer.getAttributeValue(MSAttributes.UNDERLING_DAMAGE_MODIFIER);
 					
 					if(isMissingAspectBonus)
 						modifier /= 1.2F;
@@ -356,8 +355,8 @@ public interface OnHitEffect
 			
 			if(attacker instanceof ServerPlayer player)
 			{
-				ClientMovementPacket packet = ClientMovementPacket.createPacket(attackerVec);
-				PacketDistributor.PLAYER.with(player).send(packet);
+				PushPlayerPacket packet = PushPlayerPacket.createPacket(attackerVec);
+				PacketDistributor.sendToPlayer(player, packet);
 			}
 		};
 	}
@@ -392,8 +391,8 @@ public interface OnHitEffect
 					|| playerAttacker.getAttackStrengthScale(0) < 1)
 				return;
 			
-			float attackDamage = (float) playerAttacker.getAttribute(Attributes.ATTACK_DAMAGE).getValue();
-			float sweepEnchantMod = 1.0F + EnchantmentHelper.getSweepingDamageRatio(playerAttacker) * attackDamage;
+			float attackDamage = (float) playerAttacker.getAttributeValue(Attributes.ATTACK_DAMAGE);
+			float sweepEnchantMod = 1.0F + (float) playerAttacker.getAttributeValue(Attributes.SWEEPING_DAMAGE_RATIO) * attackDamage;
 			
 			for(LivingEntity livingEntity : playerAttacker.level().getEntitiesOfClass(
 					LivingEntity.class, target.getBoundingBox().inflate(2.0D, 0.25D, 2.0D)))

@@ -2,14 +2,14 @@ package com.mraof.minestuck.client.gui;
 
 import com.mojang.blaze3d.systems.RenderSystem;
 import com.mraof.minestuck.Minestuck;
-import com.mraof.minestuck.alchemy.AlchemyHelper;
 import com.mraof.minestuck.api.alchemy.GristSet;
 import com.mraof.minestuck.api.alchemy.recipe.GristCostRecipe;
-import com.mraof.minestuck.block.MSBlocks;
 import com.mraof.minestuck.blockentity.machine.MiniAlchemiterBlockEntity;
 import com.mraof.minestuck.client.util.GuiUtil;
 import com.mraof.minestuck.inventory.MiniAlchemiterMenu;
 import com.mraof.minestuck.item.MSItems;
+import com.mraof.minestuck.item.components.EncodedItemComponent;
+import com.mraof.minestuck.item.components.MSItemComponents;
 import net.minecraft.client.gui.GuiGraphics;
 import net.minecraft.network.chat.Component;
 import net.minecraft.resources.ResourceLocation;
@@ -25,8 +25,8 @@ import java.util.Optional;
 public class MiniAlchemiterScreen extends MachineScreen<MiniAlchemiterMenu>
 {
 	
-	private static final ResourceLocation BACKGROUND_TEXTURE = new ResourceLocation(Minestuck.MOD_ID, "textures/gui/alchemiter.png");
-	private static final ResourceLocation PROGRESS_BAR_TEXTURE = new ResourceLocation(Minestuck.MOD_ID, "textures/gui/progress/alchemiter.png");
+	private static final ResourceLocation BACKGROUND_TEXTURE = ResourceLocation.fromNamespaceAndPath(Minestuck.MOD_ID, "textures/gui/alchemiter.png");
+	private static final ResourceLocation PROGRESS_BAR_TEXTURE = ResourceLocation.fromNamespaceAndPath(Minestuck.MOD_ID, "textures/gui/progress/alchemiter.png");
 	private static final int PROGRESS_BAR_X = 54;
 	private static final int PROGRESS_BAR_Y = 23;
 	private static final int PROGRESS_BAR_WIDTH = 71;
@@ -55,10 +55,7 @@ public class MiniAlchemiterScreen extends MachineScreen<MiniAlchemiterMenu>
 		if (menu.getSlot(0).hasItem())
 		{
 			//Render grist requirements
-			ItemStack stack;
-			if(!AlchemyHelper.hasDecodedItem(menu.getSlot(0).getItem()))
-				stack = new ItemStack(MSBlocks.GENERIC_OBJECT.get());
-			else stack = AlchemyHelper.getDecodedItem(menu.getSlot(0).getItem());
+			ItemStack stack = EncodedItemComponent.getEncodedOrBlank(menu.getSlot(0).getItem());
 			
 			Optional<GristCostRecipe> recipe = GristCostRecipe.findRecipeForItem(stack, minecraft.level);
 			GristSet set = recipe.map(recipe1 -> recipe1.getGristCost(stack, menu.getWildcardType(), false)).orElse(null);
@@ -98,11 +95,16 @@ public class MiniAlchemiterScreen extends MachineScreen<MiniAlchemiterMenu>
 	{
 		Objects.requireNonNull(minecraft);
 		boolean b = super.mouseClicked(mouseX, mouseY, button);
-		if (button == GLFW.GLFW_MOUSE_BUTTON_1 && menu.getCarried().isEmpty() && AlchemyHelper.getDecodedItem(menu.getSlot(0).getItem()).getItem() == MSItems.CAPTCHA_CARD.get()
+		if (button == GLFW.GLFW_MOUSE_BUTTON_1 && menu.getCarried().isEmpty()
 				&& mouseX >= leftPos + 9 && mouseX < leftPos + 167 && mouseY >= topPos + 45 && mouseY < topPos + 70)
 		{
-			minecraft.pushGuiLayer(new GristSelectorScreen(this.getMenu().machinePos));
-			return true;
+			//FIXME Handle wildcard grist costs instead of hardcoding to captcha card
+			EncodedItemComponent encodedItemComponent = menu.getSlot(0).getItem().get(MSItemComponents.ENCODED_ITEM);
+			if(encodedItemComponent != null && encodedItemComponent.item() == MSItems.CAPTCHA_CARD.get())
+			{
+				minecraft.pushGuiLayer(new GristSelectorScreen(this.getMenu().machinePos));
+				return true;
+			}
 		}
 		return b;
 	}

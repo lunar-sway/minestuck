@@ -10,7 +10,6 @@ import net.minecraft.client.renderer.entity.EntityRenderer;
 import net.minecraft.client.renderer.entity.EntityRendererProvider;
 import net.minecraft.client.renderer.texture.OverlayTexture;
 import net.minecraft.resources.ResourceLocation;
-import org.joml.Matrix3f;
 import org.joml.Matrix4f;
 
 public class VitalityGelRenderer extends EntityRenderer<VitalityGelEntity>
@@ -33,16 +32,15 @@ public class VitalityGelRenderer extends EntityRenderer<VitalityGelEntity>
 		poseStack.mulPose(Axis.YP.rotationDegrees(180.0F));
 		PoseStack.Pose matrixstack = poseStack.last();
 		Matrix4f matrix4f = matrixstack.pose();
-		Matrix3f matrix3f = matrixstack.normal();
 		VertexConsumer ivertexbuilder = bufferIn.getBuffer(RenderType.entityCutoutNoCull(this.getTextureLocation(gel)));
-		ivertexbuilder.vertex(matrix4f, 0.0F - 0.5F, 0 - 0.25F, 0.0F).color(255, 255, 255, 255).uv(0, 1)
-				.overlayCoords(OverlayTexture.NO_OVERLAY).uv2(packedLightIn).normal(matrix3f, 0.0F, 1.0F, 0.0F).endVertex();
-		ivertexbuilder.vertex(matrix4f, 1.0F - 0.5F, 0 - 0.25F, 0.0F).color(255, 255, 255, 255).uv(1, 1)
-				.overlayCoords(OverlayTexture.NO_OVERLAY).uv2(packedLightIn).normal(matrix3f, 0.0F, 1.0F, 0.0F).endVertex();
-		ivertexbuilder.vertex(matrix4f, 1.0F - 0.5F, 1 - 0.25F, 0.0F).color(255, 255, 255, 255).uv(1, 0)
-				.overlayCoords(OverlayTexture.NO_OVERLAY).uv2(packedLightIn).normal(matrix3f, 0.0F, 1.0F, 0.0F).endVertex();
-		ivertexbuilder.vertex(matrix4f, 0.0F - 0.5F, 1 - 0.25F, 0.0F).color(255, 255, 255, 255).uv(0, 0)
-				.overlayCoords(OverlayTexture.NO_OVERLAY).uv2(packedLightIn).normal(matrix3f, 0.0F, 1.0F, 0.0F).endVertex();
+		ivertexbuilder.addVertex(matrix4f, 0.0F - 0.5F, 0 - 0.25F, 0.0F).setColor(255, 255, 255, 255).setUv(0, 1)
+				.setOverlay(OverlayTexture.NO_OVERLAY).setLight(packedLightIn).setNormal(matrixstack, 0.0F, 1.0F, 0.0F);
+		ivertexbuilder.addVertex(matrix4f, 1.0F - 0.5F, 0 - 0.25F, 0.0F).setColor(255, 255, 255, 255).setUv(1, 1)
+				.setOverlay(OverlayTexture.NO_OVERLAY).setLight(packedLightIn).setNormal(matrixstack, 0.0F, 1.0F, 0.0F);
+		ivertexbuilder.addVertex(matrix4f, 1.0F - 0.5F, 1 - 0.25F, 0.0F).setColor(255, 255, 255, 255).setUv(1, 0)
+				.setOverlay(OverlayTexture.NO_OVERLAY).setLight(packedLightIn).setNormal(matrixstack, 0.0F, 1.0F, 0.0F);
+		ivertexbuilder.addVertex(matrix4f, 0.0F - 0.5F, 1 - 0.25F, 0.0F).setColor(255, 255, 255, 255).setUv(0, 0)
+				.setOverlay(OverlayTexture.NO_OVERLAY).setLight(packedLightIn).setNormal(matrixstack, 0.0F, 1.0F, 0.0F);
 		poseStack.popPose();
 		super.render(gel, entityYaw, partialTicks, poseStack, bufferIn, packedLightIn);
 	}
@@ -81,7 +79,7 @@ public class VitalityGelRenderer extends EntityRenderer<VitalityGelEntity>
 	@Override
 	public ResourceLocation getTextureLocation(VitalityGelEntity entity)
 	{
-		return new ResourceLocation("minestuck", "textures/entity/vitality_gel.png");
+		return ResourceLocation.fromNamespaceAndPath("minestuck", "textures/entity/vitality_gel.png");
 	}
 
 }

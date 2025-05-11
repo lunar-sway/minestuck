@@ -2,6 +2,7 @@ package com.mraof.minestuck.world.storage;
 
 import com.mraof.minestuck.Minestuck;
 import net.minecraft.core.GlobalPos;
+import net.minecraft.core.HolderLookup;
 import net.minecraft.nbt.CompoundTag;
 import net.minecraft.nbt.NbtOps;
 import net.minecraft.nbt.Tag;
@@ -31,7 +32,7 @@ public class TransportalizerSavedData extends SavedData
 		locations = new HashMap<>();
 	}
 	
-	public static TransportalizerSavedData load(CompoundTag nbt)
+	private static TransportalizerSavedData load(CompoundTag nbt, HolderLookup.Provider registries)
 	{
 		TransportalizerSavedData data = new TransportalizerSavedData();
 		data.locations.clear();
@@ -44,7 +45,7 @@ public class TransportalizerSavedData extends SavedData
 	}
 	
 	@Override
-	public CompoundTag save(CompoundTag compound)
+	public CompoundTag save(CompoundTag compound, HolderLookup.Provider registries)
 	{
 		for(Map.Entry<String, GlobalPos> entry : locations.entrySet())
 		{

@@ -1,0 +1,53 @@
+{
+  "node": {
+    "animation": {},
+    "gui": "minestuck:textures/gui/dialogue/dialogue.png",
+    "message": "minestuck.dialogue.consort.redpop_faygo_scalemate_pyralspite.ask_drink",
+    "responses": [
+      {
+        "condition": {
+          "type": "minestuck:always_true"
+        },
+        "hide_if_failed": true,
+        "message": "minestuck.dialogue.consort.redpop_faygo_scalemate_pyralspite.ask_drink.scalemate_confused",
+        "next_dialogue": "minestuck:consort/redpop_faygo_scalemate_pyralspite/explain_scalemate",
+        "triggers": []
+      },
+      {
+        "condition": {
+          "type": "minestuck:player_item",
+          "item": "minestuck:redpop_faygo"
+        },
+        "hide_if_failed": false,
+        "message": "minestuck.dialogue.consort.redpop_faygo_scalemate_pyralspite.ask_drink.exchange",
+        "next_dialogue": {
+          "id": "minestuck:consort/redpop_faygo_scalemate_pyralspite/happy",
+          "player_message": "minestuck.dialogue.consort.redpop_faygo_scalemate_pyralspite.ask_drink.yes.reply",
+          "set_as_entrypoint": false
+        },
+        "triggers": [
+          {
+            "type": "minestuck:take_item",
+            "item": "minestuck:redpop_faygo"
+          },
+          {
+            "type": "minestuck:give_item",
+            "item": "minestuck:scalemate_pyralspite"
+          },
+          {
+            "type": "minestuck:set_dialogue",
+            "new_path": "minestuck:consort/redpop_faygo_scalemate_pyralspite/satisfied"
+          }
+        ]
+      },
+      {
+        "condition": {
+          "type": "minestuck:always_true"
+        },
+        "hide_if_failed": true,
+        "message": "minestuck.dialogue.consort.redpop_faygo_scalemate_pyralspite.ask_drink.no",
+        "triggers": []
+      }
+    ]
+  }
+}

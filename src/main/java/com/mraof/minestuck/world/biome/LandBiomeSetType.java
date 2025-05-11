@@ -2,7 +2,7 @@ package com.mraof.minestuck.world.biome;
 
 import com.mraof.minestuck.world.gen.LandChunkGenerator;
 import net.minecraft.core.registries.Registries;
-import net.minecraft.data.worldgen.BootstapContext;
+import net.minecraft.data.worldgen.BootstrapContext;
 import net.minecraft.resources.ResourceKey;
 import net.minecraft.resources.ResourceLocation;
 import net.minecraft.world.level.biome.Biome;
@@ -29,12 +29,12 @@ public final class LandBiomeSetType
 		this.hasPrecipitation = hasPrecipitation;
 		this.temperature = temperature;
 		this.downfall = downfall;
-		NORMAL = ResourceKey.create(Registries.BIOME, new ResourceLocation(mod, "land_"+name+"_normal"));
-		ROUGH = ResourceKey.create(Registries.BIOME, new ResourceLocation(mod, "land_"+name+"_rough"));
-		OCEAN = ResourceKey.create(Registries.BIOME, new ResourceLocation(mod, "land_"+name+"_ocean"));
+		NORMAL = ResourceKey.create(Registries.BIOME, ResourceLocation.fromNamespaceAndPath(mod, "land_"+name+"_normal"));
+		ROUGH = ResourceKey.create(Registries.BIOME, ResourceLocation.fromNamespaceAndPath(mod, "land_"+name+"_rough"));
+		OCEAN = ResourceKey.create(Registries.BIOME, ResourceLocation.fromNamespaceAndPath(mod, "land_"+name+"_ocean"));
 	}
 	
-	public void createForDataGen(BootstapContext<Biome> context)
+	public void createForDataGen(BootstrapContext<Biome> context)
 	{
 		context.register(NORMAL, LandBiome.createNormalBiome(hasPrecipitation, temperature, downfall));
 		context.register(ROUGH, LandBiome.createRoughBiome(hasPrecipitation, temperature, downfall));

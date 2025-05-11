@@ -4,7 +4,7 @@ import com.mraof.minestuck.client.gui.playerStats.InventoryEditmodeScreen;
 import com.mraof.minestuck.client.gui.playerStats.PlayerStatsScreen;
 import com.mraof.minestuck.computer.editmode.ClientEditmodeData;
 import com.mraof.minestuck.computer.editmode.EditmodeLocations;
-import com.mraof.minestuck.network.EditmodeTeleportPacket;
+import com.mraof.minestuck.network.editmode.EditmodeTeleportPacket;
 import net.minecraft.client.gui.GuiGraphics;
 import net.minecraft.client.gui.components.Button;
 import net.minecraft.client.resources.sounds.SimpleSoundInstance;
@@ -36,13 +36,13 @@ public final class EditmodeSettingsScreen extends MinestuckScreen
 	public static final String INTERACTION_MODE_UNAVAILABLE = "minestuck.editmode_settings.interaction_mode_unavailable";
 	public static final String NOCLIP_UNAVAILABLE = "minestuck.editmode_settings.noclip_unavailable";
 	
-	private static final ResourceLocation GUI_BACKGROUND = new ResourceLocation("minestuck", "textures/gui/generic_extra_large.png");
+	private static final ResourceLocation GUI_BACKGROUND = ResourceLocation.fromNamespaceAndPath("minestuck", "textures/gui/generic_extra_large.png");
 	@SuppressWarnings("unused")
-	private static final ResourceLocation INTERACT_SINGLE_MODE_ICON = new ResourceLocation("minestuck", "textures/gui/editmode/interact_single_mode.png");
-	private static final ResourceLocation INTERACT_MULTIPLE_MODE_ICON = new ResourceLocation("minestuck", "textures/gui/editmode/interact_multiple_mode.png");
+	private static final ResourceLocation INTERACT_SINGLE_MODE_ICON = ResourceLocation.fromNamespaceAndPath("minestuck", "textures/gui/editmode/interact_single_mode.png");
+	private static final ResourceLocation INTERACT_MULTIPLE_MODE_ICON = ResourceLocation.fromNamespaceAndPath("minestuck", "textures/gui/editmode/interact_multiple_mode.png");
 	@SuppressWarnings("unused")
-	private static final ResourceLocation NOCLIP_ACTIVE_ICON = new ResourceLocation("minestuck", "textures/gui/editmode/noclip_active.png");
-	private static final ResourceLocation NOCLIP_INACTIVE_ICON = new ResourceLocation("minestuck", "textures/gui/editmode/noclip_inactive.png");
+	private static final ResourceLocation NOCLIP_ACTIVE_ICON = ResourceLocation.fromNamespaceAndPath("minestuck", "textures/gui/editmode/noclip_active.png");
+	private static final ResourceLocation NOCLIP_INACTIVE_ICON = ResourceLocation.fromNamespaceAndPath("minestuck", "textures/gui/editmode/noclip_inactive.png");
 	
 	private static final int GUI_WIDTH = 224;
 	private static final int GUI_HEIGHT = 176;
@@ -161,7 +161,7 @@ public final class EditmodeSettingsScreen extends MinestuckScreen
 	private void teleport(BlockPos pos)
 	{
 		EditmodeTeleportPacket packet = new EditmodeTeleportPacket(pos);
-		PacketDistributor.SERVER.noArg().send(packet);
+		PacketDistributor.sendToServer(packet);
 	}
 	
 	private void prevPage()

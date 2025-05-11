@@ -1,6 +1,6 @@
 package com.mraof.minestuck.entity.dialogue.condition;
 
-import com.mojang.serialization.Codec;
+import com.mojang.serialization.MapCodec;
 import com.mraof.minestuck.Minestuck;
 import com.mraof.minestuck.entity.carapacian.EnumEntityKingdom;
 import com.mraof.minestuck.entity.consort.ConsortEntity;
@@ -19,8 +19,8 @@ import java.util.function.Supplier;
 
 public final class Conditions
 {
-	public static final DeferredRegister<Codec<? extends Condition>> REGISTER = DeferredRegister.create(Minestuck.id("dialogue_condition"), Minestuck.MOD_ID);
-	public static final Registry<Codec<? extends Condition>> REGISTRY = REGISTER.makeRegistry(builder -> {});
+	public static final DeferredRegister<MapCodec<? extends Condition>> REGISTER = DeferredRegister.create(Minestuck.id("dialogue_condition"), Minestuck.MOD_ID);
+	public static final Registry<MapCodec<? extends Condition>> REGISTRY = REGISTER.makeRegistry(builder -> {});
 	
 	static {
 		REGISTER.register("always_true", () -> Condition.AlwaysTrue.CODEC);
@@ -48,11 +48,13 @@ public final class Conditions
 		REGISTER.register("player_reputation", () -> Condition.PlayerHasReputation.CODEC);
 		REGISTER.register("player_boondollars", () -> Condition.PlayerHasBoondollars.CODEC);
 		REGISTER.register("player_entered", () -> Condition.PlayerHasEntered.CODEC);
+		REGISTER.register("player_advancement", () -> Condition.PlayerHasAdvancement.CODEC);
 		REGISTER.register("custom_score", () -> Condition.CustomHasScore.CODEC);
+		REGISTER.register("custom_tag", () -> Condition.CustomHasTag.CODEC);
+		REGISTER.register("dialogue_exists", () -> Condition.DialogueExists.CODEC);
 		REGISTER.register("move_restriction", () -> Condition.HasMoveRestriction.CODEC);
 		REGISTER.register("flag", () -> Condition.Flag.CODEC);
 		REGISTER.register("near_spawn", () -> Condition.NearSpawn.CODEC);
-		REGISTER.register("has_player_entered", () -> Condition.HasPlayerEntered.CODEC);
 		REGISTER.register("is_in_skaia", () -> Condition.IsInSkaia.CODEC);
 		REGISTER.register("consort_visited_skaia", () -> Condition.ConsortVisitedSkaia.CODEC);
 	}
@@ -140,6 +142,10 @@ public final class Conditions
 	public static Condition hasEntered()
 	{
 		return Condition.PlayerHasEntered.INSTANCE;
+	}
+	public static Condition hasAdvancement(String name)
+	{
+		return new Condition.PlayerHasAdvancement(Minestuck.id(name.replace(".", "/")));
 	}
 	
 	public static Condition isHolding(Item item)

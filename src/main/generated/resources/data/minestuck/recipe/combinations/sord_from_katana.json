@@ -1,0 +1,11 @@
+{
+  "type": "minestuck:combination",
+  "input1": {
+    "item": "minestuck:katana"
+  },
+  "input2": {
+    "item": "minestuck:sbahj_poster"
+  },
+  "mode": "and",
+  "output": "minestuck:sord"
+}

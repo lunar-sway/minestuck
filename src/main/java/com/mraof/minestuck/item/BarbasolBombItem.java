@@ -2,8 +2,9 @@ package com.mraof.minestuck.item;
 
 import com.mraof.minestuck.entity.MSEntityTypes;
 import com.mraof.minestuck.entity.item.BarbasolBombEntity;
+import net.minecraft.MethodsReturnNonnullByDefault;
+import net.minecraft.core.Direction;
 import net.minecraft.core.Position;
-import net.minecraft.core.dispenser.AbstractProjectileDispenseBehavior;
 import net.minecraft.sounds.SoundEvents;
 import net.minecraft.sounds.SoundSource;
 import net.minecraft.stats.Stats;
@@ -13,22 +14,28 @@ import net.minecraft.world.entity.player.Player;
 import net.minecraft.world.entity.projectile.Projectile;
 import net.minecraft.world.item.Item;
 import net.minecraft.world.item.ItemStack;
+import net.minecraft.world.item.ProjectileItem;
 import net.minecraft.world.level.Level;
 import net.minecraft.world.level.block.DispenserBlock;
 
-public class BarbasolBombItem extends Item
+import javax.annotation.ParametersAreNonnullByDefault;
+
+@ParametersAreNonnullByDefault
+@MethodsReturnNonnullByDefault
+public class BarbasolBombItem extends Item implements ProjectileItem
 {
 	public BarbasolBombItem(Properties properties)
 	{
 		super(properties);
-		DispenserBlock.registerBehavior(this, new AbstractProjectileDispenseBehavior()
-		{
-			@Override
-			protected Projectile getProjectile(Level level, Position pos, ItemStack stack)
-			{
-				return new BarbasolBombEntity(MSEntityTypes.BARBASOL_BOMB.get(), pos.x(), pos.y(), pos.z(), level);
-			}
-		});
+		DispenserBlock.registerProjectileBehavior(this);
+	}
+	
+	@Override
+	public Projectile asProjectile(Level level, Position pos, ItemStack stack, Direction direction)
+	{
+		BarbasolBombEntity barbasolBomb = new BarbasolBombEntity(MSEntityTypes.BARBASOL_BOMB.get(), pos.x(), pos.y(), pos.z(), level);
+		barbasolBomb.setItem(stack);
+		return barbasolBomb;
 	}
 	
 	@Override

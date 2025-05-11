@@ -4,24 +4,23 @@ import com.mraof.minestuck.Minestuck;
 import com.mraof.minestuck.MinestuckConfig;
 import com.mraof.minestuck.computer.editmode.EditData;
 import com.mraof.minestuck.computer.editmode.ServerEditHandler;
-import com.mraof.minestuck.network.data.DataCheckerPermissionPacket;
+import com.mraof.minestuck.network.DataCheckerPackets;
+import net.minecraft.commands.Commands;
 import net.minecraft.server.MinecraftServer;
 import net.minecraft.server.level.ServerPlayer;
-import net.minecraft.server.players.ServerOpListEntry;
 import net.minecraft.world.level.GameType;
 import net.neoforged.bus.api.SubscribeEvent;
-import net.neoforged.fml.LogicalSide;
-import net.neoforged.fml.common.Mod;
-import net.neoforged.neoforge.event.TickEvent;
+import net.neoforged.fml.common.EventBusSubscriber;
 import net.neoforged.neoforge.event.entity.player.PlayerEvent;
 import net.neoforged.neoforge.event.server.ServerStoppedEvent;
+import net.neoforged.neoforge.event.tick.PlayerTickEvent;
 import net.neoforged.neoforge.network.PacketDistributor;
 
 import java.util.HashSet;
 import java.util.Set;
 import java.util.UUID;
 
-@Mod.EventBusSubscriber(modid = Minestuck.MOD_ID, bus = Mod.EventBusSubscriber.Bus.FORGE)
+@EventBusSubscriber(modid = Minestuck.MOD_ID, bus = EventBusSubscriber.Bus.GAME)
 public final class DataCheckerPermission
 {
 	private static final Set<UUID> dataCheckerPermission = new HashSet<>();
@@ -39,9 +38,9 @@ public final class DataCheckerPermission
 	}
 	
 	@SubscribeEvent
-	private static void onPlayerTick(TickEvent.PlayerTickEvent event)
+	private static void onPlayerTick(PlayerTickEvent.Post event)
 	{
-		if(event.side == LogicalSide.SERVER && event.phase == TickEvent.Phase.END && event.player instanceof ServerPlayer player)
+		if(event.getEntity() instanceof ServerPlayer player)
 		{
 			if(shouldUpdateConfigurations(player))
 				sendPacket(player);
@@ -62,13 +61,13 @@ public final class DataCheckerPermission
 	
 	private static void sendPacket(ServerPlayer player)
 	{
-		DataCheckerPermissionPacket packet;
+		DataCheckerPackets.Permission packet;
 		boolean permission = hasPermission(player);
 		if(permission)
 			dataCheckerPermission.add(player.getGameProfile().getId());
 		else dataCheckerPermission.remove(player.getGameProfile().getId());
-		packet = new DataCheckerPermissionPacket(permission);
-		PacketDistributor.PLAYER.with(player).send(packet);
+		packet = new DataCheckerPackets.Permission(permission);
+		PacketDistributor.sendToPlayer(player, packet);
 	}
 	
 	public static boolean hasPermission(ServerPlayer player)
@@ -98,10 +97,7 @@ public final class DataCheckerPermission
 	{
 		MinecraftServer server = player.getServer();
 		if(server != null && server.getPlayerList().isOp(player.getGameProfile()))
-		{
-			ServerOpListEntry entry = server.getPlayerList().getOps().get(player.getGameProfile());
-			return (entry != null ? entry.getLevel() : server.getOperatorUserPermissionLevel()) >= 2;
-		}
+			return player.hasPermissions(Commands.LEVEL_GAMEMASTERS);
 		return false;
 	}
 }

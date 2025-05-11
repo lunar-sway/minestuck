@@ -40,7 +40,7 @@ public class GristTypeArgument implements ArgumentType<GristType>
 		if(!GristTypes.REGISTRY.containsKey(gristName))
 		{
 			reader.setCursor(start2);
-			throw INVALID_TYPE.createWithContext(reader, gristName);
+			throw INVALID_TYPE.createWithContext(reader, gristName.toString());
 		}
 		return GristTypes.REGISTRY.get(gristName);
 	}

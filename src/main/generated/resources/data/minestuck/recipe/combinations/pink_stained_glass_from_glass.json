@@ -1,0 +1,11 @@
+{
+  "type": "minestuck:combination",
+  "input1": {
+    "item": "minecraft:glass"
+  },
+  "input2": {
+    "tag": "c:dyes/pink"
+  },
+  "mode": "and",
+  "output": "minecraft:pink_stained_glass"
+}

@@ -2,17 +2,22 @@
   "conditioned_nodes": [
     {
       "condition": {
-        "type": "minestuck:has_player_entered"
+        "type": "minestuck:player_entered"
       },
       "node": {
         "animation": {
           "emotion": "anxious"
         },
-        "message": "minestuck.dialogue.consort.heroic_stench"
+        "gui": "minestuck:textures/gui/dialogue/dialogue.png",
+        "message": "minestuck.dialogue.consort.heroic_stench",
+        "responses": []
       }
     }
   ],
   "default_node": {
-    "message": "minestuck.dialogue.consort.heroic_stench.leech"
+    "animation": {},
+    "gui": "minestuck:textures/gui/dialogue/dialogue.png",
+    "message": "minestuck.dialogue.consort.heroic_stench.leech",
+    "responses": []
   }
 }

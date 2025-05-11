@@ -1,0 +1,33 @@
+{
+  "parent": "minestuck:minestuck/root",
+  "criteria": {
+    "possess_scanner": {
+      "conditions": {
+        "items": [
+          {
+            "items": "minestuck:temple_scanner"
+          }
+        ]
+      },
+      "trigger": "minecraft:inventory_changed"
+    }
+  },
+  "display": {
+    "description": {
+      "translate": "advancements.minestuck.searching.description"
+    },
+    "icon": {
+      "count": 1,
+      "id": "minecraft:compass"
+    },
+    "title": {
+      "translate": "advancements.minestuck.searching.title"
+    }
+  },
+  "requirements": [
+    [
+      "possess_scanner"
+    ]
+  ],
+  "sends_telemetry_event": true
+}

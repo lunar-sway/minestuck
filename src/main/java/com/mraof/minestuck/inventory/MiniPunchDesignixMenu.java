@@ -1,10 +1,10 @@
 package com.mraof.minestuck.inventory;
 
-import com.mraof.minestuck.alchemy.AlchemyHelper;
 import com.mraof.minestuck.block.MSBlocks;
 import com.mraof.minestuck.inventory.slot.InputSlot;
 import com.mraof.minestuck.inventory.slot.OutputSlot;
 import com.mraof.minestuck.item.MSItems;
+import com.mraof.minestuck.item.components.MSItemComponents;
 import net.minecraft.core.BlockPos;
 import net.minecraft.network.FriendlyByteBuf;
 import net.minecraft.world.entity.player.Inventory;
@@ -79,7 +79,7 @@ public class MiniPunchDesignixMenu extends MachineContainerMenu
 			} else
 			{
 				//if it's an inventory slot with valid contents
-				if(itemstackOrig.getItem() == MSItems.CAPTCHA_CARD.get() && (!AlchemyHelper.hasDecodedItem(itemstackOrig) || AlchemyHelper.isPunchedCard(itemstackOrig)))
+				if(itemstackOrig.is(MSItems.CAPTCHA_CARD) && (!itemstackOrig.has(MSItemComponents.CARD_STORED_ITEM) || itemstackOrig.has(MSItemComponents.ENCODED_ITEM)))
 					result = moveItemStackTo(itemstackOrig, 1, 2, false);
 				else result = moveItemStackTo(itemstackOrig, 0, 1, false);
 			}

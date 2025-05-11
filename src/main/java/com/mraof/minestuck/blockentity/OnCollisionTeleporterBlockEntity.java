@@ -36,7 +36,7 @@ public abstract class OnCollisionTeleporterBlockEntity<E extends Entity> extends
 	 */
 	public void onCollision(E entity)
 	{
-		if(!entity.level().isClientSide && canTeleport(entity) && shouldTeleport(entity))
+		if(!entity.level().isClientSide && shouldTeleport(entity))
 		{
 			hasCollision = true;
 		}
@@ -61,6 +61,6 @@ public abstract class OnCollisionTeleporterBlockEntity<E extends Entity> extends
 	
 	private static boolean canTeleport(Entity entity)
 	{
-		return !entity.noPhysics && entity.canChangeDimensions();
+		return !entity.noPhysics && entity.canUsePortal(false);
 	}
 }

@@ -19,6 +19,7 @@ import net.minecraft.advancements.AdvancementType;
 import net.minecraft.advancements.critereon.*;
 import net.minecraft.core.HolderLookup;
 import net.minecraft.core.registries.BuiltInRegistries;
+import net.minecraft.core.registries.Registries;
 import net.minecraft.data.DataProvider;
 import net.minecraft.data.PackOutput;
 import net.minecraft.network.chat.Component;
@@ -26,6 +27,7 @@ import net.minecraft.resources.ResourceLocation;
 import net.minecraft.world.item.ItemStack;
 import net.minecraft.world.item.Items;
 import net.minecraft.world.level.ItemLike;
+import net.minecraft.world.level.levelgen.structure.Structure;
 import net.neoforged.neoforge.common.data.AdvancementProvider;
 import net.neoforged.neoforge.common.data.ExistingFileHelper;
 
@@ -65,6 +67,7 @@ public class MSAdvancementProvider implements AdvancementProvider.AdvancementGen
 	public static final String INTELLIBEAM = "minestuck.intellibeam";
 	public static final String LEGENDARY_WEAPON = "minestuck.legendary_weapon";
 	public static final String BUY_OUT_SHOP = "minestuck.buy_out_shop";
+	public static final String BRICK_COMPUTER = "minestuck.brick_computer";
 	
 	public static DataProvider create(PackOutput output, CompletableFuture<HolderLookup.Provider> registries, ExistingFileHelper existingFileHelper)
 	{
@@ -75,8 +78,9 @@ public class MSAdvancementProvider implements AdvancementProvider.AdvancementGen
 	@Override
 	public void generate(HolderLookup.Provider registries, Consumer<AdvancementHolder> saver, ExistingFileHelper existingFileHelper)
 	{
+		HolderLookup.RegistryLookup<Structure> structures = registries.lookupOrThrow(Registries.STRUCTURE);
 		AdvancementHolder root = Advancement.Builder.advancement()
-				.display(MSItems.RAW_CRUXITE.get(), Component.translatable(title(ROOT)), Component.translatable(desc(ROOT)), new ResourceLocation("minestuck:textures/gui/advancement_bg.png"), AdvancementType.TASK, false, false, false)
+				.display(MSItems.RAW_CRUXITE.get(), Component.translatable(title(ROOT)), Component.translatable(desc(ROOT)), Minestuck.id("textures/gui/advancement_bg.png"), AdvancementType.TASK, false, false, false)
 				.addCriterion("raw_cruxite", InventoryChangeTrigger.TriggerInstance.hasItems(MSItems.RAW_CRUXITE.get())).save(saver, save_loc(ROOT));
 		AdvancementHolder searching = Advancement.Builder.advancement().parent(root)
 				.display(Items.COMPASS, Component.translatable(title(SEARCHING)), Component.translatable(desc(SEARCHING)), null, AdvancementType.TASK, true, true, false)
@@ -116,10 +120,12 @@ public class MSAdvancementProvider implements AdvancementProvider.AdvancementGen
 				.addCriterion("touch_return_node", EventTrigger.Instance.returnNode()).save(saver, save_loc(RETURN_NODE));
 		AdvancementHolder dungeon = Advancement.Builder.advancement().parent(returnNode)
 				.display(MSBlocks.FROST_BRICKS.get(), Component.translatable(title(DUNGEON)), Component.translatable(desc(DUNGEON)), null, AdvancementType.TASK, true, true, false)
-				.addCriterion("imp_dungeon", PlayerTrigger.TriggerInstance.located(LocationPredicate.Builder.inStructure(MSStructures.ImpDungeon.KEY))).save(saver, save_loc(DUNGEON));
+				.addCriterion("imp_dungeon", PlayerTrigger.TriggerInstance.located(LocationPredicate.Builder.inStructure(structures.getOrThrow(MSStructures.ImpDungeon.KEY)))).save(saver, save_loc(DUNGEON));
 		AdvancementHolder commune = Advancement.Builder.advancement().parent(entry)
 				.display(MSItems.STONE_TABLET.get(), Component.translatable(title(COMMUNE)), Component.translatable(desc(COMMUNE)), null, AdvancementType.TASK, true, true, false)
-				.requirements(AdvancementRequirements.Strategy.AND).addCriterion("talk_to_consort", ConsortTalkTrigger.Instance.any()).addCriterion("visit_village", PlayerTrigger.TriggerInstance.located(LocationPredicate.Builder.inStructure(MSStructures.ConsortVillage.KEY))).save(saver, save_loc(COMMUNE));
+				.requirements(AdvancementRequirements.Strategy.AND)
+				.addCriterion("talk_to_consort", ConsortTalkTrigger.Instance.any())
+				.addCriterion("visit_village", PlayerTrigger.TriggerInstance.located(LocationPredicate.Builder.inStructure(structures.getOrThrow(MSStructures.ConsortVillage.KEY)))).save(saver, save_loc(COMMUNE));
 		AdvancementHolder frenchFry = Advancement.Builder.advancement().parent(commune)
 				.display(MSItems.FRENCH_FRY.get(), Component.translatable(title(FRENCH_FRY)), Component.translatable(desc(FRENCH_FRY)), null, AdvancementType.TASK, true, true, false)
 				.addCriterion("has_french_fry", ConsumeItemTrigger.TriggerInstance.usedItem(MSItems.FRENCH_FRY.get())).save(saver, save_loc(FRENCH_FRY));
@@ -150,6 +156,9 @@ public class MSAdvancementProvider implements AdvancementProvider.AdvancementGen
 		AdvancementHolder buyOutShop = Advancement.Builder.advancement().parent(commune)
 				.display(MSItems.CONE_OF_FLIES.get(), Component.translatable(title(BUY_OUT_SHOP)), Component.translatable(desc(BUY_OUT_SHOP)), null, AdvancementType.TASK, true, true, false)
 				.addCriterion("buy_everything", EventTrigger.Instance.buyOutShop()).save(saver, save_loc(BUY_OUT_SHOP));
+		AdvancementHolder brickComputer = Advancement.Builder.advancement().parent(connect)
+				.display(MSItems.OLD_COMPUTER.get(), Component.translatable(title(BRICK_COMPUTER)), Component.translatable(desc(BRICK_COMPUTER)), null, AdvancementType.CHALLENGE, true, true, true)
+				.addCriterion("brick_computer", EventTrigger.Instance.brickComputer()).save(saver, save_loc(BRICK_COMPUTER));
 	}
 	
 	private static Advancement.Builder changeModusCriteria(Advancement.Builder builder)

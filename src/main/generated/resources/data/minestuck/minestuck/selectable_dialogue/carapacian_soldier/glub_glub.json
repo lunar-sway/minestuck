@@ -3,5 +3,7 @@
     "type": "minestuck:consort_terrain_land_type",
     "consort": "salamander"
   },
-  "dialogue": "minestuck:carapacian_soldier/glub_glub"
+  "dialogue": "minestuck:carapacian_soldier/glub_glub",
+  "dialogue_weight": 10,
+  "keep_on_reset": false
 }

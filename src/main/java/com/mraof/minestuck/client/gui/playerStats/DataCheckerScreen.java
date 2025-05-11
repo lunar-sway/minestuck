@@ -3,7 +3,7 @@ package com.mraof.minestuck.client.gui.playerStats;
 import com.mojang.blaze3d.platform.InputConstants;
 import com.mojang.blaze3d.systems.RenderSystem;
 import com.mraof.minestuck.client.util.MSKeyHandler;
-import com.mraof.minestuck.network.DataCheckerPacket;
+import com.mraof.minestuck.network.DataCheckerPackets;
 import com.mraof.minestuck.player.ClientPlayerData;
 import com.mraof.minestuck.player.EnumAspect;
 import com.mraof.minestuck.player.EnumClass;
@@ -34,8 +34,8 @@ public class DataCheckerScreen extends Screen
 {
 	private static final Logger LOGGER = LogManager.getLogger();
 	
-	private static final ResourceLocation icons = new ResourceLocation("minestuck", "textures/gui/icons.png");
-	private static final ResourceLocation guiBackground = new ResourceLocation("minestuck", "textures/gui/data_check.png");
+	private static final ResourceLocation icons = ResourceLocation.fromNamespaceAndPath("minestuck", "textures/gui/icons.png");
+	private static final ResourceLocation guiBackground = ResourceLocation.fromNamespaceAndPath("minestuck", "textures/gui/data_check.png");
 	private static final int GUI_WIDTH = 210, GUI_HEIGHT = 140;
 	private static final int LIST_Y = 25;
 	
@@ -72,7 +72,7 @@ public class DataCheckerScreen extends Screen
 		refreshButton = addRenderableWidget(Button.builder(Component.empty(), button -> refresh()).pos(xOffset + GUI_WIDTH - 45, yOffset + 5).size(18, 18).build());
 		
 		if(activeComponent == null)
-			PacketDistributor.SERVER.noArg().send(DataCheckerPacket.request());
+			PacketDistributor.sendToServer(DataCheckerPackets.Request.create());
 		
 		componentChanged();
 	}
@@ -220,7 +220,7 @@ public class DataCheckerScreen extends Screen
 	
 	private void refresh()
 	{
-		PacketDistributor.SERVER.noArg().send(DataCheckerPacket.request());
+		PacketDistributor.sendToServer(DataCheckerPackets.Request.create());
 		activeComponent = null;
 		componentChanged();
 	}

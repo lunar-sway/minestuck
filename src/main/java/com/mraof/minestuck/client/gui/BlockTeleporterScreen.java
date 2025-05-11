@@ -1,7 +1,7 @@
 package com.mraof.minestuck.client.gui;
 
 import com.mraof.minestuck.blockentity.redstone.BlockTeleporterBlockEntity;
-import com.mraof.minestuck.network.BlockTeleporterPacket;
+import com.mraof.minestuck.network.block.BlockTeleporterSettingsPacket;
 import net.minecraft.client.gui.GuiGraphics;
 import net.minecraft.client.gui.components.EditBox;
 import net.minecraft.client.gui.screens.Screen;
@@ -21,7 +21,7 @@ public class BlockTeleporterScreen extends Screen
 	public static final String Y_MESSAGE = "minestuck.block_teleporter.y_message";
 	public static final String Z_MESSAGE = "minestuck.block_teleporter.z_message";
 	public static final String DONE_MESSAGE = "minestuck.block_teleporter.done";
-	private static final ResourceLocation GUI_BACKGROUND = new ResourceLocation("minestuck", "textures/gui/generic_medium.png");
+	private static final ResourceLocation GUI_BACKGROUND = ResourceLocation.fromNamespaceAndPath("minestuck", "textures/gui/generic_medium.png");
 	
 	private static final int GUI_WIDTH = 150;
 	private static final int GUI_HEIGHT = 98;
@@ -79,7 +79,7 @@ public class BlockTeleporterScreen extends Screen
 		
 		if(validInput)
 		{
-			PacketDistributor.SERVER.noArg().send(new BlockTeleporterPacket(offsetPos, be.getBlockPos()));
+			PacketDistributor.sendToServer(new BlockTeleporterSettingsPacket(offsetPos, be.getBlockPos()));
 			onClose();
 		}
 		

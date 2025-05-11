@@ -13,7 +13,6 @@ import net.minecraft.network.chat.Component;
 import net.minecraft.sounds.SoundEvents;
 import net.minecraft.sounds.SoundSource;
 import net.minecraft.util.RandomSource;
-import net.minecraft.world.InteractionHand;
 import net.minecraft.world.InteractionResult;
 import net.minecraft.world.entity.player.Player;
 import net.minecraft.world.item.context.BlockPlaceContext;
@@ -33,10 +32,12 @@ import net.minecraft.world.level.block.state.properties.IntegerProperty;
 import net.minecraft.world.phys.BlockHitResult;
 
 import javax.annotation.Nullable;
+import javax.annotation.ParametersAreNonnullByDefault;
 
 /**
  * Receives redstone inputs from wireless redstone transmitters. Has a blockstate that allows the receiver to retain the strongest redstone signal it has received
  */
+@ParametersAreNonnullByDefault
 public class WirelessRedstoneReceiverBlock extends HorizontalDirectionalBlock implements EntityBlock
 {
 	public static final IntegerProperty POWER = BlockStateProperties.POWER;
@@ -73,8 +74,7 @@ public class WirelessRedstoneReceiverBlock extends HorizontalDirectionalBlock im
 	}
 	
 	@Override
-	@SuppressWarnings("deprecation")
-	public InteractionResult use(BlockState state, Level level, BlockPos pos, Player player, InteractionHand hand, BlockHitResult hit)
+	protected InteractionResult useWithoutItem(BlockState state, Level level, BlockPos pos, Player player, BlockHitResult hit)
 	{
 		if(!CreativeShockEffect.doesCreativeShockLimit(player, CreativeShockEffect.LIMIT_MACHINE_INTERACTIONS))
 		{
@@ -136,9 +136,8 @@ public class WirelessRedstoneReceiverBlock extends HorizontalDirectionalBlock im
 		return true;
 	}
 	
-	@SuppressWarnings("deprecation")
 	@Override
-	public boolean isSignalSource(BlockState state)
+	protected boolean isSignalSource(BlockState state)
 	{
 		return true;
 	}
