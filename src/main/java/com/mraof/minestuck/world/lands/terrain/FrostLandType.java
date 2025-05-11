@@ -25,6 +25,8 @@ import net.minecraft.world.level.levelgen.placement.CountPlacement;
 import net.minecraft.world.level.levelgen.placement.HeightRangePlacement;
 import net.minecraft.world.level.levelgen.placement.InSquarePlacement;
 
+import static com.mraof.minestuck.world.gen.structure.blocks.StructureBlockRegistry.*;
+
 public class FrostLandType extends TerrainLandType
 {
 	public static final String FROST = "minestuck.frost";
@@ -41,24 +43,38 @@ public class FrostLandType extends TerrainLandType
 	@Override
 	public void registerBlocks(StructureBlockRegistry registry)
 	{
-		registry.setBlock("surface", Blocks.GRASS_BLOCK);
-		registry.setBlock("upper", Blocks.DIRT);
-		registry.setBlock("structure_primary", MSBlocks.FROST_TILE);
-		registry.setBlock("structure_primary_decorative", MSBlocks.CHISELED_FROST_BRICKS);
-		registry.setBlock("structure_primary_cracked", MSBlocks.CRACKED_FROST_BRICKS);
-		registry.setBlock("structure_primary_column", MSBlocks.FROST_COLUMN);
-		registry.setBlock("structure_primary_stairs", MSBlocks.FROST_TILE_STAIRS);
-		registry.setBlock("structure_secondary", MSBlocks.FROST_BRICKS);
-		registry.setBlock("structure_secondary_stairs", MSBlocks.FROST_BRICK_STAIRS);
-		registry.setBlock("structure_secondary_decorative", MSBlocks.CHISELED_FROST_BRICKS);
-		registry.setBlock("structure_planks", Blocks.SPRUCE_PLANKS);
-		registry.setBlock("structure_planks_slab", Blocks.SPRUCE_SLAB);
-		registry.setBlock("river", Blocks.ICE);
-		registry.setBlock("light_block", Blocks.SEA_LANTERN);
-		registry.setBlock("bucket_1", Blocks.SNOW_BLOCK);
-		registry.setBlock("bush", Blocks.FERN);
-		registry.setBlock("structure_wool_1", Blocks.WHITE_WOOL);
-		registry.setBlock("structure_wool_3", Blocks.CYAN_WOOL);
+		registry.setBlock(UPPER, Blocks.DIRT);
+		registry.setBlock(SURFACE, Blocks.GRASS_BLOCK);
+		registry.setBlock(RIVER, Blocks.ICE);
+		
+		registry.setBlock(STRUCTURE_PRIMARY, MSBlocks.FROST_BRICKS);
+		registry.setBlock(STRUCTURE_PRIMARY_DECORATIVE, MSBlocks.CHISELED_FROST_BRICKS);
+		registry.setBlock(STRUCTURE_PRIMARY_CRACKED, MSBlocks.CRACKED_FROST_BRICKS);
+		registry.setBlock(STRUCTURE_PRIMARY_COLUMN, MSBlocks.FROST_COLUMN);
+		registry.setBlock(STRUCTURE_PRIMARY_STAIRS, MSBlocks.FROST_BRICK_STAIRS);
+		registry.setBlock(STRUCTURE_PRIMARY_SLAB, MSBlocks.FROST_BRICK_SLAB);
+		registry.setBlock(STRUCTURE_PRIMARY_WALL, MSBlocks.FROST_BRICK_WALL);
+		
+		registry.setBlock(STRUCTURE_PRIMARY_MOSSY, MSBlocks.FLOWERY_FROST_BRICKS);
+		registry.setBlock(STRUCTURE_PRIMARY_MOSSY_STAIRS, MSBlocks.FLOWERY_FROST_BRICK_STAIRS);
+		registry.setBlock(STRUCTURE_PRIMARY_MOSSY_SLAB, MSBlocks.FLOWERY_FROST_BRICK_SLAB);
+		registry.setBlock(STRUCTURE_PRIMARY_MOSSY_WALL, MSBlocks.FLOWERY_FROST_BRICK_WALL);
+		
+		registry.setBlock(STRUCTURE_SECONDARY, MSBlocks.FROST_TILE);
+		registry.setBlock(STRUCTURE_SECONDARY_DECORATIVE, MSBlocks.CHISELED_FROST_TILE);
+		registry.setBlock(STRUCTURE_SECONDARY_STAIRS, MSBlocks.FROST_TILE_STAIRS);
+		registry.setBlock(STRUCTURE_SECONDARY_SLAB, MSBlocks.FROST_TILE_SLAB);
+		registry.setBlock(STRUCTURE_SECONDARY_WALL, MSBlocks.FROST_TILE_WALL);
+		
+		registry.setBlock(STRUCTURE_PLANKS, Blocks.SPRUCE_PLANKS);
+		registry.setBlock(STRUCTURE_PLANKS_SLAB, Blocks.SPRUCE_SLAB);
+		
+		registry.setBlock(STRUCTURE_WOOL_1, Blocks.WHITE_WOOL);
+		registry.setBlock(STRUCTURE_WOOL_3, Blocks.CYAN_WOOL);
+		
+		registry.setBlock(LIGHT_BLOCK, Blocks.SEA_LANTERN);
+		registry.setBlock(BUCKET_1, Blocks.SNOW_BLOCK);
+		registry.setBlock(BUSH, Blocks.FERN);
 	}
 	
 	@Override

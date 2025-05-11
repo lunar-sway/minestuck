@@ -67,7 +67,7 @@ public class MesaFeature extends Feature<NoneFeatureConfiguration>
 		
 		StructureBlockRegistry blocks = StructureBlockRegistry.getOrDefault(context.chunkGenerator());
 		
-		BlockPos nodePos = generateMesa(pos.above(height), height, plateauSize, level, rand, isAlt, blocks.getBlockState("ground"));
+		BlockPos nodePos = generateMesa(pos.above(height), height, plateauSize, level, rand, isAlt, blocks.getBlockState(StructureBlockRegistry.GROUND));
 		
 		if(!stomps)
 		{

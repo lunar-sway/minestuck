@@ -100,12 +100,12 @@ public final class LandCustomBiomeSettings
 		builder.addFeature(GenerationStep.Decoration.LOCAL_MODIFICATIONS, MSPlacedFeatures.RETURN_NODE, LandBiomeType.anyExcept(LandBiomeType.OCEAN));
 		
 		builder.addFeature(GenerationStep.Decoration.UNDERGROUND_ORES, MSPlacedFeatures.inline(Feature.ORE,
-						new OreConfiguration(blocks.getGroundType(), blocks.getBlockState("cruxite_ore"), baseCruxiteVeinSize),
+						new OreConfiguration(blocks.getGroundType(), blocks.getBlockState(StructureBlockRegistry.CRUXITE_ORE), baseCruxiteVeinSize),
 						CountPlacement.of(cruxiteVeinsPerChunk), InSquarePlacement.spread(), HeightRangePlacement.triangle(VerticalAnchor.absolute(cruxiteStratumMin), VerticalAnchor.absolute(cruxiteStratumMax)), BiomeFilter.biome()),
 				LandBiomeType.any());
 		
 		builder.addFeature(GenerationStep.Decoration.UNDERGROUND_ORES, MSPlacedFeatures.inline(Feature.ORE,
-						new OreConfiguration(blocks.getGroundType(), blocks.getBlockState("uranium_ore"), baseUraniumVeinSize),
+						new OreConfiguration(blocks.getGroundType(), blocks.getBlockState(StructureBlockRegistry.URANIUM_ORE), baseUraniumVeinSize),
 						CountPlacement.of(uraniumVeinsPerChunk), InSquarePlacement.spread(), HeightRangePlacement.triangle(VerticalAnchor.aboveBottom(uraniumStratumMinAboveBottom), VerticalAnchor.aboveBottom(uraniumStratumMaxAboveBottom)), BiomeFilter.biome()),
 				LandBiomeType.any());
 		
