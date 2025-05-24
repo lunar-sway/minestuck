@@ -35,6 +35,9 @@ public class MinestuckBiomeTagsProvider extends BiomeTagsProvider
 		
 		this.tag(HAS_LAND_GATE).addTag(LAND);
 		this.tag(HAS_SMALL_RUIN).addTag(LAND_NORMAL);
+		this.tag(HAS_PROSPIT_BUNKER).addTags(LAND_NORMAL, LAND_ROUGH);
+		this.tag(HAS_DERSE_BUNKER).addTags(LAND_NORMAL, LAND_ROUGH);
+		this.tag(HAS_IMP_BUNKER).addTags(LAND_NORMAL, LAND_ROUGH);
 		this.tag(HAS_IMP_DUNGEON).addTags(LAND_NORMAL, LAND_ROUGH);
 		this.tag(HAS_CONSORT_VILLAGE).addTag(LAND_NORMAL);
 		

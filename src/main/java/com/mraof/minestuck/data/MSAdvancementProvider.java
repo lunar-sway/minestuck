@@ -18,6 +18,7 @@ import net.minecraft.advancements.AdvancementRequirements;
 import net.minecraft.advancements.AdvancementType;
 import net.minecraft.advancements.critereon.*;
 import net.minecraft.core.HolderLookup;
+import net.minecraft.core.HolderSet;
 import net.minecraft.core.registries.BuiltInRegistries;
 import net.minecraft.core.registries.Registries;
 import net.minecraft.data.DataProvider;
@@ -120,7 +121,11 @@ public class MSAdvancementProvider implements AdvancementProvider.AdvancementGen
 				.addCriterion("touch_return_node", EventTrigger.Instance.returnNode()).save(saver, save_loc(RETURN_NODE));
 		AdvancementHolder dungeon = Advancement.Builder.advancement().parent(returnNode)
 				.display(MSBlocks.FROST_BRICKS.get(), Component.translatable(title(DUNGEON)), Component.translatable(desc(DUNGEON)), null, AdvancementType.TASK, true, true, false)
-				.addCriterion("imp_dungeon", PlayerTrigger.TriggerInstance.located(LocationPredicate.Builder.inStructure(structures.getOrThrow(MSStructures.ImpDungeon.KEY)))).save(saver, save_loc(DUNGEON));
+				.addCriterion("imp_dungeon", PlayerTrigger.TriggerInstance.located(LocationPredicate.Builder.location().setStructures(HolderSet.direct(
+						structures.getOrThrow(MSStructures.ImpDungeon.KEY),
+						structures.getOrThrow(MSStructures.PROSPIT_BUNKER),
+						structures.getOrThrow(MSStructures.DERSE_BUNKER),
+						structures.getOrThrow(MSStructures.IMP_BUNKER))))).save(saver, save_loc(DUNGEON));
 		AdvancementHolder commune = Advancement.Builder.advancement().parent(entry)
 				.display(MSItems.STONE_TABLET.get(), Component.translatable(title(COMMUNE)), Component.translatable(desc(COMMUNE)), null, AdvancementType.TASK, true, true, false)
 				.requirements(AdvancementRequirements.Strategy.AND)
