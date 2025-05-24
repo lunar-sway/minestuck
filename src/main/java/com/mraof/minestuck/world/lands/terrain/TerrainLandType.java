@@ -3,7 +3,6 @@ package com.mraof.minestuck.world.lands.terrain;
 import com.mojang.serialization.Codec;
 import com.mraof.minestuck.entity.consort.ConsortEntity;
 import com.mraof.minestuck.util.MSSoundEvents;
-import com.mraof.minestuck.util.MSTags;
 import com.mraof.minestuck.world.biome.LandBiomeSetType;
 import com.mraof.minestuck.world.biome.MSBiomes;
 import com.mraof.minestuck.world.gen.structure.MSStructures;
@@ -11,8 +10,10 @@ import com.mraof.minestuck.world.gen.structure.blocks.StructureBlockRegistry;
 import com.mraof.minestuck.world.lands.ILandType;
 import com.mraof.minestuck.world.lands.LandBiomeGenBuilder;
 import com.mraof.minestuck.world.lands.LandTypes;
+import net.minecraft.core.Holder;
 import net.minecraft.core.HolderGetter;
 import net.minecraft.core.HolderSet;
+import net.minecraft.core.Vec3i;
 import net.minecraft.network.RegistryFriendlyByteBuf;
 import net.minecraft.network.codec.ByteBufCodecs;
 import net.minecraft.network.codec.StreamCodec;
@@ -20,16 +21,18 @@ import net.minecraft.resources.ResourceKey;
 import net.minecraft.sounds.SoundEvent;
 import net.minecraft.tags.TagKey;
 import net.minecraft.world.entity.EntityType;
-import net.minecraft.world.entity.animal.Cod;
 import net.minecraft.world.level.biome.Biome;
 import net.minecraft.world.level.levelgen.SurfaceRules;
 import net.minecraft.world.level.levelgen.structure.Structure;
 import net.minecraft.world.level.levelgen.structure.StructureSet;
 import net.minecraft.world.level.levelgen.structure.placement.RandomSpreadStructurePlacement;
 import net.minecraft.world.level.levelgen.structure.placement.RandomSpreadType;
+import net.minecraft.world.level.levelgen.structure.placement.StructurePlacement;
 import net.minecraft.world.phys.Vec3;
 
+import java.util.List;
 import java.util.Objects;
+import java.util.Optional;
 import java.util.function.Consumer;
 import java.util.function.Supplier;
 
@@ -42,7 +45,6 @@ public abstract class TerrainLandType implements ILandType
 	public static final StreamCodec<RegistryFriendlyByteBuf, TerrainLandType> STREAM_CODEC = ByteBufCodecs.registry(LandTypes.TERRAIN_KEY);
 	
 	protected static final RandomSpreadStructurePlacement SMALL_RUIN_PLACEMENT = new RandomSpreadStructurePlacement(16, 4, RandomSpreadType.LINEAR, 59273643);
-	protected static final RandomSpreadStructurePlacement IMP_DUNGEON_PLACEMENT = new RandomSpreadStructurePlacement(16, 4, RandomSpreadType.LINEAR, 34527185);
 	protected static final RandomSpreadStructurePlacement CONSORT_VILLAGE_PLACEMENT = new RandomSpreadStructurePlacement(24, 5, RandomSpreadType.LINEAR, 10387312);
 	
 	private final String[] names;
@@ -120,14 +122,35 @@ public abstract class TerrainLandType implements ILandType
 	}
 	
 	public void addBiomeGeneration(LandBiomeGenBuilder builder, StructureBlockRegistry blocks)
-	{}
+	{
+	}
 	
 	@Override
 	public void addStructureSets(Consumer<StructureSet> consumer, HolderGetter<Structure> structureLookup)
 	{
 		consumer.accept(new StructureSet(structureLookup.getOrThrow(MSStructures.SMALL_RUIN), SMALL_RUIN_PLACEMENT));
-		consumer.accept(new StructureSet(structureLookup.getOrThrow(MSStructures.ImpDungeon.KEY), IMP_DUNGEON_PLACEMENT));
-		consumer.accept(new StructureSet(structureLookup.getOrThrow(MSStructures.ConsortVillage.KEY), CONSORT_VILLAGE_PLACEMENT));
+		
+		
+		StructureSet villageSet = new StructureSet(structureLookup.getOrThrow(MSStructures.ConsortVillage.KEY), CONSORT_VILLAGE_PLACEMENT);
+		consumer.accept(villageSet);
+		
+		RandomSpreadStructurePlacement standardDungeonPlacement = new RandomSpreadStructurePlacement(
+				Vec3i.ZERO,
+				StructurePlacement.FrequencyReductionMethod.DEFAULT,
+				1.0F,
+				34527185,
+				Optional.of(new StructurePlacement.ExclusionZone(Holder.direct(villageSet), 8)),
+				18,
+				6,
+				RandomSpreadType.LINEAR
+		);
+		consumer.accept(new StructureSet(List.of(
+				StructureSet.entry(structureLookup.getOrThrow(MSStructures.PROSPIT_BUNKER)),
+				StructureSet.entry(structureLookup.getOrThrow(MSStructures.DERSE_BUNKER)),
+				StructureSet.entry(structureLookup.getOrThrow(MSStructures.IMP_BUNKER), 3),
+				StructureSet.entry(structureLookup.getOrThrow(MSStructures.ImpDungeon.KEY), 15)),
+				standardDungeonPlacement)
+		);
 	}
 	
 	public final boolean is(TagKey<TerrainLandType> tag)

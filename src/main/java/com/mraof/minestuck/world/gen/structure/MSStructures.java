@@ -16,6 +16,7 @@ import net.minecraft.world.level.levelgen.structure.Structure;
 import net.minecraft.world.level.levelgen.structure.StructureType;
 import net.minecraft.world.level.levelgen.structure.pieces.StructurePieceType;
 import net.minecraft.world.level.levelgen.structure.placement.StructurePlacementType;
+import net.minecraft.world.level.levelgen.structure.pools.StructureTemplatePool;
 import net.neoforged.neoforge.registries.DeferredRegister;
 
 import java.util.function.Supplier;
@@ -54,6 +55,15 @@ public final class MSStructures
 	public static final ResourceKey<Structure> SMALL_RUIN = key("small_ruin");
 	public static final Supplier<StructurePieceType> SMALL_RUIN_PIECE =
 			PIECE_REGISTER.register("small_ruin", () -> contextless(SmallRuinPiece::new));
+	
+	public static final ResourceKey<Structure> PROSPIT_BUNKER = key("prospit_bunker");
+	public static final ResourceKey<StructureTemplatePool> PROSPIT_BUNKER_START_POOL = templateKey("prospit_bunker/prospit_entry");
+	
+	public static final ResourceKey<Structure> DERSE_BUNKER = key("derse_bunker");
+	public static final ResourceKey<StructureTemplatePool> DERSE_BUNKER_START_POOL = templateKey("derse_bunker/derse_entry");
+	
+	public static final ResourceKey<Structure> IMP_BUNKER = key("imp_bunker");
+	public static final ResourceKey<StructureTemplatePool> IMP_BUNKER_START_POOL = templateKey("imp_bunker/imp_entry");
 	
 	public static final class ImpDungeon
 	{
@@ -185,7 +195,12 @@ public final class MSStructures
 	
 	private static ResourceKey<Structure> key(String name)
 	{
-		return ResourceKey.create(Registries.STRUCTURE, ResourceLocation.fromNamespaceAndPath(Minestuck.MOD_ID, name));
+		return ResourceKey.create(Registries.STRUCTURE, Minestuck.id(name));
+	}
+	
+	private static ResourceKey<StructureTemplatePool> templateKey(String name)
+	{
+		return ResourceKey.create(Registries.TEMPLATE_POOL, Minestuck.id(name));
 	}
 	
 	private static StructurePieceType contextless(StructurePieceType.ContextlessType type)
