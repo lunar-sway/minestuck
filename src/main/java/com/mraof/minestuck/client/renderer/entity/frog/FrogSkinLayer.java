@@ -13,7 +13,7 @@ import net.minecraft.client.renderer.entity.layers.RenderLayer;
 public class FrogSkinLayer extends RenderLayer<FrogEntity, FrogModel<FrogEntity>>
 {
 	private final FrogModel<FrogEntity> frogModel;
-
+	
 	public FrogSkinLayer(RenderLayerParent<FrogEntity, FrogModel<FrogEntity>> renderer, EntityModelSet modelSet)
 	{
 		super(renderer);
