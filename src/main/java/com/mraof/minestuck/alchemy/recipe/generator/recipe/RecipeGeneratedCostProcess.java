@@ -61,7 +61,7 @@ class RecipeGeneratedCostProcess
 		} else
 		{
 			GristSet result = removeZeros(costFromRecipes(item, callback));
-			if (result.isEmpty()) result = null;
+			if (result != null && result.isEmpty()) result = null;
 			//TODO Log these events so that the costs of base ingredients can be modified accordingly
 			
 			if(callback.shouldSaveResult())
