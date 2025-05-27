@@ -130,6 +130,8 @@ class RecipeGeneratedCostProcess
 	 */
 	private GristSet removeZeros(GristSet gristSet)
 	{
+		if (gristSet == null) return gristSet;
+
 		MutableGristSet nonZeros = MutableGristSet.newDefault();
 		for (GristAmount amount : gristSet.asAmounts()) {
 			if (amount.amount() != 0) nonZeros.add(amount);
