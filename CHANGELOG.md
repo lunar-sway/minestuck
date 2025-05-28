@@ -10,13 +10,17 @@ The format is based on [Keep a Changelog](https://keepachangelog.com/en/1.1.0/).
 
 - Stack and Queue modi have more distinct recipes
 
+### Fixed
+
+- Fix some items having 0 grist cost
+
 ### Removed
 
 - Removed `minestuck:non_mirrored` recipe type
 
 ### Contributors for this release
 
-- Dweblenod
+- medsal15, Dweblenod
 
 ## [1.20.1-1.12.1.1] - 2025-04-18
 
