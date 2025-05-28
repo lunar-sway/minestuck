@@ -61,8 +61,11 @@ class RecipeGeneratedCostProcess
 		} else
 		{
 			GristSet result = removeZeros(costFromRecipes(item, callback));
-			if (result != null && result.isEmpty()) result = null;
-			//TODO Log these events so that the costs of base ingredients can be modified accordingly
+			if (result != null && result.isEmpty())
+			{
+				result = null;
+				LOGGER.debug("Found item {} with valid recipe but no grist cost", item);
+			}
 			
 			if(callback.shouldSaveResult())
 				generatedCosts.put(item, result == null ? null : result.asImmutable());
@@ -125,12 +128,10 @@ class RecipeGeneratedCostProcess
 
 	/**
 	 * Returns a new GristSet without the zeros
-	 * 
-	 * TODO maybe move this to GristSet itself
 	 */
 	private GristSet removeZeros(GristSet gristSet)
 	{
-		if (gristSet == null) return gristSet;
+		if (gristSet == null) return null;
 
 		MutableGristSet nonZeros = MutableGristSet.newDefault();
 		for (GristAmount amount : gristSet.asAmounts()) {
