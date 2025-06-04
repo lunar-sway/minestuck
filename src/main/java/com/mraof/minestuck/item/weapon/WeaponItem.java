@@ -275,14 +275,14 @@ public class WeaponItem extends TieredItem
 					mineableBlocks.add(toolType.mineableBlocks());
 			}
 			if(!mineableBlocks.isEmpty())
-				properties.component(DataComponents.TOOL, createToolProperties(this.tier, mineableBlocks));
+				properties.component(DataComponents.TOOL, createToolProperties(this.tier, mineableBlocks, efficiency));
 			return properties;
 		}
 	}
 	
-	private static Tool createToolProperties(Tier tier, List<TagKey<Block>> mineableBlocks)
+	private static Tool createToolProperties(Tier tier, List<TagKey<Block>> mineableBlocks, float efficiency)
 	{
-		return new Tool(Streams.concat(mineableBlocks.stream().map(tag -> Tool.Rule.minesAndDrops(tag, tier.getSpeed())), Stream.of(Tool.Rule.deniesDrops(tier.getIncorrectBlocksForDrops()))).toList(),
+		return new Tool(Streams.concat(mineableBlocks.stream().map(tag -> Tool.Rule.minesAndDrops(tag, efficiency)), Stream.of(Tool.Rule.deniesDrops(tier.getIncorrectBlocksForDrops()))).toList(),
 				1.0F, 1);
 	}
 }

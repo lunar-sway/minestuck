@@ -110,8 +110,6 @@ public class FarmineEffect implements DestroyBlockEffect
 		}
 		
 		//This set will contain all the blocks you'll want to break in the end.
-		//This is used to determine if the number of blocks broken is too high.
-		//If it is, it mines a 3x3 area instead.
 		HashSet<BlockPos> blocksToBreak = new HashSet<BlockPos>();
 
 		while (!candidates.isEmpty())
