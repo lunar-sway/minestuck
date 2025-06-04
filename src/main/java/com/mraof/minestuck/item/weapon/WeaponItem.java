@@ -194,7 +194,7 @@ public class WeaponItem extends TieredItem
 		
 		public Builder set(DestroyBlockEffect effect)
 		{
-			if(rightClickBlockEffect != null)
+			if(destroyBlockEffect != null)
 				throw new IllegalStateException("Destroy block effect has already been set");
 			destroyBlockEffect = effect;
 			return this;

@@ -13,9 +13,12 @@ import net.minecraft.world.level.block.entity.BlockEntity;
 import net.minecraft.world.level.block.state.BlockState;
 import org.apache.commons.lang3.tuple.Pair;
 
+import static com.mraof.minestuck.util.MSTags.Blocks.FARMINE_BREAK_BLACKLIST;
+
 import java.util.Comparator;
 import java.util.HashMap;
 import java.util.HashSet;
+import java.util.LinkedList;
 import java.util.PriorityQueue;
 
 /**
@@ -36,7 +39,6 @@ public class FarmineEffect implements DestroyBlockEffect
 {
 	private int radius;
 	private int terminus;
-	private final HashSet<Block> farMineForbiddenBlocks = new HashSet<>();
 	private final HashMap<Block, HashSet<Block>> farMineEquivalencies = new HashMap<>();
 	
 	public FarmineEffect(int radius, int terminus)
@@ -47,8 +49,6 @@ public class FarmineEffect implements DestroyBlockEffect
 
 	private void initializeFarMineLists()
 	{
-		farMineForbiddenBlocks.add(Blocks.OBSIDIAN);
-		
 		addAssociation(Blocks.DIRT, Blocks.GRASS_BLOCK);
 		addAssociation(Blocks.DIRT, Blocks.MYCELIUM);
 		addAssociation(Blocks.DIRT, Blocks.DIRT_PATH);
@@ -98,7 +98,7 @@ public class FarmineEffect implements DestroyBlockEffect
 		} else
 		{
 			//If the block is unacceptable or there's a harvestTool mismatch, cap out at a basic 3x3 area
-			if(farMineForbiddenBlocks.contains(block)
+			if(blockState.is(FARMINE_BREAK_BLACKLIST)
 					|| stack.getDestroySpeed(blockState) < ((WeaponItem) stack.getItem()).getEfficiency())
 			{
 				candidates.add(Pair.of(pos, 1));
@@ -113,7 +113,6 @@ public class FarmineEffect implements DestroyBlockEffect
 		//This is used to determine if the number of blocks broken is too high.
 		//If it is, it mines a 3x3 area instead.
 		HashSet<BlockPos> blocksToBreak = new HashSet<BlockPos>();
-		boolean passedBreakLimit = false;
 
 		while (!candidates.isEmpty())
 		{
@@ -121,60 +120,44 @@ public class FarmineEffect implements DestroyBlockEffect
 			int rad = candidates.poll().getRight();
 			if (!blocksToBreak.contains(curr))
 			{
-				blocksToBreak.add(curr);
-				
 				if (rad != 0)
 				{
-					//Iterates across all blocks in a 3x3 cube centered on this block.
-					for (int i = -1; i < 2; i++)
-					{
-						for (int j = -1; j < 2; j++)
+					LinkedList<BlockPos> edges = new LinkedList<>();
+					edges.add(curr);
+
+					do {
+						BlockPos edge = edges.poll();
+						blocksToBreak.add(edge);
+
+						//Iterates across all blocks in a 3x3 cube centered on this block.
+						//This ends up with a bias towards downward north-west
+						for (int i = -1; i < 2; i++)
 						{
-							for (int k = -1; k < 2; k++)
+							for (int j = -1; j < 2; j++)
 							{
-								if(i == 0 && j == 0 && k == 0)
-									continue;
-								BlockPos newBlockPos = new BlockPos(curr.getX() + i, curr.getY() + j, curr.getZ() + k);
-								BlockState newState = level.getBlockState(newBlockPos);
-								Block newBlock = newState.getBlock();
-								if (	equals.contains(newBlock) || newBlock.equals(block))
+								for (int k = -1; k < 2; k++)
 								{
-									candidates.add(Pair.of(newBlockPos, rad - 1));
+									if(i == 0 && j == 0 && k == 0)
+										continue;
+										
+									BlockPos newBlockPos = new BlockPos(edge.getX() + i, edge.getY() + j, edge.getZ() + k);
+									BlockState newState = level.getBlockState(newBlockPos);
+									Block newBlock = newState.getBlock();
+
+									if (!blocksToBreak.contains(newBlockPos) && !edges.contains(newBlockPos) &&
+										distBetween(pos, newBlockPos) <= rad &&
+										(equals.contains(newBlock) || newBlock.equals(block)))
+									{
+										edges.add(newBlockPos);
+									}
 								}
 							}
 						}
-					}
-				}
-			}	
-			
-			//If you passed the maximum blocks you can break, stop trying to add more blocks to the list.
-			if (blocksToBreak.size() + 1 > stack.getMaxDamage() - stack.getDamageValue() || blocksToBreak.size() + 1 > terminus)
-			{
-				passedBreakLimit = true;
-				break;
-			}
-		}
-		
-		//If you passed the break limit, then cut back to a 3x3x3 area
-		if(passedBreakLimit)
-		{
-			blocksToBreak.clear();
-			
-			for (int i = -1; i < 2; i++)
-			{
-				for(int j = -1; j < 2; j++)
-				{
-					for(int k = -1; k < 2; k++)
-					{
-						BlockPos newBlockPos = new BlockPos(pos.getX() + i, pos.getY() + j, pos.getZ() + k);
-						BlockState newState = level.getBlockState(newBlockPos);
-						Block newBlock = newState.getBlock();
-						if (equals.contains(newBlock) || newBlock.equals(block)
-								&& blocksToBreak.size()+1 < stack.getMaxDamage() - stack.getDamageValue())
-						{
-							blocksToBreak.add(newBlockPos);
-						}
-					}
+					} while (blocksToBreak.size() < terminus &&
+							blocksToBreak.size() <= (stack.getMaxDamage() - stack.getDamageValue()) &&
+							edges.size() > 0);
+				} else {
+					blocksToBreak.add(curr);
 				}
 			}
 		}
@@ -186,10 +169,7 @@ public class FarmineEffect implements DestroyBlockEffect
 			harvestBlock(level, state.getBlock(), blockToBreak, state, playerIn, stack);
 		}
 		
-		//We add 1 because that means the harvestTool will always take at least 2 damage.
-		//This is important because all ItemWeapons take at least 2 damage whenever it breaks a block.
-		//This is because WeaponItem extends ItemSword.
-		stack.hurtAndBreak(blocksToBreak.size() + 1, playerIn, EquipmentSlot.MAINHAND);
+		stack.hurtAndBreak(blocksToBreak.size(), playerIn, EquipmentSlot.MAINHAND);
 	}
 	
 	/*
@@ -236,6 +216,15 @@ public class FarmineEffect implements DestroyBlockEffect
 		return false;
 	}
 	
+	/**
+	 * Determines the greatest distance in all 3 axis between 2 positions
+	 */
+	private int distBetween(BlockPos a, BlockPos b) {
+		return Math.max(Math.max(Math.abs(a.getX() - b.getX()),
+				Math.abs(a.getY() - b.getY())),
+				Math.abs(a.getZ() - b.getZ()));
+	}
+	
 	/*
 	 * Getters, setters, and other public access methods
 	 */
@@ -258,7 +247,7 @@ public class FarmineEffect implements DestroyBlockEffect
 	 */
 	public boolean isBlockForbidden(Block block)
 	{
-		return farMineForbiddenBlocks.contains(block);
+		return block.defaultBlockState().is(FARMINE_BREAK_BLACKLIST);
 	}
 	
 	/**

@@ -9,11 +9,13 @@ The format is based on [Keep a Changelog](https://keepachangelog.com/en/1.1.0/).
 ### Changed
 
 - Stack and Queue modi have more distinct recipes
+- Farmine break blacklist is now controlled by the `minestuck:farmine_break_blacklist` block tag, instead of being hardcoded
 
 ### Fixed
 
 - Fix some items having 0 grist cost
 - Fix weapons having the wrong durability
+- Fix farmine only mining a 3x3x3 cube around the block mined
 
 ### Removed
 
