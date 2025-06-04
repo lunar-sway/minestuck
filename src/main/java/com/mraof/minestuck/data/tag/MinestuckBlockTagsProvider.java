@@ -371,6 +371,7 @@ public final class MinestuckBlockTagsProvider extends BlockTagsProvider
 		tag(PUSHABLE_BLOCK_REPLACEABLE).addTags(SAPLINGS, FLOWERS);
 		tag(PETRIFIED_FLORA_PLACEABLE).addTags(Tags.Blocks.STONES, Tags.Blocks.COBBLESTONES, Tags.Blocks.GRAVELS);
 		tag(EDITMODE_BREAK_BLACKLIST).addTags(BlockTags.PORTALS);
+		tag(FARMINE_BREAK_BLACKLIST).add(Blocks.OBSIDIAN);
 	}
 	
 	@Override
