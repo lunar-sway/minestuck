@@ -13,6 +13,7 @@ The format is based on [Keep a Changelog](https://keepachangelog.com/en/1.1.0/).
 ### Fixed
 
 - Fix some items having 0 grist cost
+- Fix weapons having the wrong durability
 
 ### Removed
 
