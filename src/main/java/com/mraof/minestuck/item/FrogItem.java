@@ -15,12 +15,9 @@ import net.minecraft.util.Mth;
 import net.minecraft.world.InteractionResult;
 import net.minecraft.world.entity.Entity;
 import net.minecraft.world.entity.LivingEntity;
-import net.minecraft.world.entity.MobSpawnType;
-import net.minecraft.world.entity.SpawnGroupData;
 import net.minecraft.world.entity.player.Player;
 import net.minecraft.world.item.Item;
 import net.minecraft.world.item.ItemStack;
-import net.minecraft.world.item.Items;
 import net.minecraft.world.item.TooltipFlag;
 import net.minecraft.world.item.context.UseOnContext;
 import net.minecraft.world.level.Level;
@@ -29,7 +26,6 @@ import net.minecraft.world.level.block.state.BlockState;
 import javax.annotation.Nullable;
 import javax.annotation.ParametersAreNonnullByDefault;
 import java.util.List;
-import java.util.Optional;
 import java.util.UUID;
 
 @ParametersAreNonnullByDefault
@@ -65,20 +61,17 @@ public class FrogItem extends Item
 				else if(size <= 1.4f) tooltip.add(Component.translatable(getDescriptionId() + ".size.2"));
 				else if(size <= 2f) tooltip.add(Component.translatable(getDescriptionId() + ".size.3"));
 				else tooltip.add(Component.translatable(getDescriptionId() + ".size.4"));
-			}
-			else tooltip.add(Component.translatable(getDescriptionId() + ".size.random"));
-		}
-		else tooltip.add(Component.translatable(getDescriptionId() + ".random"));
+			} else tooltip.add(Component.translatable(getDescriptionId() + ".size.random"));
+		} else tooltip.add(Component.translatable(getDescriptionId() + ".random"));
 	}
-
+	
 	@Override
 	public Component getName(ItemStack stack)
 	{
 		String variant = getFrogTraits(stack).variant().orElse(FrogEntity.FrogVariants.DEFAULT).getSerializedName();
 		return Component.translatable(getDescriptionId() + ".type." + variant);
-
 	}
-
+	
 	@Override
 	public InteractionResult useOn(UseOnContext context)
 	{
@@ -88,33 +81,32 @@ public class FrogItem extends Item
 		Level level = context.getLevel();
 		BlockPos pos = context.getClickedPos();
 		
-		if (level.isClientSide)
+		if(level.isClientSide)
 			return InteractionResult.SUCCESS;
-		else if (player != null && !player.mayUseItemAt(pos.relative(face), face, itemstack))
+		else if(player != null && !player.mayUseItemAt(pos.relative(face), face, itemstack))
 		{
 			return InteractionResult.FAIL;
-		}
-		else
+		} else
 		{
 			BlockState blockState = level.getBlockState(pos);
 			
 			BlockPos spawnPos;
-			if (blockState.getBlockSupportShape(level, pos).isEmpty())
+			if(blockState.getBlockSupportShape(level, pos).isEmpty())
 				spawnPos = pos;
 			else
 				spawnPos = pos.relative(face);
 			
-			Entity entity =  createFrog((ServerLevel) level, (double)spawnPos.getX() + 0.5D, (double)spawnPos.getY(), (double)spawnPos.getZ() + 0.5D, 0);
+			Entity entity = createFrog((ServerLevel) level, (double) spawnPos.getX() + 0.5D, (double) spawnPos.getY(), (double) spawnPos.getZ() + 0.5D, 0);
 			
-			if (entity != null)
+			if(entity != null)
 			{
-				if (entity instanceof LivingEntity && itemstack.has(DataComponents.CUSTOM_NAME))
+				if(entity instanceof LivingEntity && itemstack.has(DataComponents.CUSTOM_NAME))
 				{
 					entity.setCustomName(itemstack.getHoverName());
 				}
-				applyItemEntityDataToEntity(level, player, itemstack,(FrogEntity) entity);
+				applyItemEntityDataToEntity(level, player, itemstack, (FrogEntity) entity);
 				level.addFreshEntity(entity);
-				if (player == null || !player.isCreative())
+				if(player == null || !player.isCreative())
 				{
 					itemstack.shrink(1);
 				}
@@ -135,16 +127,17 @@ public class FrogItem extends Item
 		frog.playAmbientSound();
 		return frog;
 	}
+	
 	public static void applyItemEntityDataToEntity(Level level, @Nullable Player player, ItemStack stack, @Nullable FrogEntity targetEntity)
 	{
 		MinecraftServer minecraftserver = level.getServer();
 		
-		if (minecraftserver != null && targetEntity != null)
+		if(minecraftserver != null && targetEntity != null)
 		{
-			if (stack.has(DataComponents.ENTITY_DATA))
+			if(stack.has(DataComponents.ENTITY_DATA))
 			{
 				CompoundTag stackTag = stack.get(DataComponents.ENTITY_DATA).copyTag();
-				if (!level.isClientSide && targetEntity.onlyOpCanSetNbt() && (player == null || !minecraftserver.getPlayerList().isOp(player.getGameProfile())))
+				if(!level.isClientSide && targetEntity.onlyOpCanSetNbt() && (player == null || !minecraftserver.getPlayerList().isOp(player.getGameProfile())))
 				{
 					return;
 				}
@@ -170,7 +163,6 @@ public class FrogItem extends Item
 	
 	public static int getSkinColor(ItemStack stack)
 	{
-		
 		return getFrogTraits(stack).skinColor().orElse(0x4BEC13);
 	}
 	
@@ -185,6 +177,4 @@ public class FrogItem extends Item
 		return traits.bellyType().isPresent() && traits.bellyType().get() == FrogEntity.BellyTypes.NONE ? getSkinColor(stack) :
 				traits.bellyColor().orElse(0xD6DE83);
 	}
-	
-	
 }

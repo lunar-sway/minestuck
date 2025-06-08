@@ -28,9 +28,6 @@ public class FrogSkinLayer extends RenderLayer<FrogEntity, FrogModel<FrogEntity>
 		
 		FrogEntity.FrogVariants variant = frog.getFrogVariant();
 		
-		if(variant == null)
-			variant = FrogEntity.FrogVariants.DEFAULT;
-		
 		int color = variant == FrogEntity.FrogVariants.DEFAULT ? frog.getSkinColor() : 0xFFFFFFFF;
 		
 		coloredCutoutModelCopyLayerRender(this.getParentModel(), this.frogModel, Minestuck.id("textures/entity/frog/skin_" + variant.getSerializedName() + ".png"),
