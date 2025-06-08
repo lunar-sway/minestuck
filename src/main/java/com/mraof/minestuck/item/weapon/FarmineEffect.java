@@ -11,15 +11,12 @@ import net.minecraft.world.level.block.Block;
 import net.minecraft.world.level.block.Blocks;
 import net.minecraft.world.level.block.entity.BlockEntity;
 import net.minecraft.world.level.block.state.BlockState;
-import org.apache.commons.lang3.tuple.Pair;
 
 import static com.mraof.minestuck.util.MSTags.Blocks.FARMINE_BREAK_BLACKLIST;
 
-import java.util.Comparator;
 import java.util.HashMap;
 import java.util.HashSet;
 import java.util.LinkedList;
-import java.util.PriorityQueue;
 
 /**
  * A "Farmine" harvestTool is a harvestTool that mines more blocks that just the one originally broken.
@@ -37,7 +34,9 @@ import java.util.PriorityQueue;
  */
 public class FarmineEffect implements DestroyBlockEffect
 {
+	/** Maximum mining distance from the block mined */
 	private int radius;
+	/** Maximum amount of blocks mined */
 	private int terminus;
 	private final HashMap<Block, HashSet<Block>> farMineEquivalencies = new HashMap<>();
 	
@@ -83,11 +82,7 @@ public class FarmineEffect implements DestroyBlockEffect
 			return;
 		}
 		
-		Comparator<Pair<BlockPos, Integer>> comparator = new PairedIntComparator();
-		PriorityQueue<Pair<BlockPos, Integer>> candidates = new PriorityQueue<>(comparator);
-		Block block = blockState.getBlock();
-		HashSet<Block> equals = farMineEquivalencies.get(block);
-		if(equals == null) equals = new HashSet<>();
+		int rad;
 		
 		//If the harvestTool can't harvest the block, or the player isn't actually a player, or the player is sneaking,
 		//or the harvestTool doesn't farmine, or it's one of those blocks that breaks instantly, don't farmine.
@@ -99,66 +94,19 @@ public class FarmineEffect implements DestroyBlockEffect
 		{
 			//If the block is unacceptable or there's a harvestTool mismatch, cap out at a basic 3x3 area
 			if(blockState.is(FARMINE_BREAK_BLACKLIST)
-					|| stack.getDestroySpeed(blockState) < ((WeaponItem) stack.getItem()).getEfficiency())
+					|| blockState.getBlock().defaultDestroyTime() > ((WeaponItem) stack.getItem()).getEfficiency())
 			{
-				candidates.add(Pair.of(pos, 1));
+				rad = 1;
 			}
 			else	//Otherwise, farmine normally
 			{
-				candidates.add(Pair.of(pos, radius));
+				rad = radius;
 			}
 		}
 		
 		//This set will contain all the blocks you'll want to break in the end.
-		HashSet<BlockPos> blocksToBreak = new HashSet<BlockPos>();
-
-		while (!candidates.isEmpty())
-		{
-			BlockPos curr = candidates.peek().getLeft();
-			int rad = candidates.poll().getRight();
-			if (!blocksToBreak.contains(curr))
-			{
-				if (rad != 0)
-				{
-					LinkedList<BlockPos> edges = new LinkedList<>();
-					edges.add(curr);
-
-					do {
-						BlockPos edge = edges.poll();
-						blocksToBreak.add(edge);
-
-						//Iterates across all blocks in a 3x3 cube centered on this block.
-						//This ends up with a bias towards downward north-west
-						for (int i = -1; i < 2; i++)
-						{
-							for (int j = -1; j < 2; j++)
-							{
-								for (int k = -1; k < 2; k++)
-								{
-									if(i == 0 && j == 0 && k == 0)
-										continue;
-										
-									BlockPos newBlockPos = new BlockPos(edge.getX() + i, edge.getY() + j, edge.getZ() + k);
-									BlockState newState = level.getBlockState(newBlockPos);
-									Block newBlock = newState.getBlock();
-
-									if (!blocksToBreak.contains(newBlockPos) && !edges.contains(newBlockPos) &&
-										distBetween(pos, newBlockPos) <= rad &&
-										(equals.contains(newBlock) || newBlock.equals(block)))
-									{
-										edges.add(newBlockPos);
-									}
-								}
-							}
-						}
-					} while (blocksToBreak.size() < terminus &&
-							blocksToBreak.size() <= (stack.getMaxDamage() - stack.getDamageValue()) &&
-							edges.size() > 0);
-				} else {
-					blocksToBreak.add(curr);
-				}
-			}
-		}
+		HashSet<BlockPos> blocksToBreak = getConnectedBlocks(pos, blockState.getBlock(), rad,
+				Math.min(terminus, stack.getMaxDamage() - stack.getDamageValue()), level);
 		
 		//Now, break ALL of the blocks!
 		for(BlockPos blockToBreak : blocksToBreak)
@@ -173,32 +121,6 @@ public class FarmineEffect implements DestroyBlockEffect
 	/*
 	 * Utility
 	 */
-	
-	//This returns a larger-to-smaller comparison of the paired objects, assuming they are integers.
-	private static class PairedIntComparator implements Comparator<Pair<BlockPos, Integer>>
-	{
-		@Override
-		public int compare(Pair<BlockPos, Integer> x, Pair<BlockPos, Integer> y)
-		{
-			if (x == null || y == null || x.getRight() == null || y.getRight() == null)
-				return 0;
-			
-			return y.getRight() - x.getRight();
-		}
-	}
-	
-	/**
-	 * Determines if the farmining harvestTool will consider one block equivalent to another.
-	 * Only tests if the equivalencies list considers the blocks to be the same.
-	 * @param a The block whose nature is the test of equivalence
-	 * @param b The block whose equivalency is being tested
-	 * @return Returns true if <code>b</code> is forced to be equivalent to <code>a</code>
-	 */
-	public boolean isEquivalent(Block a, Block b)
-	{
-		HashSet<Block> e = farMineEquivalencies.get(a);
-		return e != null && e.contains(b);
-	}
 	
 	private boolean harvestBlock(Level level, Block block, BlockPos pos, BlockState state, LivingEntity playerIn, ItemStack stack)
 	{
@@ -223,39 +145,61 @@ public class FarmineEffect implements DestroyBlockEffect
 				Math.abs(a.getZ() - b.getZ()));
 	}
 	
+	/**
+	 * Returns all connected blocks positions that can be farmined
+	 * 
+	 * @param start Starting position
+	 * @param block Starting block
+	 */
+	private HashSet<BlockPos> getConnectedBlocks(BlockPos start, Block block, int radius, int max, Level level) {
+		HashSet<BlockPos> blocksToBreak = new HashSet<BlockPos>();
+		HashSet<Block> equals = farMineEquivalencies.get(block);
+		if(equals == null) equals = new HashSet<>();
+		
+		if (radius != 0)
+		{
+			LinkedList<BlockPos> edges = new LinkedList<>();
+			edges.add(start);
+
+			do {
+				BlockPos edge = edges.poll();
+				blocksToBreak.add(edge);
+
+				//Iterates across all blocks in a 3x3 cube centered on this block.
+				//This ends up with a bias towards downward north-west
+				for (int i = -1; i < 2; i++)
+				{
+					for (int j = -1; j < 2; j++)
+					{
+						for (int k = -1; k < 2; k++)
+						{
+							if(i == 0 && j == 0 && k == 0)
+								continue;
+							
+							BlockPos newBlockPos = new BlockPos(edge.getX()+i, edge.getY()+j, edge.getZ()+k);
+							BlockState newState = level.getBlockState(newBlockPos);
+							Block newBlock = newState.getBlock();
+
+							if (!blocksToBreak.contains(newBlockPos) && !edges.contains(newBlockPos) &&
+								distBetween(start, newBlockPos) <= radius &&
+								(equals.contains(newBlock) || newBlock.equals(block)))
+							{
+								edges.add(newBlockPos);
+							}
+						}
+					}
+				}
+			} while (blocksToBreak.size() <= max && edges.size() > 0);
+		} else {
+			blocksToBreak.add(start);
+		}
+		
+		return blocksToBreak;
+	}
+	
 	/*
 	 * Getters, setters, and other public access methods
 	 */
-	
-	/**
-	 * Gets the harvestTool's radius. This limits how far out blocks can be mined.
-	 * @return Returns the harvestTool's maximum mining range. Will never be less than 0.
-	 */
-	public int getRadius()
-	{
-		return radius;
-	}
-	
-	/**
-	 * For some blocks, like obsidian, it might not be appropriate to farmine, even with a farmining harvestTool equipped.
-	 * Farmining can be disabled for these blocks by adding them to a special list.
-	 * This method tests a block to see if it is on this list.
-	 * @param block The block being tested
-	 * @return Returns true if the block is on the forbidden list, and false if the block is not on the list.
-	 */
-	public boolean isBlockForbidden(Block block)
-	{
-		return block.defaultBlockState().is(FARMINE_BREAK_BLACKLIST);
-	}
-	
-	/**
-	 * Gets the harvestTool's terminus. This limits how many blocks can be mined in one operation.
-	 * @return Returns the harvestTool's maximum number of blocks broken in a single operation. Will never be less than 1.
-	 */
-	public int getTerminus()
-	{
-		return terminus;
-	}
 	
 	/**
 	 * Redefines the limiting values of a farmining harvestTool: radius and terminus.
@@ -270,24 +214,6 @@ public class FarmineEffect implements DestroyBlockEffect
 		//A harvestTool that can only mine X blocks can't mine more than X blocks away.
 		radius = Math.max(0, Math.min(r, terminus));
 		return this;
-	}
-	
-	/**
-	 * Each harvestTool maps blocks to sets of blocks, in a system of association.
-	 * This implementation was chosen because it provides cheap lookup.
-	 * This is good, because associations are checked in large batches within a single server tick.
-	 * A block is mapped to a set of all the blocks associated with it.
-	 * @return Returns a deep clone of this harvestTool's private association map.
-	 */
-	public HashMap<Block, HashSet<Block>> getAssociations()
-	{
-		HashMap<Block, HashSet<Block>> out = new HashMap<Block, HashSet<Block>>();
-		for(Block b : farMineEquivalencies.keySet())
-		{
-			out.put(b, (HashSet<Block>) farMineEquivalencies.get(b).clone());
-		}
-		
-		return out;
 	}
 	
 	/**
