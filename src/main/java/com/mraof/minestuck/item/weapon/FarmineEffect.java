@@ -25,18 +25,22 @@ import java.util.LinkedList;
  * In addition, however, it has a Radius and Terminus.
  * The radius is the farthest distance between the initially-broken block and a block broken in the same mining operation. A value of -1 means no radius will come into play.
  * The terminus is the largest number of blocks that can be destroyed in a single farmining operation. Terminus is clamped to a minimum of 1.
- * 
+ * <p>
  * Farmining tools will only break more of the same block broken originally.
  * Two blocks are considered the same if they have the same Block ID and drop the same item with the same damage.
  * Two blocks that are not normally considered the same will be considered the same if they have an association.
- * @author BenjaminK
  *
+ * @author BenjaminK
  */
 public class FarmineEffect implements DestroyBlockEffect
 {
-	/** Maximum mining distance from the block mined */
+	/**
+	 * Maximum mining distance from the block mined
+	 */
 	private int radius;
-	/** Maximum amount of blocks mined */
+	/**
+	 * Maximum amount of blocks mined
+	 */
 	private int terminus;
 	private final HashMap<Block, HashSet<Block>> farMineEquivalencies = new HashMap<>();
 	
@@ -45,7 +49,7 @@ public class FarmineEffect implements DestroyBlockEffect
 		redefineLimiters(radius, terminus);
 		initializeFarMineLists();
 	}
-
+	
 	private void initializeFarMineLists()
 	{
 		addAssociation(Blocks.DIRT, Blocks.GRASS_BLOCK);
@@ -97,8 +101,7 @@ public class FarmineEffect implements DestroyBlockEffect
 					|| blockState.getBlock().defaultDestroyTime() > ((WeaponItem) stack.getItem()).getEfficiency())
 			{
 				rad = 1;
-			}
-			else	//Otherwise, farmine normally
+			} else    //Otherwise, farmine normally
 			{
 				rad = radius;
 			}
@@ -139,58 +142,62 @@ public class FarmineEffect implements DestroyBlockEffect
 	/**
 	 * Determines the greatest distance in all 3 axis between 2 positions
 	 */
-	private int distBetween(BlockPos a, BlockPos b) {
+	private int distBetween(BlockPos a, BlockPos b)
+	{
 		return Math.max(Math.max(Math.abs(a.getX() - b.getX()),
-				Math.abs(a.getY() - b.getY())),
+						Math.abs(a.getY() - b.getY())),
 				Math.abs(a.getZ() - b.getZ()));
 	}
 	
 	/**
 	 * Returns all connected blocks positions that can be farmined
-	 * 
+	 *
 	 * @param start Starting position
 	 * @param block Starting block
 	 */
-	private HashSet<BlockPos> getConnectedBlocks(BlockPos start, Block block, int radius, int max, Level level) {
+	private HashSet<BlockPos> getConnectedBlocks(BlockPos start, Block block, int radius, int max, Level level)
+	{
 		HashSet<BlockPos> blocksToBreak = new HashSet<BlockPos>();
 		HashSet<Block> equals = farMineEquivalencies.get(block);
 		if(equals == null) equals = new HashSet<>();
 		
-		if (radius != 0)
+		if(radius != 0)
 		{
 			LinkedList<BlockPos> edges = new LinkedList<>();
 			edges.add(start);
-
-			do {
+			
+			do
+			{
 				BlockPos edge = edges.poll();
 				blocksToBreak.add(edge);
-
+				
 				//Iterates across all blocks in a 3x3 cube centered on this block.
 				//This ends up with a bias towards downward north-west
-				for (int i = -1; i < 2; i++)
+				for(int i = -1; i < 2; i++)
 				{
-					for (int j = -1; j < 2; j++)
+					for(int j = -1; j < 2; j++)
 					{
-						for (int k = -1; k < 2; k++)
+						for(int k = -1; k < 2; k++)
 						{
 							if(i == 0 && j == 0 && k == 0)
 								continue;
 							
-							BlockPos newBlockPos = new BlockPos(edge.getX()+i, edge.getY()+j, edge.getZ()+k);
+							BlockPos newBlockPos = new BlockPos(edge.getX() + i, edge.getY() + j, edge.getZ() + k);
 							BlockState newState = level.getBlockState(newBlockPos);
 							Block newBlock = newState.getBlock();
-
-							if (!blocksToBreak.contains(newBlockPos) && !edges.contains(newBlockPos) &&
-								distBetween(start, newBlockPos) <= radius &&
-								(equals.contains(newBlock) || newBlock.equals(block)))
+							
+							if(!blocksToBreak.contains(newBlockPos) && !edges.contains(newBlockPos) &&
+									distBetween(start, newBlockPos) <= radius &&
+									(equals.contains(newBlock) || newBlock.equals(block)))
 							{
 								edges.add(newBlockPos);
 							}
 						}
 					}
 				}
-			} while (blocksToBreak.size() <= max && edges.size() > 0);
-		} else {
+			} while(blocksToBreak.size() <= max && edges.size() > 0);
+		} else
+		{
 			blocksToBreak.add(start);
 		}
 		
@@ -203,6 +210,7 @@ public class FarmineEffect implements DestroyBlockEffect
 	
 	/**
 	 * Redefines the limiting values of a farmining harvestTool: radius and terminus.
+	 *
 	 * @param r R is the new value for the harvestTool's radius. Clamped between 0 and t. Setting this to 0 means the item can't farmine at all.
 	 * @param t T is the new value for the harvestTool's terminus. This will limit how many blocks can be mined. Values are clamped to a minimum of 1.
 	 * @return Returns the same farmining harvestTool, after the change has been applied. Useful for chaining same-line modifications.
@@ -221,6 +229,7 @@ public class FarmineEffect implements DestroyBlockEffect
 	 * In cases where this violates intuition and diminishes the gameplay experience (lit redstone ore is not redstone ore), we use associations.
 	 * Two blocks that have an association are considered equal to the farmining harvestTool; when one is mined, the other will be, too.
 	 * This method lets you add an association between two blocks so that this harvestTool will treat them as the same.
+	 *
 	 * @param a A is a block that will be made equivalent to B.
 	 * @param b B is a block that will be made equivalent to A.
 	 */
@@ -235,38 +244,18 @@ public class FarmineEffect implements DestroyBlockEffect
 	 * One-way associations should be reserved for special cases; please use <code>addAssociation</code> for normal equalities.
 	 * For example: by default, monster eggs are the only blocks to use one-way associations;
 	 * monster eggs are treated as stone, cobblestone, and stone bricks, but those blocks are not treated as monster eggs.
+	 *
 	 * @param a A is a block that will not be made equal to B. When a B block is mined, blocks of type A are ignored like before.
 	 * @param b B is a block that will be made equal to A. When an A block is mined, blocks of type B are included as mining candidates.
 	 */
 	public void addOneWayAssociation(Block a, Block b)
 	{
 		HashSet<Block> equalToA = farMineEquivalencies.get(a);
-		if(equalToA==null)
+		if(equalToA == null)
 		{
 			equalToA = new HashSet<Block>();
 			farMineEquivalencies.put(a, equalToA);
 		}
 		equalToA.add(b);
-	}
-
-	/**
-	 * Removes an association between two blocks. These two blocks will no longer be considered equivalent for this farmining harvestTool.
-	 * Blocks will still be equivalent if they have the same block ID and drop items with the same ID and damage values.
-	 * This removal is a two-way removal. If you want to remove only one, use this method alongside <code>addOneWayAssociation</code>. 
-	 * @param a A is a block that may or may not be associated with B. This method ensures it will not be, when complete.
-	 * @param b B is a block that may or may not be associated with A. This method ensures it will not be, when complete.
-	 */
-	public void removeAssociation(Block a, Block b)
-	{
-		HashSet<Block> equalToA = farMineEquivalencies.get(a);
-		HashSet<Block> equalToB = farMineEquivalencies.get(b);
-		if(equalToA!=null)
-		{
-			equalToA.remove(b);
-		}
-		if(equalToB!=null)
-		{
-			equalToB.remove(a);
-		}
 	}
 }
