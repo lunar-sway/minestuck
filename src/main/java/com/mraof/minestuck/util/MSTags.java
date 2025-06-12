@@ -74,6 +74,7 @@ public class MSTags
 		public static final TagKey<Block> PUSHABLE_BLOCK_REPLACEABLE = tag("portable_block_replaceable");
 		public static final TagKey<Block> PETRIFIED_FLORA_PLACEABLE = tag("petrified_flora_placeable");
 		public static final TagKey<Block> EDITMODE_BREAK_BLACKLIST = tag("editmode_break_blacklist");
+		public static final TagKey<Block> FARMINE_BREAK_BLACKLIST = tag("farmine_break_blacklist");
 		
 		public static final TagKey<Block> MINEABLE_WITH_SICKLE = tag("mineable_with_sickle");
 		public static final TagKey<Block> MINEABLE_WITH_SCYTHE = tag("mineable_with_scythe");
