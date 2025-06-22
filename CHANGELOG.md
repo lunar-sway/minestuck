@@ -6,6 +6,10 @@ The format is based on [Keep a Changelog](https://keepachangelog.com/en/1.1.0/).
 
 ## [Unreleased]
 
+### Added
+
+- Increased number of blocks used in land specific structure block palettes
+
 ### Changed
 
 - Stack and Queue modi have more distinct recipes
@@ -23,7 +27,7 @@ The format is based on [Keep a Changelog](https://keepachangelog.com/en/1.1.0/).
 
 ### Contributors for this release
 
-- medsal15, Dweblenod
+- medsal15, Dweblenod, TangleKat
 
 ## [1.20.1-1.12.1.1] - 2025-04-18
 
