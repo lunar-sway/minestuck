@@ -22,6 +22,8 @@ import net.minecraft.world.level.levelgen.placement.CountPlacement;
 import net.minecraft.world.level.levelgen.placement.HeightRangePlacement;
 import net.minecraft.world.level.levelgen.placement.InSquarePlacement;
 
+import static com.mraof.minestuck.world.gen.structure.blocks.StructureBlockRegistry.*;
+
 public class ForestLandType extends TerrainLandType
 {
 	public static final String FORESTS = "minestuck.forests";
@@ -55,25 +57,25 @@ public class ForestLandType extends TerrainLandType
 	@Override
 	public void registerBlocks(StructureBlockRegistry registry)
 	{
-		registry.setBlock("surface", type == Variant.TAIGA ? Blocks.PODZOL : Blocks.GRASS_BLOCK);
-		registry.setBlock("upper", Blocks.DIRT);
+		registry.setBlock(SURFACE, type == Variant.TAIGA ? Blocks.PODZOL : Blocks.GRASS_BLOCK);
+		registry.setBlock(UPPER, Blocks.DIRT);
 		if(type == Variant.TAIGA) {
-			registry.setBlock("structure_primary", Blocks.SPRUCE_WOOD);
-			registry.setBlock("structure_primary_decorative", MSBlocks.FROST_WOOD);
+			registry.setBlock(STRUCTURE_PRIMARY, Blocks.SPRUCE_WOOD);
+			registry.setBlock(STRUCTURE_PRIMARY_DECORATIVE, MSBlocks.FROST_WOOD);
 		} else {
-			registry.setBlock("structure_primary", MSBlocks.VINE_WOOD);
-			registry.setBlock("structure_primary_decorative", MSBlocks.FLOWERY_VINE_WOOD);
+			registry.setBlock(STRUCTURE_PRIMARY, MSBlocks.VINE_WOOD);
+			registry.setBlock(STRUCTURE_PRIMARY_DECORATIVE, MSBlocks.FLOWERY_VINE_WOOD);
 		}
-		registry.setBlock("structure_secondary", Blocks.STONE_BRICKS);
-		registry.setBlock("structure_secondary_decorative", Blocks.CHISELED_STONE_BRICKS);
-		registry.setBlock("structure_secondary_stairs", Blocks.STONE_BRICK_STAIRS);
-		registry.setBlock("village_path", Blocks.DIRT_PATH);
-		registry.setBlock("bush", Blocks.FERN);
-		registry.setBlock("structure_wool_1", Blocks.GREEN_WOOL);
+		registry.setBlock(STRUCTURE_SECONDARY, Blocks.STONE_BRICKS);
+		registry.setBlock(STRUCTURE_SECONDARY_DECORATIVE, Blocks.CHISELED_STONE_BRICKS);
+		registry.setBlock(STRUCTURE_SECONDARY_STAIRS, Blocks.STONE_BRICK_STAIRS);
+		registry.setBlock(VILLAGE_PATH, Blocks.DIRT_PATH);
+		registry.setBlock(BUSH, Blocks.FERN);
+		registry.setBlock(STRUCTURE_WOOL_1, Blocks.GREEN_WOOL);
 		if(type == Variant.TAIGA) {
-			registry.setBlock("structure_wool_3", Blocks.LIGHT_BLUE_WOOL);
+			registry.setBlock(STRUCTURE_WOOL_3, Blocks.LIGHT_BLUE_WOOL);
 		} else {
-			registry.setBlock("structure_wool_3", Blocks.BROWN_WOOL);
+			registry.setBlock(STRUCTURE_WOOL_3, Blocks.BROWN_WOOL);
 		}
 	}
 	

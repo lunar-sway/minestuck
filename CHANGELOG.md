@@ -6,9 +6,14 @@ The format is based on [Keep a Changelog](https://keepachangelog.com/en/1.1.0/).
 
 ## [Unreleased]
 
+### Added
+
+- Increased number of blocks used in land specific structure block palettes
+
 ### Changed
 
 - Stack and Queue modi have more distinct recipes
+- Farmine break blacklist is now controlled by the `minestuck:farmine_break_blacklist` block tag, instead of being hardcoded
 
 ### Fixed
 
@@ -16,6 +21,7 @@ The format is based on [Keep a Changelog](https://keepachangelog.com/en/1.1.0/).
 - Fix weapons having the wrong durability
 - Fix emerald weapons dealing no damage
 - Fix armors stacking to 64
+- Fix farmine only mining a 3x3x3 cube around the block mined
 
 ### Removed
 
@@ -23,7 +29,7 @@ The format is based on [Keep a Changelog](https://keepachangelog.com/en/1.1.0/).
 
 ### Contributors for this release
 
-- medsal15, Dweblenod
+- medsal15, Dweblenod, TangleKat
 
 ## [1.20.1-1.12.1.1] - 2025-04-18
 
