@@ -16,7 +16,6 @@ import net.minecraft.world.level.ChunkPos;
 import net.minecraft.world.level.StructureManager;
 import net.minecraft.world.level.WorldGenLevel;
 import net.minecraft.world.level.block.Blocks;
-import net.minecraft.world.level.block.WallTorchBlock;
 import net.minecraft.world.level.block.state.BlockState;
 import net.minecraft.world.level.block.state.properties.ChestType;
 import net.minecraft.world.level.chunk.ChunkGenerator;
