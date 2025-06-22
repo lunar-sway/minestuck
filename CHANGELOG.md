@@ -8,16 +8,29 @@ The format is based on [Keep a Changelog](https://keepachangelog.com/en/1.1.0/).
 
 ### Added
 
+- Increased number of blocks used in land specific structure block palettes
 - Added 3 bunker structures to Lands
 
 ### Changed
 
+- Stack and Queue modi have more distinct recipes
+- Farmine break blacklist is now controlled by the `minestuck:farmine_break_blacklist` block tag, instead of being hardcoded
 - Reduced imp dungeon generation frequency
 - Imp dungeons will not spawn near villages
 
+### Fixed
+
+- Fix some items having 0 grist cost
+- Fix weapons having the wrong durability
+- Fix farmine only mining a 3x3x3 cube around the block mined
+
+### Removed
+
+- Removed `minestuck:non_mirrored` recipe type
+
 ### Contributors for this release
 
-- TangleKat, pancake, Dweblenod
+- medsal15, Dweblenod, TangleKat, pancake
 
 ## [1.20.1-1.12.1.1] - 2025-04-18
 

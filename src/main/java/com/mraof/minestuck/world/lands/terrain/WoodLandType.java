@@ -29,6 +29,8 @@ import net.minecraft.world.level.levelgen.structure.placement.RandomSpreadType;
 
 import java.util.function.Consumer;
 
+import static com.mraof.minestuck.world.gen.structure.blocks.StructureBlockRegistry.*;
+
 public class WoodLandType extends TerrainLandType
 {
 	public static final String WOOD = "minestuck.wood";
@@ -45,27 +47,53 @@ public class WoodLandType extends TerrainLandType
 	@Override
 	public void registerBlocks(StructureBlockRegistry registry)
 	{
-		registry.setBlock("ground", MSBlocks.UNCARVED_WOOD);
-		registry.setBlock("upper", MSBlocks.UNCARVED_WOOD);
-		registry.setBlock("surface", MSBlocks.UNCARVED_WOOD);
-		registry.setBlock("ocean", MSBlocks.CAULK);
-		registry.setBlock("village_path", MSBlocks.WOOD_SHAVINGS);
-		registry.setBlock("structure_primary", MSBlocks.TREATED_HEAVY_PLANKS);
-		registry.setBlock("structure_primary_decorative", MSBlocks.POLISHED_TREATED_UNCARVED_WOOD);
-		registry.setBlock("structure_primary_cracked", MSBlocks.TREATED_CHIPBOARD);
-		registry.setBlock("structure_primary_mossy", MSBlocks.TREATED_WOOD_SHAVINGS);
-		registry.setBlock("structure_primary_column", MSBlocks.CARVED_LOG);
-		registry.setBlock("structure_primary_stairs", MSBlocks.TREATED_HEAVY_PLANK_STAIRS);
-		registry.setBlock("structure_secondary", MSBlocks.POLISHED_LACQUERED_UNCARVED_WOOD);
-		registry.setBlock("structure_secondary_decorative", MSBlocks.TREATED_PLANKS);
-		registry.setBlock("structure_secondary_stairs", MSBlocks.POLISHED_LACQUERED_UNCARVED_STAIRS);
-		registry.setBlock("light_block", MSBlocks.WOODEN_LAMP);
-		registry.setBlock("bush", MSBlocks.CARVED_BUSH);
-		registry.setBlock("village_door", MSBlocks.CARVED_DOOR);
-		registry.setBlock("structure_wool_1", Blocks.PURPLE_WOOL);
-		registry.setBlock("structure_wool_3", Blocks.GREEN_WOOL);
-		registry.setBlock("cruxite_ore", MSBlocks.UNCARVED_WOOD_CRUXITE_ORE);
-		registry.setBlock("uranium_ore", MSBlocks.UNCARVED_WOOD_URANIUM_ORE);
+		registry.setBlock(CRUXITE_ORE, MSBlocks.UNCARVED_WOOD_CRUXITE_ORE);
+		registry.setBlock(URANIUM_ORE, MSBlocks.UNCARVED_WOOD_URANIUM_ORE);
+		registry.setBlock(GROUND, MSBlocks.UNCARVED_WOOD);
+		registry.setBlock(UPPER, MSBlocks.UNCARVED_WOOD);
+		registry.setBlock(SURFACE, MSBlocks.UNCARVED_WOOD);
+		registry.setBlock(OCEAN, MSBlocks.CAULK);
+		
+		registry.setBlock(STRUCTURE_PRIMARY, MSBlocks.TREATED_HEAVY_PLANKS);
+		registry.setBlock(STRUCTURE_PRIMARY_DECORATIVE, MSBlocks.POLISHED_TREATED_UNCARVED_WOOD);
+		registry.setBlock(STRUCTURE_PRIMARY_CRACKED, MSBlocks.TREATED_CHIPBOARD);
+		registry.setBlock(STRUCTURE_PRIMARY_COLUMN, MSBlocks.CARVED_LOG);
+		registry.setBlock(STRUCTURE_PRIMARY_STAIRS, MSBlocks.TREATED_HEAVY_PLANK_STAIRS);
+		registry.setBlock(STRUCTURE_PRIMARY_SLAB, MSBlocks.TREATED_HEAVY_PLANK_SLAB);
+		registry.setBlock(STRUCTURE_PRIMARY_WALL, MSBlocks.TREATED_UNCARVED_WOOD_FENCE);
+		
+		registry.setBlock(STRUCTURE_PRIMARY_MOSSY, MSBlocks.TREATED_WOOD_SHAVINGS);
+		registry.setBlock(STRUCTURE_PRIMARY_MOSSY_STAIRS, MSBlocks.TREATED_CHIPBOARD_STAIRS);
+		registry.setBlock(STRUCTURE_PRIMARY_MOSSY_SLAB, MSBlocks.TREATED_CHIPBOARD_SLAB);
+		registry.setBlock(STRUCTURE_PRIMARY_MOSSY_WALL, MSBlocks.TREATED_CHIPBOARD_FENCE);
+		
+		registry.setBlock(STRUCTURE_SECONDARY, MSBlocks.POLISHED_LACQUERED_UNCARVED_WOOD);
+		registry.setBlock(STRUCTURE_SECONDARY_DECORATIVE, MSBlocks.TREATED_PLANKS);
+		registry.setBlock(STRUCTURE_SECONDARY_STAIRS, MSBlocks.POLISHED_LACQUERED_UNCARVED_STAIRS);
+		registry.setBlock(STRUCTURE_SECONDARY_SLAB, MSBlocks.POLISHED_LACQUERED_UNCARVED_SLAB);
+		registry.setBlock(STRUCTURE_SECONDARY_WALL, MSBlocks.LACQUERED_CHIPBOARD_FENCE);
+		
+		registry.setBlock(STRUCTURE_WOOD, MSBlocks.UNCARVED_WOOD);
+		registry.setBlock(STRUCTURE_LOG, MSBlocks.UNCARVED_WOOD);
+		registry.setBlock(STRUCTURE_STRIPPED_WOOD, MSBlocks.POLISHED_UNCARVED_WOOD);
+		registry.setBlock(STRUCTURE_STRIPPED_LOG, MSBlocks.POLISHED_UNCARVED_WOOD);
+		registry.setBlock(STRUCTURE_PLANKS, MSBlocks.CARVED_PLANKS);
+		registry.setBlock(STRUCTURE_BOOKSHELF, MSBlocks.TREATED_BOOKSHELF);
+		registry.setBlock(STRUCTURE_PLANKS_STAIRS, MSBlocks.CARVED_STAIRS);
+		registry.setBlock(STRUCTURE_PLANKS_SLAB, MSBlocks.CARVED_SLAB);
+		registry.setBlock(STRUCTURE_PLANKS_FENCE, MSBlocks.CARVED_FENCE);
+		registry.setBlock(STRUCTURE_PLANKS_FENCE_GATE, MSBlocks.CARVED_FENCE_GATE);
+		registry.setBlock(STRUCTURE_PLANKS_DOOR, MSBlocks.CARVED_DOOR);
+		registry.setBlock(STRUCTURE_PLANKS_TRAPDOOR, MSBlocks.CARVED_TRAPDOOR);
+		
+		registry.setBlock(STRUCTURE_WOOL_1, Blocks.PURPLE_WOOL);
+		registry.setBlock(STRUCTURE_WOOL_3, Blocks.GREEN_WOOL);
+		
+		registry.setBlock(VILLAGE_DOOR, MSBlocks.CARVED_DOOR);
+		registry.setBlock(VILLAGE_PATH, MSBlocks.WOOD_SHAVINGS);
+		
+		registry.setBlock(LIGHT_BLOCK, MSBlocks.WOODEN_LAMP);
+		registry.setBlock(BUSH, MSBlocks.CARVED_BUSH);
 	}
 	
 	@Override
@@ -99,11 +127,11 @@ public class WoodLandType extends TerrainLandType
 		builder.addFeature(GenerationStep.Decoration.SURFACE_STRUCTURES, MSPlacedFeatures.WOODEN_CACTUS_PAIR, LandBiomeType.NORMAL, LandBiomeType.ROUGH);
 		
 		builder.addFeature(GenerationStep.Decoration.UNDERGROUND_ORES, MSPlacedFeatures.TREATED_PLANKS_DISK,
-				FeatureModifier.withTargets(BlockPredicate.matchesBlocks(blocks.getBlockState("surface").getBlock(), blocks.getBlockState("upper").getBlock())), LandBiomeType.NORMAL, LandBiomeType.ROUGH);
+				FeatureModifier.withTargets(BlockPredicate.matchesBlocks(blocks.getBlockState(SURFACE).getBlock(), blocks.getBlockState(UPPER).getBlock())), LandBiomeType.NORMAL, LandBiomeType.ROUGH);
 		builder.addFeature(GenerationStep.Decoration.UNDERGROUND_ORES, MSPlacedFeatures.CARVED_PLANKS_DISK,
-				FeatureModifier.withTargets(BlockPredicate.matchesBlocks(blocks.getBlockState("surface").getBlock(), blocks.getBlockState("upper").getBlock())), LandBiomeType.NORMAL);
+				FeatureModifier.withTargets(BlockPredicate.matchesBlocks(blocks.getBlockState(SURFACE).getBlock(), blocks.getBlockState(UPPER).getBlock())), LandBiomeType.NORMAL);
 		builder.addFeature(GenerationStep.Decoration.UNDERGROUND_ORES, MSPlacedFeatures.CHIPBOARD_DISK,
-				FeatureModifier.withTargets(BlockPredicate.matchesBlocks(blocks.getBlockState("surface").getBlock(), blocks.getBlockState("upper").getBlock())), LandBiomeType.NORMAL, LandBiomeType.ROUGH);
+				FeatureModifier.withTargets(BlockPredicate.matchesBlocks(blocks.getBlockState(SURFACE).getBlock(), blocks.getBlockState(UPPER).getBlock())), LandBiomeType.NORMAL, LandBiomeType.ROUGH);
 		
 		builder.addFeature(GenerationStep.Decoration.VEGETAL_DECORATION, MSPlacedFeatures.LACQUERED_WOODEN_MUSHROOM_PATCH, LandBiomeType.ROUGH);
 		builder.addFeature(GenerationStep.Decoration.SURFACE_STRUCTURES, MSPlacedFeatures.TREATED_CHAIR, LandBiomeType.ROUGH);
@@ -115,11 +143,11 @@ public class WoodLandType extends TerrainLandType
 		builder.addFeature(GenerationStep.Decoration.SURFACE_STRUCTURES, MSPlacedFeatures.MASSIVE_STOOL, LandBiomeType.ROUGH);
 		
 		builder.addFeature(GenerationStep.Decoration.UNDERGROUND_ORES, MSPlacedFeatures.LACQUERED_PLANKS_DISK,
-				FeatureModifier.withTargets(BlockPredicate.matchesBlocks(blocks.getBlockState("surface").getBlock(), blocks.getBlockState("upper").getBlock())), LandBiomeType.ROUGH);
+				FeatureModifier.withTargets(BlockPredicate.matchesBlocks(blocks.getBlockState(SURFACE).getBlock(), blocks.getBlockState(UPPER).getBlock())), LandBiomeType.ROUGH);
 		builder.addFeature(GenerationStep.Decoration.UNDERGROUND_ORES, MSPlacedFeatures.TREATED_UNCARVED_WOOD_DISK,
-				FeatureModifier.withTargets(BlockPredicate.matchesBlocks(blocks.getBlockState("surface").getBlock(), blocks.getBlockState("upper").getBlock())), LandBiomeType.ROUGH);
+				FeatureModifier.withTargets(BlockPredicate.matchesBlocks(blocks.getBlockState(SURFACE).getBlock(), blocks.getBlockState(UPPER).getBlock())), LandBiomeType.ROUGH);
 		builder.addFeature(GenerationStep.Decoration.UNDERGROUND_ORES, MSPlacedFeatures.TREATED_CHIPBOARD_DISK,
-				FeatureModifier.withTargets(BlockPredicate.matchesBlocks(blocks.getBlockState("surface").getBlock(), blocks.getBlockState("upper").getBlock())), LandBiomeType.ROUGH);
+				FeatureModifier.withTargets(BlockPredicate.matchesBlocks(blocks.getBlockState(SURFACE).getBlock(), blocks.getBlockState(UPPER).getBlock())), LandBiomeType.ROUGH);
 		
 		builder.addFeature(GenerationStep.Decoration.UNDERGROUND_ORES, MSPlacedFeatures.inline(Feature.ORE,
 						new OreConfiguration(blocks.getGroundType(), MSBlocks.WOOD_SHAVINGS.get().defaultBlockState(), 33),
