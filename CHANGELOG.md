@@ -6,13 +6,31 @@ The format is based on [Keep a Changelog](https://keepachangelog.com/en/1.1.0/).
 
 ## [Unreleased]
 
+### Added
+
+- Increased number of blocks used in land specific structure block palettes
+
+### Changed
+
+- Stack and Queue modi have more distinct recipes
+- Farmine break blacklist is now controlled by the `minestuck:farmine_break_blacklist` block tag, instead of being hardcoded
+
 ### Fixed
 
+- Fix some items having 0 grist cost
+- Fix weapons having the wrong durability
+- Fix emerald weapons dealing no damage
+- Fix armor stacking/durability/toughness
+- Fix farmine only mining a 3x3x3 cube around the block mined
 - Fix carved tablets crashing the game when placed down
+
+### Removed
+
+- Removed `minestuck:non_mirrored` recipe type
 
 ### Contributors for this release
 
-- Dweblenod
+- medsal15, Dweblenod, TangleKat, kirderf1
 
 ## [1.20.1-1.12.1.1] - 2025-04-18
 

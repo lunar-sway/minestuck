@@ -41,8 +41,6 @@ public class MSRecipeTypes
 	
 	public static final DeferredRegister<RecipeSerializer<?>> SERIALIZER_REGISTER = DeferredRegister.create(BuiltInRegistries.RECIPE_SERIALIZER, Minestuck.MOD_ID);
 	
-	public static final Supplier<RecipeSerializer<NonMirroredRecipe>> NON_MIRRORED = SERIALIZER_REGISTER.register("non_mirrored", NonMirroredRecipe.Serializer::new);
-	
 	public static final Supplier<SimpleCookingSerializer<IrradiatingRecipe>> IRRADIATING = SERIALIZER_REGISTER.register("irradiating", () -> new SimpleCookingSerializer<>(IrradiatingRecipe::new, 20));
 	public static final Supplier<RecipeSerializer<IrradiatingFallbackRecipe>> IRRADIATING_FALLBACK = SERIALIZER_REGISTER.register("irradiating_fallback", IrradiatingFallbackRecipe.Serializer::new);
 	

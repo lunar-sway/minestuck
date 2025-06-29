@@ -37,7 +37,6 @@ public class GeneratedGristCostConfigProvider implements DataProvider
 	{
 		serializer(RecipeSerializer.SHAPED_RECIPE);
 		serializer(RecipeSerializer.SHAPELESS_RECIPE);
-		serializer(MSRecipeTypes.NON_MIRRORED.get());
 		type(RecipeType.STONECUTTING);
 		serializer(RecipeSerializer.SMITHING_TRANSFORM, SmithingInterpreter.INSTANCE);
 		type(RecipeType.SMELTING, new CookingCostInterpreter(GristTypes.TAR.get().amount(1)));

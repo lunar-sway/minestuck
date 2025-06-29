@@ -24,6 +24,8 @@ import net.minecraft.world.level.levelgen.placement.CountPlacement;
 import net.minecraft.world.level.levelgen.placement.HeightRangePlacement;
 import net.minecraft.world.level.levelgen.placement.InSquarePlacement;
 
+import static com.mraof.minestuck.world.gen.structure.blocks.StructureBlockRegistry.*;
+
 public class FungiLandType extends TerrainLandType
 {
 	public static final String FUNGI = "minestuck.fungi";
@@ -43,30 +45,44 @@ public class FungiLandType extends TerrainLandType
 	@Override
 	public void registerBlocks(StructureBlockRegistry registry)
 	{
-		registry.setBlock("ground", MSBlocks.MYCELIUM_STONE);
-		registry.setBlock("surface", Blocks.MYCELIUM);
-		registry.setBlock("upper", Blocks.DIRT);
-		registry.setBlock("ocean", Blocks.WATER);
-		registry.setBlock("structure_primary", MSBlocks.MYCELIUM_BRICKS);
-		registry.setBlock("structure_primary_decorative", MSBlocks.CHISELED_MYCELIUM_BRICKS);
-		registry.setBlock("structure_primary_cracked", MSBlocks.CRACKED_MYCELIUM_BRICKS);
-		registry.setBlock("structure_primary_mossy", MSBlocks.MOSSY_MYCELIUM_BRICKS);
-		registry.setBlock("structure_primary_column", MSBlocks.MYCELIUM_COLUMN);
-		registry.setBlock("structure_primary_stairs", MSBlocks.MYCELIUM_BRICK_STAIRS);
-		registry.setBlock("structure_secondary", MSBlocks.POLISHED_MYCELIUM_STONE);
-		registry.setBlock("structure_secondary_decorative", MSBlocks.MYCELIUM_COBBLESTONE);
-		registry.setBlock("structure_secondary_stairs", MSBlocks.MYCELIUM_STAIRS);
-		registry.setBlock("village_path", Blocks.DIRT_PATH);
-		registry.setBlock("light_block", MSBlocks.GLOWY_GOOP);
-		registry.setBlock("torch", Blocks.REDSTONE_TORCH);
-		registry.setBlock("wall_torch", Blocks.REDSTONE_WALL_TORCH);
-		registry.setBlock("mushroom_1", Blocks.RED_MUSHROOM);
-		registry.setBlock("mushroom_2", Blocks.BROWN_MUSHROOM);
-		registry.setBlock("bush", Blocks.BROWN_MUSHROOM);
-		registry.setBlock("structure_wool_1", Blocks.LIME_WOOL);
-		registry.setBlock("structure_wool_3", Blocks.GRAY_WOOL);
-		registry.setBlock("cruxite_ore", MSBlocks.MYCELIUM_STONE_CRUXITE_ORE);
-		registry.setBlock("uranium_ore", MSBlocks.MYCELIUM_STONE_URANIUM_ORE);
+		registry.setBlock(CRUXITE_ORE, MSBlocks.MYCELIUM_STONE_CRUXITE_ORE);
+		registry.setBlock(URANIUM_ORE, MSBlocks.MYCELIUM_STONE_URANIUM_ORE);
+		registry.setBlock(GROUND, MSBlocks.MYCELIUM_STONE);
+		registry.setBlock(GROUND_SLAB, MSBlocks.MYCELIUM_SLAB);
+		registry.setBlock(UPPER, Blocks.DIRT);
+		registry.setBlock(SURFACE, Blocks.MYCELIUM);
+		registry.setBlock(OCEAN, Blocks.WATER);
+		
+		registry.setBlock(STRUCTURE_PRIMARY, MSBlocks.MYCELIUM_BRICKS);
+		registry.setBlock(STRUCTURE_PRIMARY_DECORATIVE, MSBlocks.CHISELED_MYCELIUM_BRICKS);
+		registry.setBlock(STRUCTURE_PRIMARY_CRACKED, MSBlocks.CRACKED_MYCELIUM_BRICKS);
+		registry.setBlock(STRUCTURE_PRIMARY_COLUMN, MSBlocks.MYCELIUM_COLUMN);
+		registry.setBlock(STRUCTURE_PRIMARY_STAIRS, MSBlocks.MYCELIUM_BRICK_STAIRS);
+		registry.setBlock(STRUCTURE_PRIMARY_SLAB, MSBlocks.MYCELIUM_BRICK_SLAB);
+		registry.setBlock(STRUCTURE_PRIMARY_WALL, MSBlocks.MYCELIUM_BRICK_WALL);
+		
+		registry.setBlock(STRUCTURE_PRIMARY_MOSSY, MSBlocks.MOSSY_MYCELIUM_BRICKS);
+		registry.setBlock(STRUCTURE_PRIMARY_MOSSY_STAIRS, MSBlocks.MOSSY_MYCELIUM_BRICK_STAIRS);
+		registry.setBlock(STRUCTURE_PRIMARY_MOSSY_SLAB, MSBlocks.MOSSY_MYCELIUM_BRICK_SLAB);
+		registry.setBlock(STRUCTURE_PRIMARY_MOSSY_WALL, MSBlocks.MOSSY_MYCELIUM_BRICK_WALL);
+		
+		registry.setBlock(STRUCTURE_SECONDARY, MSBlocks.POLISHED_MYCELIUM_STONE);
+		registry.setBlock(STRUCTURE_SECONDARY_DECORATIVE, MSBlocks.MYCELIUM_COBBLESTONE);
+		registry.setBlock(STRUCTURE_SECONDARY_STAIRS, MSBlocks.POLISHED_MYCELIUM_STONE_STAIRS);
+		registry.setBlock(STRUCTURE_SECONDARY_SLAB, MSBlocks.POLISHED_MYCELIUM_STONE_SLAB);
+		registry.setBlock(STRUCTURE_SECONDARY_WALL, MSBlocks.POLISHED_MYCELIUM_STONE_WALL);
+		
+		registry.setBlock(STRUCTURE_WOOL_1, Blocks.LIME_WOOL);
+		registry.setBlock(STRUCTURE_WOOL_3, Blocks.GRAY_WOOL);
+		
+		registry.setBlock(VILLAGE_PATH, Blocks.DIRT_PATH);
+		
+		registry.setBlock(LIGHT_BLOCK, MSBlocks.GLOWY_GOOP);
+		registry.setBlock(TORCH, Blocks.REDSTONE_TORCH);
+		registry.setBlock(WALL_TORCH, Blocks.REDSTONE_WALL_TORCH);
+		registry.setBlock(MUSHROOM_1, Blocks.RED_MUSHROOM);
+		registry.setBlock(MUSHROOM_2, Blocks.BROWN_MUSHROOM);
+		registry.setBlock(BUSH, Blocks.BROWN_MUSHROOM);
 	}
 	
 	@Override
@@ -86,10 +102,10 @@ public class FungiLandType extends TerrainLandType
 	{
 		builder.addFeature(GenerationStep.Decoration.VEGETAL_DECORATION, VegetationPlacements.MUSHROOM_ISLAND_VEGETATION, LandBiomeType.NORMAL);
 		
-		builder.addFeature(GenerationStep.Decoration.UNDERGROUND_ORES, MSPlacedFeatures.SLIME_DISK, FeatureModifier.withState(blocks.getBlockState("slime")), LandBiomeType.NORMAL);
+		builder.addFeature(GenerationStep.Decoration.UNDERGROUND_ORES, MSPlacedFeatures.SLIME_DISK, FeatureModifier.withState(blocks.getBlockState(SLIME)), LandBiomeType.NORMAL);
 		builder.addFeature(GenerationStep.Decoration.VEGETAL_DECORATION, MSPlacedFeatures.HUGE_MUSHROOMS, LandBiomeType.ROUGH);
 		
-		builder.addFeature(GenerationStep.Decoration.UNDERGROUND_ORES, MSPlacedFeatures.EXTRA_SLIME_DISK, FeatureModifier.withState(blocks.getBlockState("slime")), LandBiomeType.ROUGH);
+		builder.addFeature(GenerationStep.Decoration.UNDERGROUND_ORES, MSPlacedFeatures.EXTRA_SLIME_DISK, FeatureModifier.withState(blocks.getBlockState(SLIME)), LandBiomeType.ROUGH);
 		builder.addFeature(GenerationStep.Decoration.VEGETAL_DECORATION, MSPlacedFeatures.BROWN_MUSHROOM_PATCH, LandBiomeType.any());
 		builder.addFeature(GenerationStep.Decoration.VEGETAL_DECORATION, MSPlacedFeatures.RED_MUSHROOM_PATCH, LandBiomeType.any());
 		
