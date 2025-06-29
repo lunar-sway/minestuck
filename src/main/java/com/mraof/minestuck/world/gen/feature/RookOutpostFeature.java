@@ -15,8 +15,8 @@ import net.minecraft.world.level.levelgen.structure.templatesystem.StructureTemp
  */
 public class RookOutpostFeature extends Feature<NoneFeatureConfiguration>
 {
-	private static final ResourceLocation OUTPOST_BLACK = new ResourceLocation(Minestuck.MOD_ID, "rook_outpost_black");
-	private static final ResourceLocation OUTPOST_WHITE = new ResourceLocation(Minestuck.MOD_ID, "rook_outpost_white");
+	private static final ResourceLocation OUTPOST_BLACK = Minestuck.id("rook_outpost_black");
+	private static final ResourceLocation OUTPOST_WHITE = Minestuck.id("rook_outpost_white");
 	
 	public RookOutpostFeature(Codec<NoneFeatureConfiguration> codec)
 	{
