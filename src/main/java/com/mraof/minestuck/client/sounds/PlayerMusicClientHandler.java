@@ -8,6 +8,7 @@ import net.minecraft.client.sounds.SoundManager;
 import net.minecraft.sounds.SoundSource;
 import net.minecraft.world.entity.Entity;
 import net.minecraft.world.entity.player.Player;
+import net.minecraft.world.level.Level;
 
 import java.util.HashMap;
 import java.util.Map;
@@ -27,7 +28,8 @@ public class PlayerMusicClientHandler
 	{
 		checkEntitiesInMap();
 		
-		Entity entity = Minecraft.getInstance().level.getEntity(entityID);
+		Level level = Minecraft.getInstance().level;
+		Entity entity = level.getEntity(entityID);
 		if(entity instanceof Player)
 		{
 			SoundManager soundManager = Minecraft.getInstance().getSoundManager();
@@ -40,7 +42,7 @@ public class PlayerMusicClientHandler
 			if(cassetteType != EnumCassetteType.NONE)
 			{
 				EntityBoundSoundInstance soundInstance = new EntityBoundSoundInstance(
-						cassetteType.getSoundEvent().value(), SoundSource.PLAYERS, volume, pitch, entity, 0);//TODO
+						cassetteType.getSoundEvent(level).value(), SoundSource.PLAYERS, volume, pitch, entity, 0);//TODO
 				
 				entitiesMap.put(entityID, soundInstance);
 				soundManager.play(soundInstance);

@@ -5,6 +5,7 @@ import com.mraof.minestuck.item.CassetteItem;
 import net.minecraft.core.BlockPos;
 import net.minecraft.core.Registry;
 import net.minecraft.core.registries.Registries;
+import net.minecraft.resources.ResourceKey;
 import net.minecraft.stats.Stats;
 import net.minecraft.world.InteractionResult;
 import net.minecraft.world.entity.item.ItemEntity;
@@ -51,18 +52,16 @@ public class CassettePlayerBlock extends CustomShapeBlock implements EntityBlock
 			{
 				if(!state.getValue(OPEN))
 				{
-					Registry<JukeboxSong> jukeboxRegistry = level.registryAccess().registryOrThrow(Registries.JUKEBOX_SONG);
-					
-					for(JukeboxSong jukeboxSong : jukeboxRegistry)
+					if(cassettePlayer.getCassette().getItem() instanceof CassetteItem cassetteItem)
 					{
-						if(cassettePlayer.getCassette().getItem() instanceof CassetteItem cassetteItem)
+						Registry<JukeboxSong> jukeboxRegistry = level.registryAccess().registryOrThrow(Registries.JUKEBOX_SONG);
+						ResourceKey<JukeboxSong> cassetteSong = cassetteItem.cassetteID.getJukeboxSong();
+						
+						if(cassetteSong != null)
 						{
-							if(cassetteItem.cassetteID.getSoundEvent().is(jukeboxSong.soundEvent()))
-							{
-								int songId = jukeboxRegistry.getId(jukeboxSong);
-								level.levelEvent(LevelEvent.SOUND_PLAY_JUKEBOX_SONG, pos, songId);
-								player.awardStat(Stats.PLAY_RECORD);
-							}
+							int songId = jukeboxRegistry.getId(cassetteSong);
+							level.levelEvent(LevelEvent.SOUND_PLAY_JUKEBOX_SONG, pos, songId);
+							player.awardStat(Stats.PLAY_RECORD);
 						}
 					}
 				} else if(state.getValue(OPEN))
