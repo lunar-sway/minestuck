@@ -23,6 +23,7 @@ The format is based on [Keep a Changelog](https://keepachangelog.com/en/1.1.0/).
 - Fix armor stacking/durability/toughness
 - Fix farmine only mining a 3x3x3 cube around the block mined
 - Fix carved tablets crashing the game when placed down
+- Fixed issues with frog entity/item rendering/loading/tooltips
 
 ### Removed
 

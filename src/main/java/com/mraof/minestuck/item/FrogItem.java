@@ -168,7 +168,7 @@ public class FrogItem extends Item
 	
 	public static int getEyeColor(ItemStack stack)
 	{
-		return getFrogTraits(stack).skinColor().orElse(0xC7DB95);
+		return getFrogTraits(stack).eyeColor().orElse(0xC7DB95);
 	}
 	
 	public static int getBellyColor(ItemStack stack)

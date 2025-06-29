@@ -131,9 +131,14 @@ public class FrogEntity extends PathfinderMob
 			return this.name().toLowerCase(Locale.ROOT);
 		}
 		
+		public static FrogVariants getWithDefault(String name)
+		{
+			return Arrays.stream(values()).filter(value -> value.getSerializedName().equals(name)).findFirst().orElse(DEFAULT);
+		}
+		
 		public static FrogVariants getWithDefault(SynchedEntityData data)
 		{
-			return Arrays.stream(values()).filter(value -> value.getSerializedName().equals(data.get(VARIANT))).findFirst().orElse(DEFAULT);
+			return getWithDefault(data.get(VARIANT));
 		}
 	}
 	
@@ -149,9 +154,14 @@ public class FrogEntity extends PathfinderMob
 			return this.name().toLowerCase(Locale.ROOT);
 		}
 		
+		public static EyeTypes getWithDefault(String name)
+		{
+			return Arrays.stream(values()).filter(value -> value.getSerializedName().equals(name)).findFirst().orElse(LIGHT);
+		}
+		
 		public static EyeTypes getWithDefault(SynchedEntityData data)
 		{
-			return Arrays.stream(values()).filter(value -> value.getSerializedName().equals(data.get(EYE_TYPE))).findFirst().orElse(LIGHT);
+			return getWithDefault(data.get(EYE_TYPE));
 		}
 	}
 	
@@ -168,9 +178,14 @@ public class FrogEntity extends PathfinderMob
 			return this.name().toLowerCase(Locale.ROOT);
 		}
 		
+		public static BellyTypes getWithDefault(String name)
+		{
+			return Arrays.stream(values()).filter(value -> value.getSerializedName().equals(name)).findFirst().orElse(SOLID);
+		}
+		
 		public static BellyTypes getWithDefault(SynchedEntityData data)
 		{
-			return Arrays.stream(values()).filter(value -> value.getSerializedName().equals(data.get(BELLY_TYPE))).findFirst().orElse(SOLID);
+			return getWithDefault(data.get(BELLY_TYPE));
 		}
 	}
 	
@@ -426,11 +441,11 @@ public class FrogEntity extends PathfinderMob
 		super.readAdditionalSaveData(compound);
 		
 		if(compound.contains("Variant", Tag.TAG_STRING))
-			setFrogVariant(FrogVariants.valueOf(compound.getString("Type")));
+			setFrogVariant(FrogVariants.getWithDefault(compound.getString("Variant")));
 		if(compound.contains("EyeType", Tag.TAG_STRING))
-			setEyeType(EyeTypes.valueOf(compound.getString("EyeType")));
+			setEyeType(EyeTypes.getWithDefault(compound.getString("EyeType")));
 		if(compound.contains("BellyType", Tag.TAG_STRING))
-			setBellyType(BellyTypes.valueOf(compound.getString("BellyType")));
+			setBellyType(BellyTypes.getWithDefault(compound.getString("BellyType")));
 		
 		if(compound.contains("SkinColor", Tag.TAG_INT))
 			this.setSkinColor(Math.clamp(compound.getInt("SkinColor"), 0, 0xFFFFFF));
