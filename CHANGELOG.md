@@ -8,6 +8,7 @@ The format is based on [Keep a Changelog](https://keepachangelog.com/en/1.1.0/).
 
 ### Added
 
+- New rook themed towers on the Battlefield
 - Increased number of blocks used in land specific structure block palettes
 
 ### Changed
@@ -29,7 +30,7 @@ The format is based on [Keep a Changelog](https://keepachangelog.com/en/1.1.0/).
 
 ### Contributors for this release
 
-- medsal15, Dweblenod, TangleKat, kirderf1
+- medsal15, Dweblenod, TangleKat, kirderf1, shadowLink
 
 ## [1.20.1-1.12.1.1] - 2025-04-18
 
