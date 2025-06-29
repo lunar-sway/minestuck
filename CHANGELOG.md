@@ -19,6 +19,8 @@ The format is based on [Keep a Changelog](https://keepachangelog.com/en/1.1.0/).
 
 - Fix some items having 0 grist cost
 - Fix weapons having the wrong durability
+- Fix emerald weapons dealing no damage
+- Fix armors stacking to 64
 - Fix farmine only mining a 3x3x3 cube around the block mined
 
 ### Removed

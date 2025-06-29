@@ -439,32 +439,32 @@ public class MSItems
 	
 	
 	//Material Tools
-	public static final DeferredItem<Item> EMERALD_SWORD = REGISTER.register("emerald_sword", () -> new SwordItem(MSItemTypes.EMERALD_TIER, new Item.Properties()));
-	public static final DeferredItem<Item> EMERALD_AXE = REGISTER.register("emerald_axe", () -> new AxeItem(MSItemTypes.EMERALD_TIER, new Item.Properties()));
-	public static final DeferredItem<Item> EMERALD_PICKAXE = REGISTER.register("emerald_pickaxe", () -> new PickaxeItem(MSItemTypes.EMERALD_TIER, new Item.Properties()));
-	public static final DeferredItem<Item> EMERALD_SHOVEL = REGISTER.register("emerald_shovel", () -> new ShovelItem(MSItemTypes.EMERALD_TIER, new Item.Properties()));
-	public static final DeferredItem<Item> EMERALD_HOE = REGISTER.register("emerald_hoe", () -> new HoeItem(MSItemTypes.EMERALD_TIER, new Item.Properties()));
+	public static final DeferredItem<Item> EMERALD_SWORD = REGISTER.register("emerald_sword", () -> new SwordItem(MSItemTypes.EMERALD_TIER, new Item.Properties().attributes(SwordItem.createAttributes(MSItemTypes.EMERALD_TIER, 3, -2.4F))));
+	public static final DeferredItem<Item> EMERALD_AXE = REGISTER.register("emerald_axe", () -> new AxeItem(MSItemTypes.EMERALD_TIER, new Item.Properties().attributes(AxeItem.createAttributes(MSItemTypes.EMERALD_TIER, 5.0F, -3.0F))));
+	public static final DeferredItem<Item> EMERALD_PICKAXE = REGISTER.register("emerald_pickaxe", () -> new PickaxeItem(MSItemTypes.EMERALD_TIER, new Item.Properties().attributes(PickaxeItem.createAttributes(MSItemTypes.EMERALD_TIER, 1.0F, -2.8F))));
+	public static final DeferredItem<Item> EMERALD_SHOVEL = REGISTER.register("emerald_shovel", () -> new ShovelItem(MSItemTypes.EMERALD_TIER, new Item.Properties().attributes(ShovelItem.createAttributes(MSItemTypes.EMERALD_TIER, 1.5F, -3.0F))));
+	public static final DeferredItem<Item> EMERALD_HOE = REGISTER.register("emerald_hoe", () -> new HoeItem(MSItemTypes.EMERALD_TIER, new Item.Properties().attributes(HoeItem.createAttributes(MSItemTypes.EMERALD_TIER, -3.0F, 0.0F))));
 	public static final DeferredItem<Item> MINE_AND_GRIST = REGISTER.register("mine_and_grist", () -> new WeaponItem(new WeaponItem.Builder(Tiers.DIAMOND, 1, -2.8F).efficiency(10.0F).set(MSItemTypes.PICKAXE_TOOL).add(MSItemTypes.GRIST_HARVEST), new Item.Properties()));
 	
 	
 	//Armor
-	public static final DeferredItem<Item> PRISMARINE_HELMET = REGISTER.register("prismarine_helmet", () -> new PrismarineArmorItem(MSItemTypes.PRISMARINE_ARMOR, ArmorItem.Type.HELMET, new Item.Properties()));
-	public static final DeferredItem<Item> PRISMARINE_CHESTPLATE = REGISTER.register("prismarine_chestplate", () -> new PrismarineArmorItem(MSItemTypes.PRISMARINE_ARMOR, ArmorItem.Type.CHESTPLATE, new Item.Properties()));
-	public static final DeferredItem<Item> PRISMARINE_LEGGINGS = REGISTER.register("prismarine_leggings", () -> new PrismarineArmorItem(MSItemTypes.PRISMARINE_ARMOR, ArmorItem.Type.LEGGINGS, new Item.Properties()));
-	public static final DeferredItem<Item> PRISMARINE_BOOTS = REGISTER.register("prismarine_boots", () -> new PrismarineArmorItem(MSItemTypes.PRISMARINE_ARMOR, ArmorItem.Type.BOOTS, new Item.Properties()));
-	public static final DeferredItem<Item> IRON_LASS_GLASSES = REGISTER.register("iron_lass_glasses", () -> new IronLassArmorItem(MSItemTypes.IRON_LASS_ARMOR, ArmorItem.Type.HELMET, new Item.Properties()));
-	public static final DeferredItem<Item> IRON_LASS_CHESTPLATE = REGISTER.register("iron_lass_chestplate", () -> new IronLassArmorItem(MSItemTypes.IRON_LASS_ARMOR, ArmorItem.Type.CHESTPLATE, new Item.Properties()));
-	public static final DeferredItem<Item> IRON_LASS_SKIRT = REGISTER.register("iron_lass_skirt", () -> new IronLassArmorItem(MSItemTypes.IRON_LASS_ARMOR, ArmorItem.Type.LEGGINGS, new Item.Properties()));
-	public static final DeferredItem<Item> IRON_LASS_SHOES = REGISTER.register("iron_lass_shoes", () -> new IronLassArmorItem(MSItemTypes.IRON_LASS_ARMOR, ArmorItem.Type.BOOTS, new Item.Properties()));
+	public static final DeferredItem<Item> PRISMARINE_HELMET = REGISTER.register("prismarine_helmet", () -> new PrismarineArmorItem(MSItemTypes.PRISMARINE_ARMOR, ArmorItem.Type.HELMET, new Item.Properties().stacksTo(1)));
+	public static final DeferredItem<Item> PRISMARINE_CHESTPLATE = REGISTER.register("prismarine_chestplate", () -> new PrismarineArmorItem(MSItemTypes.PRISMARINE_ARMOR, ArmorItem.Type.CHESTPLATE, new Item.Properties().stacksTo(1)));
+	public static final DeferredItem<Item> PRISMARINE_LEGGINGS = REGISTER.register("prismarine_leggings", () -> new PrismarineArmorItem(MSItemTypes.PRISMARINE_ARMOR, ArmorItem.Type.LEGGINGS, new Item.Properties().stacksTo(1)));
+	public static final DeferredItem<Item> PRISMARINE_BOOTS = REGISTER.register("prismarine_boots", () -> new PrismarineArmorItem(MSItemTypes.PRISMARINE_ARMOR, ArmorItem.Type.BOOTS, new Item.Properties().stacksTo(1)));
+	public static final DeferredItem<Item> IRON_LASS_GLASSES = REGISTER.register("iron_lass_glasses", () -> new IronLassArmorItem(MSItemTypes.IRON_LASS_ARMOR, ArmorItem.Type.HELMET, new Item.Properties().stacksTo(1)));
+	public static final DeferredItem<Item> IRON_LASS_CHESTPLATE = REGISTER.register("iron_lass_chestplate", () -> new IronLassArmorItem(MSItemTypes.IRON_LASS_ARMOR, ArmorItem.Type.CHESTPLATE, new Item.Properties().stacksTo(1)));
+	public static final DeferredItem<Item> IRON_LASS_SKIRT = REGISTER.register("iron_lass_skirt", () -> new IronLassArmorItem(MSItemTypes.IRON_LASS_ARMOR, ArmorItem.Type.LEGGINGS, new Item.Properties().stacksTo(1)));
+	public static final DeferredItem<Item> IRON_LASS_SHOES = REGISTER.register("iron_lass_shoes", () -> new IronLassArmorItem(MSItemTypes.IRON_LASS_ARMOR, ArmorItem.Type.BOOTS, new Item.Properties().stacksTo(1)));
 	
-	public static final DeferredItem<MSArmorItem> PROSPIT_CIRCLET = REGISTER.register("prospit_circlet", () -> new MSArmorItem(MSItemTypes.DREAM_PAJAMAS, ArmorItem.Type.HELMET, new Item.Properties()));
-	public static final DeferredItem<MSArmorItem> PROSPIT_SHIRT = REGISTER.register("prospit_shirt", () -> new MSArmorItem(MSItemTypes.DREAM_PAJAMAS, ArmorItem.Type.CHESTPLATE, new Item.Properties()));
-	public static final DeferredItem<MSArmorItem> PROSPIT_PANTS = REGISTER.register("prospit_pants", () -> new MSArmorItem(MSItemTypes.DREAM_PAJAMAS, ArmorItem.Type.LEGGINGS, new Item.Properties()));
-	public static final DeferredItem<MSArmorItem> PROSPIT_SHOES = REGISTER.register("prospit_shoes", () -> new MSArmorItem(MSItemTypes.DREAM_PAJAMAS, ArmorItem.Type.BOOTS, new Item.Properties()));
-	public static final DeferredItem<MSArmorItem> DERSE_CIRCLET = REGISTER.register("derse_circlet", () -> new MSArmorItem(MSItemTypes.DREAM_PAJAMAS, ArmorItem.Type.HELMET, new Item.Properties()));
-	public static final DeferredItem<MSArmorItem> DERSE_SHIRT = REGISTER.register("derse_shirt", () -> new MSArmorItem(MSItemTypes.DREAM_PAJAMAS, ArmorItem.Type.CHESTPLATE, new Item.Properties()));
-	public static final DeferredItem<MSArmorItem> DERSE_PANTS = REGISTER.register("derse_pants", () -> new MSArmorItem(MSItemTypes.DREAM_PAJAMAS, ArmorItem.Type.LEGGINGS, new Item.Properties()));
-	public static final DeferredItem<MSArmorItem> DERSE_SHOES = REGISTER.register("derse_shoes", () -> new MSArmorItem(MSItemTypes.DREAM_PAJAMAS, ArmorItem.Type.BOOTS, new Item.Properties()));
+	public static final DeferredItem<MSArmorItem> PROSPIT_CIRCLET = REGISTER.register("prospit_circlet", () -> new MSArmorItem(MSItemTypes.DREAM_PAJAMAS, ArmorItem.Type.HELMET, new Item.Properties().stacksTo(1)));
+	public static final DeferredItem<MSArmorItem> PROSPIT_SHIRT = REGISTER.register("prospit_shirt", () -> new MSArmorItem(MSItemTypes.DREAM_PAJAMAS, ArmorItem.Type.CHESTPLATE, new Item.Properties().stacksTo(1)));
+	public static final DeferredItem<MSArmorItem> PROSPIT_PANTS = REGISTER.register("prospit_pants", () -> new MSArmorItem(MSItemTypes.DREAM_PAJAMAS, ArmorItem.Type.LEGGINGS, new Item.Properties().stacksTo(1)));
+	public static final DeferredItem<MSArmorItem> PROSPIT_SHOES = REGISTER.register("prospit_shoes", () -> new MSArmorItem(MSItemTypes.DREAM_PAJAMAS, ArmorItem.Type.BOOTS, new Item.Properties().stacksTo(1)));
+	public static final DeferredItem<MSArmorItem> DERSE_CIRCLET = REGISTER.register("derse_circlet", () -> new MSArmorItem(MSItemTypes.DREAM_PAJAMAS, ArmorItem.Type.HELMET, new Item.Properties().stacksTo(1)));
+	public static final DeferredItem<MSArmorItem> DERSE_SHIRT = REGISTER.register("derse_shirt", () -> new MSArmorItem(MSItemTypes.DREAM_PAJAMAS, ArmorItem.Type.CHESTPLATE, new Item.Properties().stacksTo(1)));
+	public static final DeferredItem<MSArmorItem> DERSE_PANTS = REGISTER.register("derse_pants", () -> new MSArmorItem(MSItemTypes.DREAM_PAJAMAS, ArmorItem.Type.LEGGINGS, new Item.Properties().stacksTo(1)));
+	public static final DeferredItem<MSArmorItem> DERSE_SHOES = REGISTER.register("derse_shoes", () -> new MSArmorItem(MSItemTypes.DREAM_PAJAMAS, ArmorItem.Type.BOOTS, new Item.Properties().stacksTo(1)));
 	
 	public static final DeferredItem<MSArmorItem> AMPHIBEANIE = REGISTER.register("amphibeanie", () -> new MSArmorItem(MSItemTypes.CLOTH_ARMOR, ArmorItem.Type.HELMET, new Item.Properties().stacksTo(1)));
 	public static final DeferredItem<MSArmorItem> NOSTRILDAMUS = REGISTER.register("nostrildamus", () -> new MSArmorItem(MSItemTypes.CLOTH_ARMOR, ArmorItem.Type.HELMET, new Item.Properties().stacksTo(1)));
