@@ -6,6 +6,11 @@ The format is based on [Keep a Changelog](https://keepachangelog.com/en/1.1.0/).
 
 ## [Unreleased]
 
+### Added
+
+- Land Type Extensions now support structure sets.
+  - The structure's biome settings must include land biomes
+
 ### Changed
 
 - Stack and Queue modi have more distinct recipes
