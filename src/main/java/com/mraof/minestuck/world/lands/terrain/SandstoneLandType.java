@@ -22,6 +22,8 @@ import net.minecraft.world.level.levelgen.placement.CountPlacement;
 import net.minecraft.world.level.levelgen.placement.HeightRangePlacement;
 import net.minecraft.world.level.levelgen.placement.InSquarePlacement;
 
+import static com.mraof.minestuck.world.gen.structure.blocks.StructureBlockRegistry.*;
+
 public class SandstoneLandType extends TerrainLandType
 {
 	public static final String SANDSTONE = "minestuck.sandstone";
@@ -54,32 +56,44 @@ public class SandstoneLandType extends TerrainLandType
 	{
 		if(type == Variant.SANDSTONE)
 		{
-			registry.setBlock("sand", Blocks.SAND);
-			registry.setBlock("ocean_surface", Blocks.SAND);
-			registry.setBlock("upper", Blocks.SANDSTONE);
-			registry.setBlock("structure_primary", Blocks.SMOOTH_SANDSTONE);
-			registry.setBlock("structure_primary_decorative", Blocks.CHISELED_SANDSTONE);
-			registry.setBlock("structure_primary_stairs", Blocks.SANDSTONE_STAIRS);
-			registry.setBlock("village_path", Blocks.RED_SAND);
+			registry.setBlock(SAND, Blocks.SAND);
+			registry.setBlock(OCEAN_SURFACE, Blocks.SAND);
+			registry.setBlock(UPPER, Blocks.SANDSTONE);
+			registry.setBlock(STRUCTURE_PRIMARY, Blocks.SMOOTH_SANDSTONE);
+			registry.setBlock(STRUCTURE_PRIMARY_DECORATIVE, Blocks.CHISELED_SANDSTONE);
+			registry.setBlock(STRUCTURE_PRIMARY_STAIRS, Blocks.SANDSTONE_STAIRS);
+			registry.setBlock(VILLAGE_PATH, Blocks.RED_SAND);
 		} else
 		{
-			registry.setBlock("sand", Blocks.RED_SAND);
-			registry.setBlock("ocean_surface", Blocks.RED_SAND);
-			registry.setBlock("upper", Blocks.RED_SANDSTONE);
-			registry.setBlock("structure_primary", Blocks.SMOOTH_RED_SANDSTONE);
-			registry.setBlock("structure_primary_decorative", Blocks.CHISELED_RED_SANDSTONE);
-			registry.setBlock("structure_primary_stairs", Blocks.RED_SANDSTONE_STAIRS);
-			registry.setBlock("village_path", Blocks.SAND);
+			registry.setBlock(SAND, Blocks.RED_SAND);
+			registry.setBlock(OCEAN_SURFACE, Blocks.RED_SAND);
+			registry.setBlock(UPPER, Blocks.RED_SANDSTONE);
+			registry.setBlock(STRUCTURE_PRIMARY, Blocks.SMOOTH_RED_SANDSTONE);
+			registry.setBlock(STRUCTURE_PRIMARY_DECORATIVE, Blocks.CHISELED_RED_SANDSTONE);
+			registry.setBlock(STRUCTURE_PRIMARY_STAIRS, Blocks.RED_SANDSTONE_STAIRS);
+			registry.setBlock(VILLAGE_PATH, Blocks.SAND);
 		}
-		registry.setBlock("structure_secondary", Blocks.STONE_BRICKS);
-		registry.setBlock("structure_secondary_decorative", Blocks.CHISELED_STONE_BRICKS);
-		registry.setBlock("structure_secondary_stairs", Blocks.STONE_BRICK_STAIRS);
-		registry.setBlock("structure_planks", Blocks.ACACIA_PLANKS);
-		registry.setBlock("structure_planks_slab", Blocks.ACACIA_SLAB);
-		registry.setBlock("torch", Blocks.REDSTONE_TORCH);
-		registry.setBlock("wall_torch", Blocks.REDSTONE_WALL_TORCH);
-		registry.setBlock("structure_wool_1", Blocks.WHITE_WOOL);
-		registry.setBlock("structure_wool_3", Blocks.MAGENTA_WOOL);
+		registry.setBlock(STRUCTURE_SECONDARY, Blocks.STONE_BRICKS);
+		registry.setBlock(STRUCTURE_SECONDARY_DECORATIVE, Blocks.CHISELED_STONE_BRICKS);
+		registry.setBlock(STRUCTURE_SECONDARY_STAIRS, Blocks.STONE_BRICK_STAIRS);
+		
+		registry.setBlock(STRUCTURE_WOOD, Blocks.ACACIA_WOOD);
+		registry.setBlock(STRUCTURE_LOG, Blocks.ACACIA_LOG);
+		registry.setBlock(STRUCTURE_STRIPPED_WOOD, Blocks.STRIPPED_ACACIA_WOOD);
+		registry.setBlock(STRUCTURE_STRIPPED_LOG, Blocks.STRIPPED_ACACIA_LOG);
+		registry.setBlock(STRUCTURE_PLANKS, Blocks.ACACIA_PLANKS);
+		registry.setBlock(STRUCTURE_PLANKS_STAIRS, Blocks.ACACIA_STAIRS);
+		registry.setBlock(STRUCTURE_PLANKS_SLAB, Blocks.ACACIA_SLAB);
+		registry.setBlock(STRUCTURE_PLANKS_FENCE, Blocks.ACACIA_FENCE);
+		registry.setBlock(STRUCTURE_PLANKS_FENCE_GATE, Blocks.ACACIA_FENCE_GATE);
+		registry.setBlock(STRUCTURE_PLANKS_DOOR, Blocks.ACACIA_DOOR);
+		registry.setBlock(STRUCTURE_PLANKS_TRAPDOOR, Blocks.ACACIA_TRAPDOOR);
+		
+		registry.setBlock(STRUCTURE_WOOL_1, Blocks.WHITE_WOOL);
+		registry.setBlock(STRUCTURE_WOOL_3, Blocks.MAGENTA_WOOL);
+		
+		registry.setBlock(TORCH, Blocks.REDSTONE_TORCH);
+		registry.setBlock(WALL_TORCH, Blocks.REDSTONE_WALL_TORCH);
 	}
 	
 	@Override
@@ -91,7 +105,7 @@ public class SandstoneLandType extends TerrainLandType
 	@Override
 	public void addBiomeGeneration(LandBiomeGenBuilder builder, StructureBlockRegistry blocks)
 	{
-		BlockState sandstone = blocks.getBlockState("upper");
+		BlockState sandstone = blocks.getBlockState(UPPER);
 		
 		builder.addFeature(GenerationStep.Decoration.VEGETAL_DECORATION, VegetationPlacements.PATCH_DEAD_BUSH_2, LandBiomeType.anyExcept(LandBiomeType.OCEAN));
 		

@@ -115,13 +115,13 @@ public abstract class TerrainLandType implements ILandType
 		ResourceKey<Biome> roughBiome = this.getBiomeSet().ROUGH;
 		
 		SurfaceRules.RuleSource surfaceBlock = SurfaceRules.sequence(
-				SurfaceRules.ifTrue(SurfaceRules.isBiome(roughBiome), SurfaceRules.state(blocks.getBlockState("surface_rough"))),
-				SurfaceRules.state(blocks.getBlockState("surface")));
+				SurfaceRules.ifTrue(SurfaceRules.isBiome(roughBiome), SurfaceRules.state(blocks.getBlockState(StructureBlockRegistry.SURFACE_ROUGH))),
+				SurfaceRules.state(blocks.getBlockState(StructureBlockRegistry.SURFACE)));
 		SurfaceRules.RuleSource surface = SurfaceRules.ifTrue(SurfaceRules.ON_FLOOR, SurfaceRules.ifTrue(SurfaceRules.waterBlockCheck(0, 0), surfaceBlock));
 		
-		SurfaceRules.RuleSource upper = SurfaceRules.ifTrue(SurfaceRules.UNDER_FLOOR, SurfaceRules.ifTrue(SurfaceRules.waterStartCheck(-6, -1), SurfaceRules.state(blocks.getBlockState("upper"))));
+		SurfaceRules.RuleSource upper = SurfaceRules.ifTrue(SurfaceRules.UNDER_FLOOR, SurfaceRules.ifTrue(SurfaceRules.waterStartCheck(-6, -1), SurfaceRules.state(blocks.getBlockState(StructureBlockRegistry.UPPER))));
 		// This surface rule targets the ocean surface by being positioned after "surface" and "upper", thus only placing blocks on surfaces where "surface" or "upper" doesn't
-		SurfaceRules.RuleSource ocean_surface = SurfaceRules.ifTrue(SurfaceRules.ON_FLOOR, SurfaceRules.state(blocks.getBlockState("ocean_surface")));
+		SurfaceRules.RuleSource ocean_surface = SurfaceRules.ifTrue(SurfaceRules.ON_FLOOR, SurfaceRules.state(blocks.getBlockState(StructureBlockRegistry.OCEAN_SURFACE)));
 		
 		return SurfaceRules.sequence(surface, upper, ocean_surface);
 	}
