@@ -16,6 +16,7 @@ The format is based on [Keep a Changelog](https://keepachangelog.com/en/1.1.0/).
 
 - Stack and Queue modi have more distinct recipes
 - Farmine break blacklist is now controlled by the `minestuck:farmine_break_blacklist` block tag, instead of being hardcoded
+- Disabled Skaian Castle structure
 
 ### Fixed
 
@@ -24,7 +25,6 @@ The format is based on [Keep a Changelog](https://keepachangelog.com/en/1.1.0/).
 - Fix emerald weapons dealing no damage
 - Fix armor stacking/durability/toughness
 - Fix farmine only mining a 3x3x3 cube around the block mined
-- Disabled Skaian Castle structure
 - Fix carved tablets crashing the game when placed down
 - Fix issues with frog entity/item rendering/loading/tooltips
 - Fix casette player not playing correct music
