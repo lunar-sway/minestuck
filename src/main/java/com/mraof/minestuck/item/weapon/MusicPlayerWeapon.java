@@ -2,15 +2,18 @@ package com.mraof.minestuck.item.weapon;
 
 import com.mraof.minestuck.Minestuck;
 import com.mraof.minestuck.block.EnumCassetteType;
+import com.mraof.minestuck.inventory.musicplayer.CassetteContainerMenu;
 import com.mraof.minestuck.inventory.musicplayer.MusicPlaying;
 import com.mraof.minestuck.item.CassetteItem;
 import com.mraof.minestuck.network.MusicPlayerPacket;
 import com.mraof.minestuck.util.MSAttachments;
 import net.minecraft.core.component.DataComponents;
+import net.minecraft.network.chat.Component;
 import net.minecraft.server.level.ServerPlayer;
 import net.minecraft.util.RandomSource;
 import net.minecraft.world.InteractionHand;
 import net.minecraft.world.InteractionResultHolder;
+import net.minecraft.world.SimpleMenuProvider;
 import net.minecraft.world.entity.LivingEntity;
 import net.minecraft.world.entity.ai.attributes.Attributes;
 import net.minecraft.world.entity.player.Player;
@@ -99,11 +102,9 @@ public class MusicPlayerWeapon extends WeaponItem
 				musicPlayingCap.setMusicPlaying(ItemStack.EMPTY, EnumCassetteType.NONE);
 				//This will stop the music before opening the GUI
 				PacketDistributor.sendToPlayersTrackingEntityAndSelf(playerIn, packet);
-				/* FIXME
 				serverPlayer.openMenu(new SimpleMenuProvider((pContainerId, pInventory, pPlayer) ->
-						new CassetteContainerMenu(pContainerId, pInventory, itemStackHandlerMusicPlayer, musicPlayer),
+						new CassetteContainerMenu(pContainerId, pInventory, musicPlayer, itemInMusicPlayer),
 						Component.translatable(TITLE)));
-				*/
 			}
 		}
 		return InteractionResultHolder.sidedSuccess(musicPlayer, level.isClientSide);
@@ -155,8 +156,13 @@ public class MusicPlayerWeapon extends WeaponItem
 		{
 			RandomSource r = attacker.level().getRandom();
 			
-			double attackerLuckValue = attacker.getAttributeValue(Attributes.LUCK);
-			double targetLuckValue = target.getAttributeValue(Attributes.LUCK);
+			double attackerLuckValue = 0;
+			double targetLuckValue = 0;
+			
+			if(attacker.getAttributes().hasAttribute(Attributes.LUCK))
+				attackerLuckValue = attacker.getAttributeValue(Attributes.LUCK);
+			if(target.getAttributes().hasAttribute(Attributes.LUCK))
+				targetLuckValue = target.getAttributeValue(Attributes.LUCK);
 			
 			EnumCassetteType.EffectContainer effectContainer = musicPlaying.getCassetteType().getEffectContainer();
 			double chanceToHit = effectContainer.applyingChance();
