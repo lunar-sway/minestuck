@@ -1,7 +1,6 @@
 package com.mraof.minestuck.fluid;
 
 import com.mraof.minestuck.util.MSAttachments;
-import net.minecraft.resources.ResourceLocation;
 import net.minecraft.sounds.SoundEvent;
 import net.minecraft.sounds.SoundEvents;
 import net.minecraft.world.entity.LivingEntity;
@@ -9,14 +8,11 @@ import net.minecraft.world.entity.MoverType;
 import net.minecraft.world.entity.player.Player;
 import net.minecraft.world.level.material.FluidState;
 import net.minecraft.world.phys.Vec3;
-import net.neoforged.neoforge.client.extensions.common.IClientFluidTypeExtensions;
 import net.neoforged.neoforge.fluids.FluidType;
-import net.neoforged.neoforge.registries.NeoForgeRegistries;
 
 import java.util.HashMap;
 import java.util.Map;
 import java.util.Objects;
-import java.util.function.Consumer;
 import java.util.function.Supplier;
 
 public class MSFluidType extends FluidType
@@ -34,34 +30,6 @@ public class MSFluidType extends FluidType
 	{
 		super(properties);
 		this.fluidStyle = fluidStyle;
-	}
-	
-	@Override
-	public void initializeClient(Consumer<IClientFluidTypeExtensions> consumer)
-	{
-		consumer.accept(new IClientFluidTypeExtensions()
-		{
-			public ResourceLocation stillTexture;
-			public ResourceLocation flowingTexture;
-			
-			@Override
-			public ResourceLocation getStillTexture()
-			{
-				if(stillTexture == null)
-					stillTexture = Objects.requireNonNull(NeoForgeRegistries.FLUID_TYPES.getKey(MSFluidType.this))
-							.withPrefix("block/still_");
-				return stillTexture;
-			}
-			
-			@Override
-			public ResourceLocation getFlowingTexture()
-			{
-				if(flowingTexture == null)
-					flowingTexture = Objects.requireNonNull(NeoForgeRegistries.FLUID_TYPES.getKey(MSFluidType.this))
-							.withPrefix("block/flowing_");
-				return flowingTexture;
-			}
-		});
 	}
 	
 	@Override

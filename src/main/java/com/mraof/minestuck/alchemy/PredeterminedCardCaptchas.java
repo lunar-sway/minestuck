@@ -16,7 +16,7 @@ import net.minecraft.server.packs.resources.SimplePreparableReloadListener;
 import net.minecraft.util.profiling.ProfilerFiller;
 import net.minecraft.world.item.Item;
 import net.neoforged.bus.api.SubscribeEvent;
-import net.neoforged.fml.common.Mod;
+import net.neoforged.fml.common.EventBusSubscriber;
 import net.neoforged.neoforge.event.AddReloadListenerEvent;
 import net.neoforged.neoforge.event.server.ServerStoppedEvent;
 import org.apache.logging.log4j.LogManager;
@@ -32,7 +32,7 @@ import java.util.Optional;
 
 @ParametersAreNonnullByDefault
 @MethodsReturnNonnullByDefault
-@Mod.EventBusSubscriber(modid = Minestuck.MOD_ID, bus = Mod.EventBusSubscriber.Bus.FORGE)
+@EventBusSubscriber(modid = Minestuck.MOD_ID, bus = EventBusSubscriber.Bus.GAME)
 public class PredeterminedCardCaptchas
 {
 	@Nullable
@@ -93,7 +93,7 @@ public class PredeterminedCardCaptchas
 		
 		private static Optional<Map<String, Item>> parseCaptchaCodesFromNamespace(ResourceManager resourceManager, String namespace)
 		{
-			ResourceLocation rs = new ResourceLocation(namespace, PATH);
+			ResourceLocation rs = ResourceLocation.fromNamespaceAndPath(namespace, PATH);
 			
 			return resourceManager.getResource(rs).flatMap(resource -> {
 				try(Reader reader = resource.openAsReader())

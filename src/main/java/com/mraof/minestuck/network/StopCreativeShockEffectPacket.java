@@ -2,35 +2,27 @@ package com.mraof.minestuck.network;
 
 import com.mraof.minestuck.Minestuck;
 import com.mraof.minestuck.client.ClientProxy;
-import net.minecraft.network.FriendlyByteBuf;
-import net.minecraft.resources.ResourceLocation;
+import io.netty.buffer.ByteBuf;
+import net.minecraft.network.codec.ByteBufCodecs;
+import net.minecraft.network.codec.StreamCodec;
+import net.minecraft.network.protocol.common.custom.CustomPacketPayload;
 import net.minecraft.world.entity.player.Player;
+import net.neoforged.neoforge.network.handling.IPayloadContext;
 
 public record StopCreativeShockEffectPacket(boolean mayBuild) implements MSPacket.PlayToClient
 {
-	public static final ResourceLocation ID = Minestuck.id("stop_creative_shock_effect");
+	
+		public static final Type<StopCreativeShockEffectPacket> ID = new Type<>(Minestuck.id("stop_creative_shock_effect"));
+	public static final StreamCodec<ByteBuf, StopCreativeShockEffectPacket> STREAM_CODEC = ByteBufCodecs.BOOL.map(StopCreativeShockEffectPacket::new, StopCreativeShockEffectPacket::mayBuild);
 	
 	@Override
-	public ResourceLocation id()
+	public Type<? extends CustomPacketPayload> type()
 	{
 		return ID;
 	}
 	
 	@Override
-	public void write(FriendlyByteBuf buffer)
-	{
-		buffer.writeBoolean(mayBuild);
-	}
-	
-	public static StopCreativeShockEffectPacket read(FriendlyByteBuf buffer)
-	{
-		boolean mayBuild = buffer.readBoolean();
-		
-		return new StopCreativeShockEffectPacket(mayBuild);
-	}
-	
-	@Override
-	public void execute()
+	public void execute(IPayloadContext context)
 	{
 		Player playerEntity = ClientProxy.getClientPlayer();
 		if(playerEntity != null)

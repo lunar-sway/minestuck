@@ -10,7 +10,7 @@ import net.minecraft.nbt.Tag;
 import net.minecraft.server.MinecraftServer;
 import net.minecraft.server.level.ServerPlayer;
 import net.neoforged.bus.api.SubscribeEvent;
-import net.neoforged.fml.common.Mod;
+import net.neoforged.fml.common.EventBusSubscriber;
 import net.neoforged.neoforge.event.entity.player.PlayerEvent;
 
 import javax.annotation.Nonnull;
@@ -25,7 +25,7 @@ import java.util.stream.Stream;
  * while the other dynamically creates, merges and splits up multiple sessions as players connect and disconnect to each other.
  * @author kirderf1
  */
-@Mod.EventBusSubscriber(modid = Minestuck.MOD_ID, bus = Mod.EventBusSubscriber.Bus.FORGE)
+@EventBusSubscriber(modid = Minestuck.MOD_ID, bus = EventBusSubscriber.Bus.GAME)
 public sealed abstract class SessionHandler
 {
 	final SkaianetData skaianetData;

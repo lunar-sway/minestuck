@@ -1,0 +1,11 @@
+{
+  "type": "minestuck:combination",
+  "input1": {
+    "item": "minecraft:glass_bottle"
+  },
+  "input2": {
+    "item": "minecraft:dragon_head"
+  },
+  "mode": "or",
+  "output": "minecraft:dragon_breath"
+}

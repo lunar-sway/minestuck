@@ -1,0 +1,11 @@
+{
+  "type": "minestuck:combination",
+  "input1": {
+    "tag": "minestuck:modus_card"
+  },
+  "input2": {
+    "item": "minecraft:stick"
+  },
+  "mode": "or",
+  "output": "minestuck:tree_modus_card"
+}

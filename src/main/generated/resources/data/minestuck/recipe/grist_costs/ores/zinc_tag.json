@@ -1,0 +1,12 @@
+{
+  "type": "minestuck:source_grist_cost",
+  "grist_cost": {
+    "minestuck:build": 4
+  },
+  "ingredient": {
+    "tag": "c:ores/zinc"
+  },
+  "sources": [
+    "#c:raw_materials/zinc"
+  ]
+}

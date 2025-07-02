@@ -16,6 +16,7 @@ public class MSCriteriaTriggers
 	public static final Supplier<EventTrigger> RETURN_NODE = REGISTER.register("return_node", EventTrigger::new);
 	public static final Supplier<EventTrigger> MELON_OVERLOAD = REGISTER.register("melon_overload", EventTrigger::new);
 	public static final Supplier<EventTrigger> BUY_OUT_SHOP = REGISTER.register("buy_out_shop", EventTrigger::new);
+	public static final Supplier<EventTrigger> BRICK_COMPUTER = REGISTER.register("brick_computer", EventTrigger::new);
 	
 	public static final Supplier<PunchDesignixTrigger> PUNCH_DESIGNIX = REGISTER.register("punch_designix", PunchDesignixTrigger::new);
 	public static final Supplier<IntellibeamLaserstationTrigger> INTELLIBEAM_LASERSTATION = REGISTER.register("intellibeam_laserstation", IntellibeamLaserstationTrigger::new);

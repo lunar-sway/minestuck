@@ -2,7 +2,6 @@ package com.mraof.minestuck.computer.editmode;
 
 import com.mraof.minestuck.Minestuck;
 import com.mraof.minestuck.MinestuckConfig;
-import com.mraof.minestuck.alchemy.AlchemyHelper;
 import com.mraof.minestuck.alchemy.GristHelper;
 import com.mraof.minestuck.api.alchemy.GristSet;
 import com.mraof.minestuck.api.alchemy.GristTypes;
@@ -14,6 +13,8 @@ import com.mraof.minestuck.entity.ServerCursorEntity;
 import com.mraof.minestuck.event.OnEntryEvent;
 import com.mraof.minestuck.event.SburbEvent;
 import com.mraof.minestuck.item.MSItems;
+import com.mraof.minestuck.item.components.EncodedItemComponent;
+import com.mraof.minestuck.item.components.MSItemComponents;
 import com.mraof.minestuck.network.editmode.EditmodeLocationsPacket;
 import com.mraof.minestuck.network.editmode.ServerEditPackets;
 import com.mraof.minestuck.player.GristCache;
@@ -30,6 +31,7 @@ import net.minecraft.ChatFormatting;
 import net.minecraft.core.BlockPos;
 import net.minecraft.core.GlobalPos;
 import net.minecraft.core.SectionPos;
+import net.minecraft.core.component.DataComponentType;
 import net.minecraft.network.chat.Component;
 import net.minecraft.resources.ResourceKey;
 import net.minecraft.server.MinecraftServer;
@@ -53,23 +55,22 @@ import net.minecraft.world.level.block.TrapDoorBlock;
 import net.minecraft.world.level.block.state.BlockState;
 import net.minecraft.world.level.levelgen.Heightmap;
 import net.minecraft.world.phys.Vec3;
-import net.neoforged.bus.api.Event;
 import net.neoforged.bus.api.EventPriority;
 import net.neoforged.bus.api.SubscribeEvent;
-import net.neoforged.fml.LogicalSide;
-import net.neoforged.fml.common.Mod;
-import net.neoforged.neoforge.event.TickEvent;
+import net.neoforged.fml.common.EventBusSubscriber;
+import net.neoforged.neoforge.common.util.TriState;
 import net.neoforged.neoforge.event.entity.EntityTravelToDimensionEvent;
 import net.neoforged.neoforge.event.entity.item.ItemTossEvent;
 import net.neoforged.neoforge.event.entity.living.LivingDamageEvent;
 import net.neoforged.neoforge.event.entity.living.LivingDeathEvent;
 import net.neoforged.neoforge.event.entity.player.AttackEntityEvent;
-import net.neoforged.neoforge.event.entity.player.EntityItemPickupEvent;
+import net.neoforged.neoforge.event.entity.player.ItemEntityPickupEvent;
 import net.neoforged.neoforge.event.entity.player.PlayerEvent;
 import net.neoforged.neoforge.event.entity.player.PlayerInteractEvent;
 import net.neoforged.neoforge.event.level.BlockEvent;
 import net.neoforged.neoforge.event.server.ServerStartedEvent;
 import net.neoforged.neoforge.event.server.ServerStoppingEvent;
+import net.neoforged.neoforge.event.tick.PlayerTickEvent;
 import net.neoforged.neoforge.network.PacketDistributor;
 import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.Logger;
@@ -84,7 +85,7 @@ import java.util.*;
  * @author kirderf1
  */
 @SuppressWarnings("resource")
-@Mod.EventBusSubscriber(modid = Minestuck.MOD_ID, bus = Mod.EventBusSubscriber.Bus.FORGE)
+@EventBusSubscriber(modid = Minestuck.MOD_ID, bus = EventBusSubscriber.Bus.GAME)
 public final class ServerEditHandler    //TODO Consider splitting this class into two
 {
 	private static final Logger LOGGER = LogManager.getLogger();
@@ -129,10 +130,10 @@ public final class ServerEditHandler    //TODO Consider splitting this class int
 	}
 	
 	@SubscribeEvent
-	public static void onLivingDamage(LivingDamageEvent event)
+	public static void onLivingDamage(LivingDamageEvent.Pre event)
 	{
 		if(event.getEntity() instanceof ServerPlayer player && isInEditmode(player))
-			event.setCanceled(true);
+			event.setNewDamage(0);
 	}
 	
 	@SubscribeEvent
@@ -179,7 +180,7 @@ public final class ServerEditHandler    //TODO Consider splitting this class int
 		
 		editData.recover();    //TODO handle exception from failed recovery
 		
-		PacketDistributor.PLAYER.with(player).send(new ServerEditPackets.Exit());
+		PacketDistributor.sendToPlayer(player, new ServerEditPackets.Exit());
 		
 		editData.getDecoy().markedForDespawn = true;
 		
@@ -219,7 +220,7 @@ public final class ServerEditHandler    //TODO Consider splitting this class int
 			
 			data.locations().validateClosestSource(player, targetData);
 			
-			PacketDistributor.PLAYER.with(player).send(new ServerEditPackets.Activate());
+			PacketDistributor.sendToPlayer(player, new ServerEditPackets.Activate());
 			data.sendGivenItemsToEditor();
 			EditmodeLocationsPacket.send(data);
 			
@@ -274,7 +275,7 @@ public final class ServerEditHandler    //TODO Consider splitting this class int
 		EditData data = getData(editor);
 		if(data != null)
 		{
-			PacketDistributor.PLAYER.with(editor).send(new ServerEditPackets.Activate());
+			PacketDistributor.sendToPlayer(editor, new ServerEditPackets.Activate());
 			data.sendGivenItemsToEditor();
 			EditmodeLocationsPacket.send(data);
 			
@@ -282,7 +283,7 @@ public final class ServerEditHandler    //TODO Consider splitting this class int
 			data.sendCacheLimitToEditor();
 		} else
 		{
-			PacketDistributor.PLAYER.with(editor).send(new ServerEditPackets.Exit());
+			PacketDistributor.sendToPlayer(editor, new ServerEditPackets.Exit());
 		}
 	}
 	
@@ -316,11 +317,10 @@ public final class ServerEditHandler    //TODO Consider splitting this class int
 	}
 	
 	@SubscribeEvent
-	public static void tickEnd(TickEvent.PlayerTickEvent event)
+	public static void tickEnd(PlayerTickEvent.Pre event)
 	{
-		if(event.phase != TickEvent.Phase.END || event.side == LogicalSide.CLIENT)
+		if(!(event.getEntity() instanceof ServerPlayer player))
 			return;
-		ServerPlayer player = (ServerPlayer) event.player;
 		
 		EditData data = getData(player);
 		if(data == null)
@@ -359,7 +359,7 @@ public final class ServerEditHandler    //TODO Consider splitting this class int
 					data.sburbData().setHasGivenItem(entry);
 					SburbHandler.onEntryItemsDeployed(player.getServer(), data.getTarget());
 				} else event.setCanceled(true);
-			} else if(AlchemyHelper.isPunchedCard(stack) && DeployList.containsItemStack(AlchemyHelper.getDecodedItem(stack), data.sburbData(), event.getEntity().level(), DeployList.EntryLists.ATHENEUM))
+			} else if(isAtheneumCard(stack, event.getEntity().level(), data.sburbData()))
 			{
 				GristSet cost = GristCostRecipe.findCostForItem(MSItems.CAPTCHA_CARD.get().getDefaultInstance(), GristTypes.BUILD.get(), false, player.level());
 				if(cost == null || !data.getGristCache().tryTake(cost, GristHelper.EnumSource.SERVER))
@@ -379,11 +379,18 @@ public final class ServerEditHandler    //TODO Consider splitting this class int
 		}
 	}
 	
-	@SubscribeEvent
-	public static void onItemPickupEvent(EntityItemPickupEvent event)
+	private static boolean isAtheneumCard(ItemStack stack, Level level, SburbPlayerData playerData)
 	{
-		if(event.getEntity() instanceof ServerPlayer player && isInEditmode(player))
-			event.setCanceled(true);
+		EncodedItemComponent encodedItemComponent = stack.get(MSItemComponents.ENCODED_ITEM);
+		return stack.is(MSItems.CAPTCHA_CARD) && encodedItemComponent != null
+				&& DeployList.containsItemStack(encodedItemComponent.asItemStack(), playerData, level, DeployList.EntryLists.ATHENEUM);
+	}
+	
+	@SubscribeEvent
+	public static void onItemPickupEvent(ItemEntityPickupEvent.Pre event)
+	{
+		if(event.getPlayer() instanceof ServerPlayer player && isInEditmode(player))
+			event.setCanPickup(TriState.FALSE);
 	}
 	
 	//TODO Slightly unsafe with this approach to check, and then execute in a different event listener. It is probably better to try first, and then reset if we tried and the event got cancelled.
@@ -397,7 +404,7 @@ public final class ServerEditHandler    //TODO Consider splitting this class int
 				return;
 			
 			EditTools cap = player.getData(MSAttachments.EDIT_TOOLS);
-			if(!event.getEntity().canReach(event.getPos(), 0.0) || cap.getEditPos1() != null)
+			if(!event.getEntity().canInteractWithBlock(event.getPos(), 0.0) || cap.getEditPos1() != null)
 			{
 				event.setCanceled(true);
 				return;
@@ -405,8 +412,8 @@ public final class ServerEditHandler    //TODO Consider splitting this class int
 			
 			Block block = event.getLevel().getBlockState(event.getPos()).getBlock();
 			ItemStack stack = event.getEntity().getMainHandItem();
-			event.setUseBlock(stack.isEmpty() && (block instanceof DoorBlock || block instanceof TrapDoorBlock || block instanceof FenceGateBlock) ? Event.Result.ALLOW : Event.Result.DENY);
-			if(event.getUseBlock() == Event.Result.ALLOW)
+			event.setUseBlock(stack.isEmpty() && (block instanceof DoorBlock || block instanceof TrapDoorBlock || block instanceof FenceGateBlock) ? TriState.TRUE : TriState.FALSE);
+			if(event.getUseBlock() == TriState.TRUE)
 				return;
 			if(stack.isEmpty() || !isBlockItem(stack.getItem()) || event.getHand().equals(InteractionHand.OFF_HAND))
 			{
@@ -415,7 +422,7 @@ public final class ServerEditHandler    //TODO Consider splitting this class int
 			}
 			
 			SburbPlayerData targetData = data.sburbData();
-			cleanStackNBT(stack, targetData, event.getLevel());
+			cleanStackComponentsIfNotDeployable(stack, targetData, event.getLevel());
 			
 			DeployEntry entry = DeployList.getEntryForItem(stack, targetData, event.getEntity().level());
 			GristCache gristCache = data.getGristCache();
@@ -433,8 +440,8 @@ public final class ServerEditHandler    //TODO Consider splitting this class int
 			{
 				event.setCanceled(true);
 			}
-			if(event.getUseItem() == Event.Result.DEFAULT)
-				event.setUseItem(Event.Result.ALLOW);
+			if(event.getUseItem() == TriState.DEFAULT)
+				event.setUseItem(TriState.TRUE);
 		}
 	}
 	
@@ -453,7 +460,7 @@ public final class ServerEditHandler    //TODO Consider splitting this class int
 				return;
 			
 			EditTools cap = player.getData(MSAttachments.EDIT_TOOLS);
-			if(!event.getEntity().canReach(event.getPos(), 0.0) || cap.getEditPos1() != null)
+			if(!event.getEntity().canInteractWithBlock(event.getPos(), 0.0) || cap.getEditPos1() != null)
 			{
 				event.setCanceled(true);
 				return;
@@ -591,7 +598,7 @@ public final class ServerEditHandler    //TODO Consider splitting this class int
 			throw LOGGER.throwing(new IllegalStateException("Server Level is clientside in updateEditToolsServer()!"));
 		
 		
-		IEditTools cap = player.getData(MSAttachments.EDIT_TOOLS);
+		EditTools cap = player.getData(MSAttachments.EDIT_TOOLS);
 		
 		//Gets whether the end of the selection-box (pos2) is lesser or greater than the origin-point (pos1)
 		boolean signX = pos1.getX() < pos2.getX();
@@ -660,7 +667,7 @@ public final class ServerEditHandler    //TODO Consider splitting this class int
 	 */
 	public static void removeCursorEntity(ServerPlayer player, boolean rejected)
 	{
-		IEditTools cap = player.getData(MSAttachments.EDIT_TOOLS);
+		EditTools cap = player.getData(MSAttachments.EDIT_TOOLS);
 		
 		if(cap.getEditCursorID() != null)
 		{
@@ -684,28 +691,18 @@ public final class ServerEditHandler    //TODO Consider splitting this class int
 			ItemStack stack = player.getInventory().items.get(i);
 			if(stack.isEmpty())
 				continue;
-			if(GristCostRecipe.findCostForItem(stack, null, false, player.getCommandSenderWorld()) == null || !isBlockItem(stack.getItem()))
+			if(!isBlockItem(stack.getItem()) || GristCostRecipe.findCostForItem(stack, null, false, player.getCommandSenderWorld()) == null)
 			{
-				listSearch:
+				if(!isDeployItem(stack, itemList, player.level(), playerData))
 				{
-					for(ItemStack deployStack : itemList)
-						if(ItemStack.matches(deployStack, stack)
-								|| (AlchemyHelper.isPunchedCard(stack) && ItemStack.matches(deployStack, AlchemyHelper.getDecodedItem(stack))
-								&& DeployList.containsItemStack(AlchemyHelper.getDecodedItem(stack), playerData, player.level(), DeployList.EntryLists.ATHENEUM)))
-							break listSearch;
 					player.getInventory().items.set(i, ItemStack.EMPTY);
 					inventoryChanged = true;
 				}
-			} else if(stack.hasTag())
+			} else if(!stack.isComponentsPatchEmpty())
 			{
-				listSearch:
+				if(!isDeployItem(stack, itemList, player.level(), playerData))
 				{
-					for(ItemStack deployStack : itemList)
-						if(ItemStack.matches(deployStack, stack)
-								|| (AlchemyHelper.isPunchedCard(stack) && ItemStack.matches(deployStack, AlchemyHelper.getDecodedItem(stack))
-								&& DeployList.containsItemStack(AlchemyHelper.getDecodedItem(stack), playerData, player.level(), DeployList.EntryLists.ATHENEUM)))
-							break listSearch;
-					stack.setTag(null);
+					clearComponentPatches(stack);
 					inventoryChanged = true;
 				}
 			}
@@ -718,6 +715,19 @@ public final class ServerEditHandler    //TODO Consider splitting this class int
 		
 		if(inventoryChanged)
 			player.getServer().getPlayerList().sendAllPlayerInfo(player);
+	}
+	
+	private static boolean isDeployItem(ItemStack stack, List<ItemStack> deployItemList, Level level, SburbPlayerData playerData)
+	{
+		if(isAtheneumCard(stack, level, playerData))
+			return true;
+		
+		for(ItemStack deployStack : deployItemList)
+		{
+			if(ItemStack.matches(deployStack, stack))
+				return true;
+		}
+		return false;
 	}
 	
 	/*@SubscribeEvent(priority=EventPriority.LOWEST, receiveCanceled=false) TODO Do something about command security
@@ -802,11 +812,22 @@ public final class ServerEditHandler    //TODO Consider splitting this class int
 		return item instanceof BlockItem;
 	}
 	
-	public static void cleanStackNBT(ItemStack stack, SburbPlayerData playerData, Level level)
+	public static void cleanStackComponentsIfNotDeployable(ItemStack stack, SburbPlayerData playerData, Level level)
 	{
 		if(!DeployList.containsItemStack(stack, playerData, level, DeployList.EntryLists.DEPLOY)
-				|| !(AlchemyHelper.isPunchedCard(stack) && DeployList.containsItemStack(AlchemyHelper.getDecodedItem(stack), playerData, level, DeployList.EntryLists.ATHENEUM)))
-			stack.setTag(null);
+				|| !isAtheneumCard(stack, level, playerData))
+			clearComponentPatches(stack);
+	}
+	
+	private static void clearComponentPatches(ItemStack stack)
+	{
+		for(var patchEntry : stack.getComponentsPatch().entrySet())
+			clearComponentPatch(stack, patchEntry.getKey());
+	}
+	
+	private static <T> void clearComponentPatch(ItemStack stack, DataComponentType<T> type)
+	{
+		stack.set(type, stack.getPrototype().get(type));
 	}
 	
 	@SubscribeEvent

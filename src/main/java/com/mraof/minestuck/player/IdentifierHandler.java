@@ -10,7 +10,6 @@ import net.minecraft.world.entity.player.Player;
 import net.neoforged.neoforge.common.UsernameCache;
 import net.neoforged.neoforge.common.util.FakePlayer;
 
-import javax.annotation.Nonnull;
 import javax.annotation.Nullable;
 import java.util.*;
 
@@ -37,13 +36,6 @@ public class IdentifierHandler
 		PlayerIdentifier identifier = new UUIDIdentifier(nextIdentifierId++, player.getGameProfile().getId());
 		identifierList.add(identifier);
 		return identifier;
-	}
-	
-	@Deprecated	//Prefer the DataResult functions
-	@Nonnull
-	public static PlayerIdentifier loadOrThrow(CompoundTag tag, String key) throws RuntimeException
-	{
-		return load(tag, key).getOrThrow(false, message -> {});
 	}
 	
 	public static DataResult<Optional<PlayerIdentifier>> loadOptional(CompoundTag tag, String key)

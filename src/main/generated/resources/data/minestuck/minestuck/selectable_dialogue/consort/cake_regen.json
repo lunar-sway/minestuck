@@ -23,5 +23,7 @@
     ],
     "list_type": "all"
   },
-  "dialogue": "minestuck:consort/cake_regen"
+  "dialogue": "minestuck:consort/cake_regen",
+  "dialogue_weight": 10,
+  "keep_on_reset": false
 }

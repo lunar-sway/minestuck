@@ -11,6 +11,7 @@ import com.mraof.minestuck.block.machine.TransportalizerBlock;
 import com.mraof.minestuck.block.redstone.AreaEffectBlock;
 import com.mraof.minestuck.block.redstone.SummonerBlock;
 import com.mraof.minestuck.block.redstone.WirelessRedstoneReceiverBlock;
+import com.mraof.minestuck.blockentity.ComputerBlockEntity;
 import com.mraof.minestuck.blockentity.TransportalizerBlockEntity;
 import com.mraof.minestuck.blockentity.machine.*;
 import com.mraof.minestuck.blockentity.redstone.RedstoneClockBlockEntity;
@@ -18,12 +19,13 @@ import com.mraof.minestuck.client.gui.*;
 import com.mraof.minestuck.client.gui.captchalouge.HashMapSylladexScreen;
 import com.mraof.minestuck.client.gui.captchalouge.SylladexScreen;
 import com.mraof.minestuck.client.gui.captchalouge.TreeSylladexScreen;
+import com.mraof.minestuck.client.gui.computer.*;
 import com.mraof.minestuck.client.gui.playerStats.*;
 import com.mraof.minestuck.client.util.GuiUtil;
 import com.mraof.minestuck.client.util.MSKeyHandler;
 import com.mraof.minestuck.command.*;
 import com.mraof.minestuck.command.argument.*;
-import com.mraof.minestuck.computer.*;
+import com.mraof.minestuck.computer.editmode.ClientEditmodeData;
 import com.mraof.minestuck.computer.editmode.EditmodeLocations;
 import com.mraof.minestuck.computer.theme.MSComputerThemes;
 import com.mraof.minestuck.data.dialogue.DialogueProvider;
@@ -50,9 +52,8 @@ import com.mraof.minestuck.world.lands.terrain.*;
 import com.mraof.minestuck.world.lands.title.*;
 import net.minecraft.ChatFormatting;
 import net.minecraft.data.PackOutput;
-import net.minecraft.world.item.ItemStack;
 import net.minecraft.world.item.Items;
-import net.minecraft.world.item.alchemy.PotionUtils;
+import net.minecraft.world.item.alchemy.PotionContents;
 import net.minecraft.world.item.alchemy.Potions;
 
 public class MinestuckEnUsLanguageProvider extends MinestuckLanguageProvider
@@ -67,6 +68,7 @@ public class MinestuckEnUsLanguageProvider extends MinestuckLanguageProvider
 	{
 		SkaiaBlocksData.addEnUsTranslations(this);
 		AspectTreeBlocksData.addEnUsTranslations(this);
+		DreamerMoonBlocksData.addEnUsTranslations(this);
 		
 		add("message.shift_for_more_info", "Press §eSHIFT§r for more info");
 		
@@ -155,6 +157,8 @@ public class MinestuckEnUsLanguageProvider extends MinestuckLanguageProvider
 		addBlock(MSBlocks.PERFECTLY_GENERIC_TRAPDOOR, "Perfectly Generic Trapdoor");
 		addBlock(MSBlocks.PERFECTLY_GENERIC_SIGN, "Perfectly Generic Sign");
 		addBlock(MSBlocks.PERFECTLY_GENERIC_HANGING_SIGN, "Perfectly Generic Hanging Sign");
+		
+		addBlock(MSBlocks.METEORIC_STONE, "Meteoric Stone");
 		
 		addBlock(MSBlocks.BLUE_DIRT, "Blue Dirt");
 		addBlock(MSBlocks.THOUGHT_DIRT, "Thought Dirt");
@@ -974,6 +978,7 @@ public class MinestuckEnUsLanguageProvider extends MinestuckLanguageProvider
 		addBlock(MSBlocks.PINK_FROSTED_TOP_LARGE_CAKE, "Pink Frosted Top Large Cake");
 		addBlock(MSBlocks.CHOCOLATEY_CAKE, "Chocolatey Cake");
 		addBlockStoreTooltip(MSBlocks.CHOCOLATEY_CAKE, "The most scrumptious cake in the entire world!");
+		addBlock(MSBlocks.MOON_CAKE, "Moon Cake");
 		addBlock(MSBlocks.PRIMED_TNT, "Primed TNT");
 		addBlock(MSBlocks.UNSTABLE_TNT, "Unstable TNT");
 		addBlock(MSBlocks.INSTANT_TNT, "Instant TNT");
@@ -1680,21 +1685,21 @@ public class MinestuckEnUsLanguageProvider extends MinestuckLanguageProvider
 		addItemTooltip(MSItems.BUG_NET, "Perfect for catching bugs and frogs!");
 		addItem(MSItems.FROG, "Frog");
 		addItemExtra(MSItems.FROG, "random", "Random Frog");
-		addItemExtra(MSItems.FROG, "type.0", "Frog");
-		addItemExtra(MSItems.FROG, "type.1", "Totally Normal Frog");
-		addItemExtra(MSItems.FROG, "type.2", "Ruby Contraband");
-		addItemExtra(MSItems.FROG, "type.3", "Tiny Genesis Frog");
-		addItemExtra(MSItems.FROG, "type.4", "Frog");
-		addItemExtra(MSItems.FROG, "type.5", "Golden Frog");
-		addItemExtra(MSItems.FROG, "type.6", "Frog");
-		addItemExtra(MSItems.FROG, "desc.4", "frog.null.name");
-		addItemExtra(MSItems.FROG, "desc.6", ChatFormatting.OBFUSCATED + "Susan");
-		addItemExtra(MSItems.FROG, "eyes.0", "Lighter Eyes");
-		addItemExtra(MSItems.FROG, "eyes.1", "Darker Eyes");
-		addItemExtra(MSItems.FROG, "eyes.2", "Blank Eyes");
-		addItemExtra(MSItems.FROG, "belly.1", "Solid-Colored Belly");
-		addItemExtra(MSItems.FROG, "belly.2", "Spotted Belly");
-		addItemExtra(MSItems.FROG, "belly.3", "Striped Belly");
+		addItemExtra(MSItems.FROG, "type.default", "Frog");
+		addItemExtra(MSItems.FROG, "type.totally_normal", "Totally Normal Frog");
+		addItemExtra(MSItems.FROG, "type.ruby_contraband", "Ruby Contraband");
+		addItemExtra(MSItems.FROG, "type.genesis", "Tiny Genesis Frog");
+		addItemExtra(MSItems.FROG, "type.null", "Frog");
+		addItemExtra(MSItems.FROG, "type.golden", "Golden Frog");
+		addItemExtra(MSItems.FROG, "type.susan", "Frog");
+		addItemExtra(MSItems.FROG, "desc.null", "frog.null.name");
+		addItemExtra(MSItems.FROG, "desc.susan", ChatFormatting.OBFUSCATED + "Susan");
+		addItemExtra(MSItems.FROG, "eyes.light", "Lighter Eyes");
+		addItemExtra(MSItems.FROG, "eyes.dark", "Darker Eyes");
+		addItemExtra(MSItems.FROG, "eyes.blank", "Blank Eyes");
+		addItemExtra(MSItems.FROG, "belly.solid", "Solid-Colored Belly");
+		addItemExtra(MSItems.FROG, "belly.spotted", "Spotted Belly");
+		addItemExtra(MSItems.FROG, "belly.striped", "Striped Belly");
 		addItemExtra(MSItems.FROG, "size.0", "Tiny");
 		addItemExtra(MSItems.FROG, "size.1", "Small");
 		addItemExtra(MSItems.FROG, "size.2", "Normal Sized");
@@ -1735,8 +1740,10 @@ public class MinestuckEnUsLanguageProvider extends MinestuckLanguageProvider
 		addItemTooltip(MSItems.WHITE_QUEENS_RING, "One of a pair. Cast it into the fire!");
 		addItem(MSItems.RAZOR_BLADE, "Razor Blade");
 		addItemTooltip(MSItems.RAZOR_BLADE, "Only a fool would try to pick this up.");
+		addItemExtra(MSItems.RAZOR_BLADE, "cut_self", "While you handle the razor blade, you accidentally cut yourself and drop it.");
 		addItem(MSItems.URANIUM_POWERED_STICK, "Uranium-Powered Stick");
 		addItemTooltip(MSItems.URANIUM_POWERED_STICK, "Never runs out of uranium!");
+		
 		addItem(MSItems.SCALEMATE_APPLESCAB, "Officer Applescab");
 		addItem(MSItems.SCALEMATE_BERRYBREATH, "Inspector Berrybreath");
 		addItem(MSItems.SCALEMATE_CINNAMONWHIFF, "Officer Cinnamonwhiff");
@@ -1916,7 +1923,7 @@ public class MinestuckEnUsLanguageProvider extends MinestuckLanguageProvider
 		addStoreTooltip(Items.WHEAT_SEEDS, "You know what tastes even better than those plant grains? Their seeds, of course!");
 		addStoreTooltip(Items.MUSHROOM_STEW, "Do you enjoy mushrooms? Then this'll be a delicacy!");
 		addStoreTooltip(Items.BEEF, "You want something RAW? We've got BEEF.");
-		addStoreTooltip(PotionUtils.setPotion(new ItemStack(Items.POTION), Potions.WATER), "Stay hydrated with our oasis water.");
+		addStoreTooltip(PotionContents.createItemStack(Items.POTION, Potions.WATER), "Stay hydrated with our oasis water.");
 		addStoreTooltip(Items.CARROT, "Want to try something orange? We've got carrots straight from the ground.");
 		addStoreTooltip(Items.MILK_BUCKET, "You won't find this in a regular bucket!");
 		addStore(Items.POISONOUS_POTATO, "Green Potato");
@@ -1996,9 +2003,7 @@ public class MinestuckEnUsLanguageProvider extends MinestuckLanguageProvider
 		addEntityType(MSEntityTypes.PLAYER_DECOY, "Player Decoy");
 		addEntityType(MSEntityTypes.SERVER_CURSOR, "Server Cursor");
 		addEntityType(MSEntityTypes.METAL_BOAT, "Metal Boat");
-		addEntityType(MSEntityTypes.MIDNIGHT_CREW_POSTER, "Midnight Crew Poster");
-		addEntityType(MSEntityTypes.SBAHJ_POSTER, "SBAHJ Poster");
-		addEntityType(MSEntityTypes.SHOP_POSTER, "Shop Sign");
+		addEntityType(MSEntityTypes.POSTER, "Poster");
 		addEntityType(MSEntityTypes.LOTUS_FLOWER, "Lotus Flower");
 		
 		addGristType(GristTypes.BUILD, "Build");
@@ -2145,6 +2150,7 @@ public class MinestuckEnUsLanguageProvider extends MinestuckLanguageProvider
 		addAdvancement(MSAdvancementProvider.INTELLIBEAM, "Captcha Captured", "Use an Intellibeam Laserstation to decode a particularly challenging captcha");
 		addAdvancement(MSAdvancementProvider.LEGENDARY_WEAPON, "Legendary Weapon", "Obtain a Zilly, Welsh, or Denizen tier weapon");
 		addAdvancement(MSAdvancementProvider.BUY_OUT_SHOP, "Beware the Buyer", "Purchase every item available from a consort merchant");
+		addAdvancement(MSAdvancementProvider.BRICK_COMPUTER, "Brick Your Computer", "Did you try turning it on and off again?");
 		
 		addLand(FungiLandType.FUNGI, "Fungi");
 		addLand(FungiLandType.DANK, "Dank");
@@ -2252,6 +2258,7 @@ public class MinestuckEnUsLanguageProvider extends MinestuckLanguageProvider
 		add(SylladexScreen.EMPTY_SYLLADEX_2, "This will empty your sylladex.");
 		add(SylladexScreen.EMPTY_SYLLADEX_BUTTON, "Empty Sylladex");
 		add(AlchemiterScreen.TITLE, "Alchemiter");
+		add(ComputerBlockEntity.DISK_REJECT, "Cannot fit any more disks in the computer!");
 		add(CruxtruderBlockEntity.EMPTY, "The cruxtruder gives off an empty click. Perhaps it needs some sort of material to function?");
 		add(MiniCruxtruderBlockEntity.TITLE, "Miniature Cruxtruder");
 		add(MiniTotemLatheBlockEntity.TITLE, "Miniature Totem Lathe");
@@ -2290,6 +2297,7 @@ public class MinestuckEnUsLanguageProvider extends MinestuckLanguageProvider
 		add(ComputerThemeScreen.TITLE, "Computer Themes");
 		add(ComputerThemeScreen.SELECTED_THEME, "Selected theme:");
 		add(ComputerThemeScreen.DONE_MESSAGE, "DONE");
+		add(DiskManagerScreen.TITLE, "Disk Manager");
 		add(TransportalizerScreen.TITLE, "Transportalizer");
 		add(TransportalizerScreen.DESTINATION_CODE_MESSAGE, "Transportalizer destination code");
 		add(TransportalizerScreen.DONE_MESSAGE, "DONE");
@@ -2363,30 +2371,36 @@ public class MinestuckEnUsLanguageProvider extends MinestuckLanguageProvider
 		add(SummonerScreen.TRIGGERABLE_MESSAGE, "TRIGGERABLE");
 		add(SummonerBlock.SUMMON_TYPE_CHANGE, "Summoned entity type changed to %s.");
 		add(HashMapModus.MESSAGE, "[HASHMAP] %s %% %s -> %s");
-		add(ButtonListProgram.CLEAR_BUTTON, "Clear message");
-		add(SburbClient.CLOSE_BUTTON, "Disconnect");
-		add(SburbClient.CONNECT_BUTTON, "%s");
-		add(SburbServer.EDIT_BUTTON, "Activate edit mode");
-		add(SburbServer.GIVE_BUTTON, "Give items");
-		add(SburbServer.OPEN_BUTTON, "Open to clients");
-		add(SburbClient.RESUME_BUTTON, "Resume connection");
-		add(SburbClient.SELECT_COLOR, "Select a Color");
-		add(SburbClient.CONNECT, "Connected to %s");
-		add(SburbClient.CLIENT_ACTIVE, "Client is already active");
+		
+		add(ButtonListHelper.CLEAR_BUTTON, "Clear message");
+		add(SburbClientGui.NAME, "SBURB Client");
+		add(SburbServerGui.NAME, "SBURB Server");
+		add(SburbClientGui.CLOSE_BUTTON, "Disconnect");
+		add(SburbServerGui.EDIT_BUTTON, "Activate edit mode");
+		add(SburbServerGui.GIVE_BUTTON, "Give items");
+		add(SburbServerGui.OPEN_BUTTON, "Open to clients");
+		add(SburbClientGui.RESUME_BUTTON, "Resume connection");
+		add(SburbClientGui.SELECT_COLOR, "Select a Color");
+		add(SburbClientGui.CONNECT, "Connected to %s");
+		add(SburbClientGui.CLIENT_ACTIVE, "Client is already active");
 		add(SburbConnections.CLOSED, "Connection closed");
-		add(SburbServer.OFFLINE, "Server offline");
-		add(SburbClient.SELECT, "Select a server below");
-		add(SburbServer.SERVER_ACTIVE, "Server with your name exists");
-		add(SburbClient.RESUME_CLIENT, "Waiting for server...");
-		add(SburbServer.RESUME_SERVER, "Waiting for client...");
-		add(DiskBurner.NEED_CODE, "Requires code to burn disks");
-		add(DiskBurner.NO_DISKS, "Insert disk to burn");
-		add(DiskBurner.BURN_CLIENT_DISK, "Burn Client Disk");
-		add(DiskBurner.BURN_SERVER_DISK, "Burn Server Disk");
-		add(DiskBurner.CHOOSE, "Choose disk type to write");
+		add(SburbServerGui.OFFLINE, "Server offline");
+		add(SburbClientGui.SELECT, "Select a server below");
+		add(SburbServerGui.SERVER_ACTIVE, "Server with your name exists");
+		add(SburbClientGui.RESUME_CLIENT, "Waiting for server...");
+		add(SburbServerGui.RESUME_SERVER, "Waiting for client...");
+		add(DiskBurnerGui.NAME, "Disk Burner");
+		add(DiskBurnerGui.NEED_CODE, "Requires code to burn disks");
+		add(DiskBurnerGui.NO_DISKS, "Insert disk to burn");
+		add(DiskBurnerGui.BURN_CLIENT_DISK, "Burn Client Disk");
+		add(DiskBurnerGui.BURN_SERVER_DISK, "Burn Server Disk");
+		add(DiskBurnerGui.CHOOSE, "Choose disk type to write");
 		add(ComputerInteractions.STOP_RESUME, "Stopped resuming");
-		add(SettingsApp.THEME, "Choose Theme");
-		add(SettingsApp.TITLE, "Sburb Settings");
+		add(SettingsAppGui.NAME, "Settings");
+		add(SettingsAppGui.THEME, "Choose Theme");
+		add(SettingsAppGui.DISK_MANAGER, "Disk Manager");
+		add(SettingsAppGui.TITLE, "Sburb Settings");
+		
 		add(EntryProcess.WRONG_DIMENSION, "Entry not permitted from this dimension");
 		add(EntryProcess.BUSY, "Someone else is already entering");
 		add(EntryProcess.CREATION_FAILED, "Something went wrong while creating your Land. More details in the server console");
@@ -2402,6 +2416,7 @@ public class MinestuckEnUsLanguageProvider extends MinestuckLanguageProvider
 		add(EntryProcess.EXCEPTION, "[Minestuck] Something went wrong during entry. %s");
 		add(EntryCommand.ENTERING, "Preparing to enter The Medium");
 		add(EntryCommand.OTHER_PLAYER_ENTERING, "%s is now entering The Medium");
+		add(ClientEditmodeData.ENTERED, "[Minestuck] Press [%s] to exit edit mode");
 		add(EditmodeLocations.REMOVED_LOCATION_MESSAGE, "The location you were in is no longer in range, and you have now been teleported to a valid location.");
 		
 		addThemeName(MSComputerThemes.DEFAULT, "Default");
@@ -2429,6 +2444,7 @@ public class MinestuckEnUsLanguageProvider extends MinestuckLanguageProvider
 		add(GristLayerInfo.INFO, "Grist types at this position; common: %s, uncommon: %s, any: %s");
 		add(CheckLandCommand.CHECK, "You are currently in %s.");
 		add(CheckLandCommand.FAIL, "You are currently not in a land dimension.");
+		add(GutterCommand.SHOW, "Gutter modifier: %s, remaining capacity: %s, grist contained: %s");
 		add(SendGristCommand.SUCCESS, "Successfully gave grist to %s: %s");
 		add(SendGristCommand.RECEIVE, "Received grist from %s: %s");
 		add(SendGristCommand.NOT_PERMITTED, "You are not permitted to send grist to %s.");
@@ -2525,6 +2541,10 @@ public class MinestuckEnUsLanguageProvider extends MinestuckLanguageProvider
 		addSubtitles("projectile_bounce", "Projectile bounces");
 		addSubtitles("tool_revise", "Server uses Revise tool");
 		addSubtitles("tool_recycle", "Server recycles blocks");
+		addSubtitles("computer_boot", "Computer booting up");
+		addSubtitles("computer_disk_insert", "Disk inserted");
+		addSubtitles("computer_disk_remove", "Disk removed");
+		addSubtitles("computer_keyboard", "Typing on computer");
 		addSubtitles("alchemiter_resonate", "Alchemize!");
 		addSubtitles("transportalizer_teleport", "Transportalize!");
 		addSubtitles("totem_lathe_lathe", "Latheify!");

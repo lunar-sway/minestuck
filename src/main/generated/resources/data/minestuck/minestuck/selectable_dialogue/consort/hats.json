@@ -3,5 +3,7 @@
     "type": "minestuck:entity_type",
     "entity_type": "minestuck:salamander"
   },
-  "dialogue": "minestuck:consort/hats"
+  "dialogue": "minestuck:consort/hats",
+  "dialogue_weight": 10,
+  "keep_on_reset": false
 }

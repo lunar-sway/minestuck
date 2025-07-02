@@ -1,5 +1,6 @@
 package com.mraof.minestuck.entity.animation;
 
+import net.minecraft.core.Holder;
 import net.minecraft.world.entity.Entity;
 import net.minecraft.world.entity.LivingEntity;
 import net.minecraft.world.entity.ai.attributes.Attribute;
@@ -28,7 +29,7 @@ public record MobAnimation(Action action, int animationLength, boolean freezeMov
 	 * @param speedModifyingAttribute The attribute used to determine the animation's speed
 	 * @return The speed at which the animation should play
 	 */
-	public static double getAttributeAffectedSpeed(LivingEntity entity, @Nullable Attribute speedModifyingAttribute)
+	public static double getAttributeAffectedSpeed(LivingEntity entity, @Nullable Holder<Attribute> speedModifyingAttribute)
 	{
 		if(speedModifyingAttribute == null)
 			return 1;

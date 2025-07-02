@@ -11,16 +11,23 @@ import net.minecraft.server.MinecraftServer;
 import net.minecraft.server.level.ServerPlayer;
 import net.minecraft.world.level.Level;
 import net.neoforged.bus.api.SubscribeEvent;
-import net.neoforged.fml.common.Mod;
+import net.neoforged.fml.common.EventBusSubscriber;
 import net.neoforged.neoforge.event.entity.player.PlayerEvent;
 import net.neoforged.neoforge.network.PacketDistributor;
 
-@Mod.EventBusSubscriber(modid = Minestuck.MOD_ID, bus = Mod.EventBusSubscriber.Bus.FORGE)
+@EventBusSubscriber(modid = Minestuck.MOD_ID, bus = EventBusSubscriber.Bus.GAME)
 public class MSDimensions
 {
 	
-	public static ResourceKey<Level> SKAIA = ResourceKey.create(Registries.DIMENSION, new ResourceLocation(Minestuck.MOD_ID, "skaia"));
-	public static final ResourceLocation LAND_EFFECTS = new ResourceLocation(Minestuck.MOD_ID, "land");
+	public static ResourceKey<Level> SKAIA = ResourceKey.create(Registries.DIMENSION, Minestuck.id("skaia"));
+	public static ResourceKey<Level> PROSPIT = ResourceKey.create(Registries.DIMENSION,  Minestuck.id("prospit"));
+	public static ResourceKey<Level> DERSE = ResourceKey.create(Registries.DIMENSION,  Minestuck.id("derse"));
+	public static ResourceKey<Level> VEIL = ResourceKey.create(Registries.DIMENSION, Minestuck.id("veil"));
+	
+	public static final ResourceLocation LAND_EFFECTS =  Minestuck.id("land");
+	public static final ResourceLocation PROSPIT_EFFECTS =  Minestuck.id("prospit_effects");
+	public static final ResourceLocation DERSE_EFFECTS =  Minestuck.id("derse_effects");
+	public static final ResourceLocation VEIL_EFFECTS =  Minestuck.id("veil_effects");
 	
 	public static boolean isLandDimension(MinecraftServer server, ResourceKey<Level> levelKey)
 	{
@@ -35,21 +42,36 @@ public class MSDimensions
 		return dimension == SKAIA;
 	}
 	
+	public static boolean isProspit(ResourceKey<Level> dimension)
+	{
+		return dimension == PROSPIT;
+	}
+	
+	public static boolean isDerse(ResourceKey<Level> dimension)
+	{
+		return dimension == DERSE;
+	}
+	
+	public static boolean isVeil(ResourceKey<Level> dimension)
+	{
+		return dimension == VEIL;
+	}
+	
 	public static boolean isInMedium(MinecraftServer server, ResourceKey<Level> dimension)
 	{
-		return isLandDimension(server, dimension) || isSkaia(dimension);
+		return isLandDimension(server, dimension) || isSkaia(dimension) || isVeil(dimension);
 	}
 	
 	public static void sendLandTypesToAll(MinecraftServer server)
 	{
-		PacketDistributor.ALL.noArg().send(createLandTypesPacket(server));
+		PacketDistributor.sendToAllPlayers(createLandTypesPacket(server));
 	}
 	
 	@SubscribeEvent
 	private static void onPlayerLogin(PlayerEvent.PlayerLoggedInEvent event)
 	{
 		ServerPlayer player = (ServerPlayer) event.getEntity();
-		PacketDistributor.PLAYER.with(player).send(createLandTypesPacket(player.server));
+		PacketDistributor.sendToPlayer(player, createLandTypesPacket(player.server));
 	}
 	
 	private static LandTypesDataPacket createLandTypesPacket(MinecraftServer server)

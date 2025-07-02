@@ -14,7 +14,7 @@ import net.minecraft.world.level.levelgen.structure.templatesystem.StructureTemp
 
 public class UnfinishedCarvedTableFeature extends Feature<NoneFeatureConfiguration>
 {
-	private static final ResourceLocation UNFINISHED_CARVED_TABLE = new ResourceLocation(Minestuck.MOD_ID, "unfinished_carved_table");
+	private static final ResourceLocation UNFINISHED_CARVED_TABLE = ResourceLocation.fromNamespaceAndPath(Minestuck.MOD_ID, "unfinished_carved_table");
 	
 	public UnfinishedCarvedTableFeature(Codec<NoneFeatureConfiguration> codec)
 	{

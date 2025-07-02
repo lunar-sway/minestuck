@@ -1,8 +1,10 @@
 package com.mraof.minestuck.util;
 
 import com.mraof.minestuck.Minestuck;
+import net.minecraft.core.Holder;
 import net.minecraft.core.registries.BuiltInRegistries;
 import net.minecraft.sounds.SoundEvent;
+import net.neoforged.neoforge.registries.DeferredHolder;
 import net.neoforged.neoforge.registries.DeferredRegister;
 
 import java.util.function.Supplier;
@@ -11,9 +13,9 @@ public final class MSSoundEvents
 {
 	public static final DeferredRegister<SoundEvent> REGISTER = DeferredRegister.create(BuiltInRegistries.SOUND_EVENT, Minestuck.MOD_ID);
 	
-	public static final Supplier<SoundEvent> MUSIC_DISC_EMISSARY_OF_DANCE = register("music_disc.emissary_of_dance");
-	public static final Supplier<SoundEvent> MUSIC_DISC_DANCE_STAB_DANCE = register("music_disc.dance_stab_dance");
-	public static final Supplier<SoundEvent> MUSIC_DISC_RETRO_BATTLE_THEME = register("music_disc.retro_battle_theme");
+	public static final Holder<SoundEvent> MUSIC_DISC_EMISSARY_OF_DANCE = register("music_disc.emissary_of_dance");
+	public static final Holder<SoundEvent> MUSIC_DISC_DANCE_STAB_DANCE = register("music_disc.dance_stab_dance");
+	public static final Holder<SoundEvent> MUSIC_DISC_RETRO_BATTLE_THEME = register("music_disc.retro_battle_theme");
 	
 	public static final Supplier<SoundEvent> MUSIC_DEFAULT = register("music.default");
 	public static final Supplier<SoundEvent> MUSIC_FOREST = register("music.forest");
@@ -50,6 +52,8 @@ public final class MSSoundEvents
 	
 	public static final Supplier<SoundEvent> MUSIC_UNIVERSAL = register("music.universal"); //play in all lands
 	public static final Supplier<SoundEvent> MUSIC_RISE_UP = register("music.rise_up"); //is intended for use during godtiering
+	public static final Supplier<SoundEvent> MUSIC_PROSPIT = register("music.prospit");
+	public static final Supplier<SoundEvent> MUSIC_DERSE = register("music.derse");
 	
 	public static final Supplier<SoundEvent> ENTITY_SWOOSH = register("entity.swoosh");
 	public static final Supplier<SoundEvent> ENTITY_SLAM = register("entity.slam");
@@ -101,6 +105,10 @@ public final class MSSoundEvents
 	public static final Supplier<SoundEvent> EVENT_LOTUS_FLOWER_RESTORE = register("event.lotus_flower.restore"); //identical to beehive exit
 	public static final Supplier<SoundEvent> EVENT_EDIT_TOOL_REVISE = register("event.edit_tools.revise");
 	public static final Supplier<SoundEvent> EVENT_EDIT_TOOL_RECYCLE = register("event.edit_tools.recycle");
+	public static final Supplier<SoundEvent> COMPUTER_BOOT = register("block.computer.boot");
+	public static final Supplier<SoundEvent> COMPUTER_DISK_INSERT = register("block.computer.disk_insert");
+	public static final Supplier<SoundEvent> COMPUTER_DISK_REMOVE = register("block.computer.disk_remove");
+	public static final Supplier<SoundEvent> COMPUTER_KEYBOARD = register("block.computer.keyboard");
 	public static final Supplier<SoundEvent> CRUXTRUDER_DOWEL = register("block.cruxtruder.dowel");
 	public static final Supplier<SoundEvent> ALCHEMITER_RESONATE = register("block.alchemiter.resonate");
 	public static final Supplier<SoundEvent> TRANSPORTALIZER_TELEPORT = register("block.transportalizer.teleport");
@@ -112,7 +120,7 @@ public final class MSSoundEvents
 	public static final Supplier<SoundEvent> BLOCK_CLOCK_TOCK = register("block.clock.tock");
 	
 	
-	private static Supplier<SoundEvent> register(String name)
+	private static DeferredHolder<SoundEvent, SoundEvent> register(String name)
 	{
 		return REGISTER.register(name, () -> SoundEvent.createVariableRangeEvent(Minestuck.id(name)));
 	}

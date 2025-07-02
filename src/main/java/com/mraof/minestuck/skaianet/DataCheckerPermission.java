@@ -10,18 +10,17 @@ import net.minecraft.server.MinecraftServer;
 import net.minecraft.server.level.ServerPlayer;
 import net.minecraft.world.level.GameType;
 import net.neoforged.bus.api.SubscribeEvent;
-import net.neoforged.fml.LogicalSide;
-import net.neoforged.fml.common.Mod;
-import net.neoforged.neoforge.event.TickEvent;
+import net.neoforged.fml.common.EventBusSubscriber;
 import net.neoforged.neoforge.event.entity.player.PlayerEvent;
 import net.neoforged.neoforge.event.server.ServerStoppedEvent;
+import net.neoforged.neoforge.event.tick.PlayerTickEvent;
 import net.neoforged.neoforge.network.PacketDistributor;
 
 import java.util.HashSet;
 import java.util.Set;
 import java.util.UUID;
 
-@Mod.EventBusSubscriber(modid = Minestuck.MOD_ID, bus = Mod.EventBusSubscriber.Bus.FORGE)
+@EventBusSubscriber(modid = Minestuck.MOD_ID, bus = EventBusSubscriber.Bus.GAME)
 public final class DataCheckerPermission
 {
 	private static final Set<UUID> dataCheckerPermission = new HashSet<>();
@@ -39,9 +38,9 @@ public final class DataCheckerPermission
 	}
 	
 	@SubscribeEvent
-	private static void onPlayerTick(TickEvent.PlayerTickEvent event)
+	private static void onPlayerTick(PlayerTickEvent.Post event)
 	{
-		if(event.side == LogicalSide.SERVER && event.phase == TickEvent.Phase.END && event.player instanceof ServerPlayer player)
+		if(event.getEntity() instanceof ServerPlayer player)
 		{
 			if(shouldUpdateConfigurations(player))
 				sendPacket(player);
@@ -68,7 +67,7 @@ public final class DataCheckerPermission
 			dataCheckerPermission.add(player.getGameProfile().getId());
 		else dataCheckerPermission.remove(player.getGameProfile().getId());
 		packet = new DataCheckerPackets.Permission(permission);
-		PacketDistributor.PLAYER.with(player).send(packet);
+		PacketDistributor.sendToPlayer(player, packet);
 	}
 	
 	public static boolean hasPermission(ServerPlayer player)

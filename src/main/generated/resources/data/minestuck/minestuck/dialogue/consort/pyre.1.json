@@ -3,11 +3,17 @@
     "animation": {
       "emotion": "happy"
     },
+    "gui": "minestuck:textures/gui/dialogue/dialogue.png",
     "message": "minestuck.dialogue.consort.pyre.1",
     "responses": [
       {
+        "condition": {
+          "type": "minestuck:always_true"
+        },
+        "hide_if_failed": true,
         "message": "minestuck.arrow",
-        "next_dialogue": "minestuck:consort/pyre.2"
+        "next_dialogue": "minestuck:consort/pyre.2",
+        "triggers": []
       }
     ]
   }

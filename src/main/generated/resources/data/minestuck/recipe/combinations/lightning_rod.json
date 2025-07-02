@@ -1,0 +1,11 @@
+{
+  "type": "minestuck:combination",
+  "input1": {
+    "item": "minecraft:redstone"
+  },
+  "input2": {
+    "item": "minecraft:copper_ingot"
+  },
+  "mode": "and",
+  "output": "minecraft:lightning_rod"
+}

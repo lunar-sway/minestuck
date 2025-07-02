@@ -49,10 +49,10 @@ public class BouncingProjectileEntity extends ThrowableItemProjectile
 	}
 	
 	@Override
-	protected void defineSynchedData()
+	protected void defineSynchedData(SynchedEntityData.Builder builder)
 	{
-		super.defineSynchedData();
-		entityData.define(LIFESPAN, 200);
+		super.defineSynchedData(builder);
+		builder.define(LIFESPAN, 200);
 	}
 	
 	@Override
@@ -127,7 +127,7 @@ public class BouncingProjectileEntity extends ThrowableItemProjectile
 	{
 		if(getOwner() instanceof Player player)
 		{
-			player.getCooldowns().addCooldown(getItemRaw().getItem(), 5);
+			player.getCooldowns().addCooldown(getItem().getItem(), 5);
 			this.discard();
 		}
 	}
@@ -178,7 +178,7 @@ public class BouncingProjectileEntity extends ThrowableItemProjectile
 	
 	public ItemStack getItemFromItemStack()
 	{
-		ItemStack itemstack = this.getItemRaw();
+		ItemStack itemstack = this.getItem();
 		return itemstack.isEmpty() ? new ItemStack(this.getDefaultItem()) : itemstack;
 	}
 	

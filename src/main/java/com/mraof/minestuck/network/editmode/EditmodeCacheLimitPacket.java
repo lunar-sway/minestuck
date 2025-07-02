@@ -4,31 +4,30 @@ import com.mraof.minestuck.Minestuck;
 import com.mraof.minestuck.network.MSPacket;
 import com.mraof.minestuck.player.ClientPlayerData;
 import net.minecraft.network.FriendlyByteBuf;
+import net.minecraft.network.codec.ByteBufCodecs;
+import net.minecraft.network.codec.StreamCodec;
+import net.minecraft.network.protocol.common.custom.CustomPacketPayload;
 import net.minecraft.resources.ResourceLocation;
+import net.neoforged.neoforge.network.handling.IPayloadContext;
 
 public record EditmodeCacheLimitPacket(long limit) implements MSPacket.PlayToClient
 {
-	public static final ResourceLocation ID = Minestuck.id("editmode_cache_limit");
+	
+	public static final Type<EditmodeCacheLimitPacket> ID = new Type<>(Minestuck.id("editmode_cache_limit"));
+	public static final StreamCodec<FriendlyByteBuf, EditmodeCacheLimitPacket> STREAM_CODEC = StreamCodec.composite(
+			ByteBufCodecs.VAR_LONG,
+			EditmodeCacheLimitPacket::limit,
+			EditmodeCacheLimitPacket::new
+	);
 	
 	@Override
-	public ResourceLocation id()
+	public Type<? extends CustomPacketPayload> type()
 	{
 		return ID;
 	}
 	
 	@Override
-	public void write(FriendlyByteBuf buffer)
-	{
-		buffer.writeLong(this.limit);
-	}
-	
-	public static EditmodeCacheLimitPacket read(FriendlyByteBuf buffer)
-	{
-		return new EditmodeCacheLimitPacket(buffer.readLong());
-	}
-	
-	@Override
-	public void execute()
+	public void execute(IPayloadContext context)
 	{
 		ClientPlayerData.handleDataPacket(this);
 	}

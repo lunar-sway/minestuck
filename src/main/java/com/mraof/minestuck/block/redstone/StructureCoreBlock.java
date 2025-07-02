@@ -13,7 +13,6 @@ import net.minecraft.core.particles.DustParticleOptions;
 import net.minecraft.sounds.SoundEvents;
 import net.minecraft.sounds.SoundSource;
 import net.minecraft.util.RandomSource;
-import net.minecraft.world.InteractionHand;
 import net.minecraft.world.InteractionResult;
 import net.minecraft.world.entity.player.Player;
 import net.minecraft.world.level.BlockGetter;
@@ -31,11 +30,13 @@ import net.minecraft.world.level.block.state.properties.BooleanProperty;
 import net.minecraft.world.phys.BlockHitResult;
 
 import javax.annotation.Nullable;
+import javax.annotation.ParametersAreNonnullByDefault;
 
 /**
  * When ACTIVE is true, the block entity will perform one of several tasks outlined in its ActionType enum to either send nbt to a CoreCompatibleScatteredStructurePiece or act on nbt it receives from said Piece type.
  * It is made to work with various structures in which recording whether it has been completed or not will be important, such as for updating quest completion(quest system pending) or preventing area effect blocks/summoners from remaining in use after completion of a dungeon
  */
+@ParametersAreNonnullByDefault
 public class StructureCoreBlock extends HorizontalDirectionalBlock implements EntityBlock
 {
 	public static final BooleanProperty POWERED = BlockStateProperties.POWERED;
@@ -54,8 +55,7 @@ public class StructureCoreBlock extends HorizontalDirectionalBlock implements En
 	}
 	
 	@Override
-	@SuppressWarnings("deprecation")
-	public InteractionResult use(BlockState state, Level level, BlockPos pos, Player player, InteractionHand hand, BlockHitResult hit)
+	protected InteractionResult useWithoutItem(BlockState state, Level level, BlockPos pos, Player player, BlockHitResult hit)
 	{
 		if(!canInteract(player) || !(level.getBlockEntity(pos) instanceof StructureCoreBlockEntity structureCore))
 			return InteractionResult.FAIL;
@@ -90,17 +90,15 @@ public class StructureCoreBlock extends HorizontalDirectionalBlock implements En
 		return !CreativeShockEffect.doesCreativeShockLimit(player, CreativeShockEffect.LIMIT_MACHINE_INTERACTIONS);
 	}
 	
-	@SuppressWarnings("deprecation")
 	@Override
-	public void neighborChanged(BlockState state, Level level, BlockPos pos, Block blockIn, BlockPos fromPos, boolean isMoving)
+	protected void neighborChanged(BlockState state, Level level, BlockPos pos, Block blockIn, BlockPos fromPos, boolean isMoving)
 	{
 		super.neighborChanged(state, level, pos, blockIn, fromPos, isMoving);
 		updateBlockEntityWithBlock(level, pos);
 	}
 	
-	@SuppressWarnings("deprecation")
 	@Override
-	public void onPlace(BlockState state, Level level, BlockPos pos, BlockState oldState, boolean isMoving)
+	protected void onPlace(BlockState state, Level level, BlockPos pos, BlockState oldState, boolean isMoving)
 	{
 		super.onPlace(state, level, pos, oldState, isMoving);
 		updateBlockEntityWithBlock(level, pos);
@@ -121,16 +119,14 @@ public class StructureCoreBlock extends HorizontalDirectionalBlock implements En
 		}
 	}
 	
-	@SuppressWarnings("deprecation")
 	@Override
-	public boolean isSignalSource(BlockState state)
+	protected boolean isSignalSource(BlockState state)
 	{
 		return state.getValue(POWERED);
 	}
 	
-	@SuppressWarnings("deprecation")
 	@Override
-	public int getSignal(BlockState blockState, BlockGetter blockAccess, BlockPos pos, Direction side)
+	protected int getSignal(BlockState blockState, BlockGetter blockAccess, BlockPos pos, Direction side)
 	{
 		return blockState.getValue(POWERED) ? 15 : 0;
 	}

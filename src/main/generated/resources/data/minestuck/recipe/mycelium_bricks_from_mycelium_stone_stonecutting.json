@@ -1,0 +1,10 @@
+{
+  "type": "minecraft:stonecutting",
+  "ingredient": {
+    "item": "minestuck:mycelium_stone"
+  },
+  "result": {
+    "count": 1,
+    "id": "minestuck:mycelium_bricks"
+  }
+}

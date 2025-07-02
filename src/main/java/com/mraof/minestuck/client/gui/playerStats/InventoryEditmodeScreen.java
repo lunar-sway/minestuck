@@ -22,8 +22,8 @@ import java.time.Month;
 public class InventoryEditmodeScreen extends PlayerStatsContainerScreen<EditmodeMenu>
 {
 	public static final String TITLE = "minestuck.deploy_list";
-	private static final ResourceLocation GUI_BACKGROUND = new ResourceLocation("minestuck", "textures/gui/gui_inv_editmode.png");
-	public static final ResourceLocation SETTINGS_ICON = new ResourceLocation(Minestuck.MOD_ID, "textures/gui/desktop_icon/settings.png");
+	private static final ResourceLocation GUI_BACKGROUND = ResourceLocation.fromNamespaceAndPath("minestuck", "textures/gui/gui_inv_editmode.png");
+	public static final ResourceLocation SETTINGS_ICON = ResourceLocation.fromNamespaceAndPath(Minestuck.MOD_ID, "textures/gui/desktop_icon/settings.png");
 	private static final int LEFT_ARROW_X = 7, RIGHT_ARROW_X = 151, ARROW_Y = 23;
 	private static final int SETTINGS_X = 80, SETTINGS_Y = 54;
 	public static final int ARROW_SIZE = 18, SETTINGS_SIZE = 16; //same width and height
@@ -108,7 +108,7 @@ public class InventoryEditmodeScreen extends PlayerStatsContainerScreen<Editmode
 			}
 			if(packet != null)
 			{
-				PacketDistributor.SERVER.noArg().send(packet);
+				PacketDistributor.sendToServer(packet);
 				return true;
 			}
 		}

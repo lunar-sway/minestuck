@@ -338,7 +338,7 @@ public class ConsortVillagePieces
 					consort.merchantType = type;
 					consort.restrictTo(pos, maxHomeDistance);
 					
-					consort.finalizeSpawn(level, level.getCurrentDifficultyAt(pos), MobSpawnType.STRUCTURE, null, null);
+					consort.finalizeSpawn(level, level.getCurrentDifficultyAt(pos), MobSpawnType.STRUCTURE, null);
 					
 					level.addFreshEntity(consort);
 					return true;
@@ -449,7 +449,7 @@ public class ConsortVillagePieces
 		public void postProcess(WorldGenLevel level, StructureManager manager, ChunkGenerator chunkGeneratorIn, RandomSource randomIn, BoundingBox structureBoundingBoxIn, ChunkPos chunkPosIn, BlockPos pos)
 		{
 			StructureBlockRegistry blocks = StructureBlockRegistry.getOrDefault(chunkGeneratorIn);
-			BlockState pathBlock = blocks.getBlockState("village_path");
+			BlockState pathBlock = blocks.getBlockState(StructureBlockRegistry.VILLAGE_PATH);
 
 			for (int i = this.boundingBox.minX(); i <= this.boundingBox.maxX(); ++i)
 			{

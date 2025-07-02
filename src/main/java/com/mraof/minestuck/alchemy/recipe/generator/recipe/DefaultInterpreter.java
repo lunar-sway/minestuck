@@ -1,6 +1,6 @@
 package com.mraof.minestuck.alchemy.recipe.generator.recipe;
 
-import com.mojang.serialization.Codec;
+import com.mojang.serialization.MapCodec;
 import com.mraof.minestuck.api.alchemy.GristSet;
 import com.mraof.minestuck.api.alchemy.MutableGristSet;
 import com.mraof.minestuck.api.alchemy.recipe.generator.GeneratorCallback;
@@ -18,7 +18,7 @@ public enum DefaultInterpreter implements RecipeInterpreter
 {
 	INSTANCE;
 	
-	public static final Codec<DefaultInterpreter> CODEC = Codec.unit(INSTANCE);
+	public static final MapCodec<DefaultInterpreter> CODEC = MapCodec.unit(INSTANCE);
 	
 	@Override
 	public List<Item> getOutputItems(Recipe<?> recipe)
@@ -54,7 +54,7 @@ public enum DefaultInterpreter implements RecipeInterpreter
 	}
 	
 	@Override
-	public Codec<? extends RecipeInterpreter> codec()
+	public MapCodec<? extends RecipeInterpreter> codec()
 	{
 		return CODEC;
 	}

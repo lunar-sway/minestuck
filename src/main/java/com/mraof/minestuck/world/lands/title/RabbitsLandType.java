@@ -30,8 +30,8 @@ public class RabbitsLandType extends TitleLandType
 	@Override
 	public void registerBlocks(StructureBlockRegistry registry)
 	{
-		registry.setBlock("structure_wool_2", Blocks.PINK_WOOL);
-		registry.setBlock("carpet", Blocks.LIGHT_GRAY_CARPET);
+		registry.setBlock(StructureBlockRegistry.STRUCTURE_WOOL_2, Blocks.PINK_WOOL);
+		registry.setBlock(StructureBlockRegistry.CARPET, Blocks.LIGHT_GRAY_CARPET);
 	}
 	
 	@Override

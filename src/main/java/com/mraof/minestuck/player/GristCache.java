@@ -10,6 +10,7 @@ import com.mraof.minestuck.entity.item.GristEntity;
 import com.mraof.minestuck.network.GristCachePacket;
 import com.mraof.minestuck.network.GristToastPacket;
 import com.mraof.minestuck.util.MSAttachments;
+import net.minecraft.core.HolderLookup;
 import net.minecraft.nbt.NbtOps;
 import net.minecraft.nbt.Tag;
 import net.minecraft.network.chat.Component;
@@ -17,7 +18,7 @@ import net.minecraft.server.MinecraftServer;
 import net.minecraft.server.level.ServerPlayer;
 import net.minecraft.world.level.Level;
 import net.neoforged.bus.api.SubscribeEvent;
-import net.neoforged.fml.common.Mod;
+import net.neoforged.fml.common.EventBusSubscriber;
 import net.neoforged.neoforge.common.util.INBTSerializable;
 import net.neoforged.neoforge.event.entity.player.PlayerEvent;
 import org.apache.logging.log4j.LogManager;
@@ -33,7 +34,7 @@ import java.util.Objects;
  *
  * @author kirderf1
  */
-@Mod.EventBusSubscriber(modid = Minestuck.MOD_ID, bus = Mod.EventBusSubscriber.Bus.FORGE)
+@EventBusSubscriber(modid = Minestuck.MOD_ID, bus = EventBusSubscriber.Bus.GAME)
 public final class GristCache implements INBTSerializable<Tag>
 {
 	public static final String MISSING_MESSAGE = "grist.missing";
@@ -41,7 +42,7 @@ public final class GristCache implements INBTSerializable<Tag>
 	
 	private final PlayerData data;
 	private final MinecraftServer mcServer;
-	private ImmutableGristSet gristSet;
+	private GristSet.Immutable gristSet;
 	
 	public GristCache(PlayerData data)
 	{
@@ -101,21 +102,21 @@ public final class GristCache implements INBTSerializable<Tag>
 	}
 	
 	@Override
-	public void deserializeNBT(Tag tag)
+	public void deserializeNBT(HolderLookup.Provider provider, Tag tag)
 	{
-		gristSet = ImmutableGristSet.NON_NEGATIVE_CODEC.parse(NbtOps.INSTANCE, tag)
+		gristSet = GristSet.Codecs.NON_NEGATIVE_CODEC.parse(NbtOps.INSTANCE, tag)
 				.resultOrPartial(LOGGER::error).orElse(GristSet.EMPTY);
 	}
 	
 	@Nullable
 	@Override
-	public Tag serializeNBT()
+	public Tag serializeNBT(HolderLookup.Provider provider)
 	{
-		return ImmutableGristSet.NON_NEGATIVE_CODEC.encodeStart(NbtOps.INSTANCE, this.gristSet)
+		return GristSet.Codecs.NON_NEGATIVE_CODEC.encodeStart(NbtOps.INSTANCE, this.gristSet)
 				.resultOrPartial(LOGGER::error).orElse(null);
 	}
 	
-	public ImmutableGristSet getGristSet()
+	public GristSet.Immutable getGristSet()
 	{
 		return this.gristSet;
 	}

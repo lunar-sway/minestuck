@@ -11,9 +11,10 @@ import net.minecraft.server.level.ServerPlayer;
 import net.minecraft.world.level.Level;
 import net.minecraft.world.level.levelgen.Heightmap;
 import net.neoforged.bus.api.SubscribeEvent;
-import net.neoforged.fml.common.Mod;
+import net.neoforged.fml.common.EventBusSubscriber;
 import net.neoforged.neoforge.event.entity.player.PlayerEvent;
-@Mod.EventBusSubscriber(modid = Minestuck.MOD_ID)
+
+@EventBusSubscriber(modid = Minestuck.MOD_ID)
 public class LandRespawnHandler
 {
 	@SubscribeEvent

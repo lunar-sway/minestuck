@@ -14,7 +14,7 @@ import net.minecraft.world.level.levelgen.structure.templatesystem.StructureTemp
 
 public class UnfinishedCarvedChairFeature extends Feature<NoneFeatureConfiguration>
 {
-	private static final ResourceLocation UNFINISHED_CARVED_CHAIR = new ResourceLocation(Minestuck.MOD_ID, "unfinished_carved_chair");
+	private static final ResourceLocation UNFINISHED_CARVED_CHAIR = ResourceLocation.fromNamespaceAndPath(Minestuck.MOD_ID, "unfinished_carved_chair");
 	
 	public UnfinishedCarvedChairFeature(Codec<NoneFeatureConfiguration> codec)
 	{

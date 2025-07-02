@@ -35,6 +35,7 @@ public class MSBlockStateProvider extends BlockStateProvider
 	{
 		SkaiaBlocksData.addModels(this);
 		AspectTreeBlocksData.addModels(this);
+		DreamerMoonBlocksData.addModels(this);
 		
 		simpleBlockWithItem(MSBlocks.STONE_CRUXITE_ORE);
 		simpleBlockWithItem(MSBlocks.NETHERRACK_CRUXITE_ORE);
@@ -158,6 +159,13 @@ public class MSBlockStateProvider extends BlockStateProvider
 		pressurePlateWithItem(MSBlocks.URANIUM_PRESSURE_PLATE, MSBlocks.URANIUM_BLOCK);
 		
 		simpleBlockWithItem(MSBlocks.GENERIC_OBJECT);
+		
+		//The Veil
+		{
+			//the 2 variants and blockstate model are created manually
+			ModelFile baseModel = models().cubeAll("meteoric_stone", texture("meteoric_stone"));
+			simpleBlockItem(MSBlocks.METEORIC_STONE.get(), baseModel);
+		}
 		
 		//Land Environment
 		weightedVariantsWithItem(MSBlocks.BLUE_DIRT, new int[]{12, 6, 1, 1},
@@ -637,7 +645,7 @@ public class MSBlockStateProvider extends BlockStateProvider
 				id -> models().cross(id.getPath(), texture(id)).renderType("cutout"));
 		flatItem(MSItems.CARVED_BUSH, MSBlockStateProvider::texture);
 		simpleHorizontalWithItem(MSBlocks.CARVED_KNOTTED_WOOD,
-				id -> models().singleTexture(id.getPath(), new ResourceLocation("template_glazed_terracotta"), "pattern", texture(id)));
+				id -> models().singleTexture(id.getPath(), ResourceLocation.withDefaultNamespace("template_glazed_terracotta"), "pattern", texture(id)));
 		simpleBlock(MSBlocks.WOODEN_GRASS,
 				id -> models().cross(id.getPath(), texture(id)).renderType("cutout"));
 		flatItem(MSItems.WOODEN_GRASS, MSBlockStateProvider::texture);
@@ -684,7 +692,7 @@ public class MSBlockStateProvider extends BlockStateProvider
 		slabWithItem(MSBlocks.POLISHED_TREATED_UNCARVED_SLAB, MSBlocks.POLISHED_TREATED_UNCARVED_WOOD);
 		
 		simpleHorizontalWithItem(MSBlocks.TREATED_CARVED_KNOTTED_WOOD,
-				id -> models().singleTexture(id.getPath(), new ResourceLocation("template_glazed_terracotta"), "pattern", texture(id)));
+				id -> models().singleTexture(id.getPath(), ResourceLocation.withDefaultNamespace("template_glazed_terracotta"), "pattern", texture(id)));
 		simpleBlock(MSBlocks.TREATED_WOODEN_GRASS,
 				id -> models().cross(id.getPath(), texture(id)).renderType("cutout"));
 		flatItem(MSItems.TREATED_WOODEN_GRASS, MSBlockStateProvider::texture);
@@ -731,7 +739,7 @@ public class MSBlockStateProvider extends BlockStateProvider
 		slabWithItem(MSBlocks.POLISHED_LACQUERED_UNCARVED_SLAB, MSBlocks.POLISHED_LACQUERED_UNCARVED_WOOD);
 		
 		simpleHorizontalWithItem(MSBlocks.LACQUERED_CARVED_KNOTTED_WOOD,
-				id -> models().singleTexture(id.getPath(), new ResourceLocation("template_glazed_terracotta"), "pattern", texture(id)));
+				id -> models().singleTexture(id.getPath(), ResourceLocation.withDefaultNamespace("template_glazed_terracotta"), "pattern", texture(id)));
 		simpleBlock(MSBlocks.LACQUERED_WOODEN_MUSHROOM,
 				id -> models().cross(id.getPath(), texture(id)).renderType("cutout"));
 		flatItem(MSItems.LACQUERED_WOODEN_MUSHROOM, MSBlockStateProvider::texture);
@@ -1009,7 +1017,7 @@ public class MSBlockStateProvider extends BlockStateProvider
 		simpleBlockWithItem(MSBlocks.FROST_LEAVES);
 		simpleBlockWithItem(MSBlocks.FROST_LEAVES_FLOWERING);
 		simpleBlockWithItem(MSBlocks.RAINBOW_LEAVES,
-				id -> models().singleTexture(id.getPath(), new ResourceLocation("block/leaves"), "all", texture(id)));
+				id -> models().singleTexture(id.getPath(), ResourceLocation.withDefaultNamespace("block/leaves"), "all", texture(id)));
 		simpleBlockWithItem(MSBlocks.END_LEAVES);
 		simpleBlockWithItem(MSBlocks.SHADEWOOD_LEAVES);
 		simpleBlockWithItem(MSBlocks.SHROOMY_SHADEWOOD_LEAVES);
@@ -1571,11 +1579,13 @@ public class MSBlockStateProvider extends BlockStateProvider
 				i -> models().getExistingFile(id("pink_frosted_top_large_cake" + i)));
 		cake(MSBlocks.CHOCOLATEY_CAKE);
 		flatItem(MSItems.CHOCOLATEY_CAKE, MSBlockStateProvider::itemTexture);
+		cakeAlt(MSBlocks.MOON_CAKE);
+		flatItem(MSItems.MOON_CAKE, MSBlockStateProvider::itemTexture);
 		
 		//Explosives
 		{
-			ModelFile model = models().getExistingFile(new ResourceLocation("tnt"));
-			ModelFile itemModel = itemModels().getExistingFile(new ResourceLocation("tnt"));
+			ModelFile model = models().getExistingFile(ResourceLocation.withDefaultNamespace("tnt"));
+			ModelFile itemModel = itemModels().getExistingFile(ResourceLocation.withDefaultNamespace("tnt"));
 			for(Supplier<Block> block : Arrays.asList(MSBlocks.PRIMED_TNT, MSBlocks.UNSTABLE_TNT, MSBlocks.INSTANT_TNT))
 			{
 				getVariantBuilder(block.get()).partialState().setModels(ConfiguredModel.allYRotations(model, 0, false));
@@ -1711,14 +1721,14 @@ public class MSBlockStateProvider extends BlockStateProvider
 	}
 	
 	@SuppressWarnings("SameParameterValue")
-	private void variantsWithItem(DeferredBlock<?> block, int count, IntFunction<ModelFile> modelProvider)
+	public void variantsWithItem(DeferredBlock<?> block, int count, IntFunction<ModelFile> modelProvider)
 	{
 		ConfiguredModel[] models = variantModels(count, modelProvider);
 		getVariantBuilder(block.get()).partialState().setModels(models);
 		simpleBlockItem(block.get(), models[0].model);
 	}
 	
-	private void weightedVariantsWithItem(DeferredBlock<?> block, int[] weights, IntFunction<ModelFile> modelProvider)
+	public void weightedVariantsWithItem(DeferredBlock<?> block, int[] weights, IntFunction<ModelFile> modelProvider)
 	{
 		ConfiguredModel[] models = weightedVariantModels(weights, modelProvider);
 		getVariantBuilder(block.get()).partialState().setModels(models);
@@ -1845,7 +1855,7 @@ public class MSBlockStateProvider extends BlockStateProvider
 	 * While the standard directional block (with {@link MSBlockStateProvider#directionalUp(DeferredBlock, Function, Property[])}) has the down-facing state rotated 180 degrees along the y-axis,
 	 * blocks with this function are instead not rotated in both the up-facing state and the down-facing state.
 	 */
-	private void unflippedColumnWithItem(DeferredBlock<?> block, Function<ResourceLocation, ModelFile> modelProvider)
+	public void unflippedColumnWithItem(DeferredBlock<?> block, Function<ResourceLocation, ModelFile> modelProvider)
 	{
 		var model = modelProvider.apply(block.getId());
 		getVariantBuilder(block.get())
@@ -1908,7 +1918,7 @@ public class MSBlockStateProvider extends BlockStateProvider
 		slabWithItem(block, sourceBlock.getId().getPath(), texture(sourceBlock));
 	}
 	
-	private void slabWithItem(Supplier<SlabBlock> block, String baseName, ResourceLocation texture)
+	public void slabWithItem(Supplier<SlabBlock> block, String baseName, ResourceLocation texture)
 	{
 		slabWithItem(block, baseName, texture, texture);
 	}
@@ -1917,7 +1927,7 @@ public class MSBlockStateProvider extends BlockStateProvider
 	{
 		ModelFile slabBottom = models().slab(baseName + "_slab", side, topBottom, topBottom);
 		ModelFile slabTop = models().slabTop(baseName + "_slab_top", side, topBottom, topBottom);
-		ModelFile doubleSlab = models().getExistingFile(new ResourceLocation("minestuck:" + baseName));
+		ModelFile doubleSlab = models().getExistingFile(Minestuck.id(baseName));
 		slabBlock(block.get(), slabBottom, slabTop, doubleSlab);
 		simpleBlockItem(block.get(), slabBottom);
 	}
@@ -1927,7 +1937,7 @@ public class MSBlockStateProvider extends BlockStateProvider
 		wallWithItem(block, sourceBlock.getId().getPath(), texture(sourceBlock));
 	}
 	
-	private void wallWithItem(Supplier<WallBlock> block, String baseName, ResourceLocation texture)
+	public void wallWithItem(Supplier<WallBlock> block, String baseName, ResourceLocation texture)
 	{
 		wallBlock(block.get(), texture);
 		
@@ -1963,8 +1973,8 @@ public class MSBlockStateProvider extends BlockStateProvider
 	public void simpleDoorBlock(DeferredBlock<DoorBlock> block)
 	{
 		String baseName = block.getId().getPath();
-		ResourceLocation doorBottom = new ResourceLocation("minestuck:block/" + baseName + "_bottom");
-		ResourceLocation doorTop = new ResourceLocation("minestuck:block/" + baseName + "_top");
+		ResourceLocation doorBottom = Minestuck.id("block/" + baseName + "_bottom");
+		ResourceLocation doorTop = Minestuck.id("block/" + baseName + "_top");
 		
 		doorBlockWithRenderType(block.get(), doorBottom, doorTop, "cutout");
 	}
@@ -1972,8 +1982,8 @@ public class MSBlockStateProvider extends BlockStateProvider
 	public void simpleDoorBlock(DeferredBlock<DoorBlock> block, String renderType)
 	{
 		String baseName = block.getId().getPath();
-		ResourceLocation doorBottom = new ResourceLocation("minestuck:block/" + baseName + "_bottom");
-		ResourceLocation doorTop = new ResourceLocation("minestuck:block/" + baseName + "_top");
+		ResourceLocation doorBottom = Minestuck.id("block/" + baseName + "_bottom");
+		ResourceLocation doorTop = Minestuck.id("block/" + baseName + "_top");
 		
 		doorBlockWithRenderType(block.get(), doorBottom, doorTop, renderType);
 	}
@@ -2001,7 +2011,7 @@ public class MSBlockStateProvider extends BlockStateProvider
 		buttonWithItem(block, sourceBlock.getId().getPath(), texture(sourceBlock));
 	}
 	
-	private void buttonWithItem(Supplier<ButtonBlock> block, String baseName, ResourceLocation texture)
+	public void buttonWithItem(Supplier<ButtonBlock> block, String baseName, ResourceLocation texture)
 	{
 		ModelFile buttonInventory = models().buttonInventory(baseName + "_button_inventory", texture);
 		buttonBlock(block.get(), texture);
@@ -2013,7 +2023,7 @@ public class MSBlockStateProvider extends BlockStateProvider
 		pressurePlateWithItem(block, sourceBlock.getId().getPath(), texture(sourceBlock));
 	}
 	
-	private void pressurePlateWithItem(Supplier<PressurePlateBlock> block, String baseName, ResourceLocation texture)
+	public void pressurePlateWithItem(Supplier<PressurePlateBlock> block, String baseName, ResourceLocation texture)
 	{
 		ModelFile pressurePlateInventory = models().pressurePlate(baseName + "_pressure_plate", texture);
 		pressurePlateBlock(block.get(), texture);
@@ -2033,8 +2043,8 @@ public class MSBlockStateProvider extends BlockStateProvider
 	
 	private void customLampWithItem(Supplier<? extends Block> block, String baseName, ResourceLocation texture)
 	{
-		ModelFile lampOn = models().cubeAll(baseName + "_on", new ResourceLocation(texture + "_on"));
-		ModelFile lampOff = models().cubeAll(baseName + "_off", new ResourceLocation(texture + "_off"));
+		ModelFile lampOn = models().cubeAll(baseName + "_on", texture.withSuffix("_on"));
+		ModelFile lampOff = models().cubeAll(baseName + "_off", texture.withSuffix("_off"));
 		
 		getVariantBuilder(block.get()).forAllStates(state -> {
 			if(state.getValue(CustomLampBlock.CLICKED))
@@ -2047,7 +2057,7 @@ public class MSBlockStateProvider extends BlockStateProvider
 		});
 		
 		simpleBlockItem(block.get(), models().cubeAll(baseName + "_on",
-				new ResourceLocation(Minestuck.MOD_ID, "block/" + baseName + "_on")));
+				ResourceLocation.fromNamespaceAndPath(Minestuck.MOD_ID, "block/" + baseName + "_on")));
 	}
 	
 	private void powerVariableWithItem(DeferredBlock<?> block, ModelFile highPowerModel, ModelFile mediumPowerModel, ModelFile lowPowerModel, ModelFile unpoweredModel)
@@ -2113,12 +2123,73 @@ public class MSBlockStateProvider extends BlockStateProvider
 		}
 	}
 	
+	private ModelFile cakeAltModel(ResourceLocation id, int bites)
+	{
+		if(bites == 0)
+		{
+			return models().getBuilder(id.getPath() + "_uneaten")
+					.texture("particle", texture(id.withSuffix("_side")))
+					.texture("bottom", texture(id.withSuffix("_bottom")))
+					.texture("top", texture(id.withSuffix("_top")))
+					.texture("side", texture(id.withSuffix("_side")))
+					.texture("north", texture(id.withSuffix("_north")))
+					.texture("south", texture(id.withSuffix("_south")))
+					.texture("east", texture(id.withSuffix("_east")))
+					.texture("west", texture(id.withSuffix("_west")))
+					.element()
+					.from(1, 0, 1).to(15, 8, 15)
+					.allFaces((direction, faceBuilder) -> {
+						if(direction == Direction.UP) faceBuilder.texture("#top");
+						else if(direction == Direction.DOWN) faceBuilder.texture("#bottom").cullface(Direction.DOWN);
+						else if(direction == Direction.NORTH) faceBuilder.texture("#north");
+						else if(direction == Direction.SOUTH) faceBuilder.texture("#south");
+						else if(direction == Direction.EAST) faceBuilder.texture("#east");
+						else if(direction == Direction.WEST) faceBuilder.texture("#west");
+						else
+							faceBuilder.texture("#side");
+					})
+					.end();
+		} else
+		{
+			return models().getBuilder(id.getPath() + "_slice" + bites)
+					.texture("particle", texture(id.withSuffix("_side")))
+					.texture("bottom", texture(id.withSuffix("_bottom")))
+					.texture("top", texture(id.withSuffix("_top")))
+					.texture("north", texture(id.withSuffix("_north")))
+					.texture("south", texture(id.withSuffix("_south")))
+					.texture("east", texture(id.withSuffix("_east")))
+					.texture("side", texture(id.withSuffix("_side")))
+					.texture("inside", texture(id.withSuffix("_inner")))
+					.element()
+					.from(1 + 2 * bites, 0, 1).to(15, 8, 15)
+					.allFaces((direction, faceBuilder) -> {
+						if(direction == Direction.UP) faceBuilder.texture("#top");
+						else if(direction == Direction.DOWN) faceBuilder.texture("#bottom").cullface(Direction.DOWN);
+						else if(direction == Direction.NORTH) faceBuilder.texture("#north");
+						else if(direction == Direction.SOUTH) faceBuilder.texture("#south");
+						else if(direction == Direction.EAST) faceBuilder.texture("#east");
+						else if(direction == Direction.WEST) faceBuilder.texture("#inside");
+						else faceBuilder.texture("#side");
+					})
+					.end();
+		}
+	}
+	
 	private void cake(DeferredBlock<?> block)
 	{
 		ResourceLocation id = block.getId();
 		getVariantBuilder(block.get()).forAllStates(state -> {
 			int bites = state.getValue(CakeBlock.BITES);
 			return ConfiguredModel.builder().modelFile(cakeModel(id, bites)).build();
+		});
+	}
+	
+	private void cakeAlt(DeferredBlock<?> block)
+	{
+		ResourceLocation id = block.getId();
+		getVariantBuilder(block.get()).forAllStates(state -> {
+			int bites = state.getValue(CakeBlock.BITES);
+			return ConfiguredModel.builder().modelFile(cakeAltModel(id, bites)).build();
 		});
 	}
 	
@@ -2145,7 +2216,7 @@ public class MSBlockStateProvider extends BlockStateProvider
 	public void flatItem(DeferredItem<?> item, Function<ResourceLocation, ResourceLocation> textureProvider)
 	{
 		itemModels().withExistingParent(item.getId().getPath(),
-				new ResourceLocation("item/generated")).texture("layer0",
+				ResourceLocation.withDefaultNamespace("item/generated")).texture("layer0",
 				textureProvider.apply(item.getId()));
 	}
 	
@@ -2161,7 +2232,7 @@ public class MSBlockStateProvider extends BlockStateProvider
 	
 	public static ResourceLocation texture(String path)
 	{
-		return new ResourceLocation(Minestuck.MOD_ID, ModelProvider.BLOCK_FOLDER + "/" + path);
+		return ResourceLocation.fromNamespaceAndPath(Minestuck.MOD_ID, ModelProvider.BLOCK_FOLDER + "/" + path);
 	}
 	
 	public static ResourceLocation itemTexture(ResourceLocation id)
@@ -2171,11 +2242,11 @@ public class MSBlockStateProvider extends BlockStateProvider
 	
 	public static ResourceLocation vanillaTexture(String path)
 	{
-		return new ResourceLocation(ModelProvider.BLOCK_FOLDER + "/" + path);
+		return ResourceLocation.withDefaultNamespace(ModelProvider.BLOCK_FOLDER + "/" + path);
 	}
 	
 	public static ResourceLocation id(String path)
 	{
-		return new ResourceLocation(Minestuck.MOD_ID, path);
+		return ResourceLocation.fromNamespaceAndPath(Minestuck.MOD_ID, path);
 	}
 }

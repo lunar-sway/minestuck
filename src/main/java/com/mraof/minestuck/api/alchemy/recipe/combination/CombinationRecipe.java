@@ -12,11 +12,11 @@ import java.util.List;
 import java.util.function.Supplier;
 
 @MethodsReturnNonnullByDefault
-public interface CombinationRecipe extends Recipe<CombinerContainer>
+public interface CombinationRecipe extends Recipe<CombinationInput>
 {
 	Supplier<RecipeType<CombinationRecipe>> RECIPE_TYPE = MSRecipeTypes.COMBINATION_TYPE;
 	
-	static ItemStack findResult(CombinerContainer combiner, Level level)
+	static ItemStack findResult(CombinationInput combiner, Level level)
 	{
 		return level.getRecipeManager().getRecipeFor(CombinationRecipe.RECIPE_TYPE.get(), combiner, level)
 				.map(recipe -> recipe.value().assemble(combiner, level.registryAccess())).orElse(ItemStack.EMPTY);

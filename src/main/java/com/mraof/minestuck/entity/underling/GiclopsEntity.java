@@ -22,8 +22,7 @@ import net.minecraft.world.level.Level;
 import net.minecraft.world.level.material.Fluid;
 import net.minecraft.world.phys.AABB;
 import software.bernie.geckolib.animatable.GeoEntity;
-import software.bernie.geckolib.core.animation.*;
-import software.bernie.geckolib.core.object.PlayState;
+import software.bernie.geckolib.animation.*;
 
 import javax.annotation.ParametersAreNonnullByDefault;
 
@@ -39,14 +38,14 @@ public class GiclopsEntity extends UnderlingEntity implements GeoEntity
 	public GiclopsEntity(EntityType<? extends GiclopsEntity> type, Level level)
 	{
 		super(type, level, 7);
-		this.setMaxUpStep(2);
 	}
 	
 	public static AttributeSupplier.Builder giclopsAttributes()
 	{
 		return UnderlingEntity.underlingAttributes().add(Attributes.MAX_HEALTH, 210)
 				.add(Attributes.KNOCKBACK_RESISTANCE, 0.9).add(Attributes.MOVEMENT_SPEED, 0.20)
-				.add(Attributes.ATTACK_DAMAGE, 18).add(Attributes.ATTACK_SPEED, 1);
+				.add(Attributes.ATTACK_DAMAGE, 18).add(Attributes.ATTACK_SPEED, 1)
+				.add(Attributes.STEP_HEIGHT, 2);
 	}
 	
 	@Override
@@ -91,8 +90,8 @@ public class GiclopsEntity extends UnderlingEntity implements GeoEntity
 	protected void onGristTypeUpdated(GristType type)
 	{
 		super.onGristTypeUpdated(type);
-		applyGristModifier(Attributes.MAX_HEALTH, 46 * type.getPower(), AttributeModifier.Operation.ADDITION);
-		applyGristModifier(Attributes.ATTACK_DAMAGE, 4.5 * type.getPower(), AttributeModifier.Operation.ADDITION);
+		applyGristModifier(Attributes.MAX_HEALTH, 46 * type.getPower(), AttributeModifier.Operation.ADD_VALUE);
+		applyGristModifier(Attributes.ATTACK_DAMAGE, 4.5 * type.getPower(), AttributeModifier.Operation.ADD_VALUE);
 		this.xpReward = (int) (7 * type.getPower() + 5);
 	}
 	

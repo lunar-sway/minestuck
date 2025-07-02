@@ -7,7 +7,6 @@ import net.minecraft.advancements.critereon.ContextAwarePredicate;
 import net.minecraft.advancements.critereon.EntityPredicate;
 import net.minecraft.advancements.critereon.SimpleCriterionTrigger;
 import net.minecraft.server.level.ServerPlayer;
-import net.minecraft.util.ExtraCodecs;
 
 import javax.annotation.ParametersAreNonnullByDefault;
 import java.util.Optional;
@@ -29,7 +28,7 @@ public class EventTrigger extends SimpleCriterionTrigger<EventTrigger.Instance>
 	
 	public record Instance(Optional<ContextAwarePredicate> player) implements SimpleCriterionTrigger.SimpleInstance
 	{
-		private static final Codec<Instance> CODEC = ExtraCodecs.strictOptionalField(EntityPredicate.ADVANCEMENT_CODEC, "player")
+		private static final Codec<Instance> CODEC = EntityPredicate.ADVANCEMENT_CODEC.optionalFieldOf("player")
 				.codec().xmap(Instance::new, Instance::player);
 		
 		public static Criterion<Instance> sburbConnection()
@@ -55,6 +54,11 @@ public class EventTrigger extends SimpleCriterionTrigger<EventTrigger.Instance>
 		public static Criterion<Instance> buyOutShop()
 		{
 			return MSCriteriaTriggers.BUY_OUT_SHOP.get().createCriterion(new Instance(Optional.empty()));
+		}
+		
+		public static Criterion<Instance> brickComputer()
+		{
+			return MSCriteriaTriggers.BRICK_COMPUTER.get().createCriterion(new Instance(Optional.empty()));
 		}
 		
 		public boolean test()

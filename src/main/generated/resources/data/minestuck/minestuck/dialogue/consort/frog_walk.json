@@ -3,6 +3,8 @@
     "animation": {
       "emotion": "happy"
     },
-    "message": "minestuck.dialogue.consort.frog_walk"
+    "gui": "minestuck:textures/gui/dialogue/dialogue.png",
+    "message": "minestuck.dialogue.consort.frog_walk",
+    "responses": []
   }
 }

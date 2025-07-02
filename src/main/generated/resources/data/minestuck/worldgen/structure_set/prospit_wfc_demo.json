@@ -1,0 +1,11 @@
+{
+  "placement": {
+    "type": "minestuck:fixed"
+  },
+  "structures": [
+    {
+      "structure": "minestuck:prospit_wfc_demo",
+      "weight": 1
+    }
+  ]
+}

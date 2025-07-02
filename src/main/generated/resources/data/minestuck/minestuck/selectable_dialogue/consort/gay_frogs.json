@@ -13,5 +13,7 @@
     ],
     "list_type": "all"
   },
-  "dialogue": "minestuck:consort/gay_frogs"
+  "dialogue": "minestuck:consort/gay_frogs",
+  "dialogue_weight": 10,
+  "keep_on_reset": false
 }

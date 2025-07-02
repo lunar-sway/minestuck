@@ -21,8 +21,8 @@ import javax.annotation.ParametersAreNonnullByDefault;
 @ParametersAreNonnullByDefault
 public class SendificatorScreen extends MachineScreen<SendificatorMenu>
 {
-	private static final ResourceLocation BACKGROUND_TEXTURE = new ResourceLocation(Minestuck.MOD_ID, "textures/gui/sendificator.png");
-	private static final ResourceLocation PROGRESS_BAR_TEXTURE = new ResourceLocation(Minestuck.MOD_ID, "textures/gui/progress/uranium_level.png");
+	private static final ResourceLocation BACKGROUND_TEXTURE = ResourceLocation.fromNamespaceAndPath(Minestuck.MOD_ID, "textures/gui/sendificator.png");
+	private static final ResourceLocation PROGRESS_BAR_TEXTURE = ResourceLocation.fromNamespaceAndPath(Minestuck.MOD_ID, "textures/gui/progress/uranium_level.png");
 	
 	private static final int PROGRESS_BAR_X = 52;
 	private static final int PROGRESS_BAR_Y = 24;
@@ -133,7 +133,7 @@ public class SendificatorScreen extends MachineScreen<SendificatorMenu>
 	{
 		if(parsedPos != null)
 		{
-			PacketDistributor.SERVER.noArg().send(new SetSendificatorDestinationPacket(parsedPos));
+			PacketDistributor.sendToServer(new SetSendificatorDestinationPacket(parsedPos));
 		}
 	}
 	

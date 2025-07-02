@@ -1,0 +1,11 @@
+{
+  "type": "minestuck:combination",
+  "input1": {
+    "item": "minestuck:wood_shavings"
+  },
+  "input2": {
+    "item": "minestuck:molten_amber_bucket"
+  },
+  "mode": "or",
+  "output": "minestuck:treated_wood_shavings"
+}

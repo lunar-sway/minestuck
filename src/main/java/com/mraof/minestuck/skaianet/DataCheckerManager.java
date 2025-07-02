@@ -29,7 +29,7 @@ public class DataCheckerManager
 		if(DataCheckerPermission.hasPermission(player))
 		{
 			CompoundTag data = createDataTag(player.server, SessionHandler.get(player.server));
-			PacketDistributor.PLAYER.with(player).send(new DataCheckerPackets.Data(index, data));
+			PacketDistributor.sendToPlayer(player, new DataCheckerPackets.Data(index, data));
 		}
 	}
 	/**

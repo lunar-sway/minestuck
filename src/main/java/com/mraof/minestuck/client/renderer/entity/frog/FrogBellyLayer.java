@@ -1,6 +1,7 @@
 package com.mraof.minestuck.client.renderer.entity.frog;
 
 import com.mojang.blaze3d.vertex.PoseStack;
+import com.mraof.minestuck.Minestuck;
 import com.mraof.minestuck.client.model.entity.FrogModel;
 import com.mraof.minestuck.client.model.MSModelLayers;
 import com.mraof.minestuck.entity.FrogEntity;
@@ -9,14 +10,13 @@ import net.minecraft.client.renderer.MultiBufferSource;
 import net.minecraft.client.renderer.entity.RenderLayerParent;
 import net.minecraft.client.renderer.entity.layers.RenderLayer;
 import net.minecraft.resources.ResourceLocation;
+import net.minecraft.util.FastColor;
 
 import static com.mraof.minestuck.entity.FrogEntity.maxTypes;
 
 public class FrogBellyLayer extends RenderLayer<FrogEntity, FrogModel<FrogEntity>>
 {
 	private final FrogModel<FrogEntity> frogModel;
-	private float colorMin = 0;
-	private int type = 0;
 	
 	public FrogBellyLayer(RenderLayerParent<FrogEntity, FrogModel<FrogEntity>> renderer, EntityModelSet modelSet)
 	{
@@ -27,37 +27,21 @@ public class FrogBellyLayer extends RenderLayer<FrogEntity, FrogModel<FrogEntity
 	@Override
 	public void render(PoseStack poseStack, MultiBufferSource bufferIn, int packedLightIn, FrogEntity frog, float limbSwing, float limbSwingAmount, float partialTicks, float ageInTicks, float netHeadYaw, float headPitch)
 	{
-		if (!frog.isInvisible() && (frog.getFrogType() > maxTypes() || frog.getFrogType() < 1))
+		if (!frog.isInvisible() && frog.getFrogVariant() == FrogEntity.FrogVariants.DEFAULT)
         {
 			int bellyColor;
-			type = frog.getBellyType();
-			if(type == 0)
-			{
+			FrogEntity.BellyTypes type = frog.getBellyType();
+			if(type == FrogEntity.BellyTypes.NONE)
 				bellyColor = frog.getSkinColor();
-				colorMin = 0.25f;
-			}
-			else bellyColor = frog.getBellyColor();
-
-			float r = (float) ((bellyColor & 16711680) >> 16) / 255f;
-			float g = (float) ((bellyColor & 65280) >> 8) / 255f;
-			float b = (float) ((bellyColor & 255)) / 255f;
-
-			if (r < this.colorMin) r = this.colorMin;
-			if (g < this.colorMin) g = this.colorMin;
-			if (b < this.colorMin) b = this.colorMin;
-
-			coloredCutoutModelCopyLayerRender(this.getParentModel(), this.frogModel, this.getTextureLocation(frog), poseStack, bufferIn, packedLightIn, frog, limbSwing, limbSwingAmount, ageInTicks, netHeadYaw, headPitch, partialTicks, r, g, b);
+			else bellyColor = FastColor.ARGB32.color(255, frog.getBellyColor());
+			
+			coloredCutoutModelCopyLayerRender(this.getParentModel(), this.frogModel, this.getTextureLocation(frog), poseStack, bufferIn, packedLightIn, frog, limbSwing, limbSwingAmount, ageInTicks, netHeadYaw, headPitch, partialTicks, bellyColor);
 		}
 	}
 
 	@Override
 	public ResourceLocation getTextureLocation(FrogEntity frog)
 	{
-		int id = frog.getBellyType();
-
-		if(id <= 0) id = 1;
-		else if(id > 3) id = 3;
-
-		return new ResourceLocation("minestuck:textures/entity/frog/belly_" + id + ".png");
+		return Minestuck.id("textures/entity/frog/belly_" + frog.getBellyType().getSerializedName() + ".png");
 	}
 }

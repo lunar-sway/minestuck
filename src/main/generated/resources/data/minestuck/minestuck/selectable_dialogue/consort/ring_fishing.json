@@ -13,5 +13,7 @@
     ],
     "list_type": "any"
   },
-  "dialogue": "minestuck:consort/ring_fishing"
+  "dialogue": "minestuck:consort/ring_fishing",
+  "dialogue_weight": 10,
+  "keep_on_reset": false
 }

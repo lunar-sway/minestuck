@@ -4,6 +4,8 @@ import com.mraof.minestuck.network.ServerCursorAnimationPacket;
 import net.minecraft.MethodsReturnNonnullByDefault;
 import net.minecraft.nbt.CompoundTag;
 import net.minecraft.network.FriendlyByteBuf;
+import net.minecraft.network.RegistryFriendlyByteBuf;
+import net.minecraft.network.syncher.SynchedEntityData;
 import net.minecraft.world.entity.Entity;
 import net.minecraft.world.entity.EntityType;
 import net.minecraft.world.level.Level;
@@ -11,10 +13,10 @@ import net.minecraft.world.phys.AABB;
 import net.neoforged.neoforge.entity.IEntityWithComplexSpawn;
 import net.neoforged.neoforge.network.PacketDistributor;
 import software.bernie.geckolib.animatable.GeoEntity;
-import software.bernie.geckolib.core.animatable.GeoAnimatable;
-import software.bernie.geckolib.core.animatable.instance.AnimatableInstanceCache;
-import software.bernie.geckolib.core.animation.*;
-import software.bernie.geckolib.core.object.PlayState;
+import software.bernie.geckolib.animatable.GeoAnimatable;
+import software.bernie.geckolib.animatable.instance.AnimatableInstanceCache;
+import software.bernie.geckolib.animation.*;
+import software.bernie.geckolib.animation.PlayState;
 import software.bernie.geckolib.util.GeckoLibUtil;
 
 import javax.annotation.Nonnull;
@@ -69,13 +71,13 @@ public class ServerCursorEntity extends Entity implements GeoEntity, IEntityWith
 	}
 	
 	@Override
-	public void writeSpawnData(FriendlyByteBuf buffer)
+	public void writeSpawnData(RegistryFriendlyByteBuf buffer)
 	{
 		buffer.writeEnum(animationType);
 	}
 	
 	@Override
-	public void readSpawnData(FriendlyByteBuf additionalData)
+	public void readSpawnData(RegistryFriendlyByteBuf additionalData)
 	{
 		animationType = additionalData.readEnum(AnimationType.class);
 	}
@@ -126,7 +128,7 @@ public class ServerCursorEntity extends Entity implements GeoEntity, IEntityWith
 	*/
 	
 	@Override
-	protected void defineSynchedData()
+	protected void defineSynchedData(SynchedEntityData.Builder builder)
 	{
 	
 	}
@@ -157,7 +159,7 @@ public class ServerCursorEntity extends Entity implements GeoEntity, IEntityWith
 			if(!removalFlag)
 				this.despawnTimer = 0;
 			ServerCursorAnimationPacket packet = ServerCursorAnimationPacket.createPacket(this, animation); //this packet allows information to be exchanged between server and client where one side cant access the other easily or reliably
-			PacketDistributor.TRACKING_ENTITY.with(this).send(packet);
+			PacketDistributor.sendToPlayersTrackingEntity(this, packet);
 		} else
 			setAnimationFromPacket(animation);
 	}

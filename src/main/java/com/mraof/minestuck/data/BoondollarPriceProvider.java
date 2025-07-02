@@ -255,7 +255,7 @@ public class BoondollarPriceProvider implements DataProvider
 	
 	protected void add(Ingredient ingredient, IntProvider range, String name)
 	{
-		add(new BoondollarPriceRecipe(ingredient, range), new ResourceLocation(modid, name));
+		add(new BoondollarPriceRecipe(ingredient, range), ResourceLocation.fromNamespaceAndPath(modid, name));
 	}
 	
 	protected void add(BoondollarPriceRecipe pricing, ResourceLocation name)
@@ -274,8 +274,7 @@ public class BoondollarPriceProvider implements DataProvider
 		for(Map.Entry<ResourceLocation, BoondollarPriceRecipe> entry : recipes.entrySet())
 		{
 			Path pricingPath = getPath(outputPath, entry.getKey());
-			JsonElement jsonData = BoondollarPriceRecipe.CODEC.encodeStart(JsonOps.INSTANCE, entry.getValue())
-					.getOrThrow(false, message -> LOGGER.error("Problem encoding boondollar price {}: {}", entry.getKey(), message));
+			JsonElement jsonData = BoondollarPriceRecipe.CODEC.encodeStart(JsonOps.INSTANCE, entry.getValue()).getOrThrow();
 			futures.add(DataProvider.saveStable(cache, jsonData, pricingPath));
 		}
 		return CompletableFuture.allOf(futures.toArray(new CompletableFuture[0]));

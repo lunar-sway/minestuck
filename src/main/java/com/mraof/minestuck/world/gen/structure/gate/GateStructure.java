@@ -1,6 +1,6 @@
 package com.mraof.minestuck.world.gen.structure.gate;
 
-import com.mojang.serialization.Codec;
+import com.mojang.serialization.MapCodec;
 import com.mraof.minestuck.world.gen.LandChunkGenerator;
 import com.mraof.minestuck.world.gen.structure.MSStructures;
 import net.minecraft.util.RandomSource;
@@ -16,7 +16,7 @@ import java.util.Optional;
 
 public class GateStructure extends Structure
 {
-	public static final Codec<GateStructure> CODEC = simpleCodec(GateStructure::new);
+	public static final MapCodec<GateStructure> CODEC = simpleCodec(GateStructure::new);
 	
 	public GateStructure(Structure.StructureSettings settings)
 	{

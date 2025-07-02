@@ -14,7 +14,7 @@ import net.minecraft.world.level.levelgen.structure.templatesystem.StructureTemp
 
 public class UnfinishedCarvedCreeperFeature extends Feature<NoneFeatureConfiguration>
 {
-	private static final ResourceLocation UNFINISHED_CARVED_CREEPER = new ResourceLocation(Minestuck.MOD_ID, "unfinished_carved_creeper");
+	private static final ResourceLocation UNFINISHED_CARVED_CREEPER = ResourceLocation.fromNamespaceAndPath(Minestuck.MOD_ID, "unfinished_carved_creeper");
 	
 	public UnfinishedCarvedCreeperFeature(Codec<NoneFeatureConfiguration> codec)
 	{

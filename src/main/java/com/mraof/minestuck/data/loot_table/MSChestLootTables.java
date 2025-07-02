@@ -11,13 +11,15 @@ import com.mraof.minestuck.util.MSTags;
 import com.mraof.minestuck.world.lands.LandTypes;
 import com.mraof.minestuck.world.lands.terrain.TerrainLandType;
 import com.mraof.minestuck.world.lands.title.TitleLandType;
+import net.minecraft.core.registries.Registries;
 import net.minecraft.data.loot.LootTableSubProvider;
+import net.minecraft.resources.ResourceKey;
 import net.minecraft.resources.ResourceLocation;
 import net.minecraft.world.item.Items;
 import net.minecraft.world.level.storage.loot.LootPool;
 import net.minecraft.world.level.storage.loot.LootTable;
 import net.minecraft.world.level.storage.loot.entries.LootItem;
-import net.minecraft.world.level.storage.loot.entries.LootTableReference;
+import net.minecraft.world.level.storage.loot.entries.NestedLootTable;
 import net.minecraft.world.level.storage.loot.entries.TagEntry;
 import net.minecraft.world.level.storage.loot.functions.LootItemFunction;
 import net.minecraft.world.level.storage.loot.functions.SetItemCountFunction;
@@ -33,13 +35,13 @@ import java.util.function.Supplier;
 public final class MSChestLootTables implements LootTableSubProvider
 {
 	public static final String ITEM_POOL = "item";
-	public static final ResourceLocation WEAPON_ITEM_TABLE = Minestuck.id("chests/weapon_item");
-	public static final ResourceLocation SUPPLY_ITEM_TABLE = Minestuck.id("chests/supply_item");
-	public static final ResourceLocation MISC_ITEM_TABLE = Minestuck.id("chests/misc_item");
-	public static final ResourceLocation RARE_ITEM_TABLE = Minestuck.id("chests/rare_item");
+	public static final ResourceKey<LootTable> WEAPON_ITEM_TABLE = ResourceKey.create(Registries.LOOT_TABLE, Minestuck.id("chests/weapon_item"));
+	public static final ResourceKey<LootTable> SUPPLY_ITEM_TABLE = ResourceKey.create(Registries.LOOT_TABLE, Minestuck.id("chests/supply_item"));
+	public static final ResourceKey<LootTable> MISC_ITEM_TABLE = ResourceKey.create(Registries.LOOT_TABLE, Minestuck.id("chests/misc_item"));
+	public static final ResourceKey<LootTable> RARE_ITEM_TABLE = ResourceKey.create(Registries.LOOT_TABLE, Minestuck.id("chests/rare_item"));
 	
 	@Override
-	public void generate(BiConsumer<ResourceLocation, LootTable.Builder> lootProcessor)
+	public void generate(BiConsumer<ResourceKey<LootTable>, LootTable.Builder> lootProcessor)
 	{
 		lootProcessor.accept(MSLootTables.BLANK_DISK_DUNGEON_LOOT_INJECT, LootTable.lootTable()
 				.withPool(LootPool.lootPool().name("minestuck").setRolls(UniformGenerator.between(0, 1))
@@ -465,6 +467,7 @@ public final class MSChestLootTables implements LootTableSubProvider
 						.add(LootItem.lootTableItem(MSBlocks.NEGATIVE_CAKE).setWeight(2).setQuality(1))
 						.add(LootItem.lootTableItem(MSBlocks.CARROT_CAKE).setWeight(3).setQuality(1))
 						.add(LootItem.lootTableItem(MSBlocks.CHOCOLATEY_CAKE).setWeight(4).setQuality(1))
+						.add(LootItem.lootTableItem(MSBlocks.MOON_CAKE).setWeight(4).setQuality(1))
 						.add(LootItem.lootTableItem(Items.COOKIE).setWeight(5).setQuality(0).apply(countRange(2, 5)))
 						.add(LootItem.lootTableItem(MSItems.CANDY_CORN).setWeight(3).setQuality(0))
 				));
@@ -835,13 +838,13 @@ public final class MSChestLootTables implements LootTableSubProvider
 		
 		lootProcessor.accept(MSLootTables.BASIC_MEDIUM_CHEST, LootTable.lootTable()
 				.withPool(LootPool.lootPool().name("weapons").setRolls(ConstantValue.exactly(1))
-						.add(LootTableReference.lootTableReference(WEAPON_ITEM_TABLE)))
+						.add(NestedLootTable.lootTableReference(WEAPON_ITEM_TABLE)))
 				.withPool(LootPool.lootPool().name("supplies").setRolls(ConstantValue.exactly(3))
-						.add(LootTableReference.lootTableReference(SUPPLY_ITEM_TABLE)))
+						.add(NestedLootTable.lootTableReference(SUPPLY_ITEM_TABLE)))
 				.withPool(LootPool.lootPool().name("misc").setRolls(UniformGenerator.between(2, 4))
-						.add(LootTableReference.lootTableReference(MISC_ITEM_TABLE)))
+						.add(NestedLootTable.lootTableReference(MISC_ITEM_TABLE)))
 				.withPool(LootPool.lootPool().name("rare").setRolls(UniformGenerator.between(0, 1))
-						.add(LootTableReference.lootTableReference(RARE_ITEM_TABLE)))
+						.add(NestedLootTable.lootTableReference(RARE_ITEM_TABLE)))
 				.withPool(LootPool.lootPool().name("boondollars").setRolls(ConstantValue.exactly(1))
 						.add(LootItem.lootTableItem(MSItems.SORROW_GUSHERS).setWeight(7).setQuality(-1).apply(countRange(3, 7)))
 						.add(LootItem.lootTableItem(MSItems.BOONDOLLARS).setWeight(10).setQuality(-1).apply(SetBoondollarCount.builder(UniformGenerator.between(5, 50))))
@@ -852,16 +855,16 @@ public final class MSChestLootTables implements LootTableSubProvider
 		
 	}
 	
-	public static ResourceLocation locationForTerrain(Supplier<TerrainLandType> landType, ResourceLocation baseLoot)
+	public static ResourceKey<LootTable> locationForTerrain(Supplier<TerrainLandType> landType, ResourceKey<LootTable> baseLoot)
 	{
 		ResourceLocation landName = Objects.requireNonNull(LandTypes.TERRAIN_REGISTRY.getKey(landType.get()));
-		return baseLoot.withSuffix("/terrain/" + landName.getNamespace() + "/" + landName.getPath());
+		return ResourceKey.create(Registries.LOOT_TABLE, baseLoot.location().withSuffix("/terrain/" + landName.getNamespace() + "/" + landName.getPath()));
 	}
 	
-	public static ResourceLocation locationForTitle(Supplier<TitleLandType> landType, ResourceLocation baseLoot)
+	public static ResourceKey<LootTable> locationForTitle(Supplier<TitleLandType> landType, ResourceKey<LootTable> baseLoot)
 	{
 		ResourceLocation landName = Objects.requireNonNull(LandTypes.TITLE_REGISTRY.getKey(landType.get()));
-		return baseLoot.withSuffix("/title/" + landName.getNamespace() + "/" + landName.getPath());
+		return ResourceKey.create(Registries.LOOT_TABLE, baseLoot.location().withSuffix("/title/" + landName.getNamespace() + "/" + landName.getPath()));
 	}
 	
 	public LootItemFunction.Builder minorDamageRange()

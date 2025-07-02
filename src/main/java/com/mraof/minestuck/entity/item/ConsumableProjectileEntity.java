@@ -74,7 +74,7 @@ public class ConsumableProjectileEntity extends ThrowableItemProjectile
 	
 	public ItemStack getItemFromItemStack()
 	{
-		ItemStack itemstack = this.getItemRaw();
+		ItemStack itemstack = this.getItem();
 		return itemstack.isEmpty() ? new ItemStack(this.getDefaultItem()) : itemstack;
 	}
 }

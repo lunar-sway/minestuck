@@ -82,7 +82,7 @@ public final class PredefineData
 		
 		if(terrainLandType != null && !landType.isAspectCompatible(terrainLandType))
 		{
-			source.sendSuccess(() -> Component.translatable(RESETTING_TERRAIN_TYPE, LandTypes.TERRAIN_REGISTRY.getKey(terrainLandType)).withStyle(ChatFormatting.YELLOW), true);
+			source.sendSuccess(() -> Component.translatable(RESETTING_TERRAIN_TYPE, LandTypes.TERRAIN_REGISTRY.getKey(terrainLandType).toString()).withStyle(ChatFormatting.YELLOW), true);
 			terrainLandType = null;
 		}
 		this.titleLandType = landType;
@@ -137,8 +137,9 @@ public final class PredefineData
 			}
 			
 			if(previous == null)
-				source.sendSuccess(() -> Component.translatable(GENERATED_TITLE_LAND, LandTypes.TITLE_REGISTRY.getKey(titleLandType)), true);
-			else source.sendSuccess(() -> Component.translatable(CHANGED_TITLE_LAND, LandTypes.TITLE_REGISTRY.getKey(previous), LandTypes.TITLE_REGISTRY.getKey(titleLandType)).withStyle(ChatFormatting.YELLOW), true);
+				source.sendSuccess(() -> Component.translatable(GENERATED_TITLE_LAND, LandTypes.TITLE_REGISTRY.getKey(titleLandType).toString()), true);
+			else source.sendSuccess(() -> Component.translatable(CHANGED_TITLE_LAND,
+					LandTypes.TITLE_REGISTRY.getKey(previous).toString(), LandTypes.TITLE_REGISTRY.getKey(titleLandType).toString()).withStyle(ChatFormatting.YELLOW), true);
 		}
 	}
 	

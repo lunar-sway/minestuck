@@ -1,18 +1,24 @@
 package com.mraof.minestuck.player;
 
 import com.mraof.minestuck.Minestuck;
+import com.mraof.minestuck.MinestuckConfig;
 import com.mraof.minestuck.api.alchemy.GristSet;
+import com.mraof.minestuck.client.ClientRungData;
+import com.mraof.minestuck.client.gui.ColorSelectorScreen;
 import com.mraof.minestuck.client.gui.MSScreenFactories;
 import com.mraof.minestuck.inventory.captchalogue.CaptchaDeckHandler;
 import com.mraof.minestuck.inventory.captchalogue.Modus;
 import com.mraof.minestuck.network.*;
 import com.mraof.minestuck.network.editmode.EditmodeCacheLimitPacket;
 import com.mraof.minestuck.util.ColorHandler;
+import net.minecraft.client.Minecraft;
+import net.minecraft.core.HolderLookup;
 import net.neoforged.api.distmarker.Dist;
 import net.neoforged.bus.api.SubscribeEvent;
 import net.neoforged.fml.LogicalSide;
-import net.neoforged.fml.common.Mod;
+import net.neoforged.fml.common.EventBusSubscriber;
 import net.neoforged.neoforge.client.event.ClientPlayerNetworkEvent;
+import net.neoforged.neoforge.client.event.ClientTickEvent;
 import net.neoforged.neoforge.network.PacketDistributor;
 import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.Logger;
@@ -21,7 +27,7 @@ import org.apache.logging.log4j.Logger;
  * Contains static field for any {@link PlayerData} fields that also need client access.
  * @author kirderf1
  */
-@Mod.EventBusSubscriber(modid = Minestuck.MOD_ID, bus = Mod.EventBusSubscriber.Bus.FORGE, value = Dist.CLIENT)
+@EventBusSubscriber(modid = Minestuck.MOD_ID, bus = EventBusSubscriber.Bus.GAME, value = Dist.CLIENT)
 public final class ClientPlayerData
 {
 	private static final Logger LOGGER = LogManager.getLogger();
@@ -38,7 +44,7 @@ public final class ClientPlayerData
 	private static boolean dataCheckerAccess;
 	
 	@SubscribeEvent
-	public static void onLoggedIn(ClientPlayerNetworkEvent.LoggingIn event)
+	private static void onLoggedIn(ClientPlayerNetworkEvent.LoggingIn event)
 	{
 		modus = null;
 		title = null;
@@ -79,7 +85,7 @@ public final class ClientPlayerData
 	{
 		return switch(cacheSource)
 		{
-			case PLAYER -> new ClientCache(ClientPlayerData.playerGrist, Echeladder.getGristCapacity(ClientPlayerData.getRung()));
+			case PLAYER -> new ClientCache(ClientPlayerData.playerGrist, ClientRungData.getData(ClientPlayerData.getRung()).gristCapacity());
 			case EDITMODE -> new ClientCache(ClientPlayerData.targetGrist, targetCacheLimit);
 		};
 	}
@@ -105,7 +111,7 @@ public final class ClientPlayerData
 	
 	public static void selectColor(int colorIndex)
 	{
-		PacketDistributor.SERVER.noArg().send(new PlayerColorPackets.SelectIndex(colorIndex));
+		PacketDistributor.sendToServer(new PlayerColorPackets.SelectIndex(colorIndex));
 		playerColor = ColorHandler.BuiltinColors.getColor(colorIndex);
 	}
 	
@@ -113,18 +119,8 @@ public final class ClientPlayerData
 	{
 		if (color < 0 || color > 256*256*256) return;
 		
-		PacketDistributor.SERVER.noArg().send(new PlayerColorPackets.SelectRGB(color));
+		PacketDistributor.sendToServer(new PlayerColorPackets.SelectRGB(color));
 		playerColor = color;
-	}
-	
-	public static boolean shouDisplayColorSelection()
-	{
-		return displaySelectionGui;
-	}
-	
-	public static void clearDisplayColorSelection()
-	{
-		displaySelectionGui = false;
 	}
 	
 	public static boolean hasDataCheckerAccess()
@@ -132,9 +128,9 @@ public final class ClientPlayerData
 		return dataCheckerAccess;
 	}
 	
-	public static void handleDataPacket(CaptchaDeckPackets.ModusData packet)
+	public static void handleDataPacket(CaptchaDeckPackets.ModusData packet, HolderLookup.Provider provider)
 	{
-		modus = CaptchaDeckHandler.readFromNBT(packet.nbt(), LogicalSide.CLIENT);
+		modus = CaptchaDeckHandler.readFromNBT(packet.nbt(), LogicalSide.CLIENT, provider);
 		if(modus != null)
 			MSScreenFactories.updateSylladexScreen();
 		else LOGGER.debug("Player lost their modus after update packet");
@@ -185,5 +181,15 @@ public final class ClientPlayerData
 	{
 		dataCheckerAccess = packet.isAvailable();
 	}
+	
+	@SubscribeEvent
+	private static void onClientTick(ClientTickEvent.Post event)
+	{
+		if(displaySelectionGui && Minecraft.getInstance().screen == null)
+		{
+			displaySelectionGui = false;
+			if(MinestuckConfig.CLIENT.loginColorSelector.get())
+				Minecraft.getInstance().setScreen(new ColorSelectorScreen(true));
+		}
+	}
 }
-

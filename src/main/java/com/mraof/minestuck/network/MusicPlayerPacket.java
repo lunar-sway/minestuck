@@ -4,12 +4,29 @@ import com.mraof.minestuck.Minestuck;
 import com.mraof.minestuck.block.EnumCassetteType;
 import com.mraof.minestuck.client.sounds.PlayerMusicClientHandler;
 import net.minecraft.network.FriendlyByteBuf;
+import net.minecraft.network.RegistryFriendlyByteBuf;
+import net.minecraft.network.codec.ByteBufCodecs;
+import net.minecraft.network.codec.StreamCodec;
+import net.minecraft.network.protocol.common.custom.CustomPacketPayload;
 import net.minecraft.resources.ResourceLocation;
 import net.minecraft.world.entity.player.Player;
+import net.neoforged.neoforge.network.codec.NeoForgeStreamCodecs;
+import net.neoforged.neoforge.network.handling.IPayloadContext;
 
 public record MusicPlayerPacket(int entityID, EnumCassetteType cassetteType, float volume, float pitch) implements MSPacket.PlayToClient
 {
-	public static final ResourceLocation ID = Minestuck.id("music_player");
+	public static final Type<MusicPlayerPacket> ID = new Type<>(Minestuck.id("music_player"));
+	public static final StreamCodec<FriendlyByteBuf, MusicPlayerPacket> STREAM_CODEC = StreamCodec.composite(
+			ByteBufCodecs.INT,
+			MusicPlayerPacket::entityID,
+			NeoForgeStreamCodecs.enumCodec(EnumCassetteType.class),
+			MusicPlayerPacket::cassetteType,
+			ByteBufCodecs.FLOAT,
+			MusicPlayerPacket::volume,
+			ByteBufCodecs.FLOAT,
+			MusicPlayerPacket::pitch,
+			MusicPlayerPacket::new
+	);
 	
 	/**
 	 * Creates a packet to the client for starting a cassette music track played by a specified player, and stopping the previous music track played by that player if there was any.
@@ -28,32 +45,14 @@ public record MusicPlayerPacket(int entityID, EnumCassetteType cassetteType, flo
 	}
 	
 	@Override
-	public ResourceLocation id()
+	public Type<? extends CustomPacketPayload> type()
 	{
 		return ID;
 	}
 	
-	@Override
-	public void write(FriendlyByteBuf buffer)
-	{
-		buffer.writeInt(entityID);
-		buffer.writeFloat(volume);
-		buffer.writeFloat(pitch);
-		buffer.writeEnum(cassetteType);
-	}
-	
-	public static MusicPlayerPacket read(FriendlyByteBuf buffer)
-	{
-		int entityID = buffer.readInt(); //readInt spits out the values you gave to the PacketBuffer in encode in that order
-		float volume = buffer.readFloat();
-		float pitch = buffer.readFloat();
-		EnumCassetteType cassetteType = buffer.readEnum(EnumCassetteType.class);
-		
-		return new MusicPlayerPacket(entityID, cassetteType, volume, pitch);
-	}
 	
 	@Override
-	public void execute()
+	public void execute(IPayloadContext context)
 	{
 		PlayerMusicClientHandler.handlePacket(entityID, cassetteType, volume, pitch);
 	}

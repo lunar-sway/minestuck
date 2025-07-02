@@ -23,20 +23,20 @@ import net.minecraft.world.entity.player.Inventory;
 import net.minecraft.world.item.ItemStack;
 import net.neoforged.api.distmarker.Dist;
 import net.neoforged.bus.api.SubscribeEvent;
-import net.neoforged.fml.common.Mod;
+import net.neoforged.fml.common.EventBusSubscriber;
 import net.neoforged.neoforge.client.event.ClientPlayerNetworkEvent;
 import net.neoforged.neoforge.network.PacketDistributor;
 
 import java.util.function.BiFunction;
 import java.util.function.Supplier;
 
-@Mod.EventBusSubscriber(modid = Minestuck.MOD_ID, bus = Mod.EventBusSubscriber.Bus.FORGE, value = Dist.CLIENT)
+@EventBusSubscriber(modid = Minestuck.MOD_ID, bus = EventBusSubscriber.Bus.GAME, value = Dist.CLIENT)
 public abstract class PlayerStatsScreen extends MinestuckScreen
 {
 	//TODO A better way of working with inventory-like guis like these?
 	public static final int WINDOW_ID_START = 105;	//Note that window ids used MUST be a byte. (that's how the window id is serialized in minecraft's packets)
 	
-	public static final ResourceLocation icons = new ResourceLocation("minestuck", "textures/gui/icons.png");
+	public static final ResourceLocation icons = ResourceLocation.fromNamespaceAndPath("minestuck", "textures/gui/icons.png");
 	
 	public enum NormalGuiType
 	{
@@ -274,7 +274,7 @@ public abstract class PlayerStatsScreen extends MinestuckScreen
 				
 				mc.setScreen(containerScreen);
 				if(mc.screen == containerScreen)
-					PacketDistributor.SERVER.noArg().send(new MiscContainerPacket(ordinal, ClientEditmodeData.isInEditmode()));
+					PacketDistributor.sendToServer(new MiscContainerPacket(ordinal, ClientEditmodeData.isInEditmode()));
 			}
 			else mc.setScreen(ClientEditmodeData.isInEditmode() ? editmodeTab.createGuiInstance():normalTab.createGuiInstance());
 		}

@@ -1,0 +1,26 @@
+{
+  "parent": "minestuck:minestuck/alchemy",
+  "criteria": {
+    "use_intellibeam": {
+      "trigger": "minestuck:intellibeam_laserstation"
+    }
+  },
+  "display": {
+    "description": {
+      "translate": "advancements.minestuck.intellibeam.description"
+    },
+    "icon": {
+      "count": 1,
+      "id": "minestuck:intellibeam_laserstation"
+    },
+    "title": {
+      "translate": "advancements.minestuck.intellibeam.title"
+    }
+  },
+  "requirements": [
+    [
+      "use_intellibeam"
+    ]
+  ],
+  "sends_telemetry_event": true
+}

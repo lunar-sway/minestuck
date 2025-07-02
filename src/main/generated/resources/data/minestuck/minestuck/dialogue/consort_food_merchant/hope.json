@@ -1,5 +1,7 @@
 {
   "node": {
+    "animation": {},
+    "gui": "minestuck:textures/gui/dialogue/dialogue.png",
     "messages": [
       {
         "type": "entity",
@@ -12,6 +14,10 @@
     ],
     "responses": [
       {
+        "condition": {
+          "type": "minestuck:always_true"
+        },
+        "hide_if_failed": true,
         "message": "minestuck.arrow",
         "triggers": [
           {

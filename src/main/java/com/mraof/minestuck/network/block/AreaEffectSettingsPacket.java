@@ -6,51 +6,49 @@ import com.mraof.minestuck.blockentity.redstone.AreaEffectBlockEntity;
 import com.mraof.minestuck.effects.MSEffects;
 import com.mraof.minestuck.network.MSPacket;
 import net.minecraft.core.BlockPos;
+import net.minecraft.core.Holder;
 import net.minecraft.core.registries.BuiltInRegistries;
 import net.minecraft.network.FriendlyByteBuf;
+import net.minecraft.network.RegistryFriendlyByteBuf;
+import net.minecraft.network.codec.ByteBufCodecs;
+import net.minecraft.network.codec.StreamCodec;
+import net.minecraft.network.protocol.common.custom.CustomPacketPayload;
 import net.minecraft.resources.ResourceLocation;
 import net.minecraft.server.level.ServerPlayer;
 import net.minecraft.world.effect.MobEffect;
+import net.neoforged.neoforge.network.handling.IPayloadContext;
 
 import java.util.Objects;
 
-public record AreaEffectSettingsPacket(MobEffect effect, int effectAmp, boolean isAllMobs, BlockPos minEffectPos, BlockPos maxEffectPos, BlockPos beBlockPos) implements MSPacket.PlayToServer
+public record AreaEffectSettingsPacket(Holder<MobEffect> effect, int effectAmp, boolean isAllMobs, BlockPos minEffectPos, BlockPos maxEffectPos, BlockPos beBlockPos) implements MSPacket.PlayToServer
 {
-	public static final ResourceLocation ID = Minestuck.id("area_effect_settings");
+	
+		public static final Type<AreaEffectSettingsPacket> ID = new Type<>(Minestuck.id("area_effect_settings"));
+	public static final StreamCodec<RegistryFriendlyByteBuf, AreaEffectSettingsPacket> STREAM_CODEC = StreamCodec.composite(
+			MobEffect.STREAM_CODEC,
+			AreaEffectSettingsPacket::effect,
+			ByteBufCodecs.INT,
+			AreaEffectSettingsPacket::effectAmp,
+			ByteBufCodecs.BOOL,
+			AreaEffectSettingsPacket::isAllMobs,
+			BlockPos.STREAM_CODEC,
+			AreaEffectSettingsPacket::minEffectPos,
+			BlockPos.STREAM_CODEC,
+			AreaEffectSettingsPacket::maxEffectPos,
+			BlockPos.STREAM_CODEC,
+			AreaEffectSettingsPacket::beBlockPos,
+			AreaEffectSettingsPacket::new
+	);
 	
 	@Override
-	public ResourceLocation id()
+	public Type<? extends CustomPacketPayload> type()
 	{
 		return ID;
 	}
 	
-	@Override
-	public void write(FriendlyByteBuf buffer)
-	{
-		buffer.writeId(BuiltInRegistries.MOB_EFFECT, effect);
-		buffer.writeInt(effectAmp);
-		buffer.writeBoolean(isAllMobs);
-		buffer.writeBlockPos(minEffectPos);
-		buffer.writeBlockPos(maxEffectPos);
-		buffer.writeBlockPos(beBlockPos);
-	}
-	
-	public static AreaEffectSettingsPacket read(FriendlyByteBuf buffer)
-	{
-		MobEffect effect = Objects.requireNonNullElse(buffer.readById(BuiltInRegistries.MOB_EFFECT), MSEffects.CREATIVE_SHOCK.get());
-		
-		int effectAmp = buffer.readInt();
-		boolean isAllMobs = buffer.readBoolean();
-		
-		BlockPos minEffectPos = buffer.readBlockPos();
-		BlockPos maxEffectPos = buffer.readBlockPos();
-		BlockPos beBlockPos = buffer.readBlockPos();
-		
-		return new AreaEffectSettingsPacket(effect, effectAmp, isAllMobs, minEffectPos, maxEffectPos, beBlockPos);
-	}
 	
 	@Override
-	public void execute(ServerPlayer player)
+	public void execute(IPayloadContext context, ServerPlayer player)
 	{
 		if(!AreaEffectBlock.canInteract(player))
 			return;

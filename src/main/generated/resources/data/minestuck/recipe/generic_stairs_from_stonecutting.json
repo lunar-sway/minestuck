@@ -1,0 +1,10 @@
+{
+  "type": "minecraft:stonecutting",
+  "ingredient": {
+    "item": "minestuck:generic_object"
+  },
+  "result": {
+    "count": 1,
+    "id": "minestuck:perfectly_generic_stairs"
+  }
+}

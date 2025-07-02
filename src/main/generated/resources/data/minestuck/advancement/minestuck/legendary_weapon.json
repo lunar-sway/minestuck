@@ -1,0 +1,33 @@
+{
+  "parent": "minestuck:minestuck/alchemy",
+  "criteria": {
+    "get_max_tier_weapon": {
+      "conditions": {
+        "items": [
+          {
+            "items": "#minestuck:legendary"
+          }
+        ]
+      },
+      "trigger": "minecraft:inventory_changed"
+    }
+  },
+  "display": {
+    "description": {
+      "translate": "advancements.minestuck.legendary_weapon.description"
+    },
+    "icon": {
+      "count": 1,
+      "id": "minestuck:caledfwlch"
+    },
+    "title": {
+      "translate": "advancements.minestuck.legendary_weapon.title"
+    }
+  },
+  "requirements": [
+    [
+      "get_max_tier_weapon"
+    ]
+  ],
+  "sends_telemetry_event": true
+}

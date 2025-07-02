@@ -97,7 +97,7 @@ public class TreeSylladexScreen extends SylladexScreen
 		if(MinestuckConfig.SERVER.treeModusSetting.get() == MinestuckConfig.AvailableOptions.BOTH)
 		{
 			modus.autoBalance = !modus.autoBalance;
-			PacketDistributor.SERVER.noArg().send(new CaptchaDeckPackets.SetModusParameter((byte) 0, modus.autoBalance ? 1 : 0));
+			PacketDistributor.sendToServer(new CaptchaDeckPackets.SetModusParameter((byte) 0, modus.autoBalance ? 1 : 0));
 		}
 	}
 	

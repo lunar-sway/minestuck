@@ -17,11 +17,11 @@ import net.minecraft.server.packs.resources.Resource;
 import net.minecraft.server.packs.resources.ResourceManager;
 import net.minecraft.util.FastColor;
 import software.bernie.geckolib.cache.object.BakedGeoModel;
-import software.bernie.geckolib.core.object.Color;
 import software.bernie.geckolib.model.DefaultedEntityGeoModel;
 import software.bernie.geckolib.renderer.GeoEntityRenderer;
 import software.bernie.geckolib.renderer.GeoRenderer;
 import software.bernie.geckolib.renderer.layer.GeoRenderLayer;
+import software.bernie.geckolib.util.Color;
 
 import java.io.IOException;
 import java.io.InputStream;
@@ -50,6 +50,7 @@ public class UnderlingRenderer<T extends UnderlingEntity> extends GeoEntityRende
 		return 0;
 	}
 	
+	
 	@Override
 	public Color getRenderColor(T animatable, float partialTick, int packedLight)
 	{
@@ -68,12 +69,12 @@ public class UnderlingRenderer<T extends UnderlingEntity> extends GeoEntityRende
 		
 		// the texture manager will cache the computed textures so they're effectively computed once (at least in theory)
 		SimpleTexture nullTexture = new SimpleTexture(resource);
-		if(Minecraft.getInstance().textureManager.getTexture(resource, nullTexture) == nullTexture)
+		if(Minecraft.getInstance().getTextureManager().getTexture(resource, nullTexture) == nullTexture)
 		{
 			DynamicTexture texture = createLayeredTexture(entity);
 			
 			// save the computed texture to the texture manager's cache
-			Minecraft.getInstance().textureManager.register(resource, texture);
+			Minecraft.getInstance().getTextureManager().register(resource, texture);
 		}
 		
 		return resource;
@@ -139,11 +140,12 @@ public class UnderlingRenderer<T extends UnderlingEntity> extends GeoEntityRende
 		public void render(PoseStack poseStack, T animatable, BakedGeoModel bakedModel, RenderType renderType, MultiBufferSource bufferSource, VertexConsumer buffer, float partialTick, int packedLight, int packedOverlay)
 		{
 			RenderType layerRenderType = RenderType.entityCutoutNoCullZOffset(this.textureId);
-			float color = getContrastModifier(animatable);
+			float contrast = getContrastModifier(animatable);
+			
 			poseStack.pushPose();
 			
 			this.getRenderer().reRender(bakedModel, poseStack, bufferSource, animatable, layerRenderType, bufferSource.getBuffer(layerRenderType),
-					partialTick, packedLight, packedOverlay, color, color, color, 1);
+					partialTick, packedLight, packedOverlay, FastColor.ARGB32.colorFromFloat(1, contrast, contrast, contrast));
 			
 			poseStack.popPose();
 		}

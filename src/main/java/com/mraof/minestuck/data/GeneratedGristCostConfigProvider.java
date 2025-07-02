@@ -37,7 +37,6 @@ public class GeneratedGristCostConfigProvider implements DataProvider
 	{
 		serializer(RecipeSerializer.SHAPED_RECIPE);
 		serializer(RecipeSerializer.SHAPELESS_RECIPE);
-		serializer(MSRecipeTypes.NON_MIRRORED.get());
 		type(RecipeType.STONECUTTING);
 		serializer(RecipeSerializer.SMITHING_TRANSFORM, SmithingInterpreter.INSTANCE);
 		type(RecipeType.SMELTING, new CookingCostInterpreter(GristTypes.TAR.get().amount(1)));
@@ -52,8 +51,7 @@ public class GeneratedGristCostConfigProvider implements DataProvider
 		Path jsonPath = this.output.getOutputFolder(PackOutput.Target.DATA_PACK)
 				.resolve(modid).resolve(RecipeGeneratedCostHandler.PATH);
 		
-		JsonElement json = RecipeGeneratedCostHandler.SourceEntry.LIST_CODEC.encodeStart(JsonOps.INSTANCE, this.entries)
-				.getOrThrow(false, LOGGER::error);
+		JsonElement json = RecipeGeneratedCostHandler.SourceEntry.LIST_CODEC.encodeStart(JsonOps.INSTANCE, this.entries).getOrThrow();
 		
 		return DataProvider.saveStable(cache, json, jsonPath);
 	}

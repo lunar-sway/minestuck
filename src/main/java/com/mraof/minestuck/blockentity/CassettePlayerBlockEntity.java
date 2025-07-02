@@ -1,6 +1,7 @@
 package com.mraof.minestuck.blockentity;
 
 import net.minecraft.core.BlockPos;
+import net.minecraft.core.HolderLookup;
 import net.minecraft.nbt.CompoundTag;
 import net.minecraft.world.Clearable;
 import net.minecraft.world.item.ItemStack;
@@ -17,22 +18,22 @@ public class CassettePlayerBlockEntity extends BlockEntity implements Clearable
 	}
 	
 	@Override
-	public void load(CompoundTag nbt)
+	protected void loadAdditional(CompoundTag nbt, HolderLookup.Provider pRegistries)
 	{
-		super.load(nbt);
+		super.loadAdditional(nbt, pRegistries);
 		if(nbt.contains("CassetteItem", 10))
 		{
-			this.setCassette(ItemStack.of(nbt.getCompound("CassetteItem")));
+			this.setCassette(ItemStack.parseOptional(pRegistries, nbt.getCompound("CassetteItem")));
 		}
 	}
 	
 	@Override
-	public void saveAdditional(CompoundTag compound)
+	public void saveAdditional(CompoundTag compound, HolderLookup.Provider provider)
 	{
-		super.saveAdditional(compound);
+		super.saveAdditional(compound, provider);
 		if(!this.getCassette().isEmpty())
 		{
-			compound.put("CassetteItem", this.getCassette().save(new CompoundTag()));
+			compound.put("CassetteItem", this.getCassette().save(provider));
 		}
 	}
 	

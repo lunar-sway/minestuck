@@ -14,7 +14,7 @@ import net.minecraft.world.level.levelgen.structure.templatesystem.StructureTemp
 
 public class WoodenCactusPairFeature extends Feature<NoneFeatureConfiguration>
 {
-	private static final ResourceLocation WOODEN_CACTUS_PAIR = new ResourceLocation(Minestuck.MOD_ID, "wooden_cactus_pair");
+	private static final ResourceLocation WOODEN_CACTUS_PAIR = ResourceLocation.fromNamespaceAndPath(Minestuck.MOD_ID, "wooden_cactus_pair");
 	
 	public WoodenCactusPairFeature(Codec<NoneFeatureConfiguration> codec)
 	{

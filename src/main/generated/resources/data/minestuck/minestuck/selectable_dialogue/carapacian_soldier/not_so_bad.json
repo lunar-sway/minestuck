@@ -2,5 +2,7 @@
   "condition": {
     "type": "minestuck:is_in_skaia"
   },
-  "dialogue": "minestuck:carapacian_soldier/not_so_bad.1"
+  "dialogue": "minestuck:carapacian_soldier/not_so_bad.1",
+  "dialogue_weight": 10,
+  "keep_on_reset": false
 }

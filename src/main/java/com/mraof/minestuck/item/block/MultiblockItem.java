@@ -43,6 +43,7 @@ public class MultiblockItem extends BlockItem
 		multiblock.forEachBlock(block -> blockToItemMap.put(block, itemIn));
 	}
 	
+	@SuppressWarnings("removal") // Just remove the method when it no longer exists
 	@Override
 	public void removeFromBlockToItemMap(Map<Block, Item> blockToItemMap, Item itemIn)
 	{

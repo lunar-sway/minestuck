@@ -8,7 +8,6 @@ import com.mraof.minestuck.blockentity.MSBlockEntityTypes;
 import net.minecraft.MethodsReturnNonnullByDefault;
 import net.minecraft.core.BlockPos;
 import net.minecraft.core.Direction;
-import net.minecraft.world.InteractionHand;
 import net.minecraft.world.InteractionResult;
 import net.minecraft.world.entity.player.Player;
 import net.minecraft.world.level.BlockGetter;
@@ -60,9 +59,8 @@ public class HolopadBlock extends MachineBlock implements EntityBlock
 		return level.isClientSide ? BlockUtil.checkTypeForTicker(placedType, MSBlockEntityTypes.HOLOPAD.get(), HolopadBlockEntity::clientTick) : null;
 	}
 	
-	@SuppressWarnings("deprecation")
 	@Override
-	public InteractionResult use(BlockState state, Level level, BlockPos pos, Player player, InteractionHand handIn, BlockHitResult hit)
+	protected InteractionResult useWithoutItem(BlockState state, Level level, BlockPos pos, Player player, BlockHitResult hit)
 	{
 		if(player.isShiftKeyDown()) return InteractionResult.PASS;
 		if(level.isClientSide)
@@ -94,8 +92,7 @@ public class HolopadBlock extends MachineBlock implements EntityBlock
 	}
 	
 	@Override
-	@SuppressWarnings("deprecation")
-	public VoxelShape getShape(BlockState state, BlockGetter level, BlockPos pos, CollisionContext context)
+	protected VoxelShape getShape(BlockState state, BlockGetter level, BlockPos pos, CollisionContext context)
 	{
 		return SHAPE.get(state.getValue(FACING));
 	}

@@ -3,5 +3,7 @@
     "type": "minestuck:entity_type",
     "entity_type": "minestuck:nakagator"
   },
-  "dialogue": "minestuck:consort/oh_to_be_ugly"
+  "dialogue": "minestuck:consort/oh_to_be_ugly",
+  "dialogue_weight": 10,
+  "keep_on_reset": false
 }

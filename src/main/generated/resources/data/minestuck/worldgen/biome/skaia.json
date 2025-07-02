@@ -7,14 +7,23 @@
     "water_color": 4159204,
     "water_fog_color": 329011
   },
-  "features": [],
+  "features": [
+    [],
+    [],
+    [],
+    [],
+    [
+      "minestuck:rook_outpost"
+    ]
+  ],
   "has_precipitation": false,
   "spawn_costs": {},
   "spawners": {
     "ambient": [],
     "axolotls": [],
-    "consort": [],
     "creature": [],
+    "minestuck:consort": [],
+    "minestuck:underling": [],
     "misc": [],
     "monster": [
       {
@@ -55,7 +64,6 @@
       }
     ],
     "underground_water_creature": [],
-    "underling": [],
     "water_ambient": [],
     "water_creature": []
   },

@@ -10,7 +10,7 @@ import com.mraof.minestuck.world.gen.feature.SimpleTemplateFeature;
 import net.minecraft.core.Direction;
 import net.minecraft.core.HolderGetter;
 import net.minecraft.core.registries.Registries;
-import net.minecraft.data.worldgen.BootstapContext;
+import net.minecraft.data.worldgen.BootstrapContext;
 import net.minecraft.data.worldgen.features.FeatureUtils;
 import net.minecraft.data.worldgen.placement.PlacementUtils;
 import net.minecraft.data.worldgen.placement.TreePlacements;
@@ -46,11 +46,15 @@ import static com.mraof.minestuck.world.gen.feature.MSCFeatures.*;
 
 public final class MSConfiguredFeatureProvider
 {
-	public static void register(BootstapContext<ConfiguredFeature<?, ?>> context)
+	public static void register(BootstrapContext<ConfiguredFeature<?, ?>> context)
 	{
 		HolderGetter<PlacedFeature> placedFeatures = context.lookup(Registries.PLACED_FEATURE);
 		
 		context.register(RETURN_NODE, new ConfiguredFeature<>(MSFeatures.RETURN_NODE.get(), FeatureConfiguration.NONE));
+		
+		context.register(VEIL_CRATER, new ConfiguredFeature<>(MSFeatures.VEIL_CRATER.get(), FeatureConfiguration.NONE));
+		
+		context.register(ROOK_OUTPOST, new ConfiguredFeature<>(MSFeatures.ROOK_OUTPOST.get(), FeatureConfiguration.NONE));
 		
 		var smallCog = context.register(SMALL_COG, new ConfiguredFeature<>(MSFeatures.SIMPLE_TEMPLATE.get(),
 				new SimpleTemplateFeature.Config(Minestuck.id("small_cog"), true,
@@ -215,94 +219,94 @@ public final class MSConfiguredFeatureProvider
 		
 		
 		context.register(BLOOD_TREE, new ConfiguredFeature<>(Feature.TREE,
-				new TreeConfiguration.TreeConfigurationBuilder(BlockStateProvider.simple(AspectTreeBlocks.BLOOD_ASPECT_LOG.get().defaultBlockState()),
-						new DarkOakTrunkPlacer(8, 4, 0), BlockStateProvider.simple(AspectTreeBlocks.BLOOD_ASPECT_LEAVES.get().defaultBlockState()),
+				new TreeConfiguration.TreeConfigurationBuilder(BlockStateProvider.simple(AspectTreeBlocks.BLOOD_ASPECT_LOG.asBlock().defaultBlockState()),
+						new DarkOakTrunkPlacer(8, 4, 0), BlockStateProvider.simple(AspectTreeBlocks.BLOOD_ASPECT_LEAVES.asBlock().defaultBlockState()),
 						new DarkOakFoliagePlacer(ConstantInt.of(0), ConstantInt.of(0)),
 						new TwoLayersFeatureSize(1, 0, 1))
 						.dirt(BlockStateProvider.simple(Blocks.DIRT)).forceDirt().ignoreVines().build()));
 		
 		context.register(BREATH_TREE, new ConfiguredFeature<>(Feature.TREE,
-				new TreeConfiguration.TreeConfigurationBuilder(BlockStateProvider.simple(AspectTreeBlocks.BREATH_ASPECT_LOG.get().defaultBlockState()),
+				new TreeConfiguration.TreeConfigurationBuilder(BlockStateProvider.simple(AspectTreeBlocks.BREATH_ASPECT_LOG.asBlock().defaultBlockState()),
 						new CherryTrunkPlacer(7, 1, 0, new WeightedListInt(SimpleWeightedRandomList.<IntProvider>builder().add(ConstantInt.of(1), 1).add(ConstantInt.of(2), 1).add(ConstantInt.of(3), 1).build()), UniformInt.of(2, 4), UniformInt.of(-4, -3), UniformInt.of(-1, 0)),
-						BlockStateProvider.simple(AspectTreeBlocks.BREATH_ASPECT_LEAVES.get().defaultBlockState()),
+						BlockStateProvider.simple(AspectTreeBlocks.BREATH_ASPECT_LEAVES.asBlock().defaultBlockState()),
 						new BlobFoliagePlacer(ConstantInt.of(2), ConstantInt.of(0), 3),
 						new TwoLayersFeatureSize(1, 0, 1))
 						.dirt(BlockStateProvider.simple(Blocks.DIRT)).forceDirt().ignoreVines().build()));
 		
 		context.register(DOOM_TREE, new ConfiguredFeature<>(Feature.TREE,
-				new TreeConfiguration.TreeConfigurationBuilder(BlockStateProvider.simple(AspectTreeBlocks.DOOM_ASPECT_LOG.get().defaultBlockState()),
-						new StraightTrunkPlacer(8, 4, 0), BlockStateProvider.simple(AspectTreeBlocks.DOOM_ASPECT_LEAVES.get().defaultBlockState()),
+				new TreeConfiguration.TreeConfigurationBuilder(BlockStateProvider.simple(AspectTreeBlocks.DOOM_ASPECT_LOG.asBlock().defaultBlockState()),
+						new StraightTrunkPlacer(8, 4, 0), BlockStateProvider.simple(AspectTreeBlocks.DOOM_ASPECT_LEAVES.asBlock().defaultBlockState()),
 						new BlobFoliagePlacer(ConstantInt.of(2), ConstantInt.of(0), 3),
 						new TwoLayersFeatureSize(1, 0, 1))
 						.dirt(BlockStateProvider.simple(Blocks.DIRT)).forceDirt().ignoreVines().build()));
 		
 		context.register(HEART_TREE, new ConfiguredFeature<>(Feature.TREE,
-				new TreeConfiguration.TreeConfigurationBuilder(BlockStateProvider.simple(AspectTreeBlocks.HEART_ASPECT_LOG.get().defaultBlockState()),
-						new ForkingTrunkPlacer(5, 2, 2), BlockStateProvider.simple(AspectTreeBlocks.HEART_ASPECT_LEAVES.get().defaultBlockState()),
+				new TreeConfiguration.TreeConfigurationBuilder(BlockStateProvider.simple(AspectTreeBlocks.HEART_ASPECT_LOG.asBlock().defaultBlockState()),
+						new ForkingTrunkPlacer(5, 2, 2), BlockStateProvider.simple(AspectTreeBlocks.HEART_ASPECT_LEAVES.asBlock().defaultBlockState()),
 						new FancyFoliagePlacer(ConstantInt.of(2), ConstantInt.of(2), 4),
 						new TwoLayersFeatureSize(1, 0, 1))
 						.dirt(BlockStateProvider.simple(Blocks.DIRT)).forceDirt().ignoreVines().build()));
 				
 		context.register(HOPE_TREE, new ConfiguredFeature<>(Feature.TREE,
-				new TreeConfiguration.TreeConfigurationBuilder(BlockStateProvider.simple(AspectTreeBlocks.HOPE_ASPECT_LOG.get().defaultBlockState()),
+				new TreeConfiguration.TreeConfigurationBuilder(BlockStateProvider.simple(AspectTreeBlocks.HOPE_ASPECT_LOG.asBlock().defaultBlockState()),
 						new FancyTrunkPlacer(14, 2, 0),
-						BlockStateProvider.simple(AspectTreeBlocks.HOPE_ASPECT_LEAVES.get().defaultBlockState()),
+						BlockStateProvider.simple(AspectTreeBlocks.HOPE_ASPECT_LEAVES.asBlock().defaultBlockState()),
 						new CherryFoliagePlacer(ConstantInt.of(3), ConstantInt.of(3), ConstantInt.of(4), 0.25F, 0.5F, 0.5F, 0.33333334F),
 						new TwoLayersFeatureSize(1, 0, 1))
 						.dirt(BlockStateProvider.simple(Blocks.DIRT)).forceDirt().ignoreVines().build()));
 		
 		context.register(LIFE_TREE, new ConfiguredFeature<>(Feature.TREE,
-				new TreeConfiguration.TreeConfigurationBuilder(BlockStateProvider.simple(AspectTreeBlocks.LIFE_ASPECT_LOG.get().defaultBlockState()),
+				new TreeConfiguration.TreeConfigurationBuilder(BlockStateProvider.simple(AspectTreeBlocks.LIFE_ASPECT_LOG.asBlock().defaultBlockState()),
 						new CherryTrunkPlacer(7, 1, 0, new WeightedListInt(SimpleWeightedRandomList.<IntProvider>builder().add(ConstantInt.of(1), 1).add(ConstantInt.of(2), 1).add(ConstantInt.of(3), 1).build()), UniformInt.of(2, 4), UniformInt.of(-4, -3), UniformInt.of(-1, 0)),
-						BlockStateProvider.simple(AspectTreeBlocks.LIFE_ASPECT_LEAVES.get().defaultBlockState()),
+						BlockStateProvider.simple(AspectTreeBlocks.LIFE_ASPECT_LEAVES.asBlock().defaultBlockState()),
 						new BlobFoliagePlacer(ConstantInt.of(2), ConstantInt.of(1), 3),
 						new TwoLayersFeatureSize(1, 0, 1))
 						.dirt(BlockStateProvider.simple(Blocks.DIRT)).forceDirt().ignoreVines().build()));
 		
 		context.register(LIGHT_TREE, new ConfiguredFeature<>(Feature.TREE,
-				new TreeConfiguration.TreeConfigurationBuilder(BlockStateProvider.simple(AspectTreeBlocks.LIGHT_ASPECT_LOG.get().defaultBlockState()),
+				new TreeConfiguration.TreeConfigurationBuilder(BlockStateProvider.simple(AspectTreeBlocks.LIGHT_ASPECT_LOG.asBlock().defaultBlockState()),
 						new StraightTrunkPlacer(5, 2, 0),
-						BlockStateProvider.simple(AspectTreeBlocks.LIGHT_ASPECT_LEAVES.get().defaultBlockState()),
+						BlockStateProvider.simple(AspectTreeBlocks.LIGHT_ASPECT_LEAVES.asBlock().defaultBlockState()),
 						new SpruceFoliagePlacer(ConstantInt.of(2), ConstantInt.of(2), ConstantInt.of(3)),
 						new TwoLayersFeatureSize(1, 0, 1))
 						.dirt(BlockStateProvider.simple(Blocks.DIRT)).forceDirt().ignoreVines().build()));
 
 		context.register(MIND_TREE, new ConfiguredFeature<>(Feature.TREE,
-				new TreeConfiguration.TreeConfigurationBuilder(BlockStateProvider.simple(AspectTreeBlocks.MIND_ASPECT_LOG.get().defaultBlockState()),
+				new TreeConfiguration.TreeConfigurationBuilder(BlockStateProvider.simple(AspectTreeBlocks.MIND_ASPECT_LOG.asBlock().defaultBlockState()),
 						new ForkingTrunkPlacer(6, 2, 0),
-						BlockStateProvider.simple(AspectTreeBlocks.MIND_ASPECT_LEAVES.get().defaultBlockState()),
+						BlockStateProvider.simple(AspectTreeBlocks.MIND_ASPECT_LEAVES.asBlock().defaultBlockState()),
 						new CherryFoliagePlacer(ConstantInt.of(3), ConstantInt.of(1), ConstantInt.of(4), 0.25F, 0.5F, 0.5F, 0.33333334F),
 						new TwoLayersFeatureSize(1, 0, 1))
 						.dirt(BlockStateProvider.simple(Blocks.DIRT)).forceDirt().ignoreVines().build()));
 		
 		context.register(RAGE_TREE, new ConfiguredFeature<>(Feature.TREE,
-				new TreeConfiguration.TreeConfigurationBuilder(BlockStateProvider.simple(AspectTreeBlocks.RAGE_ASPECT_LOG.get().defaultBlockState()),
+				new TreeConfiguration.TreeConfigurationBuilder(BlockStateProvider.simple(AspectTreeBlocks.RAGE_ASPECT_LOG.asBlock().defaultBlockState()),
 						new ForkingTrunkPlacer(5, 4, 0),
-						BlockStateProvider.simple(AspectTreeBlocks.RAGE_ASPECT_LEAVES.get().defaultBlockState()),
+						BlockStateProvider.simple(AspectTreeBlocks.RAGE_ASPECT_LEAVES.asBlock().defaultBlockState()),
 						new RandomSpreadFoliagePlacer(ConstantInt.of(3), ConstantInt.of(0), ConstantInt.of(2), 50),
 						new TwoLayersFeatureSize(1, 0, 1))
 						.dirt(BlockStateProvider.simple(Blocks.DIRT)).forceDirt().ignoreVines().build()));
 		
 		context.register(SPACE_TREE, new ConfiguredFeature<>(Feature.TREE,
-				new TreeConfiguration.TreeConfigurationBuilder(BlockStateProvider.simple(AspectTreeBlocks.SPACE_ASPECT_LOG.get().defaultBlockState()),
+				new TreeConfiguration.TreeConfigurationBuilder(BlockStateProvider.simple(AspectTreeBlocks.SPACE_ASPECT_LOG.asBlock().defaultBlockState()),
 						new FancyTrunkPlacer(10, 4, 0),
-						BlockStateProvider.simple(AspectTreeBlocks.SPACE_ASPECT_LEAVES.get().defaultBlockState()),
+						BlockStateProvider.simple(AspectTreeBlocks.SPACE_ASPECT_LEAVES.asBlock().defaultBlockState()),
 						new CherryFoliagePlacer(ConstantInt.of(3), ConstantInt.of(1), ConstantInt.of(4), 0.25F, 0.5F, 0.5F, 0.33333334F),
 						new TwoLayersFeatureSize(1, 0, 1))
 						.dirt(BlockStateProvider.simple(Blocks.DIRT)).forceDirt().ignoreVines().build()));
 		
 		context.register(TIME_TREE, new ConfiguredFeature<>(Feature.TREE,
-				new TreeConfiguration.TreeConfigurationBuilder(BlockStateProvider.simple(AspectTreeBlocks.TIME_ASPECT_LOG.get().defaultBlockState()),
+				new TreeConfiguration.TreeConfigurationBuilder(BlockStateProvider.simple(AspectTreeBlocks.TIME_ASPECT_LOG.asBlock().defaultBlockState()),
 						new StraightTrunkPlacer(6, 4, 0),
-						BlockStateProvider.simple(AspectTreeBlocks.TIME_ASPECT_LEAVES.get().defaultBlockState()),
+						BlockStateProvider.simple(AspectTreeBlocks.TIME_ASPECT_LEAVES.asBlock().defaultBlockState()),
 						new BlobFoliagePlacer(ConstantInt.of(2), ConstantInt.of(0), 3),
 						new TwoLayersFeatureSize(1, 0, 1))
 						.dirt(BlockStateProvider.simple(Blocks.DIRT)).forceDirt().ignoreVines().build()));
 		
 		context.register(VOID_TREE, new ConfiguredFeature<>(Feature.TREE,
-				new TreeConfiguration.TreeConfigurationBuilder(BlockStateProvider.simple(AspectTreeBlocks.VOID_ASPECT_LOG.get().defaultBlockState()),
+				new TreeConfiguration.TreeConfigurationBuilder(BlockStateProvider.simple(AspectTreeBlocks.VOID_ASPECT_LOG.asBlock().defaultBlockState()),
 						new StraightTrunkPlacer(5, 2, 0),
-						BlockStateProvider.simple(AspectTreeBlocks.VOID_ASPECT_LEAVES.get().defaultBlockState()),
+						BlockStateProvider.simple(AspectTreeBlocks.VOID_ASPECT_LEAVES.asBlock().defaultBlockState()),
 						new CherryFoliagePlacer(ConstantInt.of(4), ConstantInt.of(1), ConstantInt.of(4), 0.1F, 0.1F, 0.75F, 0.5F),
 						new TwoLayersFeatureSize(1, 0, 1))
 						.dirt(BlockStateProvider.simple(Blocks.DIRT)).forceDirt().ignoreVines().build()));

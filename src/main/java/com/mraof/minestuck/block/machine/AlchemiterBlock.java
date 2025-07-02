@@ -8,7 +8,6 @@ import com.mraof.minestuck.util.MSRotationUtil;
 import net.minecraft.MethodsReturnNonnullByDefault;
 import net.minecraft.core.BlockPos;
 import net.minecraft.core.Direction;
-import net.minecraft.world.InteractionHand;
 import net.minecraft.world.InteractionResult;
 import net.minecraft.world.entity.player.Player;
 import net.minecraft.world.level.BlockGetter;
@@ -30,15 +29,17 @@ import java.util.Optional;
 
 @ParametersAreNonnullByDefault
 @MethodsReturnNonnullByDefault
-public class AlchemiterBlock extends MultiMachineBlock<AlchemiterMultiblock> implements EditmodeDestroyable
+public class AlchemiterBlock extends MachineBlock implements EditmodeDestroyable
 {
 	protected final Map<Direction, VoxelShape> shape;
 	protected final boolean recursive, corner;
 	protected final BlockPos mainPos;
+	protected final AlchemiterMultiblock multiblock;
 	
-	public AlchemiterBlock(AlchemiterMultiblock machine, CustomVoxelShape shape, boolean recursive, boolean corner, BlockPos mainPos, Properties properties)
+	public AlchemiterBlock(AlchemiterMultiblock multiblock, CustomVoxelShape shape, boolean recursive, boolean corner, BlockPos mainPos, Properties properties)
 	{
-		super(machine, properties);
+		super(properties);
+		this.multiblock = multiblock;
 		this.shape = shape.createRotatedShapes();
 		this.recursive = recursive;
 		this.corner = corner;
@@ -46,15 +47,13 @@ public class AlchemiterBlock extends MultiMachineBlock<AlchemiterMultiblock> imp
 	}
 	
 	@Override
-	@SuppressWarnings("deprecation")
-	public VoxelShape getShape(BlockState state, BlockGetter level, BlockPos pos, CollisionContext context)
+	protected VoxelShape getShape(BlockState state, BlockGetter level, BlockPos pos, CollisionContext context)
 	{
 		return shape.get(state.getValue(FACING));
 	}
 	
 	@Override
-	@SuppressWarnings("deprecation")
-	public InteractionResult use(BlockState state, Level level, BlockPos pos, Player player, InteractionHand handIn, BlockHitResult hit)
+	protected InteractionResult useWithoutItem(BlockState state, Level level, BlockPos pos, Player player, BlockHitResult hit)
 	{
 		Optional<BlockPos> mainPos = getMainPos(state, pos, level);
 		
@@ -67,8 +66,7 @@ public class AlchemiterBlock extends MultiMachineBlock<AlchemiterMultiblock> imp
 	}
 	
 	@Override
-	@SuppressWarnings("deprecation")
-	public void onRemove(BlockState state, Level level, BlockPos pos, BlockState newState, boolean isMoving)
+	protected void onRemove(BlockState state, Level level, BlockPos pos, BlockState newState, boolean isMoving)
 	{
 		if(state.getBlock() != newState.getBlock())
 		{
@@ -90,13 +88,13 @@ public class AlchemiterBlock extends MultiMachineBlock<AlchemiterMultiblock> imp
 	public void destroyFull(BlockState state, Level level, BlockPos pos)
 	{
 		var placement = this.getMainPos(state, pos, level)
-				.flatMap(mainPos -> this.machine.findPlacementFromPad(level, mainPos));
+				.flatMap(mainPos -> this.multiblock.findPlacementFromPad(level, mainPos));
 		if(placement.isPresent())
-			this.machine.removeAt(level, placement.get());
+			this.multiblock.removeAt(level, placement.get());
 		else
 		{
-			for(var placementGuess : this.machine.guessPlacement(pos, state))
-				this.machine.removeAt(level, placementGuess);
+			for(var placementGuess : this.multiblock.guessPlacement(pos, state))
+				this.multiblock.removeAt(level, placementGuess);
 		}
 	}
 	
@@ -141,12 +139,10 @@ public class AlchemiterBlock extends MultiMachineBlock<AlchemiterMultiblock> imp
 		}
 		
 		@Override
-		public VoxelShape getShape(BlockState state, BlockGetter worldIn, BlockPos pos, CollisionContext context)
+		protected VoxelShape getShape(BlockState state, BlockGetter worldIn, BlockPos pos, CollisionContext context)
 		{
 			if(state.getValue(DOWEL).equals(EnumDowelType.NONE))
-			{
 				return super.getShape(state, worldIn, pos, context);
-			}
 			
 			return dowelShape.get(state.getValue(FACING));
 		}

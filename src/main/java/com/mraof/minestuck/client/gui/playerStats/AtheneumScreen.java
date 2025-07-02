@@ -18,7 +18,7 @@ import java.time.Month;
 public class AtheneumScreen extends PlayerStatsContainerScreen<AtheneumMenu>
 {
 	public static final String TITLE = "minestuck.atheneum";
-	private static final ResourceLocation GUI_BACKGROUND = new ResourceLocation("minestuck", "textures/gui/gui_inv_atheneum.png");
+	private static final ResourceLocation GUI_BACKGROUND = ResourceLocation.fromNamespaceAndPath("minestuck", "textures/gui/gui_inv_atheneum.png");
 	private static final int UP_ARROW_Y = 14, DOWN_ARROW_Y = 48, ARROW_X = 151;
 	
 	public boolean more, less;
@@ -79,7 +79,7 @@ public class AtheneumScreen extends PlayerStatsContainerScreen<AtheneumMenu>
 			}
 			if(packet != null)
 			{
-				PacketDistributor.SERVER.noArg().send(packet);
+				PacketDistributor.sendToServer(packet);
 				return true;
 			}
 		}
@@ -101,7 +101,7 @@ public class AtheneumScreen extends PlayerStatsContainerScreen<AtheneumMenu>
 				
 				if(packet != null)
 				{
-					PacketDistributor.SERVER.noArg().send(packet);
+					PacketDistributor.sendToServer(packet);
 					return true;
 				}
 			}

@@ -4,6 +4,7 @@ import com.mraof.minestuck.util.ColorHandler;
 import com.mraof.minestuck.world.GateHandler;
 import net.minecraft.MethodsReturnNonnullByDefault;
 import net.minecraft.core.BlockPos;
+import net.minecraft.core.HolderLookup;
 import net.minecraft.nbt.CompoundTag;
 import net.minecraft.network.Connection;
 import net.minecraft.network.protocol.Packet;
@@ -44,25 +45,25 @@ public class GateBlockEntity extends OnCollisionTeleporterBlockEntity<ServerPlay
 	}
 	
 	@Override
-	public void load(CompoundTag nbt)
+	protected void loadAdditional(CompoundTag nbt, HolderLookup.Provider pRegistries)
 	{
-		super.load(nbt);
+		super.loadAdditional(nbt, pRegistries);
 		if(nbt.contains("gate_type"))
 			this.gateType = GateHandler.Type.fromString(nbt.getString("gate_type"));
 	}
 	
 	@Override
-	public void saveAdditional(CompoundTag compound)
+	public void saveAdditional(CompoundTag compound, HolderLookup.Provider provider)
 	{
-		super.saveAdditional(compound);
+		super.saveAdditional(compound, provider);
 		if(this.gateType != null)
 			compound.putString("gate_type", gateType.toString());
 	}
 	
 	@Override
-	public CompoundTag getUpdateTag()
+	public CompoundTag getUpdateTag(HolderLookup.Provider provider)
 	{
-		CompoundTag nbt = super.getUpdateTag();
+		CompoundTag nbt = super.getUpdateTag(provider);
 		nbt.putInt("color", ColorHandler.getColorForDimension((ServerLevel) level));
 		return nbt;
 	}
@@ -74,15 +75,15 @@ public class GateBlockEntity extends OnCollisionTeleporterBlockEntity<ServerPlay
 	}
 	
 	@Override
-	public void handleUpdateTag(CompoundTag tag)
+	public void handleUpdateTag(CompoundTag tag, HolderLookup.Provider lookupProvider)
 	{
 		this.color = tag.getInt("color");
 	}
 	
 	@Override
-	public void onDataPacket(Connection net, ClientboundBlockEntityDataPacket pkt)
+	public void onDataPacket(Connection net, ClientboundBlockEntityDataPacket pkt, HolderLookup.Provider lookupProvider)
 	{
-		handleUpdateTag(pkt.getTag());
+		handleUpdateTag(pkt.getTag(), lookupProvider);
 	}
 	
 }

@@ -2,11 +2,15 @@ package com.mraof.minestuck.network.computer;
 
 import com.mraof.minestuck.Minestuck;
 import com.mraof.minestuck.blockentity.ComputerBlockEntity;
+import com.mraof.minestuck.computer.SburbClientData;
+import com.mraof.minestuck.computer.SburbServerData;
 import com.mraof.minestuck.network.MSPacket;
 import net.minecraft.core.BlockPos;
 import net.minecraft.network.FriendlyByteBuf;
-import net.minecraft.resources.ResourceLocation;
+import net.minecraft.network.codec.ByteBufCodecs;
+import net.minecraft.network.codec.StreamCodec;
 import net.minecraft.server.level.ServerPlayer;
+import net.neoforged.neoforge.network.handling.IPayloadContext;
 
 /**
  * This packet tells the server to clear the message for the
@@ -18,35 +22,31 @@ import net.minecraft.server.level.ServerPlayer;
  */
 public record ClearMessagePacket(BlockPos computerPos, int program) implements MSPacket.PlayToServer
 {
-	public static final ResourceLocation ID = Minestuck.id("clear_message");
+	public static final Type<ClearMessagePacket> ID = new Type<>(Minestuck.id("clear_message"));
+	public static final StreamCodec<FriendlyByteBuf, ClearMessagePacket> STREAM_CODEC = StreamCodec.composite(
+			BlockPos.STREAM_CODEC,
+			ClearMessagePacket::computerPos,
+			ByteBufCodecs.INT,
+			ClearMessagePacket::program,
+			ClearMessagePacket::new
+	);
+	
 	
 	@Override
-	public ResourceLocation id()
+	public Type<ClearMessagePacket> type()
 	{
 		return ID;
 	}
 	
-	@Override
-	public void write(FriendlyByteBuf buffer)
-	{
-		buffer.writeBlockPos(computerPos);
-		buffer.writeInt(program);
-	}
-	
-	public static ClearMessagePacket read(FriendlyByteBuf buffer)
-	{
-		BlockPos computer = buffer.readBlockPos();
-		int program = buffer.readInt();
-		
-		return new ClearMessagePacket(computer, program);
-	}
 	
 	@Override
-	public void execute(ServerPlayer player)
+	public void execute(IPayloadContext context, ServerPlayer player)
 	{
 		ComputerBlockEntity.getAccessibleComputer(player, computerPos).ifPresent(computer -> {
-			computer.latestmessage.put(program, "");
-			computer.markBlockForUpdate();
+			if(program == 0)
+				computer.getSburbClientData().ifPresent(SburbClientData::clearEventMessage);
+			if(program == 1)
+				computer.getSburbServerData().ifPresent(SburbServerData::clearEventMessage);
 		});
 	}
 }

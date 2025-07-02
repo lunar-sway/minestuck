@@ -1,7 +1,8 @@
 package com.mraof.minestuck.inventory.captchalogue;
 
-import com.mraof.minestuck.alchemy.AlchemyHelper;
+import com.mraof.minestuck.item.CaptchaCardItem;
 import com.mraof.minestuck.item.MSItems;
+import com.mraof.minestuck.item.components.MSItemComponents;
 import net.minecraft.core.NonNullList;
 import net.minecraft.server.level.ServerPlayer;
 import net.minecraft.world.item.ItemStack;
@@ -44,11 +45,11 @@ public class QueueModus extends StackModus
 		
 		ItemStack item = list.removeLast();
 		markDirty();
-		if(asCard && !(item.getItem() == MSItems.CAPTCHA_CARD.get() && item.hasTag() && !item.getTag().getBoolean("punched") && item.getTag().contains("id")))
+		if(asCard && !(CaptchaCardItem.isUnpunchedCard(item) && item.has(MSItemComponents.CARD_STORED_ITEM)))
 		{
 			size--;
 			markDirty();
-			return AlchemyHelper.createCard(item, player.server);
+			return CaptchaCardItem.createCardWithItem(item, player.server);
 		}
 		else return item;
 	}

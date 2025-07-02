@@ -1,0 +1,11 @@
+{
+  "type": "minestuck:combination",
+  "input1": {
+    "item": "minecraft:sculk"
+  },
+  "input2": {
+    "item": "minecraft:glow_lichen"
+  },
+  "mode": "and",
+  "output": "minecraft:sculk_vein"
+}

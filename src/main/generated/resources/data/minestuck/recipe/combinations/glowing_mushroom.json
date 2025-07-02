@@ -1,0 +1,11 @@
+{
+  "type": "minestuck:combination",
+  "input1": {
+    "item": "minecraft:brown_mushroom"
+  },
+  "input2": {
+    "item": "minecraft:glowstone_dust"
+  },
+  "mode": "or",
+  "output": "minestuck:glowing_mushroom"
+}

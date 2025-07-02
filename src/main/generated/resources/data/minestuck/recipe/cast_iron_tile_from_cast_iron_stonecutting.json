@@ -1,0 +1,10 @@
+{
+  "type": "minecraft:stonecutting",
+  "ingredient": {
+    "item": "minestuck:cast_iron"
+  },
+  "result": {
+    "count": 1,
+    "id": "minestuck:cast_iron_tile"
+  }
+}

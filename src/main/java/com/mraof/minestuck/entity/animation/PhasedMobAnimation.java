@@ -1,5 +1,6 @@
 package com.mraof.minestuck.entity.animation;
 
+import net.minecraft.core.Holder;
 import net.minecraft.world.entity.PathfinderMob;
 import net.minecraft.world.entity.ai.attributes.Attribute;
 import net.minecraft.world.entity.ai.attributes.Attributes;
@@ -18,7 +19,7 @@ public class PhasedMobAnimation
 	private final int recoveryStart;
 	private final int recoveryEnd;
 	@Nullable
-	private final Attribute speedModifyingAttribute;
+	private final Holder<Attribute> speedModifyingAttribute;
 	
 	public 	PhasedMobAnimation(MobAnimation animation, int initiationStart, int contactStart, int recoveryStart, int recoveryEnd)
 	{
@@ -31,7 +32,7 @@ public class PhasedMobAnimation
 	 * @param contactStart the apex of animations, when attacks connect
 	 * @param speedModifyingAttribute the entity attribute responsible for affecting the animation's speed
 	 */
-	public PhasedMobAnimation(MobAnimation animation, int initiationStart, int contactStart, int recoveryStart, int recoveryEnd, @Nullable Attribute speedModifyingAttribute)
+	public PhasedMobAnimation(MobAnimation animation, int initiationStart, int contactStart, int recoveryStart, int recoveryEnd, @Nullable Holder<Attribute> speedModifyingAttribute)
 	{
 		this.animation = animation;
 		this.initiationStart = initiationStart;
@@ -42,7 +43,7 @@ public class PhasedMobAnimation
 	}
 	
 	@Nullable
-	public Attribute getSpeedModifyingAttribute()
+	public Holder<Attribute> getSpeedModifyingAttribute()
 	{
 		return speedModifyingAttribute;
 	}

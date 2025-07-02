@@ -3,5 +3,7 @@
     "type": "minestuck:title_land_type",
     "land_type": "minestuck:wind"
   },
-  "dialogue": "minestuck:consort/pipe_network"
+  "dialogue": "minestuck:consort/pipe_network",
+  "dialogue_weight": 10,
+  "keep_on_reset": false
 }

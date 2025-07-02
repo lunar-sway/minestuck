@@ -69,7 +69,7 @@ public class ListArgument<T> implements ArgumentType<List<T>>
 		@SuppressWarnings("unchecked")
 		private static <A extends ArgumentType<?>, T extends ArgumentTypeInfo.Template<A>> void serializeArgument(FriendlyByteBuf buffer, ArgumentTypeInfo<A, T> argumentInfo, ArgumentTypeInfo.Template<A> template)
 		{
-			buffer.writeId(BuiltInRegistries.COMMAND_ARGUMENT_TYPE, argumentInfo);
+			buffer.writeById(BuiltInRegistries.COMMAND_ARGUMENT_TYPE::getId, argumentInfo);
 			argumentInfo.serializeToNetwork((T)template, buffer);
 		}
 		
@@ -78,7 +78,7 @@ public class ListArgument<T> implements ArgumentType<List<T>>
 		{
 			try
 			{
-				ArgumentTypeInfo<?, ?> elementArgInfo = buffer.readById(BuiltInRegistries.COMMAND_ARGUMENT_TYPE);
+				ArgumentTypeInfo<?, ?> elementArgInfo = buffer.readById(BuiltInRegistries.COMMAND_ARGUMENT_TYPE::byId);
 				return new Template((ArgumentTypeInfo.Template<? extends ArgumentType<T>>) elementArgInfo.deserializeFromNetwork(buffer));
 			} catch(Exception e)
 			{

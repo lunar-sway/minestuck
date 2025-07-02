@@ -1,0 +1,31 @@
+{
+  "parent": "minestuck:minestuck/commune",
+  "criteria": {
+    "has_french_fry": {
+      "conditions": {
+        "item": {
+          "items": "minestuck:french_fry"
+        }
+      },
+      "trigger": "minecraft:consume_item"
+    }
+  },
+  "display": {
+    "description": {
+      "translate": "advancements.minestuck.french_fry.description"
+    },
+    "icon": {
+      "count": 1,
+      "id": "minestuck:french_fry"
+    },
+    "title": {
+      "translate": "advancements.minestuck.french_fry.title"
+    }
+  },
+  "requirements": [
+    [
+      "has_french_fry"
+    ]
+  ],
+  "sends_telemetry_event": true
+}

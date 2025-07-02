@@ -1,0 +1,11 @@
+{
+  "type": "minestuck:combination",
+  "input1": {
+    "item": "minestuck:metal_bat"
+  },
+  "input2": {
+    "item": "minestuck:horn"
+  },
+  "mode": "or",
+  "output": "minestuck:clown_club"
+}

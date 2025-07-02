@@ -1,0 +1,13 @@
+{
+  "type": "minecraft:crafting_shapeless",
+  "category": "building",
+  "ingredients": [
+    {
+      "item": "minestuck:prospit_ferrostrata"
+    }
+  ],
+  "result": {
+    "count": 1,
+    "id": "minestuck:prospit_ferrostrata_pressure_plate"
+  }
+}

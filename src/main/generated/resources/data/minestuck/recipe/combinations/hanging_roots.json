@@ -1,0 +1,11 @@
+{
+  "type": "minestuck:combination",
+  "input1": {
+    "item": "minecraft:vine"
+  },
+  "input2": {
+    "item": "minecraft:dead_bush"
+  },
+  "mode": "or",
+  "output": "minecraft:hanging_roots"
+}

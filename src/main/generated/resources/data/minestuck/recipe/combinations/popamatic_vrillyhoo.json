@@ -1,0 +1,11 @@
+{
+  "type": "minestuck:combination",
+  "input1": {
+    "item": "minestuck:zillyhoo_hammer"
+  },
+  "input2": {
+    "item": "minestuck:fluorite_octet"
+  },
+  "mode": "and",
+  "output": "minestuck:popamatic_vrillyhoo"
+}

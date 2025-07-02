@@ -1,0 +1,11 @@
+{
+  "type": "minestuck:combination",
+  "input1": {
+    "item": "minestuck:claw_hammer"
+  },
+  "input2": {
+    "item": "minecraft:bricks"
+  },
+  "mode": "and",
+  "output": "minestuck:sledge_hammer"
+}

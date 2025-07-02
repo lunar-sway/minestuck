@@ -1,0 +1,22 @@
+{
+  "type": "minecraft:crafting_shaped",
+  "category": "misc",
+  "group": "terrain_ladder",
+  "key": {
+    "p": {
+      "item": "minestuck:treated_planks"
+    },
+    "s": {
+      "item": "minecraft:stick"
+    }
+  },
+  "pattern": [
+    "s s",
+    "sps",
+    "s s"
+  ],
+  "result": {
+    "count": 4,
+    "id": "minestuck:treated_ladder"
+  }
+}

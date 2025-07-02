@@ -14,7 +14,7 @@ import net.minecraft.world.level.levelgen.structure.templatesystem.StructureTemp
 
 public class TreatedChairFeature extends Feature<NoneFeatureConfiguration>
 {
-	private static final ResourceLocation TREATED_CHAIR = new ResourceLocation(Minestuck.MOD_ID, "treated_chair");
+	private static final ResourceLocation TREATED_CHAIR = ResourceLocation.fromNamespaceAndPath(Minestuck.MOD_ID, "treated_chair");
 	
 	public TreatedChairFeature(Codec<NoneFeatureConfiguration> codec)
 	{

@@ -1,7 +1,10 @@
 package com.mraof.minestuck.player;
 
+import com.mojang.serialization.Codec;
 import net.minecraft.network.chat.Component;
+import net.minecraft.util.StringRepresentable;
 
+import java.util.Locale;
 import java.util.stream.Stream;
 
 /**
@@ -11,7 +14,7 @@ import java.util.stream.Stream;
  * The <code>toString()</code> method is overridden and returns a lower-cased version of the title-class name.
  * @author kirderf1
  */
-public enum EnumClass
+public enum EnumClass implements StringRepresentable
 {
 	BARD(true), HEIR(true), KNIGHT(true),
 	MAGE(true), MAID(true), PAGE(true),
@@ -25,6 +28,8 @@ public enum EnumClass
 	{
 		this.usedInGeneration = usedInGeneration;
 	}
+	
+	public static final Codec<EnumClass> CODEC = StringRepresentable.fromEnum(EnumClass::values);
 	
 	/**
 	 * Used to get a title-class based on index. Used when reading a title-class from nbt.
@@ -54,7 +59,7 @@ public enum EnumClass
 	{
 		for(EnumClass c : values())
 		{
-			if(c.toString().equalsIgnoreCase(string))
+			if(c.getSerializedName().equalsIgnoreCase(string))
 				return c;
 		}
 		return null;
@@ -62,14 +67,18 @@ public enum EnumClass
 	
 	/**
 	 * Takes the enum name for this title-class and returns a lowercase version.
-	 * Aside from regular use of the method, it is useful for producing
-	 * the unlocalized name of the title-class using <code>"title." + titleClass.toString()</code>
 	 * @return the name of this title-class
 	 */
 	@Override
+	public String getSerializedName()
+	{
+		return this.name().toLowerCase(Locale.ROOT);
+	}
+	
+	@Override
 	public String toString()
 	{
-		return this.name().toLowerCase();
+		return this.getSerializedName();
 	}
 	
 	/**
@@ -84,7 +93,7 @@ public enum EnumClass
 	
 	public String getTranslationKey()
 	{
-		return "title.class." + this.toString();
+		return "title.class." + this.getSerializedName();
 	}
 	
 	public boolean isUsedInGeneration()

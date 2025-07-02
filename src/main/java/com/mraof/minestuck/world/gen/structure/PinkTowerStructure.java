@@ -1,6 +1,6 @@
 package com.mraof.minestuck.world.gen.structure;
 
-import com.mojang.serialization.Codec;
+import com.mojang.serialization.MapCodec;
 import com.mraof.minestuck.Minestuck;
 import com.mraof.minestuck.world.gen.feature.TemplatePlacement;
 import net.minecraft.MethodsReturnNonnullByDefault;
@@ -20,7 +20,7 @@ import java.util.Optional;
 @MethodsReturnNonnullByDefault
 public class PinkTowerStructure extends Structure
 {
-	public static final Codec<PinkTowerStructure> CODEC = simpleCodec(PinkTowerStructure::new);
+	public static final MapCodec<PinkTowerStructure> CODEC = simpleCodec(PinkTowerStructure::new);
 	
 	public PinkTowerStructure(StructureSettings settings)
 	{

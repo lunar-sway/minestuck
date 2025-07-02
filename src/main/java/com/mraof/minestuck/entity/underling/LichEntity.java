@@ -1,5 +1,6 @@
 package com.mraof.minestuck.entity.underling;
 
+import com.mraof.minestuck.Minestuck;
 import com.mraof.minestuck.alchemy.GristHelper;
 import com.mraof.minestuck.api.alchemy.GristType;
 import com.mraof.minestuck.api.alchemy.MutableGristSet;
@@ -9,6 +10,7 @@ import com.mraof.minestuck.entity.animation.MobAnimation;
 import com.mraof.minestuck.entity.animation.PhasedMobAnimation;
 import com.mraof.minestuck.player.EcheladderBonusType;
 import com.mraof.minestuck.util.MSSoundEvents;
+import net.minecraft.resources.ResourceLocation;
 import net.minecraft.sounds.SoundEvent;
 import net.minecraft.world.damagesource.DamageSource;
 import net.minecraft.world.entity.Entity;
@@ -20,11 +22,9 @@ import net.minecraft.world.entity.ai.attributes.Attributes;
 import net.minecraft.world.entity.ai.goal.Goal;
 import net.minecraft.world.level.Level;
 import software.bernie.geckolib.animatable.GeoEntity;
-import software.bernie.geckolib.core.animation.*;
-import software.bernie.geckolib.core.object.PlayState;
+import software.bernie.geckolib.animation.*;
 
 import javax.annotation.ParametersAreNonnullByDefault;
-import java.util.UUID;
 
 @ParametersAreNonnullByDefault
 public class LichEntity extends UnderlingEntity implements GeoEntity
@@ -92,8 +92,8 @@ public class LichEntity extends UnderlingEntity implements GeoEntity
 	protected void onGristTypeUpdated(GristType type)
 	{
 		super.onGristTypeUpdated(type);
-		applyGristModifier(Attributes.MAX_HEALTH, 30 * type.getPower(), AttributeModifier.Operation.ADDITION);
-		applyGristModifier(Attributes.ATTACK_DAMAGE, 3.4 * type.getPower(), AttributeModifier.Operation.ADDITION);
+		applyGristModifier(Attributes.MAX_HEALTH, 30 * type.getPower(), AttributeModifier.Operation.ADD_VALUE);
+		applyGristModifier(Attributes.ATTACK_DAMAGE, 3.4 * type.getPower(), AttributeModifier.Operation.ADD_VALUE);
 		this.xpReward = (int) (6.5 * type.getPower() + 4);
 	}
 	
@@ -188,8 +188,8 @@ public class LichEntity extends UnderlingEntity implements GeoEntity
 		return PlayState.STOP;
 	}
 	
-	private static final UUID RESISTANCE_MODIFIER_ATTACKING_UUID = UUID.fromString("7f03c94c-e287-11ec-8fea-0242ac120002");
-	private static final AttributeModifier RESISTANCE_MODIFIER_ATTACKING = new AttributeModifier(RESISTANCE_MODIFIER_ATTACKING_UUID, "Attacking resistance boost", 1, AttributeModifier.Operation.ADDITION);
+	private static final ResourceLocation RESISTANCE_MODIFIER_ATTACKING_ID = Minestuck.id("attacking_resistance");
+	private static final AttributeModifier RESISTANCE_MODIFIER_ATTACKING = new AttributeModifier(RESISTANCE_MODIFIER_ATTACKING_ID, 1, AttributeModifier.Operation.ADD_VALUE);
 	
 	private class AttackResistanceGoal extends Goal
 	{
@@ -203,7 +203,7 @@ public class LichEntity extends UnderlingEntity implements GeoEntity
 		public void start()
 		{
 			AttributeInstance instance = getAttributes().getInstance(Attributes.KNOCKBACK_RESISTANCE);
-			if(instance != null && !instance.hasModifier(RESISTANCE_MODIFIER_ATTACKING))
+			if(instance != null && !instance.hasModifier(RESISTANCE_MODIFIER_ATTACKING_ID))
 				instance.addTransientModifier(RESISTANCE_MODIFIER_ATTACKING);
 		}
 		
@@ -212,7 +212,7 @@ public class LichEntity extends UnderlingEntity implements GeoEntity
 		{
 			AttributeInstance instance = getAttributes().getInstance(Attributes.KNOCKBACK_RESISTANCE);
 			if(instance != null)
-				instance.removeModifier(RESISTANCE_MODIFIER_ATTACKING.getId());
+				instance.removeModifier(RESISTANCE_MODIFIER_ATTACKING_ID);
 		}
 	}
 }

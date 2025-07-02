@@ -1,0 +1,22 @@
+{
+  "type": "minecraft:crafting_shaped",
+  "category": "misc",
+  "key": {
+    "C": {
+      "item": "minestuck:cruxite_block"
+    },
+    "a": {
+      "item": "minestuck:captcha_card"
+    },
+    "c": {
+      "item": "minestuck:raw_cruxite"
+    }
+  },
+  "pattern": [
+    "Cac"
+  ],
+  "result": {
+    "count": 1,
+    "id": "minestuck:stack_modus_card"
+  }
+}

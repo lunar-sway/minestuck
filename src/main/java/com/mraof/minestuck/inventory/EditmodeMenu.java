@@ -138,7 +138,7 @@ public class EditmodeMenu extends AbstractContainerMenu
 		}
 		
 		CustomPacketPayload packet = new EditmodeInventoryPackets.Update(itemList, scroll > 0, scroll*2 + 14 < items.size());
-		PacketDistributor.PLAYER.with(serverPlayer).send(packet);
+		PacketDistributor.sendToPlayer(serverPlayer, packet);
 	}
 	
 	public void receiveUpdatePacket(EditmodeInventoryPackets.Update packet)

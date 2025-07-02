@@ -63,7 +63,7 @@ public class HashMapSylladexScreen extends SylladexScreen
 				public void onClick(int mouseButton)
 				{
 					if(this.item != null && mouseButton == 1)
-						PacketDistributor.SERVER.noArg().send(new CaptchaDeckPackets.GetItem(this.index, true));
+						PacketDistributor.sendToServer(new CaptchaDeckPackets.GetItem(this.index, true));
 					else
 						super.onClick(mouseButton);
 				}
@@ -106,7 +106,7 @@ public class HashMapSylladexScreen extends SylladexScreen
 		if(MinestuckConfig.SERVER.hashmapChatModusSetting.get() == MinestuckConfig.AvailableOptions.BOTH)
 		{
 			modus.ejectByChat = !modus.ejectByChat;
-			PacketDistributor.SERVER.noArg().send(new CaptchaDeckPackets.SetModusParameter((byte) 0, modus.ejectByChat ? 1 : 0));
+			PacketDistributor.sendToServer(new CaptchaDeckPackets.SetModusParameter((byte) 0, modus.ejectByChat ? 1 : 0));
 		}
 	}
 }

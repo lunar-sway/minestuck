@@ -1,0 +1,32 @@
+{
+  "parent": "minecraft:recipes/root",
+  "criteria": {
+    "has_igneous_stone": {
+      "conditions": {
+        "items": [
+          {
+            "items": "minestuck:igneous_stone"
+          }
+        ]
+      },
+      "trigger": "minecraft:inventory_changed"
+    },
+    "has_the_recipe": {
+      "conditions": {
+        "recipe": "minestuck:igneous_stone_stairs_from_igneous_stone_stonecutting"
+      },
+      "trigger": "minecraft:recipe_unlocked"
+    }
+  },
+  "requirements": [
+    [
+      "has_the_recipe",
+      "has_igneous_stone"
+    ]
+  ],
+  "rewards": {
+    "recipes": [
+      "minestuck:igneous_stone_stairs_from_igneous_stone_stonecutting"
+    ]
+  }
+}

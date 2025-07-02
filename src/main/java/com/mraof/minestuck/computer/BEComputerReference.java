@@ -1,6 +1,6 @@
 package com.mraof.minestuck.computer;
 
-import com.mojang.serialization.Codec;
+import com.mojang.serialization.MapCodec;
 import com.mojang.serialization.codecs.RecordCodecBuilder;
 import com.mraof.minestuck.blockentity.ComputerBlockEntity;
 import net.minecraft.core.GlobalPos;
@@ -12,7 +12,7 @@ import java.util.Objects;
 
 final class BEComputerReference implements ComputerReference
 {
-	static final Codec<BEComputerReference> CODEC = RecordCodecBuilder.create(instance ->
+	static final MapCodec<BEComputerReference> CODEC = RecordCodecBuilder.mapCodec(instance ->
 			instance.group(GlobalPos.CODEC.fieldOf("pos").forGetter(reference -> reference.location))
 					.apply(instance, BEComputerReference::new));
 	

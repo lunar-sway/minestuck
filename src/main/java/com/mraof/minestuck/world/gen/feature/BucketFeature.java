@@ -21,10 +21,10 @@ import net.minecraft.world.level.material.FluidState;
 
 public class BucketFeature extends Feature<NoneFeatureConfiguration>
 {
-	private static final ResourceLocation STRUCTURE_BUCKET_0 = new ResourceLocation(Minestuck.MOD_ID, "bucket_0");
-	private static final ResourceLocation STRUCTURE_BUCKET_1 = new ResourceLocation(Minestuck.MOD_ID, "bucket_1");
-	private static final ResourceLocation STRUCTURE_BUCKET_WITH_HANDLE_0 = new ResourceLocation(Minestuck.MOD_ID, "bucket_with_handle_0");
-	private static final ResourceLocation STRUCTURE_BUCKET_WITH_HANDLE_1 = new ResourceLocation(Minestuck.MOD_ID, "bucket_with_handle_1");
+	private static final ResourceLocation STRUCTURE_BUCKET_0 = ResourceLocation.fromNamespaceAndPath(Minestuck.MOD_ID, "bucket_0");
+	private static final ResourceLocation STRUCTURE_BUCKET_1 = ResourceLocation.fromNamespaceAndPath(Minestuck.MOD_ID, "bucket_1");
+	private static final ResourceLocation STRUCTURE_BUCKET_WITH_HANDLE_0 = ResourceLocation.fromNamespaceAndPath(Minestuck.MOD_ID, "bucket_with_handle_0");
+	private static final ResourceLocation STRUCTURE_BUCKET_WITH_HANDLE_1 = ResourceLocation.fromNamespaceAndPath(Minestuck.MOD_ID, "bucket_with_handle_1");
 	
 	public BucketFeature(Codec<NoneFeatureConfiguration> codec)
 	{
@@ -66,7 +66,7 @@ public class BucketFeature extends Feature<NoneFeatureConfiguration>
 		if(rand.nextBoolean())
 		{
 			StructureBlockRegistry blocks = StructureBlockRegistry.getOrDefault(context.chunkGenerator());
-			return blocks.getBlockState(rand.nextBoolean() ? "ocean" : "river");
+			return blocks.getBlockState(rand.nextBoolean() ? StructureBlockRegistry.OCEAN : StructureBlockRegistry.RIVER);
 		}
 		
 		SimpleWeightedRandomList.Builder<BlockState> list = SimpleWeightedRandomList.builder();

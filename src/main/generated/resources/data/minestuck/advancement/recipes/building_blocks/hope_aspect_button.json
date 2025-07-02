@@ -1,0 +1,32 @@
+{
+  "parent": "minecraft:recipes/root",
+  "criteria": {
+    "has_hope_aspect_planks": {
+      "conditions": {
+        "items": [
+          {
+            "items": "minestuck:hope_aspect_planks"
+          }
+        ]
+      },
+      "trigger": "minecraft:inventory_changed"
+    },
+    "has_the_recipe": {
+      "conditions": {
+        "recipe": "minestuck:hope_aspect_button"
+      },
+      "trigger": "minecraft:recipe_unlocked"
+    }
+  },
+  "requirements": [
+    [
+      "has_the_recipe",
+      "has_hope_aspect_planks"
+    ]
+  ],
+  "rewards": {
+    "recipes": [
+      "minestuck:hope_aspect_button"
+    ]
+  }
+}

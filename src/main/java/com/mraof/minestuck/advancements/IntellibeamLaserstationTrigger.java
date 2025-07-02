@@ -9,7 +9,6 @@ import net.minecraft.advancements.critereon.EntityPredicate;
 import net.minecraft.advancements.critereon.ItemPredicate;
 import net.minecraft.advancements.critereon.SimpleCriterionTrigger;
 import net.minecraft.server.level.ServerPlayer;
-import net.minecraft.util.ExtraCodecs;
 import net.minecraft.world.item.ItemStack;
 
 import javax.annotation.ParametersAreNonnullByDefault;
@@ -33,8 +32,8 @@ public class IntellibeamLaserstationTrigger extends SimpleCriterionTrigger<Intel
 	public record Instance(Optional<ContextAwarePredicate> player, Optional<ItemPredicate> item) implements SimpleCriterionTrigger.SimpleInstance
 	{
 		private static final Codec<Instance> CODEC = RecordCodecBuilder.create(instance -> instance.group(
-				ExtraCodecs.strictOptionalField(EntityPredicate.ADVANCEMENT_CODEC, "player").forGetter(Instance::player),
-				ExtraCodecs.strictOptionalField(ItemPredicate.CODEC, "item").forGetter(Instance::item)
+				EntityPredicate.ADVANCEMENT_CODEC.optionalFieldOf("player").forGetter(Instance::player),
+				ItemPredicate.CODEC.optionalFieldOf("item").forGetter(Instance::item)
 		).apply(instance, Instance::new));
 		
 		public static Criterion<Instance> any()
@@ -49,7 +48,7 @@ public class IntellibeamLaserstationTrigger extends SimpleCriterionTrigger<Intel
 		
 		public boolean test(ItemStack item)
 		{
-			return this.item.isEmpty() || this.item.get().matches(item);
+			return this.item.isEmpty() || this.item.get().test(item);
 		}
 	}
 }

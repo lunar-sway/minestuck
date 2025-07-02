@@ -9,7 +9,6 @@ import net.minecraft.core.Direction;
 import net.minecraft.core.particles.DustParticleOptions;
 import net.minecraft.server.level.ServerLevel;
 import net.minecraft.util.RandomSource;
-import net.minecraft.world.InteractionHand;
 import net.minecraft.world.InteractionResult;
 import net.minecraft.world.entity.player.Player;
 import net.minecraft.world.level.BlockGetter;
@@ -26,10 +25,12 @@ import net.minecraft.world.level.block.state.properties.BooleanProperty;
 import net.minecraft.world.phys.BlockHitResult;
 
 import javax.annotation.Nullable;
+import javax.annotation.ParametersAreNonnullByDefault;
 
 /**
  * Generates a redstone pulse through its block entity at a modifiable increment. Used as a compact means of creating redstone clocks
  */
+@ParametersAreNonnullByDefault
 public class RedstoneClockBlock extends MSDirectionalBlock implements EntityBlock
 {
 	public static final BooleanProperty POWERED = BlockStateProperties.POWERED;
@@ -41,8 +42,7 @@ public class RedstoneClockBlock extends MSDirectionalBlock implements EntityBloc
 	}
 	
 	@Override
-	@SuppressWarnings("deprecation")
-	public InteractionResult use(BlockState state, Level level, BlockPos pos, Player player, InteractionHand hand, BlockHitResult hit)
+	protected InteractionResult useWithoutItem(BlockState state, Level level, BlockPos pos, Player player, BlockHitResult hit)
 	{
 		if(level.getBlockEntity(pos) instanceof RedstoneClockBlockEntity be) //does not check for creative shock to anticipate use cases in timing puzzle designs
 		{
@@ -63,9 +63,8 @@ public class RedstoneClockBlock extends MSDirectionalBlock implements EntityBloc
 		return InteractionResult.PASS;
 	}
 	
-	@SuppressWarnings("deprecation")
 	@Override
-	public void tick(BlockState state, ServerLevel level, BlockPos pos, RandomSource rand)
+	protected void tick(BlockState state, ServerLevel level, BlockPos pos, RandomSource rand)
 	{
 		super.tick(state, level, pos, rand);
 		
@@ -75,16 +74,14 @@ public class RedstoneClockBlock extends MSDirectionalBlock implements EntityBloc
 		}
 	}
 	
-	@SuppressWarnings("deprecation")
 	@Override
-	public boolean isSignalSource(BlockState state)
+	protected boolean isSignalSource(BlockState state)
 	{
 		return state.getValue(POWERED);
 	}
 	
-	@SuppressWarnings("deprecation")
 	@Override
-	public int getSignal(BlockState blockState, BlockGetter level, BlockPos pos, Direction side)
+	protected int getSignal(BlockState blockState, BlockGetter level, BlockPos pos, Direction side)
 	{
 		return blockState.getValue(POWERED) ? 15 : 0;
 	}

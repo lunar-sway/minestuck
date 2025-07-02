@@ -1,0 +1,14 @@
+{
+  "type": "minecraft:smelting",
+  "category": "blocks",
+  "cookingtime": 200,
+  "experience": 0.1,
+  "group": "cruxite_blocks",
+  "ingredient": {
+    "item": "minestuck:cruxite_block"
+  },
+  "result": {
+    "count": 1,
+    "id": "minestuck:smooth_cruxite_block"
+  }
+}

@@ -1,0 +1,11 @@
+{
+  "type": "minestuck:combination",
+  "input1": {
+    "item": "minecraft:water_bucket"
+  },
+  "input2": {
+    "item": "minecraft:lava_bucket"
+  },
+  "mode": "or",
+  "output": "minestuck:obsidian_bucket"
+}

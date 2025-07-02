@@ -72,7 +72,7 @@ public final class WildcardGristCostBuilder
 	public void buildFor(RecipeOutput recipeOutput, String modId)
 	{
 		ResourceLocation name = Objects.requireNonNull(defaultName != null ? defaultName : BuiltInRegistries.ITEM.getKey(ingredient.getItems()[0].getItem()));
-		build(recipeOutput, new ResourceLocation(modId, name.getPath()));
+		build(recipeOutput, ResourceLocation.fromNamespaceAndPath(modId, name.getPath()));
 	}
 	
 	public void build(RecipeOutput recipeOutput, ResourceLocation id)

@@ -14,8 +14,8 @@ import net.minecraft.server.MinecraftServer;
 import net.minecraft.server.level.ServerPlayer;
 import net.minecraft.util.RandomSource;
 import net.neoforged.bus.api.SubscribeEvent;
-import net.neoforged.fml.common.Mod;
-import net.neoforged.neoforge.event.TickEvent;
+import net.neoforged.fml.common.EventBusSubscriber;
+import net.neoforged.neoforge.event.tick.ServerTickEvent;
 import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.Logger;
 
@@ -27,7 +27,7 @@ import java.util.stream.Stream;
  * A class that handles Grist overflow whenever you acquire too much grist.
  * @author Doro
  */
-@Mod.EventBusSubscriber(modid = Minestuck.MOD_ID, bus=Mod.EventBusSubscriber.Bus.FORGE)
+@EventBusSubscriber(modid = Minestuck.MOD_ID, bus = EventBusSubscriber.Bus.GAME)
 public class GristGutter
 {
 	private static final Logger LOGGER = LogManager.getLogger();
@@ -162,10 +162,10 @@ public class GristGutter
 	}
 	
 	@SubscribeEvent
-	public static void onServerTickEvent(TickEvent.ServerTickEvent event)
+	public static void onServerTickEvent(ServerTickEvent.Pre event)
 	{
 		//noinspection resource
-		if(event.phase == TickEvent.Phase.START && event.getServer().overworld().getGameTime() % 200 == 0)
+		if(event.getServer().overworld().getGameTime() % 200 == 0)
 		{
 			for(Session session : SessionHandler.get(event.getServer()).getSessions())
 				session.getGristGutter().distributeToPlayers();

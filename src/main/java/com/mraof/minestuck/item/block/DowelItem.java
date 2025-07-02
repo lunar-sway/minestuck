@@ -1,9 +1,10 @@
 package com.mraof.minestuck.item.block;
 
 import com.mraof.minestuck.block.CruxiteDowelBlock;
-import com.mraof.minestuck.item.AlchemizedColored;
-import com.mraof.minestuck.alchemy.AlchemyHelper;
 import com.mraof.minestuck.blockentity.ItemStackBlockEntity;
+import com.mraof.minestuck.item.AlchemizedColored;
+import com.mraof.minestuck.item.components.EncodedItemComponent;
+import com.mraof.minestuck.item.components.MSItemComponents;
 import net.minecraft.ChatFormatting;
 import net.minecraft.core.BlockPos;
 import net.minecraft.network.chat.Component;
@@ -31,17 +32,18 @@ public class DowelItem extends BlockItem implements AlchemizedColored
 	@Override
 	public int getMaxStackSize(ItemStack stack)
 	{
-		if(stack.hasTag())
+		if(stack.has(MSItemComponents.ENCODED_ITEM))
 			return 16;
 		else return 64;
 	}
 	
 	@Override
-	public void appendHoverText(ItemStack stack, @Nullable Level level, List<Component> tooltip, TooltipFlag flagIn)
+	public void appendHoverText(ItemStack stack, TooltipContext context, List<Component> tooltip, TooltipFlag flagIn)
 	{
-		if(AlchemyHelper.hasDecodedItem(stack))
+		EncodedItemComponent encodedItemComponent = stack.get(MSItemComponents.ENCODED_ITEM);
+		if(encodedItemComponent != null)
 		{
-			ItemStack containedStack = AlchemyHelper.getDecodedItem(stack);
+			ItemStack containedStack = encodedItemComponent.asItemStack();
 			
 			if(!containedStack.isEmpty())
 			{
@@ -63,7 +65,7 @@ public class DowelItem extends BlockItem implements AlchemizedColored
 			return null;
 		
 		ItemStack stack = context.getItemInHand();
-		if(AlchemyHelper.hasDecodedItem(stack))
+		if(stack.has(MSItemComponents.ENCODED_ITEM))
 			state = state.setValue(CruxiteDowelBlock.DOWEL_TYPE, CruxiteDowelBlock.Type.TOTEM);
 		else
 			state = state.setValue(CruxiteDowelBlock.DOWEL_TYPE, CruxiteDowelBlock.Type.DOWEL);

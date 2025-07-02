@@ -1,6 +1,7 @@
 package com.mraof.minestuck.item.loot;
 
 import com.mojang.serialization.Codec;
+import com.mojang.serialization.MapCodec;
 import com.mojang.serialization.codecs.RecordCodecBuilder;
 import com.mraof.minestuck.api.alchemy.GristSet;
 import com.mraof.minestuck.api.alchemy.recipe.GristCostRecipe;
@@ -24,7 +25,7 @@ import javax.annotation.Nonnull;
  */
 public class GristLootModifier extends LootModifier
 {
-	public static final Codec<GristLootModifier> CODEC = RecordCodecBuilder.create(instance ->
+	public static final MapCodec<GristLootModifier> CODEC = RecordCodecBuilder.mapCodec(instance ->
 			codecStart(instance)
 			.and(Codec.FLOAT.fieldOf("multiplier").forGetter(modifier -> modifier.multiplier)
 			).apply(instance, GristLootModifier::new));
@@ -63,7 +64,7 @@ public class GristLootModifier extends LootModifier
 	}
 	
 	@Override
-	public Codec<? extends GristLootModifier> codec()
+	public MapCodec<? extends GristLootModifier> codec()
 	{
 		return CODEC;
 	}

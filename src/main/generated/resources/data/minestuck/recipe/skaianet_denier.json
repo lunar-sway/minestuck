@@ -1,0 +1,27 @@
+{
+  "type": "minecraft:crafting_shaped",
+  "category": "misc",
+  "key": {
+    "e": {
+      "item": "minestuck:energy_core"
+    },
+    "i": {
+      "tag": "c:ingots/iron"
+    },
+    "p": {
+      "item": "minestuck:computer_parts"
+    },
+    "r": {
+      "item": "minecraft:lightning_rod"
+    }
+  },
+  "pattern": [
+    "iri",
+    "ipi",
+    "iei"
+  ],
+  "result": {
+    "count": 1,
+    "id": "minestuck:skaianet_denier"
+  }
+}

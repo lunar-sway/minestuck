@@ -1,0 +1,27 @@
+{
+  "type": "minecraft:crafting_shaped",
+  "category": "redstone",
+  "key": {
+    "c": {
+      "item": "minecraft:comparator"
+    },
+    "e": {
+      "item": "minestuck:plutonium_core"
+    },
+    "i": {
+      "item": "minecraft:iron_ingot"
+    },
+    "o": {
+      "item": "minecraft:observer"
+    }
+  },
+  "pattern": [
+    "ici",
+    "oeo",
+    "iii"
+  ],
+  "result": {
+    "count": 1,
+    "id": "minestuck:remote_comparator"
+  }
+}

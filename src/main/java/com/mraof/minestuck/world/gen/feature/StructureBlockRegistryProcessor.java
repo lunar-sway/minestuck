@@ -1,14 +1,18 @@
 package com.mraof.minestuck.world.gen.feature;
 
-import com.mojang.serialization.Codec;
+import com.mojang.serialization.MapCodec;
 import com.mraof.minestuck.world.gen.structure.blocks.StructureBlockRegistry;
 import net.minecraft.MethodsReturnNonnullByDefault;
 import net.minecraft.core.BlockPos;
 import net.minecraft.server.level.ServerLevel;
 import net.minecraft.world.level.ServerLevelAccessor;
+import net.minecraft.world.level.block.Blocks;
 import net.minecraft.world.level.block.state.BlockState;
 import net.minecraft.world.level.chunk.ChunkGenerator;
-import net.minecraft.world.level.levelgen.structure.templatesystem.*;
+import net.minecraft.world.level.levelgen.structure.templatesystem.StructurePlaceSettings;
+import net.minecraft.world.level.levelgen.structure.templatesystem.StructureProcessor;
+import net.minecraft.world.level.levelgen.structure.templatesystem.StructureProcessorType;
+import net.minecraft.world.level.levelgen.structure.templatesystem.StructureTemplate;
 
 import javax.annotation.ParametersAreNonnullByDefault;
 import java.util.List;
@@ -17,7 +21,7 @@ import java.util.List;
 @MethodsReturnNonnullByDefault
 public final class StructureBlockRegistryProcessor extends StructureProcessor
 {
-	public static final Codec<StructureBlockRegistryProcessor> CODEC = Codec.unit(() -> StructureBlockRegistryProcessor.INSTANCE);
+	public static final MapCodec<StructureBlockRegistryProcessor> CODEC = MapCodec.unit(() -> StructureBlockRegistryProcessor.INSTANCE);
 	public static final StructureBlockRegistryProcessor INSTANCE = new StructureBlockRegistryProcessor();
 	
 	private StructureBlockRegistryProcessor()
@@ -36,7 +40,8 @@ public final class StructureBlockRegistryProcessor extends StructureProcessor
 			StructureTemplate.StructureBlockInfo original = originals.get(i);
 			StructureTemplate.StructureBlockInfo current = currents.get(i);
 			
-			if(original.state() != current.state())
+			//blocks can be skipped past if it has already been changed so long as it was not first a jigsaw block
+			if(original.state() != current.state() && !original.state().is(Blocks.JIGSAW))
 				continue;
 			
 			BlockState newState = blockRegistry.getTemplateState(current.state());

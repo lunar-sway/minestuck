@@ -1,0 +1,11 @@
+{
+  "type": "minestuck:combination",
+  "input1": {
+    "item": "minecraft:obsidian"
+  },
+  "input2": {
+    "item": "minecraft:ghast_tear"
+  },
+  "mode": "or",
+  "output": "minecraft:crying_obsidian"
+}

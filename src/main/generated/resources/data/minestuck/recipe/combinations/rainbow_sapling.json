@@ -1,0 +1,11 @@
+{
+  "type": "minestuck:combination",
+  "input1": {
+    "item": "minestuck:rainbow_leaves"
+  },
+  "input2": {
+    "item": "minestuck:rainbow_log"
+  },
+  "mode": "or",
+  "output": "minestuck:rainbow_sapling"
+}

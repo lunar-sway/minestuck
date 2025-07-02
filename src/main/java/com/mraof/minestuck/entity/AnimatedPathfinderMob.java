@@ -1,18 +1,17 @@
 package com.mraof.minestuck.entity;
 
+import com.mraof.minestuck.Minestuck;
 import com.mraof.minestuck.entity.animation.MobAnimation;
 import net.minecraft.network.syncher.EntityDataAccessor;
 import net.minecraft.network.syncher.EntityDataSerializers;
 import net.minecraft.network.syncher.SynchedEntityData;
+import net.minecraft.resources.ResourceLocation;
 import net.minecraft.world.entity.EntityType;
 import net.minecraft.world.entity.PathfinderMob;
-import net.minecraft.world.entity.ai.attributes.Attribute;
 import net.minecraft.world.entity.ai.attributes.AttributeInstance;
 import net.minecraft.world.entity.ai.attributes.AttributeModifier;
 import net.minecraft.world.entity.ai.attributes.Attributes;
 import net.minecraft.world.level.Level;
-import software.bernie.geckolib.core.animatable.GeoAnimatable;
-import software.bernie.geckolib.core.animation.AnimationController;
 
 import java.util.UUID;
 
@@ -20,14 +19,13 @@ import java.util.UUID;
  * Abstract class for handling the action of Geckolib animated mobs. It keeps track of which animation is in use via a MobAnimation and EntityDataAccessor
  */
 public abstract class AnimatedPathfinderMob extends PathfinderMob
-{
+{	
 	/**
 	 * Retains the action from MobAnimation
 	 */
 	private static final EntityDataAccessor<Integer> CURRENT_ACTION = SynchedEntityData.defineId(AnimatedPathfinderMob.class, EntityDataSerializers.INT);
 	
-	private static final UUID FREEZE_MOB_UUID = UUID.fromString("e4c7543e-335c-4217-8d15-25c157e8ce88");
-	private static final AttributeModifier STATIONARY_MOB_MODIFIER = new AttributeModifier(FREEZE_MOB_UUID, "Stationary Animation Modifier", -1, AttributeModifier.Operation.MULTIPLY_TOTAL);
+	private static final AttributeModifier STATIONARY_MOB_MODIFIER = new AttributeModifier(Minestuck.id("stationary_animation_modifier"), -1, AttributeModifier.Operation.ADD_MULTIPLIED_TOTAL);
 	
 	private int remainingAnimationTicks; //starts off as the time value stored in mobAnimation when set. Will be set to -1 for looping animations
 	
@@ -38,10 +36,10 @@ public abstract class AnimatedPathfinderMob extends PathfinderMob
 	}
 	
 	@Override
-	protected void defineSynchedData()
+	protected void defineSynchedData(SynchedEntityData.Builder builder)
 	{
-		super.defineSynchedData();
-		entityData.define(CURRENT_ACTION, MobAnimation.IDLE_ACTION.ordinal());
+		super.defineSynchedData(builder);
+		builder.define(CURRENT_ACTION, MobAnimation.IDLE_ACTION.ordinal());
 	}
 	
 	@Override
@@ -79,7 +77,7 @@ public abstract class AnimatedPathfinderMob extends PathfinderMob
 	public void freezeMob()
 	{
 		AttributeInstance instance = getAttributes().getInstance(Attributes.MOVEMENT_SPEED);
-		if(instance != null && !instance.hasModifier(STATIONARY_MOB_MODIFIER))
+		if(instance != null && !instance.hasModifier(STATIONARY_MOB_MODIFIER.id()))
 			instance.addTransientModifier(STATIONARY_MOB_MODIFIER);
 	}
 	
@@ -87,7 +85,7 @@ public abstract class AnimatedPathfinderMob extends PathfinderMob
 	{
 		AttributeInstance instance = getAttributes().getInstance(Attributes.MOVEMENT_SPEED);
 		if(instance != null)
-			instance.removeModifier(STATIONARY_MOB_MODIFIER.getId());
+			instance.removeModifier(STATIONARY_MOB_MODIFIER);
 	}
 	
 	public void setCurrentAnimation(MobAnimation animation)

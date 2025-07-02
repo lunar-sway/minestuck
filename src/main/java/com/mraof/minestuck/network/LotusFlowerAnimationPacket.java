@@ -4,12 +4,24 @@ import com.mraof.minestuck.Minestuck;
 import com.mraof.minestuck.entity.LotusFlowerEntity;
 import net.minecraft.client.Minecraft;
 import net.minecraft.network.FriendlyByteBuf;
-import net.minecraft.resources.ResourceLocation;
+import net.minecraft.network.codec.ByteBufCodecs;
+import net.minecraft.network.codec.StreamCodec;
+import net.minecraft.network.protocol.common.custom.CustomPacketPayload;
 import net.minecraft.world.entity.Entity;
+import net.neoforged.neoforge.network.codec.NeoForgeStreamCodecs;
+import net.neoforged.neoforge.network.handling.IPayloadContext;
 
 public record LotusFlowerAnimationPacket(int entityID, LotusFlowerEntity.Animation animation) implements MSPacket.PlayToClient
 {
-	public static final ResourceLocation ID = Minestuck.id("lotus_flower_animation");
+	
+		public static final Type<LotusFlowerAnimationPacket> ID = new Type<>(Minestuck.id("lotus_flower_animation"));
+	public static final StreamCodec<FriendlyByteBuf, LotusFlowerAnimationPacket> STREAM_CODEC = StreamCodec.composite(
+			ByteBufCodecs.INT,
+			LotusFlowerAnimationPacket::entityID,
+			NeoForgeStreamCodecs.enumCodec(LotusFlowerEntity.Animation.class),
+			LotusFlowerAnimationPacket::animation,
+			LotusFlowerAnimationPacket::new
+	);
 	
 	public static LotusFlowerAnimationPacket createPacket(LotusFlowerEntity entity, LotusFlowerEntity.Animation animation)
 	{
@@ -17,28 +29,14 @@ public record LotusFlowerAnimationPacket(int entityID, LotusFlowerEntity.Animati
 	}
 	
 	@Override
-	public ResourceLocation id()
+	public Type<? extends CustomPacketPayload> type()
 	{
 		return ID;
 	}
 	
-	@Override
-	public void write(FriendlyByteBuf buffer)
-	{
-		buffer.writeInt(entityID);
-		buffer.writeEnum(animation);
-	}
-	
-	public static LotusFlowerAnimationPacket read(FriendlyByteBuf buffer)
-	{
-		int entityID = buffer.readInt(); //readInt spits out the values you gave to the PacketBuffer in encode in that order
-		LotusFlowerEntity.Animation animation = buffer.readEnum(LotusFlowerEntity.Animation.class);
-		
-		return new LotusFlowerAnimationPacket(entityID, animation);
-	}
 	
 	@Override
-	public void execute()
+	public void execute(IPayloadContext context)
 	{
 		Entity entity = Minecraft.getInstance().level.getEntity(entityID);
 		if(entity instanceof LotusFlowerEntity lotusFlower)

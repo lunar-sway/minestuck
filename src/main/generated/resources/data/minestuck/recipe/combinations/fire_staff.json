@@ -1,0 +1,11 @@
+{
+  "type": "minestuck:combination",
+  "input1": {
+    "item": "minestuck:wizard_staff"
+  },
+  "input2": {
+    "item": "minecraft:magma_cream"
+  },
+  "mode": "and",
+  "output": "minestuck:fire_staff"
+}

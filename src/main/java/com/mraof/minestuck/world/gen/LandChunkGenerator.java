@@ -1,7 +1,7 @@
 package com.mraof.minestuck.world.gen;
 
 import com.mojang.datafixers.util.Pair;
-import com.mojang.serialization.Codec;
+import com.mojang.serialization.MapCodec;
 import com.mojang.serialization.codecs.RecordCodecBuilder;
 import com.mraof.minestuck.entity.MSEntityTypes;
 import com.mraof.minestuck.entity.underling.UnderlingSpawnSettings;
@@ -45,7 +45,7 @@ import java.util.stream.Stream;
 @MethodsReturnNonnullByDefault
 public class LandChunkGenerator extends CustomizableNoiseChunkGenerator
 {
-	public static final Codec<LandChunkGenerator> CODEC = RecordCodecBuilder.create(instance -> instance.group(
+	public static final MapCodec<LandChunkGenerator> CODEC = RecordCodecBuilder.mapCodec(instance -> instance.group(
 			RegistryOps.retrieveGetter(Registries.NOISE),
 			RegistryOps.retrieveGetter(Registries.DENSITY_FUNCTION),
 			RegistryOps.retrieveGetter(Registries.STRUCTURE),
@@ -86,7 +86,7 @@ public class LandChunkGenerator extends CustomizableNoiseChunkGenerator
 	}
 	
 	@Override
-	protected Codec<? extends LandChunkGenerator> codec()
+	protected MapCodec<? extends LandChunkGenerator> codec()
 	{
 		return CODEC;
 	}
