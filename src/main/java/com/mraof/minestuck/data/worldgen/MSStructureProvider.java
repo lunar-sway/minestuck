@@ -13,16 +13,10 @@ import net.minecraft.core.HolderGetter;
 import net.minecraft.core.HolderSet;
 import net.minecraft.core.registries.Registries;
 import net.minecraft.data.worldgen.BootstrapContext;
-import net.minecraft.data.worldgen.BootstapContext;
-import net.minecraft.data.worldgen.Structures;
-import net.minecraft.data.worldgen.Structures;
 import net.minecraft.resources.ResourceKey;
 import net.minecraft.resources.ResourceLocation;
 import net.minecraft.world.level.biome.Biome;
 import net.minecraft.world.level.levelgen.GenerationStep;
-import net.minecraft.world.level.levelgen.Heightmap;
-import net.minecraft.world.level.levelgen.VerticalAnchor;
-import net.minecraft.world.level.levelgen.heightproviders.ConstantHeight;
 import net.minecraft.world.level.levelgen.Heightmap;
 import net.minecraft.world.level.levelgen.VerticalAnchor;
 import net.minecraft.world.level.levelgen.heightproviders.ConstantHeight;
@@ -31,7 +25,6 @@ import net.minecraft.world.level.levelgen.structure.StructureSet;
 import net.minecraft.world.level.levelgen.structure.TerrainAdjustment;
 import net.minecraft.world.level.levelgen.structure.placement.RandomSpreadStructurePlacement;
 import net.minecraft.world.level.levelgen.structure.placement.RandomSpreadType;
-import net.minecraft.world.level.levelgen.structure.structures.JigsawStructure;
 import net.minecraft.world.level.levelgen.structure.pools.StructureTemplatePool;
 import net.minecraft.world.level.levelgen.structure.structures.JigsawStructure;
 
@@ -69,7 +62,7 @@ public final class MSStructureProvider
 		context.register(SkaiaCastle.KEY, new CastleStructure(new Structure.StructureSettings(biomes.getOrThrow(MSTags.Biomes.HAS_SKAIA_CASTLE),
 				Map.of(), GenerationStep.Decoration.SURFACE_STRUCTURES, TerrainAdjustment.NONE)));
 		
-		context.register(SKAIAN_CATHEDRAL, new JigsawStructure(Structures.structure(biomes.getOrThrow(MSTags.Biomes.SKAIA),
+		context.register(SKAIAN_CATHEDRAL, new JigsawStructure(new Structure.StructureSettings(biomes.getOrThrow(MSTags.Biomes.HAS_SKAIAN_CATHEDRAL),
 				Map.of(), GenerationStep.Decoration.SURFACE_STRUCTURES, TerrainAdjustment.NONE), pools.getOrThrow(ResourceKey.create(Registries.TEMPLATE_POOL,
 				Minestuck.id("skaian_cathedral/front"))), 7, ConstantHeight.of(VerticalAnchor.absolute(-6)),
 				false, Heightmap.Types.WORLD_SURFACE_WG));
@@ -96,7 +89,7 @@ public final class MSStructureProvider
 				new RandomSpreadStructurePlacement(50, 40, RandomSpreadType.LINEAR, 6729346)));
 		
 		context.register(key("skaian_cathedral"), new StructureSet(structures.getOrThrow(SKAIAN_CATHEDRAL),
-				new RandomSpreadStructurePlacement(20, 10, RandomSpreadType.LINEAR, 1481098009)));
+				new RandomSpreadStructurePlacement(40, 10, RandomSpreadType.LINEAR, 1481098009)));
 		
 		context.register(key("prospit_wfc_demo"), new StructureSet(structures.getOrThrow(ProspitWFCDemoStructure.STRUCTURE),
 				new ProspitWFCDemoStructure.FixedPlacement()));
