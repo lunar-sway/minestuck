@@ -54,6 +54,8 @@ public final class MSConfiguredFeatureProvider
 		
 		context.register(VEIL_CRATER, new ConfiguredFeature<>(MSFeatures.VEIL_CRATER.get(), FeatureConfiguration.NONE));
 		
+		context.register(ROOK_OUTPOST, new ConfiguredFeature<>(MSFeatures.ROOK_OUTPOST.get(), FeatureConfiguration.NONE));
+		
 		var smallCog = context.register(SMALL_COG, new ConfiguredFeature<>(MSFeatures.SIMPLE_TEMPLATE.get(),
 				new SimpleTemplateFeature.Config(Minestuck.id("small_cog"), true,
 						SimpleTemplateFeature.HeightQueryType.MIN.with(Heightmap.Types.WORLD_SURFACE_WG, UniformInt.of(-2, 0)))));
