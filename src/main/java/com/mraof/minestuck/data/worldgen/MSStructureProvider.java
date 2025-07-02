@@ -17,11 +17,16 @@ import net.minecraft.resources.ResourceKey;
 import net.minecraft.resources.ResourceLocation;
 import net.minecraft.world.level.biome.Biome;
 import net.minecraft.world.level.levelgen.GenerationStep;
+import net.minecraft.world.level.levelgen.Heightmap;
+import net.minecraft.world.level.levelgen.VerticalAnchor;
+import net.minecraft.world.level.levelgen.heightproviders.ConstantHeight;
 import net.minecraft.world.level.levelgen.structure.Structure;
 import net.minecraft.world.level.levelgen.structure.StructureSet;
 import net.minecraft.world.level.levelgen.structure.TerrainAdjustment;
 import net.minecraft.world.level.levelgen.structure.placement.RandomSpreadStructurePlacement;
 import net.minecraft.world.level.levelgen.structure.placement.RandomSpreadType;
+import net.minecraft.world.level.levelgen.structure.pools.StructureTemplatePool;
+import net.minecraft.world.level.levelgen.structure.structures.JigsawStructure;
 
 import java.util.Map;
 
@@ -32,6 +37,7 @@ public final class MSStructureProvider
 	public static void registerStructures(BootstrapContext<Structure> context)
 	{
 		HolderGetter<Biome> biomes = context.lookup(Registries.BIOME);
+		HolderGetter<StructureTemplatePool> pools = context.lookup(Registries.TEMPLATE_POOL);
 		
 		// Overworld
 		context.register(FROG_TEMPLE, new FrogTempleStructure(new Structure.StructureSettings(biomes.getOrThrow(MSTags.Biomes.HAS_FROG_TEMPLE),
@@ -56,6 +62,11 @@ public final class MSStructureProvider
 		context.register(SkaiaCastle.KEY, new CastleStructure(new Structure.StructureSettings(biomes.getOrThrow(MSTags.Biomes.HAS_SKAIA_CASTLE),
 				Map.of(), GenerationStep.Decoration.SURFACE_STRUCTURES, TerrainAdjustment.NONE)));
 		
+		context.register(SKAIAN_CATHEDRAL, new JigsawStructure(new Structure.StructureSettings(biomes.getOrThrow(MSTags.Biomes.HAS_SKAIAN_CATHEDRAL),
+				Map.of(), GenerationStep.Decoration.SURFACE_STRUCTURES, TerrainAdjustment.NONE), pools.getOrThrow(ResourceKey.create(Registries.TEMPLATE_POOL,
+				Minestuck.id("skaian_cathedral/front"))), 7, ConstantHeight.of(VerticalAnchor.absolute(-6)),
+				false, Heightmap.Types.WORLD_SURFACE_WG));
+		
 		context.register(ProspitWFCDemoStructure.STRUCTURE, new ProspitWFCDemoStructure.TerrainStructure(
 				new Structure.StructureSettings(HolderSet.direct(biomes.getOrThrow(MSBiomes.PROSPIT_WFC_DEMO)),
 						Map.of(), GenerationStep.Decoration.SURFACE_STRUCTURES, TerrainAdjustment.NONE)));
@@ -76,6 +87,9 @@ public final class MSStructureProvider
 		// Skaia
 		context.register(key("skaia_castle"), new StructureSet(structures.getOrThrow(SkaiaCastle.KEY),
 				new RandomSpreadStructurePlacement(50, 40, RandomSpreadType.LINEAR, 6729346)));
+		
+		context.register(key("skaian_cathedral"), new StructureSet(structures.getOrThrow(SKAIAN_CATHEDRAL),
+				new RandomSpreadStructurePlacement(40, 10, RandomSpreadType.LINEAR, 1481098009)));
 		
 		context.register(key("prospit_wfc_demo"), new StructureSet(structures.getOrThrow(ProspitWFCDemoStructure.STRUCTURE),
 				new ProspitWFCDemoStructure.FixedPlacement()));

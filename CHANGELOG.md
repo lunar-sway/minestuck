@@ -11,7 +11,7 @@ The format is based on [Keep a Changelog](https://keepachangelog.com/en/1.1.0/).
 - New rook themed towers on the Battlefield
 - Increased number of blocks used in land specific structure block palettes
 - Land Type Extensions now support structure sets.
-  - The structure's biome settings must include land biomes
+- New Cathedral Structure on the Battlefield
 
 ### Changed
 
@@ -25,6 +25,7 @@ The format is based on [Keep a Changelog](https://keepachangelog.com/en/1.1.0/).
 - Fix emerald weapons dealing no damage
 - Fix armor stacking/durability/toughness
 - Fix farmine only mining a 3x3x3 cube around the block mined
+- Disabled Skaian Castle structure
 
 ### Removed
 
@@ -32,7 +33,7 @@ The format is based on [Keep a Changelog](https://keepachangelog.com/en/1.1.0/).
 
 ### Contributors for this release
 
-- medsal15, Dweblenod, TangleKat, kirderf1, shadowLink
+- medsal15, Dweblenod, TangleKat, kirderf1, shadowLink, ThalliumSulfate
 
 ## [1.20.1-1.12.1.1] - 2025-04-18
 
