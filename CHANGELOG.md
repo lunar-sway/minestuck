@@ -25,6 +25,7 @@ The format is based on [Keep a Changelog](https://keepachangelog.com/en/1.1.0/).
 - Fix armor stacking/durability/toughness
 - Fix farmine only mining a 3x3x3 cube around the block mined
 - Disabled Skaian Castle structure
+- Fix weapons not being enchantable
 
 ### Removed
 
