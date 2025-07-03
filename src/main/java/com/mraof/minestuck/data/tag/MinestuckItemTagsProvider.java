@@ -179,6 +179,7 @@ public class MinestuckItemTagsProvider extends ItemTagsProvider
 			}
 			return false;
 		}).toArray(Item[]::new));
+		tag(ItemTags.SWORD_ENCHANTABLE).add(MSItems.REGISTER.getEntries().stream().map(Supplier::get).filter(item -> item instanceof WeaponItem).toArray(Item[]::new));
 		tag(ItemTags.SHARP_WEAPON_ENCHANTABLE).add(MSItems.REGISTER.getEntries().stream().map(Supplier::get).filter(item -> item instanceof WeaponItem).toArray(Item[]::new));
 		tag(ItemTags.WEAPON_ENCHANTABLE).add(MSItems.REGISTER.getEntries().stream().map(Supplier::get).filter(item -> item instanceof WeaponItem).toArray(Item[]::new));
 		tag(ItemTags.FIRE_ASPECT_ENCHANTABLE).add(MSItems.REGISTER.getEntries().stream().map(Supplier::get).filter(item -> item instanceof WeaponItem).toArray(Item[]::new));
