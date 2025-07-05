@@ -10,6 +10,7 @@ The format is based on [Keep a Changelog](https://keepachangelog.com/en/1.1.0/).
 
 - New rook themed towers on the Battlefield
 - Increased number of blocks used in land specific structure block palettes
+- Land Type Extensions now support structure sets.
 - New Cathedral Structure on the Battlefield
 
 ### Changed
