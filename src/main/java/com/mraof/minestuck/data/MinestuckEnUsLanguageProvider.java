@@ -1697,14 +1697,17 @@ public class MinestuckEnUsLanguageProvider extends MinestuckLanguageProvider
 		addItemExtra(MSItems.FROG, "eyes.light", "Lighter Eyes");
 		addItemExtra(MSItems.FROG, "eyes.dark", "Darker Eyes");
 		addItemExtra(MSItems.FROG, "eyes.blank", "Blank Eyes");
+		addItemExtra(MSItems.FROG, "eyes.random", "Random Eyes");
 		addItemExtra(MSItems.FROG, "belly.solid", "Solid-Colored Belly");
 		addItemExtra(MSItems.FROG, "belly.spotted", "Spotted Belly");
 		addItemExtra(MSItems.FROG, "belly.striped", "Striped Belly");
+		addItemExtra(MSItems.FROG, "belly.random", "Random Belly");
 		addItemExtra(MSItems.FROG, "size.0", "Tiny");
 		addItemExtra(MSItems.FROG, "size.1", "Small");
 		addItemExtra(MSItems.FROG, "size.2", "Normal Sized");
 		addItemExtra(MSItems.FROG, "size.3", "Big");
 		addItemExtra(MSItems.FROG, "size.4", "Huge");
+		addItemExtra(MSItems.FROG, "size.random", "Random Size");
 		addItem(MSItems.CARVING_TOOL, "Carving Tool");
 		addItemStoreTooltip(MSItems.CARVING_TOOL, "You gotta BE the marble!");
 		addItem(MSItems.CRUMPLY_HAT, "Crumply Hat");

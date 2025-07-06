@@ -1,8 +1,8 @@
 {
-  "comparator_output": 3,
+  "comparator_output": 1,
   "description": {
-    "translate": "item.minestuck.music_disc_dance_stab_dance.desc"
+    "translate": "item.minestuck.music_disc_emissary_of_dance.desc"
   },
-  "length_in_seconds": 672.0,
-  "sound_event": "minestuck:music_disc.dance_stab_dance"
+  "length_in_seconds": 552.0,
+  "sound_event": "minestuck:music_disc.emissary_of_dance"
 }
