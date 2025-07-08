@@ -82,9 +82,7 @@ public abstract class PlayerStatsScreen extends MinestuckScreen
 		
 		public boolean reqMedium()
 		{
-			if(this == ECHELADDER)
-				return MinestuckConfig.SERVER.preEntryRungLimit.get() == 0;
-			else return this.reqMedium;
+			return this.reqMedium;
 		}
 		
 	}

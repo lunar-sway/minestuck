@@ -130,6 +130,23 @@ public class Rungs
 		return RUNGS.size() - 1;
 	}
 	
+	public static int getMaxAttainableRung(ServerPlayer serverPlayer)
+	{
+		int maxRung = 0;
+		
+		for(Rung rung : RUNGS)
+		{
+			Optional<Rung.RungCondition> rungCondition = rung.rungCondition();
+			
+			if(rungCondition.isPresent() && !rungCondition.get().canInitiateRung(serverPlayer))
+				break; //stop iterating maxRung when obstruction is met
+			
+			maxRung++;
+		}
+		
+		return maxRung;
+	}
+	
 	public List<Rung> getRungs()
 	{
 		return RUNGS;
