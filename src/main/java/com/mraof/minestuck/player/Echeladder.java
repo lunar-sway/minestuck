@@ -96,6 +96,8 @@ public final class Echeladder implements INBTSerializable<CompoundTag>
 		if(player == null)
 			return;
 		
+		//TODO reduce max attainable by one
+		
 		int topRung = Rungs.getMaxAttainableRung(player);
 		long expReq = Rungs.getProgressReq(rung);
 		

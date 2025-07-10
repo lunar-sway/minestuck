@@ -92,12 +92,13 @@ public record Rung(int rung, int backgroundColor, int textColor, long expRequire
 		}
 	}
 	
-	public record DisplayData(int backgroundColor, int textColor, long gristCapacity, DisplayAttributes attributes)
+	public record DisplayData(int backgroundColor, int textColor, long gristCapacity, String description, DisplayAttributes attributes)
 	{
 		public static final StreamCodec<FriendlyByteBuf, DisplayData> STREAM_CODEC = StreamCodec.composite(
 				ByteBufCodecs.INT, DisplayData::backgroundColor,
 				ByteBufCodecs.INT, DisplayData::textColor,
 				ByteBufCodecs.VAR_LONG, DisplayData::gristCapacity,
+				ByteBufCodecs.STRING_UTF8, DisplayData::description,
 				DisplayAttributes.STREAM_CODEC, DisplayData::attributes,
 				DisplayData::new);
 	}

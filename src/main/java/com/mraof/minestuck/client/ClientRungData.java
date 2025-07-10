@@ -14,7 +14,7 @@ import java.util.List;
 @EventBusSubscriber(modid = Minestuck.MOD_ID, bus = EventBusSubscriber.Bus.GAME, value = Dist.CLIENT)
 public final class ClientRungData
 {
-	private static final Rung.DisplayData DUMMY_DATA = new Rung.DisplayData(0xFFFFFF, 0x000000, 0,
+	private static final Rung.DisplayData DUMMY_DATA = new Rung.DisplayData(0xFFFFFF, 0x000000, 0, "",
 			new Rung.DisplayAttributes(0D, 0D, 1D, 1D));
 	private static List<Rung.DisplayData> RUNG_LIST = Collections.emptyList();
 	
