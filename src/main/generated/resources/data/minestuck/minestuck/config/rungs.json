@@ -61,6 +61,12 @@
     "exp_requirement": 115,
     "grist_capacity": 282,
     "rung": 7,
+    "rungCondition": {
+      "condition": {
+        "type": "minestuck:player_entered"
+      },
+      "description": "echeladder.must_enter"
+    },
     "text_color": 4144959
   },
   {

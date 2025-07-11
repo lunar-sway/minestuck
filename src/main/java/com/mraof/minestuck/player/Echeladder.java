@@ -6,7 +6,6 @@ import com.mraof.minestuck.advancements.MSCriteriaTriggers;
 import com.mraof.minestuck.computer.editmode.EditData;
 import com.mraof.minestuck.computer.editmode.ServerEditHandler;
 import com.mraof.minestuck.network.EcheladderDataPacket;
-import com.mraof.minestuck.skaianet.SburbPlayerData;
 import com.mraof.minestuck.util.MSAttachments;
 import com.mraof.minestuck.util.MSSoundEvents;
 import net.minecraft.MethodsReturnNonnullByDefault;
@@ -91,8 +90,12 @@ public final class Echeladder implements INBTSerializable<CompoundTag>
 	{
 		//for each rung, the experience is divided and approaches 0. If exp is smaller than 1, there is only a percent chance of contribution
 		exp = (exp / (rung + 1) * 2);
-		boolean hasEntered = SburbPlayerData.get(identifier, mcServer).hasEntered();
-		int topRung = hasEntered ? Rungs.finalRung() : MinestuckConfig.SERVER.preEntryRungLimit.get();
+		ServerPlayer player = identifier.getPlayer(mcServer);
+		
+		if(player == null)
+			return;
+		
+		int topRung = Rungs.getMaxAttainableRung(player) - 1;
 		long expReq = Rungs.getProgressReq(rung);
 		
 		if(rung >= topRung)
@@ -137,20 +140,15 @@ public final class Echeladder implements INBTSerializable<CompoundTag>
 		PlayerBoondollars.addBoondollars(PlayerData.get(identifier, mcServer), boondollarsGained);
 		
 		LOGGER.debug("Finished echeladder climbing for {} at {} with progress {}", identifier.getUsername(), rung, progress);
-		ServerPlayer player = identifier.getPlayer(mcServer);
-		if(player != null)
-		{
-			sendDataPacket(player, true);
-			if(rung != prevRung)
-			{
-				updateEcheladderBonuses(player);
-				MSCriteriaTriggers.ECHELADDER.get().trigger(player, rung);
-				player.level().playSound(null, player.getX(), player.getY(), player.getZ(), MSSoundEvents.EVENT_ECHELADDER_INCREASE.get(), SoundSource.AMBIENT, 1F, 1F);
-			}
-		}
+		
+		sendDataPacket(player, true);
 		
 		if(rung != prevRung)
 		{
+			updateEcheladderBonuses(player);
+			MSCriteriaTriggers.ECHELADDER.get().trigger(player, rung);
+			player.level().playSound(null, player.getX(), player.getY(), player.getZ(), MSSoundEvents.EVENT_ECHELADDER_INCREASE.get(), SoundSource.AMBIENT, 1F, 1F);
+			
 			EditData data = ServerEditHandler.getData(this.mcServer, this.identifier);
 			if(data != null)
 				data.sendCacheLimitToEditor();
