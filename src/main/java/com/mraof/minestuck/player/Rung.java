@@ -6,7 +6,6 @@ import com.mojang.serialization.codecs.RecordCodecBuilder;
 import com.mraof.minestuck.entity.dialogue.condition.Condition;
 import net.minecraft.core.Holder;
 import net.minecraft.network.FriendlyByteBuf;
-import net.minecraft.network.chat.Component;
 import net.minecraft.network.codec.ByteBufCodecs;
 import net.minecraft.network.codec.StreamCodec;
 import net.minecraft.resources.ResourceLocation;
@@ -15,8 +14,6 @@ import net.minecraft.world.effect.MobEffect;
 import net.minecraft.world.entity.ai.attributes.Attribute;
 import net.minecraft.world.entity.ai.attributes.AttributeInstance;
 import net.minecraft.world.entity.ai.attributes.AttributeModifier;
-import org.apache.logging.log4j.LogManager;
-import org.apache.logging.log4j.Logger;
 
 import java.util.List;
 import java.util.Optional;
@@ -78,11 +75,6 @@ public record Rung(int rung, int backgroundColor, int textColor, long expRequire
 				Codec.STRING.fieldOf("description").forGetter(RungCondition::description)
 		).apply(instance, RungCondition::new));
 		
-		public Component translatableDescription()
-		{
-			return Component.translatable(description);
-		}
-		
 		public boolean canInitiateRung(ServerPlayer player)
 		{
 			if(condition instanceof Condition.PlayerOnlyCondition playerOnlyCondition)
@@ -92,13 +84,13 @@ public record Rung(int rung, int backgroundColor, int textColor, long expRequire
 		}
 	}
 	
-	public record DisplayData(int backgroundColor, int textColor, long gristCapacity, String description, DisplayAttributes attributes)
+	public record DisplayData(int backgroundColor, int textColor, long gristCapacity, Optional<String> description, DisplayAttributes attributes)
 	{
 		public static final StreamCodec<FriendlyByteBuf, DisplayData> STREAM_CODEC = StreamCodec.composite(
 				ByteBufCodecs.INT, DisplayData::backgroundColor,
 				ByteBufCodecs.INT, DisplayData::textColor,
 				ByteBufCodecs.VAR_LONG, DisplayData::gristCapacity,
-				ByteBufCodecs.STRING_UTF8, DisplayData::description,
+				ByteBufCodecs.optional(ByteBufCodecs.STRING_UTF8), DisplayData::description,
 				DisplayAttributes.STREAM_CODEC, DisplayData::attributes,
 				DisplayData::new);
 	}

@@ -6,7 +6,6 @@ import com.mraof.minestuck.advancements.MSCriteriaTriggers;
 import com.mraof.minestuck.computer.editmode.EditData;
 import com.mraof.minestuck.computer.editmode.ServerEditHandler;
 import com.mraof.minestuck.network.EcheladderDataPacket;
-import com.mraof.minestuck.skaianet.SburbPlayerData;
 import com.mraof.minestuck.util.MSAttachments;
 import com.mraof.minestuck.util.MSSoundEvents;
 import net.minecraft.MethodsReturnNonnullByDefault;
@@ -96,9 +95,7 @@ public final class Echeladder implements INBTSerializable<CompoundTag>
 		if(player == null)
 			return;
 		
-		//TODO reduce max attainable by one
-		
-		int topRung = Rungs.getMaxAttainableRung(player);
+		int topRung = Rungs.getMaxAttainableRung(player) - 1;
 		long expReq = Rungs.getProgressReq(rung);
 		
 		if(rung >= topRung)

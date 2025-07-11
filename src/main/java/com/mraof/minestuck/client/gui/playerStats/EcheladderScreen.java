@@ -40,6 +40,7 @@ public class EcheladderScreen extends PlayerStatsScreen
 	
 	private static final int LADDER_X_OFFSET = 163;
 	private static final int RUNG_Y = 14;
+	private static final int VISIBLE_RUNG_COUNT = 12;
 	
 	private static final int GREY = 0x404040;
 	private static final int BLUE = 0x0094FF;
@@ -83,13 +84,15 @@ public class EcheladderScreen extends PlayerStatsScreen
 			Component name = Component.translatable(I18n.exists("echeladder.rung." + i) ? I18n.get("echeladder.rung." + i) : "Rung " + (i + 1));
 			
 			Optional<String> tooltip = Optional.empty();
-			String description = ClientRungData.getData(i).description();
+			String description = ClientRungData.getData(i).description().orElse("");
 			if(!description.isEmpty())
 				tooltip = Optional.of(description);
 			
 			RungBar rungBar = new RungBar(xOffset + 90, yOffset + 175 - i * RUNG_Y, 146, RUNG_Y, name, tooltip, i);
 			rungBars.add(rungBar);
 			addRenderableWidget(rungBar);
+			
+			rungBar.visible = i <= VISIBLE_RUNG_COUNT;
 		}
 	}
 	
@@ -106,7 +109,10 @@ public class EcheladderScreen extends PlayerStatsScreen
 		
 		drawTabs(guiGraphics);
 		
-		updateLadder();
+		rungBars.forEach(rungBar -> {
+			rungBar.setY(rungBar.initY + getScrollMod());
+			rungBar.updateVisibility();
+		});
 		
 		RenderSystem.setShaderColor(1, 1, 1, 1);
 		
@@ -172,16 +178,6 @@ public class EcheladderScreen extends PlayerStatsScreen
 				}
 			}
 		}
-	}
-	
-	private void updateLadder()
-	{
-		RenderSystem.setShaderColor(1, 1, 1, 1);
-		
-		rungBars.forEach(rungBar -> {
-			rungBar.setY(rungBar.initY + getScrollMod());
-			rungBar.updateVisibility();
-		});
 	}
 	
 	@Nullable
@@ -379,7 +375,7 @@ public class EcheladderScreen extends PlayerStatsScreen
 		
 		public void updateVisibility()
 		{
-			this.visible = rung >= scroll && rung <= scroll + 12;
+			this.visible = rung >= scroll && rung <= scroll + VISIBLE_RUNG_COUNT;
 		}
 		
 		@Override
