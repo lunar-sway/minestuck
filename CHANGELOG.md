@@ -21,6 +21,7 @@ The format is based on [Keep a Changelog](https://keepachangelog.com/en/1.1.0/).
 
 - Fix some items having 0 grist cost
 - Fix weapons having the wrong durability
+- Fix unbreakable katana and crowbar being breakable
 - Fix emerald weapons dealing no damage
 - Fix armor stacking/durability/toughness
 - Fix farmine only mining a 3x3x3 cube around the block mined
