@@ -49,7 +49,7 @@ public class EcheladderScreen extends PlayerStatsScreen
 	private static final int TIME_TILL_NEXT = TIME_BEFORE_NEXT + TIME_FOR_RUNG;
 	
 	private int scroll = 0;
-	private final int maxRung;
+	private final int maxScroll;
 	
 	private final List<RungBar> rungBars = new ArrayList<>();
 	
@@ -67,7 +67,7 @@ public class EcheladderScreen extends PlayerStatsScreen
 		guiWidth = 250;
 		guiHeight = 202;
 		
-		maxRung = ClientRungData.getFinalRungIndex() - 10;
+		maxScroll = ClientRungData.getFinalRungIndex() - 10;
 	}
 	
 	@Override
@@ -119,7 +119,7 @@ public class EcheladderScreen extends PlayerStatsScreen
 		guiGraphics.blit(guiEcheladder, xOffset, yOffset, 0, 0, guiWidth, guiHeight);
 		
 		//scroll bar
-		float scrollPercentage = (float) scroll / maxRung;
+		float scrollPercentage = (float) scroll / maxScroll;
 		guiGraphics.blit(guiEcheladder, xOffset + 80, (int) (yOffset + 42 + (130F * (1F - scrollPercentage))), 0, 243, 7, 13);
 		
 		List<Component> tooltip = drawEffectIconsAndText(guiGraphics, currentRung, mouseX, mouseY);
@@ -308,7 +308,7 @@ public class EcheladderScreen extends PlayerStatsScreen
 			else
 				scroll--;
 			
-			scroll = Mth.clamp(scroll, 0, maxRung);
+			scroll = Mth.clamp(scroll, 0, maxScroll);
 			return true;
 		} else
 			return super.mouseScrolled(mouseX, mouseY, scrollX, scrollY);
@@ -321,7 +321,7 @@ public class EcheladderScreen extends PlayerStatsScreen
 		{
 			if(ycor >= yOffset + 35 && ycor < yOffset + 42)
 			{
-				scroll = maxRung;
+				scroll = maxScroll;
 				return true;
 			} else if(ycor >= yOffset + 185 && ycor < yOffset + 192)
 			{

@@ -71,7 +71,7 @@ public record Rung(int rung, int backgroundColor, int textColor, long expRequire
 	public record RungCondition(Condition condition, String description)
 	{
 		public static final Codec<RungCondition> CODEC = RecordCodecBuilder.create(instance -> instance.group(
-				Condition.PlayerOnlyCondition.CODEC.fieldOf("condition").forGetter(RungCondition::condition),
+				Condition.PLAYER_ONLY_CODEC.fieldOf("condition").forGetter(RungCondition::condition),
 				Codec.STRING.fieldOf("description").forGetter(RungCondition::description)
 		).apply(instance, RungCondition::new));
 		
