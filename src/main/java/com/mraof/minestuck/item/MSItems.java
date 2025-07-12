@@ -24,6 +24,8 @@ import com.mraof.minestuck.item.weapon.projectiles.ReturningProjectileWeaponItem
 import com.mraof.minestuck.player.EnumAspect;
 import com.mraof.minestuck.util.MSSoundEvents;
 import com.mraof.minestuck.util.MSTags;
+
+import net.minecraft.core.component.DataComponents;
 import net.minecraft.core.particles.ParticleTypes;
 import net.minecraft.core.registries.Registries;
 import net.minecraft.resources.ResourceKey;
@@ -32,6 +34,7 @@ import net.minecraft.world.effect.MobEffectInstance;
 import net.minecraft.world.effect.MobEffects;
 import net.minecraft.world.entity.EntityType;
 import net.minecraft.world.item.*;
+import net.minecraft.world.item.component.Unbreakable;
 import net.minecraft.world.level.block.Block;
 import net.minecraft.world.level.block.Blocks;
 import net.neoforged.neoforge.common.DeferredSpawnEggItem;
@@ -83,7 +86,7 @@ public class MSItems
 	public static final DeferredItem<Item> MACUAHUITL = REGISTER.register("macuahuitl", () -> new WeaponItem(new WeaponItem.Builder(MSItemTypes.PRISMARINE_TIER, 3, -2.4F).efficiency(1.0F).set(MSItemTypes.SWORD_TOOL).add(OnHitEffect.SWEEP), new MSItemProperties().durability(100)));
 	public static final DeferredItem<Item> FROSTY_MACUAHUITL = REGISTER.register("frosty_macuahuitl", () -> new WeaponItem(new WeaponItem.Builder(MSItemTypes.ICE_TIER, 6, -2.4F).efficiency(1.0F).set(MSItemTypes.SWORD_TOOL).add(OnHitEffect.SWEEP).add(OnHitEffect.ICE_SHARD), new MSItemProperties().durability(200)));
 	public static final DeferredItem<Item> KATANA = REGISTER.register("katana", () -> new WeaponItem(new WeaponItem.Builder(Tiers.IRON, 3, -2.4F).efficiency(15.0F).set(MSItemTypes.SWORD_TOOL).add(OnHitEffect.SWEEP), new Item.Properties()));
-	public static final DeferredItem<Item> UNBREAKABLE_KATANA = REGISTER.register("unbreakable_katana", () -> new WeaponItem(new WeaponItem.Builder(MSItemTypes.ZILLY_TIER, 6, -2.4F).efficiency(15.0F).set(MSItemTypes.SWORD_TOOL).add(OnHitEffect.SWEEP), new MSItemProperties().durability(-1).rarity(Rarity.RARE))); //Actually unbreakable
+	public static final DeferredItem<Item> UNBREAKABLE_KATANA = REGISTER.register("unbreakable_katana", () -> new WeaponItem(new WeaponItem.Builder(MSItemTypes.ZILLY_TIER, 6, -2.4F).efficiency(15.0F).set(MSItemTypes.SWORD_TOOL).add(OnHitEffect.SWEEP), new Item.Properties().component(DataComponents.UNBREAKABLE, new Unbreakable(false)).rarity(Rarity.RARE))); //Actually unbreakable
 	public static final DeferredItem<Item> ANGEL_APOCALYPSE = REGISTER.register("angel_apocalypse", () -> new WeaponItem(new WeaponItem.Builder(Tiers.IRON, 5, -2.4F).efficiency(15.0F).set(MSItemTypes.SWORD_TOOL).add(OnHitEffect.SWEEP).add(OnHitEffect.HOPE_RESISTANCE), new MSItemProperties().durability(2048).rarity(Rarity.UNCOMMON)));
 	public static final DeferredItem<Item> FIRE_POKER = REGISTER.register("fire_poker", () -> new WeaponItem(new WeaponItem.Builder(Tiers.IRON, 4, -2.4F).efficiency(15.0F).set(MSItemTypes.SWORD_TOOL).add(OnHitEffect.SWEEP).add(OnHitEffect.setOnFire(30)), new Item.Properties()));
 	public static final DeferredItem<Item> TOO_HOT_TO_HANDLE = REGISTER.register("too_hot_to_handle", () -> new WeaponItem(new WeaponItem.Builder(Tiers.IRON, 3, -2.4F).efficiency(15.0F).set(MSItemTypes.SWORD_TOOL).add(OnHitEffect.SWEEP).add(OnHitEffect.setOnFire(10)), new MSItemProperties().durability(350)));
@@ -355,7 +358,7 @@ public class MSItems
 	public static final DeferredItem<Item> CANE = REGISTER.register("cane", () -> new WeaponItem(new WeaponItem.Builder(Tiers.WOOD, 2, -2.0F).efficiency(1.0F).set(MSItemTypes.CANE_TOOL), new MSItemProperties().durability(100)));
 	public static final DeferredItem<Item> VAUDEVILLE_HOOK = REGISTER.register("vaudeville_hook", () -> new WeaponItem(new WeaponItem.Builder(Tiers.WOOD, 2, -2.0F).efficiency(1.0F).set(MSItemTypes.CANE_TOOL), new MSItemProperties().durability(150)));
 	public static final DeferredItem<Item> BEAR_POKING_STICK = REGISTER.register("bear_poking_stick", () -> new WeaponItem(new WeaponItem.Builder(Tiers.WOOD, 3, -2.0F).efficiency(1.0F).set(MSItemTypes.CANE_TOOL).add(OnHitEffect.notAtPlayer(OnHitEffect.enemyPotionEffect(() -> new MobEffectInstance(MobEffects.DAMAGE_BOOST, 140, 1)))), new MSItemProperties().durability(150)));
-	public static final DeferredItem<Item> CROWBAR = REGISTER.register("crowbar", () -> new WeaponItem(new WeaponItem.Builder(Tiers.IRON, 6, -2.0F).efficiency(1.0F).set(MSItemTypes.CANE_TOOL).add(OnHitEffect.playSound(() -> SoundEvents.ANVIL_PLACE)), new MSItemProperties().durability(-1).rarity(Rarity.EPIC)));
+	public static final DeferredItem<Item> CROWBAR = REGISTER.register("crowbar", () -> new WeaponItem(new WeaponItem.Builder(Tiers.IRON, 6, -2.0F).efficiency(1.0F).set(MSItemTypes.CANE_TOOL).add(OnHitEffect.playSound(() -> SoundEvents.ANVIL_PLACE)), new Item.Properties().component(DataComponents.UNBREAKABLE, new Unbreakable(false)).rarity(Rarity.EPIC)));
 	public static final DeferredItem<Item> UMBRELLA = REGISTER.register("umbrella", () -> new WeaponItem(new WeaponItem.Builder(Tiers.WOOD, 2, -2.0F).efficiency(1.0F).set(MSItemTypes.CANE_TOOL).add(InventoryTickEffect.BREATH_SLOW_FALLING), new MSItemProperties().durability(350)));
 	public static final DeferredItem<Item> BARBERS_BEST_FRIEND = REGISTER.register("barbers_best_friend", () -> new WeaponItem(new WeaponItem.Builder(Tiers.IRON, 1, -2.0F).efficiency(1.0F).set(MSItemTypes.CANE_TOOL), new Item.Properties()));
 	public static final DeferredItem<Item> UPPER_CRUST_CRUST_CANE = REGISTER.register("upper_crust_crust_cane", () -> new WeaponItem(new WeaponItem.Builder(MSItemTypes.ORGANIC_TIER, 3, -2.0F).efficiency(2.0F).set(MSItemTypes.CANE_TOOL).add(OnHitEffect.SPAWN_BREADCRUMBS).setEating(FinishUseItemEffect.SPAWN_BREADCRUMBS, FinishUseItemEffect.foodEffect(4, 0.5F)), new Item.Properties()));
