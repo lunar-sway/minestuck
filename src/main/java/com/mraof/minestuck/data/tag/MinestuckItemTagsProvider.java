@@ -2,12 +2,12 @@ package com.mraof.minestuck.data.tag;
 
 import com.mraof.minestuck.Minestuck;
 import com.mraof.minestuck.block.MSBlocks;
-import com.mraof.minestuck.item.MSItemTypes;
 import com.mraof.minestuck.item.MSItems;
 import com.mraof.minestuck.item.weapon.MSToolType;
 import com.mraof.minestuck.item.weapon.MagicAOERightClickEffect;
 import com.mraof.minestuck.item.weapon.MagicRangedRightClickEffect;
 import com.mraof.minestuck.item.weapon.WeaponItem;
+import com.mraof.minestuck.item.weapon.projectiles.ConsumableProjectileWeaponItem;
 import com.mraof.minestuck.item.weapon.projectiles.ReturningProjectileWeaponItem;
 import com.mraof.minestuck.util.ExtraModTags;
 import com.mraof.minestuck.util.MSTags;
@@ -17,7 +17,6 @@ import net.minecraft.data.PackOutput;
 import net.minecraft.data.tags.ItemTagsProvider;
 import net.minecraft.data.tags.TagsProvider;
 import net.minecraft.tags.BlockTags;
-import net.minecraft.tags.ItemTags;
 import net.minecraft.world.item.Item;
 import net.minecraft.world.item.Items;
 import net.minecraft.world.level.block.Block;
@@ -26,11 +25,13 @@ import net.neoforged.neoforge.common.data.ExistingFileHelper;
 
 import javax.annotation.Nullable;
 import javax.annotation.ParametersAreNonnullByDefault;
-
 import java.util.List;
 import java.util.concurrent.CompletableFuture;
+import java.util.function.Predicate;
 import java.util.function.Supplier;
+import java.util.stream.Stream;
 
+import static com.mraof.minestuck.item.MSItemTypes.*;
 import static com.mraof.minestuck.item.MSItems.*;
 import static com.mraof.minestuck.util.MSTags.Items.*;
 import static net.minecraft.tags.ItemTags.*;
@@ -102,16 +103,33 @@ public class MinestuckItemTagsProvider extends ItemTagsProvider
 		copy(MSTags.Blocks.EMERALD_ORES, MSTags.Items.EMERALD_ORES);
 		copy(MSTags.Blocks.CRUXITE_STORAGE_BLOCKS, CRUXITE_STORAGE_BLOCKS);
 		
-		tag(SWORDS).add(EMERALD_SWORD.get(), SORD.get(), PAPER_SWORD.get(), CACTACEAE_CUTLASS.get(), STEAK_SWORD.get(), BEEF_SWORD.get(), IRRADIATED_STEAK_SWORD.get(), MACUAHUITL.get(), FROSTY_MACUAHUITL.get(), KATANA.get(), UNBREAKABLE_KATANA.get(), ANGEL_APOCALYPSE.get(), FIRE_POKER.get(), TOO_HOT_TO_HANDLE.get(), CALEDSCRATCH.get(), CALEDFWLCH.get(), ROYAL_DERINGER.get(), CLAYMORE.get(), CUTLASS_OF_ZILLYWAIR.get(), REGISWORD.get(), CRUEL_FATE_CRUCIBLE.get(), SCARLET_RIBBITAR.get(), DOGG_MACHETE.get(), COBALT_SABRE.get(), QUANTUM_SABRE.get(), SHATTER_BEACON.get(), SHATTER_BACON.get(), SUBTRACTSHUMIDIRE_ZOMORRODNEGATIVE.get(), MUSIC_SWORD.get(), PILLOW_TALK.get(), KRAKENS_EYE.get(), CINNAMON_SWORD.get());
-		tag(AXES).add(EMERALD_AXE.get(), BATLEACKS.get(), COPSE_CRUSHER.get(), QUENCH_CRUSHER.get(), MELONSBANE.get(), CROP_CHOP.get(), THE_LAST_STRAW.get(), BATTLEAXE.get(), CANDY_BATTLEAXE.get(), CHOCO_LOCO_WOODSPLITTER.get(), STEEL_EDGE_CANDYCUTTER.get(), BLACKSMITH_BANE.get(), REGIAXE.get(), GOTHY_AXE.get(), SURPRISE_AXE.get(), SHOCK_AXE.get(), SHOCK_AXE_UNPOWERED.get(), SCRAXE.get(), LORENTZ_DISTRANSFORMATIONER.get(), PISTON_POWERED_POGO_AXEHAMMER.get(), RUBY_CROAK.get(), HEPHAESTUS_LUMBERJACK.get(), FISSION_FOCUSED_FAULT_FELLER.get(), BISECTOR.get(), FINE_CHINA_AXE.get(), LIPSTICK_CHAINSAW.get(), CAKESAW.get(), MAGENTA_MAULER.get(), THISTLEBLOWER.get(), EMERALD_IMMOLATOR.get(), OBSIDIATOR.get(), DEVILS_DELIGHT.get(), DEMONBANE_RAGRIPPER.get(), FROSTTOOTH.get());
-		tag(PICKAXES).add(EMERALD_PICKAXE.get(), MINE_AND_GRIST.get(), PROSPECTING_PICKSCYTHE.get());
-		tag(SHOVELS).add(EMERALD_SHOVEL.get(), WOODEN_SPOON.get(), SILVER_SPOON.get(), MELONBALLER.get(), TERRAIN_FLATENATOR.get(), NOSFERATU_SPOON.get(), THRONGLER.get(), CROCKER_SPOON.get());
+		List<MSToolType> customMiningToolTypes = List.of(SICKLE_TOOL, SCYTHE_TOOL, CLAWS_TOOL, HAMMER_TOOL, FORK_TOOL);
+		List<MSToolType> customMeleeToolTypes = List.of(LANCE_TOOL, CLUB_TOOL, KNIFE_TOOL, KEY_TOOL, FAN_TOOL, BATON_TOOL, STAFF_TOOL, CANE_TOOL, WAND_TOOL);
+		List<MSToolType> customToolTypes = Stream.concat(customMiningToolTypes.stream(), customMeleeToolTypes.stream()).toList();
+		
+		tag(SWORDS).add(EMERALD_SWORD.get()).add(relevantWeapons(item -> hasToolType(item, List.of(SWORD_TOOL))));
+		tag(AXES).add(EMERALD_AXE.get()).add(relevantWeapons(item -> hasToolType(item, List.of(AXE_TOOL, CHAINSAW_TOOL))));
+		tag(PICKAXES).add(EMERALD_PICKAXE.get()).add(relevantWeapons(item -> hasToolType(item, List.of(PICKAXE_TOOL))));
+		tag(SHOVELS).add(EMERALD_SHOVEL.get()).add(relevantWeapons(item -> hasToolType(item, List.of(SHOVEL_TOOL, SPOON_TOOL))));
 		tag(HOES).add(EMERALD_HOE.get(), HELLBRINGERS_HOE_INACTIVE.get(), HELLBRINGERS_HOE_ACTIVE.get());
-		tag(TRIDENT_ENCHANTABLE).add(BIDENT.get(), MEATFORK.get(), DOUBLE_ENDED_TRIDENT.get());
 		tag(HEAD_ARMOR).add(PRISMARINE_HELMET.get(), IRON_LASS_GLASSES.get(), PROSPIT_CIRCLET.get(), DERSE_CIRCLET.get(), AMPHIBEANIE.get(), NOSTRILDAMUS.get(), PONYTAIL.get());
 		tag(CHEST_ARMOR).add(PRISMARINE_CHESTPLATE.get(), IRON_LASS_CHESTPLATE.get(), PROSPIT_SHIRT.get(), DERSE_SHIRT.get());
 		tag(LEG_ARMOR).add(PRISMARINE_LEGGINGS.get(), IRON_LASS_SKIRT.get(), PROSPIT_PANTS.get(), DERSE_PANTS.get());
 		tag(FOOT_ARMOR).add(PRISMARINE_BOOTS.get(), IRON_LASS_SHOES.get(), PROSPIT_SHOES.get(), DERSE_SHOES.get());
+		tag(CLUSTER_MAX_HARVESTABLES).add(relevantWeapons(item -> hasToolType(item, List.of(PICKAXE_TOOL, HAMMER_TOOL))));
+		tag(BREAKS_DECORATED_POTS).add(relevantWeapons(item -> hasToolType(item, customToolTypes)));
+		
+		tag(MINING_TOOL_TOOLS).add(relevantWeapons(item -> hasToolType(item, List.of(PICKAXE_TOOL, HAMMER_TOOL))));
+		tag(MELEE_WEAPON_TOOLS).add(relevantWeapons(item -> item instanceof WeaponItem));
+		tag(TOOLS_SPEAR).add(relevantWeapons(item -> hasToolType(item, List.of(LANCE_TOOL))));
+		tag(RANGED_WEAPON_TOOLS).add(relevantWeapons(item -> item instanceof ConsumableProjectileWeaponItem || (item instanceof WeaponItem weapon && (weapon.getItemRightClickEffect() instanceof MagicRangedRightClickEffect || weapon.getItemRightClickEffect() instanceof MagicAOERightClickEffect))));
+		
+		tag(DURABILITY_ENCHANTABLE).add(relevantWeapons(item -> (item instanceof WeaponItem && item.isDamageable(item.getDefaultInstance())) || item instanceof ReturningProjectileWeaponItem));
+		tag(MINING_ENCHANTABLE).add(relevantWeapons(item -> hasToolType(item, customMiningToolTypes)));
+		tag(MINING_LOOT_ENCHANTABLE).add(relevantWeapons(item -> hasToolType(item, customMiningToolTypes)));
+		tag(SWORD_ENCHANTABLE).add(relevantWeapons(item -> item instanceof WeaponItem)); //TODO weapons without sweep can get sweeping edge
+		tag(SHARP_WEAPON_ENCHANTABLE).add(relevantWeapons(item -> item instanceof WeaponItem));
+		tag(VANISHING_ENCHANTABLE).add(relevantWeapons(item -> item instanceof WeaponItem));
 		
 		tag(Tags.Items.MUSIC_DISCS).add(MUSIC_DISC_DANCE_STAB_DANCE.get(), MUSIC_DISC_EMISSARY_OF_DANCE.get(), MUSIC_DISC_RETRO_BATTLE.get());
 		tag(DUSTS).add(MSBlocks.GLOWYSTONE_DUST.get().asItem());
@@ -157,33 +175,31 @@ public class MinestuckItemTagsProvider extends ItemTagsProvider
 		tag(CASSETTES).add(MSItems.CASSETTE_MELLOHI.get(), CASSETTE_13.get(), CASSETTE_BLOCKS.get(), CASSETTE_CAT.get(), CASSETTE_CHIRP.get(), CASSETTE_FAR.get(), CASSETTE_MALL.get(), CASSETTE_DANCE_STAB.get(), CASSETTE_RETRO_BATTLE.get(), CASSETTE_EMISSARY.get(), CASSETTE_11.get(), CASSETTE_PIGSTEP.get(), CASSETTE_STAL.get(), CASSETTE_STRAD.get(), CASSETTE_WAIT.get(), CASSETTE_WARD.get(), CASSETTE_OTHERSIDE.get(), CASSETTE_5.get());
 		tag(BUGS).add(BUG_ON_A_STICK.get(), CHOCOLATE_BEETLE.get(), CONE_OF_FLIES.get(), GRASSHOPPER.get(), CICADA.get(), JAR_OF_BUGS.get());
 		tag(CONSORT_SNACKS).add(Items.COOKIE).addTag(BUGS);
-		tag(MAGIC_WEAPON).add(MSItems.REGISTER.getEntries().stream().map(Supplier::get).filter(item -> item instanceof WeaponItem weapon && (weapon.getItemRightClickEffect() instanceof MagicRangedRightClickEffect || weapon.getItemRightClickEffect() instanceof MagicAOERightClickEffect)).toArray(Item[]::new));
+		tag(MAGIC_WEAPON).add(relevantWeapons(item ->
+				item instanceof WeaponItem weapon && (weapon.getItemRightClickEffect() instanceof MagicRangedRightClickEffect || weapon.getItemRightClickEffect() instanceof MagicAOERightClickEffect)));
 		tag(CREATIVE_SHOCK_RIGHT_CLICK_LIMIT).add(Items.CHORUS_FRUIT);
 		tag(UNREADABLE).add(CRUEL_FATE_CRUCIBLE.get(), ROYAL_DERINGER.get(), TRANSPORTALIZER.get(), TRANS_PORTALIZER.get(), FEAR_NO_ANVIL.get(), TYPHONIC_TRIVIALIZER.get(), QUILL_OF_ECHIDNA.get(), UMBRAL_INFILTRATOR.get(), FLUORITE_OCTET.get(), CLIENT_DISK.get(), SERVER_DISK.get(), GUTTER_THUMB_DRIVE.get(), GUTTER_BALL.get(), CAPTCHA_CARD.get(), CUEBALL.get(), BLACK_QUEENS_RING.get(), WHITE_QUEENS_RING.get(), BLACK_KINGS_SCEPTER.get(), WHITE_KINGS_SCEPTER.get()).add(Items.DRAGON_EGG).add(Items.DRAGON_HEAD).add(Items.DRAGON_BREATH).add(Items.NETHER_STAR).add(Items.COMMAND_BLOCK).add(Items.COMMAND_BLOCK_MINECART).add(Items.CHAIN_COMMAND_BLOCK).add(Items.REPEATING_COMMAND_BLOCK).add(Items.END_CRYSTAL).add(Items.EXPERIENCE_BOTTLE).add(Items.ELYTRA).add(Items.TOTEM_OF_UNDYING).add(Items.BEACON).add(Items.BEDROCK).add(Items.PUMPKIN);
-		tag(LEGENDARY).add(MSItems.REGISTER.getEntries().stream().map(Supplier::get).filter(item -> item instanceof WeaponItem weapon && (weapon.getTier() == MSItemTypes.DENIZEN_TIER || weapon.getTier() == MSItemTypes.ZILLY_TIER || weapon.getTier() == MSItemTypes.WELSH_TIER)).toArray(Item[]::new));
+		tag(LEGENDARY).add(relevantWeapons(item ->
+				item instanceof WeaponItem weapon && (weapon.getTier() == DENIZEN_TIER || weapon.getTier() == ZILLY_TIER || weapon.getTier() == WELSH_TIER)));
+	}
+	
+	private static Item[] relevantWeapons(Predicate<Item> predicate)
+	{
+		return MSItems.REGISTER.getEntries().stream().map(Supplier::get).filter(predicate).toArray(Item[]::new);
+	}
+	
+	private static boolean hasToolType(Item item, List<MSToolType> toolTypes)
+	{
+		if(!(item instanceof WeaponItem weaponItem) || weaponItem.getToolTypes() == null)
+			return false;
 		
-		tag(ItemTags.DURABILITY_ENCHANTABLE).add(MSItems.REGISTER.getEntries().stream().map(Supplier::get).filter(item -> (item instanceof WeaponItem && item.isDamageable(item.getDefaultInstance())) || item instanceof ReturningProjectileWeaponItem).toArray(Item[]::new));
-		tag(ItemTags.MINING_ENCHANTABLE).add(MSItems.REGISTER.getEntries().stream().map(Supplier::get).filter(item -> {
-			if(item instanceof WeaponItem weapon)
-			{
-				List<MSToolType> toolTypes = weapon.getToolTypes();
-				return toolTypes != null && (toolTypes.contains(MSItemTypes.SICKLE_TOOL) || toolTypes.contains(MSItemTypes.SCYTHE_TOOL) || toolTypes.contains(MSItemTypes.CLAWS_TOOL) || toolTypes.contains(MSItemTypes.HAMMER_TOOL) || toolTypes.contains(MSItemTypes.FORK_TOOL));
-			}
-			return false;
-		}).toArray(Item[]::new));
-		tag(ItemTags.MINING_LOOT_ENCHANTABLE).add(MSItems.REGISTER.getEntries().stream().map(Supplier::get).filter(item -> {
-			if(item instanceof WeaponItem weapon)
-			{
-				List<MSToolType> toolTypes = weapon.getToolTypes();
-				return toolTypes != null && (toolTypes.contains(MSItemTypes.SICKLE_TOOL) || toolTypes.contains(MSItemTypes.SCYTHE_TOOL) || toolTypes.contains(MSItemTypes.CLAWS_TOOL) || toolTypes.contains(MSItemTypes.HAMMER_TOOL) || toolTypes.contains(MSItemTypes.FORK_TOOL));
-			}
-			return false;
-		}).toArray(Item[]::new));
-		tag(ItemTags.SWORD_ENCHANTABLE).add(MSItems.REGISTER.getEntries().stream().map(Supplier::get).filter(item -> item instanceof WeaponItem).toArray(Item[]::new));
-		tag(ItemTags.SHARP_WEAPON_ENCHANTABLE).add(MSItems.REGISTER.getEntries().stream().map(Supplier::get).filter(item -> item instanceof WeaponItem).toArray(Item[]::new));
-		tag(ItemTags.WEAPON_ENCHANTABLE).add(MSItems.REGISTER.getEntries().stream().map(Supplier::get).filter(item -> item instanceof WeaponItem).toArray(Item[]::new));
-		tag(ItemTags.FIRE_ASPECT_ENCHANTABLE).add(MSItems.REGISTER.getEntries().stream().map(Supplier::get).filter(item -> item instanceof WeaponItem).toArray(Item[]::new));
-		tag(ItemTags.VANISHING_ENCHANTABLE).add(MSItems.REGISTER.getEntries().stream().map(Supplier::get).filter(item -> item instanceof WeaponItem).toArray(Item[]::new));
+		List<MSToolType> weaponTypes = weaponItem.getToolTypes();
+		
+		for(MSToolType toolType : toolTypes)
+			if(weaponTypes.contains(toolType))
+				return true;
+		
+		return false;
 	}
 	
 	@Override
