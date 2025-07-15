@@ -6,8 +6,6 @@ import com.mraof.minestuck.alchemy.TorrentSession;
 import com.mraof.minestuck.alchemy.TorrentSession.LimitedCache;
 import com.mraof.minestuck.api.alchemy.GristAmount;
 import com.mraof.minestuck.api.alchemy.GristSet;
-import com.mraof.minestuck.api.alchemy.GristType;
-import com.mraof.minestuck.api.alchemy.GristTypes;
 import com.mraof.minestuck.blockentity.ComputerBlockEntity;
 import com.mraof.minestuck.client.gui.MSScreenFactories;
 import com.mraof.minestuck.client.gui.computer.TorrentWidgets.*;
@@ -55,8 +53,6 @@ public final class GristTorrentGui extends Screen implements ProgramGui<ProgramT
 	private final List<GutterBar> gutterBars = new ArrayList<>();
 	private StatsContainer statsContainer;
 	
-	private List<GristType> allGristTypes;
-	
 	private int updateTick = 0;
 	
 	public GristTorrentGui()
@@ -75,8 +71,6 @@ public final class GristTorrentGui extends Screen implements ProgramGui<ProgramT
 		visibleTorrentData.clear();
 		ClientPlayerData.getVisibleTorrentData().forEach(((torrentSession, limitedCache) ->
 				visibleTorrentData.put(torrentSession.getSeeder(), Pair.of(torrentSession, limitedCache))));
-		
-		this.allGristTypes = GristTypes.REGISTRY.stream().toList();
 		
 		if(minecraft == null || minecraft.player == null)
 			return;
@@ -210,7 +204,7 @@ public final class GristTorrentGui extends Screen implements ProgramGui<ProgramT
 		int combinedXOffset = xOffset + 5 + ((GristEntry.WIDTH + 2) * torrentXOffset);
 		
 		//TODO because this is being reset, the tooltip is flashing and the scroll returns to 0 preventing it from moving
-		TorrentContainer torrentContainer = new TorrentContainer(combinedXOffset, gristWidgetsYOffset, font, torrentSession.getSeeder(), allGristTypes);
+		TorrentContainer torrentContainer = new TorrentContainer(combinedXOffset, gristWidgetsYOffset, font, torrentSession.getSeeder());
 		torrentContainer.refreshEntries(torrentSession, cache);
 		torrentContainers.add(torrentContainer);
 		addRenderableWidget(torrentContainer);

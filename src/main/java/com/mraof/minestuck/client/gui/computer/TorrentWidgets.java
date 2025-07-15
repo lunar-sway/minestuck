@@ -182,18 +182,15 @@ public class TorrentWidgets
 		public final IdentifierHandler.UUIDIdentifier player;
 		private final Font font;
 		
-		private final List<GristType> allGristTypes;
-		
-		public TorrentContainer(int pX, int pY, Font font, IdentifierHandler.UUIDIdentifier player, List<GristType> allGristTypes)
+		public TorrentContainer(int pX, int pY, Font font, IdentifierHandler.UUIDIdentifier player)
 		{
 			super(pX, pY, WIDTH, HEIGHT);
 			
 			this.player = player;
 			this.font = font;
-			this.allGristTypes = allGristTypes;
 			
 			int yOffset = 1; //this is 1 because there needs to be room to render the name of the torrent's seeder
-			for(GristType type : allGristTypes)
+			for(GristType type : GristTypes.REGISTRY)
 			{
 				GristEntry gristEntry = new GristEntry(pX, pY + ((GristEntry.HEIGHT + 1) * yOffset), type);
 				if(this.children().size() < visibleEntryCount())
@@ -251,7 +248,7 @@ public class TorrentWidgets
 		@Override
 		public int getMaxScroll()
 		{
-			return Math.max(0, allGristTypes.size() - visibleEntryCount());
+			return Math.max(0, this.children().size() - visibleEntryCount());
 		}
 		
 		@Override
