@@ -79,7 +79,7 @@ public class EcheladderScreen extends PlayerStatsScreen
 		lastRung = ClientPlayerData.getRung();
 		
 		rungBars.clear();
-		for(int i = 0; i < ClientRungData.getFinalRungIndex() + 1; i++)
+		for(int i = 0; i <= ClientRungData.getFinalRungIndex(); i++)
 		{
 			Component name = Component.translatable(I18n.exists("echeladder.rung." + i) ? I18n.get("echeladder.rung." + i) : "Rung " + (i + 1));
 			
