@@ -103,9 +103,10 @@ public class MinestuckItemTagsProvider extends ItemTagsProvider
 		copy(MSTags.Blocks.EMERALD_ORES, MSTags.Items.EMERALD_ORES);
 		copy(MSTags.Blocks.CRUXITE_STORAGE_BLOCKS, CRUXITE_STORAGE_BLOCKS);
 		
-		List<MSToolType> customMiningToolTypes = List.of(SICKLE_TOOL, SCYTHE_TOOL, CLAWS_TOOL, HAMMER_TOOL, FORK_TOOL);
-		List<MSToolType> customMeleeToolTypes = List.of(LANCE_TOOL, CLUB_TOOL, KNIFE_TOOL, KEY_TOOL, FAN_TOOL, BATON_TOOL, STAFF_TOOL, CANE_TOOL, WAND_TOOL);
-		List<MSToolType> customToolTypes = Stream.concat(customMiningToolTypes.stream(), customMeleeToolTypes.stream()).toList();
+		//handles items that are in tool types added by Minestuck which would otherwise not be added to relevant tags for weapons or tools
+		List<MSToolType> minestuckMiningToolTypes = List.of(SICKLE_TOOL, SCYTHE_TOOL, CLAWS_TOOL, HAMMER_TOOL, FORK_TOOL);
+		List<MSToolType> minestuckMeleeToolTypes = List.of(LANCE_TOOL, CLUB_TOOL, KNIFE_TOOL, KEY_TOOL, FAN_TOOL, BATON_TOOL, STAFF_TOOL, CANE_TOOL, WAND_TOOL);
+		List<MSToolType> minestuckToolTypes = Stream.concat(minestuckMiningToolTypes.stream(), minestuckMeleeToolTypes.stream()).toList();
 		
 		tag(SWORDS).add(EMERALD_SWORD.get()).add(relevantWeapons(item -> hasToolType(item, List.of(SWORD_TOOL))));
 		tag(AXES).add(EMERALD_AXE.get()).add(relevantWeapons(item -> hasToolType(item, List.of(AXE_TOOL, CHAINSAW_TOOL))));
@@ -117,7 +118,7 @@ public class MinestuckItemTagsProvider extends ItemTagsProvider
 		tag(LEG_ARMOR).add(PRISMARINE_LEGGINGS.get(), IRON_LASS_SKIRT.get(), PROSPIT_PANTS.get(), DERSE_PANTS.get());
 		tag(FOOT_ARMOR).add(PRISMARINE_BOOTS.get(), IRON_LASS_SHOES.get(), PROSPIT_SHOES.get(), DERSE_SHOES.get());
 		tag(CLUSTER_MAX_HARVESTABLES).add(relevantWeapons(item -> hasToolType(item, List.of(PICKAXE_TOOL, HAMMER_TOOL))));
-		tag(BREAKS_DECORATED_POTS).add(relevantWeapons(item -> hasToolType(item, customToolTypes)));
+		tag(BREAKS_DECORATED_POTS).add(relevantWeapons(item -> hasToolType(item, minestuckToolTypes)));
 		
 		tag(MINING_TOOL_TOOLS).add(relevantWeapons(item -> hasToolType(item, List.of(PICKAXE_TOOL, HAMMER_TOOL))));
 		tag(MELEE_WEAPON_TOOLS).add(relevantWeapons(item -> item instanceof WeaponItem));
@@ -125,8 +126,8 @@ public class MinestuckItemTagsProvider extends ItemTagsProvider
 		tag(RANGED_WEAPON_TOOLS).add(relevantWeapons(item -> item instanceof ConsumableProjectileWeaponItem || (item instanceof WeaponItem weapon && (weapon.getItemRightClickEffect() instanceof MagicRangedRightClickEffect || weapon.getItemRightClickEffect() instanceof MagicAOERightClickEffect))));
 		
 		tag(DURABILITY_ENCHANTABLE).add(relevantWeapons(item -> (item instanceof WeaponItem && item.isDamageable(item.getDefaultInstance())) || item instanceof ReturningProjectileWeaponItem));
-		tag(MINING_ENCHANTABLE).add(relevantWeapons(item -> hasToolType(item, customMiningToolTypes)));
-		tag(MINING_LOOT_ENCHANTABLE).add(relevantWeapons(item -> hasToolType(item, customMiningToolTypes)));
+		tag(MINING_ENCHANTABLE).add(relevantWeapons(item -> hasToolType(item, minestuckMiningToolTypes)));
+		tag(MINING_LOOT_ENCHANTABLE).add(relevantWeapons(item -> hasToolType(item, minestuckMiningToolTypes)));
 		tag(SWORD_ENCHANTABLE).add(relevantWeapons(item -> item instanceof WeaponItem)); //TODO weapons without sweep can get sweeping edge
 		tag(SHARP_WEAPON_ENCHANTABLE).add(relevantWeapons(item -> item instanceof WeaponItem));
 		tag(VANISHING_ENCHANTABLE).add(relevantWeapons(item -> item instanceof WeaponItem));
