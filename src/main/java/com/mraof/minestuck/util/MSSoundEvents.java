@@ -3,7 +3,10 @@ package com.mraof.minestuck.util;
 import com.mraof.minestuck.Minestuck;
 import net.minecraft.core.Holder;
 import net.minecraft.core.registries.BuiltInRegistries;
+import net.minecraft.core.registries.Registries;
+import net.minecraft.resources.ResourceKey;
 import net.minecraft.sounds.SoundEvent;
+import net.minecraft.world.item.JukeboxSong;
 import net.neoforged.neoforge.registries.DeferredHolder;
 import net.neoforged.neoforge.registries.DeferredRegister;
 
@@ -16,6 +19,10 @@ public final class MSSoundEvents
 	public static final Holder<SoundEvent> MUSIC_DISC_EMISSARY_OF_DANCE = register("music_disc.emissary_of_dance");
 	public static final Holder<SoundEvent> MUSIC_DISC_DANCE_STAB_DANCE = register("music_disc.dance_stab_dance");
 	public static final Holder<SoundEvent> MUSIC_DISC_RETRO_BATTLE_THEME = register("music_disc.retro_battle_theme");
+	
+	public static final ResourceKey<JukeboxSong> JUKEBOX_SONG_EMISSARY_OF_DANCE = ResourceKey.create(Registries.JUKEBOX_SONG, Minestuck.id("emissary_of_dance"));
+	public static final ResourceKey<JukeboxSong> JUKEBOX_SONG_DANCE_STAB_DANCE = ResourceKey.create(Registries.JUKEBOX_SONG, Minestuck.id("dance_stab_dance"));
+	public static final ResourceKey<JukeboxSong> JUKEBOX_SONG_RETRO_BATTLE_THEME = ResourceKey.create(Registries.JUKEBOX_SONG, Minestuck.id("retro_battle"));
 	
 	public static final Supplier<SoundEvent> MUSIC_DEFAULT = register("music.default");
 	public static final Supplier<SoundEvent> MUSIC_FOREST = register("music.forest");
