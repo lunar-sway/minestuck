@@ -58,8 +58,10 @@ public interface Condition
 	Codec<Condition> CODEC = Conditions.REGISTRY.byNameCodec().dispatch(Condition::codec, Function.identity());
 	Codec<Condition> NPC_ONLY_CODEC = Condition.CODEC.validate(
 			condition -> condition.isNpcOnly() ? DataResult.success(condition) : DataResult.error(() -> "Player condition not supported here"));
-	Codec<Condition> PLAYER_ONLY_CODEC = Condition.CODEC.validate(
-			condition -> condition.isPlayerOnly() ? DataResult.success(condition) : DataResult.error(() -> "NPC condition not supported here"));
+	Codec<PlayerOnlyCondition> PLAYER_ONLY_CODEC = Condition.CODEC.comapFlatMap(
+			condition -> condition instanceof PlayerOnlyCondition playerOnly
+					? DataResult.success(playerOnly)
+					: DataResult.error(() -> "NPC condition not supported here"), Function.identity());
 	
 	MapCodec<? extends Condition> codec();
 	
