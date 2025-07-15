@@ -33,11 +33,13 @@ The format is based on [Keep a Changelog](https://keepachangelog.com/en/1.1.0/).
 - Fix cassette player not playing correct music
 - Fix dance_stab_dance and emissary_of_dance being labelled as each other
 - Fix cassette playing weapons not having a menu for storing cassette
+- Fix weapons not being enchantable
 
 ### Removed
 
 - Removed `minestuck:non_mirrored` recipe type
 - Removed `preEntryRungLimit` server config
+- Minestuck tridents no longer get unusable trident enchantments
 
 ### Contributors for this release
 
