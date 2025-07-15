@@ -50,7 +50,6 @@ public final class GristTorrentGui extends Screen implements ProgramGui<ProgramT
 	static TorrentSession userSession;
 	
 	private final List<TorrentContainer> torrentContainers = new ArrayList<>();
-	private final List<GristStat> gristStats = new ArrayList<>();
 	private final List<GutterBar> gutterBars = new ArrayList<>();
 	private StatsContainer statsContainer;
 	
@@ -83,7 +82,7 @@ public final class GristTorrentGui extends Screen implements ProgramGui<ProgramT
 		
 		addTorrentSessions();
 		
-		statsContainer = new StatsContainer(xOffset + GristStat.X_OFFSET_FROM_EDGE, yOffset + GristStat.Y_OFFSET_FROM_EDGE, font, gristStats);
+		statsContainer = new StatsContainer(xOffset + GristStat.X_OFFSET_FROM_EDGE, yOffset + GristStat.Y_OFFSET_FROM_EDGE, font);
 		addRenderableWidget(statsContainer);
 	}
 	
@@ -98,10 +97,11 @@ public final class GristTorrentGui extends Screen implements ProgramGui<ProgramT
 	@Override
 	public void render(GuiGraphics guiGraphics, int mouseX, int mouseY, float partialTicks)
 	{
+		clientDataUpdates();
+		statsContainer.updateStats();
+		
 		super.render(guiGraphics, mouseX, mouseY, partialTicks);
 		
-		clientDataUpdates();
-		renderGristStats();
 		renderGutter(guiGraphics);
 	}
 	
@@ -133,37 +133,13 @@ public final class GristTorrentGui extends Screen implements ProgramGui<ProgramT
 			
 			LimitedCache cache = visibleTorrentData.get(entrySession);
 			
-			torrentContainer.widgets.forEach(gristEntry ->
+			torrentContainer.children().forEach(gristEntry ->
 			{
 				gristEntry.cache = cache;
 				gristEntry.cacheLimit = cache.limit();
 				gristEntry.gristAmount = visibleTorrentData.get(entrySession).set().getGrist(gristEntry.gristType);
 			});
 		}
-	}
-	
-	private void renderGristStats()
-	{
-		//TODO dont rerender every time, or limit visibility here, or something!!
-		statsContainer.widgets.forEach(this::removeWidget);
-		statsContainer.widgets.clear();
-		
-		int i = 0;
-		for(GristType gristType : allGristTypes)
-		{
-			GristStat gristStat = new GristStat(xOffset + GristStat.X_OFFSET_FROM_EDGE, yOffset + GristStat.Y_OFFSET_FROM_EDGE + 6 + ((GristStat.HEIGHT + 1) * i), font, gristType);
-			
-			if(gristStat.typeIsActive())
-			{
-				gristStats.add(gristStat);
-				addRenderableWidget(gristStat);
-				
-				i++;
-			}
-		}
-		
-		statsContainer.widgets = gristStats;
-		statsContainer.updateVisibilityAndPosition();
 	}
 	
 	private void renderGutter(GuiGraphics guiGraphics)
@@ -209,7 +185,6 @@ public final class GristTorrentGui extends Screen implements ProgramGui<ProgramT
 		if(userSession == null)
 			return; //if the users own session isnt visible, there is no point in looking at any
 		
-		torrentContainers.forEach(container -> container.widgets.forEach(this::removeWidget));
 		torrentContainers.forEach(this::removeWidget);
 		
 		int torrentXOffset = 0;
@@ -235,20 +210,8 @@ public final class GristTorrentGui extends Screen implements ProgramGui<ProgramT
 	{
 		int combinedXOffset = xOffset + 5 + ((GristEntry.WIDTH + 2) * torrentXOffset);
 		
-		List<GristEntry> gristEntries = new ArrayList<>();
-		
-		int yOffset = 1; //this is 1 because there needs to be room to render the name of the torrent's seeder
-		for(GristType type : allGristTypes)
-		{
-			GristEntry gristEntry = new GristEntry(combinedXOffset, gristWidgetsYOffset + ((GristEntry.HEIGHT + 1) * yOffset), type);
-			
-			gristEntries.add(addRenderableWidget(gristEntry));
-			
-			yOffset++;
-		}
-		
 		//TODO because this is being reset, the tooltip is flashing and the scroll returns to 0 preventing it from moving
-		TorrentContainer torrentContainer = new TorrentContainer(combinedXOffset, gristWidgetsYOffset, torrentSession, cache, font, gristEntries, allGristTypes);
+		TorrentContainer torrentContainer = new TorrentContainer(combinedXOffset, gristWidgetsYOffset, torrentSession, cache, font, allGristTypes);
 		torrentContainers.add(torrentContainer);
 		addRenderableWidget(torrentContainer);
 	}

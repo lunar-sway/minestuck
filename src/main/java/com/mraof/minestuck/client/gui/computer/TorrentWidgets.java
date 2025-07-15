@@ -13,6 +13,7 @@ import com.mraof.minestuck.client.util.GuiUtil;
 import com.mraof.minestuck.network.TorrentPackets;
 import net.minecraft.client.gui.Font;
 import net.minecraft.client.gui.GuiGraphics;
+import net.minecraft.client.gui.components.AbstractContainerWidget;
 import net.minecraft.client.gui.components.AbstractWidget;
 import net.minecraft.client.gui.components.Tooltip;
 import net.minecraft.client.gui.narration.NarrationElementOutput;
@@ -22,6 +23,7 @@ import net.minecraft.network.chat.MutableComponent;
 import net.minecraft.resources.ResourceLocation;
 import net.neoforged.neoforge.network.PacketDistributor;
 
+import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
@@ -181,22 +183,32 @@ public class TorrentWidgets
 		
 		private final List<GristType> allGristTypes;
 		
-		public TorrentContainer(int pX, int pY, TorrentSession torrentSession, LimitedCache cache, Font font, List<GristEntry> gristEntries, List<GristType> allGristTypes)
+		public TorrentContainer(int pX, int pY, TorrentSession torrentSession, LimitedCache cache, Font font, List<GristType> allGristTypes)
 		{
-			super(pX, pY, WIDTH, HEIGHT, gristEntries);
+			super(pX, pY, WIDTH, HEIGHT);
 			
 			this.torrentSession = torrentSession;
 			this.font = font;
 			this.allGristTypes = allGristTypes;
+			
+			int yOffset = 1; //this is 1 because there needs to be room to render the name of the torrent's seeder
+			for(GristType type : allGristTypes)
+			{
+				GristEntry gristEntry = new GristEntry(pX, pY + ((GristEntry.HEIGHT + 1) * yOffset), type);
+				
+				this.children().add(gristEntry);
+				
+				yOffset++;
+			}
 			
 			completeGristEntryInit(cache);
 		}
 		
 		private void completeGristEntryInit(LimitedCache cache)
 		{
-			for(int i = 0; i < widgets.size(); i++)
+			for(int i = 0; i < this.children().size(); i++)
 			{
-				GristEntry gristEntry = widgets.get(i);
+				GristEntry gristEntry = this.children().get(i);
 				if(i < visibleEntryCount())
 					gristEntry.visible = true;
 				
@@ -215,8 +227,10 @@ public class TorrentWidgets
 		}
 		
 		@Override
-		protected void renderWidget(GuiGraphics guiGraphics, int i, int i1, float v)
+		protected void renderWidget(GuiGraphics guiGraphics, int mouseX, int mouseY, float partialTick)
 		{
+			super.renderWidget(guiGraphics, mouseX, mouseY, partialTick);
+			
 			String text = torrentSession.getSeeder().getUsername();
 			guiGraphics.pose().pushPose();
 			guiGraphics.pose().scale(0.5F, 0.5F, 0.5F);
@@ -373,15 +387,34 @@ public class TorrentWidgets
 		
 		private final Font font;
 		
-		public StatsContainer(int pX, int pY, Font font, List<GristStat> gristStats)
+		public StatsContainer(int pX, int pY, Font font)
 		{
-			super(pX, pY, WIDTH, HEIGHT, gristStats);
+			super(pX, pY, WIDTH, HEIGHT);
 			
 			this.font = font;
 		}
 		
+		public void updateStats()
+		{
+			this.children().clear();
+			
+			int i = 0;
+			for(GristType gristType : GristTypes.REGISTRY)
+			{
+				GristStat gristStat = new GristStat(this.getX(), this.getY() + 6 + ((GristStat.HEIGHT + 1) * i), font, gristType);
+				
+				if(gristStat.typeIsActive())
+				{
+					this.children().add(gristStat);
+					i++;
+				}
+			}
+			
+			this.updateVisibilityAndPosition();
+		}
+		
 		@Override
-		protected void renderWidget(GuiGraphics guiGraphics, int i, int i1, float v)
+		protected void renderWidget(GuiGraphics guiGraphics, int mouseX, int mouseY, float partialTick)
 		{
 			guiGraphics.pose().pushPose();
 			guiGraphics.pose().scale(0.5F, 0.5F, 0.5F);
@@ -398,6 +431,8 @@ public class TorrentWidgets
 			guiGraphics.drawString(font, Component.literal("Seeds"), scale(getX() + 110), scale(getY() + 2), GristTorrentGui.LIGHT_BLUE, false);
 			
 			guiGraphics.pose().popPose();
+			
+			super.renderWidget(guiGraphics, mouseX, mouseY, partialTick);
 		}
 		
 		@Override
@@ -415,7 +450,7 @@ public class TorrentWidgets
 		@Override
 		public int getMaxScroll()
 		{
-			return Math.max(0, widgets.size() - visibleEntryCount());
+			return Math.max(0, this.children().size() - visibleEntryCount());
 		}
 		
 		@Override
@@ -483,20 +518,27 @@ public class TorrentWidgets
 		}
 	}
 	
-	public abstract static class ScrollingWidget<T extends AbstractWidget> extends AbstractWidget
+	public abstract static class ScrollingWidget<T extends AbstractWidget> extends AbstractContainerWidget
 	{
 		private int scroll = 0;
-		public List<T> widgets;
+		private final List<T> widgets = new ArrayList<>();
 		
-		public ScrollingWidget(int pX, int pY, int pWidth, int pHeight, List<T> widgets)
+		public ScrollingWidget(int pX, int pY, int pWidth, int pHeight)
 		{
 			super(pX, pY, pWidth, pHeight, Component.empty());
-			this.widgets = widgets;
 		}
 		
 		@Override
-		protected void renderWidget(GuiGraphics guiGraphics, int i, int i1, float v)
+		public List<T> children()
 		{
+			return widgets;
+		}
+		
+		@Override
+		protected void renderWidget(GuiGraphics guiGraphics, int mouseX, int mouseY, float partialTick)
+		{
+			for (T widget : this.widgets)
+				widget.render(guiGraphics, mouseX, mouseY, partialTick);
 		}
 		
 		@Override
