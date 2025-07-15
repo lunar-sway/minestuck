@@ -1,5 +1,6 @@
 package com.mraof.minestuck.client.gui.computer;
 
+import com.mojang.datafixers.util.Pair;
 import com.mraof.minestuck.Minestuck;
 import com.mraof.minestuck.alchemy.TorrentSession;
 import com.mraof.minestuck.alchemy.TorrentSession.LimitedCache;
@@ -49,7 +50,7 @@ public final class GristTorrentGui extends Screen implements ProgramGui<ProgramT
 	static Map<TorrentSession, LimitedCache> visibleTorrentData = new HashMap<>();
 	static TorrentSession userSession;
 	
-	private final List<TorrentContainer> torrentContainers = new ArrayList<>();
+	private final List<Pair<TorrentSession, TorrentContainer>> torrentContainers = new ArrayList<>();
 	private final List<GutterBar> gutterBars = new ArrayList<>();
 	private StatsContainer statsContainer;
 	
@@ -122,9 +123,9 @@ public final class GristTorrentGui extends Screen implements ProgramGui<ProgramT
 	
 	private void renderTorrentSessions()
 	{
-		for(TorrentContainer torrentContainer : torrentContainers)
+		for(Pair<TorrentSession, TorrentContainer> torrentPair : torrentContainers)
 		{
-			TorrentSession entrySession = torrentContainer.torrentSession;
+			TorrentSession entrySession = torrentPair.getFirst();
 			if(!visibleTorrentData.containsKey(entrySession))
 			{
 				addTorrentSessions();
@@ -132,13 +133,7 @@ public final class GristTorrentGui extends Screen implements ProgramGui<ProgramT
 			}
 			
 			LimitedCache cache = visibleTorrentData.get(entrySession);
-			
-			torrentContainer.children().forEach(gristEntry ->
-			{
-				gristEntry.cache = cache;
-				gristEntry.cacheLimit = cache.limit();
-				gristEntry.gristAmount = visibleTorrentData.get(entrySession).set().getGrist(gristEntry.gristType);
-			});
+			torrentPair.getSecond().refreshEntries(entrySession, cache);
 		}
 	}
 	
@@ -185,7 +180,7 @@ public final class GristTorrentGui extends Screen implements ProgramGui<ProgramT
 		if(userSession == null)
 			return; //if the users own session isnt visible, there is no point in looking at any
 		
-		torrentContainers.forEach(this::removeWidget);
+		torrentContainers.forEach(pair -> this.removeWidget(pair.getSecond()));
 		
 		int torrentXOffset = 0;
 		
@@ -211,8 +206,9 @@ public final class GristTorrentGui extends Screen implements ProgramGui<ProgramT
 		int combinedXOffset = xOffset + 5 + ((GristEntry.WIDTH + 2) * torrentXOffset);
 		
 		//TODO because this is being reset, the tooltip is flashing and the scroll returns to 0 preventing it from moving
-		TorrentContainer torrentContainer = new TorrentContainer(combinedXOffset, gristWidgetsYOffset, torrentSession, cache, font, allGristTypes);
-		torrentContainers.add(torrentContainer);
+		TorrentContainer torrentContainer = new TorrentContainer(combinedXOffset, gristWidgetsYOffset, font, torrentSession.getSeeder(), allGristTypes);
+		torrentContainer.refreshEntries(torrentSession, cache);
+		torrentContainers.add(Pair.of(torrentSession, torrentContainer));
 		addRenderableWidget(torrentContainer);
 	}
 	

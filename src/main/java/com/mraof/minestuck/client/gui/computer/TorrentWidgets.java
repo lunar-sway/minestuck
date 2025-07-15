@@ -11,6 +11,7 @@ import com.mraof.minestuck.api.alchemy.GristType;
 import com.mraof.minestuck.api.alchemy.GristTypes;
 import com.mraof.minestuck.client.util.GuiUtil;
 import com.mraof.minestuck.network.TorrentPackets;
+import com.mraof.minestuck.player.IdentifierHandler;
 import net.minecraft.client.gui.Font;
 import net.minecraft.client.gui.GuiGraphics;
 import net.minecraft.client.gui.components.AbstractContainerWidget;
@@ -178,16 +179,16 @@ public class TorrentWidgets
 		public static final int WIDTH = GristEntry.WIDTH + 2;
 		public static final int HEIGHT = (GristEntry.HEIGHT + 1) * 6;
 		
-		public final TorrentSession torrentSession;
+		private final String playerUsername;
 		private final Font font;
 		
 		private final List<GristType> allGristTypes;
 		
-		public TorrentContainer(int pX, int pY, TorrentSession torrentSession, LimitedCache cache, Font font, List<GristType> allGristTypes)
+		public TorrentContainer(int pX, int pY, Font font, IdentifierHandler.UUIDIdentifier player, List<GristType> allGristTypes)
 		{
 			super(pX, pY, WIDTH, HEIGHT);
 			
-			this.torrentSession = torrentSession;
+			this.playerUsername = player.getUsername();
 			this.font = font;
 			this.allGristTypes = allGristTypes;
 			
@@ -195,29 +196,26 @@ public class TorrentWidgets
 			for(GristType type : allGristTypes)
 			{
 				GristEntry gristEntry = new GristEntry(pX, pY + ((GristEntry.HEIGHT + 1) * yOffset), type);
+				if(this.children().size() < visibleEntryCount())
+					gristEntry.visible = true;
+				
+				gristEntry.isOwner = GristTorrentGui.userSession.sameOwner(player);
+				gristEntry.font = font;
 				
 				this.children().add(gristEntry);
 				
 				yOffset++;
 			}
-			
-			completeGristEntryInit(cache);
 		}
 		
-		private void completeGristEntryInit(LimitedCache cache)
+		public void refreshEntries(TorrentSession torrentSession, LimitedCache cache)
 		{
-			for(int i = 0; i < this.children().size(); i++)
+			for(GristEntry gristEntry : this.children())
 			{
-				GristEntry gristEntry = this.children().get(i);
-				if(i < visibleEntryCount())
-					gristEntry.visible = true;
-				
 				GristType entryGristType = gristEntry.gristType;
 				
 				gristEntry.torrentSession = torrentSession;
-				gristEntry.isOwner = GristTorrentGui.userSession.sameOwner(torrentSession);
 				gristEntry.isActive = gristEntry.isOwner ? torrentSession.getSeeding().contains(entryGristType) : torrentSession.isLeechForGristType(GristTorrentGui.userSession.getSeeder(), entryGristType);
-				gristEntry.font = font;
 				gristEntry.cache = cache;
 				gristEntry.gristAmount = cache.set().getGrist(entryGristType);
 				gristEntry.cacheLimit = cache.limit();
@@ -231,10 +229,9 @@ public class TorrentWidgets
 		{
 			super.renderWidget(guiGraphics, mouseX, mouseY, partialTick);
 			
-			String text = torrentSession.getSeeder().getUsername();
 			guiGraphics.pose().pushPose();
 			guiGraphics.pose().scale(0.5F, 0.5F, 0.5F);
-			guiGraphics.drawString(font, text, scale((getX() + WIDTH / 2)) - scale(font.width(text) / 2), scale(getY() + 4), 0xFF000000, false);
+			guiGraphics.drawString(font, this.playerUsername, scale((getX() + WIDTH / 2)) - scale(font.width(this.playerUsername) / 2), scale(getY() + 4), 0xFF000000, false);
 			guiGraphics.pose().popPose();
 		}
 		
