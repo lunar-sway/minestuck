@@ -2,11 +2,16 @@ package com.mraof.minestuck.block;
 
 import com.mraof.minestuck.util.MSSoundEvents;
 import net.minecraft.core.Holder;
+import net.minecraft.core.Registry;
+import net.minecraft.core.registries.Registries;
+import net.minecraft.resources.ResourceKey;
 import net.minecraft.sounds.SoundEvent;
-import net.minecraft.sounds.SoundEvents;
 import net.minecraft.util.StringRepresentable;
 import net.minecraft.world.effect.MobEffectInstance;
 import net.minecraft.world.effect.MobEffects;
+import net.minecraft.world.item.JukeboxSong;
+import net.minecraft.world.item.JukeboxSongs;
+import net.minecraft.world.level.Level;
 
 import javax.annotation.Nonnull;
 import javax.annotation.Nullable;
@@ -16,49 +21,49 @@ import java.util.function.Supplier;
 public enum EnumCassetteType implements StringRepresentable
 {
 	NONE(null, null),
-	FIVE(SoundEvents.MUSIC_DISC_5, onHitEffect(() -> new MobEffectInstance(MobEffects.DARKNESS, 500, 0),
+	FIVE(JukeboxSongs.FIVE, onHitEffect(() -> new MobEffectInstance(MobEffects.DARKNESS, 500, 0),
 			0.90F)),
-	OTHERSIDE(SoundEvents.MUSIC_DISC_OTHERSIDE, userEffect(() -> new MobEffectInstance(MobEffects.DAMAGE_BOOST, 100, 1,
+	OTHERSIDE(JukeboxSongs.OTHERSIDE, userEffect(() -> new MobEffectInstance(MobEffects.DAMAGE_BOOST, 100, 1,
 			false, false, false))),
-	ELEVEN(SoundEvents.MUSIC_DISC_11, onHitEffect(() -> new MobEffectInstance(MobEffects.WITHER, 160, 0),
+	ELEVEN(JukeboxSongs.ELEVEN, onHitEffect(() -> new MobEffectInstance(MobEffects.WITHER, 160, 0),
 			0.10F)),
-	THIRTEEN(SoundEvents.MUSIC_DISC_13, onHitEffect(() -> new MobEffectInstance(MobEffects.HUNGER, 500, 0), 0.30F)),
-	BLOCKS(SoundEvents.MUSIC_DISC_BLOCKS, onHitEffect(() -> new MobEffectInstance(MobEffects.BLINDNESS, 100, 0),
+	THIRTEEN(JukeboxSongs.THIRTEEN, onHitEffect(() -> new MobEffectInstance(MobEffects.HUNGER, 500, 0), 0.30F)),
+	BLOCKS(JukeboxSongs.BLOCKS, onHitEffect(() -> new MobEffectInstance(MobEffects.BLINDNESS, 100, 0),
 			0.15F)),
-	CAT(SoundEvents.MUSIC_DISC_CAT, userEffect(() -> new MobEffectInstance(MobEffects.NIGHT_VISION, 200, 0,
+	CAT(JukeboxSongs.CAT, userEffect(() -> new MobEffectInstance(MobEffects.NIGHT_VISION, 200, 0,
 			false, false, false))),
-	CHIRP(SoundEvents.MUSIC_DISC_CHIRP, userEffect(() -> new MobEffectInstance(MobEffects.SLOW_FALLING, 100, 0,
+	CHIRP(JukeboxSongs.CHIRP, userEffect(() -> new MobEffectInstance(MobEffects.SLOW_FALLING, 100, 0,
 			false, false, false))),
-	DANCE_STAB_DANCE(MSSoundEvents.MUSIC_DISC_DANCE_STAB_DANCE, onHitEffect(() -> new MobEffectInstance(MobEffects.DIG_SLOWDOWN, 600, 3),
+	DANCE_STAB_DANCE(MSSoundEvents.JUKEBOX_SONG_DANCE_STAB_DANCE, onHitEffect(() -> new MobEffectInstance(MobEffects.DIG_SLOWDOWN, 600, 3),
 			0.3F)),
-	EMISSARY_OF_DANCE(MSSoundEvents.MUSIC_DISC_EMISSARY_OF_DANCE, onHitEffect(() -> new MobEffectInstance(MobEffects.POISON, 200, 0),
+	EMISSARY_OF_DANCE(MSSoundEvents.JUKEBOX_SONG_EMISSARY_OF_DANCE, onHitEffect(() -> new MobEffectInstance(MobEffects.POISON, 200, 0),
 			0.1F)),
-	FAR(SoundEvents.MUSIC_DISC_FAR, userEffect(() -> new MobEffectInstance(MobEffects.MOVEMENT_SPEED, 100, 0,
+	FAR(JukeboxSongs.FAR, userEffect(() -> new MobEffectInstance(MobEffects.MOVEMENT_SPEED, 100, 0,
 			false, false, false))),
-	MALL(SoundEvents.MUSIC_DISC_MALL, userEffect(() -> new MobEffectInstance(MobEffects.WATER_BREATHING, 100, 0,
+	MALL(JukeboxSongs.MALL, userEffect(() -> new MobEffectInstance(MobEffects.WATER_BREATHING, 100, 0,
 			false, false, false))),
-	MELLOHI(SoundEvents.MUSIC_DISC_MELLOHI, onHitEffect(() -> new MobEffectInstance(MobEffects.LEVITATION, 60, 0),
+	MELLOHI(JukeboxSongs.MELLOHI, onHitEffect(() -> new MobEffectInstance(MobEffects.LEVITATION, 60, 0),
 			0.20F)),
-	PIGSTEP(SoundEvents.MUSIC_DISC_PIGSTEP, userEffect(() -> new MobEffectInstance(MobEffects.FIRE_RESISTANCE, 100, 0,
+	PIGSTEP(JukeboxSongs.PIGSTEP, userEffect(() -> new MobEffectInstance(MobEffects.FIRE_RESISTANCE, 100, 0,
 			false, false, false))),
-	RETRO_BATTLE_THEME(MSSoundEvents.MUSIC_DISC_RETRO_BATTLE_THEME, userEffect(() -> new MobEffectInstance(MobEffects.DIG_SPEED, 100, 2,
+	RETRO_BATTLE_THEME(MSSoundEvents.JUKEBOX_SONG_RETRO_BATTLE_THEME, userEffect(() -> new MobEffectInstance(MobEffects.DIG_SPEED, 100, 2,
 			false, false, false))),
-	STAL(SoundEvents.MUSIC_DISC_STAL, userEffect(() -> new MobEffectInstance(MobEffects.JUMP, 100, 1,
+	STAL(JukeboxSongs.STAL, userEffect(() -> new MobEffectInstance(MobEffects.JUMP, 100, 1,
 			false, false, false))),
-	STRAD(SoundEvents.MUSIC_DISC_STRAD, onHitEffect(() -> new MobEffectInstance(MobEffects.UNLUCK, 200, 0),
+	STRAD(JukeboxSongs.STRAD, onHitEffect(() -> new MobEffectInstance(MobEffects.UNLUCK, 200, 0),
 			0.10F)),
-	WAIT(SoundEvents.MUSIC_DISC_WAIT, onHitEffect(() -> new MobEffectInstance(MobEffects.MOVEMENT_SLOWDOWN, 200, 0),
+	WAIT(JukeboxSongs.WAIT, onHitEffect(() -> new MobEffectInstance(MobEffects.MOVEMENT_SLOWDOWN, 200, 0),
 			0.30F)),
-	WARD(SoundEvents.MUSIC_DISC_WARD, onHitEffect(() -> new MobEffectInstance(MobEffects.GLOWING, 750, 0), 1F));
+	WARD(JukeboxSongs.WARD, onHitEffect(() -> new MobEffectInstance(MobEffects.GLOWING, 750, 0), 1F));
 	
 	@Nullable
-	private final Holder<SoundEvent> soundEvent;
+	private final ResourceKey<JukeboxSong> jukeboxSong;
 	@Nullable
 	private final EffectContainer effectContainer;
 	
-	EnumCassetteType(@Nullable Holder<SoundEvent> soundEvent, @Nullable EffectContainer effectContainer)
+	EnumCassetteType(@Nullable ResourceKey<JukeboxSong> jukeboxSong, @Nullable EffectContainer effectContainer)
 	{
-		this.soundEvent = soundEvent;
+		this.jukeboxSong = jukeboxSong;
 		this.effectContainer = effectContainer;
 	}
 	
@@ -69,9 +74,21 @@ public enum EnumCassetteType implements StringRepresentable
 	}
 	
 	@Nullable
-	public Holder<SoundEvent> getSoundEvent()
+	public ResourceKey<JukeboxSong> getJukeboxSong()
 	{
-		return this.soundEvent;
+		return this.jukeboxSong;
+	}
+	
+	@Nullable
+	public Holder<SoundEvent> getSoundEvent(Level level)
+	{
+		Registry<JukeboxSong> jukeboxRegistry = level.registryAccess().registryOrThrow(Registries.JUKEBOX_SONG);
+		if(this.jukeboxSong == null)
+			return null;
+		JukeboxSong jukeboxSongObject = jukeboxRegistry.get(this.jukeboxSong);
+		if(jukeboxSongObject == null)
+			return null;
+		return jukeboxSongObject.soundEvent();
 	}
 	
 	@Nonnull
@@ -80,7 +97,9 @@ public enum EnumCassetteType implements StringRepresentable
 		return Objects.requireNonNull(effectContainer);
 	}
 	
-	public record EffectContainer(Supplier<MobEffectInstance> effect, float applyingChance, boolean onHit) {}
+	public record EffectContainer(Supplier<MobEffectInstance> effect, float applyingChance, boolean onHit)
+	{
+	}
 	
 	private static EffectContainer userEffect(Supplier<MobEffectInstance> effect)
 	{
