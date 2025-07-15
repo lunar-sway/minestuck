@@ -179,7 +179,7 @@ public class TorrentWidgets
 		public static final int WIDTH = GristEntry.WIDTH + 2;
 		public static final int HEIGHT = (GristEntry.HEIGHT + 1) * 6;
 		
-		private final String playerUsername;
+		public final IdentifierHandler.UUIDIdentifier player;
 		private final Font font;
 		
 		private final List<GristType> allGristTypes;
@@ -188,7 +188,7 @@ public class TorrentWidgets
 		{
 			super(pX, pY, WIDTH, HEIGHT);
 			
-			this.playerUsername = player.getUsername();
+			this.player = player;
 			this.font = font;
 			this.allGristTypes = allGristTypes;
 			
@@ -231,7 +231,8 @@ public class TorrentWidgets
 			
 			guiGraphics.pose().pushPose();
 			guiGraphics.pose().scale(0.5F, 0.5F, 0.5F);
-			guiGraphics.drawString(font, this.playerUsername, scale((getX() + WIDTH / 2)) - scale(font.width(this.playerUsername) / 2), scale(getY() + 4), 0xFF000000, false);
+			String username = this.player.getUsername();
+			guiGraphics.drawString(font, username, scale((getX() + WIDTH / 2)) - scale(font.width(username) / 2), scale(getY() + 4), 0xFF000000, false);
 			guiGraphics.pose().popPose();
 		}
 		
@@ -288,7 +289,7 @@ public class TorrentWidgets
 		
 		public void updateStats()
 		{
-			LimitedCache userCache = GristTorrentGui.visibleTorrentData.get(GristTorrentGui.userSession);
+			LimitedCache userCache = GristTorrentGui.visibleTorrentData.get(GristTorrentGui.userSession.getSeeder()).getSecond();
 			
 			int minDownSpeed = Integer.MAX_VALUE;
 			int maxDownSpeed = 1;
@@ -296,17 +297,17 @@ public class TorrentWidgets
 			
 			Map<TorrentSession, LimitedCache> filteredData = new HashMap<>();
 			GristTorrentGui.visibleTorrentData.forEach((key, value) -> {
-				boolean couldSeed = value.set().asAmounts().stream().anyMatch(gristAmount -> gristAmount.hasType(gristType) && !gristAmount.isEmpty());
-				boolean tryingToSeed = key.getSeeding().stream().anyMatch(iterateType -> iterateType.equals(gristType));
-				boolean userTryingToLeech = key.isLeechForGristType(GristTorrentGui.userSession.getSeeder(), gristType);
+				boolean couldSeed = value.getSecond().set().asAmounts().stream().anyMatch(gristAmount -> gristAmount.hasType(gristType) && !gristAmount.isEmpty());
+				boolean tryingToSeed = value.getFirst().getSeeding().stream().anyMatch(iterateType -> iterateType.equals(gristType));
+				boolean userTryingToLeech = value.getFirst().isLeechForGristType(GristTorrentGui.userSession.getSeeder(), gristType);
 				
-				if(tryingToSeed && !key.sameOwner(GristTorrentGui.userSession))
+				if(tryingToSeed && !value.getFirst().sameOwner(GristTorrentGui.userSession))
 				{
 					if(couldSeed)
 						totalSeeds.addAndGet(1);
 					
 					if(userTryingToLeech)
-						filteredData.put(key, value);
+						filteredData.put(value.getFirst(), value.getSecond());
 				}
 			}); //only include data if the user is trying to leech the grist
 			
