@@ -83,7 +83,12 @@ public enum EnumCassetteType implements StringRepresentable
 	public Holder<SoundEvent> getSoundEvent(Level level)
 	{
 		Registry<JukeboxSong> jukeboxRegistry = level.registryAccess().registryOrThrow(Registries.JUKEBOX_SONG);
-		return jukeboxRegistry.get(this.jukeboxSong).soundEvent();
+		if(this.jukeboxSong == null)
+			return null;
+		JukeboxSong jukeboxSongObject = jukeboxRegistry.get(this.jukeboxSong);
+		if(jukeboxSongObject == null)
+			return null;
+		return jukeboxSongObject.soundEvent();
 	}
 	
 	@Nonnull
@@ -92,7 +97,9 @@ public enum EnumCassetteType implements StringRepresentable
 		return Objects.requireNonNull(effectContainer);
 	}
 	
-	public record EffectContainer(Supplier<MobEffectInstance> effect, float applyingChance, boolean onHit) {}
+	public record EffectContainer(Supplier<MobEffectInstance> effect, float applyingChance, boolean onHit)
+	{
+	}
 	
 	private static EffectContainer userEffect(Supplier<MobEffectInstance> effect)
 	{
