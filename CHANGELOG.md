@@ -30,6 +30,7 @@ The format is based on [Keep a Changelog](https://keepachangelog.com/en/1.1.0/).
 ### Removed
 
 - Removed `minestuck:non_mirrored` recipe type
+- Removed `preEntryRungLimit` server config
 
 ### Contributors for this release
 

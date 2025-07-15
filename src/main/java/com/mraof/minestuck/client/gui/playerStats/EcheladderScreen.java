@@ -38,7 +38,6 @@ public class EcheladderScreen extends PlayerStatsScreen
 	
 	private static final ResourceLocation guiEcheladder = ResourceLocation.fromNamespaceAndPath("minestuck", "textures/gui/echeladder.png");
 	
-	private static final int LADDER_X_OFFSET = 163;
 	private static final int RUNG_Y = 14;
 	private static final int VISIBLE_RUNG_COUNT = 12;
 	
@@ -81,12 +80,9 @@ public class EcheladderScreen extends PlayerStatsScreen
 		rungBars.clear();
 		for(int i = 0; i <= ClientRungData.getFinalRungIndex(); i++)
 		{
-			Component name = Component.translatable(I18n.exists("echeladder.rung." + i) ? I18n.get("echeladder.rung." + i) : "Rung " + (i + 1));
+			Component name = I18n.exists("echeladder.rung." + i) ? Component.translatable("echeladder.rung." + i) : Component.literal("Rung " + (i + 1));
 			
-			Optional<String> tooltip = Optional.empty();
-			String description = ClientRungData.getData(i).description().orElse("");
-			if(!description.isEmpty())
-				tooltip = Optional.of(description);
+			Optional<String> tooltip = ClientRungData.getData(i).description();
 			
 			RungBar rungBar = new RungBar(xOffset + 90, yOffset + 175 - i * RUNG_Y, 146, RUNG_Y, name, tooltip, i);
 			rungBars.add(rungBar);
@@ -105,14 +101,14 @@ public class EcheladderScreen extends PlayerStatsScreen
 		
 		calculateRungAnimationStep(speedFactor);
 		
-		super.render(guiGraphics, mouseX, mouseY, partialTicks);
-		
-		drawTabs(guiGraphics);
-		
 		rungBars.forEach(rungBar -> {
 			rungBar.setY(rungBar.initY + getScrollMod());
 			rungBar.updateVisibility();
 		});
+		
+		super.render(guiGraphics, mouseX, mouseY, partialTicks);
+		
+		drawTabs(guiGraphics);
 		
 		RenderSystem.setShaderColor(1, 1, 1, 1);
 		
@@ -360,17 +356,16 @@ public class EcheladderScreen extends PlayerStatsScreen
 			{
 				textColor = ClientRungData.getData(rung).textColor();
 				//full bar
-				guiGraphics.fill(xOffset + 90, y + 2, xOffset + 236, y + 14, backgroundColor);
+				guiGraphics.fill(x, y + 2, x + 146, y + 14, backgroundColor);
 			} else if(rung == currentRung + 1 && animationCycle == 0)
 			{
 				//progress bar
 				float brightness = (((backgroundColor >> 16) & 0xFF) + ((backgroundColor >> 8) & 0xFF) + (backgroundColor & 0xFF)) / 765F;
 				boolean isDark = brightness < 0.2;
-				guiGraphics.fill(xOffset + 90, y + 12, xOffset + 90 + (int) (146 * ClientPlayerData.getRungProgress()), y + 14, isDark ? 0xFFFFFFFF : backgroundColor);
+				guiGraphics.fill(x, y + 12, x + (int) (146 * ClientPlayerData.getRungProgress()), y + 14, isDark ? 0xFFFFFFFF : backgroundColor);
 			}
 			
-			String s = I18n.exists("echeladder.rung." + rung) ? I18n.get("echeladder.rung." + rung) : "Rung " + (rung + 1);
-			guiGraphics.drawString(font, s, xOffset + LADDER_X_OFFSET - mc.font.width(s) / 2, y + 4, textColor, false);
+			guiGraphics.drawString(font, this.getMessage(), x + 73 - mc.font.width(this.getMessage()) / 2, y + 4, textColor, false);
 		}
 		
 		public void updateVisibility()
