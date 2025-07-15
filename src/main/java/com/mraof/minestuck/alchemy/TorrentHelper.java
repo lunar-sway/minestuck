@@ -11,16 +11,20 @@ import net.minecraft.server.MinecraftServer;
 import net.minecraft.server.level.ServerPlayer;
 import net.neoforged.neoforge.network.PacketDistributor;
 
-import java.util.*;
+import java.util.ArrayList;
+import java.util.HashMap;
+import java.util.List;
+import java.util.Map;
+import java.util.stream.Collectors;
 
 public final class TorrentHelper
 {
 	public static TorrentSession createPlayerTorrentSession(ServerPlayer player, MinecraftServer server)
 	{
-		return createPlayerTorrentSession((IdentifierHandler.UUIDIdentifier) IdentifierHandler.encode(player), server);
+		return createPlayerTorrentSession(IdentifierHandler.encode(player), server);
 	}
 	
-	public static TorrentSession createPlayerTorrentSession(IdentifierHandler.UUIDIdentifier player, MinecraftServer server)
+	public static TorrentSession createPlayerTorrentSession(PlayerIdentifier player, MinecraftServer server)
 	{
 		List<GristType> seeding = new ArrayList<>();
 		
@@ -41,7 +45,7 @@ public final class TorrentHelper
 		if(seedAll)
 			seeding.addAll(GristTypes.REGISTRY.stream().toList());
 		
-		return new TorrentSession(new IdentifierHandler.UUIDIdentifier(id, UUID.randomUUID()), seeding, new ArrayList<>());
+		return new TorrentSession(IdentifierHandler.createNewFakeIdentifier(), seeding, new ArrayList<>());
 	}
 	
 	public static void debugStuff(MinecraftServer server, MSExtraData data)
@@ -53,7 +57,7 @@ public final class TorrentHelper
 			if(player.isHolding(MSItems.MWRTHWL.get()))
 			{
 				TorrentSession playerSession = createPlayerTorrentSession(player, server);
-				List<IdentifierHandler.UUIDIdentifier> testIDs = new ArrayList<>();
+				List<PlayerIdentifier> testIDs = new ArrayList<>();
 				
 				if(data.getTorrentSessions().stream().anyMatch(session -> session.getSeeder().getId() == 99))
 					return;
@@ -63,7 +67,7 @@ public final class TorrentHelper
 					TorrentSession iterateSession = createTestTorrentSession(i, true);
 					data.tryAddTorrentSession(iterateSession);
 					
-					IdentifierHandler.UUIDIdentifier testID = iterateSession.getSeeder();
+					PlayerIdentifier testID = iterateSession.getSeeder();
 					testIDs.add(testID);
 					
 					List<GristAmount> gristAmounts = new ArrayList<>();
@@ -81,7 +85,7 @@ public final class TorrentHelper
 	
 	public static void handleTorrent(TorrentSession torrentSession, List<TorrentSession> sessions, MinecraftServer server)
 	{
-		IdentifierHandler.UUIDIdentifier seeder = torrentSession.getSeeder();
+		PlayerIdentifier seeder = torrentSession.getSeeder();
 		
 		PlayerData seederData = PlayerData.get(seeder, server);
 		GristCache seederCache = GristCache.get(seederData);
@@ -103,7 +107,7 @@ public final class TorrentHelper
 		sendOutUpdates(sessions, server, seeder);
 	}
 	
-	public static void sendOutUpdates(List<TorrentSession> sessions, MinecraftServer server, IdentifierHandler.UUIDIdentifier seeder)
+	public static void sendOutUpdates(List<TorrentSession> sessions, MinecraftServer server, PlayerIdentifier seeder)
 	{
 		//TODO consider holding on to torrent data that may be sent to multiple players
 		ServerPlayer seederPlayer = seeder.getPlayer(server);
@@ -113,9 +117,9 @@ public final class TorrentHelper
 			boolean sessionOnly = visibilityConfig.equals(MinestuckConfig.TorrentVisibility.SESSION);
 			boolean globalVisibility = visibilityConfig.equals(MinestuckConfig.TorrentVisibility.GLOBAL);
 			
-			Map<TorrentSession, TorrentSession.LimitedCache> visibleTorrentData = new HashMap<>();
+			Map<Integer, TorrentSession.TorrentClientData> visibleTorrentData = new HashMap<>();
 			sessions.forEach(session -> {
-				IdentifierHandler.UUIDIdentifier sessionPlayerID = session.getSeeder();
+				PlayerIdentifier sessionPlayerID = session.getSeeder();
 				
 				//TODO add Land config option functionality
 				//SkaianetData.get(server).getOrCreatePredefineData(sessionPlayerID);
@@ -132,7 +136,8 @@ public final class TorrentHelper
 					GristCache leechCache = GristCache.get(leechData);
 					TorrentSession.LimitedCache leechLimitedCache = new TorrentSession.LimitedCache(leechCache.getGristSet(), Echeladder.get(leechData).getGristCapacity());
 					
-					visibleTorrentData.put(session, leechLimitedCache);
+					visibleTorrentData.put(sessionPlayerID.getId(), new TorrentSession.TorrentClientData(sessionPlayerID.getUsername(), session.getSeeding(),
+							session.getLeeching().stream().collect(Collectors.toMap(leech -> leech.id().getId(), TorrentSession.Leech::gristTypes)), leechLimitedCache));
 				}
 			});
 			

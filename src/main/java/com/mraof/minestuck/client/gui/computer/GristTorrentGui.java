@@ -1,9 +1,7 @@
 package com.mraof.minestuck.client.gui.computer;
 
-import com.mojang.datafixers.util.Pair;
 import com.mraof.minestuck.Minestuck;
 import com.mraof.minestuck.alchemy.TorrentSession;
-import com.mraof.minestuck.alchemy.TorrentSession.LimitedCache;
 import com.mraof.minestuck.api.alchemy.GristAmount;
 import com.mraof.minestuck.api.alchemy.GristSet;
 import com.mraof.minestuck.blockentity.ComputerBlockEntity;
@@ -11,7 +9,7 @@ import com.mraof.minestuck.client.gui.MSScreenFactories;
 import com.mraof.minestuck.client.gui.computer.TorrentWidgets.*;
 import com.mraof.minestuck.computer.ProgramType;
 import com.mraof.minestuck.player.ClientPlayerData;
-import com.mraof.minestuck.player.IdentifierHandler;
+import com.mraof.minestuck.skaianet.client.SkaiaClient;
 import net.minecraft.client.gui.GuiGraphics;
 import net.minecraft.client.gui.screens.Screen;
 import net.minecraft.network.chat.Component;
@@ -46,8 +44,7 @@ public final class GristTorrentGui extends Screen implements ProgramGui<ProgramT
 	
 	private GristSet gutterGrist;
 	private long gutterRemainingCapacity;
-	static final Map<IdentifierHandler.UUIDIdentifier, Pair<TorrentSession, LimitedCache>> visibleTorrentData = new HashMap<>();
-	static TorrentSession userSession;
+	static final Map<Integer, TorrentSession.TorrentClientData> visibleTorrentData = new HashMap<>();
 	
 	private final List<TorrentContainer> torrentContainers = new ArrayList<>();
 	private final List<GutterBar> gutterBars = new ArrayList<>();
@@ -69,14 +66,11 @@ public final class GristTorrentGui extends Screen implements ProgramGui<ProgramT
 		
 		gutterGrist = ClientPlayerData.getGutterSet();
 		visibleTorrentData.clear();
-		ClientPlayerData.getVisibleTorrentData().forEach(((torrentSession, limitedCache) ->
-				visibleTorrentData.put(torrentSession.getSeeder(), Pair.of(torrentSession, limitedCache))));
+		visibleTorrentData.putAll(ClientPlayerData.getVisibleTorrentData());
 		
 		if(minecraft == null || minecraft.player == null)
 			return;
-		Pair<TorrentSession, LimitedCache> userDataEntry = visibleTorrentData.get(new IdentifierHandler.UUIDIdentifier(0, minecraft.player.getUUID()));
-		if(userDataEntry != null)
-			userSession = userDataEntry.getFirst();
+		TorrentSession.TorrentClientData userDataEntry = visibleTorrentData.get(SkaiaClient.playerId);
 		
 		addTorrentSessions();
 		
@@ -110,8 +104,7 @@ public final class GristTorrentGui extends Screen implements ProgramGui<ProgramT
 			gutterGrist = ClientPlayerData.getGutterSet();
 			gutterRemainingCapacity = ClientPlayerData.getGutterRemainingCapacity();
 			visibleTorrentData.clear();
-			ClientPlayerData.getVisibleTorrentData().forEach(((torrentSession, limitedCache) ->
-					visibleTorrentData.put(torrentSession.getSeeder(), Pair.of(torrentSession, limitedCache))));
+			visibleTorrentData.putAll(ClientPlayerData.getVisibleTorrentData());
 			
 			//TODO update gutter bar data
 			renderTorrentSessions();
@@ -124,14 +117,14 @@ public final class GristTorrentGui extends Screen implements ProgramGui<ProgramT
 	{
 		for(TorrentContainer torrentContainer : torrentContainers)
 		{
-			if(!visibleTorrentData.containsKey(torrentContainer.player))
+			if(!visibleTorrentData.containsKey(torrentContainer.playerId))
 			{
 				addTorrentSessions();
 				break;
 			}
 			
-			Pair<TorrentSession, LimitedCache> pair = visibleTorrentData.get(torrentContainer.player);
-			torrentContainer.refreshEntries(pair.getFirst(), pair.getSecond());
+			TorrentSession.TorrentClientData data = visibleTorrentData.get(torrentContainer.playerId);
+			torrentContainer.refreshEntries(data);
 		}
 	}
 	
@@ -175,37 +168,33 @@ public final class GristTorrentGui extends Screen implements ProgramGui<ProgramT
 	
 	private void addTorrentSessions()
 	{
-		if(userSession == null)
+		TorrentSession.TorrentClientData userData = visibleTorrentData.get(SkaiaClient.playerId);
+		if(userData == null)
 			return; //if the users own session isnt visible, there is no point in looking at any
 		
 		torrentContainers.forEach(this::removeWidget);
 		
 		int torrentXOffset = 0;
 		
-		ClientPlayerData.ClientCache clientCache = ClientPlayerData.getGristCache(ClientPlayerData.CacheSource.PLAYER);
-		createTorrentWidgets(userSession, new LimitedCache(clientCache.set().asImmutable(), clientCache.limit()), torrentXOffset);
+		createTorrentWidgets(SkaiaClient.playerId, userData, torrentXOffset);
 		torrentXOffset++;
 		
-		for(Pair<TorrentSession, LimitedCache> entry : visibleTorrentData.values())
+		for(Map.Entry<Integer, TorrentSession.TorrentClientData> entry : visibleTorrentData.entrySet())
 		{
-			TorrentSession entrySession = entry.getFirst();
-			LimitedCache entryCache = entry.getSecond();
-			
-			if(entrySession.sameOwner(userSession))
+			if(entry.getKey() == SkaiaClient.playerId)
 				continue;
 			
-			createTorrentWidgets(entrySession, entryCache, torrentXOffset);
+			createTorrentWidgets(entry.getKey(), entry.getValue(), torrentXOffset);
 			torrentXOffset++;
 		}
 	}
 	
-	public void createTorrentWidgets(TorrentSession torrentSession, LimitedCache cache, int torrentXOffset)
+	public void createTorrentWidgets(int playerId, TorrentSession.TorrentClientData torrentData, int torrentXOffset)
 	{
 		int combinedXOffset = xOffset + 5 + ((GristEntry.WIDTH + 2) * torrentXOffset);
 		
-		//TODO because this is being reset, the tooltip is flashing and the scroll returns to 0 preventing it from moving
-		TorrentContainer torrentContainer = new TorrentContainer(combinedXOffset, gristWidgetsYOffset, font, torrentSession.getSeeder());
-		torrentContainer.refreshEntries(torrentSession, cache);
+		TorrentContainer torrentContainer = new TorrentContainer(combinedXOffset, gristWidgetsYOffset, font, playerId, torrentData.username());
+		torrentContainer.refreshEntries(torrentData);
 		torrentContainers.add(torrentContainer);
 		addRenderableWidget(torrentContainer);
 	}

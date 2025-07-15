@@ -19,10 +19,10 @@ import java.util.Map;
 
 public class TorrentPackets
 {
-	public record UpdateClient(Map<TorrentSession, TorrentSession.LimitedCache> data) implements MSPacket.PlayToClient
+	public record UpdateClient(Map<Integer, TorrentSession.TorrentClientData> data) implements MSPacket.PlayToClient
 	{
 		public static final Type<UpdateClient> ID = new Type<>(Minestuck.id("torrent_update_client"));
-		private static final StreamCodec<RegistryFriendlyByteBuf, Map<TorrentSession, TorrentSession.LimitedCache>> MAP_STREAM_CODEC = ByteBufCodecs.map(HashMap::new, TorrentSession.STREAM_CODEC, TorrentSession.LimitedCache.STREAM_CODEC);
+		private static final StreamCodec<RegistryFriendlyByteBuf, Map<Integer, TorrentSession.TorrentClientData>> MAP_STREAM_CODEC = ByteBufCodecs.map(HashMap::new, ByteBufCodecs.INT, TorrentSession.TorrentClientData.STREAM_CODEC);
 		public static final StreamCodec<RegistryFriendlyByteBuf, UpdateClient> STREAM_CODEC = MAP_STREAM_CODEC.map(UpdateClient::new, UpdateClient::data);
 		
 		@Override
@@ -61,17 +61,17 @@ public class TorrentPackets
 			MinecraftServer server = player.server;
 			MSExtraData data = MSExtraData.get(server);
 			
-			data.updateTorrentSeeding((IdentifierHandler.UUIDIdentifier) IdentifierHandler.encode(player), gristType, isSeeding);
+			data.updateTorrentSeeding(IdentifierHandler.encode(player), gristType, isSeeding);
 		}
 	}
 	
-	public record ModifyLeeching(IdentifierHandler.UUIDIdentifier target, GristType gristType,
+	public record ModifyLeeching(Integer targetId, GristType gristType,
 								 boolean isLeeching) implements MSPacket.PlayToServer
 	{
 		public static final Type<ModifyLeeching> ID = new Type<>(Minestuck.id("torrent_modify_leeching"));
 		public static final StreamCodec<RegistryFriendlyByteBuf, ModifyLeeching> STREAM_CODEC = StreamCodec.composite(
-				IdentifierHandler.UUIDIdentifier.STREAM_CODEC,
-				ModifyLeeching::target,
+				ByteBufCodecs.INT,
+				ModifyLeeching::targetId,
 				GristType.STREAM_CODEC,
 				ModifyLeeching::gristType,
 				ByteBufCodecs.BOOL,
@@ -91,7 +91,7 @@ public class TorrentPackets
 			MinecraftServer server = player.server;
 			MSExtraData data = MSExtraData.get(server);
 			
-			data.updateTorrentLeeching(target, (IdentifierHandler.UUIDIdentifier) IdentifierHandler.encode(player), gristType, isLeeching);
+			data.updateTorrentLeeching(IdentifierHandler.getById(targetId), IdentifierHandler.encode(player), gristType, isLeeching);
 		}
 	}
 }

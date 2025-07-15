@@ -5,13 +5,12 @@ import com.mojang.blaze3d.vertex.*;
 import com.mojang.datafixers.util.Pair;
 import com.mraof.minestuck.alchemy.TorrentHelper;
 import com.mraof.minestuck.alchemy.TorrentSession;
-import com.mraof.minestuck.alchemy.TorrentSession.LimitedCache;
 import com.mraof.minestuck.api.alchemy.GristAmount;
 import com.mraof.minestuck.api.alchemy.GristType;
 import com.mraof.minestuck.api.alchemy.GristTypes;
 import com.mraof.minestuck.client.util.GuiUtil;
 import com.mraof.minestuck.network.TorrentPackets;
-import com.mraof.minestuck.player.IdentifierHandler;
+import com.mraof.minestuck.skaianet.client.SkaiaClient;
 import net.minecraft.client.gui.Font;
 import net.minecraft.client.gui.GuiGraphics;
 import net.minecraft.client.gui.components.AbstractContainerWidget;
@@ -25,9 +24,8 @@ import net.minecraft.resources.ResourceLocation;
 import net.neoforged.neoforge.network.PacketDistributor;
 
 import java.util.ArrayList;
-import java.util.HashMap;
+import java.util.Collections;
 import java.util.List;
-import java.util.Map;
 import java.util.concurrent.atomic.AtomicInteger;
 
 public class TorrentWidgets
@@ -72,20 +70,21 @@ public class TorrentWidgets
 		public static final int GRIST_COUNT_X = GRIST_ICON_X + 13;
 		public static final float BAR_WIDTH = 20F;
 		
-		private TorrentSession torrentSession;
-		public LimitedCache cache;
+		private TorrentSession.TorrentClientData torrentData;
 		public final GristType gristType;
+		private final Integer playerId;
 		public long gristAmount;
 		public long cacheLimit;
 		public boolean isOwner;
 		private boolean isActive;
 		private Font font;
 		
-		public GristEntry(int pX, int pY, GristType gristType)
+		public GristEntry(int pX, int pY, GristType gristType, int playerId)
 		{
 			super(pX, pY, WIDTH, HEIGHT, Component.empty());
 			
 			this.gristType = gristType;
+			this.playerId = playerId;
 			
 			visible = false;
 		}
@@ -95,7 +94,7 @@ public class TorrentWidgets
 		{
 			MutableComponent tooltip = gristType.getDisplayName();
 			
-			if(torrentSession != null && torrentSession.getSeeding().contains(gristType))
+			if(torrentData != null && torrentData.seededTypes().contains(gristType))
 			{
 				if(gristAmount > 0)
 					tooltip.append("\n(Is being seeded)");
@@ -165,7 +164,7 @@ public class TorrentWidgets
 			if(isOwner)
 				PacketDistributor.sendToServer(new TorrentPackets.ModifySeeding(gristType, isActive));
 			else
-				PacketDistributor.sendToServer(new TorrentPackets.ModifyLeeching(torrentSession.getSeeder(), gristType, isActive));
+				PacketDistributor.sendToServer(new TorrentPackets.ModifyLeeching(playerId, gristType, isActive));
 		}
 		
 		@Override
@@ -179,24 +178,26 @@ public class TorrentWidgets
 		public static final int WIDTH = GristEntry.WIDTH + 2;
 		public static final int HEIGHT = (GristEntry.HEIGHT + 1) * 6;
 		
-		public final IdentifierHandler.UUIDIdentifier player;
+		public final Integer playerId;
+		private final String username;
 		private final Font font;
 		
-		public TorrentContainer(int pX, int pY, Font font, IdentifierHandler.UUIDIdentifier player)
+		public TorrentContainer(int pX, int pY, Font font, Integer playerId, String username)
 		{
 			super(pX, pY, WIDTH, HEIGHT);
 			
-			this.player = player;
+			this.playerId = playerId;
+			this.username = username;
 			this.font = font;
 			
 			int yOffset = 1; //this is 1 because there needs to be room to render the name of the torrent's seeder
 			for(GristType type : GristTypes.REGISTRY)
 			{
-				GristEntry gristEntry = new GristEntry(pX, pY + ((GristEntry.HEIGHT + 1) * yOffset), type);
+				GristEntry gristEntry = new GristEntry(pX, pY + ((GristEntry.HEIGHT + 1) * yOffset), type, playerId);
 				if(this.children().size() < visibleEntryCount())
 					gristEntry.visible = true;
 				
-				gristEntry.isOwner = GristTorrentGui.userSession.sameOwner(player);
+				gristEntry.isOwner = playerId == SkaiaClient.playerId;
 				gristEntry.font = font;
 				
 				this.children().add(gristEntry);
@@ -205,17 +206,17 @@ public class TorrentWidgets
 			}
 		}
 		
-		public void refreshEntries(TorrentSession torrentSession, LimitedCache cache)
+		public void refreshEntries(TorrentSession.TorrentClientData torrentData)
 		{
 			for(GristEntry gristEntry : this.children())
 			{
 				GristType entryGristType = gristEntry.gristType;
 				
-				gristEntry.torrentSession = torrentSession;
-				gristEntry.isActive = gristEntry.isOwner ? torrentSession.getSeeding().contains(entryGristType) : torrentSession.isLeechForGristType(GristTorrentGui.userSession.getSeeder(), entryGristType);
-				gristEntry.cache = cache;
-				gristEntry.gristAmount = cache.set().getGrist(entryGristType);
-				gristEntry.cacheLimit = cache.limit();
+				gristEntry.torrentData = torrentData;
+				gristEntry.isActive = gristEntry.isOwner ? torrentData.seededTypes().contains(entryGristType)
+						: torrentData.leeches().getOrDefault(SkaiaClient.playerId, Collections.emptyList()).contains(entryGristType);
+				gristEntry.gristAmount = torrentData.cache().set().getGrist(entryGristType);
+				gristEntry.cacheLimit = torrentData.cache().limit();
 				
 				gristEntry.setTooltip();
 			}
@@ -228,7 +229,6 @@ public class TorrentWidgets
 			
 			guiGraphics.pose().pushPose();
 			guiGraphics.pose().scale(0.5F, 0.5F, 0.5F);
-			String username = this.player.getUsername();
 			guiGraphics.drawString(font, username, scale((getX() + WIDTH / 2)) - scale(font.width(username) / 2), scale(getY() + 4), 0xFF000000, false);
 			guiGraphics.pose().popPose();
 		}
@@ -286,39 +286,37 @@ public class TorrentWidgets
 		
 		public void updateStats()
 		{
-			LimitedCache userCache = GristTorrentGui.visibleTorrentData.get(GristTorrentGui.userSession.getSeeder()).getSecond();
+			TorrentSession.TorrentClientData userData = GristTorrentGui.visibleTorrentData.get(SkaiaClient.playerId);
 			
 			int minDownSpeed = Integer.MAX_VALUE;
 			int maxDownSpeed = 1;
 			AtomicInteger totalSeeds = new AtomicInteger(); //TODO is this appropriate?
 			
-			Map<TorrentSession, LimitedCache> filteredData = new HashMap<>();
+			List<TorrentSession.TorrentClientData> filteredData = new ArrayList<>();
 			GristTorrentGui.visibleTorrentData.forEach((key, value) -> {
-				boolean couldSeed = value.getSecond().set().asAmounts().stream().anyMatch(gristAmount -> gristAmount.hasType(gristType) && !gristAmount.isEmpty());
-				boolean tryingToSeed = value.getFirst().getSeeding().stream().anyMatch(iterateType -> iterateType.equals(gristType));
-				boolean userTryingToLeech = value.getFirst().isLeechForGristType(GristTorrentGui.userSession.getSeeder(), gristType);
+				boolean couldSeed = value.cache().set().asAmounts().stream().anyMatch(gristAmount -> gristAmount.hasType(gristType) && !gristAmount.isEmpty());
+				boolean tryingToSeed = value.seededTypes().stream().anyMatch(iterateType -> iterateType.equals(gristType));
+				boolean userTryingToLeech = value.leeches().getOrDefault(SkaiaClient.playerId, Collections.emptyList()).contains(gristType);
 				
-				if(tryingToSeed && !value.getFirst().sameOwner(GristTorrentGui.userSession))
+				if(tryingToSeed && key != SkaiaClient.playerId)
 				{
 					if(couldSeed)
 						totalSeeds.addAndGet(1);
 					
 					if(userTryingToLeech)
-						filteredData.put(value.getFirst(), value.getSecond());
+						filteredData.add(value);
 				}
 			}); //only include data if the user is trying to leech the grist
 			
 			if(filteredData.isEmpty())
 				return; //widget will render due to how min/max speeds are obtained without this early return
 			
-			List<GristType> userSeeding = GristTorrentGui.userSession.getViableSeeding(userCache);
+			List<GristType> userSeeding = userData.getViableSeeding();
 			typeUpSpeed = TorrentHelper.getSeedRateMod(userSeeding);
 			
-			for(Map.Entry<TorrentSession, LimitedCache> dataEntry : filteredData.entrySet())
+			for(TorrentSession.TorrentClientData dataEntry : filteredData)
 			{
-				TorrentSession entrySession = dataEntry.getKey();
-				LimitedCache entryCache = dataEntry.getValue();
-				List<GristType> entrySeeding = entrySession.getViableSeeding(entryCache);
+				List<GristType> entrySeeding = dataEntry.getViableSeeding();
 				
 				int entrySeedRate = TorrentHelper.getSeedRateMod(entrySeeding);
 				

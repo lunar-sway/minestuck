@@ -44,7 +44,7 @@ public final class ClientPlayerData
 	private static GristSet gutterGrist;
 	private static long gutterRemainingCapacity;
 	private static long targetCacheLimit;
-	private static Map<TorrentSession, TorrentSession.LimitedCache> visibleTorrentData = new HashMap<>();
+	private static Map<Integer, TorrentSession.TorrentClientData> visibleTorrentData = new HashMap<>();
 	private static int playerColor;
 	private static boolean displaySelectionGui;
 	private static boolean dataCheckerAccess;
@@ -120,7 +120,7 @@ public final class ClientPlayerData
 		return gutterRemainingCapacity;
 	}
 	
-	public static Map<TorrentSession, TorrentSession.LimitedCache> getVisibleTorrentData()
+	public static Map<Integer, TorrentSession.TorrentClientData> getVisibleTorrentData()
 	{
 		return visibleTorrentData;
 	}

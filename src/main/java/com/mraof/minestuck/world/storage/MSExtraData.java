@@ -6,7 +6,7 @@ import com.mraof.minestuck.alchemy.TorrentSession;
 import com.mraof.minestuck.api.alchemy.GristType;
 import com.mraof.minestuck.computer.editmode.EditData;
 import com.mraof.minestuck.entry.PostEntryTask;
-import com.mraof.minestuck.player.IdentifierHandler;
+import com.mraof.minestuck.player.PlayerIdentifier;
 import net.minecraft.core.HolderLookup;
 import net.minecraft.nbt.CompoundTag;
 import net.minecraft.nbt.ListTag;
@@ -83,8 +83,7 @@ public class MSExtraData extends SavedData
 		ListTag torrentSessionList = nbt.getList("torrent_sessions", Tag.TAG_COMPOUND);
 		for(int i = 0; i < torrentSessionList.size(); i++)
 		{
-			TorrentSession.CODEC.parse(NbtOps.INSTANCE, torrentSessionList.getCompound(i))
-					.resultOrPartial(LOGGER::error).ifPresent(data.torrentSessions::add);
+			data.torrentSessions.add(TorrentSession.read(torrentSessionList.getCompound(i)));
 		}
 		
 		return data;
@@ -109,9 +108,7 @@ public class MSExtraData extends SavedData
 		compound.put("card_captchas", cardCaptchas.serialize());
 		
 		ListTag torrentSessionList = new ListTag();
-		torrentSessions.stream()
-				.flatMap(session -> TorrentSession.CODEC.encodeStart(NbtOps.INSTANCE, session).resultOrPartial(LOGGER::error).stream())
-				.forEach(torrentSessionList::add);
+		torrentSessions.forEach(session -> torrentSessionList.add(session.write()));
 		
 		compound.put("torrent_sessions", torrentSessionList);
 		
@@ -234,7 +231,7 @@ public class MSExtraData extends SavedData
 		return torrentSessions;
 	}
 	
-	public void updateTorrentSeeding(IdentifierHandler.UUIDIdentifier playerID, GristType gristType, boolean isSeeding)
+	public void updateTorrentSeeding(PlayerIdentifier playerID, GristType gristType, boolean isSeeding)
 	{
 		for(int i = 0; i < torrentSessions.size(); i++)
 		{
@@ -259,7 +256,7 @@ public class MSExtraData extends SavedData
 		setDirty(); //TODO should this be set to dirty even if no information is changed?
 	}
 	
-	public void updateTorrentLeeching(IdentifierHandler.UUIDIdentifier target, IdentifierHandler.UUIDIdentifier playerID, GristType gristType, boolean isLeeching)
+	public void updateTorrentLeeching(PlayerIdentifier target, PlayerIdentifier playerID, GristType gristType, boolean isLeeching)
 	{
 		for(int i = 0; i < torrentSessions.size(); i++)
 		{
@@ -269,7 +266,7 @@ public class MSExtraData extends SavedData
 			{
 				List<TorrentSession.Leech> leeching = new ArrayList<>(torrentSession.getLeeching());
 				
-				TorrentSession.Leech existingLeech = leeching.stream().filter(leech -> leech.UUIDMatches(playerID)).findFirst().orElse(null);
+				TorrentSession.Leech existingLeech = leeching.stream().filter(leech -> leech.matches(playerID)).findFirst().orElse(null);
 				
 				List<GristType> leechGrists = new ArrayList<>();
 				

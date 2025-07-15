@@ -1,14 +1,8 @@
 package com.mraof.minestuck.player;
 
-import com.mojang.serialization.Codec;
 import com.mojang.serialization.DataResult;
-import com.mojang.serialization.codecs.RecordCodecBuilder;
-import net.minecraft.core.UUIDUtil;
 import net.minecraft.nbt.CompoundTag;
 import net.minecraft.nbt.Tag;
-import net.minecraft.network.RegistryFriendlyByteBuf;
-import net.minecraft.network.codec.ByteBufCodecs;
-import net.minecraft.network.codec.StreamCodec;
 import net.minecraft.server.MinecraftServer;
 import net.minecraft.server.level.ServerPlayer;
 import net.minecraft.server.players.PlayerList;
@@ -159,24 +153,11 @@ public class IdentifierHandler
 		fakePlayerIndex = 0;
 	}
 	
-	public static class UUIDIdentifier extends PlayerIdentifier
+	private static class UUIDIdentifier extends PlayerIdentifier
 	{
-		public static final Codec<UUIDIdentifier> CODEC = RecordCodecBuilder.create(instance -> instance.group(
-				Codec.INT.fieldOf("id").forGetter(UUIDIdentifier::getId),
-				Codec.STRING.xmap(UUID::fromString, UUID::toString).fieldOf("uuid").forGetter(UUIDIdentifier::getUUID)
-		).apply(instance, UUIDIdentifier::new));
-		public static final StreamCodec<RegistryFriendlyByteBuf, UUIDIdentifier> STREAM_CODEC = StreamCodec.composite(
-				ByteBufCodecs.INT,
-				UUIDIdentifier::getId,
-				UUIDUtil.STREAM_CODEC,
-				UUIDIdentifier::getUUID,
-				UUIDIdentifier::new
-		);
-		
 		private final UUID uuid;
 		
-		//TODO make this constructor private again. Exposed for testing
-		public UUIDIdentifier(int id, UUID uuid)
+		private UUIDIdentifier(int id, UUID uuid)
 		{
 			super(id);
 			this.uuid = uuid;
