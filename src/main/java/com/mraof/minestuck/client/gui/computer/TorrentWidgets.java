@@ -72,7 +72,7 @@ public class TorrentWidgets
 		public static final int GRIST_COUNT_X = GRIST_ICON_X + 13;
 		public static final float BAR_WIDTH = 20F;
 		
-		public TorrentSession torrentSession;
+		private TorrentSession torrentSession;
 		public LimitedCache cache;
 		public final GristType gristType;
 		public long gristAmount;
@@ -165,7 +165,7 @@ public class TorrentWidgets
 			if(isOwner)
 				PacketDistributor.sendToServer(new TorrentPackets.ModifySeeding(gristType, isActive));
 			else
-				PacketDistributor.sendToServer(new TorrentPackets.ModifyLeeching(torrentSession, gristType, isActive));
+				PacketDistributor.sendToServer(new TorrentPackets.ModifyLeeching(torrentSession.getSeeder(), gristType, isActive));
 		}
 		
 		@Override

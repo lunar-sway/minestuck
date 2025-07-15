@@ -65,13 +65,13 @@ public class TorrentPackets
 		}
 	}
 	
-	public record ModifyLeeching(TorrentSession torrentSession, GristType gristType,
+	public record ModifyLeeching(IdentifierHandler.UUIDIdentifier target, GristType gristType,
 								 boolean isLeeching) implements MSPacket.PlayToServer
 	{
 		public static final Type<ModifyLeeching> ID = new Type<>(Minestuck.id("torrent_modify_leeching"));
 		public static final StreamCodec<RegistryFriendlyByteBuf, ModifyLeeching> STREAM_CODEC = StreamCodec.composite(
-				TorrentSession.STREAM_CODEC,
-				ModifyLeeching::torrentSession,
+				IdentifierHandler.UUIDIdentifier.STREAM_CODEC,
+				ModifyLeeching::target,
 				GristType.STREAM_CODEC,
 				ModifyLeeching::gristType,
 				ByteBufCodecs.BOOL,
@@ -91,7 +91,7 @@ public class TorrentPackets
 			MinecraftServer server = player.server;
 			MSExtraData data = MSExtraData.get(server);
 			
-			data.updateTorrentLeeching(torrentSession, (IdentifierHandler.UUIDIdentifier) IdentifierHandler.encode(player), gristType, isLeeching);
+			data.updateTorrentLeeching(target, (IdentifierHandler.UUIDIdentifier) IdentifierHandler.encode(player), gristType, isLeeching);
 		}
 	}
 }

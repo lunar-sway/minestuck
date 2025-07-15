@@ -6,8 +6,8 @@ import com.mraof.minestuck.alchemy.TorrentSession;
 import com.mraof.minestuck.api.alchemy.GristType;
 import com.mraof.minestuck.computer.editmode.EditData;
 import com.mraof.minestuck.entry.PostEntryTask;
-import net.minecraft.core.HolderLookup;
 import com.mraof.minestuck.player.IdentifierHandler;
+import net.minecraft.core.HolderLookup;
 import net.minecraft.nbt.CompoundTag;
 import net.minecraft.nbt.ListTag;
 import net.minecraft.nbt.NbtOps;
@@ -259,13 +259,13 @@ public class MSExtraData extends SavedData
 		setDirty(); //TODO should this be set to dirty even if no information is changed?
 	}
 	
-	public void updateTorrentLeeching(TorrentSession torrentSessionIn, IdentifierHandler.UUIDIdentifier playerID, GristType gristType, boolean isLeeching)
+	public void updateTorrentLeeching(IdentifierHandler.UUIDIdentifier target, IdentifierHandler.UUIDIdentifier playerID, GristType gristType, boolean isLeeching)
 	{
 		for(int i = 0; i < torrentSessions.size(); i++)
 		{
 			TorrentSession torrentSession = torrentSessions.get(i);
 			
-			if(torrentSession.sameOwner(torrentSessionIn))
+			if(torrentSession.sameOwner(target))
 			{
 				List<TorrentSession.Leech> leeching = new ArrayList<>(torrentSession.getLeeching());
 				
