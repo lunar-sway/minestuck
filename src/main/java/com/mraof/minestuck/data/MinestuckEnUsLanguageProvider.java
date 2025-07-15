@@ -2077,6 +2077,7 @@ public class MinestuckEnUsLanguageProvider extends MinestuckLanguageProvider
 		add(Title.FORMAT, "%1$s of %2$s");
 		
 		add(Echeladder.NEW_RUNG, "You reached rung %s!");
+		add(RungsProvider.MUST_ENTER, "You must Enter before initiating this Rung!");
 		addRung(0, "Greentike");
 		addRung(1, "Sir Dies-a-lot");
 		addRung(2, "Soil Architect");

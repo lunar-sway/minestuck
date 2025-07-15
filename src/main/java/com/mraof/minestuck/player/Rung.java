@@ -3,6 +3,7 @@ package com.mraof.minestuck.player;
 import com.mojang.serialization.Codec;
 import com.mojang.serialization.MapCodec;
 import com.mojang.serialization.codecs.RecordCodecBuilder;
+import com.mraof.minestuck.entity.dialogue.condition.Condition;
 import net.minecraft.core.Holder;
 import net.minecraft.network.FriendlyByteBuf;
 import net.minecraft.network.codec.ByteBufCodecs;
@@ -15,8 +16,9 @@ import net.minecraft.world.entity.ai.attributes.AttributeInstance;
 import net.minecraft.world.entity.ai.attributes.AttributeModifier;
 
 import java.util.List;
+import java.util.Optional;
 
-public record Rung(int rung, int backgroundColor, int textColor, long expRequirement, long boondollars, long gristCapacity)
+public record Rung(int rung, int backgroundColor, int textColor, long expRequirement, long boondollars, long gristCapacity, Optional<RungCondition> rungCondition)
 {
 	public static final Codec<Rung> CODEC = RecordCodecBuilder.create(instance -> instance.group(
 			Codec.INT.fieldOf("rung").forGetter(Rung::rung),
@@ -24,7 +26,8 @@ public record Rung(int rung, int backgroundColor, int textColor, long expRequire
 			Codec.INT.fieldOf("text_color").forGetter(Rung::textColor),
 			Codec.LONG.fieldOf("exp_requirement").forGetter(Rung::expRequirement),
 			Codec.LONG.fieldOf("boondollars").forGetter(Rung::boondollars),
-			Codec.LONG.fieldOf("grist_capacity").forGetter(Rung::gristCapacity)
+			Codec.LONG.fieldOf("grist_capacity").forGetter(Rung::gristCapacity),
+			RungCondition.CODEC.optionalFieldOf("rungCondition").forGetter(Rung::rungCondition)
 	).apply(instance, Rung::new));
 	public static final Codec<List<Rung>> LIST_CODEC = Codec.list(CODEC);
 	
@@ -65,12 +68,29 @@ public record Rung(int rung, int backgroundColor, int textColor, long expRequire
 		}
 	}
 	
-	public record DisplayData(int backgroundColor, int textColor, long gristCapacity, DisplayAttributes attributes)
+	public record RungCondition(Condition.PlayerOnlyCondition condition, String description)
+	{
+		public static final Codec<RungCondition> CODEC = RecordCodecBuilder.create(instance -> instance.group(
+				Condition.PLAYER_ONLY_CODEC.fieldOf("condition").forGetter(RungCondition::condition),
+				Codec.STRING.fieldOf("description").forGetter(RungCondition::description)
+		).apply(instance, RungCondition::new));
+		
+		public boolean canInitiateRung(ServerPlayer player)
+		{
+			if(condition instanceof Condition.PlayerOnlyCondition playerOnlyCondition)
+				return playerOnlyCondition.test(player);
+			
+			return false;
+		}
+	}
+	
+	public record DisplayData(int backgroundColor, int textColor, long gristCapacity, Optional<String> description, DisplayAttributes attributes)
 	{
 		public static final StreamCodec<FriendlyByteBuf, DisplayData> STREAM_CODEC = StreamCodec.composite(
 				ByteBufCodecs.INT, DisplayData::backgroundColor,
 				ByteBufCodecs.INT, DisplayData::textColor,
 				ByteBufCodecs.VAR_LONG, DisplayData::gristCapacity,
+				ByteBufCodecs.optional(ByteBufCodecs.STRING_UTF8), DisplayData::description,
 				DisplayAttributes.STREAM_CODEC, DisplayData::attributes,
 				DisplayData::new);
 	}

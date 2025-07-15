@@ -3,6 +3,7 @@ package com.mraof.minestuck.data;
 import com.google.gson.JsonElement;
 import com.mojang.serialization.JsonOps;
 import com.mraof.minestuck.Minestuck;
+import com.mraof.minestuck.entity.dialogue.condition.Conditions;
 import com.mraof.minestuck.player.Rung;
 import com.mraof.minestuck.player.Rungs;
 import net.minecraft.MethodsReturnNonnullByDefault;
@@ -15,6 +16,7 @@ import javax.annotation.ParametersAreNonnullByDefault;
 import java.nio.file.Path;
 import java.util.ArrayList;
 import java.util.List;
+import java.util.Optional;
 import java.util.concurrent.CompletableFuture;
 
 @ParametersAreNonnullByDefault
@@ -26,6 +28,8 @@ public class RungsProvider implements DataProvider
 	public static final ResourceLocation UNDERLING_PROTECTION_ID = Minestuck.id("echeladder_underling_protection");
 	public static final ResourceLocation UNDERLING_DAMAGE_ID = Minestuck.id("echeladder_underling_damage");
 	public static final ResourceLocation FALL_DAMAGE_REDUCTION_ID = Minestuck.id("echeladder_fall_damage_reduction");
+	public static final String MUST_ENTER = "echeladder.must_enter";
+	
 	private final PackOutput output;
 	
 	public RungsProvider(PackOutput output)
@@ -46,7 +50,7 @@ public class RungsProvider implements DataProvider
 		add(0xFFD8A600, 0xFFFFFF, 140, 145);
 		add(0xFF7F0000, 0xFF6A00, 170, 181); //5
 		add(0xFF007F0E, 0x0094FF, 200, 226);
-		add(0xFF808080, 0x3F3F3F, 250, 282);
+		add(0xFF808080, 0x3F3F3F, 250, 282, Optional.of(new Rung.RungCondition(Conditions.hasEntered(), MUST_ENTER)));
 		add(0xFF00FF21, 0x007F7F, 320, 352);
 		add(0xFF4800FF, 0xB200FF, 425, 440);
 		add(0xFF404040, 0x7B9CB5, 575, 550); //10
@@ -93,7 +97,12 @@ public class RungsProvider implements DataProvider
 	
 	private void add(int backgroundColor, int textColor, long boondollars, long gristCapacity)
 	{
-		rungs.add(new Rung(rungIterate, backgroundColor, textColor, rungRequirement(rungIterate), boondollars, gristCapacity));
+		add(backgroundColor, textColor, boondollars, gristCapacity, Optional.empty());
+	}
+	
+	private void add(int backgroundColor, int textColor, long boondollars, long gristCapacity, Optional<Rung.RungCondition> rungCondition)
+	{
+		rungs.add(new Rung(rungIterate, backgroundColor, textColor, rungRequirement(rungIterate), boondollars, gristCapacity, rungCondition));
 		rungIterate++;
 	}
 	

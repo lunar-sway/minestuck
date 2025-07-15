@@ -1383,6 +1383,7 @@
   "denizen.title.aspect.space": "Echidna",
   "denizen.title.aspect.time": "Hephaestus",
   "denizen.title.aspect.void": "Nyx",
+  "echeladder.must_enter": "You must Enter before initiating this Rung!",
   "echeladder.new_rung": "You reached rung %s!",
   "echeladder.rung.0": "Greentike",
   "echeladder.rung.1": "Sir Dies-a-lot",

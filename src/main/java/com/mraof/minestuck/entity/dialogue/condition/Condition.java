@@ -58,6 +58,10 @@ public interface Condition
 	Codec<Condition> CODEC = Conditions.REGISTRY.byNameCodec().dispatch(Condition::codec, Function.identity());
 	Codec<Condition> NPC_ONLY_CODEC = Condition.CODEC.validate(
 			condition -> condition.isNpcOnly() ? DataResult.success(condition) : DataResult.error(() -> "Player condition not supported here"));
+	Codec<PlayerOnlyCondition> PLAYER_ONLY_CODEC = Condition.CODEC.comapFlatMap(
+			condition -> condition instanceof PlayerOnlyCondition playerOnly
+					? DataResult.success(playerOnly)
+					: DataResult.error(() -> "NPC condition not supported here"), Function.identity());
 	
 	MapCodec<? extends Condition> codec();
 	
@@ -74,6 +78,34 @@ public interface Condition
 		return false;
 	}
 	
+	default boolean isPlayerOnly()
+	{
+		return false;
+	}
+	
+	interface PlayerOnlyCondition extends Condition
+	{
+		boolean test(ServerPlayer player);
+		
+		@Override
+		default boolean test(LivingEntity entity, ServerPlayer player)
+		{
+			return test(player);
+		}
+		
+		@Override
+		default boolean isNpcOnly()
+		{
+			return false;
+		}
+		
+		@Override
+		default boolean isPlayerOnly()
+		{
+			return true;
+		}
+	}
+	
 	interface NpcOnlyCondition extends Condition
 	{
 		boolean test(LivingEntity entity);
@@ -88,6 +120,12 @@ public interface Condition
 		default boolean isNpcOnly()
 		{
 			return true;
+		}
+		
+		@Override
+		default boolean isPlayerOnly()
+		{
+			return false;
 		}
 	}
 	
@@ -510,7 +548,7 @@ public interface Condition
 		}
 	}
 	
-	record PlayerHasItem(Item item, int amount) implements Condition
+	record PlayerHasItem(Item item, int amount) implements PlayerOnlyCondition
 	{
 		static final MapCodec<PlayerHasItem> CODEC = RecordCodecBuilder.mapCodec(instance -> instance.group(
 				BuiltInRegistries.ITEM.byNameCodec().fieldOf("item").forGetter(PlayerHasItem::item),
@@ -524,7 +562,7 @@ public interface Condition
 		}
 		
 		@Override
-		public boolean test(LivingEntity entity, ServerPlayer player)
+		public boolean test(ServerPlayer player)
 		{
 			ItemStack stack = findPlayerItem(this.item, player, this.amount);
 			return stack != null;
@@ -657,7 +695,7 @@ public interface Condition
 		}
 	}
 	
-	record PlayerIsClass(EnumClass enumClass) implements Condition
+	record PlayerIsClass(EnumClass enumClass) implements PlayerOnlyCondition
 	{
 		static final MapCodec<PlayerIsClass> CODEC = RecordCodecBuilder.mapCodec(instance -> instance.group(
 				EnumClass.CODEC.fieldOf("class").forGetter(PlayerIsClass::enumClass)
@@ -670,7 +708,7 @@ public interface Condition
 		}
 		
 		@Override
-		public boolean test(LivingEntity entity, ServerPlayer player)
+		public boolean test(ServerPlayer player)
 		{
 			if(player == null)
 				return false;
@@ -688,7 +726,7 @@ public interface Condition
 		}
 	}
 	
-	record PlayerIsAspect(EnumAspect enumAspect) implements Condition
+	record PlayerIsAspect(EnumAspect enumAspect) implements PlayerOnlyCondition
 	{
 		static final MapCodec<PlayerIsAspect> CODEC = RecordCodecBuilder.mapCodec(instance -> instance.group(
 				EnumAspect.CODEC.fieldOf("aspect").forGetter(PlayerIsAspect::enumAspect)
@@ -701,7 +739,7 @@ public interface Condition
 		}
 		
 		@Override
-		public boolean test(LivingEntity entity, ServerPlayer player)
+		public boolean test(ServerPlayer player)
 		{
 			if(player == null)
 				return false;
@@ -716,7 +754,7 @@ public interface Condition
 		}
 	}
 	
-	record PlayerHasReputation(int amount, boolean greaterThan) implements Condition
+	record PlayerHasReputation(int amount, boolean greaterThan) implements PlayerOnlyCondition
 	{
 		static final MapCodec<PlayerHasReputation> CODEC = RecordCodecBuilder.mapCodec(instance -> instance.group(
 				Codec.INT.optionalFieldOf("amount", 1).forGetter(PlayerHasReputation::amount),
@@ -730,7 +768,7 @@ public interface Condition
 		}
 		
 		@Override
-		public boolean test(LivingEntity entity, ServerPlayer player)
+		public boolean test(ServerPlayer player)
 		{
 			if(player == null)
 				return false;
@@ -753,7 +791,7 @@ public interface Condition
 		}
 	}
 	
-	record PlayerHasBoondollars(int amount) implements Condition
+	record PlayerHasBoondollars(int amount) implements PlayerOnlyCondition
 	{
 		static final MapCodec<PlayerHasBoondollars> CODEC = RecordCodecBuilder.mapCodec(instance -> instance.group(
 				Codec.INT.optionalFieldOf("amount", 1).forGetter(PlayerHasBoondollars::amount)
@@ -766,7 +804,7 @@ public interface Condition
 		}
 		
 		@Override
-		public boolean test(LivingEntity entity, ServerPlayer player)
+		public boolean test(ServerPlayer player)
 		{
 			if(player == null)
 				return false;
@@ -785,7 +823,7 @@ public interface Condition
 		}
 	}
 	
-	enum PlayerHasEntered implements Condition
+	enum PlayerHasEntered implements PlayerOnlyCondition
 	{
 		INSTANCE;
 		
@@ -798,7 +836,7 @@ public interface Condition
 		}
 		
 		@Override
-		public boolean test(LivingEntity entity, ServerPlayer player)
+		public boolean test(ServerPlayer player)
 		{
 			if(player == null)
 				return false;
@@ -813,7 +851,7 @@ public interface Condition
 		}
 	}
 	
-	record PlayerHasAdvancement(ResourceLocation advancementId) implements Condition
+	record PlayerHasAdvancement(ResourceLocation advancementId) implements PlayerOnlyCondition
 	{
 		static final MapCodec<PlayerHasAdvancement> CODEC = RecordCodecBuilder.mapCodec(instance -> instance.group(
 				ResourceLocation.CODEC.fieldOf("advancement_id").forGetter(PlayerHasAdvancement::advancementId)
@@ -826,7 +864,7 @@ public interface Condition
 		}
 		
 		@Override
-		public boolean test(LivingEntity entity, ServerPlayer player)
+		public boolean test(ServerPlayer player)
 		{
 			if(player == null)
 				return false;
