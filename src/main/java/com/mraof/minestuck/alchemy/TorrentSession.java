@@ -8,7 +8,12 @@ import com.mraof.minestuck.api.alchemy.GristSet;
 import com.mraof.minestuck.api.alchemy.GristType;
 import com.mraof.minestuck.api.alchemy.GristTypes;
 import com.mraof.minestuck.player.IdentifierHandler;
+import com.mraof.minestuck.player.PlayerIdentifier;
 import com.mraof.minestuck.world.storage.MSExtraData;
+import net.minecraft.nbt.CompoundTag;
+import net.minecraft.nbt.ListTag;
+import net.minecraft.nbt.NbtOps;
+import net.minecraft.nbt.Tag;
 import net.minecraft.network.RegistryFriendlyByteBuf;
 import net.minecraft.network.codec.ByteBufCodecs;
 import net.minecraft.network.codec.StreamCodec;
@@ -20,6 +25,7 @@ import net.neoforged.neoforge.event.entity.player.PlayerEvent;
 import net.neoforged.neoforge.event.tick.ServerTickEvent;
 
 import java.util.ArrayList;
+import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 
@@ -27,34 +33,44 @@ import java.util.Map;
 public class TorrentSession
 {
 	private static final Codec<List<GristType>> GRISTS_CODEC = Codec.list(GristTypes.REGISTRY.byNameCodec());
-	private static final Codec<List<Leech>> LEECHES_CODEC = Codec.list(Leech.CODEC);
-	public static final Codec<TorrentSession> CODEC = RecordCodecBuilder.create(instance -> instance.group(
-			IdentifierHandler.UUIDIdentifier.CODEC.fieldOf("seeder").forGetter(TorrentSession::getSeeder),
-			GRISTS_CODEC.fieldOf("seeding").forGetter(TorrentSession::getSeeding),
-			LEECHES_CODEC.fieldOf("leeching").forGetter(TorrentSession::getLeeching)
-	).apply(instance, TorrentSession::new));
-	public static final StreamCodec<RegistryFriendlyByteBuf, TorrentSession> STREAM_CODEC = StreamCodec.composite(
-			IdentifierHandler.UUIDIdentifier.STREAM_CODEC,
-			TorrentSession::getSeeder,
-			GristType.STREAM_CODEC.apply(ByteBufCodecs.list()),
-			TorrentSession::getSeeding,
-			Leech.STREAM_CODEC.apply(ByteBufCodecs.list()),
-			TorrentSession::getLeeching,
-			TorrentSession::new
-	);
 	
-	private final IdentifierHandler.UUIDIdentifier seeder;
+	private final PlayerIdentifier seeder;
 	private final List<GristType> seeding = new ArrayList<>();
 	private final List<Leech> leeching = new ArrayList<>();
 	
-	public TorrentSession(IdentifierHandler.UUIDIdentifier seeder, List<GristType> seeding, List<Leech> leeching)
+	public TorrentSession(PlayerIdentifier seeder, List<GristType> seeding, List<Leech> leeching)
 	{
 		this.seeder = seeder;
 		this.seeding.addAll(seeding);
 		this.leeching.addAll(leeching);
 	}
 	
-	public IdentifierHandler.UUIDIdentifier getSeeder()
+	public static TorrentSession read(CompoundTag tag)
+	{
+		PlayerIdentifier seeder = IdentifierHandler.load(tag, "seeder").getOrThrow();
+		List<GristType> seeding = GRISTS_CODEC.parse(NbtOps.INSTANCE, tag.get("seeding")).getPartialOrThrow();
+		List<Leech> leeching = new ArrayList<>();
+		ListTag leechTags = tag.getList("leeching", Tag.TAG_COMPOUND);
+		for(int i = 0; i < leechTags.size(); i++)
+			leeching.add(Leech.read(leechTags.getCompound(i)));
+		
+		return new TorrentSession(seeder, seeding, leeching);
+	}
+	
+	public CompoundTag write()
+	{
+		CompoundTag tag = new CompoundTag();
+		this.seeder.saveToNBT(tag, "seeder");
+		tag.put("seeding", GRISTS_CODEC.encodeStart(NbtOps.INSTANCE, this.seeding).getPartialOrThrow());
+		ListTag leechTags = new ListTag();
+		for(Leech leech : leeching)
+			leechTags.add(leech.write());
+		tag.put("leeching", leechTags);
+		
+		return tag;
+	}
+	
+	public PlayerIdentifier getSeeder()
 	{
 		return seeder;
 	}
@@ -89,9 +105,9 @@ public class TorrentSession
 	/**
 	 * @return whether the input PlayerIdentifier is trying to leech the given grist type from this TorrentSession
 	 */
-	public boolean isLeechForGristType(IdentifierHandler.UUIDIdentifier identifier, GristType gristType)
+	public boolean isLeechForGristType(PlayerIdentifier identifier, GristType gristType)
 	{
-		return leeching.stream().anyMatch(leech -> leech.UUIDMatches(identifier) && leech.gristTypes.contains(gristType));
+		return leeching.stream().anyMatch(leech -> leech.matches(identifier) && leech.gristTypes.contains(gristType));
 	}
 	
 	public boolean sameOwner(TorrentSession otherSession)
@@ -99,9 +115,9 @@ public class TorrentSession
 		return sameOwner(otherSession.seeder);
 	}
 	
-	public boolean sameOwner(IdentifierHandler.UUIDIdentifier identifier)
+	public boolean sameOwner(PlayerIdentifier identifier)
 	{
-		return this.seeder.getUUID().equals(identifier.getUUID());
+		return this.seeder.equals(identifier);
 	}
 	
 	@SubscribeEvent
@@ -150,23 +166,26 @@ public class TorrentSession
 		return seeding;
 	}
 	
-	public record Leech(IdentifierHandler.UUIDIdentifier id, List<GristType> gristTypes)
+	public record Leech(PlayerIdentifier id, List<GristType> gristTypes)
 	{
-		public static final Codec<Leech> CODEC = RecordCodecBuilder.create(instance -> instance.group(
-				IdentifierHandler.UUIDIdentifier.CODEC.fieldOf("id").forGetter(Leech::id),
-				GRISTS_CODEC.fieldOf("grist_types").forGetter(Leech::gristTypes)
-		).apply(instance, Leech::new));
-		public static final StreamCodec<RegistryFriendlyByteBuf, Leech> STREAM_CODEC = StreamCodec.composite(
-				IdentifierHandler.UUIDIdentifier.STREAM_CODEC,
-				Leech::id,
-				GristType.STREAM_CODEC.apply(ByteBufCodecs.list()),
-				Leech::gristTypes,
-				Leech::new
-		);
-		
-		public boolean UUIDMatches(IdentifierHandler.UUIDIdentifier identifierIn)
+		static Leech read(CompoundTag tag)
 		{
-			return id.getUUID().equals(identifierIn.getUUID());
+			PlayerIdentifier id = IdentifierHandler.load(tag, "id").getOrThrow();
+			List<GristType> gristTypes = GRISTS_CODEC.parse(NbtOps.INSTANCE, tag.get("grist_types")).getPartialOrThrow();
+			return new Leech(id, gristTypes);
+		}
+		
+		CompoundTag write()
+		{
+			CompoundTag tag = new CompoundTag();
+			this.id.saveToNBT(tag, "id");
+			tag.put("grist_types", GRISTS_CODEC.encodeStart(NbtOps.INSTANCE, this.gristTypes).getPartialOrThrow());
+			return tag;
+		}
+		
+		public boolean matches(PlayerIdentifier identifierIn)
+		{
+			return id.equals(identifierIn);
 		}
 		
 		//TODO find a way to express the share ratio, for potential leech banning
@@ -188,5 +207,22 @@ public class TorrentSession
 		);
 	}
 	
-	public static final Codec<Map<TorrentSession, LimitedCache>> TORRENT_DATA_CODEC = Codec.unboundedMap(TorrentSession.CODEC, LimitedCache.CODEC);
+	public record TorrentClientData(String username, List<GristType> seededTypes, Map<Integer, List<GristType>> leeches, LimitedCache cache)
+	{
+		public static final StreamCodec<RegistryFriendlyByteBuf, TorrentClientData> STREAM_CODEC = StreamCodec.composite(
+				ByteBufCodecs.STRING_UTF8,
+				TorrentClientData::username,
+				GristType.STREAM_CODEC.apply(ByteBufCodecs.list()),
+				TorrentClientData::seededTypes,
+				ByteBufCodecs.map(HashMap::new, ByteBufCodecs.INT, GristType.STREAM_CODEC.apply(ByteBufCodecs.list())),
+				TorrentClientData::leeches,
+				LimitedCache.STREAM_CODEC,
+				TorrentClientData::cache,
+				TorrentClientData::new);
+		
+		public List<GristType> getViableSeeding()
+		{
+			return this.seededTypes.stream().filter(this.cache.set::hasType).toList();
+		}
+	}
 }
