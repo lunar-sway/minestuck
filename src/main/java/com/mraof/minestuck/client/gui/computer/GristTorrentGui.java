@@ -225,15 +225,15 @@ public final class GristTorrentGui extends Screen implements ProgramGui<ProgramT
 	}
 	
 	@Override
-	public void onInit(ComputerScreen screen)
+	public void onInit(ThemedScreen screen)
 	{
 		GristTorrentGui gui = new GristTorrentGui();
-		gui.computer = screen.be;
+		gui.computer = screen.computer;
 		screen.getMinecraft().setScreen(gui);
 	}
 	
 	@Override
-	public void render(GuiGraphics guiGraphics, ComputerScreen screen)
+	public void render(GuiGraphics guiGraphics, ThemedScreen screen)
 	{
 		//handled by the screen render method
 	}
