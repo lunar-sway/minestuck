@@ -1,0 +1,20 @@
+{
+  "aspect": "breath",
+  "effects": [
+    {
+      "effect": "minecraft:speed",
+      "amplifier": 0,
+      "rung": 15
+    },
+    {
+      "effect": "minecraft:speed",
+      "amplifier": 1,
+      "rung": 30
+    },
+    {
+      "effect": "minecraft:speed",
+      "amplifier": 2,
+      "rung": 45
+    }
+  ]
+}

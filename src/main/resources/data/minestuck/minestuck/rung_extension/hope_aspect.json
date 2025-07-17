@@ -1,0 +1,19 @@
+{
+  "aspect": "hope",
+  "effects": [
+    {
+      "effect": "minecraft:fire_resistance",
+      "amplifier": 0,
+      "rung": 18
+    },
+    {
+      "effect": "minecraft:water_breathing",
+      "rung": 24
+    },
+    {
+      "effect": "minecraft:fire_resistance",
+      "amplifier": 1,
+      "rung": 36
+    }
+  ]
+}

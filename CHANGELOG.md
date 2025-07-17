@@ -4,35 +4,137 @@ All notable changes to this project will be documented in this file.
 
 The format is based on [Keep a Changelog](https://keepachangelog.com/en/1.1.0/).
 
-## [Unreleased 1.21]
-
-- Updated to run with Minecraft 1.21 / Neoforge 21.0
+## [Unreleased]
 
 ### Added
 
-- New consort dialogue
-- New carapacian dialogue
-- Message when entering edit mode to remind players of the exit keybind
-- Added 2 tracks october and endless chasm by triagegremlin
-- Added 2 tracks the note desolation plays and desolate strife by Caldw3ll
+- New rook themed towers on the Battlefield
+- Increased number of blocks used in land specific structure block palettes
+- Land Type Extensions now support structure sets.
+- New Cathedral Structure on the Battlefield
+- Added tooltip to rungs which have gated conditions
 - GristTorrent Computer App
 
 ### Changed
 
-- Knitting needle crafting recipe now produces one item instead of two
+- Stack and Queue modi have more distinct recipes
+- Farmine break blacklist is now controlled by the `minestuck:farmine_break_blacklist` block tag, instead of being hardcoded
+- Disabled Skaian Castle structure
 - Updated Grist Cache gui texture
 
 ### Fixed
 
-- Signs now mineable with axe
-- Non-color data will now be preserved on dowels going through a totem lathe
-- Item stack data will now be preserved on disks inserted into a computer
-- Fix disk insertion and computer screen for computer easter egg
+- Fix some items having 0 grist cost
+- Fix weapons having the wrong durability
+- Fix unbreakable katana and crowbar being breakable
+- Fix emerald weapons dealing no damage
+- Fix armor stacking/durability/toughness
+- Fix farmine only mining a 3x3x3 cube around the block mined
+- Fix carved tablets crashing the game when placed down
+- Fix issues with frog entity/item rendering/loading/tooltips
+- Fix cassette player not playing correct music
+- Fix dance_stab_dance and emissary_of_dance being labelled as each other
+- Fix cassette playing weapons not having a menu for storing cassette
+- Fix weapons not being enchantable
+
+### Removed
+
+- Removed `minestuck:non_mirrored` recipe type
+- Removed `preEntryRungLimit` server config
+- Minestuck tridents no longer get unusable trident enchantments
+
+### Contributors for this release
+
+- medsal15, Dweblenod, TangleKat, kirderf1, shadowLink, ThalliumSulfate, Riotmode
+
+## [1.20.1-1.12.1.1] - 2025-04-18
+
+### Fixed
+
+- Fix crash with Geckolib 4.7.1+ mentioning giclops.animation.json
+- Color selection button is available in the SBURB Client program before connection again instead of after
+- Cruxite button now uses raw cruxite instead of cruxite block, which resolves a conflict with storage block breakdown
+- The block model for the holopad with card now renders with cutout
 - Carved totems in alchemiter model now have correct uv mapping
 
 ### Contributors for this release
 
-- Cibernet, Dweblenod, kirderf1, glubtier, blankMushroom, hadean, ThalliumSulfate, triagegremlin, Caldw3ll, Riotmode
+- kirderf1, blankMushroom
+
+## [1.21.1-1.13.0.1] - 2025-04-14
+
+### Fixed
+
+- Fix multiplayer crash with grist cache screen
+
+### Contributors for this release
+
+- kirderf1
+
+## [1.21.1-1.13.0.0] - 2025-04-13
+
+- Updated to run with Minecraft 1.21 / Neoforge 21.1
+
+### Added
+
+- Added Moon Cake
+- New consort and carapacian dialogue
+- Added 2 tracks by triagegremling: october and endless chasm
+- Added 2 tracks by Caldw3ll: the note desolation plays and desolate strife
+- New Disk Manager utility in Settings computer program for ejecting disks
+- Computer interaction sound effects
+- New computer related advancement
+- Message when entering edit mode to remind players of the exit keybind
+- Computer programs now have a tooltip when hovered over in computer gui
+- Data files for echeladder rungs and rung effects
+- Echeladder now provides fall damage resistance
+- Some work-in-progress content not accessible through normal gameplay:
+  - Prospit and Derse dimensions and block sets
+  - Veil dimension and meteoric stone block
+  - Dream moon structure generation system with demo dimension
+
+### Changed
+
+- Updated land skybox rendering
+- Most vanilla enemy mobs now provide Echeladder exp
+- Echeladder exp is provided when gaining the advancements for obtaining a legendary weapon/obtaining a netherite hoe/entering the Nether/entering the End
+- There is no longer a threshold under which certain experience sources will stop contributing. After the incoming exp has been modified for the given rung, there is a 1 in 2/exp chance that 1 exp will be added.
+- Echeladder related attributes now scale linearly instead of exponentially, with minor tweaks to values on each rung
+- Tweaks to Echeladder GUI
+- Knitting needle crafting recipe now produces one item instead of two
+- Updated coarse end stone texture
+
+### Fixed
+
+- Wall Signs now mineable with axe
+- Non-color data will now be preserved on dowels going through a totem lathe
+- Item stack data will now be preserved on disks inserted into a computer
+- Fix disk insertion and computer screen for computer easter egg
+- Rung progress bar is now white when it would otherwise be too dark to see progress clearly
+
+### Removed
+
+- Removed "aspectEffects" config option as it is redundant to modifying rungs.json
+
+### Contributors for this release
+
+- Cibernet, Dweblenod, kirderf1, glubtier, blankMushroom, hadean, ThalliumSulfate, triagegremlin, Caldw3ll, heartsremedy, rose_bushes_, v_sabitron
+
+## [1.20.4-1.12.2.1] - 2025-03-16
+
+### Fixed
+
+- Shade stone no longer has texture of shade stone cruxite ore
+- Carved totems in alchemiter model now have correct uv mapping
+- Removed collision from buttons
+- Fixed many blocks not having a correct tool
+- Color selection button is available in the SBURB Client program before connection again instead of after
+- Fixed untranslated key when using /gutter show command
+- Fixed widget rendering in Color Selection screen
+
+### Contributors for this release
+
+- Dweblenod, blankMushroom, kirderf1
 
 ## [1.20.4-1.12.2.0] - 2024-10-06
 
@@ -565,7 +667,7 @@ The format is based on [Keep a Changelog](https://keepachangelog.com/en/1.1.0/).
 
 ### Contributors for this release
 
-- kirderf1, Dweblenod, Akisephila, rose_bushes_, Hadean, Emma "Dilemma", Carnie, Riotmode, sipherNil, blankMushroom, Caldw3ll, Amiwyn, LunaticCat, Doro, SarahK
+- kirderf1, Dweblenod, Akisephila, rose_bushes_, Hadean, Emma "Dilemma", Carnie, Riotmode, sipherNil, blankMushroom, Caldw3ll, Amiwyn, LunaticCat, DORO, SarahK
 
 ## [1.19.2-1.9.3.0] - 2023-03-24
 
@@ -661,7 +763,7 @@ The format is based on [Keep a Changelog](https://keepachangelog.com/en/1.1.0/).
 
 ### Contributors for this release
 
-- Riotmode, rose_bushes_, Dweblenod, kirderf1, Doro, Akisephila, blankMushroom
+- Riotmode, rose_bushes_, Dweblenod, kirderf1, DORO, Akisephila, blankMushroom
 
 ## [1.18.2-1.9.0.2] - 2023-01-09
 
@@ -679,6 +781,232 @@ The format is based on [Keep a Changelog](https://keepachangelog.com/en/1.1.0/).
 ### Fixed
 
 - Fix crash on player death
+
+### Contributors for this release
+
+- kirderf1
+
+## [1.18.2-1.9.0.0] - 2022-12-27
+
+### Added
+
+- Grist toast notifications
+- New hats
+- Added Music Sword
+- Added cassettes for additional vanilla tracks
+- Added Green Stone Brick Embedded Ladder, which is now used in frog temples
+- Villager trades for minestuck-related items
+
+### Changed
+
+- Sburb code is now written down in parts
+- Sburb disks are now obtained using the new disk burner program
+- Add functionality to Mine and Grist
+- Blank disks can now be crafted
+- Lotus flower now uses a loot table
+- Tweak overworld loot slightly
+
+### Fixed
+
+- Fix compatibility issue with TerraBlender
+- Fixed item for large machines not being used up in survival,
+  and made other small improvements to placing large machines
+- Add missing usage message to oW THE EDGE
+- Fix frog temple generation performance issue
+
+### Contributors for this release
+
+- kirderf1, Dweblenod, Riotmode, LunaticCat, Caldw3ll
+
+## [1.18.2-1.8.1.2] - 2022-11-15
+
+### Fixed
+
+- Fix transportalizer bug where they stop working as destination after being unloaded
+- Fix item deletion bug in the captcha deck screen
+- Fix captchalogue dupe bug
+- Fix up focus on transportalizer text box
+- Fix horn position in the lich model
+
+### Contributors for this release
+
+- kirderf1
+
+## [1.18.2-1.8.1.1] - 2022-11-01
+
+### Fixed
+
+- Fix basilisk-related crash
+- Fix geckolib-related crash
+- Bumped up minimum forge version
+
+### Contributors for this release
+
+- kirderf1
+
+## [1.18.2-1.8.1.0] - 2022-10-30
+
+- Updated to Minecraft 1.18.2
+- Minestuck has a new dependency: Infiniverse
+
+### Added
+
+- New music track "Lillypad Rain" that plays in frogs and clockwork lands
+- New music tracks "Sickest Fires", "Rancorous Gambligant", "What Goes Up" that plays in all lands
+- New music track "Rise Up" that may be used in the future
+- Sound effects for magic effects and lotus flower loot spawn
+- Combination and grist cost recipes for new vanilla items
+
+### Changed
+
+- Starting moduses are now defined through datapacks
+- Land and skaia world gen has been revamped somewhat to fit the new worldgen system
+- World height has been increased for lands
+- Ore generation in land and the overworld has been adapted to the new world heights
+- Minestuck versions of iron/gold ore will drop raw iron/gold
+- New ore textures
+- Grist and vitality gel no longer have fire immunity
+- A number of other technical entites now have fire immunity
+- Changed sound and other properties of some block groups
+- Changed system behind grist layer generation
+- Ignore fog density in custom fluids for spectators
+- Changed strawberry stem block drops to match that of vanilla stem blocks
+- Grist type secondary drops are now handled by grist type data tags
+- Grist layer spawn categories are now handled by grist type data tags
+- Petrified flora now uses block tag `minestuck:petrified_flora_placeable` for placeable blocks
+- Kundler surprise egg now uses a new data loot table `minestuck:kundler_suprises` for its drop
+- Frogs now uses item tag `minestuck:bugs` for lure/tempt behavior instead of a hardcoded list of items
+- Hungry consort dialogue now matches items against a new item tag `minestuck:consort_snacks` instead of a hardcoded list of items
+- Changed registry id of `mossy_coarse_stone` block to `mossy_coarse_stone_bricks`
+- Changed registry id of `castle_brick` blocks to `chess_brick`
+- Changed registry id of `stone_slab` to `stone_tablet`
+- Renamed `minestuck:portable_block_replacable` block tag to `minestuck:portable_block_replaceable`
+- Renamed `minestuck:land_aspect` loot condition to `minestuck:land_type`
+- Changed conditions used for spawning mobs using summoner block
+- Block property change for gate and return node blocks: the "main" block is now a different block and not just a different state
+
+### Fixed
+
+- Fixed poster being wrongly rotated when loading
+- Fixed flowing light water texture animation
+- Added missing model for cassette "Far" inside cassette player
+- Strawberry stem now properly uses cutout render type
+- Fix some display problems with stone tablets
+- Lava blocks in "ocean rundowns" in heat lands now properly flow on generation
+- Fixed redstone power related block updating for a few puzzle blocks
+- Fix some interactions with the totem lathe
+
+### Removed
+
+- Removed wyrm entity
+- Removed vein blocks
+- "startingModusTypes" config option was replaced by new datapack file
+
+### Contributors for this release
+
+- kirderf1, Amiwyn, Dweblenod, sipherNil, Caldw3ll, FrostyMac, DORO
+
+## [1.16.5-1.8.0.1] - 2022-07-28
+
+### Fixed
+
+- Patched issue with infinite loop when checking whether all players in a session have entered and completed connections
+
+### Contributors for this release
+
+- kirderf1
+
+## [1.16.5-1.8.0.0] - 2022-07-17
+
+### Added
+
+- Toggler block: toggles a specific blockstate that many puzzle blocks have been modified to possess or been given (if they are new), can be toggled itself to instead shut off powered redstone blocks
+- Remote Comparator block: checks for blocks at a specific distance and gives off redstone if it matches the type that is directly behind it, can be toggled to additionally matches blockstates
+- Structure Core block: records data to specific structures and can permanently shut down specific blocks functionality (summoners and area effect blocks) if otherwise set to read data from said structures, intended for actual use in the Tiered Dungeons update
+- Pushable Block: can be pushed in a horizontal direction if right clicked, imagined with sokoban/zelda/portal style puzzles in mind, can absorb platform blocks but cannot be pushed into their way, destroys small plants and any blocks listed in the block tag "pushable_block_replacable"
+- Block Pressure Plate: will give off redstone if a player(who is not crouching) or a block with a full faced bottom side are directly above it
+
+### Changed
+
+- Implemented new land structure blocks into their respective terrain land components, expanding and fixing components of structure block registries for said terrain lands in the process (fungi lands now have mycelium stone as their ground material)
+- Increased functionality for the Sendificator for it to now be able to teleport items to coordinates in the same dimension after being set by a player, using uranium as fuel similar to the uranium cooker
+- Area effect block can be shut down by the structure core when in READ_AND_WIPE mode
+- Area effect block now works as an offset, allowing it to change the area of effect upon rotation
+- Area effect GUI now also has a way to set the effect type/amplifier and change whether all mobs or just players are affected
+- Item Magnet can now be machine toggled to push entities away instead of pulling them closer. Can also move the new pushable blocks upwards (turning them into a falling block entity)
+- Platform block/platform generator now use new blockstate properties to reduce the amount of block updates they caused, with the platform blocks being able to check whether they are being supported and the generators able to more reliable create and remove the platform blocks, including a block tag for blocks that should absorb the platforms
+- Platform block now has the ability to replace blocks like grass/fire/liquid
+- Summoner now has a gui for improved capacity to set the summoned entity among other small utility
+- The area at which Remote Observer can observe is now variable.
+- Remote Observer now has a blacklist entity type tag for entities it shouldnt be able to detect
+- Remote Observer type `IS_ENTITY_IN_WATER` has been split into a type for if an entity is submerged in water and a type for it the player is wet(in bubble column/water/rain)
+- Remote Observer can now check for sprinting + entities on ground
+- Stat storer alchemy recipe now uses computer parts instead of comparator
+- If a Toggler block is in Discharge mode and interacts with a Stat storer, it will also reset the active stat type value to 0, increasing its capacity for automation
+- Variable Solid Switch now has an alchemy recipe of Solid Switch || Comparator
+- Redstone Clock now has an alchemy recipe of Clock && Comparator
+- Fragile Stone alchemy recipe now uses && instead of ||
+- Fragile stone now has a stonecutting recipe from stone
+- Retractable Spikes now has an alchemy recipe of Spikes && Sticky Piston
+- Wireless Redstone Transmitter now works as an offset, allowing it to power different receivers depending on rotation
+- Wireless Redstone Transmitter now uses computer parts instead of quartz in its crafting recipe
+- Expanded the list of blocks that the Rotator can rotate (now includes repeaters and comparators for advanced redstone)
+- Rotator now has a crafting recipe
+- Updated some preexisting block textures related to terrain lands
+- Renamed "Mossy Coarse Stone" to "Mossy Coarse Stone Bricks"
+
+### Fixed
+
+- Fixed issue with the redstone clock tick speed resetting every time it was unloaded
+
+### Contributors for this release
+
+- Badadamadaba, Dweblenod, SipherNil, Riotmode, kirderf1
+
+## [1.16.5-1.7.0.3] - 2022-05-14
+
+### Fixed
+
+- Fix client-side editmode crash related to item tooltips
+- Fix sylladex not immediately syncing when switching modus
+
+### Contributors for this release
+
+- kirderf1
+
+## [1.16.5-1.7.0.2] - 2022-04-21
+
+### Added
+
+- New combination recipes and grist costs
+
+### Changes
+
+- Allow crouch interaction for more puzzle blocks
+
+### Fixed
+
+- Fix stone tablet placement crash
+- Fix some data sync problems with puzzle blocks
+- Fix some title generation issues
+- Fix data checker render issue
+
+### Contributors for this release
+
+- kirderf1, Dweblenod
+
+## [1.16.5-1.7.0.1] - 2022-04-15
+
+### Fixed
+
+- Fix server crash from remote observers
+- Fix server crash from daggers
+- Fix an interaction with area effect blocks outside of single player
+- Added command argument serialization, which fixed some logged warnings and possibly some under-the-hood improvements
+
+### Removed
+
+- Remove loot entry from `minestuck:chests/medium_basic` that didn't serve a purpose and caused log warnings
 
 ### Contributors for this release
 

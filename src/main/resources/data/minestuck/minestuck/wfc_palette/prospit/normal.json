@@ -1,0 +1,24 @@
+{
+  "connection_set": "minestuck:prospit",
+  "entries": [
+    { "prototype": "minestuck:prospit/empty", "weight": 30 },
+    { "prototype": "minestuck:prospit/solid", "weight": 10 },
+    { "prototype": "minestuck:prospit/support", "weight": 4 },
+    { "prototype": "minestuck:prospit/pyramid_roof", "weight": 2 },
+    { "prototype": "minestuck:prospit/spike", "weight": 1 },
+    { "prototype": "minestuck:prospit/bridge", "weight": 3 },
+    { "prototype": "minestuck:prospit/ledge", "weight": 2 },
+    { "prototype": "minestuck:prospit/ledge_corner", "weight": 2 },
+    { "prototype": "minestuck:prospit/corridor", "weight": 5 },
+    { "prototype": "minestuck:prospit/corridor_window", "weight": 3 },
+    { "prototype": "minestuck:prospit/turn_corridor", "weight": 3 },
+    { "prototype": "minestuck:prospit/t_corridor", "weight": 4 },
+    { "prototype": "minestuck:prospit/t_corridor_window", "weight": 5 },
+    {
+      "prototype": { "type": "template", "template": "minestuck:prospit_wfc_demo/room" },
+      "weight": 1
+    },
+    { "prototype": "minestuck:prospit/interior_stairs", "weight": 4 },
+    { "prototype": "minestuck:prospit/outdoor_stairs", "weight": 2 }
+  ]
+}

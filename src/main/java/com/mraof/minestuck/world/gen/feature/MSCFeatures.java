@@ -16,6 +16,10 @@ public final class MSCFeatures
 {
 	public static final ResourceKey<ConfiguredFeature<?, ?>> RETURN_NODE = key("return_node");
 	
+	public static final ResourceKey<ConfiguredFeature<?, ?>> VEIL_CRATER = key("veil_crater");
+	
+	public static final ResourceKey<ConfiguredFeature<?, ?>> ROOK_OUTPOST = key("rook_outpost");
+	
 	public static final ResourceKey<ConfiguredFeature<?, ?>> SMALL_COG = key("small_cog");
 	public static final ResourceKey<ConfiguredFeature<?, ?>> LARGE_COG_1 = key("large_cog_1");
 	public static final ResourceKey<ConfiguredFeature<?, ?>> LARGE_COG_2 = key("large_cog_2");

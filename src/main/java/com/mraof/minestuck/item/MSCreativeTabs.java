@@ -2,6 +2,7 @@ package com.mraof.minestuck.item;
 
 import com.mraof.minestuck.Minestuck;
 import com.mraof.minestuck.block.AspectTreeBlocks;
+import com.mraof.minestuck.block.DreamerMoonBlocks;
 import com.mraof.minestuck.block.SkaiaBlocks;
 import com.mraof.minestuck.entity.FrogEntity;
 import com.mraof.minestuck.item.components.FrogTraitsComponent;
@@ -264,6 +265,8 @@ public final class MSCreativeTabs
 		output.accept(SkaiaBlocks.WHITE_CROWN_STAINED_GLASS);
 		output.accept(SkaiaBlocks.WHITE_PAWN_STAINED_GLASS);
 		
+		output.accept(MSItems.METEORIC_STONE.get());
+		
 		output.accept(MSItems.CRUXITE_BLOCK.get());
 		output.accept(MSItems.CRUXITE_STAIRS.get());
 		output.accept(MSItems.CRUXITE_SLAB.get());
@@ -392,6 +395,7 @@ public final class MSCreativeTabs
 		output.accept(MSItems.NEGATIVE_CAKE.get());
 		output.accept(MSItems.CARROT_CAKE.get());
 		output.accept(MSItems.CHOCOLATEY_CAKE.get());
+		output.accept(MSItems.MOON_CAKE.get());
 		
 		output.accept(MSItems.PRIMED_TNT.get());
 		output.accept(MSItems.UNSTABLE_TNT.get());
@@ -1433,6 +1437,143 @@ public final class MSCreativeTabs
 		
 		output.accept(MSItems.LARGE_CAKE.get());
 		output.accept(MSItems.PINK_FROSTED_TOP_LARGE_CAKE.get());
+		
+		//Dreamer moons
+		//Items
+		output.accept(DreamerMoonBlocks.PROSPIT_DROSS.get());
+		output.accept(DreamerMoonBlocks.DERSE_RESIDUE.get());
+		
+		//Blocks
+		output.accept(DreamerMoonBlocks.PROSPIT_GILDING.asItem());
+		output.accept(DreamerMoonBlocks.PROSPIT_GILDED_PATH.asItem());
+		output.accept(DreamerMoonBlocks.PROSPIT_FERROSTRATA.asItem());
+		output.accept(DreamerMoonBlocks.PROSPIT_FERROSTRATA_STAIRS.asItem());
+		output.accept(DreamerMoonBlocks.PROSPIT_FERROSTRATA_SLAB.asItem());
+		output.accept(DreamerMoonBlocks.PROSPIT_FERROSTRATA_WALL.asItem());
+		output.accept(DreamerMoonBlocks.PROSPIT_ROUGH_FERROSTRATA.asItem());
+		output.accept(DreamerMoonBlocks.PROSPIT_ROUGH_FERROSTRATA_STAIRS.asItem());
+		output.accept(DreamerMoonBlocks.PROSPIT_ROUGH_FERROSTRATA_SLAB.asItem());
+		output.accept(DreamerMoonBlocks.PROSPIT_ROUGH_FERROSTRATA_WALL.asItem());
+		output.accept(DreamerMoonBlocks.PROSPIT_REFINED_FERROSTRATA.asItem());
+		output.accept(DreamerMoonBlocks.PROSPIT_REFINED_FERROSTRATA_STAIRS.asItem());
+		output.accept(DreamerMoonBlocks.PROSPIT_REFINED_FERROSTRATA_SLAB.asItem());
+		output.accept(DreamerMoonBlocks.PROSPIT_REFINED_FERROSTRATA_WALL.asItem());
+		output.accept(DreamerMoonBlocks.PROSPIT_CORE.asItem());
+		output.accept(DreamerMoonBlocks.PROSPIT_CORE_STAIRS.asItem());
+		output.accept(DreamerMoonBlocks.PROSPIT_CORE_SLAB.asItem());
+		output.accept(DreamerMoonBlocks.PROSPIT_CORE_WALL.asItem());
+		output.accept(DreamerMoonBlocks.PROSPIT_ROUGH_CORE.asItem());
+		output.accept(DreamerMoonBlocks.PROSPIT_ROUGH_CORE_STAIRS.asItem());
+		output.accept(DreamerMoonBlocks.PROSPIT_ROUGH_CORE_SLAB.asItem());
+		output.accept(DreamerMoonBlocks.PROSPIT_ROUGH_CORE_WALL.asItem());
+		output.accept(DreamerMoonBlocks.PROSPIT_REFINED_CORE.asItem());
+		output.accept(DreamerMoonBlocks.PROSPIT_REFINED_CORE_STAIRS.asItem());
+		output.accept(DreamerMoonBlocks.PROSPIT_REFINED_CORE_SLAB.asItem());
+		output.accept(DreamerMoonBlocks.PROSPIT_REFINED_CORE_WALL.asItem());
+		output.accept(DreamerMoonBlocks.PROSPIT_CABLE.asItem());
+		output.accept(DreamerMoonBlocks.PROSPIT_THICK_CABLE.asItem());
+		output.accept(DreamerMoonBlocks.PROSPIT_PILLAR.asItem());
+		output.accept(DreamerMoonBlocks.PROSPIT_DOOR.asItem());
+		output.accept(DreamerMoonBlocks.PROSPIT_TRAPDOOR.asItem());
+		output.accept(DreamerMoonBlocks.PROSPIT_FERROSTRATA_PRESSURE_PLATE.asItem());
+		output.accept(DreamerMoonBlocks.PROSPIT_FERROSTRATA_BUTTON.asItem());
+		output.accept(DreamerMoonBlocks.PROSPIT_BRICK.asItem());
+		output.accept(DreamerMoonBlocks.PROSPIT_CRACKED_BRICK.asItem());
+		output.accept(DreamerMoonBlocks.PROSPIT_CHISELED_BRICK.asItem());
+		output.accept(DreamerMoonBlocks.PROSPIT_PAVING_BRICK.asItem());
+		output.accept(DreamerMoonBlocks.PROSPIT_FANCY_BRICK.asItem());
+		output.accept(DreamerMoonBlocks.PROSPIT_TARNISHED_BRICK.asItem());
+		output.accept(DreamerMoonBlocks.PROSPIT_STACKED_BRICK.asItem());
+		output.accept(DreamerMoonBlocks.PROSPIT_TILES.asItem());
+		output.accept(DreamerMoonBlocks.PROSPIT_BRICK_STAIRS.asItem());
+		output.accept(DreamerMoonBlocks.PROSPIT_BRICK_SLAB.asItem());
+		output.accept(DreamerMoonBlocks.PROSPIT_BRICK_WALL.asItem());
+		output.accept(DreamerMoonBlocks.PROSPIT_CRACKED_BRICK_STAIRS.asItem());
+		output.accept(DreamerMoonBlocks.PROSPIT_CRACKED_BRICK_SLAB.asItem());
+		output.accept(DreamerMoonBlocks.PROSPIT_CRACKED_BRICK_WALL.asItem());
+		output.accept(DreamerMoonBlocks.PROSPIT_TARNISHED_BRICK_STAIRS.asItem());
+		output.accept(DreamerMoonBlocks.PROSPIT_TARNISHED_BRICK_SLAB.asItem());
+		output.accept(DreamerMoonBlocks.PROSPIT_TARNISHED_BRICK_WALL.asItem());
+		output.accept(DreamerMoonBlocks.PROSPIT_CORE_BRICK.asItem());
+		output.accept(DreamerMoonBlocks.PROSPIT_CRACKED_CORE_BRICK.asItem());
+		output.accept(DreamerMoonBlocks.PROSPIT_CORE_TILES.asItem());
+		output.accept(DreamerMoonBlocks.PROSPIT_CRACKED_CORE_TILES.asItem());
+		output.accept(DreamerMoonBlocks.PROSPIT_CHISELED_CORE.asItem());
+		output.accept(DreamerMoonBlocks.PROSPIT_CORE_BRICK_STAIRS.asItem());
+		output.accept(DreamerMoonBlocks.PROSPIT_CORE_BRICK_SLAB.asItem());
+		output.accept(DreamerMoonBlocks.PROSPIT_CORE_BRICK_WALL.asItem());
+		output.accept(DreamerMoonBlocks.PROSPIT_CRACKED_CORE_BRICK_STAIRS.asItem());
+		output.accept(DreamerMoonBlocks.PROSPIT_CRACKED_CORE_BRICK_SLAB.asItem());
+		output.accept(DreamerMoonBlocks.PROSPIT_CRACKED_CORE_BRICK_WALL.asItem());
+		output.accept(DreamerMoonBlocks.PROSPIT_CORE_TILE_STAIRS.asItem());
+		output.accept(DreamerMoonBlocks.PROSPIT_CORE_TILE_SLAB.asItem());
+		output.accept(DreamerMoonBlocks.PROSPIT_CORE_TILE_WALL.asItem());
+		
+		output.accept(DreamerMoonBlocks.DERSE_PLATING.asItem());
+		output.accept(DreamerMoonBlocks.DERSE_PLATED_PATH.asItem());
+		output.accept(DreamerMoonBlocks.DERSE_METALLITH.asItem());
+		output.accept(DreamerMoonBlocks.DERSE_METALLITH_STAIRS.asItem());
+		output.accept(DreamerMoonBlocks.DERSE_METALLITH_SLAB.asItem());
+		output.accept(DreamerMoonBlocks.DERSE_METALLITH_WALL.asItem());
+		output.accept(DreamerMoonBlocks.DERSE_ROUGH_METALLITH.asItem());
+		output.accept(DreamerMoonBlocks.DERSE_ROUGH_METALLITH_STAIRS.asItem());
+		output.accept(DreamerMoonBlocks.DERSE_ROUGH_METALLITH_SLAB.asItem());
+		output.accept(DreamerMoonBlocks.DERSE_ROUGH_METALLITH_WALL.asItem());
+		output.accept(DreamerMoonBlocks.DERSE_REFINED_METALLITH.asItem());
+		output.accept(DreamerMoonBlocks.DERSE_REFINED_METALLITH_STAIRS.asItem());
+		output.accept(DreamerMoonBlocks.DERSE_REFINED_METALLITH_SLAB.asItem());
+		output.accept(DreamerMoonBlocks.DERSE_REFINED_METALLITH_WALL.asItem());
+		output.accept(DreamerMoonBlocks.DERSE_CORE.asItem());
+		output.accept(DreamerMoonBlocks.DERSE_CORE_STAIRS.asItem());
+		output.accept(DreamerMoonBlocks.DERSE_CORE_SLAB.asItem());
+		output.accept(DreamerMoonBlocks.DERSE_CORE_WALL.asItem());
+		output.accept(DreamerMoonBlocks.DERSE_ROUGH_CORE.asItem());
+		output.accept(DreamerMoonBlocks.DERSE_ROUGH_CORE_STAIRS.asItem());
+		output.accept(DreamerMoonBlocks.DERSE_ROUGH_CORE_SLAB.asItem());
+		output.accept(DreamerMoonBlocks.DERSE_ROUGH_CORE_WALL.asItem());
+		output.accept(DreamerMoonBlocks.DERSE_REFINED_CORE.asItem());
+		output.accept(DreamerMoonBlocks.DERSE_REFINED_CORE_STAIRS.asItem());
+		output.accept(DreamerMoonBlocks.DERSE_REFINED_CORE_SLAB.asItem());
+		output.accept(DreamerMoonBlocks.DERSE_REFINED_CORE_WALL.asItem());
+		output.accept(DreamerMoonBlocks.DERSE_CABLE.asItem());
+		output.accept(DreamerMoonBlocks.DERSE_THICK_CABLE.asItem());
+		output.accept(DreamerMoonBlocks.DERSE_PILLAR.asItem());
+		output.accept(DreamerMoonBlocks.DERSE_DOOR.asItem());
+		output.accept(DreamerMoonBlocks.DERSE_TRAPDOOR.asItem());
+		output.accept(DreamerMoonBlocks.DERSE_METALLITH_PRESSURE_PLATE.asItem());
+		output.accept(DreamerMoonBlocks.DERSE_METALLITH_BUTTON.asItem());
+		output.accept(DreamerMoonBlocks.DERSE_BRICK.asItem());
+		output.accept(DreamerMoonBlocks.DERSE_CRACKED_BRICK.asItem());
+		output.accept(DreamerMoonBlocks.DERSE_CHISELED_BRICK.asItem());
+		output.accept(DreamerMoonBlocks.DERSE_PAVING_BRICK.asItem());
+		output.accept(DreamerMoonBlocks.DERSE_FANCY_BRICK.asItem());
+		output.accept(DreamerMoonBlocks.DERSE_TARNISHED_BRICK.asItem());
+		output.accept(DreamerMoonBlocks.DERSE_STACKED_BRICK.asItem());
+		output.accept(DreamerMoonBlocks.DERSE_TILES.asItem());
+		output.accept(DreamerMoonBlocks.DERSE_BRICK_STAIRS.asItem());
+		output.accept(DreamerMoonBlocks.DERSE_BRICK_SLAB.asItem());
+		output.accept(DreamerMoonBlocks.DERSE_BRICK_WALL.asItem());
+		output.accept(DreamerMoonBlocks.DERSE_CRACKED_BRICK_STAIRS.asItem());
+		output.accept(DreamerMoonBlocks.DERSE_CRACKED_BRICK_SLAB.asItem());
+		output.accept(DreamerMoonBlocks.DERSE_CRACKED_BRICK_WALL.asItem());
+		output.accept(DreamerMoonBlocks.DERSE_TARNISHED_BRICK_STAIRS.asItem());
+		output.accept(DreamerMoonBlocks.DERSE_TARNISHED_BRICK_SLAB.asItem());
+		output.accept(DreamerMoonBlocks.DERSE_TARNISHED_BRICK_WALL.asItem());
+		output.accept(DreamerMoonBlocks.DERSE_CORE_BRICK.asItem());
+		output.accept(DreamerMoonBlocks.DERSE_CRACKED_CORE_BRICK.asItem());
+		output.accept(DreamerMoonBlocks.DERSE_CORE_TILES.asItem());
+		output.accept(DreamerMoonBlocks.DERSE_CRACKED_CORE_TILES.asItem());
+		output.accept(DreamerMoonBlocks.DERSE_CHISELED_CORE.asItem());
+		output.accept(DreamerMoonBlocks.DERSE_CORE_BRICK_STAIRS.asItem());
+		output.accept(DreamerMoonBlocks.DERSE_CORE_BRICK_SLAB.asItem());
+		output.accept(DreamerMoonBlocks.DERSE_CORE_BRICK_WALL.asItem());
+		output.accept(DreamerMoonBlocks.DERSE_CRACKED_CORE_BRICK_STAIRS.asItem());
+		output.accept(DreamerMoonBlocks.DERSE_CRACKED_CORE_BRICK_SLAB.asItem());
+		output.accept(DreamerMoonBlocks.DERSE_CRACKED_CORE_BRICK_WALL.asItem());
+		output.accept(DreamerMoonBlocks.DERSE_CORE_TILE_STAIRS.asItem());
+		output.accept(DreamerMoonBlocks.DERSE_CORE_TILE_SLAB.asItem());
+		output.accept(DreamerMoonBlocks.DERSE_CORE_TILE_WALL.asItem());
+		
 	}
 	
 	private static void buildWeaponsTab(CreativeModeTab.ItemDisplayParameters parameters, CreativeModeTab.Output output)

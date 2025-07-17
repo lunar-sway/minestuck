@@ -1,0 +1,8 @@
+{
+  "parent": "minecraft:block/slab_top",
+  "textures": {
+    "bottom": "minestuck:block/prospit_cracked_core_brick",
+    "side": "minestuck:block/prospit_cracked_core_brick",
+    "top": "minestuck:block/prospit_cracked_core_brick"
+  }
+}

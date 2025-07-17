@@ -17,27 +17,27 @@ public interface ProgramGui<D>
 	 * Called when the gui is created or if the player pressed the switch
 	 * program button.
 	 */
-	default void onInit(ComputerScreen screen)
+	default void onInit(ThemedScreen screen)
 	{
 	}
 	
 	/**
 	 * Called when some related data have changed that may affect the program.
 	 */
-	default void onUpdate(ComputerScreen screen, D data)
+	default void onUpdate(ThemedScreen screen, D data)
 	{
 	}
 	
 	/**
 	 * Called when the gui is to be rendered.
 	 */
-	void render(GuiGraphics guiGraphics, ComputerScreen screen);
+	void render(GuiGraphics guiGraphics, ThemedScreen screen);
 	
-	static void drawHeaderMessage(Component message, GuiGraphics guiGraphics, ComputerScreen gui)
+	static void drawHeaderMessage(Component message, GuiGraphics guiGraphics, ThemedScreen gui)
 	{
 		guiGraphics.drawString(gui.getMinecraft().font, message,
-				(gui.width - ComputerScreen.xSize) / 2 + 15, (gui.height - ComputerScreen.ySize) / 2 + 45,
-				gui.getTheme().data().textColor(), false);
+				(gui.width - ComputerScreen.GUI_WIDTH) / 2 + 15, (gui.height - ComputerScreen.GUI_HEIGHT) / 2 + 45,
+				gui.selectedTheme.data().textColor(), false);
 	}
 	
 	final class Registry

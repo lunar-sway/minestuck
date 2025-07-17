@@ -66,7 +66,7 @@ public class BucketFeature extends Feature<NoneFeatureConfiguration>
 		if(rand.nextBoolean())
 		{
 			StructureBlockRegistry blocks = StructureBlockRegistry.getOrDefault(context.chunkGenerator());
-			return blocks.getBlockState(rand.nextBoolean() ? "ocean" : "river");
+			return blocks.getBlockState(rand.nextBoolean() ? StructureBlockRegistry.OCEAN : StructureBlockRegistry.RIVER);
 		}
 		
 		SimpleWeightedRandomList.Builder<BlockState> list = SimpleWeightedRandomList.builder();

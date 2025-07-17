@@ -4,6 +4,7 @@ import com.mraof.minestuck.Minestuck;
 import com.mraof.minestuck.MinestuckConfig;
 import com.mraof.minestuck.alchemy.TorrentSession;
 import com.mraof.minestuck.api.alchemy.GristSet;
+import com.mraof.minestuck.client.ClientRungData;
 import com.mraof.minestuck.client.gui.ColorSelectorScreen;
 import com.mraof.minestuck.client.gui.MSScreenFactories;
 import com.mraof.minestuck.inventory.captchalogue.CaptchaDeckHandler;
@@ -91,7 +92,7 @@ public final class ClientPlayerData
 	{
 		return switch(cacheSource)
 		{
-			case PLAYER -> new ClientCache(ClientPlayerData.playerGrist, Echeladder.getGristCapacity(ClientPlayerData.getRung()));
+			case PLAYER -> new ClientCache(ClientPlayerData.playerGrist, ClientRungData.getData(ClientPlayerData.getRung()).gristCapacity());
 			case EDITMODE -> new ClientCache(ClientPlayerData.targetGrist, targetCacheLimit);
 		};
 	}

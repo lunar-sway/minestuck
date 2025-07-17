@@ -11,6 +11,7 @@ import com.mraof.minestuck.block.machine.TransportalizerBlock;
 import com.mraof.minestuck.block.redstone.AreaEffectBlock;
 import com.mraof.minestuck.block.redstone.SummonerBlock;
 import com.mraof.minestuck.block.redstone.WirelessRedstoneReceiverBlock;
+import com.mraof.minestuck.blockentity.ComputerBlockEntity;
 import com.mraof.minestuck.blockentity.TransportalizerBlockEntity;
 import com.mraof.minestuck.blockentity.machine.*;
 import com.mraof.minestuck.blockentity.redstone.RedstoneClockBlockEntity;
@@ -67,6 +68,7 @@ public class MinestuckEnUsLanguageProvider extends MinestuckLanguageProvider
 	{
 		SkaiaBlocksData.addEnUsTranslations(this);
 		AspectTreeBlocksData.addEnUsTranslations(this);
+		DreamerMoonBlocksData.addEnUsTranslations(this);
 		
 		add("message.shift_for_more_info", "Press §eSHIFT§r for more info");
 		
@@ -155,6 +157,8 @@ public class MinestuckEnUsLanguageProvider extends MinestuckLanguageProvider
 		addBlock(MSBlocks.PERFECTLY_GENERIC_TRAPDOOR, "Perfectly Generic Trapdoor");
 		addBlock(MSBlocks.PERFECTLY_GENERIC_SIGN, "Perfectly Generic Sign");
 		addBlock(MSBlocks.PERFECTLY_GENERIC_HANGING_SIGN, "Perfectly Generic Hanging Sign");
+		
+		addBlock(MSBlocks.METEORIC_STONE, "Meteoric Stone");
 		
 		addBlock(MSBlocks.BLUE_DIRT, "Blue Dirt");
 		addBlock(MSBlocks.THOUGHT_DIRT, "Thought Dirt");
@@ -974,6 +978,7 @@ public class MinestuckEnUsLanguageProvider extends MinestuckLanguageProvider
 		addBlock(MSBlocks.PINK_FROSTED_TOP_LARGE_CAKE, "Pink Frosted Top Large Cake");
 		addBlock(MSBlocks.CHOCOLATEY_CAKE, "Chocolatey Cake");
 		addBlockStoreTooltip(MSBlocks.CHOCOLATEY_CAKE, "The most scrumptious cake in the entire world!");
+		addBlock(MSBlocks.MOON_CAKE, "Moon Cake");
 		addBlock(MSBlocks.PRIMED_TNT, "Primed TNT");
 		addBlock(MSBlocks.UNSTABLE_TNT, "Unstable TNT");
 		addBlock(MSBlocks.INSTANT_TNT, "Instant TNT");
@@ -1693,14 +1698,17 @@ public class MinestuckEnUsLanguageProvider extends MinestuckLanguageProvider
 		addItemExtra(MSItems.FROG, "eyes.light", "Lighter Eyes");
 		addItemExtra(MSItems.FROG, "eyes.dark", "Darker Eyes");
 		addItemExtra(MSItems.FROG, "eyes.blank", "Blank Eyes");
+		addItemExtra(MSItems.FROG, "eyes.random", "Random Eyes");
 		addItemExtra(MSItems.FROG, "belly.solid", "Solid-Colored Belly");
 		addItemExtra(MSItems.FROG, "belly.spotted", "Spotted Belly");
 		addItemExtra(MSItems.FROG, "belly.striped", "Striped Belly");
+		addItemExtra(MSItems.FROG, "belly.random", "Random Belly");
 		addItemExtra(MSItems.FROG, "size.0", "Tiny");
 		addItemExtra(MSItems.FROG, "size.1", "Small");
 		addItemExtra(MSItems.FROG, "size.2", "Normal Sized");
 		addItemExtra(MSItems.FROG, "size.3", "Big");
 		addItemExtra(MSItems.FROG, "size.4", "Huge");
+		addItemExtra(MSItems.FROG, "size.random", "Random Size");
 		addItem(MSItems.CARVING_TOOL, "Carving Tool");
 		addItemStoreTooltip(MSItems.CARVING_TOOL, "You gotta BE the marble!");
 		addItem(MSItems.CRUMPLY_HAT, "Crumply Hat");
@@ -2070,6 +2078,7 @@ public class MinestuckEnUsLanguageProvider extends MinestuckLanguageProvider
 		add(Title.FORMAT, "%1$s of %2$s");
 		
 		add(Echeladder.NEW_RUNG, "You reached rung %s!");
+		add(RungsProvider.MUST_ENTER, "You must Enter before initiating this Rung!");
 		addRung(0, "Greentike");
 		addRung(1, "Sir Dies-a-lot");
 		addRung(2, "Soil Architect");
@@ -2146,6 +2155,7 @@ public class MinestuckEnUsLanguageProvider extends MinestuckLanguageProvider
 		addAdvancement(MSAdvancementProvider.INTELLIBEAM, "Captcha Captured", "Use an Intellibeam Laserstation to decode a particularly challenging captcha");
 		addAdvancement(MSAdvancementProvider.LEGENDARY_WEAPON, "Legendary Weapon", "Obtain a Zilly, Welsh, or Denizen tier weapon");
 		addAdvancement(MSAdvancementProvider.BUY_OUT_SHOP, "Beware the Buyer", "Purchase every item available from a consort merchant");
+		addAdvancement(MSAdvancementProvider.BRICK_COMPUTER, "Brick Your Computer", "Did you try turning it on and off again?");
 		
 		addLand(FungiLandType.FUNGI, "Fungi");
 		addLand(FungiLandType.DANK, "Dank");
@@ -2253,6 +2263,7 @@ public class MinestuckEnUsLanguageProvider extends MinestuckLanguageProvider
 		add(SylladexScreen.EMPTY_SYLLADEX_2, "This will empty your sylladex.");
 		add(SylladexScreen.EMPTY_SYLLADEX_BUTTON, "Empty Sylladex");
 		add(AlchemiterScreen.TITLE, "Alchemiter");
+		add(ComputerBlockEntity.DISK_REJECT, "Cannot fit any more disks in the computer!");
 		add(CruxtruderBlockEntity.EMPTY, "The cruxtruder gives off an empty click. Perhaps it needs some sort of material to function?");
 		add(MiniCruxtruderBlockEntity.TITLE, "Miniature Cruxtruder");
 		add(MiniTotemLatheBlockEntity.TITLE, "Miniature Totem Lathe");
@@ -2440,6 +2451,7 @@ public class MinestuckEnUsLanguageProvider extends MinestuckLanguageProvider
 		add(GristLayerInfo.INFO, "Grist types at this position; common: %s, uncommon: %s, any: %s");
 		add(CheckLandCommand.CHECK, "You are currently in %s.");
 		add(CheckLandCommand.FAIL, "You are currently not in a land dimension.");
+		add(GutterCommand.SHOW, "Gutter modifier: %s, remaining capacity: %s, grist contained: %s");
 		add(SendGristCommand.SUCCESS, "Successfully gave grist to %s: %s");
 		add(SendGristCommand.RECEIVE, "Received grist from %s: %s");
 		add(SendGristCommand.NOT_PERMITTED, "You are not permitted to send grist to %s.");
@@ -2536,6 +2548,10 @@ public class MinestuckEnUsLanguageProvider extends MinestuckLanguageProvider
 		addSubtitles("projectile_bounce", "Projectile bounces");
 		addSubtitles("tool_revise", "Server uses Revise tool");
 		addSubtitles("tool_recycle", "Server recycles blocks");
+		addSubtitles("computer_boot", "Computer booting up");
+		addSubtitles("computer_disk_insert", "Disk inserted");
+		addSubtitles("computer_disk_remove", "Disk removed");
+		addSubtitles("computer_keyboard", "Typing on computer");
 		addSubtitles("alchemiter_resonate", "Alchemize!");
 		addSubtitles("transportalizer_teleport", "Transportalize!");
 		addSubtitles("totem_lathe_lathe", "Latheify!");

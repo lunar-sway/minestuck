@@ -93,9 +93,7 @@ public class MinestuckConfig
 		//Mechanics
 		public final BooleanValue hardMode;
 		public final BooleanValue echeladderProgress;
-		public final BooleanValue aspectEffects;
 		public final BooleanValue playerSelectedTitle;
-		public final IntValue preEntryRungLimit;
 		public final BooleanValue rungHealthOnRespawn;
 		public final IntValue dialogueRenewalSpeed;
 		public final IntValue lotusRestorationTime;
@@ -128,12 +126,8 @@ public class MinestuckConfig
 			builder.push("mechanics");
 			echeladderProgress = builder.comment("If this is true, players will be able to see their progress towards the next rung. This is server side and will only be active in multiplayer if the server/Lan host has it activated.")
 					.define("echeladderProgress", true);
-			preEntryRungLimit = builder.comment("The highest rung you can get before entering medium. Note that the first rung is indexed as 0, the second as 1 and so on.")
-					.defineInRange("preEntryRungLimit", 6, 0, 49);
 			rungHealthOnRespawn = builder.comment("If true, players will respawn with full health, rung bonuses included. If false, health will be left alone (typically meaning that you respawn with 10 hearts)")
 					.define("rungHealthOnRespawn", true);
-			aspectEffects = builder.comment("If this is true, players will gain certain potion effects once they reach a certain rung based on their aspect.")
-					.define("aspectEffects", true);
 			playerSelectedTitle = builder.comment("Enable this to let players select their own title. They will however not be able to select the Lord or Muse as class.")
 					.define("playerSelectedTitle", true);
 			dialogueRenewalSpeed = builder.comment("Determines how quickly consort dialogue and store stocks are renewed.")

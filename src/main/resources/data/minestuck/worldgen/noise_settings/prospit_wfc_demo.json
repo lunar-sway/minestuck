@@ -1,0 +1,44 @@
+{
+    "sea_level": 0,
+    "disable_mob_generation": false,
+    "default_block": {
+        "Name": "minecraft:stone"
+    },
+    "default_fluid": {
+        "Properties": {
+            "level": "0"
+        },
+        "Name": "minecraft:water"
+    },
+    "noise": {
+        "size_vertical": 2,
+        "size_horizontal": 1,
+        "min_y": 0,
+        "height": 256
+    },
+    "noise_router": {
+        "barrier": "zero",
+        "fluid_level_floodedness": "zero",
+        "fluid_level_spread": "zero",
+        "lava": "zero",
+        "temperature": "zero",
+        "vegetation": "zero",
+        "continents": "zero",
+        "erosion": "zero",
+        "depth": "zero",
+        "ridges": "zero",
+        "initial_density_without_jaggedness": "zero",
+        "final_density": "zero",
+        "vein_toggle": "zero",
+        "vein_ridged": "zero",
+        "vein_gap": "zero"
+    },
+    "surface_rule": {
+        "type": "sequence",
+        "sequence": []
+    },
+    "spawn_target": [],
+    "aquifers_enabled": false,
+    "ore_veins_enabled": false,
+    "legacy_random_source": true
+}
