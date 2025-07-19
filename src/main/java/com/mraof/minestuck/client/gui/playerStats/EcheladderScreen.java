@@ -198,11 +198,13 @@ public class EcheladderScreen extends PlayerStatsScreen
 		
 		int attack = (int) Math.round(100 * (1 + rungData.attributes().attackBonus()));
 		guiGraphics.drawString(font, I18n.get(ATTACK), textOffset, yOffset + 30, GREY, false);
-		guiGraphics.drawString(font, attack + "%", textOffset + 2, yOffset + 39, BLUE, false);
+		String attackValueText = attack + "%";
+		guiGraphics.drawString(font, attackValueText, textOffset + 2, yOffset + 39, BLUE, false);
 		
 		double health = rungData.attributes().healthBoost() / 2D;
 		guiGraphics.drawString(font, I18n.get(HEALTH), textOffset, yOffset + 84, GREY, false);
-		guiGraphics.drawString(font, "+" + String.format(Locale.ROOT, "%.1f", health), textOffset + 2, yOffset + 93, BLUE, false);
+		String healthValueText = "+" + String.format(Locale.ROOT, "%.1f", health);
+		guiGraphics.drawString(font, healthValueText, textOffset + 2, yOffset + 93, BLUE, false);
 		
 		guiGraphics.drawString(font, "=", textOffset + 1, yOffset + 12, GREY, false);    //Should this be black, or the same blue as the numbers?
 		guiGraphics.drawString(font, String.valueOf(ClientPlayerData.getBoondollars()), textOffset + 3 + mc.font.width("="), yOffset + 12, BLUE, false);
@@ -211,9 +213,9 @@ public class EcheladderScreen extends PlayerStatsScreen
 		guiGraphics.drawString(font, I18n.get(CACHE), textOffset, yOffset + 138, GREY, false);
 		guiGraphics.drawString(font, String.valueOf(rungData.gristCapacity()), textOffset + 2, yOffset + 147, BLUE, false);
 		
-		if(mouseInBounds(mouseY, yOffset + 39, mouseX, textOffset + 2, mc.font.width(attack + "%")))
+		if(mouseInBounds(mouseY, yOffset + 39, mouseX, textOffset + 2, mc.font.width(attackValueText)))
 			return ImmutableList.of(Component.translatable(DAMAGE_UNDERLING), Component.literal(Math.round(attack * rungData.attributes().underlingDamageMod()) + "%"));
-		if(mouseInBounds(mouseY, yOffset + 93, mouseX, textOffset + 2, mc.font.width(String.valueOf(health))))
+		if(mouseInBounds(mouseY, yOffset + 93, mouseX, textOffset + 2, mc.font.width(healthValueText)))
 			return ImmutableList.of(Component.translatable(PROTECTION_UNDERLING), Component.literal(String.format(Locale.ROOT, "%.1f", 100 * rungData.attributes().underlingProtectionMod()) + "%"));
 		return null;
 	}
