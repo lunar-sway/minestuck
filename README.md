@@ -14,12 +14,13 @@ Minestuck is a mod for Minecraft that adds game elements from the webcomic Homes
 As of right now, it's strongly recommended to have read at least the first four acts of Homestuck, and preferably also the fifth act before delving into this mod.
 
 In general we plan to add the content necessary to play a full session of Sburb either singleplayer or multiplayer. We hope to implement:
-* Places like Skaia, Prospit and Derse
 * Improved Title powers
 * Sprites and Prototyping
 * More stuff in land
 * Tons of Homestuck themed items
 * And more!
+
+Datapacks, Resource Packs, and more, can be found at `src/additional_resources/`
 
 Other Links
 ============
