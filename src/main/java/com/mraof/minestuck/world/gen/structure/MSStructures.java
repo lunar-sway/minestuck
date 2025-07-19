@@ -11,7 +11,6 @@ import com.mraof.minestuck.world.gen.structure.village.*;
 import net.minecraft.FieldsAreNonnullByDefault;
 import net.minecraft.core.registries.Registries;
 import net.minecraft.resources.ResourceKey;
-import net.minecraft.resources.ResourceLocation;
 import net.minecraft.world.level.levelgen.structure.Structure;
 import net.minecraft.world.level.levelgen.structure.StructureType;
 import net.minecraft.world.level.levelgen.structure.pieces.StructurePieceType;

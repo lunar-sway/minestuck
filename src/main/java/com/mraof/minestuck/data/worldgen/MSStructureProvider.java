@@ -28,6 +28,7 @@ import net.minecraft.world.level.levelgen.structure.placement.RandomSpreadStruct
 import net.minecraft.world.level.levelgen.structure.placement.RandomSpreadType;
 import net.minecraft.world.level.levelgen.structure.pools.StructureTemplatePool;
 import net.minecraft.world.level.levelgen.structure.structures.JigsawStructure;
+import net.minecraft.world.level.levelgen.structure.templatesystem.LiquidSettings;
 
 import java.util.List;
 import java.util.Map;
@@ -116,7 +117,7 @@ public final class MSStructureProvider
 				128,
 				List.of(),
 				JigsawStructure.DEFAULT_DIMENSION_PADDING,
-				JigsawStructure.DEFAULT_LIQUID_SETTINGS
+				LiquidSettings.IGNORE_WATERLOGGING
 		);
 	}
 	
