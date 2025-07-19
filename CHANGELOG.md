@@ -36,6 +36,7 @@ The format is based on [Keep a Changelog](https://keepachangelog.com/en/1.1.0/).
 - Fix weapons not being enchantable
 - Add back song description for cassette items
 - Fix hover area for some tooltip in the echeladder screen
+- Removed Refined Storage compatibility feature that was not compatible with Refined Storage 2
 
 ### Removed
 
