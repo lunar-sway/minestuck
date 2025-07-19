@@ -1,6 +1,6 @@
 {
   "pack": {
-    "pack_format": 10,
-    "description": "Minestuck Create Integration"
+    "pack_format": 15,
+    "description": "Minestuck Create Integration for 1.20.1"
   }
 }

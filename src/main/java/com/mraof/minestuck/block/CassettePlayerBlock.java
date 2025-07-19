@@ -55,7 +55,7 @@ public class CassettePlayerBlock extends CustomShapeBlock implements EntityBlock
 					if(cassettePlayer.getCassette().getItem() instanceof CassetteItem cassetteItem)
 					{
 						Registry<JukeboxSong> jukeboxRegistry = level.registryAccess().registryOrThrow(Registries.JUKEBOX_SONG);
-						ResourceKey<JukeboxSong> cassetteSong = cassetteItem.cassetteID.getJukeboxSong();
+						ResourceKey<JukeboxSong> cassetteSong = cassetteItem.cassetteType.getJukeboxSong();
 						
 						if(cassetteSong != null)
 						{
@@ -90,7 +90,7 @@ public class CassettePlayerBlock extends CustomShapeBlock implements EntityBlock
 			cassettePlayer.setCassette(cassetteStack.copy());
 			if(cassetteStack.getItem() instanceof CassetteItem cassette)
 			{
-				level.setBlock(pos, state.setValue(CASSETTE, cassette.cassetteID), 2);
+				level.setBlock(pos, state.setValue(CASSETTE, cassette.cassetteType), 2);
 			}
 		}
 	}
