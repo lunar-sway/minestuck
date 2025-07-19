@@ -20,7 +20,7 @@ In general we plan to add the content necessary to play a full session of Sburb 
 * Tons of Homestuck themed items
 * And more!
 
-Datapacks, Resource Packs, and more, can be found at `src/additional_resources/`
+Datapacks, Resource Packs, and more, can be found at `additional_resources/`
 
 Other Links
 ============
