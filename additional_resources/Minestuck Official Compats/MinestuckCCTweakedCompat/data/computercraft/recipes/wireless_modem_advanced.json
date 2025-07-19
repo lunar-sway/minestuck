@@ -1,0 +1,23 @@
+{
+  "type": "minecraft:crafting_shaped",
+  "pattern": [
+    "G G",
+    "GTG",
+    "GRG"
+  ],
+  "key": {
+    "T": {
+      "item": "minestuck:wireless_redstone_transmitter"
+    },
+    "R": {
+      "item": "minestuck:wireless_redstone_receiver"
+    },
+    "G": {
+      "item": "minecraft:gold_ingot"
+    }
+  },
+  "result": {
+    "item": "computercraft:wireless_modem_advanced",
+    "count": 8
+  }
+}

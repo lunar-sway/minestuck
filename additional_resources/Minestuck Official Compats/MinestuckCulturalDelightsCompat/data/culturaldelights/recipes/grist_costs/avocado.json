@@ -1,0 +1,10 @@
+{
+  "type": "minestuck:grist_cost",
+  "grist_cost": {
+    "minestuck:marble": 4,
+    "minestuck:iodine": 4
+  },
+  "ingredient": {
+    "item": "culturaldelights:avocado"
+  }
+}

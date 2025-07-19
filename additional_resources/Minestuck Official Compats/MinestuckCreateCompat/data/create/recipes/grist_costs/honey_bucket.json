@@ -1,0 +1,12 @@
+{
+  "type": "minestuck:grist_cost",
+  "grist_cost": {
+    "minestuck:rust": 27,
+    "minestuck:build": 16,
+    "minestuck:amber": 4,
+    "minestuck:gold": 4
+  },
+  "ingredient": {
+    "item": "create:honey_bucket"
+  }
+}

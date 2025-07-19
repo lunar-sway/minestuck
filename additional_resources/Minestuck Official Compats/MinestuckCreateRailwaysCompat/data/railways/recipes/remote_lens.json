@@ -1,0 +1,17 @@
+{
+  "type": "minecraft:crafting_shapeless",
+  "ingredients": [
+    {
+      "item": "create:brass_sheet"
+    },
+    {
+      "item": "create:precision_mechanism"
+    },
+    {
+      "item": "minestuck:remote_observer"
+    }
+  ],
+  "result": {
+    "item": "railways:remote_lens"
+  }
+}

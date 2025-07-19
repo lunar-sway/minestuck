@@ -1,0 +1,17 @@
+[
+  {
+    "interpreter_type": "minestuck:default",
+    "source": "create:pressing",
+    "source_type": "recipe_type"
+  },
+  {
+    "interpreter_type": "minestuck:default",
+    "source": "create:mechanical_crafting",
+    "source_type": "recipe_type"
+  },
+  {
+    "interpreter_type": "minestuck:default",
+    "source": "create:sandpaper_polishing",
+    "source_type": "recipe_type"
+  }
+]

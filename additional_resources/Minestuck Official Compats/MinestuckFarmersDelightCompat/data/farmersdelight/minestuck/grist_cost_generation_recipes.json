@@ -1,0 +1,10 @@
+[
+  {
+    "interpreter": {
+      "minestuck:build": 5
+    },
+    "interpreter_type": "minestuck:cooking",
+    "source": "farmersdelight:cooking",
+    "source_type": "recipe_type"
+  }
+]

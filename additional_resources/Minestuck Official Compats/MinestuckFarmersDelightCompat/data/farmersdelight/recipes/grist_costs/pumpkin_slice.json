@@ -1,0 +1,10 @@
+{
+  "type": "minestuck:grist_cost",
+  "grist_cost": {
+    "minestuck:amber": 3,
+    "minestuck:caulk": 1
+  },
+  "ingredient": {
+    "item": "farmersdelight:pumpkin_slice"
+  }
+}

@@ -1,0 +1,14 @@
+{
+  "type": "minestuck:grist_cost",
+  "grist_cost": {
+    "minestuck:amethyst": 27,
+    "minestuck:shale": 18,
+    "minestuck:ruby": 5,
+    "minestuck:sulfur": 13,
+    "minestuck:build": 28,
+    "minestuck:iodine": 8
+  },
+  "ingredient": {
+    "item": "ends_delight:dragon_breath_and_chorus_soup"
+  }
+}

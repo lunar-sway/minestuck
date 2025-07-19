@@ -1,0 +1,12 @@
+{
+  "type": "minestuck:source_grist_cost",
+  "grist_cost": {
+    "minestuck:tar": 1
+  },
+  "ingredient": {
+    "item": "delightful:cooked_marshmallow_stick"
+  },
+  "sources": [
+    "delightful:marshmallow_stick"
+  ]
+}

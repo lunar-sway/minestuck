@@ -1,0 +1,10 @@
+{
+  "type": "minestuck:grist_cost",
+  "grist_cost": {
+    "minestuck:uranium": 250,
+    "minestuck:chalk": 100
+  },
+  "ingredient": {
+    "item": "enlightened_end:pure_radium_block"
+  }
+}

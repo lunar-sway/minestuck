@@ -1,0 +1,10 @@
+{
+  "type": "minestuck:grist_cost",
+  "grist_cost": {
+    "minestuck:rust": 1,
+    "minestuck:amber": 4
+  },
+  "ingredient": {
+    "item": "farmersdelight:rotten_tomato"
+  }
+}

@@ -1,0 +1,13 @@
+{
+  "type": "minestuck:combination",
+  "input1": {
+    "item": "minecraft:grass"
+  },
+  "input2": {
+    "item": "minecraft:potato"
+  },
+  "mode": "or",
+  "output": {
+    "item": "farmersdelight:wild_potatoes"
+  }
+}

@@ -1,0 +1,13 @@
+{
+  "type": "minestuck:combination",
+  "input1": {
+    "item": "minecraft:rotten_flesh"
+  },
+  "input2": {
+    "item": "farmersdelight:tomato"
+  },
+  "mode": "or",
+  "output": {
+    "item": "farmersdelight:rotten_tomato"
+  }
+}

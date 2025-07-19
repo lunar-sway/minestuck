@@ -1,0 +1,10 @@
+{
+  "type": "minestuck:grist_cost",
+  "grist_cost": {
+    "minestuck:build": 1,
+    "minestuck:gold": 2
+  },
+  "ingredient": {
+    "tag": "create:stone_types/ochrum"
+  }
+}

@@ -1,0 +1,12 @@
+{
+  "type": "minestuck:grist_cost",
+  "grist_cost": {
+    "minestuck:build": 52,
+    "minestuck:chalk": 76,
+    "minestuck:tar": 132,
+    "minestuck:cobalt": 64
+  },
+  "ingredient": {
+    "item": "ends_delight:dragon_egg_shell"
+  }
+}
