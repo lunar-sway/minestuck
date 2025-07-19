@@ -85,8 +85,8 @@ public class MusicPlayerWeapon extends WeaponItem
 					MusicPlayerPacket packet;
 					if(musicPlayingCap.getCassetteType() == EnumCassetteType.NONE)
 					{
-						packet = MusicPlayerPacket.createPacket(playerIn, cassette.cassetteID, volume, pitch);
-						musicPlayingCap.setMusicPlaying(musicPlayer, cassette.cassetteID);
+						packet = MusicPlayerPacket.createPacket(playerIn, cassette.cassetteType, volume, pitch);
+						musicPlayingCap.setMusicPlaying(musicPlayer, cassette.cassetteType);
 					} else
 					{
 						packet = MusicPlayerPacket.createPacket(playerIn, EnumCassetteType.NONE, 0, 0);
