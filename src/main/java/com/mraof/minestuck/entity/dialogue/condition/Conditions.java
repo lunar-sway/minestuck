@@ -17,49 +17,53 @@ import java.util.Arrays;
 import java.util.List;
 import java.util.function.Supplier;
 
+import static com.mraof.minestuck.entity.dialogue.condition.Condition.*;
+
 public final class Conditions
 {
 	public static final DeferredRegister<MapCodec<? extends Condition>> REGISTER = DeferredRegister.create(Minestuck.id("dialogue_condition"), Minestuck.MOD_ID);
 	public static final Registry<MapCodec<? extends Condition>> REGISTRY = REGISTER.makeRegistry(builder -> {});
 	
 	static {
-		REGISTER.register("always_true", () -> Condition.AlwaysTrue.CODEC);
-		REGISTER.register("first_time_generating", () -> Condition.FirstTimeGenerating.CODEC);
+		REGISTER.register("always_true", () -> AlwaysTrue.CODEC);
+		REGISTER.register("first_time_generating", () -> FirstTimeGenerating.CODEC);
 		REGISTER.register("list", () -> ListCondition.CODEC);
-		REGISTER.register("carapacian", () -> Condition.IsCarapacian.CODEC);
-		REGISTER.register("is_from_kingdom", () -> Condition.IsFromKingdom.CODEC);
-		REGISTER.register("entity_type", () -> Condition.IsEntityType.CODEC);
-		REGISTER.register("is_is_land", () -> Condition.IsInLand.CODEC);
-		REGISTER.register("is_consort_from_land", () -> Condition.IsConsortFromLand.CODEC);
-		REGISTER.register("is_consort_in_home_land", () -> Condition.IsConsortInHomeLand.CODEC);
-		REGISTER.register("terrain_land_type", () -> Condition.InTerrainLandType.CODEC);
-		REGISTER.register("terrain_land_type_tag", () -> Condition.InTerrainLandTypeTag.CODEC);
-		REGISTER.register("consort_terrain_land_type", () -> Condition.InConsortTerrainLandType.CODEC);
-		REGISTER.register("title_land_type", () -> Condition.InTitleLandType.CODEC);
-		REGISTER.register("title_land_type_tag", () -> Condition.InTitleLandTypeTag.CODEC);
-		REGISTER.register("at_or_above_y", () -> Condition.AtOrAboveY.CODEC);
-		REGISTER.register("npc_holding_item", () -> Condition.NPCIsHoldingItem.CODEC);
-		REGISTER.register("player_item", () -> Condition.PlayerHasItem.CODEC);
-		REGISTER.register("item_tag_match", () -> Condition.ItemTagMatch.CODEC);
-		REGISTER.register("item_tag_match_exclude", () -> Condition.ItemTagMatchExclude.CODEC);
-		REGISTER.register("has_matched_item", () -> Condition.HasMatchedItem.CODEC);
-		REGISTER.register("player_class", () -> Condition.PlayerIsClass.CODEC);
-		REGISTER.register("player_aspect", () -> Condition.PlayerIsAspect.CODEC);
-		REGISTER.register("player_reputation", () -> Condition.PlayerHasReputation.CODEC);
-		REGISTER.register("player_boondollars", () -> Condition.PlayerHasBoondollars.CODEC);
-		REGISTER.register("player_entered", () -> Condition.PlayerHasEntered.CODEC);
-		REGISTER.register("custom_score", () -> Condition.CustomHasScore.CODEC);
-		REGISTER.register("move_restriction", () -> Condition.HasMoveRestriction.CODEC);
-		REGISTER.register("flag", () -> Condition.Flag.CODEC);
-		REGISTER.register("near_spawn", () -> Condition.NearSpawn.CODEC);
-		REGISTER.register("has_player_entered", () -> Condition.HasPlayerEntered.CODEC);
-		REGISTER.register("is_in_skaia", () -> Condition.IsInSkaia.CODEC);
-		REGISTER.register("consort_visited_skaia", () -> Condition.ConsortVisitedSkaia.CODEC);
+		REGISTER.register("carapacian", () -> IsCarapacian.CODEC);
+		REGISTER.register("is_from_kingdom", () -> IsFromKingdom.CODEC);
+		REGISTER.register("entity_type", () -> IsEntityType.CODEC);
+		REGISTER.register("is_is_land", () -> IsInLand.CODEC);
+		REGISTER.register("is_consort_from_land", () -> IsConsortFromLand.CODEC);
+		REGISTER.register("is_consort_in_home_land", () -> IsConsortInHomeLand.CODEC);
+		REGISTER.register("terrain_land_type", () -> InTerrainLandType.CODEC);
+		REGISTER.register("terrain_land_type_tag", () -> InTerrainLandTypeTag.CODEC);
+		REGISTER.register("consort_terrain_land_type", () -> InConsortTerrainLandType.CODEC);
+		REGISTER.register("title_land_type", () -> InTitleLandType.CODEC);
+		REGISTER.register("title_land_type_tag", () -> InTitleLandTypeTag.CODEC);
+		REGISTER.register("at_or_above_y", () -> AtOrAboveY.CODEC);
+		REGISTER.register("npc_holding_item", () -> NPCIsHoldingItem.CODEC);
+		REGISTER.register("player_item", () -> PlayerHasItem.CODEC);
+		REGISTER.register("item_tag_match", () -> ItemTagMatch.CODEC);
+		REGISTER.register("item_tag_match_exclude", () -> ItemTagMatchExclude.CODEC);
+		REGISTER.register("has_matched_item", () -> HasMatchedItem.CODEC);
+		REGISTER.register("player_class", () -> PlayerIsClass.CODEC);
+		REGISTER.register("player_aspect", () -> PlayerIsAspect.CODEC);
+		REGISTER.register("player_reputation", () -> PlayerHasReputation.CODEC);
+		REGISTER.register("player_boondollars", () -> PlayerHasBoondollars.CODEC);
+		REGISTER.register("player_entered", () -> PlayerHasEntered.CODEC);
+		REGISTER.register("player_advancement", () -> PlayerHasAdvancement.CODEC);
+		REGISTER.register("custom_score", () -> CustomHasScore.CODEC);
+		REGISTER.register("custom_tag", () -> CustomHasTag.CODEC);
+		REGISTER.register("dialogue_exists", () -> DialogueExists.CODEC);
+		REGISTER.register("move_restriction", () -> HasMoveRestriction.CODEC);
+		REGISTER.register("flag", () -> Flag.CODEC);
+		REGISTER.register("near_spawn", () -> NearSpawn.CODEC);
+		REGISTER.register("is_in_skaia", () -> IsInSkaia.CODEC);
+		REGISTER.register("consort_visited_skaia", () -> ConsortVisitedSkaia.CODEC);
 	}
 	
 	public static Condition alwaysTrue()
 	{
-		return Condition.AlwaysTrue.INSTANCE;
+		return AlwaysTrue.INSTANCE;
 	}
 	
 	public static Condition all(Condition... conditions)
@@ -84,67 +88,71 @@ public final class Conditions
 	
 	public static Condition isInLand()
 	{
-		return Condition.IsInLand.INSTANCE;
+		return IsInLand.INSTANCE;
 	}
 	
 	public static Condition isFromLand()
 	{
-		return Condition.IsConsortFromLand.INSTANCE;
+		return IsConsortFromLand.INSTANCE;
 	}
 	
 	public static Condition isInHomeLand()
 	{
-		return Condition.IsConsortInHomeLand.INSTANCE;
+		return IsConsortInHomeLand.INSTANCE;
 	}
 	
 	public static Condition isInTerrainLand(Supplier<TerrainLandType> landType)
 	{
-		return new Condition.InTerrainLandType(landType.get());
+		return new InTerrainLandType(landType.get());
 	}
 	
 	public static Condition isInTerrainLand(TagKey<TerrainLandType> tag)
 	{
-		return new Condition.InTerrainLandTypeTag(tag);
+		return new InTerrainLandTypeTag(tag);
 	}
 	
 	public static Condition isInConsortLand(EnumConsort consort)
 	{
-		return new Condition.InConsortTerrainLandType(consort);
+		return new InConsortTerrainLandType(consort);
 	}
 	
 	public static Condition isInTitleLand(Supplier<TitleLandType> landType)
 	{
-		return new Condition.InTitleLandType(landType.get());
+		return new InTitleLandType(landType.get());
 	}
 	
 	public static Condition isInTitleLand(TagKey<TitleLandType> tag)
 	{
-		return new Condition.InTitleLandTypeTag(tag);
+		return new InTitleLandTypeTag(tag);
 	}
 	
 	public static Condition isInSkaia()
 	{
-		return Condition.IsInSkaia.INSTANCE;
+		return IsInSkaia.INSTANCE;
 	}
 	
 	public static Condition isProspitian()
 	{
-		return new Condition.IsFromKingdom(EnumEntityKingdom.PROSPITIAN);
+		return new IsFromKingdom(EnumEntityKingdom.PROSPITIAN);
 	}
 	
 	public static Condition isDersite()
 	{
-		return new Condition.IsFromKingdom(EnumEntityKingdom.DERSITE);
+		return new IsFromKingdom(EnumEntityKingdom.DERSITE);
 	}
 	
-	public static Condition hasEntered()
+	public static PlayerOnlyCondition hasEntered()
 	{
-		return Condition.PlayerHasEntered.INSTANCE;
+		return PlayerHasEntered.INSTANCE;
+	}
+	public static PlayerOnlyCondition hasAdvancement(String name)
+	{
+		return new PlayerHasAdvancement(Minestuck.id(name.replace(".", "/")));
 	}
 	
 	public static Condition isHolding(Item item)
 	{
-		return new Condition.NPCIsHoldingItem(item);
+		return new NPCIsHoldingItem(item);
 	}
 	
 	@SafeVarargs
@@ -156,8 +164,8 @@ public final class Conditions
 	public static Condition isAnyEntityType(EntityType<?>... entityTypes)
 	{
 		if(entityTypes.length == 1)
-			return new Condition.IsEntityType(entityTypes[0]);
+			return new IsEntityType(entityTypes[0]);
 		else
-			return new ListCondition(Arrays.stream(entityTypes).<Condition>map(Condition.IsEntityType::new).toList(), ListCondition.ListType.ANY);
+			return new ListCondition(Arrays.stream(entityTypes).<Condition>map(IsEntityType::new).toList(), ListCondition.ListType.ANY);
 	}
 }

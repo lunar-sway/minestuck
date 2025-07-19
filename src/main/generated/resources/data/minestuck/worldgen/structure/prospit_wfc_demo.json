@@ -1,0 +1,6 @@
+{
+  "type": "minestuck:prospit_wfc_demo",
+  "biomes": "minestuck:prospit_wfc_demo",
+  "spawn_overrides": {},
+  "step": "surface_structures"
+}

@@ -1,0 +1,47 @@
+{
+  "elements": [
+    {
+      "faces": {
+        "down": {
+          "cullface": "down",
+          "texture": "#bottom"
+        },
+        "east": {
+          "texture": "#east"
+        },
+        "north": {
+          "texture": "#north"
+        },
+        "south": {
+          "texture": "#south"
+        },
+        "up": {
+          "texture": "#top"
+        },
+        "west": {
+          "texture": "#west"
+        }
+      },
+      "from": [
+        1,
+        0,
+        1
+      ],
+      "to": [
+        15,
+        8,
+        15
+      ]
+    }
+  ],
+  "textures": {
+    "bottom": "minestuck:block/moon_cake_bottom",
+    "east": "minestuck:block/moon_cake_east",
+    "north": "minestuck:block/moon_cake_north",
+    "particle": "minestuck:block/moon_cake_side",
+    "side": "minestuck:block/moon_cake_side",
+    "south": "minestuck:block/moon_cake_south",
+    "top": "minestuck:block/moon_cake_top",
+    "west": "minestuck:block/moon_cake_west"
+  }
+}

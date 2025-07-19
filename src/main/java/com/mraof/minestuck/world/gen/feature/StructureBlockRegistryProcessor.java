@@ -6,6 +6,7 @@ import net.minecraft.MethodsReturnNonnullByDefault;
 import net.minecraft.core.BlockPos;
 import net.minecraft.server.level.ServerLevel;
 import net.minecraft.world.level.ServerLevelAccessor;
+import net.minecraft.world.level.block.Blocks;
 import net.minecraft.world.level.block.state.BlockState;
 import net.minecraft.world.level.chunk.ChunkGenerator;
 import net.minecraft.world.level.levelgen.structure.templatesystem.StructurePlaceSettings;
@@ -39,7 +40,8 @@ public final class StructureBlockRegistryProcessor extends StructureProcessor
 			StructureTemplate.StructureBlockInfo original = originals.get(i);
 			StructureTemplate.StructureBlockInfo current = currents.get(i);
 			
-			if(original.state() != current.state())
+			//blocks can be skipped past if it has already been changed so long as it was not first a jigsaw block
+			if(original.state() != current.state() && !original.state().is(Blocks.JIGSAW))
 				continue;
 			
 			BlockState newState = blockRegistry.getTemplateState(current.state());

@@ -54,7 +54,7 @@ public final class ColorHandler
 					case 1 -> FrogItem.getEyeColor(stack);
 					case 2 -> FrogItem.getBellyColor(stack);
 					default -> -1;
-				};
+				} | 0xFF000000;
             }
             return -1;
         }

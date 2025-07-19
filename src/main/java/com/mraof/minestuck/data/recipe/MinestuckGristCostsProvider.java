@@ -352,7 +352,7 @@ public final class MinestuckGristCostsProvider
 		ContainerGristCostBuilder.of(Items.WATER_BUCKET).grist(COBALT, 4).buildFor(recipeSaver, Minestuck.MOD_ID);
 		ContainerGristCostBuilder.of(Items.LAVA_BUCKET).grist(TAR, 16).buildFor(recipeSaver, Minestuck.MOD_ID);
 		ContainerGristCostBuilder.of(Items.MILK_BUCKET).grist(CHALK, 8).buildFor(recipeSaver, Minestuck.MOD_ID);
-		GristCostRecipeBuilder.of(Items.POWDER_SNOW_BUCKET).grist(RUST, 27).grist(CHALK, 4).buildFor(recipeSaver, Minestuck.MOD_ID); //TODO find way to handle SolidBucketItem instances like BucketItem
+		SourceGristCostBuilder.of(Items.POWDER_SNOW_BUCKET).source(Items.BUCKET).grist(CHALK, 4).buildFor(recipeSaver, Minestuck.MOD_ID);
 		
 		//------------------------MINESTUCK------------------------\\
 		
@@ -916,6 +916,7 @@ public final class MinestuckGristCostsProvider
 		GristCostRecipeBuilder.of(MSBlocks.LARGE_CAKE.get()).grist(BUILD, 1).grist(IODINE, 1).build(recipeSaver);
 		GristCostRecipeBuilder.of(MSBlocks.PINK_FROSTED_TOP_LARGE_CAKE.get()).grist(BUILD, 1).grist(IODINE, 1).grist(CHALK, 1).build(recipeSaver);
 		GristCostRecipeBuilder.of(MSBlocks.CHOCOLATEY_CAKE.get()).grist(AMBER, 20).grist(CHALK, 10).grist(IODINE, 5).grist(RUBY, 1).build(recipeSaver);
+		GristCostRecipeBuilder.of(MSBlocks.MOON_CAKE.get()).grist(AMBER, 50).grist(AMETHYST, 50).build(recipeSaver);
 		
 		GristCostRecipeBuilder.of(MSBlocks.CRUXTRUDER_LID.get()).grist(BUILD, 8).build(recipeSaver);
 		GristCostRecipeBuilder.of(MSBlocks.BLENDER.get()).grist(BUILD, 16).build(recipeSaver);

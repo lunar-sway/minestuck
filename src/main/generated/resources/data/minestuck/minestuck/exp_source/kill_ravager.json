@@ -1,0 +1,5 @@
+{
+  "type": "minestuck:kill_entity",
+  "amount": 10,
+  "entity_type": "minecraft:ravager"
+}

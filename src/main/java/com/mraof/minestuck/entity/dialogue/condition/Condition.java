@@ -11,6 +11,7 @@ import com.mraof.minestuck.entity.consort.ConsortReputation;
 import com.mraof.minestuck.entity.consort.EnumConsort;
 import com.mraof.minestuck.entity.dialogue.DialogueComponent;
 import com.mraof.minestuck.entity.dialogue.DialogueEntity;
+import com.mraof.minestuck.entity.dialogue.DialogueNodes;
 import com.mraof.minestuck.player.*;
 import com.mraof.minestuck.skaianet.SburbPlayerData;
 import com.mraof.minestuck.world.MSDimensions;
@@ -18,11 +19,13 @@ import com.mraof.minestuck.world.lands.LandTypePair;
 import com.mraof.minestuck.world.lands.LandTypes;
 import com.mraof.minestuck.world.lands.terrain.TerrainLandType;
 import com.mraof.minestuck.world.lands.title.TitleLandType;
+import net.minecraft.advancements.AdvancementHolder;
 import net.minecraft.core.Holder;
 import net.minecraft.core.HolderSet;
 import net.minecraft.core.registries.BuiltInRegistries;
 import net.minecraft.core.registries.Registries;
 import net.minecraft.network.chat.Component;
+import net.minecraft.resources.ResourceLocation;
 import net.minecraft.server.level.ServerLevel;
 import net.minecraft.server.level.ServerPlayer;
 import net.minecraft.tags.TagKey;
@@ -55,6 +58,10 @@ public interface Condition
 	Codec<Condition> CODEC = Conditions.REGISTRY.byNameCodec().dispatch(Condition::codec, Function.identity());
 	Codec<Condition> NPC_ONLY_CODEC = Condition.CODEC.validate(
 			condition -> condition.isNpcOnly() ? DataResult.success(condition) : DataResult.error(() -> "Player condition not supported here"));
+	Codec<PlayerOnlyCondition> PLAYER_ONLY_CODEC = Condition.CODEC.comapFlatMap(
+			condition -> condition instanceof PlayerOnlyCondition playerOnly
+					? DataResult.success(playerOnly)
+					: DataResult.error(() -> "NPC condition not supported here"), Function.identity());
 	
 	MapCodec<? extends Condition> codec();
 	
@@ -71,6 +78,34 @@ public interface Condition
 		return false;
 	}
 	
+	default boolean isPlayerOnly()
+	{
+		return false;
+	}
+	
+	interface PlayerOnlyCondition extends Condition
+	{
+		boolean test(ServerPlayer player);
+		
+		@Override
+		default boolean test(LivingEntity entity, ServerPlayer player)
+		{
+			return test(player);
+		}
+		
+		@Override
+		default boolean isNpcOnly()
+		{
+			return false;
+		}
+		
+		@Override
+		default boolean isPlayerOnly()
+		{
+			return true;
+		}
+	}
+	
 	interface NpcOnlyCondition extends Condition
 	{
 		boolean test(LivingEntity entity);
@@ -85,6 +120,12 @@ public interface Condition
 		default boolean isNpcOnly()
 		{
 			return true;
+		}
+		
+		@Override
+		default boolean isPlayerOnly()
+		{
+			return false;
 		}
 	}
 	
@@ -507,7 +548,7 @@ public interface Condition
 		}
 	}
 	
-	record PlayerHasItem(Item item, int amount) implements Condition
+	record PlayerHasItem(Item item, int amount) implements PlayerOnlyCondition
 	{
 		static final MapCodec<PlayerHasItem> CODEC = RecordCodecBuilder.mapCodec(instance -> instance.group(
 				BuiltInRegistries.ITEM.byNameCodec().fieldOf("item").forGetter(PlayerHasItem::item),
@@ -521,7 +562,7 @@ public interface Condition
 		}
 		
 		@Override
-		public boolean test(LivingEntity entity, ServerPlayer player)
+		public boolean test(ServerPlayer player)
 		{
 			ItemStack stack = findPlayerItem(this.item, player, this.amount);
 			return stack != null;
@@ -654,10 +695,10 @@ public interface Condition
 		}
 	}
 	
-	record PlayerIsClass(EnumClass enumClass) implements Condition
+	record PlayerIsClass(EnumClass enumClass) implements PlayerOnlyCondition
 	{
 		static final MapCodec<PlayerIsClass> CODEC = RecordCodecBuilder.mapCodec(instance -> instance.group(
-				Title.CLASS_CODEC.fieldOf("class").forGetter(PlayerIsClass::enumClass)
+				EnumClass.CODEC.fieldOf("class").forGetter(PlayerIsClass::enumClass)
 		).apply(instance, PlayerIsClass::new));
 		
 		@Override
@@ -667,7 +708,7 @@ public interface Condition
 		}
 		
 		@Override
-		public boolean test(LivingEntity entity, ServerPlayer player)
+		public boolean test(ServerPlayer player)
 		{
 			if(player == null)
 				return false;
@@ -685,10 +726,10 @@ public interface Condition
 		}
 	}
 	
-	record PlayerIsAspect(EnumAspect enumAspect) implements Condition
+	record PlayerIsAspect(EnumAspect enumAspect) implements PlayerOnlyCondition
 	{
 		static final MapCodec<PlayerIsAspect> CODEC = RecordCodecBuilder.mapCodec(instance -> instance.group(
-				Title.ASPECT_CODEC.fieldOf("aspect").forGetter(PlayerIsAspect::enumAspect)
+				EnumAspect.CODEC.fieldOf("aspect").forGetter(PlayerIsAspect::enumAspect)
 		).apply(instance, PlayerIsAspect::new));
 		
 		@Override
@@ -698,7 +739,7 @@ public interface Condition
 		}
 		
 		@Override
-		public boolean test(LivingEntity entity, ServerPlayer player)
+		public boolean test(ServerPlayer player)
 		{
 			if(player == null)
 				return false;
@@ -713,7 +754,7 @@ public interface Condition
 		}
 	}
 	
-	record PlayerHasReputation(int amount, boolean greaterThan) implements Condition
+	record PlayerHasReputation(int amount, boolean greaterThan) implements PlayerOnlyCondition
 	{
 		static final MapCodec<PlayerHasReputation> CODEC = RecordCodecBuilder.mapCodec(instance -> instance.group(
 				Codec.INT.optionalFieldOf("amount", 1).forGetter(PlayerHasReputation::amount),
@@ -727,7 +768,7 @@ public interface Condition
 		}
 		
 		@Override
-		public boolean test(LivingEntity entity, ServerPlayer player)
+		public boolean test(ServerPlayer player)
 		{
 			if(player == null)
 				return false;
@@ -750,7 +791,7 @@ public interface Condition
 		}
 	}
 	
-	record PlayerHasBoondollars(int amount) implements Condition
+	record PlayerHasBoondollars(int amount) implements PlayerOnlyCondition
 	{
 		static final MapCodec<PlayerHasBoondollars> CODEC = RecordCodecBuilder.mapCodec(instance -> instance.group(
 				Codec.INT.optionalFieldOf("amount", 1).forGetter(PlayerHasBoondollars::amount)
@@ -763,7 +804,7 @@ public interface Condition
 		}
 		
 		@Override
-		public boolean test(LivingEntity entity, ServerPlayer player)
+		public boolean test(ServerPlayer player)
 		{
 			if(player == null)
 				return false;
@@ -782,7 +823,7 @@ public interface Condition
 		}
 	}
 	
-	enum PlayerHasEntered implements Condition
+	enum PlayerHasEntered implements PlayerOnlyCondition
 	{
 		INSTANCE;
 		
@@ -795,7 +836,7 @@ public interface Condition
 		}
 		
 		@Override
-		public boolean test(LivingEntity entity, ServerPlayer player)
+		public boolean test(ServerPlayer player)
 		{
 			if(player == null)
 				return false;
@@ -807,6 +848,39 @@ public interface Condition
 		public Component getFailureTooltip()
 		{
 			return Component.literal("Player has not Entered");
+		}
+	}
+	
+	record PlayerHasAdvancement(ResourceLocation advancementId) implements PlayerOnlyCondition
+	{
+		static final MapCodec<PlayerHasAdvancement> CODEC = RecordCodecBuilder.mapCodec(instance -> instance.group(
+				ResourceLocation.CODEC.fieldOf("advancement_id").forGetter(PlayerHasAdvancement::advancementId)
+		).apply(instance, PlayerHasAdvancement::new));
+		
+		@Override
+		public MapCodec<PlayerHasAdvancement> codec()
+		{
+			return CODEC;
+		}
+		
+		@Override
+		public boolean test(ServerPlayer player)
+		{
+			if(player == null)
+				return false;
+			
+			AdvancementHolder holder = player.server.getAdvancements().get(advancementId);
+			
+			if(holder == null)
+				return false;
+			
+			return player.getAdvancements().getOrStartProgress(holder).isDone();
+		}
+		
+		@Override
+		public Component getFailureTooltip()
+		{
+			return Component.literal("Player has not completed advancement");
 		}
 	}
 	
@@ -853,6 +927,57 @@ public interface Condition
 		public Component getFailureTooltip()
 		{
 			return Component.literal("A custom scoreboard value does not match");
+		}
+	}
+	
+	record CustomHasTag(boolean checkPlayer, String tagName) implements Condition
+	{
+		static final MapCodec<CustomHasTag> CODEC = RecordCodecBuilder.mapCodec(instance -> instance.group(
+				Codec.BOOL.optionalFieldOf("check_player", true).forGetter(CustomHasTag::checkPlayer),
+				Codec.STRING.fieldOf("tag_name").forGetter(CustomHasTag::tagName)
+		).apply(instance, CustomHasTag::new));
+		
+		@Override
+		public MapCodec<CustomHasTag> codec()
+		{
+			return CODEC;
+		}
+		
+		@Override
+		public boolean test(LivingEntity entity, ServerPlayer player)
+		{
+			if(player == null)
+				return false;
+			
+			if(checkPlayer)
+				return player.getTags().contains(tagName);
+			else
+				return entity.getTags().contains(tagName);
+		}
+		
+		@Override
+		public Component getFailureTooltip()
+		{
+			return Component.literal("The target does not have the correct tag");
+		}
+	}
+	
+	record DialogueExists(ResourceLocation dialogueId) implements Condition
+	{
+		static final MapCodec<DialogueExists> CODEC = RecordCodecBuilder.mapCodec(instance -> instance.group(
+				ResourceLocation.CODEC.fieldOf("dialogue_id").forGetter(DialogueExists::dialogueId)
+		).apply(instance, DialogueExists::new));
+		
+		@Override
+		public MapCodec<DialogueExists> codec()
+		{
+			return CODEC;
+		}
+		
+		@Override
+		public boolean test(LivingEntity entity, ServerPlayer player)
+		{
+			return DialogueNodes.getInstance().getDialogue(dialogueId) != null;
 		}
 	}
 	
@@ -917,25 +1042,6 @@ public interface Condition
 			LevelData levelData = entity.level().getLevelData();
 			Vec3 spawn = Vec3.atCenterOf(levelData.getSpawnPos());
 			return entity.distanceToSqr(spawn) <= maxDistance * maxDistance;
-		}
-	}
-	
-	enum HasPlayerEntered implements Condition
-	{
-		INSTANCE;
-		static final MapCodec<HasPlayerEntered> CODEC = MapCodec.unit(INSTANCE);
-		
-		
-		@Override
-		public MapCodec<HasPlayerEntered> codec()
-		{
-			return CODEC;
-		}
-		
-		@Override
-		public boolean test(LivingEntity entity, ServerPlayer player)
-		{
-			return SburbPlayerData.get(player).hasEntered();
 		}
 	}
 	

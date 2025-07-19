@@ -4,15 +4,17 @@ import com.mraof.minestuck.advancements.MSCriteriaTriggers;
 import com.mraof.minestuck.alchemy.recipe.generator.recipe.InterpreterTypes;
 import com.mraof.minestuck.api.alchemy.GristTypes;
 import com.mraof.minestuck.block.AspectTreeBlocks;
+import com.mraof.minestuck.block.DreamerMoonBlocks;
 import com.mraof.minestuck.block.MSBlocks;
 import com.mraof.minestuck.block.SkaiaBlocks;
 import com.mraof.minestuck.block.plant.MSPottedSaplings;
 import com.mraof.minestuck.blockentity.MSBlockEntityTypes;
 import com.mraof.minestuck.command.MSSuggestionProviders;
 import com.mraof.minestuck.command.argument.MSArgumentTypes;
-import com.mraof.minestuck.computer.ProgramData;
+import com.mraof.minestuck.computer.ProgramTypes;
 import com.mraof.minestuck.computer.editmode.DeployList;
 import com.mraof.minestuck.effects.MSEffects;
+import com.mraof.minestuck.entity.MSAttributes;
 import com.mraof.minestuck.entity.MSEntityTypes;
 import com.mraof.minestuck.entity.dialogue.Triggers;
 import com.mraof.minestuck.entity.dialogue.condition.Conditions;
@@ -30,6 +32,7 @@ import com.mraof.minestuck.item.MSItems;
 import com.mraof.minestuck.item.components.MSItemComponents;
 import com.mraof.minestuck.item.crafting.MSRecipeTypes;
 import com.mraof.minestuck.item.loot.MSLootTables;
+import com.mraof.minestuck.player.EcheladderExpSources;
 import com.mraof.minestuck.player.KindAbstratusList;
 import com.mraof.minestuck.util.MSAttachments;
 import com.mraof.minestuck.util.MSParticleType;
@@ -39,6 +42,7 @@ import com.mraof.minestuck.world.gen.MSWorldGenTypes;
 import com.mraof.minestuck.world.gen.feature.MSFeatures;
 import com.mraof.minestuck.world.gen.feature.MSStructureProcessorTypes;
 import com.mraof.minestuck.world.gen.structure.MSStructures;
+import com.mraof.minestuck.world.gen.structure.wfc.ProspitWFCDemoStructure;
 import com.mraof.minestuck.world.lands.LandTypes;
 import net.minecraft.resources.ResourceLocation;
 import net.neoforged.bus.api.IEventBus;
@@ -69,8 +73,6 @@ public class Minestuck
 		modContainer.registerConfig(ModConfig.Type.CLIENT, MinestuckConfig.clientSpec);
 		modContainer.registerConfig(ModConfig.Type.SERVER, MinestuckConfig.serverSpec);
 		
-		//GeckoLib.initialize(eventBus); FIXME
-		
 		MSItemComponents.REGISTRY.register(eventBus);
 		MSItemTypes.ARMOR_MATERIAL_REGISTRY.register(eventBus);
 		MSBlocks.REGISTER.register(eventBus);
@@ -97,8 +99,11 @@ public class Minestuck
 		MSLootTables.MODIFIER_REGISTER.register(eventBus);
 		
 		ModusTypes.REGISTER.register(eventBus);
+		ProgramTypes.REGISTER.register(eventBus);
 		Conditions.REGISTER.register(eventBus);
 		Triggers.REGISTER.register(eventBus);
+		
+		EcheladderExpSources.REGISTER.register(eventBus);
 		
 		MSFeatures.REGISTER.register(eventBus);
 		
@@ -115,9 +120,12 @@ public class Minestuck
 		MSCreativeTabs.REGISTER.register(eventBus);
 		
 		MSAttachments.REGISTER.register(eventBus);
+		MSAttributes.REGISTER.register(eventBus);
 		
 		SkaiaBlocks.init();
 		AspectTreeBlocks.init();
+		DreamerMoonBlocks.init();
+		ProspitWFCDemoStructure.init();
 	}
 	
 	/**
@@ -142,8 +150,6 @@ public class Minestuck
 		MSDispenserBehaviours.registerBehaviours();
 		
 		MSPottedSaplings.addSaplingsToPot();
-		
-		ProgramData.init();
 		
 		BlockCopier.addStep(new ComputerBlockProcess());
 		BlockCopier.addStep(new TransportalizerBlockProcess());

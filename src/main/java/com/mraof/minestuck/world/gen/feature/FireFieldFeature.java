@@ -31,8 +31,8 @@ public class FireFieldFeature extends Feature<NoneFeatureConfiguration>
 		BlockPos pos = context.origin();
 		RandomSource rand = context.random();
 		StructureBlockRegistry blocks = StructureBlockRegistry.getOrDefault(context.chunkGenerator());
-		BlockState surface = blocks.getBlockState("surface");
-		BlockState upper = blocks.getBlockState("upper");
+		BlockState surface = blocks.getBlockState(StructureBlockRegistry.SURFACE);
+		BlockState upper = blocks.getBlockState(StructureBlockRegistry.UPPER);
 		
 		for(int i2 = 0; i2 < BLOCK_COUNT; i2++)
 		{

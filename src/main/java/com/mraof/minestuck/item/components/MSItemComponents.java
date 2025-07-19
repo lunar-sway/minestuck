@@ -2,8 +2,11 @@ package com.mraof.minestuck.item.components;
 
 import com.mojang.serialization.Codec;
 import com.mraof.minestuck.Minestuck;
+import com.mraof.minestuck.computer.ProgramType;
+import com.mraof.minestuck.computer.ProgramTypes;
 import com.mraof.minestuck.item.block.TransportalizerItem;
 import net.minecraft.core.GlobalPos;
+import net.minecraft.core.Holder;
 import net.minecraft.core.component.DataComponentType;
 import net.minecraft.core.registries.Registries;
 import net.minecraft.network.codec.ByteBufCodecs;
@@ -39,6 +42,8 @@ public final class MSItemComponents
 			builder -> builder.persistent(HieroglyphCode.CODEC).networkSynchronized(HieroglyphCode.STREAM_CODEC));
 	public static final Supplier<DataComponentType<Unit>> PARADOX_CODE = REGISTRY.registerComponentType("paradox_code",
 			builder -> builder.persistent(Unit.CODEC).networkSynchronized(StreamCodec.unit(Unit.INSTANCE)));
+	public static final Supplier<DataComponentType<Holder<ProgramType<?>>>> PROGRAM_TYPE = REGISTRY.registerComponentType("program_type",
+			builder -> builder.persistent(ProgramTypes.REGISTRY.holderByNameCodec()).networkSynchronized(ByteBufCodecs.holderRegistry(ProgramTypes.REGISTRY_KEY)));
 	
 	public static final Supplier<DataComponentType<Long>> VALUE = REGISTRY.registerComponentType("value",
 			builder -> builder.persistent(Codec.LONG).networkSynchronized(ByteBufCodecs.VAR_LONG));

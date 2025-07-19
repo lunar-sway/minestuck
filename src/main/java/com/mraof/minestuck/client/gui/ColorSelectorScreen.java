@@ -3,6 +3,7 @@ package com.mraof.minestuck.client.gui;
 import com.mojang.blaze3d.systems.RenderSystem;
 import com.mraof.minestuck.Minestuck;
 import com.mraof.minestuck.blockentity.ComputerBlockEntity;
+import com.mraof.minestuck.client.gui.computer.ComputerScreen;
 import com.mraof.minestuck.player.ClientPlayerData;
 import com.mraof.minestuck.util.ColorHandler;
 import net.minecraft.ChatFormatting;
@@ -56,8 +57,14 @@ public class ColorSelectorScreen extends Screen
 		int offset = 0;
 		for(int yIndex = 0; yIndex < 5; yIndex++)
 		{
-			if (yIndex == 1 ) { offset+=3; }
-			if (yIndex == 2 ) { offset+=3; }
+			if(yIndex == 1)
+			{
+				offset += 3;
+			}
+			if(yIndex == 2)
+			{
+				offset += 3;
+			}
 			for(int xIndex = 0; xIndex < 4; xIndex++)
 				canonColors.add(new ColorSelector(21 + 34 * xIndex, 32 + 18 * yIndex + offset, i++));
 		}
@@ -88,20 +95,20 @@ public class ColorSelectorScreen extends Screen
 	@Override
 	public void init()
 	{
-		xOffset = (width - guiWidth)/2;
-		yOffset = (height - guiHeight)/2;
+		xOffset = (width - guiWidth) / 2;
+		yOffset = (height - guiHeight) / 2;
 		
 		redSlider = addRenderableWidget(new ColorSlider(ColorSlider.ColorComp.R));
 		greenSlider = addRenderableWidget(new ColorSlider(ColorSlider.ColorComp.G));
 		blueSlider = addRenderableWidget(new ColorSlider(ColorSlider.ColorComp.B));
 		
-		hexBox = addRenderableWidget(new EditBox(minecraft.font, xOffset+23, yOffset+109, 80, 15, Component.empty()));
+		hexBox = addRenderableWidget(new EditBox(minecraft.font, xOffset + 23, yOffset + 109, 80, 15, Component.empty()));
 		hexBox.setResponder(this::onBoxUpdate);
 		hexBox.setFilter((text) -> Pattern.matches("^[0-9a-fA-F]+$", text) || text.isEmpty());
 		hexBox.setMaxLength(6);
 		
-		tabButton = addRenderableWidget(new ExtendedButton(xOffset+20, yOffset+130, 65, 20, Component.translatable(ADVANCED_TAB), button -> setTab(tab==Tab.RGB?Tab.Canon:Tab.RGB)));
-		addRenderableWidget(new ExtendedButton(xOffset+91, yOffset+130, 65, 20, Component.translatable(CHOOSE_MESSAGE), button -> selectColor()));
+		tabButton = addRenderableWidget(new ExtendedButton(xOffset + 20, yOffset + 130, 65, 20, Component.translatable(ADVANCED_TAB), button -> setTab(tab == Tab.RGB ? Tab.Canon : Tab.RGB)));
+		addRenderableWidget(new ExtendedButton(xOffset + 91, yOffset + 130, 65, 20, Component.translatable(CHOOSE_MESSAGE), button -> selectColor()));
 		
 		setTab(tab);
 	}
@@ -124,28 +131,27 @@ public class ColorSelectorScreen extends Screen
 	
 	private int getPlayerColorComponent(int comp)
 	{
-		return (ClientPlayerData.getPlayerColor() >> (comp*8)) & 0xFF;
+		return (ClientPlayerData.getPlayerColor() >> (comp * 8)) & 0xFF;
 	}
 	
 	private void setTab(Tab tab)
 	{
 		this.tab = tab;
-		redSlider.visible = greenSlider.visible = blueSlider.visible = hexBox.visible = tab==Tab.RGB;
+		redSlider.visible = greenSlider.visible = blueSlider.visible = hexBox.visible = tab == Tab.RGB;
 		
-		if(tab==Tab.RGB && selectedIndex!=-1)
+		if(tab == Tab.RGB && selectedIndex != -1)
 		{
 			var color = ColorHandler.BuiltinColors.getColor(selectedIndex);
 			redSlider.setValue((color >> 16) & 0xFF);
 			greenSlider.setValue((color >> 8) & 0xFF);
 			blueSlider.setValue(color & 0xFF);
 			hexBox.setValue(toFormattedHex(color));
-		}
-		else if(tab==Tab.RGB)
+		} else if(tab == Tab.RGB)
 		{
 			hexBox.setValue(toFormattedHex(getSlidersValue()));
 		}
 		
-		tabButton.setMessage( tab==Tab.RGB? Component.translatable(BASIC_TAB) : Component.translatable(ADVANCED_TAB) );
+		tabButton.setMessage(tab == Tab.RGB ? Component.translatable(BASIC_TAB) : Component.translatable(ADVANCED_TAB));
 	}
 	
 	@Override
@@ -153,6 +159,13 @@ public class ColorSelectorScreen extends Screen
 	{
 		super.renderBackground(guiGraphics, mouseX, mouseY, partialTicks);
 		guiGraphics.blit(guiBackground, xOffset, yOffset, 0, 0, guiWidth, guiHeight);
+		
+		if(tab == Tab.RGB)
+		{
+			// hide the color box outlines by putting this other box on top
+			RenderSystem.setShaderColor(1, 1, 1, 1);
+			guiGraphics.blit(guiBackground, xOffset + 20, yOffset + 31, 0, guiHeight, 138, 98);
+		}
 	}
 	
 	@Override
@@ -163,15 +176,11 @@ public class ColorSelectorScreen extends Screen
 		String cacheMessage = I18n.get(SELECT_COLOR);
 		guiGraphics.drawString(font, cacheMessage, (width / 2F) - font.width(cacheMessage) / 2F, yOffset + 12, 0x404040, false);
 		
-		if(tab==Tab.RGB)
+		if(tab == Tab.RGB)
 		{
-			// hide the color box outlines by putting this other box on top
-			RenderSystem.setShaderColor(1, 1, 1, 1);
-			guiGraphics.blit(guiBackground, xOffset+20, yOffset+31, 0, guiHeight, 138, 98);
-			
 			// spirograph color preview
-			RenderSystem.setShaderColor((float)redSlider.getValue()/255F, (float)greenSlider.getValue()/255, (float)blueSlider.getValue()/255, 0.5F);
-			guiGraphics.blit(guiBackground, xOffset+106, yOffset+57, 47, 47, guiWidth, 20, 64, 64, 256, 256);
+			RenderSystem.setShaderColor((float) redSlider.getValue() / 255F, (float) greenSlider.getValue() / 255, (float) blueSlider.getValue() / 255, 0.5F);
+			guiGraphics.blit(guiBackground, xOffset + 106, yOffset + 57, 47, 47, guiWidth, 20, 64, 64, 256, 256);
 			
 		} else
 		{
@@ -187,7 +196,7 @@ public class ColorSelectorScreen extends Screen
 		//resets shader color to avoid tinting the whole gui
 		RenderSystem.setShaderColor(1, 1, 1, 1);
 		
-		if(tab==Tab.Canon)
+		if(tab == Tab.Canon)
 			for(ColorSelector canonColor : canonColors)
 				if(canonColor.pointWithin(mouseX, mouseY))
 					guiGraphics.renderTooltip(font, canonColor.getName(), mouseX, mouseY);
@@ -202,7 +211,7 @@ public class ColorSelectorScreen extends Screen
 	@Override
 	public boolean mouseClicked(double mouseX, double mouseY, int mouseButton)
 	{
-		if(mouseButton == GLFW.GLFW_MOUSE_BUTTON_LEFT && tab==Tab.Canon)
+		if(mouseButton == GLFW.GLFW_MOUSE_BUTTON_LEFT && tab == Tab.Canon)
 			for(ColorSelector canonColor : canonColors)
 				if(canonColor.pointWithin(mouseX, mouseY))
 				{
@@ -215,6 +224,7 @@ public class ColorSelectorScreen extends Screen
 		
 		return super.mouseClicked(mouseX, mouseY, mouseButton);
 	}
+	
 	private int getSlidersValue()
 	{
 		return redSlider.getValueInt() << 16 | greenSlider.getValueInt() << 8 | blueSlider.getValueInt();
@@ -227,10 +237,10 @@ public class ColorSelectorScreen extends Screen
 	
 	private void onBoxUpdate(String hex)
 	{
-		if(hex.length()!=6) return;
-		redSlider.setValue(Integer.parseInt(hex.substring(0,2),16));
-		greenSlider.setValue(Integer.parseInt(hex.substring(2,4),16));
-		blueSlider.setValue(Integer.parseInt(hex.substring(4,6),16));
+		if(hex.length() != 6) return;
+		redSlider.setValue(Integer.parseInt(hex.substring(0, 2), 16));
+		greenSlider.setValue(Integer.parseInt(hex.substring(2, 4), 16));
+		blueSlider.setValue(Integer.parseInt(hex.substring(4, 6), 16));
 	}
 	
 	private void selectColor()
@@ -249,7 +259,10 @@ public class ColorSelectorScreen extends Screen
 	}
 	
 	@Override
-	public boolean shouldCloseOnEsc() { return false; }
+	public boolean shouldCloseOnEsc()
+	{
+		return false;
+	}
 	
 	@Override
 	public boolean keyPressed(int pKeyCode, int pScanCode, int pModifiers)
@@ -272,7 +285,7 @@ public class ColorSelectorScreen extends Screen
 		{
 			minecraft.player.sendSystemMessage(
 					Component.literal("[Minestuck] ").append(
-							ClientPlayerData.getPlayerColor()==ColorHandler.BuiltinColors.DEFAULT_COLOR
+							ClientPlayerData.getPlayerColor() == ColorHandler.BuiltinColors.DEFAULT_COLOR
 									? Component.translatable(DEFAULT_COLOR_SELECTED)
 									: Component.translatable(COLOR_SELECTED))
 			);
@@ -281,18 +294,26 @@ public class ColorSelectorScreen extends Screen
 	
 	private class ColorSlider extends ExtendedSlider
 	{
-		public enum ColorComp {
+		public enum ColorComp
+		{
 			R(34, Component.literal("r: ").withStyle(ChatFormatting.RED)),
 			G(59, Component.literal("g: ").withStyle(ChatFormatting.GREEN)),
 			B(84, Component.literal("b: ").withStyle(ChatFormatting.BLUE));
 			public final int yBonus;
 			public final Component prefix;
-			ColorComp(int yBonus, Component prefix){this.yBonus=yBonus;this.prefix=prefix;}
+			
+			ColorComp(int yBonus, Component prefix)
+			{
+				this.yBonus = yBonus;
+				this.prefix = prefix;
+			}
 		}
+		
 		ColorComp color;
+		
 		public ColorSlider(ColorComp color)
 		{
-			super(xOffset+23, yOffset+color.yBonus, 80, 20, color.prefix, Component.empty(), 0.0, 255.0, getPlayerColorComponent(color.ordinal()), true);
+			super(xOffset + 23, yOffset + color.yBonus, 80, 20, color.prefix, Component.empty(), 0.0, 255.0, getPlayerColorComponent(color.ordinal()), true);
 			this.color = color;
 		}
 		
@@ -305,21 +326,32 @@ public class ColorSelectorScreen extends Screen
 		}
 	}
 	
-	private record ColorSelector (int x, int y, int id)
+	private record ColorSelector(int x, int y, int id)
 	{
 		public static final int WIDTH = 32, HEIGHT = 16;
-		public Component getName() { return ColorHandler.BuiltinColors.getName(id); }
-		public int getColor() { return ColorHandler.BuiltinColors.getColor(id); }
+		
+		public Component getName()
+		{
+			return ColorHandler.BuiltinColors.getName(id);
+		}
+		
+		public int getColor()
+		{
+			return ColorHandler.BuiltinColors.getColor(id);
+		}
+		
 		public void draw(GuiGraphics guiGraphics)
 		{
-			guiGraphics.fill(xOffset+x, yOffset+y, xOffset+x+WIDTH, yOffset+y+HEIGHT,
-					ColorHandler.BuiltinColors.getColor(id)|0xFF000000);
+			guiGraphics.fill(xOffset + x, yOffset + y, xOffset + x + WIDTH, yOffset + y + HEIGHT,
+					ColorHandler.BuiltinColors.getColor(id) | 0xFF000000);
 		}
+		
 		public boolean pointWithin(double mouseX, double mouseY)
 		{
-			return mouseX>=x+xOffset && mouseX<x+WIDTH+xOffset && mouseY>=y+yOffset && mouseY<y+HEIGHT+yOffset;
+			return mouseX >= x + xOffset && mouseX < x + WIDTH + xOffset && mouseY >= y + yOffset && mouseY < y + HEIGHT + yOffset;
 		}
 	}
 	
-	private enum Tab { Canon, RGB }
+	private enum Tab
+	{Canon, RGB}
 }

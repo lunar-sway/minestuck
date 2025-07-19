@@ -1,6 +1,7 @@
 package com.mraof.minestuck.data.dialogue;
 
 import com.mraof.minestuck.Minestuck;
+import com.mraof.minestuck.data.MSAdvancementProvider;
 import com.mraof.minestuck.data.dialogue.DialogueProvider.NodeBuilder;
 import com.mraof.minestuck.data.dialogue.DialogueProvider.NodeSelectorBuilder;
 import com.mraof.minestuck.data.dialogue.DialogueProvider.ResponseBuilder;
@@ -13,8 +14,11 @@ import com.mraof.minestuck.item.loot.MSLootTables;
 import com.mraof.minestuck.util.MSTags;
 import net.minecraft.data.DataProvider;
 import net.minecraft.data.PackOutput;
+import net.minecraft.world.item.Item;
 import net.minecraft.world.item.Items;
+import net.neoforged.neoforge.common.Tags;
 import net.neoforged.neoforge.common.data.LanguageProvider;
+import net.neoforged.neoforge.registries.DeferredItem;
 
 import java.util.List;
 
@@ -220,7 +224,7 @@ public final class ConsortDialogue
 					.addMessage(l.subMsg("a", "I'm feeling generous, so how about this."))
 					.addMessage(l.subMsg("b", "If you want to get started on being an intellectual giant, I can offer you a discounted price on my self help memoir. It's only 5 payments of 8000 boondollars."))
 					.addDescription(l.subMsg("description", "They show you a book labelled \"Grindset Tales: From Pawn to King (How to follow the Philosopher's Journey)\""))
-					.addResponse(new ResponseBuilder(l.subMsg("purchase", "[Purchase book]")).visibleCondition(l.subText("not_purchase","No matter how you feel, you are compelled to decline"), none(alwaysTrue())))
+					.addResponse(new ResponseBuilder(l.subMsg("purchase", "[Purchase book]")).visibleCondition(l.subText("not_purchase", "No matter how you feel, you are compelled to decline"), none(alwaysTrue())))
 					.addClosingResponse(l.subMsg("decline", "Yeah no way."))
 					.addClosingResponse(l.subMsg("decline_hard", "Absolutely no chance."))
 			);
@@ -385,6 +389,7 @@ public final class ConsortDialogue
 				new NodeBuilder(l.defaultKeyMsg("Sometimes I wonder whether a purely mushroom diet is the cause of my dwindling mental capacity. In those moments, I think 'Ooh! mushroom!'... speaking of mushrooms, Sometimes I wonder...")));
 		provider.addRandomlySelectable("lazy_king", defaultWeight(isInTerrainLand(SHADE)),
 				new NodeBuilder(l.defaultKeyMsg("I feel like our king just sits around doing nothing but eating weird glowing mushrooms! So lazy!")));
+		terrainFaygoDialogue(provider, l, MSItems.ORANGE_FAYGO, "Orange", MSItems.SCALEMATE_LEMONSNOUT, "Lemonsnout", isInTerrainLand(SHADE));
 		
 		//Heat
 		provider.addRandomlySelectable("getting_hot", defaultWeight(isInTerrainLand(HEAT)),
@@ -397,6 +402,7 @@ public final class ConsortDialogue
 				new NodeBuilder(l.defaultKeyMsg("Man this shop is packed tighter then my tummy tunnel when I gotta make brown on the john after eating one too many of them incandescent pies what be popping around.")));
 		provider.addRandomlySelectable("the_water_is_molten", defaultWeight(isInTerrainLand(HEAT)),
 				new NodeBuilder(l.defaultKeyMsg("You know the water is fucking molten goo? Who thought it would be a good idea to make water out of lava or some shit? How do we even stay hydrated in this place dude?")).animation(ANGRY_EMOTION));
+		terrainFaygoDialogue(provider, l, MSItems.CANDY_APPLE_FAYGO, "Candy Apple", MSItems.SCALEMATE_APPLESCAB, "Applescab", isInTerrainLand(HEAT));
 		
 		
 		//Wood
@@ -425,6 +431,9 @@ public final class ConsortDialogue
 								.addPlayerMessage(l.subMsg("no.reply", "Not at all!"))
 								.nextDialogue(builder.add("dancing_camel", new NodeBuilder(l.defaultKeyMsg("Are you sure? Too bad! The camel knew how to dance, too!"))))))
 		));
+		provider.addRandomlySelectable("like_sand", defaultWeight(isInTerrainLand(MSTags.TerrainLandTypes.SAND)),
+				new NodeBuilder(l.defaultKeyMsg("I actually like sand. It's coarse and rough and irritating and it gets everywhere. Reminds me of myself!")));
+		terrainFaygoDialogue(provider, l, MSItems.COTTON_CANDY_FAYGO, "Cotton Candy", MSItems.SCALEMATE_BERRYBREATH, "Berrybreath", isInTerrainLand(MSTags.TerrainLandTypes.SAND));
 		
 		
 		//Sandstone
@@ -433,6 +442,7 @@ public final class ConsortDialogue
 		provider.addRandomlySelectable("sandless", defaultWeight(isInTerrainLand(MSTags.TerrainLandTypes.SANDSTONE)), new ChainBuilder()
 				.node(new NodeBuilder(l.defaultKeyMsg("According to legend, %s ate all the sand here leaving nothing but sandstone!", Argument.LAND_DENIZEN)))
 				.node(new NodeBuilder(l.defaultKeyMsg("I'm kidding, I made that up on the spot. I had no other dialogue."))));
+		terrainFaygoDialogue(provider, l, MSItems.CREME_SODA_FAYGO, "Creme Soda", MSItems.SCALEMATE_HONEYTONGUE, "Honeytongue", isInTerrainLand(MSTags.TerrainLandTypes.SANDSTONE));
 		
 		
 		//Frost
@@ -494,6 +504,7 @@ public final class ConsortDialogue
 							.nextDialogue("worried", new NodeBuilder(l.defaultKeyMsg("Oh this is not a safe space suddenly"))))
 			);
 		}));
+		terrainFaygoDialogue(provider, l, MSItems.MOON_MIST_FAYGO, "Moon Mist", MSItems.SCALEMATE_PUMPKINSNUFFLE, "Pumpkinsnuffle", isInTerrainLand(MSTags.TerrainLandTypes.ROCK));
 		
 		
 		//Forest
@@ -506,6 +517,7 @@ public final class ConsortDialogue
 				.node(new NodeBuilder(l.defaultKeyMsg("Worst part is, we never find a body.")).animation(ANXIOUS_EMOTION)));
 		provider.addRandomlySelectable("deep_roots", defaultWeight(isInTerrainLand(MSTags.TerrainLandTypes.FOREST)),
 				new NodeBuilder(l.defaultKeyMsg("The trees are always trying to grow and expand. Bet that's why their roots travel so deep!")));
+		terrainFaygoDialogue(provider, l, MSItems.PEACH_FAYGO, "Peach", MSItems.SCALEMATE_CINNAMONWHIFF, "Cinnamonwhiff", isInTerrainLand(MSTags.TerrainLandTypes.FOREST));
 		
 		
 		//Fungi
@@ -558,6 +570,7 @@ public final class ConsortDialogue
 				.node(new NodeBuilder(l.defaultKeyMsg("Dye is weird like that.")))
 				.node(new NodeBuilder(l.defaultKeyMsg("...what, you're still listening to me? Wow. No one's ever listened to the whole thing before. Would you like to hear it again?")))
 				.loop());
+		terrainFaygoDialogue(provider, l, MSItems.GRAPE_FAYGO, "Grape", MSItems.SCALEMATE_WITNESS, "The Witness", isInTerrainLand(RAINBOW));
 		
 		
 		//End
@@ -573,6 +586,7 @@ public final class ConsortDialogue
 				new NodeBuilder(l.defaultKeyMsg("The taller grass is so disorienting to walk through! Unless you are careful it will just move you around.")).animation(ANXIOUS_EMOTION));
 		provider.addRandomlySelectable("useless_elytra", defaultWeight(isInTerrainLand(END)),
 				new NodeBuilder(l.defaultKeyMsg("One time, I saw a guy with some weird wing-looking things on his back. He could glide with them, but without being able to stay in the air, what's the point?")));
+		terrainFaygoDialogue(provider, l, MSItems.REDPOP_FAYGO, "Redpop", MSItems.SCALEMATE_PYRALSPITE, "Pyralspite", isInTerrainLand(END));
 		
 		
 		//Rain
@@ -607,6 +621,7 @@ public final class ConsortDialogue
 		provider.addRandomlySelectable("spices", defaultWeight(isInTerrainLand(FLORA)), new ChainBuilder()
 				.node(new NodeBuilder(l.defaultKeyMsg("A good chef cooks with the spices found throughout the land.")))
 				.node(new NodeBuilder(l.defaultKeyMsg("Other chefs are envious that they don't live in %s.", Argument.LAND_NAME))));
+		terrainFaygoDialogue(provider, l, MSItems.GRAPE_FAYGO, "Grape", MSItems.SCALEMATE_PUCEFOOT, "Pucefoot", isInTerrainLand(FLORA));
 		
 		
 		//Mixed
@@ -614,6 +629,9 @@ public final class ConsortDialogue
 				new NodeBuilder(l.defaultKeyMsg("Red is much better than yellow, don't you think?")));
 		provider.addRandomlySelectable("yellow_better", defaultWeight(any(isInTerrainLand(SAND), isInTerrainLand(SANDSTONE))),
 				new NodeBuilder(l.defaultKeyMsg("In our village, we have tales of monsters that are attracted to red. That's why everything is yellow!")));
+		provider.addRandomlySelectable("bad_water", defaultWeight(any(isInTerrainLand(SHADE), isInTerrainLand(HEAT), isInTerrainLand(WOOD), isInTerrainLand(RAINBOW), isInTerrainLand(END))),
+				new NodeBuilder(l.defaultKeyMsg("Can you imagine living in a world where the liquid in the oceans is actually drinkable?")));
+		terrainFaygoDialogue(provider, l, MSItems.FAYGO_COLA, "Cola", MSItems.SCALEMATE_PYRALSPITE, "Pyralspite", any(isInTerrainLand(WOOD), isInTerrainLand(FROST), isInTerrainLand(FUNGI), isInTerrainLand(RAIN)));
 		
 		
 		//Misc
@@ -668,6 +686,14 @@ public final class ConsortDialogue
 				new NodeBuilder(l.defaultKeyMsg("Look I know you aren't a reptile, I just got one question. You ever hear some of these people talk? I swear, they must be putting mercury in the water with how nonsensical conversation can be with these guys.")));
 		provider.addRandomlySelectable("hats", defaultWeight(isAnyEntityType(SALAMANDER)),
 				new NodeBuilder(l.defaultKeyMsg("I like crumpled hats, they're comfy and easy to wear!")).animation(HAPPY_EMOTION));
+		provider.addRandomlySelectable("best_scales", defaultWeight(isAnyEntityType(NAKAGATOR, IGUANA)),
+				new NodeBuilder(l.defaultKeyMsg("Everyone loves me for my luxurious shiny scales and cool demeanour.")));
+		provider.addRandomlySelectable("laser_defense_system", defaultWeight(isAnyEntityType(TURTLE)), new ChainBuilder()
+				.node(new NodeBuilder(l.defaultKeyMsg("Anytime someone approaches me when I want to be left alone I picture an orbital defense satellite beaming a laser down at them with precise precision.")))
+				.node(new NodeBuilder(l.defaultKeyMsg("I'm exploding you with my mind right now,,"))));
+		provider.addRandomlySelectable("too_humble", defaultWeight(isAnyEntityType(SALAMANDER)), new ChainBuilder()
+				.node(new NodeBuilder(l.defaultKeyMsg("You ever notice how the other consorts are constantly insulting others or self-aggrandizing?")))
+				.node(new NodeBuilder(l.defaultKeyMsg("Not me though. I'm way more humble than the rest of these dummies."))));
 		provider.addRandomlySelectable("wwizard", defaultWeight(isAnyEntityType(TURTLE)),
 				new NodeBuilder(l.defaultKeyMsg("Secret wizards? Th-there are no secret wizards! Wh-what're you speaking of, o-outlandish traveller?")).animation(ANXIOUS_EMOTION));
 		provider.addRandomlySelectable("stock_market", defaultWeight(isAnyEntityType(NAKAGATOR)),
@@ -773,14 +799,46 @@ public final class ConsortDialogue
 		provider.addRandomlySelectable("floating_island", defaultWeight(all(isInHomeLand(), new Condition.NearSpawn(256))),
 				new NodeBuilder(l.defaultKeyMsg("I heard a floating island just appeared somewhere near here recently and falling chunks destroyed a village underneath it!")));
 		provider.addRandomlySelectable("heroic_stench", defaultWeight(isInLand()), new NodeSelectorBuilder()
-				.node(Condition.HasPlayerEntered.INSTANCE, new NodeBuilder(l.defaultKeyMsg("You smell kind of... heroic... like a hero, perhaps? It makes me kinda nervous to be around you!")).animation(ANXIOUS_EMOTION))
+				.node(Condition.PlayerHasEntered.INSTANCE, new NodeBuilder(l.defaultKeyMsg("You smell kind of... heroic... like a hero, perhaps? It makes me kinda nervous to be around you!")).animation(ANXIOUS_EMOTION))
 				.defaultNode(new NodeBuilder(l.subMsg("leech", "You smell like you're leeching from the success from another hero... is this true?"))));
 		provider.addRandomlySelectable("watch_skaia", defaultWeight(isFromLand()), new NodeSelectorBuilder()
 				.node(all(Condition.IsInSkaia.INSTANCE, isAnyEntityType(TURTLE)), new NodeBuilder(l.subMsg("at_skaia.turtle", "Oh my...! I'm actually on Skaia!")))
 				.node(Condition.IsInSkaia.INSTANCE, new NodeBuilder(l.subMsg("at_skaia", "OH MY %s! I'M ACTUALLY ON SKAIA!", Argument.ENTITY_SOUND_2)).animation(HAPPY_EMOTION))
 				.node(Condition.ConsortVisitedSkaia.INSTANCE, new NodeBuilder(l.subMsg("has_visited", "You know, I have actually visited Skaia at one point!")))
 				.defaultNode(new NodeBuilder(l.defaultKeyMsg("Sometimes, I look up in the sky to see Skaia and wish I could visit there some day..."))));
-		
+		provider.addRandomlySelectable("echeladder_progress", defaultWeight(alwaysTrue()), new FolderedDialogue(builder ->
+		{
+			var whatIs = l.msg("what_is", "What is an Echeladder?");
+			var meta = l.msg("meta", "If it's abstract, then how do you know about it?");
+			
+			var explainLeveling = builder.add("explain_leveling", new ChainBuilder()
+					.node(new NodeBuilder(l.defaultKeyMsg("There are multiple ways to climb the Rungs. But the main one is to beat up Underlings.")))
+					.node(new NodeBuilder(l.defaultKeyMsg("Very early on, defeating other kinds of monsters could probably also help you too.")))
+					.node(new NodeBuilder(l.defaultKeyMsg("Other than combat, I bet the first time you alchemize things with large grist costs you could get a bump."))
+							.addClosingResponse(thanksGoodbyeMsg))
+			);
+			
+			var smartass = builder.add("smartass", new NodeBuilder(l.defaultKeyMsg("What, are you calling me an NPC? I should be asking you the same. You don't exactly scream \"Rich inner life\"."))
+					.addDescription(l.subMsg("desc", "You are convinced you can hear this consort ascend a rung after that burn on you.")));
+			
+			var explainEcheladder = builder.add("explain_echeladder", new NodeBuilder(l.defaultKeyMsg("The Echeladder is an abstract system composed of Rungs. Every time you climb a rung you gain some boondollars, get a little stronger, and increase your grist cache."))
+					.addResponse(new ResponseBuilder(l.subMsg("leveling", "How do you climb it?"))
+							.nextDialogue(explainLeveling))
+					.addResponse(new ResponseBuilder(meta)
+							.addPlayerMessage(meta)
+							.nextDialogue(smartass))
+					.addClosingResponse(thanksGoodbyeMsg));
+			
+			builder.addStart(new NodeSelectorBuilder()
+					.node(hasAdvancement(MSAdvancementProvider.BIG_ONE_MIL), new NodeBuilder(l.subMsg("one_mil", "Amazing! You look like you have almost reached the end of your Echeladder!"))
+							.addResponse(new ResponseBuilder(whatIs).nextDialogue(explainEcheladder)))
+					.node(hasAdvancement(MSAdvancementProvider.HALFWAY_POINT), new NodeBuilder(l.subMsg("halfway", "Woah, you look like you've climbed at least halfway up your Echeladder!"))
+							.addResponse(new ResponseBuilder(whatIs).nextDialogue(explainEcheladder)))
+					.node(hasAdvancement(MSAdvancementProvider.DOUBLE_DIGITS), new NodeBuilder(l.subMsg("double_digits", "You look like you've climbed at least a 5th of the way up your Echeladder. Not bad."))
+							.addResponse(new ResponseBuilder(whatIs).nextDialogue(explainEcheladder)))
+					.defaultNode(new NodeBuilder(l.defaultKeyMsg("You give off the look of someone who has barely climbed their Echeladder."))
+							.addResponse(new ResponseBuilder(whatIs).nextDialogue(explainEcheladder))));
+		}));
 		provider.addRandomlySelectable("hungry", defaultWeight(isAnyEntityType(SALAMANDER, IGUANA, NAKAGATOR)), new FolderedDialogue(builder ->
 		{
 			String barterFlag = "barter", noBarterFlag = "no_barter";
@@ -839,6 +897,31 @@ public final class ConsortDialogue
 									.nextDialogue(firstNo)
 									.setNextAsEntrypoint()))
 					.defaultNode(new NodeBuilder(l.defaultKeyMsg("I'm hungry. Have any bugs? Maybe a chocolate chip cookie? Mmm."))));
+		}));
+		
+		provider.addRandomlySelectable("computer_expert", defaultWeight(alwaysTrue()), new FolderedDialogue(builder ->
+		{
+			var done = builder.add("done", new NodeSelectorBuilder()
+					.node(all(new Condition.Flag(helpingPlayer), hasAdvancement(MSAdvancementProvider.BRICK_COMPUTER)), new NodeBuilder(l.subMsg("player_specific_advancement", "Hey by the look on your face you've installed one of my custom programs! Glad to be of service.")))
+					.node(new Condition.Flag(helpingPlayer), new NodeBuilder(l.subMsg("player_specific", "That should fit nicely in your computer. You won't regret it!")))
+					.defaultNode(new NodeBuilder(l.defaultKeyMsg("I love helping people. You should have seen the face of this other person I helped earlier. Priceless."))));
+			
+			var sure = builder.add("sure", new NodeBuilder(l.defaultKeyMsg("Alright, all I need is a music disc. One that's in good condition. Got one?"))
+					.addResponse(new ResponseBuilder(l.subMsg("yes", "[Hand over the %s]", Argument.MATCHED_ITEM))
+							.visibleCondition(l.subText("give_item.condition", "Must have a music disc, excluding a broken disc"), new Condition.ItemTagMatchExclude(Tags.Items.MUSIC_DISCS, Items.MUSIC_DISC_11))
+							.addTrigger(Trigger.TakeMatchedItem.INSTANCE)
+							.addTrigger(new Trigger.GiveItem(Items.MUSIC_DISC_11))
+							.addTrigger(new Trigger.SetFlag(helpingPlayer, true))
+							.addTrigger(new Trigger.SetDialogue(done))
+							.addDescription(l.subMsg("desc", "They take the disc and gently place it on the ground. Then they take out a hammer and break it to pieces before giving it back to you."))
+							.nextDialogue(done))
+					.addClosingResponse(noMsg));
+			
+			builder.addStart(new NodeBuilder(l.defaultKeyMsg("Me? I'm a computer expert. In fact I can slip you the latest software if you are interested."))
+					.addResponse(new ResponseBuilder(l.subMsg("accept", "Sure, what is it."))
+							.nextDialogue(sure)
+							.setNextAsEntrypoint())
+					.addClosingResponse(noMsg));
 		}));
 		
 		provider.addRandomlySelectable("rap_battle", defaultWeight(isAnyEntityType(NAKAGATOR, IGUANA)), new FolderedDialogue(builder ->
@@ -906,5 +989,44 @@ public final class ConsortDialogue
 							.nextDialogue(builder.add("deny", new NodeBuilder(l.defaultKeyMsg("Maybe one day I will find a challenger worthy of my greatness...."))))));
 		}));
 		
+	}
+	
+	private static void terrainFaygoDialogue(SelectableDialogueProvider provider, DialogueLangHelper l, DeferredItem<Item> drink, String capitalizedDrinkName, DeferredItem<Item> scalemateItem, String scalemateCapitalizedName, Condition terrain)
+	{
+		String drinkRegistryName = drink.getId().getPath();
+		String dialogueId = drinkRegistryName + "_" + scalemateItem.getId().getPath();
+		Item drinkItem = drink.asItem();
+		Condition faygoCondition = new Condition.PlayerHasItem(drinkItem, 1);
+		
+		provider.addRandomlySelectable(dialogueId, defaultWeight(terrain), new FolderedDialogue(builder ->
+		{
+			var satisfied = builder.add("satisfied", new NodeBuilder(l.defaultKeyMsg("I drank my faygo too fast to cherish it, but at least I have the dye stains to remember it by.")));
+			
+			var scalemate = builder.add("explain_scalemate", new NodeBuilder(l.defaultKeyMsg("Because I'm willing to be the bigger consort about this, I will refrain from commenting on your ignorance. Scalemates are highly collectable designer dragon stuffed animals."))
+					.addResponse(new ResponseBuilder(l.subMsg("return", "Lets talk about the drink again."))
+							.nextDialogue(provider.dialogue().dialogueId(dialogueId + "/ask_drink"))));
+			
+			var afterInvitation = builder.add("ask_drink", new NodeBuilder(l.defaultKeyMsg("I would give you my first born child for that, if I had one. Since I don't, could I exchange it for my scalemate " + scalemateCapitalizedName + "?"))
+					.addResponse(new ResponseBuilder(l.subMsg("scalemate_confused", "What is a scalemate?"))
+							.nextDialogue(scalemate))
+					.addResponse(new ResponseBuilder(l.subMsg("exchange", "[Hand over the faygo for scalemate]"))
+							.visibleCondition(faygoCondition)
+							.addPlayerMessage(l.subMsg("yes.reply", "Sure here you go"))
+							.nextDialogue(builder.add("happy", new NodeBuilder(l.defaultKeyMsg("Ohhhh yeah that's the stuff. Straight up ambrosia."))))
+							.addTrigger(new Trigger.TakeItem(drinkItem))
+							.addTrigger(new Trigger.GiveItem(scalemateItem.asItem()))
+							.addTrigger(new Trigger.SetDialogue(satisfied)))
+					.addClosingResponse(l.subMsg("no", "No")));
+			
+			builder.addStart(new NodeBuilder(l.defaultKeyMsg("Everyone knows that the best flavor of faygo is " + capitalizedDrinkName + ". There is literally nothing else that can top it."))
+					.addClosingResponse(l.subMsg("bye", "Oh, good to know. Bye."))
+					.addResponse(new ResponseBuilder(l.subMsg("different_better", "I prefer another flavor"))
+							.nextDialogue(builder.add("scoundrel", new NodeBuilder(l.defaultKeyMsg("You are a liar and a scoundrel.")))))
+					.addResponse(new ResponseBuilder(l.subMsg("dont_drink", "I don't drink faygo"))
+							.nextDialogue(builder.add("foul", new NodeBuilder(l.defaultKeyMsg("Begone foul beast.")))))
+					.addResponse(new ResponseBuilder(l.subMsg("possess", "I have some with me"))
+							.visibleCondition(faygoCondition)
+							.nextDialogue(afterInvitation)));
+		}));
 	}
 }

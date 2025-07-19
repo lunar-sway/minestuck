@@ -28,8 +28,8 @@ public class TowersLandType extends TitleLandType
 	@Override
 	public void registerBlocks(StructureBlockRegistry registry)
 	{
-		registry.setBlock("structure_wool_2", Blocks.LIGHT_BLUE_WOOL);
-		registry.setBlock("carpet", Blocks.YELLOW_CARPET);
+		registry.setBlock(StructureBlockRegistry.STRUCTURE_WOOL_2, Blocks.LIGHT_BLUE_WOOL);
+		registry.setBlock(StructureBlockRegistry.CARPET, Blocks.YELLOW_CARPET);
 	}
 	
 	@Override
@@ -37,7 +37,7 @@ public class TowersLandType extends TitleLandType
 	{
 		builder.addFeature(GenerationStep.Decoration.SURFACE_STRUCTURES, MSPlacedFeatures.TOWER, LandBiomeType.anyExcept(LandBiomeType.OCEAN));
 		
-		builder.addFeature(GenerationStep.Decoration.LOCAL_MODIFICATIONS, MSPlacedFeatures.MIXED_PILLARS, FeatureModifier.withState(blocks.getBlockState("structure_primary")), LandBiomeType.ROUGH);
+		builder.addFeature(GenerationStep.Decoration.LOCAL_MODIFICATIONS, MSPlacedFeatures.MIXED_PILLARS, FeatureModifier.withState(blocks.getBlockState(StructureBlockRegistry.STRUCTURE_PRIMARY)), LandBiomeType.ROUGH);
 		
 		builder.addFeature(GenerationStep.Decoration.VEGETAL_DECORATION, MSPlacedFeatures.HOPE_TREE, LandBiomeType.anyExcept(LandBiomeType.OCEAN));
 		

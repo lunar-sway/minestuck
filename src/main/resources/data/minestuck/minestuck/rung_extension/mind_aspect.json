@@ -1,0 +1,25 @@
+{
+  "aspect": "mind",
+  "effects": [
+    {
+      "effect": "minecraft:night_vision",
+      "amplifier": 0,
+      "rung": 12
+    },
+    {
+      "effect": "minecraft:night_vision",
+      "amplifier": 1,
+      "rung": 24
+    },
+    {
+      "effect": "minecraft:night_vision",
+      "amplifier": 2,
+      "rung": 36
+    },
+    {
+      "effect": "minecraft:night_vision",
+      "amplifier": 3,
+      "rung": 48
+    }
+  ]
+}

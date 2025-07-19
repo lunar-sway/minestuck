@@ -10,6 +10,8 @@ import com.mraof.minestuck.world.gen.structure.MSStructures;
 import com.mraof.minestuck.world.gen.structure.blocks.StructureBlockRegistry;
 import com.mraof.minestuck.world.lands.ILandType;
 import com.mraof.minestuck.world.lands.LandBiomeGenBuilder;
+import com.mraof.minestuck.world.lands.LandTypeExtensions;
+import com.mraof.minestuck.world.lands.LandTypeExtensions.StructureSetExtension;
 import com.mraof.minestuck.world.lands.LandTypes;
 import net.minecraft.core.HolderGetter;
 import net.minecraft.core.HolderSet;
@@ -29,9 +31,13 @@ import net.minecraft.world.level.levelgen.structure.placement.RandomSpreadStruct
 import net.minecraft.world.level.levelgen.structure.placement.RandomSpreadType;
 import net.minecraft.world.phys.Vec3;
 
+import java.util.List;
 import java.util.Objects;
 import java.util.function.Consumer;
 import java.util.function.Supplier;
+
+import org.apache.logging.log4j.LogManager;
+import org.apache.logging.log4j.Logger;
 
 /**
  * Base class for land types that make up the base of a land.
@@ -40,6 +46,7 @@ public abstract class TerrainLandType implements ILandType
 {
 	public static final Codec<TerrainLandType> CODEC = LandTypes.TERRAIN_REGISTRY.byNameCodec();
 	public static final StreamCodec<RegistryFriendlyByteBuf, TerrainLandType> STREAM_CODEC = ByteBufCodecs.registry(LandTypes.TERRAIN_KEY);
+	private static final Logger LOGGER = LogManager.getLogger();
 	
 	protected static final RandomSpreadStructurePlacement SMALL_RUIN_PLACEMENT = new RandomSpreadStructurePlacement(16, 4, RandomSpreadType.LINEAR, 59273643);
 	protected static final RandomSpreadStructurePlacement IMP_DUNGEON_PLACEMENT = new RandomSpreadStructurePlacement(16, 4, RandomSpreadType.LINEAR, 34527185);
@@ -108,13 +115,13 @@ public abstract class TerrainLandType implements ILandType
 		ResourceKey<Biome> roughBiome = this.getBiomeSet().ROUGH;
 		
 		SurfaceRules.RuleSource surfaceBlock = SurfaceRules.sequence(
-				SurfaceRules.ifTrue(SurfaceRules.isBiome(roughBiome), SurfaceRules.state(blocks.getBlockState("surface_rough"))),
-				SurfaceRules.state(blocks.getBlockState("surface")));
+				SurfaceRules.ifTrue(SurfaceRules.isBiome(roughBiome), SurfaceRules.state(blocks.getBlockState(StructureBlockRegistry.SURFACE_ROUGH))),
+				SurfaceRules.state(blocks.getBlockState(StructureBlockRegistry.SURFACE)));
 		SurfaceRules.RuleSource surface = SurfaceRules.ifTrue(SurfaceRules.ON_FLOOR, SurfaceRules.ifTrue(SurfaceRules.waterBlockCheck(0, 0), surfaceBlock));
 		
-		SurfaceRules.RuleSource upper = SurfaceRules.ifTrue(SurfaceRules.UNDER_FLOOR, SurfaceRules.ifTrue(SurfaceRules.waterStartCheck(-6, -1), SurfaceRules.state(blocks.getBlockState("upper"))));
+		SurfaceRules.RuleSource upper = SurfaceRules.ifTrue(SurfaceRules.UNDER_FLOOR, SurfaceRules.ifTrue(SurfaceRules.waterStartCheck(-6, -1), SurfaceRules.state(blocks.getBlockState(StructureBlockRegistry.UPPER))));
 		// This surface rule targets the ocean surface by being positioned after "surface" and "upper", thus only placing blocks on surfaces where "surface" or "upper" doesn't
-		SurfaceRules.RuleSource ocean_surface = SurfaceRules.ifTrue(SurfaceRules.ON_FLOOR, SurfaceRules.state(blocks.getBlockState("ocean_surface")));
+		SurfaceRules.RuleSource ocean_surface = SurfaceRules.ifTrue(SurfaceRules.ON_FLOOR, SurfaceRules.state(blocks.getBlockState(StructureBlockRegistry.OCEAN_SURFACE)));
 		
 		return SurfaceRules.sequence(surface, upper, ocean_surface);
 	}
@@ -128,6 +135,13 @@ public abstract class TerrainLandType implements ILandType
 		consumer.accept(new StructureSet(structureLookup.getOrThrow(MSStructures.SMALL_RUIN), SMALL_RUIN_PLACEMENT));
 		consumer.accept(new StructureSet(structureLookup.getOrThrow(MSStructures.ImpDungeon.KEY), IMP_DUNGEON_PLACEMENT));
 		consumer.accept(new StructureSet(structureLookup.getOrThrow(MSStructures.ConsortVillage.KEY), CONSORT_VILLAGE_PLACEMENT));
+		
+		LandTypeExtensions landTypeExtensions = LandTypeExtensions.get();
+		List<StructureSetExtension> structureSets = landTypeExtensions.getStructureSetsFor(this);
+		for(StructureSetExtension structureSetExtension : structureSets)
+		{
+			consumer.accept(structureSetExtension.structureSet());
+		}
 	}
 	
 	public final boolean is(TagKey<TerrainLandType> tag)

@@ -1,0 +1,408 @@
+[
+  {
+    "background_color": -11545600,
+    "boondollars": 0,
+    "exp_requirement": 10,
+    "grist_capacity": 60,
+    "rung": 0,
+    "text_color": 16645931
+  },
+  {
+    "background_color": -65536,
+    "boondollars": 50,
+    "exp_requirement": 25,
+    "grist_capacity": 75,
+    "rung": 1,
+    "text_color": 4210752
+  },
+  {
+    "background_color": -6984628,
+    "boondollars": 75,
+    "exp_requirement": 40,
+    "grist_capacity": 93,
+    "rung": 2,
+    "text_color": 11992832
+  },
+  {
+    "background_color": -8540105,
+    "boondollars": 105,
+    "exp_requirement": 55,
+    "grist_capacity": 116,
+    "rung": 3,
+    "text_color": 7821078
+  },
+  {
+    "background_color": -2578944,
+    "boondollars": 140,
+    "exp_requirement": 70,
+    "grist_capacity": 145,
+    "rung": 4,
+    "text_color": 16777215
+  },
+  {
+    "background_color": -8454144,
+    "boondollars": 170,
+    "exp_requirement": 85,
+    "grist_capacity": 181,
+    "rung": 5,
+    "text_color": 16738816
+  },
+  {
+    "background_color": -16744690,
+    "boondollars": 200,
+    "exp_requirement": 100,
+    "grist_capacity": 226,
+    "rung": 6,
+    "text_color": 38143
+  },
+  {
+    "background_color": -8355712,
+    "boondollars": 250,
+    "exp_requirement": 115,
+    "grist_capacity": 282,
+    "rung": 7,
+    "rungCondition": {
+      "condition": {
+        "type": "minestuck:player_entered"
+      },
+      "description": "echeladder.must_enter"
+    },
+    "text_color": 4144959
+  },
+  {
+    "background_color": -16711903,
+    "boondollars": 320,
+    "exp_requirement": 130,
+    "grist_capacity": 352,
+    "rung": 8,
+    "text_color": 32639
+  },
+  {
+    "background_color": -12058369,
+    "boondollars": 425,
+    "exp_requirement": 145,
+    "grist_capacity": 440,
+    "rung": 9,
+    "text_color": 11665663
+  },
+  {
+    "background_color": -12566464,
+    "boondollars": 575,
+    "exp_requirement": 160,
+    "grist_capacity": 550,
+    "rung": 10,
+    "text_color": 8101045
+  },
+  {
+    "background_color": -1769728,
+    "boondollars": 790,
+    "exp_requirement": 175,
+    "grist_capacity": 687,
+    "rung": 11,
+    "text_color": 7182848
+  },
+  {
+    "background_color": -2114708,
+    "boondollars": 1140,
+    "exp_requirement": 190,
+    "grist_capacity": 858,
+    "rung": 12,
+    "text_color": 2201121
+  },
+  {
+    "background_color": -3223858,
+    "boondollars": 1630,
+    "exp_requirement": 205,
+    "grist_capacity": 1072,
+    "rung": 13,
+    "text_color": 8352831
+  },
+  {
+    "background_color": -65536,
+    "boondollars": 2230,
+    "exp_requirement": 220,
+    "grist_capacity": 1340,
+    "rung": 14,
+    "text_color": 16744319
+  },
+  {
+    "background_color": -3764659,
+    "boondollars": 2980,
+    "exp_requirement": 235,
+    "grist_capacity": 1675,
+    "rung": 15,
+    "text_color": 11471500
+  },
+  {
+    "background_color": -10427052,
+    "boondollars": 3850,
+    "exp_requirement": 250,
+    "grist_capacity": 2093,
+    "rung": 16,
+    "text_color": 2791001
+  },
+  {
+    "background_color": -7811448,
+    "boondollars": 4800,
+    "exp_requirement": 265,
+    "grist_capacity": 2616,
+    "rung": 17,
+    "text_color": 16767218
+  },
+  {
+    "background_color": -16748868,
+    "boondollars": 6000,
+    "exp_requirement": 280,
+    "grist_capacity": 3270,
+    "rung": 18,
+    "text_color": 16777215
+  },
+  {
+    "background_color": -971994,
+    "boondollars": 7500,
+    "exp_requirement": 295,
+    "grist_capacity": 4087,
+    "rung": 19,
+    "text_color": 14352255
+  },
+  {
+    "background_color": -4124672,
+    "boondollars": 9500,
+    "exp_requirement": 310,
+    "grist_capacity": 5108,
+    "rung": 20,
+    "text_color": 3430844
+  },
+  {
+    "background_color": -4551884,
+    "boondollars": 11900,
+    "exp_requirement": 325,
+    "grist_capacity": 6385,
+    "rung": 21,
+    "text_color": 14674024
+  },
+  {
+    "background_color": -11455320,
+    "boondollars": 15200,
+    "exp_requirement": 340,
+    "grist_capacity": 7981,
+    "rung": 22,
+    "text_color": 2794451
+  },
+  {
+    "background_color": -7156736,
+    "boondollars": 19300,
+    "exp_requirement": 355,
+    "grist_capacity": 9976,
+    "rung": 23,
+    "text_color": 5000268
+  },
+  {
+    "background_color": -7118533,
+    "boondollars": 24400,
+    "exp_requirement": 370,
+    "grist_capacity": 12470,
+    "rung": 24,
+    "text_color": 54040
+  },
+  {
+    "background_color": -15658719,
+    "boondollars": 45000,
+    "exp_requirement": 385,
+    "grist_capacity": 15587,
+    "rung": 25,
+    "text_color": 7283365
+  },
+  {
+    "background_color": -2745560,
+    "boondollars": 68000,
+    "exp_requirement": 400,
+    "grist_capacity": 19483,
+    "rung": 26,
+    "text_color": 12888617
+  },
+  {
+    "background_color": -1080959,
+    "boondollars": 95500,
+    "exp_requirement": 415,
+    "grist_capacity": 24353,
+    "rung": 27,
+    "text_color": 2325504
+  },
+  {
+    "background_color": -1221606,
+    "boondollars": 124000,
+    "exp_requirement": 430,
+    "grist_capacity": 30441,
+    "rung": 28,
+    "text_color": 2960685
+  },
+  {
+    "background_color": -2368549,
+    "boondollars": 180000,
+    "exp_requirement": 445,
+    "grist_capacity": 38051,
+    "rung": 29,
+    "text_color": 16738081
+  },
+  {
+    "background_color": -1064192,
+    "boondollars": 260000,
+    "exp_requirement": 460,
+    "grist_capacity": 47563,
+    "rung": 30,
+    "text_color": 8685536
+  },
+  {
+    "background_color": -13293147,
+    "boondollars": 425000,
+    "exp_requirement": 475,
+    "grist_capacity": 59453,
+    "rung": 31,
+    "text_color": 0
+  },
+  {
+    "background_color": -10272735,
+    "boondollars": 632000,
+    "exp_requirement": 490,
+    "grist_capacity": 74316,
+    "rung": 32,
+    "text_color": 11382189
+  },
+  {
+    "background_color": -4408132,
+    "boondollars": 880000,
+    "exp_requirement": 505,
+    "grist_capacity": 92895,
+    "rung": 33,
+    "text_color": 14828544
+  },
+  {
+    "background_color": -4582144,
+    "boondollars": 1000000,
+    "exp_requirement": 520,
+    "grist_capacity": 116118,
+    "rung": 34,
+    "text_color": 14841353
+  },
+  {
+    "background_color": -12409931,
+    "boondollars": 1000000,
+    "exp_requirement": 535,
+    "grist_capacity": 145147,
+    "rung": 35,
+    "text_color": 657568
+  },
+  {
+    "background_color": -12819628,
+    "boondollars": 1000000,
+    "exp_requirement": 550,
+    "grist_capacity": 181433,
+    "rung": 36,
+    "text_color": 13018659
+  },
+  {
+    "background_color": -3885439,
+    "boondollars": 1000000,
+    "exp_requirement": 565,
+    "grist_capacity": 226791,
+    "rung": 37,
+    "text_color": 3719505
+  },
+  {
+    "background_color": -6908266,
+    "boondollars": 1000000,
+    "exp_requirement": 580,
+    "grist_capacity": 283488,
+    "rung": 38,
+    "text_color": 16361024
+  },
+  {
+    "background_color": -9737365,
+    "boondollars": 1000000,
+    "exp_requirement": 595,
+    "grist_capacity": 354360,
+    "rung": 39,
+    "text_color": 3575370
+  },
+  {
+    "background_color": -5432413,
+    "boondollars": 1000000,
+    "exp_requirement": 610,
+    "grist_capacity": 442950,
+    "rung": 40,
+    "text_color": 16777215
+  },
+  {
+    "background_color": -16768513,
+    "boondollars": 1000000,
+    "exp_requirement": 625,
+    "grist_capacity": 553687,
+    "rung": 41,
+    "text_color": 41409
+  },
+  {
+    "background_color": -16777216,
+    "boondollars": 1000000,
+    "exp_requirement": 640,
+    "grist_capacity": 692108,
+    "rung": 42,
+    "text_color": 7039390
+  },
+  {
+    "background_color": -14069861,
+    "boondollars": 1000000,
+    "exp_requirement": 655,
+    "grist_capacity": 865135,
+    "rung": 43,
+    "text_color": 2960685
+  },
+  {
+    "background_color": -5396357,
+    "boondollars": 1000000,
+    "exp_requirement": 670,
+    "grist_capacity": 1081418,
+    "rung": 44,
+    "text_color": 1577338
+  },
+  {
+    "background_color": -12345803,
+    "boondollars": 1000000,
+    "exp_requirement": 685,
+    "grist_capacity": 1351772,
+    "rung": 45,
+    "text_color": 16748584
+  },
+  {
+    "background_color": -7448514,
+    "boondollars": 1000000,
+    "exp_requirement": 700,
+    "grist_capacity": 1689715,
+    "rung": 46,
+    "text_color": 2063502
+  },
+  {
+    "background_color": -10461088,
+    "boondollars": 1000000,
+    "exp_requirement": 715,
+    "grist_capacity": 2112143,
+    "rung": 47,
+    "text_color": 14831634
+  },
+  {
+    "background_color": -2242478,
+    "boondollars": 1000000,
+    "exp_requirement": 730,
+    "grist_capacity": 2640178,
+    "rung": 48,
+    "text_color": 9904608
+  },
+  {
+    "background_color": -1,
+    "boondollars": 1000000,
+    "exp_requirement": 745,
+    "grist_capacity": 3300222,
+    "rung": 49,
+    "text_color": 0
+  }
+]

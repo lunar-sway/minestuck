@@ -37,10 +37,10 @@ public final class SetDialogueCommand
 			throw INVALID_ENTITY.create(entity.getDisplayName());
 		
 		if(DialogueNodes.getInstance().getDialogue(id) == null)
-			throw INVALID_ID.create(id);
+			throw INVALID_ID.create(id.toString());
 		
 		dialogueEntity.getDialogueComponent().setDialogue(id, true);
-		source.sendSuccess(() -> Component.translatable(SUCCESS_KEY, entity.getDisplayName(), id), true);
+		source.sendSuccess(() -> Component.translatable(SUCCESS_KEY, entity.getDisplayName(), id.toString()), true);
 		return 1;
 	}
 }

@@ -1,0 +1,45 @@
+{
+  "node": {
+    "animation": {},
+    "gui": "minestuck:textures/gui/dialogue/dialogue.png",
+    "message": "minestuck.dialogue.consort.orange_faygo_scalemate_lemonsnout.start",
+    "responses": [
+      {
+        "condition": {
+          "type": "minestuck:always_true"
+        },
+        "hide_if_failed": true,
+        "message": "minestuck.dialogue.consort.orange_faygo_scalemate_lemonsnout.start.bye",
+        "triggers": []
+      },
+      {
+        "condition": {
+          "type": "minestuck:always_true"
+        },
+        "hide_if_failed": true,
+        "message": "minestuck.dialogue.consort.orange_faygo_scalemate_lemonsnout.start.different_better",
+        "next_dialogue": "minestuck:consort/orange_faygo_scalemate_lemonsnout/scoundrel",
+        "triggers": []
+      },
+      {
+        "condition": {
+          "type": "minestuck:always_true"
+        },
+        "hide_if_failed": true,
+        "message": "minestuck.dialogue.consort.orange_faygo_scalemate_lemonsnout.start.dont_drink",
+        "next_dialogue": "minestuck:consort/orange_faygo_scalemate_lemonsnout/foul",
+        "triggers": []
+      },
+      {
+        "condition": {
+          "type": "minestuck:player_item",
+          "item": "minestuck:orange_faygo"
+        },
+        "hide_if_failed": false,
+        "message": "minestuck.dialogue.consort.orange_faygo_scalemate_lemonsnout.start.possess",
+        "next_dialogue": "minestuck:consort/orange_faygo_scalemate_lemonsnout/ask_drink",
+        "triggers": []
+      }
+    ]
+  }
+}
