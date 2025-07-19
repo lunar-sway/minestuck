@@ -17,6 +17,15 @@ Content here may have been produced by individuals unaffiliated with Minestuck. 
 
 # Contents/Credits
 
+### wave function collapse prospit demo
+`Author: kirderf1`
+`Installation type: Datapack`
+
+A datapack created by Kirderf that shows off the Wave Function Collapse functionality in a new demonstration dimension called 'prospit_wfc_demo'.
+Made for 1.21.1.
+
+`Installation guide: Install the datapack to your datapack folder.`
+
 ### minestuck-zhtw
 `Author: 4seer2`
 `Installation type: Resource Pack`
