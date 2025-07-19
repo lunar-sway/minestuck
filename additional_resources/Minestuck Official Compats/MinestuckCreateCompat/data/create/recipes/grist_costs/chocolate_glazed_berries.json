@@ -1,0 +1,12 @@
+{
+  "type": "minestuck:grist_cost",
+  "grist_cost": {
+    "minestuck:iodine": 7,
+    "minestuck:amber": 6,
+    "minestuck:chalk": 2,
+    "minestuck:shale": 1
+  },
+  "ingredient": {
+    "item": "create:chocolate_glazed_berries"
+  }
+}

@@ -1,0 +1,9 @@
+{
+  "type": "minestuck:grist_cost",
+  "grist_cost": {
+    "minestuck:marble": 9
+  },
+  "ingredient": {
+    "item": "enlightened_end:raw_bismuth"
+  }
+}

@@ -65,7 +65,7 @@ public class MSItemTypes
 	
 	public static Holder<ArmorMaterial> registerArmorMaterial(String name, Map<ArmorItem.Type, Integer> damageReductionByType, int enchantability, Holder<SoundEvent> soundEvent, float toughness, float knockbackResistance, Supplier<Ingredient> repairMaterial)
 	{
-		return ARMOR_MATERIAL_REGISTRY.register(name, () -> new ArmorMaterial(damageReductionByType, enchantability, soundEvent, repairMaterial, List.of(new ArmorMaterial.Layer(Minestuck.id(name))), enchantability, knockbackResistance));
+		return ARMOR_MATERIAL_REGISTRY.register(name, () -> new ArmorMaterial(damageReductionByType, enchantability, soundEvent, repairMaterial, List.of(new ArmorMaterial.Layer(Minestuck.id(name))), toughness, knockbackResistance));
 	}
 	
 	//Base Tools

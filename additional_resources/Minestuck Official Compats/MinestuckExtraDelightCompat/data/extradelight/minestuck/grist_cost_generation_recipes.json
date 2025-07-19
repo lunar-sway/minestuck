@@ -1,0 +1,27 @@
+[
+  {
+    "interpreter_type": "minestuck:default",
+    "source": "extradelight:oven",
+    "source_type": "recipe_type"
+  },
+  {
+    "interpreter_type": "minestuck:default",
+    "source": "extradelight:drying_rack",
+    "source_type": "recipe_type"
+  },
+  {
+    "interpreter_type": "minestuck:default",
+    "source": "extradelight:mixing_bowl",
+    "source_type": "recipe_type"
+  },
+  {
+    "interpreter_type": "minestuck:default",
+    "source": "extradelight:mortar",
+    "source_type": "recipe_type"
+  },
+  {
+    "interpreter_type": "minestuck:default",
+    "source": "extradelight:dough_shaping",
+    "source_type": "recipe_type"
+  }
+]

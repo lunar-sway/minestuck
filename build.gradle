@@ -24,19 +24,6 @@ repositories {
         }
     }
     maven {
-        url = uri("https://maven.pkg.github.com/refinedmods/refinedstorage")
-        /* As of december 2021, GitHub packages requires authentication.
-           The password below is a personal access token that has read access to the Refined Mods repos.
-           It can be reused in other projects.
-           See: https://github.community/t/download-from-github-package-registry-without-authentication/14407/38 and
-                https://github.community/t/download-from-github-package-registry-without-authentication/14407/44
-         */
-        credentials {
-            username = "anything"
-            password = "\u0067hp_oGjcDFCn8jeTzIj4Ke9pLoEVtpnZMP4VQgaX"
-        }
-    }
-    maven {
         // maven that contains infiniverse
         url "https://commoble.net/maven/"
     }
@@ -92,7 +79,6 @@ dependencies {
     compileOnly "mezz.jei:jei-${mc_version}-common-api:${mc_jei_version}"
     compileOnly "mezz.jei:jei-${mc_version}-neoforge-api:${mc_jei_version}"
     runtimeOnly "mezz.jei:jei-${mc_version}-neoforge:${mc_jei_version}"
-    compileOnly "com.refinedmods:refinedstorage:${mc_refined_storage_version}"
 
     implementation "software.bernie.geckolib:geckolib-${mc_gecko_version}"
     implementation "net.commoble.infiniverse:${infiniverse_branch}:${infiniverse_version}"

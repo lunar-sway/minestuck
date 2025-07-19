@@ -1,0 +1,12 @@
+{
+  "type": "minestuck:source_grist_cost",
+  "grist_cost": {
+    "minestuck:build": 5
+  },
+  "ingredient": {
+    "item": "create:crushed_raw_zinc"
+  },
+  "sources": [
+    "#forge:raw_materials/zinc"
+  ]
+}

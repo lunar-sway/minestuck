@@ -1,0 +1,18 @@
+{
+  "type": "minecraft:crafting_shapeless",
+  "ingredients": [
+    {
+      "item": "minestuck:computer_parts"
+    },
+    {
+      "tag": "forge:glass_panes"
+    },
+    {
+      "item": "minecraft:iron_ingot"
+    }
+  ],
+  "result": {
+    "item": "computercraft:monitor_normal",
+    "count": 12
+  }
+}

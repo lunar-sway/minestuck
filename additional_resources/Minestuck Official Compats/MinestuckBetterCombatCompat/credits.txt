@@ -1,0 +1,4 @@
+- Dweblenod, modified from generated weapon attributes in 1.20.4
+- Previously a creation made by gtzc with updates by Dweblenod
+- Other version: agronz
+- Other version: frenziedferno

@@ -1,0 +1,9 @@
+{
+  "type": "minestuck:grist_cost",
+  "grist_cost": {
+    "minestuck:marble": 2
+  },
+  "ingredient": {
+    "item": "culturaldelights:avocado_pit"
+  }
+}

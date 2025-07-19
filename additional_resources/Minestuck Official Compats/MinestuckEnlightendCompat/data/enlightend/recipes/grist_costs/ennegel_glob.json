@@ -1,0 +1,10 @@
+{
+  "type": "minestuck:grist_cost",
+  "grist_cost": {
+    "minestuck:amethyst": 2,
+    "minestuck:amber": 2
+  },
+  "ingredient": {
+    "item": "enlightened_end:ennegel_glob"
+  }
+}

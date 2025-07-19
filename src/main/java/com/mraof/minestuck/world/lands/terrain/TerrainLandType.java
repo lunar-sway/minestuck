@@ -9,6 +9,8 @@ import com.mraof.minestuck.world.gen.structure.MSStructures;
 import com.mraof.minestuck.world.gen.structure.blocks.StructureBlockRegistry;
 import com.mraof.minestuck.world.lands.ILandType;
 import com.mraof.minestuck.world.lands.LandBiomeGenBuilder;
+import com.mraof.minestuck.world.lands.LandTypeExtensions;
+import com.mraof.minestuck.world.lands.LandTypeExtensions.StructureSetExtension;
 import com.mraof.minestuck.world.lands.LandTypes;
 import net.minecraft.core.Holder;
 import net.minecraft.core.HolderGetter;
@@ -36,6 +38,9 @@ import java.util.Optional;
 import java.util.function.Consumer;
 import java.util.function.Supplier;
 
+import org.apache.logging.log4j.LogManager;
+import org.apache.logging.log4j.Logger;
+
 /**
  * Base class for land types that make up the base of a land.
  */
@@ -43,6 +48,7 @@ public abstract class TerrainLandType implements ILandType
 {
 	public static final Codec<TerrainLandType> CODEC = LandTypes.TERRAIN_REGISTRY.byNameCodec();
 	public static final StreamCodec<RegistryFriendlyByteBuf, TerrainLandType> STREAM_CODEC = ByteBufCodecs.registry(LandTypes.TERRAIN_KEY);
+	private static final Logger LOGGER = LogManager.getLogger();
 	
 	protected static final RandomSpreadStructurePlacement SMALL_RUIN_PLACEMENT = new RandomSpreadStructurePlacement(16, 4, RandomSpreadType.LINEAR, 59273643);
 	protected static final RandomSpreadStructurePlacement CONSORT_VILLAGE_PLACEMENT = new RandomSpreadStructurePlacement(24, 5, RandomSpreadType.LINEAR, 10387312);
@@ -129,8 +135,6 @@ public abstract class TerrainLandType implements ILandType
 	public void addStructureSets(Consumer<StructureSet> consumer, HolderGetter<Structure> structureLookup)
 	{
 		consumer.accept(new StructureSet(structureLookup.getOrThrow(MSStructures.SMALL_RUIN), SMALL_RUIN_PLACEMENT));
-		
-		
 		StructureSet villageSet = new StructureSet(structureLookup.getOrThrow(MSStructures.ConsortVillage.KEY), CONSORT_VILLAGE_PLACEMENT);
 		consumer.accept(villageSet);
 		
@@ -151,6 +155,13 @@ public abstract class TerrainLandType implements ILandType
 				StructureSet.entry(structureLookup.getOrThrow(MSStructures.ImpDungeon.KEY), 15)),
 				standardDungeonPlacement)
 		);
+		
+		LandTypeExtensions landTypeExtensions = LandTypeExtensions.get();
+		List<StructureSetExtension> structureSets = landTypeExtensions.getStructureSetsFor(this);
+		for(StructureSetExtension structureSetExtension : structureSets)
+		{
+			consumer.accept(structureSetExtension.structureSet());
+		}
 	}
 	
 	public final boolean is(TagKey<TerrainLandType> tag)

@@ -1,0 +1,10 @@
+{
+  "type": "minestuck:grist_cost",
+  "grist_cost": {
+    "minestuck:iodine": 15,
+    "minestuck:ruby": 5
+  },
+  "ingredient": {
+    "item": "farmersdelight:red_mushroom_colony"
+  }
+}

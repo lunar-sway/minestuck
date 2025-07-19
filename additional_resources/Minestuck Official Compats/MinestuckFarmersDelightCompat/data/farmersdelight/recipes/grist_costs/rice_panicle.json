@@ -1,0 +1,10 @@
+{
+  "type": "minestuck:grist_cost",
+  "grist_cost": {
+    "minestuck:iodine": 5,
+    "minestuck:build": 1
+  },
+  "ingredient": {
+    "item": "farmersdelight:rice_panicle"
+  }
+}

@@ -1,0 +1,11 @@
+{
+  "type": "minestuck:grist_cost",
+  "grist_cost": {
+    "minestuck:shale": 9,
+    "minestuck:build": 4,
+    "minestuck:caulk": 3
+  },
+  "ingredient": {
+    "item": "enlightened_end:malachite_ore"
+  }
+}

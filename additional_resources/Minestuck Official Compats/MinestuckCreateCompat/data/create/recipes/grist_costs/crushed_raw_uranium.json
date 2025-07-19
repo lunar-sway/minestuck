@@ -1,0 +1,10 @@
+{
+  "type": "minestuck:grist_cost",
+  "grist_cost": {
+    "minestuck:uranium": 3,
+    "minestuck:build": 5
+  },
+  "ingredient": {
+    "item": "create:crushed_raw_uranium"
+  }
+}

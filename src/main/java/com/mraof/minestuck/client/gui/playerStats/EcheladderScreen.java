@@ -7,6 +7,9 @@ import com.mraof.minestuck.client.ClientRungData;
 import com.mraof.minestuck.player.ClientPlayerData;
 import com.mraof.minestuck.player.Rung;
 import net.minecraft.client.gui.GuiGraphics;
+import net.minecraft.client.gui.components.AbstractWidget;
+import net.minecraft.client.gui.components.Tooltip;
+import net.minecraft.client.gui.narration.NarrationElementOutput;
 import net.minecraft.client.renderer.texture.TextureAtlasSprite;
 import net.minecraft.client.resources.MobEffectTextureManager;
 import net.minecraft.client.resources.language.I18n;
@@ -17,9 +20,7 @@ import net.minecraft.world.effect.MobEffects;
 import org.lwjgl.glfw.GLFW;
 
 import javax.annotation.Nullable;
-import java.util.Collections;
-import java.util.List;
-import java.util.Locale;
+import java.util.*;
 
 /**
  * @author Kirderf1
@@ -37,10 +38,8 @@ public class EcheladderScreen extends PlayerStatsScreen
 	
 	private static final ResourceLocation guiEcheladder = ResourceLocation.fromNamespaceAndPath("minestuck", "textures/gui/echeladder.png");
 	
-	
-	private static final int LADDER_X_OFFSET = 163;
-	private static final int ROWS = 12;
 	private static final int RUNG_Y = 14;
+	private static final int VISIBLE_RUNG_COUNT = 12;
 	
 	private static final int GREY = 0x404040;
 	private static final int BLUE = 0x0094FF;
@@ -48,13 +47,15 @@ public class EcheladderScreen extends PlayerStatsScreen
 	private static final int TIME_BEFORE_ANIMATION = 10, TIME_BEFORE_NEXT = 16, TIME_FOR_RUNG = 4, TIME_FOR_SHOW_ONLY = 65;
 	private static final int TIME_TILL_NEXT = TIME_BEFORE_NEXT + TIME_FOR_RUNG;
 	
+	private int scroll = 0;
 	private final int maxScroll;
-	private int scrollIndex;
-	private boolean isScrolling;
+	
+	private final List<RungBar> rungBars = new ArrayList<>();
 	
 	public static int lastRung = -1;    //The current rung last time the gui was opened. Used to determine which rung to display increments from next time the gui is opened
 	public static int animatedRung;    //The rung animated to or the latest to be animated
 	private boolean showLastRung = true;
+	private int currentRung;
 	private int fromRung;    //First rung to display increments from; (actually the one right before that one)
 	private int animationCycle;    //Ticks left on the animation cycle
 	private int animatedRungs;    //The amount of rungs to animate
@@ -65,39 +66,57 @@ public class EcheladderScreen extends PlayerStatsScreen
 		guiWidth = 250;
 		guiHeight = 202;
 		
-		maxScroll = (ClientRungData.getFinalRungIndex() + 1) * RUNG_Y - 154;
+		maxScroll = ClientRungData.getFinalRungIndex() - 10;
 	}
 	
 	@Override
 	public void init()
 	{
 		super.init();
-		scrollIndex = Mth.clamp((ClientPlayerData.getRung() - 8) * RUNG_Y, 0, maxScroll);
 		animatedRung = Math.max(animatedRung, lastRung);    //If you gain a rung while the gui is open, the animated rung might get higher than the lastRung. Otherwise they're always the same value.
 		fromRung = lastRung;
 		lastRung = ClientPlayerData.getRung();
+		
+		rungBars.clear();
+		for(int i = 0; i <= ClientRungData.getFinalRungIndex(); i++)
+		{
+			Component name = I18n.exists("echeladder.rung." + i) ? Component.translatable("echeladder.rung." + i) : Component.literal("Rung " + (i + 1));
+			
+			Optional<String> tooltip = ClientRungData.getData(i).description();
+			
+			RungBar rungBar = new RungBar(xOffset + 90, yOffset + 175 - i * RUNG_Y, 146, RUNG_Y, name, tooltip, i);
+			rungBars.add(rungBar);
+			addRenderableWidget(rungBar);
+			
+			rungBar.visible = i <= VISIBLE_RUNG_COUNT;
+		}
 	}
 	
 	@Override
 	public void render(GuiGraphics guiGraphics, int mouseX, int mouseY, float partialTicks)
 	{
-		updateScrollAndAnimation(mouseY);
+		updateAnimation();
 		
 		int speedFactor = MinestuckConfig.CLIENT.echeladderAnimation.get().getSpeed();
 		
-		int currentRung = calculateRungAnimationStep(speedFactor);
+		calculateRungAnimationStep(speedFactor);
+		
+		rungBars.forEach(rungBar -> {
+			rungBar.setY(rungBar.initY + getScrollMod());
+			rungBar.updateVisibility();
+		});
 		
 		super.render(guiGraphics, mouseX, mouseY, partialTicks);
 		
 		drawTabs(guiGraphics);
 		
-		drawLadder(guiGraphics, currentRung);
-		
 		RenderSystem.setShaderColor(1, 1, 1, 1);
 		
 		guiGraphics.blit(guiEcheladder, xOffset, yOffset, 0, 0, guiWidth, guiHeight);
 		
-		guiGraphics.blit(guiEcheladder, xOffset + 80, yOffset + 42 + (int) (130 * (1 - scrollIndex / (float) maxScroll)), 0, 243, 7, 13);
+		//scroll bar
+		float scrollPercentage = (float) scroll / maxScroll;
+		guiGraphics.blit(guiEcheladder, xOffset + 80, (int) (yOffset + 42 + (130F * (1F - scrollPercentage))), 0, 243, 7, 13);
 		
 		List<Component> tooltip = drawEffectIconsAndText(guiGraphics, currentRung, mouseX, mouseY);
 		
@@ -118,10 +137,14 @@ public class EcheladderScreen extends PlayerStatsScreen
 			guiGraphics.renderComponentTooltip(font, tooltip, mouseX, mouseY);
 	}
 	
-	private int calculateRungAnimationStep(int speedFactor)
+	private int getScrollMod()
+	{
+		return scroll * RUNG_Y;
+	}
+	
+	private void calculateRungAnimationStep(int speedFactor)
 	{
 		showLastRung = true;
-		int currentRung;
 		if(animationCycle == 0)
 		{
 			currentRung = animatedRung;
@@ -151,41 +174,6 @@ public class EcheladderScreen extends PlayerStatsScreen
 				}
 			}
 		}
-		return currentRung;
-	}
-	
-	private void drawLadder(GuiGraphics guiGraphics, int currentRung)
-	{
-		RenderSystem.setShaderColor(1, 1, 1, 1);
-		int scroll = scrollIndex % RUNG_Y;
-		
-		for(int i = 0; i < ROWS; i++)
-		{
-			guiGraphics.blit(guiEcheladder, xOffset + 90, yOffset + 175 + scroll - i * RUNG_Y, 7, 242, 146, RUNG_Y);
-			
-			int y = yOffset + 177 + scroll - i * RUNG_Y;
-			int rung = scrollIndex / RUNG_Y + i;
-			if(rung > ClientRungData.getFinalRungIndex())
-				break;
-			
-			int textColor = 0xFFFFFF;
-			int backgroundColor = ClientRungData.getData(rung).backgroundColor();
-			if(rung <= currentRung - (showLastRung ? 0 : 1))
-			{
-				textColor = ClientRungData.getData(rung).textColor();
-				//full bar
-				guiGraphics.fill(xOffset + 90, y, xOffset + 236, y + 12, backgroundColor);
-			} else if(rung == currentRung + 1 && animationCycle == 0)
-			{
-				//progress bar
-				float brightness = (((backgroundColor >> 16) & 0xFF) + ((backgroundColor >> 8) & 0xFF) + (backgroundColor & 0xFF)) / 765F;
-				boolean isDark = brightness < 0.2;
-				guiGraphics.fill(xOffset + 90, y + 10, xOffset + 90 + (int) (146 * ClientPlayerData.getRungProgress()), y + 12, isDark ? 0xFFFFFFFF : backgroundColor);
-			}
-			
-			String s = I18n.exists("echeladder.rung." + rung) ? I18n.get("echeladder.rung." + rung) : "Rung " + (rung + 1);
-			guiGraphics.drawString(font, s, xOffset + LADDER_X_OFFSET - mc.font.width(s) / 2, y + 2, textColor, false);
-		}
 	}
 	
 	@Nullable
@@ -210,11 +198,13 @@ public class EcheladderScreen extends PlayerStatsScreen
 		
 		int attack = (int) Math.round(100 * (1 + rungData.attributes().attackBonus()));
 		guiGraphics.drawString(font, I18n.get(ATTACK), textOffset, yOffset + 30, GREY, false);
-		guiGraphics.drawString(font, attack + "%", textOffset + 2, yOffset + 39, BLUE, false);
+		String attackValueText = attack + "%";
+		guiGraphics.drawString(font, attackValueText, textOffset + 2, yOffset + 39, BLUE, false);
 		
 		double health = rungData.attributes().healthBoost() / 2D;
 		guiGraphics.drawString(font, I18n.get(HEALTH), textOffset, yOffset + 84, GREY, false);
-		guiGraphics.drawString(font, "+" + String.format(Locale.ROOT, "%.1f", health), textOffset + 2, yOffset + 93, BLUE, false);
+		String healthValueText = "+" + String.format(Locale.ROOT, "%.1f", health);
+		guiGraphics.drawString(font, healthValueText, textOffset + 2, yOffset + 93, BLUE, false);
 		
 		guiGraphics.drawString(font, "=", textOffset + 1, yOffset + 12, GREY, false);    //Should this be black, or the same blue as the numbers?
 		guiGraphics.drawString(font, String.valueOf(ClientPlayerData.getBoondollars()), textOffset + 3 + mc.font.width("="), yOffset + 12, BLUE, false);
@@ -223,9 +213,9 @@ public class EcheladderScreen extends PlayerStatsScreen
 		guiGraphics.drawString(font, I18n.get(CACHE), textOffset, yOffset + 138, GREY, false);
 		guiGraphics.drawString(font, String.valueOf(rungData.gristCapacity()), textOffset + 2, yOffset + 147, BLUE, false);
 		
-		if(mouseInBounds(mouseY, yOffset + 39, mouseX, textOffset + 2, mc.font.width(attack + "%")))
+		if(mouseInBounds(mouseY, yOffset + 39, mouseX, textOffset + 2, mc.font.width(attackValueText)))
 			return ImmutableList.of(Component.translatable(DAMAGE_UNDERLING), Component.literal(Math.round(attack * rungData.attributes().underlingDamageMod()) + "%"));
-		if(mouseInBounds(mouseY, yOffset + 93, mouseX, textOffset + 2, mc.font.width(String.valueOf(health))))
+		if(mouseInBounds(mouseY, yOffset + 93, mouseX, textOffset + 2, mc.font.width(healthValueText)))
 			return ImmutableList.of(Component.translatable(PROTECTION_UNDERLING), Component.literal(String.format(Locale.ROOT, "%.1f", 100 * rungData.attributes().underlingProtectionMod()) + "%"));
 		return null;
 	}
@@ -279,14 +269,8 @@ public class EcheladderScreen extends PlayerStatsScreen
 		return (mouseY >= minY && mouseY < minY + mc.font.lineHeight) && (mouseX >= minX && mouseX < minX + xDiff);
 	}
 	
-	private void updateScrollAndAnimation(int ycor)
+	private void updateAnimation()
 	{
-		if(isScrolling)
-		{
-			scrollIndex = (int) (maxScroll * (ycor - yOffset - 179) / -130F);
-			scrollIndex = Mth.clamp(scrollIndex, 0, maxScroll);
-		}
-		
 		if(animationCycle > 0)
 			if(MinestuckConfig.CLIENT.echeladderAnimation.get() != MinestuckConfig.AnimationSpeed.NOTHING)
 				animationCycle--;
@@ -317,9 +301,12 @@ public class EcheladderScreen extends PlayerStatsScreen
 	{
 		if(scrollY != 0)
 		{
-			if(scrollY > 0) scrollIndex += RUNG_Y;
-			else scrollIndex -= RUNG_Y;
-			scrollIndex = Mth.clamp(scrollIndex, 0, maxScroll);
+			if(scrollY > 0)
+				scroll++;
+			else
+				scroll--;
+			
+			scroll = Mth.clamp(scroll, 0, maxScroll);
 			return true;
 		} else
 			return super.mouseScrolled(mouseX, mouseY, scrollX, scrollY);
@@ -332,27 +319,65 @@ public class EcheladderScreen extends PlayerStatsScreen
 		{
 			if(ycor >= yOffset + 35 && ycor < yOffset + 42)
 			{
-				scrollIndex = Mth.clamp(scrollIndex + RUNG_Y, 0, maxScroll);
-				isScrolling = true;
+				scroll = maxScroll;
 				return true;
 			} else if(ycor >= yOffset + 185 && ycor < yOffset + 192)
 			{
-				scrollIndex = Mth.clamp(scrollIndex - RUNG_Y, 0, maxScroll);
-				isScrolling = true;
+				scroll = 0;
 				return true;
 			}
 		}
+		
 		return super.mouseClicked(xcor, ycor, mouseButton);
 	}
 	
-	@Override
-	public boolean mouseReleased(double mouseX, double mouseY, int mouseButton)
+	private final class RungBar extends AbstractWidget
 	{
-		if(isScrolling)
+		private final int initY;
+		private final int rung;
+		
+		public RungBar(int initX, int initY, int width, int height, Component message, Optional<String> tooltip, int rung)
 		{
-			isScrolling = false;
-			return false;
+			super(initX, initY, width, height, message);
+			this.initY = initY;
+			this.rung = rung;
+			tooltip.ifPresent(string -> setTooltip(Tooltip.create(Component.translatable(string))));
 		}
-		return super.mouseReleased(mouseX, mouseY, mouseButton);
+		
+		@Override
+		public void renderWidget(GuiGraphics guiGraphics, int mouseX, int mouseY, float partialTick)
+		{
+			int x = getX();
+			int y = getY();
+			
+			guiGraphics.blit(guiEcheladder, x, y, 7, 242, 146, RUNG_Y);
+			
+			int textColor = 0xFFFFFFFF;
+			int backgroundColor = ClientRungData.getData(rung).backgroundColor();
+			if(rung <= currentRung - (showLastRung ? 0 : 1))
+			{
+				textColor = ClientRungData.getData(rung).textColor();
+				//full bar
+				guiGraphics.fill(x, y + 2, x + 146, y + 14, backgroundColor);
+			} else if(rung == currentRung + 1 && animationCycle == 0)
+			{
+				//progress bar
+				float brightness = (((backgroundColor >> 16) & 0xFF) + ((backgroundColor >> 8) & 0xFF) + (backgroundColor & 0xFF)) / 765F;
+				boolean isDark = brightness < 0.2;
+				guiGraphics.fill(x, y + 12, x + (int) (146 * ClientPlayerData.getRungProgress()), y + 14, isDark ? 0xFFFFFFFF : backgroundColor);
+			}
+			
+			guiGraphics.drawString(font, this.getMessage(), x + 73 - mc.font.width(this.getMessage()) / 2, y + 4, textColor, false);
+		}
+		
+		public void updateVisibility()
+		{
+			this.visible = rung >= scroll && rung <= scroll + VISIBLE_RUNG_COUNT;
+		}
+		
+		@Override
+		protected void updateWidgetNarration(NarrationElementOutput narrationElementOutput)
+		{
+		}
 	}
 }

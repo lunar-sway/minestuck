@@ -13,7 +13,6 @@ import net.minecraft.core.particles.ParticleTypes;
 import net.minecraft.nbt.CompoundTag;
 import net.minecraft.nbt.Tag;
 import net.minecraft.network.syncher.EntityDataAccessor;
-import net.minecraft.network.syncher.EntityDataSerializer;
 import net.minecraft.network.syncher.EntityDataSerializers;
 import net.minecraft.network.syncher.SynchedEntityData;
 import net.minecraft.resources.ResourceLocation;
@@ -38,8 +37,9 @@ import net.minecraft.world.level.Level;
 import net.minecraft.world.level.LevelAccessor;
 import net.minecraft.world.level.pathfinder.Path;
 import net.minecraft.world.phys.Vec3;
-import net.neoforged.neoforge.network.codec.NeoForgeStreamCodecs;
 
+import java.util.Arrays;
+import java.util.Locale;
 import java.util.Random;
 
 public class FrogEntity extends PathfinderMob
@@ -54,9 +54,9 @@ public class FrogEntity extends PathfinderMob
 	private static final EntityDataAccessor<Integer> SKIN_COLOR = SynchedEntityData.defineId(FrogEntity.class, EntityDataSerializers.INT);
 	private static final EntityDataAccessor<Integer> EYE_COLOR = SynchedEntityData.defineId(FrogEntity.class, EntityDataSerializers.INT);
 	private static final EntityDataAccessor<Integer> BELLY_COLOR = SynchedEntityData.defineId(FrogEntity.class, EntityDataSerializers.INT);
-	private static final EntityDataAccessor<EyeTypes> EYE_TYPE = SynchedEntityData.defineId(FrogEntity.class, EntityDataSerializer.forValueType(NeoForgeStreamCodecs.enumCodec(EyeTypes.class)));
-	private static final EntityDataAccessor<BellyTypes> BELLY_TYPE = SynchedEntityData.defineId(FrogEntity.class, EntityDataSerializer.forValueType(NeoForgeStreamCodecs.enumCodec(BellyTypes.class)));
-	private static final EntityDataAccessor<FrogVariants> VARIANT = SynchedEntityData.defineId(FrogEntity.class, EntityDataSerializer.forValueType(NeoForgeStreamCodecs.enumCodec(FrogVariants.class)));
+	private static final EntityDataAccessor<String> EYE_TYPE = SynchedEntityData.defineId(FrogEntity.class, EntityDataSerializers.STRING);
+	private static final EntityDataAccessor<String> BELLY_TYPE = SynchedEntityData.defineId(FrogEntity.class, EntityDataSerializers.STRING);
+	private static final EntityDataAccessor<String> VARIANT = SynchedEntityData.defineId(FrogEntity.class, EntityDataSerializers.STRING);
 	
 	private static final ResourceLocation GENETIC_SIZE_ATTRIBUTE_KEY = Minestuck.id("genetic_size");
 	
@@ -77,12 +77,12 @@ public class FrogEntity extends PathfinderMob
 	protected void defineSynchedData(SynchedEntityData.Builder builder)
 	{
 		super.defineSynchedData(builder);
-		builder.define(VARIANT, FrogVariants.DEFAULT);
+		builder.define(VARIANT, FrogVariants.DEFAULT.getSerializedName());
 		builder.define(SKIN_COLOR, random(34277));
 		builder.define(EYE_COLOR, random(15967496));
 		builder.define(BELLY_COLOR, random(28350));
-		builder.define(EYE_TYPE, EyeTypes.LIGHT);
-		builder.define(BELLY_TYPE, BellyTypes.SOLID);
+		builder.define(EYE_TYPE, EyeTypes.LIGHT.getSerializedName());
+		builder.define(BELLY_TYPE, BellyTypes.SOLID.getSerializedName());
 	}
 	
 	@Override
@@ -115,83 +115,77 @@ public class FrogEntity extends PathfinderMob
 		return super.mobInteract(player, hand);
 	}
 	
-	public static int maxTypes()
-	{
-		return 6;
-	}
-	
-	public static int maxEyes()
-	{
-		return 2;
-	}
-	
-	public static int maxBelly()
-	{
-		return 3;
-	}
-	
 	public enum FrogVariants implements StringRepresentable
 	{
-		DEFAULT("default"),
-		TOTALLY_NORMAL("totally_normal"),
-		RUBY_CONTRABAND("ruby_contraband"),
-		GENESIS("genesis"),
-		NULL("null"),
-		GOLDEN("golden"),
-		SUSAN("susan");
-		
-		private final String name;
-		
-		FrogVariants(String name)
-		{
-			this.name = name;
-		}
+		DEFAULT,
+		TOTALLY_NORMAL,
+		RUBY_CONTRABAND,
+		GENESIS,
+		NULL,
+		GOLDEN,
+		SUSAN;
 		
 		@Override
 		public String getSerializedName()
 		{
-			return name;
+			return this.name().toLowerCase(Locale.ROOT);
+		}
+		
+		public static FrogVariants getWithDefault(String name)
+		{
+			return Arrays.stream(values()).filter(value -> value.getSerializedName().equals(name)).findFirst().orElse(DEFAULT);
+		}
+		
+		public static FrogVariants getWithDefault(SynchedEntityData data)
+		{
+			return getWithDefault(data.get(VARIANT));
 		}
 	}
 	
 	public enum EyeTypes implements StringRepresentable
 	{
-		LIGHT("light"),
-		DARK("dark"),
-		BLANK("blank");
-		
-		private final String name;
-		
-		EyeTypes(String name)
-		{
-			this.name = name;
-		}
+		LIGHT,
+		DARK,
+		BLANK;
 		
 		@Override
 		public String getSerializedName()
 		{
-			return name;
+			return this.name().toLowerCase(Locale.ROOT);
+		}
+		
+		public static EyeTypes getWithDefault(String name)
+		{
+			return Arrays.stream(values()).filter(value -> value.getSerializedName().equals(name)).findFirst().orElse(LIGHT);
+		}
+		
+		public static EyeTypes getWithDefault(SynchedEntityData data)
+		{
+			return getWithDefault(data.get(EYE_TYPE));
 		}
 	}
 	
 	public enum BellyTypes implements StringRepresentable
 	{
-		NONE("none"),
-		SOLID("solid"),
-		SPOTTED("spotted"),
-		STRIPED("striped");
-		
-		private final String name;
-		
-		BellyTypes(String name)
-		{
-			this.name = name;
-		}
+		NONE,
+		SOLID,
+		SPOTTED,
+		STRIPED;
 		
 		@Override
 		public String getSerializedName()
 		{
-			return name;
+			return this.name().toLowerCase(Locale.ROOT);
+		}
+		
+		public static BellyTypes getWithDefault(String name)
+		{
+			return Arrays.stream(values()).filter(value -> value.getSerializedName().equals(name)).findFirst().orElse(SOLID);
+		}
+		
+		public static BellyTypes getWithDefault(SynchedEntityData data)
+		{
+			return getWithDefault(data.get(BELLY_TYPE));
 		}
 	}
 	
@@ -447,11 +441,11 @@ public class FrogEntity extends PathfinderMob
 		super.readAdditionalSaveData(compound);
 		
 		if(compound.contains("Variant", Tag.TAG_STRING))
-			setFrogVariant(FrogVariants.valueOf(compound.getString("Type")));
+			setFrogVariant(FrogVariants.getWithDefault(compound.getString("Variant")));
 		if(compound.contains("EyeType", Tag.TAG_STRING))
-			setEyeType(EyeTypes.valueOf(compound.getString("EyeType")));
+			setEyeType(EyeTypes.getWithDefault(compound.getString("EyeType")));
 		if(compound.contains("BellyType", Tag.TAG_STRING))
-			setBellyType(BellyTypes.valueOf(compound.getString("BellyType")));
+			setBellyType(BellyTypes.getWithDefault(compound.getString("BellyType")));
 		
 		if(compound.contains("SkinColor", Tag.TAG_INT))
 			this.setSkinColor(Math.clamp(compound.getInt("SkinColor"), 0, 0xFFFFFF));
@@ -493,35 +487,34 @@ public class FrogEntity extends PathfinderMob
 		return this.entityData.get(BELLY_COLOR);
 	}
 	
-	
 	public void setEyeType(EyeTypes i)
 	{
-		this.entityData.set(EYE_TYPE, i);
+		this.entityData.set(EYE_TYPE, i.getSerializedName());
 	}
 	
 	public EyeTypes getEyeType()
 	{
-		return this.entityData.get(EYE_TYPE);
+		return EyeTypes.getWithDefault(this.entityData);
 	}
 	
 	public void setBellyType(BellyTypes i)
 	{
-		this.entityData.set(BELLY_TYPE, i);
+		this.entityData.set(BELLY_TYPE, i.getSerializedName());
 	}
 	
 	public BellyTypes getBellyType()
 	{
-		return this.entityData.get(BELLY_TYPE);
+		return BellyTypes.getWithDefault(this.entityData);
 	}
 	
 	public void setFrogVariant(FrogVariants i)
 	{
-		this.entityData.set(VARIANT, i);
+		this.entityData.set(VARIANT, i.getSerializedName());
 	}
 	
 	public FrogVariants getFrogVariant()
 	{
-		return this.entityData.get(VARIANT);
+		return FrogVariants.getWithDefault(this.entityData);
 	}
 	
 	public void setFrogSize(double size, boolean regenHealth)

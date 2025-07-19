@@ -1,0 +1,11 @@
+{
+  "type": "minestuck:grist_cost",
+  "grist_cost": {
+    "minestuck:amethyst": 1,
+    "minestuck:marble": 1,
+    "minestuck:build": 2
+  },
+  "ingredient": {
+    "item": "enlightened_end:congealed_fern"
+  }
+}

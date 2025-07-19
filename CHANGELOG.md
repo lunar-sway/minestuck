@@ -8,13 +8,18 @@ The format is based on [Keep a Changelog](https://keepachangelog.com/en/1.1.0/).
 
 ### Added
 
+- New rook themed towers on the Battlefield
 - Increased number of blocks used in land specific structure block palettes
+- Land Type Extensions now support structure sets.
+- New Cathedral Structure on the Battlefield
+- Added tooltip to rungs which have gated conditions
 - Added 3 bunker structures to Lands
 
 ### Changed
 
 - Stack and Queue modi have more distinct recipes
 - Farmine break blacklist is now controlled by the `minestuck:farmine_break_blacklist` block tag, instead of being hardcoded
+- Disabled Skaian Castle structure
 - Reduced imp dungeon generation frequency
 - Imp dungeons will not spawn near villages
 
@@ -22,15 +27,29 @@ The format is based on [Keep a Changelog](https://keepachangelog.com/en/1.1.0/).
 
 - Fix some items having 0 grist cost
 - Fix weapons having the wrong durability
+- Fix unbreakable katana and crowbar being breakable
+- Fix emerald weapons dealing no damage
+- Fix armor stacking/durability/toughness
 - Fix farmine only mining a 3x3x3 cube around the block mined
+- Fix carved tablets crashing the game when placed down
+- Fix issues with frog entity/item rendering/loading/tooltips
+- Fix cassette player not playing correct music
+- Fix dance_stab_dance and emissary_of_dance being labelled as each other
+- Fix cassette playing weapons not having a menu for storing cassette
+- Fix weapons not being enchantable
+- Add back song description for cassette items
+- Fix hover area for some tooltip in the echeladder screen
+- Removed Refined Storage compatibility feature that was not compatible with Refined Storage 2
 
 ### Removed
 
 - Removed `minestuck:non_mirrored` recipe type
+- Removed `preEntryRungLimit` server config
+- Minestuck tridents no longer get unusable trident enchantments
 
 ### Contributors for this release
 
-- medsal15, Dweblenod, TangleKat, pancake
+- medsal15, Dweblenod, TangleKat, kirderf1, shadowLink, ThalliumSulfate, pancake
 
 ## [1.20.1-1.12.1.1] - 2025-04-18
 

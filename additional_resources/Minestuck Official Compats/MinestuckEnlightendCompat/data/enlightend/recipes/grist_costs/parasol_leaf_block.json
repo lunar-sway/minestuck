@@ -1,0 +1,10 @@
+{
+  "type": "minestuck:grist_cost",
+  "grist_cost": {
+    "minestuck:shale": 5,
+    "minestuck:cobalt": 5
+  },
+  "ingredient": {
+    "item": "enlightened_end:parasol_leaf_block"
+  }
+}

@@ -233,6 +233,7 @@ public class MSTags
 		
 		// Skaia
 		public static final TagKey<Biome> HAS_SKAIA_CASTLE = tag("has_structure/skaia_castle");
+		public static final TagKey<Biome> HAS_SKAIAN_CATHEDRAL = tag("has_structure/skaian_cathedral");
 		
 		private static TagKey<Biome> tag(String name)
 		{

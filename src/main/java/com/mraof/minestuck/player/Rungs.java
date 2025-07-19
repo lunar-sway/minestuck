@@ -130,6 +130,23 @@ public class Rungs
 		return RUNGS.size() - 1;
 	}
 	
+	public static int getMaxAttainableRung(ServerPlayer serverPlayer)
+	{
+		int maxRung = 0;
+		
+		for(Rung rung : RUNGS)
+		{
+			Optional<Rung.RungCondition> rungCondition = rung.rungCondition();
+			
+			if(rungCondition.isPresent() && !rungCondition.get().canInitiateRung(serverPlayer))
+				break; //stop iterating maxRung when obstruction is met
+			
+			maxRung++;
+		}
+		
+		return maxRung;
+	}
+	
 	public List<Rung> getRungs()
 	{
 		return RUNGS;
@@ -251,7 +268,7 @@ public class Rungs
 		List<Rung.DisplayData> rungList = RUNGS.stream().map(rung -> {
 			Rung.DisplayAttributes attributes = new Rung.DisplayAttributes(getAttributeAmount(rung.rung(), RungsProvider.DAMAGE_BOOST_ID), getAttributeAmount(rung.rung(), RungsProvider.HEALTH_BOOST_ID),
 					1D + getAttributeAmount(rung.rung(), RungsProvider.UNDERLING_DAMAGE_ID), 1D + getAttributeAmount(rung.rung(), RungsProvider.UNDERLING_PROTECTION_ID));
-					return new Rung.DisplayData(rung.backgroundColor(), rung.textColor(), rung.gristCapacity(), attributes);
+					return new Rung.DisplayData(rung.backgroundColor(), rung.textColor(), rung.gristCapacity(), rung.rungCondition().map(Rung.RungCondition::description), attributes);
 				}
 		).toList();
 		return new RungDisplayDataPacket(rungList);

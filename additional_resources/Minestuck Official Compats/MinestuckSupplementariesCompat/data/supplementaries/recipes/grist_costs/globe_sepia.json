@@ -1,0 +1,11 @@
+{
+  "type": "minestuck:grist_cost",
+  "grist_cost": {
+    "minestuck:build": 900,
+    "minestuck:rust": 100,
+    "minestuck:gold": 10
+  },
+  "ingredient": {
+    "item": "supplementaries:globe_sepia"
+  }
+}

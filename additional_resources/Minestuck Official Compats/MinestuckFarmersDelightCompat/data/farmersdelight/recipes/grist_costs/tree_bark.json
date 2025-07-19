@@ -1,0 +1,7 @@
+{
+  "type": "minestuck:wildcard_grist_cost",
+  "grist_cost": 20,
+  "ingredient": {
+    "item": "farmersdelight:tree_bark"
+  }
+}

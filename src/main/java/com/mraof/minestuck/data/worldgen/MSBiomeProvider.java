@@ -20,7 +20,7 @@ public final class MSBiomeProvider
 	{
 		HolderGetter<PlacedFeature> features = context.lookup(Registries.PLACED_FEATURE);
 		
-		context.register(MSBiomes.SKAIA, skaiaBiome());
+		context.register(MSBiomes.SKAIA, skaiaBiome(features));
 		context.register(MSBiomes.PROSPIT, prospitBiome());
 		context.register(MSBiomes.DERSE, derseBiome());
 		context.register(MSBiomes.VEIL, veilBiome(features));
@@ -38,7 +38,7 @@ public final class MSBiomeProvider
 		MSBiomes.SNOW_LAND.createForDataGen(context);
 	}
 	
-	private static Biome skaiaBiome()
+	private static Biome skaiaBiome(HolderGetter<PlacedFeature> features)
 	{
 		MobSpawnSettings.Builder spawnInfo = new MobSpawnSettings.Builder();
 		spawnInfo.addSpawn(MobCategory.MONSTER, new MobSpawnSettings.SpawnerData(MSEntityTypes.DERSITE_PAWN.get(), 2, 1, 10));
@@ -52,6 +52,8 @@ public final class MSBiomeProvider
 		
 		BiomeSpecialEffects.Builder ambience = new BiomeSpecialEffects.Builder().waterColor(0x3F76E4).waterFogColor(0x050533);
 		ambience.fogColor(0xCDCDFF).skyColor(0x7AA4FF);
+		
+		genSettings.addFeature(GenerationStep.Decoration.SURFACE_STRUCTURES, features.getOrThrow(MSPlacedFeatures.ROOK_OUTPOST));
 		
 		return new Biome.BiomeBuilder().hasPrecipitation(false).temperature(0.5F).downfall(0.5F).specialEffects(ambience.build()).mobSpawnSettings(spawnInfo.build()).generationSettings(genSettings.build()).build();
 	}

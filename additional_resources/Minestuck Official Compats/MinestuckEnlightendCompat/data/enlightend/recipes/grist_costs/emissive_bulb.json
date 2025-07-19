@@ -1,0 +1,10 @@
+{
+  "type": "minestuck:grist_cost",
+  "grist_cost": {
+    "minestuck:caulk": 6,
+    "minestuck:uranium": 2
+  },
+  "ingredient": {
+    "item": "enlightened_end:emissive_bulb"
+  }
+}

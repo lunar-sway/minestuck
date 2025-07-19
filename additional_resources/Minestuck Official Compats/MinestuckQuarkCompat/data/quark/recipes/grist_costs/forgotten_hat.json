@@ -1,0 +1,11 @@
+{
+  "type": "minestuck:grist_cost",
+  "grist_cost": {
+    "minestuck:mercury": 500,
+    "minestuck:shale": 500,
+    "minestuck:chalk": 500
+  },
+  "ingredient": {
+    "item": "quark:forgotten_hat"
+  }
+}

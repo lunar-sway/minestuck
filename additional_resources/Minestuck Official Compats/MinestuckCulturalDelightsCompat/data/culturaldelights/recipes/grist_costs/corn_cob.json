@@ -1,0 +1,10 @@
+{
+  "type": "minestuck:grist_cost",
+  "grist_cost": {
+    "minestuck:sulfur": 1,
+    "minestuck:amber": 3
+  },
+  "ingredient": {
+    "item": "culturaldelights:corn_cob"
+  }
+}
