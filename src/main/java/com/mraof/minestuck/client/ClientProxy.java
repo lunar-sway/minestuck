@@ -125,6 +125,7 @@ public class ClientProxy
 		ProgramGui.Registry.register(ProgramTypes.SBURB_SERVER, SburbServerGui::new);
 		ProgramGui.Registry.register(ProgramTypes.DISK_BURNER, DiskBurnerGui::new);
 		ProgramGui.Registry.register(ProgramTypes.SETTINGS, SettingsAppGui::new);
+		ProgramGui.Registry.register(ProgramTypes.GRIST_TORRENT, GristTorrentGui::new);
 		
 		registerArmorModels();
 		

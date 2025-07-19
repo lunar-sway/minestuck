@@ -2,6 +2,7 @@ package com.mraof.minestuck.alchemy;
 
 import com.mraof.minestuck.Minestuck;
 import com.mraof.minestuck.api.alchemy.*;
+import com.mraof.minestuck.network.GutterUpdatePacket;
 import com.mraof.minestuck.player.*;
 import com.mraof.minestuck.skaianet.SburbPlayerData;
 import com.mraof.minestuck.skaianet.Session;
@@ -16,6 +17,7 @@ import net.minecraft.util.RandomSource;
 import net.neoforged.bus.api.SubscribeEvent;
 import net.neoforged.fml.common.EventBusSubscriber;
 import net.neoforged.neoforge.event.tick.ServerTickEvent;
+import net.neoforged.neoforge.network.PacketDistributor;
 import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.Logger;
 
@@ -196,6 +198,10 @@ public class GristGutter
 		GristSet remainder = gristCache.addWithinCapacity(gristToTransfer, null);
 		if(!remainder.isEmpty())
 			throw new IllegalStateException("Took more grist than could be given to the player. Got back grist: " + remainder);
+		
+		ServerPlayer serverPlayer = player.getPlayer(mcServer);
+		if(serverPlayer != null)
+			PacketDistributor.sendToPlayer(serverPlayer, new GutterUpdatePacket(this.gristSet.asImmutable(), this.getRemainingCapacity()));
 	}
 	
 	private double getDistributionRateModifier()

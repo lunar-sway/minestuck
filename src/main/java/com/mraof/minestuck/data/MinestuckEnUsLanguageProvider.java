@@ -1559,6 +1559,7 @@ public class MinestuckEnUsLanguageProvider extends MinestuckLanguageProvider
 		addItemTooltip(MSItems.BLANK_DISK, "Can be put into a computer, has space to write a program on to it.");
 		addItem(MSItems.CLIENT_DISK, "SBURB Client Disk");
 		addItem(MSItems.SERVER_DISK, "SBURB Server Disk");
+		addItem(MSItems.TORRENT_DISK, "GristTorrent Disk");
 		addItem(MSItems.CAPTCHA_CARD, "Captchalogue Card");
 		addItemExtra(MSItems.CAPTCHA_CARD, "empty", "Empty");
 		addItemExtra(MSItems.CAPTCHA_CARD, "invalid", "Invalid Data");
@@ -2404,6 +2405,8 @@ public class MinestuckEnUsLanguageProvider extends MinestuckLanguageProvider
 		add(SettingsAppGui.THEME, "Choose Theme");
 		add(SettingsAppGui.DISK_MANAGER, "Disk Manager");
 		add(SettingsAppGui.TITLE, "Sburb Settings");
+		add(GristTorrentGui.NAME, "Grist Torrent");
+		add(GristTorrentGui.TITLE, "Grist Torrent");
 		
 		add(EntryProcess.WRONG_DIMENSION, "Entry not permitted from this dimension");
 		add(EntryProcess.BUSY, "Someone else is already entering");
