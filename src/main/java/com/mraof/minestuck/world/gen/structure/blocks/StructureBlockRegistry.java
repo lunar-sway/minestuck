@@ -207,9 +207,9 @@ public final class StructureBlockRegistry
 		registerBlock(STRUCTURE_PLANKS_STAIRS, STRUCTURE_PLANKS, Blocks.OAK_STAIRS);
 		registerBlock(STRUCTURE_PLANKS_SLAB, STRUCTURE_PLANKS, Blocks.OAK_SLAB);
 		registerBlock(STRUCTURE_PLANKS_FENCE, STRUCTURE_PLANKS, Blocks.OAK_FENCE);
+		registerBlock(STRUCTURE_PLANKS_TRAPDOOR, Blocks.OAK_TRAPDOOR.defaultBlockState());
 		registerEmptyFallbackBlock(STRUCTURE_PLANKS_FENCE_GATE, Blocks.OAK_FENCE_GATE);
 		registerEmptyFallbackBlock(STRUCTURE_PLANKS_DOOR, Blocks.OAK_DOOR, DoorBlock.class);
-		registerEmptyFallbackBlock(STRUCTURE_PLANKS_TRAPDOOR, Blocks.OAK_TRAPDOOR);
 		
 		registerBlock(STRUCTURE_WOOL_1, Blocks.WHITE_WOOL.defaultBlockState());
 		registerBlock(STRUCTURE_WOOL_2, Blocks.LIGHT_GRAY_WOOL.defaultBlockState());
