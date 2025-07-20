@@ -180,9 +180,9 @@ public final class StructureBlockRegistry
 		registerBlock(STRUCTURE_PRIMARY, Blocks.STONE_BRICKS.defaultBlockState());
 		registerBlock(STRUCTURE_PRIMARY_DECORATIVE, STRUCTURE_PRIMARY, Blocks.CHISELED_STONE_BRICKS);
 		registerBlock(STRUCTURE_PRIMARY_CRACKED, STRUCTURE_PRIMARY, Blocks.CRACKED_STONE_BRICKS);
-		registerBlock(STRUCTURE_PRIMARY_COLUMN, STRUCTURE_PRIMARY, MSBlocks.COARSE_STONE_COLUMN.get()); //TODO change to quartz column, determine if used anywhere currently
+		registerBlock(STRUCTURE_PRIMARY_COLUMN, STRUCTURE_PRIMARY_DECORATIVE, MSBlocks.COARSE_STONE_COLUMN.get());
 		registerBlock(STRUCTURE_PRIMARY_STAIRS, STRUCTURE_PRIMARY, Blocks.STONE_BRICK_STAIRS);
-		registerBlock(STRUCTURE_PRIMARY_SLAB, STRUCTURE_PRIMARY, Blocks.STONE_BRICK_SLAB); //TODO when using SlabBlock class param "The class specified must be the same or a superclass to the class used by the parent "structure_primary""
+		registerBlock(STRUCTURE_PRIMARY_SLAB, STRUCTURE_PRIMARY, Blocks.STONE_BRICK_SLAB);
 		registerBlock(STRUCTURE_PRIMARY_WALL, STRUCTURE_PRIMARY, Blocks.STONE_BRICK_WALL);
 		
 		//TODO consider renaming mossy to something more neutral like contaminated or overgrown
