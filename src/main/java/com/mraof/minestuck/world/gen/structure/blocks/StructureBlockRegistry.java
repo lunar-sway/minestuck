@@ -205,8 +205,8 @@ public final class StructureBlockRegistry
 		registerBlock(STRUCTURE_PLANKS, Blocks.OAK_PLANKS.defaultBlockState());
 		registerBlock(STRUCTURE_BOOKSHELF, Blocks.BOOKSHELF.defaultBlockState());
 		registerBlock(STRUCTURE_PLANKS_STAIRS, STRUCTURE_PLANKS, Blocks.OAK_STAIRS);
-		registerBlock(STRUCTURE_PLANKS_SLAB, STRUCTURE_PLANKS, Blocks.OAK_SLAB);
-		registerBlock(STRUCTURE_PLANKS_FENCE, STRUCTURE_PLANKS, Blocks.OAK_FENCE);
+		registerBlock(STRUCTURE_PLANKS_SLAB, Blocks.OAK_SLAB.defaultBlockState());
+		registerBlock(STRUCTURE_PLANKS_FENCE, Blocks.OAK_FENCE.defaultBlockState());
 		registerBlock(STRUCTURE_PLANKS_TRAPDOOR, Blocks.OAK_TRAPDOOR.defaultBlockState());
 		registerEmptyFallbackBlock(STRUCTURE_PLANKS_FENCE_GATE, Blocks.OAK_FENCE_GATE);
 		registerEmptyFallbackBlock(STRUCTURE_PLANKS_DOOR, Blocks.OAK_DOOR, DoorBlock.class);
