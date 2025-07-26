@@ -182,7 +182,7 @@ public final class StructureBlockRegistry
 		registerBlock(STRUCTURE_PRIMARY_CRACKED, STRUCTURE_PRIMARY, Blocks.CRACKED_STONE_BRICKS);
 		registerBlock(STRUCTURE_PRIMARY_COLUMN, STRUCTURE_PRIMARY, MSBlocks.COARSE_STONE_COLUMN.get()); //TODO change to quartz column, determine if used anywhere currently
 		registerBlock(STRUCTURE_PRIMARY_STAIRS, STRUCTURE_PRIMARY, Blocks.STONE_BRICK_STAIRS);
-		registerBlock(STRUCTURE_PRIMARY_SLAB, STRUCTURE_PRIMARY, Blocks.STONE_BRICK_SLAB); //TODO when using SlabBlock class param "The class specified must be the same or a superclass to the class used by the parent "structure_primary""
+		registerBlock(STRUCTURE_PRIMARY_SLAB, STRUCTURE_PRIMARY, Blocks.STONE_BRICK_SLAB);
 		registerBlock(STRUCTURE_PRIMARY_WALL, STRUCTURE_PRIMARY, Blocks.STONE_BRICK_WALL);
 		
 		//TODO consider renaming mossy to something more neutral like contaminated or overgrown
@@ -205,11 +205,11 @@ public final class StructureBlockRegistry
 		registerBlock(STRUCTURE_PLANKS, Blocks.OAK_PLANKS.defaultBlockState());
 		registerBlock(STRUCTURE_BOOKSHELF, Blocks.BOOKSHELF.defaultBlockState());
 		registerBlock(STRUCTURE_PLANKS_STAIRS, STRUCTURE_PLANKS, Blocks.OAK_STAIRS);
-		registerBlock(STRUCTURE_PLANKS_SLAB, STRUCTURE_PLANKS, Blocks.OAK_SLAB);
-		registerBlock(STRUCTURE_PLANKS_FENCE, STRUCTURE_PLANKS, Blocks.OAK_FENCE);
+		registerBlock(STRUCTURE_PLANKS_SLAB, Blocks.OAK_SLAB.defaultBlockState());
+		registerBlock(STRUCTURE_PLANKS_FENCE, Blocks.OAK_FENCE.defaultBlockState());
+		registerBlock(STRUCTURE_PLANKS_TRAPDOOR, Blocks.OAK_TRAPDOOR.defaultBlockState());
 		registerEmptyFallbackBlock(STRUCTURE_PLANKS_FENCE_GATE, Blocks.OAK_FENCE_GATE);
 		registerEmptyFallbackBlock(STRUCTURE_PLANKS_DOOR, Blocks.OAK_DOOR, DoorBlock.class);
-		registerEmptyFallbackBlock(STRUCTURE_PLANKS_TRAPDOOR, Blocks.OAK_TRAPDOOR);
 		
 		registerBlock(STRUCTURE_WOOL_1, Blocks.WHITE_WOOL.defaultBlockState());
 		registerBlock(STRUCTURE_WOOL_2, Blocks.LIGHT_GRAY_WOOL.defaultBlockState());
