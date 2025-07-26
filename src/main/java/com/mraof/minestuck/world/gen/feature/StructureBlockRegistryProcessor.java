@@ -5,6 +5,7 @@ import com.mraof.minestuck.world.gen.structure.blocks.StructureBlockRegistry;
 import net.minecraft.MethodsReturnNonnullByDefault;
 import net.minecraft.core.BlockPos;
 import net.minecraft.server.level.ServerLevel;
+import net.minecraft.world.level.LevelReader;
 import net.minecraft.world.level.ServerLevelAccessor;
 import net.minecraft.world.level.block.Blocks;
 import net.minecraft.world.level.block.state.BlockState;
@@ -29,6 +30,13 @@ public final class StructureBlockRegistryProcessor extends StructureProcessor
 	}
 	
 	@Override
+	public StructureTemplate.StructureEntityInfo processEntity(LevelReader world, BlockPos seedPos, StructureTemplate.StructureEntityInfo rawEntityInfo, StructureTemplate.StructureEntityInfo entityInfo, StructurePlaceSettings placementSettings, StructureTemplate template)
+	{
+		
+		return super.processEntity(world, seedPos, rawEntityInfo, entityInfo, placementSettings, template);
+	}
+	
+	@Override
 	public List<StructureTemplate.StructureBlockInfo> finalizeProcessing(ServerLevelAccessor levelAccessor, BlockPos pOffset, BlockPos pPos, List<StructureTemplate.StructureBlockInfo> originals, List<StructureTemplate.StructureBlockInfo> currents, StructurePlaceSettings placementSettings)
 	{
 		ServerLevel serverLevel = levelAccessor.getLevel();
@@ -40,8 +48,8 @@ public final class StructureBlockRegistryProcessor extends StructureProcessor
 			StructureTemplate.StructureBlockInfo original = originals.get(i);
 			StructureTemplate.StructureBlockInfo current = currents.get(i);
 			
-			//blocks can be skipped past if it has already been changed so long as it was not first a jigsaw block
-			if(original.state() != current.state() && !original.state().is(Blocks.JIGSAW))
+			//avoids processing liquid in bucket feature
+			if(original.state().is(Blocks.BLUE_STAINED_GLASS))
 				continue;
 			
 			BlockState newState = blockRegistry.getTemplateState(current.state());
