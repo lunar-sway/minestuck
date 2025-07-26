@@ -40,8 +40,8 @@ public final class StructureBlockRegistryProcessor extends StructureProcessor
 			StructureTemplate.StructureBlockInfo original = originals.get(i);
 			StructureTemplate.StructureBlockInfo current = currents.get(i);
 			
-			//blocks can be skipped past if it has already been changed so long as it was not first a jigsaw block
-			if(original.state() != current.state() && !original.state().is(Blocks.JIGSAW))
+			//avoids processing liquid in bucket feature
+			if(original.state().is(Blocks.BLUE_STAINED_GLASS))
 				continue;
 			
 			BlockState newState = blockRegistry.getTemplateState(current.state());
