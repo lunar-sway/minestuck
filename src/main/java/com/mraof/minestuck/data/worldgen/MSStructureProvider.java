@@ -2,15 +2,12 @@ package com.mraof.minestuck.data.worldgen;
 
 import com.mraof.minestuck.Minestuck;
 import com.mraof.minestuck.util.MSTags;
-import com.mraof.minestuck.world.biome.MSBiomes;
 import com.mraof.minestuck.world.gen.structure.*;
 import com.mraof.minestuck.world.gen.structure.castle.CastleStructure;
 import com.mraof.minestuck.world.gen.structure.gate.GateStructure;
 import com.mraof.minestuck.world.gen.structure.gate.LandGatePlacement;
 import com.mraof.minestuck.world.gen.structure.village.ConsortVillageStructure;
-import com.mraof.minestuck.world.gen.structure.wfc.ProspitWFCDemoStructure;
 import net.minecraft.core.HolderGetter;
-import net.minecraft.core.HolderSet;
 import net.minecraft.core.registries.Registries;
 import net.minecraft.data.worldgen.BootstrapContext;
 import net.minecraft.resources.ResourceKey;
@@ -73,10 +70,6 @@ public final class MSStructureProvider
 				Map.of(), GenerationStep.Decoration.SURFACE_STRUCTURES, TerrainAdjustment.NONE), pools.getOrThrow(ResourceKey.create(Registries.TEMPLATE_POOL,
 				Minestuck.id("skaian_cathedral/front"))), 7, ConstantHeight.of(VerticalAnchor.absolute(-6)),
 				false, Heightmap.Types.WORLD_SURFACE_WG));
-		
-		context.register(ProspitWFCDemoStructure.STRUCTURE, new ProspitWFCDemoStructure.TerrainStructure(
-				new Structure.StructureSettings(HolderSet.direct(biomes.getOrThrow(MSBiomes.PROSPIT_WFC_DEMO)),
-						Map.of(), GenerationStep.Decoration.SURFACE_STRUCTURES, TerrainAdjustment.NONE)));
 	}
 	
 	public static void registerStructureSets(BootstrapContext<StructureSet> context)
@@ -97,9 +90,6 @@ public final class MSStructureProvider
 		
 		context.register(key("skaian_cathedral"), new StructureSet(structures.getOrThrow(SKAIAN_CATHEDRAL),
 				new RandomSpreadStructurePlacement(40, 10, RandomSpreadType.LINEAR, 1481098009)));
-		
-		context.register(key("prospit_wfc_demo"), new StructureSet(structures.getOrThrow(ProspitWFCDemoStructure.STRUCTURE),
-				new ProspitWFCDemoStructure.FixedPlacement()));
 	}
 	
 	private static JigsawStructure jigsaw(HolderGetter<Biome> biomes, HolderGetter<StructureTemplatePool> templatePools, TagKey<Biome> biome, ResourceKey<StructureTemplatePool> startPool)

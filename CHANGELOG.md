@@ -20,6 +20,8 @@ The format is based on [Keep a Changelog](https://keepachangelog.com/en/1.1.0/).
 - Stack and Queue modi have more distinct recipes
 - Farmine break blacklist is now controlled by the `minestuck:farmine_break_blacklist` block tag, instead of being hardcoded
 - Disabled Skaian Castle structure
+- Moved `prospit_wfc_demo` dimension and related wfc examples to `additional_resources` datapack
+- Disabled `wfc_performance_test` command
 - Reduced imp dungeon generation frequency
 - Imp dungeons will not spawn near villages
 
@@ -40,6 +42,7 @@ The format is based on [Keep a Changelog](https://keepachangelog.com/en/1.1.0/).
 - Add back song description for cassette items
 - Fix hover area for some tooltip in the echeladder screen
 - Removed Refined Storage compatibility feature that was not compatible with Refined Storage 2
+- Improve land skybox performance
 
 ### Removed
 
