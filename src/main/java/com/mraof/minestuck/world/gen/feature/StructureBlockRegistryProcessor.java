@@ -5,6 +5,7 @@ import com.mraof.minestuck.world.gen.structure.blocks.StructureBlockRegistry;
 import net.minecraft.MethodsReturnNonnullByDefault;
 import net.minecraft.core.BlockPos;
 import net.minecraft.server.level.ServerLevel;
+import net.minecraft.world.level.LevelReader;
 import net.minecraft.world.level.ServerLevelAccessor;
 import net.minecraft.world.level.block.Blocks;
 import net.minecraft.world.level.block.state.BlockState;
@@ -26,6 +27,13 @@ public final class StructureBlockRegistryProcessor extends StructureProcessor
 	
 	private StructureBlockRegistryProcessor()
 	{
+	}
+	
+	@Override
+	public StructureTemplate.StructureEntityInfo processEntity(LevelReader world, BlockPos seedPos, StructureTemplate.StructureEntityInfo rawEntityInfo, StructureTemplate.StructureEntityInfo entityInfo, StructurePlaceSettings placementSettings, StructureTemplate template)
+	{
+		
+		return super.processEntity(world, seedPos, rawEntityInfo, entityInfo, placementSettings, template);
 	}
 	
 	@Override
