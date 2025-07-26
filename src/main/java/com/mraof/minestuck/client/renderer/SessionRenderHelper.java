@@ -41,6 +41,10 @@ public final class SessionRenderHelper
 		TextureAtlasSprite sprite = LandSkySpriteUploader.getInstance().getMeteorSprite();
 		Random random = new Random(10842L);
 		
+		RenderSystem.setShaderTexture(0, sprite.atlasLocation());
+		RenderSystem.setShader(GameRenderer::getPositionTexShader);
+		BufferBuilder buffer = Tesselator.getInstance().begin(VertexFormat.Mode.QUADS, DefaultVertexFormat.POSITION_TEX);
+		
 		for(int count = 0; count < 1500; count++)
 		{
 			poseStack.pushPose();
@@ -52,9 +56,15 @@ public final class SessionRenderHelper
 			poseStack.mulPose(Axis.YP.rotationDegrees((float) (random.nextGaussian()))); //Y axis offset from radius of ring for 3D effect
 			Matrix4f matrix = poseStack.last().pose();
 			
-			drawSprite(matrix, size, sprite);
+			buffer.addVertex(matrix, -size, 100, -size).setUv(sprite.getU0(), sprite.getV0());
+			buffer.addVertex(matrix, size, 100, -size).setUv(sprite.getU1(), sprite.getV0());
+			buffer.addVertex(matrix, size, 100, size).setUv(sprite.getU1(), sprite.getV1());
+			buffer.addVertex(matrix, -size, 100, size).setUv(sprite.getU0(), sprite.getV1());
 			poseStack.popPose();
 		}
+		
+		// Draw all meteors in one batch for better performance than with drawSprite()
+		BufferUploader.drawWithShader(buffer.buildOrThrow());
 	}
 	
 	public static void drawRotatingSkaia(PoseStack poseStack, ClientLevel level, float skaiaSize)
