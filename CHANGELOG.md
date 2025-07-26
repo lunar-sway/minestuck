@@ -19,6 +19,8 @@ The format is based on [Keep a Changelog](https://keepachangelog.com/en/1.1.0/).
 - Stack and Queue modi have more distinct recipes
 - Farmine break blacklist is now controlled by the `minestuck:farmine_break_blacklist` block tag, instead of being hardcoded
 - Disabled Skaian Castle structure
+- Moved `prospit_wfc_demo` dimension and related wfc examples to `additional_resources` datapack
+- Disabled `wfc_performance_test` command
 
 ### Fixed
 
