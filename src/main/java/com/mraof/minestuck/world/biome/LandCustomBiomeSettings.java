@@ -109,7 +109,7 @@ public final class LandCustomBiomeSettings
 						CountPlacement.of(uraniumVeinsPerChunk), InSquarePlacement.spread(), HeightRangePlacement.triangle(VerticalAnchor.aboveBottom(uraniumStratumMinAboveBottom), VerticalAnchor.aboveBottom(uraniumStratumMaxAboveBottom)), BiomeFilter.biome()),
 				LandBiomeType.any());
 		
-		landTypes.getTerrain().addBiomeGeneration(builder, blocks);
+		//landTypes.getTerrain().addBiomeGeneration(builder, blocks);
 		landTypes.getTitle().addBiomeGeneration(builder, blocks, landTypes.getTerrain().getBiomeSet());
 		
 		extensions.addBiomeGenExtensions(builder, landTypes);

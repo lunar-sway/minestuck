@@ -59,6 +59,8 @@ public final class MinestuckData
 		gen.addProvider(event.includeServer(), new MSLootModifiers(output, event.getLookupProvider()));
 		gen.addProvider(event.includeServer(), MSAdvancementProvider.create(output, lookupProvider, fileHelper));
 		
+		gen.addProvider(event.includeServer(), new MSLandTypeExtensionProvider(output));
+		
 		gen.addProvider(event.includeServer(), new StartingModusProvider(output, Minestuck.MOD_ID));
 		gen.addProvider(event.includeServer(), new EcheladderExpSourceProvider(output));
 		gen.addProvider(event.includeServer(), new RungsProvider(output));

@@ -3,8 +3,8 @@ package com.mraof.minestuck.world.lands.terrain;
 import com.mojang.serialization.Codec;
 import com.mraof.minestuck.entity.consort.ConsortEntity;
 import com.mraof.minestuck.util.MSSoundEvents;
-import com.mraof.minestuck.util.MSTags;
 import com.mraof.minestuck.world.biome.LandBiomeSetType;
+import com.mraof.minestuck.world.biome.LandBiomeType;
 import com.mraof.minestuck.world.biome.MSBiomes;
 import com.mraof.minestuck.world.gen.structure.MSStructures;
 import com.mraof.minestuck.world.gen.structure.blocks.StructureBlockRegistry;
@@ -13,6 +13,7 @@ import com.mraof.minestuck.world.lands.LandBiomeGenBuilder;
 import com.mraof.minestuck.world.lands.LandTypeExtensions;
 import com.mraof.minestuck.world.lands.LandTypeExtensions.StructureSetExtension;
 import com.mraof.minestuck.world.lands.LandTypes;
+import net.minecraft.core.Holder;
 import net.minecraft.core.HolderGetter;
 import net.minecraft.core.HolderSet;
 import net.minecraft.network.RegistryFriendlyByteBuf;
@@ -22,22 +23,24 @@ import net.minecraft.resources.ResourceKey;
 import net.minecraft.sounds.SoundEvent;
 import net.minecraft.tags.TagKey;
 import net.minecraft.world.entity.EntityType;
-import net.minecraft.world.entity.animal.Cod;
 import net.minecraft.world.level.biome.Biome;
+import net.minecraft.world.level.levelgen.GenerationStep;
 import net.minecraft.world.level.levelgen.SurfaceRules;
+import net.minecraft.world.level.levelgen.placement.PlacedFeature;
 import net.minecraft.world.level.levelgen.structure.Structure;
 import net.minecraft.world.level.levelgen.structure.StructureSet;
 import net.minecraft.world.level.levelgen.structure.placement.RandomSpreadStructurePlacement;
 import net.minecraft.world.level.levelgen.structure.placement.RandomSpreadType;
 import net.minecraft.world.phys.Vec3;
+import org.apache.logging.log4j.LogManager;
+import org.apache.logging.log4j.Logger;
 
+import java.util.ArrayList;
+import java.util.Arrays;
 import java.util.List;
 import java.util.Objects;
 import java.util.function.Consumer;
 import java.util.function.Supplier;
-
-import org.apache.logging.log4j.LogManager;
-import org.apache.logging.log4j.Logger;
 
 /**
  * Base class for land types that make up the base of a land.
@@ -57,6 +60,11 @@ public abstract class TerrainLandType implements ILandType
 	private final Supplier<? extends EntityType<? extends ConsortEntity>> consortType;
 	private final float skylightBase;
 	private final Vec3 fogColor, skyColor;
+	
+	private LandTypeExtensions.ParsedExtension extensions;
+	private final List<LandTypeExtensions.FeatureExtension> featureExtensions = new ArrayList<>();
+	
+	private StructureBlockRegistry blocks;
 	
 	private final LandBiomeSetType biomeSet;
 	private final Supplier<SoundEvent> backgroundMusic;
@@ -127,7 +135,29 @@ public abstract class TerrainLandType implements ILandType
 	}
 	
 	public void addBiomeGeneration(LandBiomeGenBuilder builder, StructureBlockRegistry blocks)
-	{}
+	{
+	}
+	
+	public void addExtensions(StructureBlockRegistry blocks)
+	{
+	}
+	
+	public void addFeatureExtension(GenerationStep.Decoration step, ResourceKey<PlacedFeature> feature, LandBiomeType... biomeTypes)
+	{
+		//NeoForgeRegistries.Keys(NeoForgeRegistries.HOLDER_SET_TYPES.)
+		//addFeatureExtension(step, feature, biomeTypes);
+	}
+	
+	public void addFeatureExtension(GenerationStep.Decoration step, PlacedFeature feature, LandBiomeType... biomeTypes)
+	{
+		featureExtensions.add(new LandTypeExtensions.FeatureExtension(step, Holder.direct(feature), Arrays.stream(biomeTypes).toList()));
+	}
+	
+	public LandTypeExtensions.ParsedExtension getExtensions(StructureBlockRegistry blocks)
+	{
+		addExtensions(blocks);
+		return new LandTypeExtensions.ParsedExtension(featureExtensions, List.of(), List.of(), List.of());
+	}
 	
 	@Override
 	public void addStructureSets(Consumer<StructureSet> consumer, HolderGetter<Structure> structureLookup)
