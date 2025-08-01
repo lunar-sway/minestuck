@@ -13,9 +13,7 @@ import com.mraof.minestuck.world.lands.LandBiomeGenBuilder;
 import com.mraof.minestuck.world.lands.LandTypeExtensions;
 import com.mraof.minestuck.world.lands.LandTypeExtensions.StructureSetExtension;
 import com.mraof.minestuck.world.lands.LandTypes;
-import net.minecraft.core.Holder;
-import net.minecraft.core.HolderGetter;
-import net.minecraft.core.HolderSet;
+import net.minecraft.core.*;
 import net.minecraft.network.RegistryFriendlyByteBuf;
 import net.minecraft.network.codec.ByteBufCodecs;
 import net.minecraft.network.codec.StreamCodec;
@@ -63,8 +61,6 @@ public abstract class TerrainLandType implements ILandType
 	
 	private LandTypeExtensions.ParsedExtension extensions;
 	private final List<LandTypeExtensions.FeatureExtension> featureExtensions = new ArrayList<>();
-	
-	private StructureBlockRegistry blocks;
 	
 	private final LandBiomeSetType biomeSet;
 	private final Supplier<SoundEvent> backgroundMusic;
@@ -138,14 +134,24 @@ public abstract class TerrainLandType implements ILandType
 	{
 	}
 	
-	public void addExtensions(StructureBlockRegistry blocks)
+	public void addExtensions(Registry<PlacedFeature> features, StructureBlockRegistry blocks)
 	{
 	}
 	
-	public void addFeatureExtension(GenerationStep.Decoration step, ResourceKey<PlacedFeature> feature, LandBiomeType... biomeTypes)
+	public void addFeatureExtension(Registry<PlacedFeature> features, GenerationStep.Decoration step, ResourceKey<PlacedFeature> feature, LandBiomeType... biomeTypes)
 	{
-		//NeoForgeRegistries.Keys(NeoForgeRegistries.HOLDER_SET_TYPES.)
-		//addFeatureExtension(step, feature, biomeTypes);
+		//Holder<PlacedFeature> featureHolder = featureLookup.get(feature).orElseThrow().getDelegate();
+		//featureExtensions.add(new LandTypeExtensions.FeatureExtension(step, featureHolder, Arrays.stream(biomeTypes).toList()));
+		
+		//featureExtensions.add(new LandTypeExtensions.FeatureExtension(step, Holder.direct(featureLookup.get(feature).orElseThrow().getDelegate().value()), Arrays.stream(biomeTypes).toList()));
+		
+		//Holder<PlacedFeature> featureHolder = featureLookup.get(feature).orElseThrow().getDelegate();
+		//featureExtensions.add(new LandTypeExtensions.FeatureExtension(step, featureHolder, Arrays.stream(biomeTypes).toList()));
+		
+		//featureExtensions.add(new LandTypeExtensions.FeatureExtension(step, features.getOrThrow(feature), Arrays.stream(biomeTypes).toList()));
+		
+		featureExtensions.add(new LandTypeExtensions.FeatureExtension(step, features.wrapAsHolder(features.getOrThrow(feature)), Arrays.stream(biomeTypes).toList()));
+		//regard'ess of approach, error line 73 in provider, java.lang.IllegalStateException: Can't access registry ResourceKey[minecraft:root / minecraft:block];
 	}
 	
 	public void addFeatureExtension(GenerationStep.Decoration step, PlacedFeature feature, LandBiomeType... biomeTypes)
@@ -153,9 +159,9 @@ public abstract class TerrainLandType implements ILandType
 		featureExtensions.add(new LandTypeExtensions.FeatureExtension(step, Holder.direct(feature), Arrays.stream(biomeTypes).toList()));
 	}
 	
-	public LandTypeExtensions.ParsedExtension getExtensions(StructureBlockRegistry blocks)
+	public LandTypeExtensions.ParsedExtension getExtensions(Registry<PlacedFeature> features, StructureBlockRegistry blocks)
 	{
-		addExtensions(blocks);
+		addExtensions(features, blocks);
 		return new LandTypeExtensions.ParsedExtension(featureExtensions, List.of(), List.of(), List.of());
 	}
 	

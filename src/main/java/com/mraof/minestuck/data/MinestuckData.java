@@ -59,8 +59,6 @@ public final class MinestuckData
 		gen.addProvider(event.includeServer(), new MSLootModifiers(output, event.getLookupProvider()));
 		gen.addProvider(event.includeServer(), MSAdvancementProvider.create(output, lookupProvider, fileHelper));
 		
-		gen.addProvider(event.includeServer(), new MSLandTypeExtensionProvider(output));
-		
 		gen.addProvider(event.includeServer(), new StartingModusProvider(output, Minestuck.MOD_ID));
 		gen.addProvider(event.includeServer(), new EcheladderExpSourceProvider(output));
 		gen.addProvider(event.includeServer(), new RungsProvider(output));
@@ -68,6 +66,8 @@ public final class MinestuckData
 		gen.addProvider(event.includeClient(), new MSBlockStateProvider(output, fileHelper));
 		gen.addProvider(event.includeClient(), new MinestuckItemModelProvider(output, fileHelper));
 		var enUsLanguageProvider = gen.addProvider(event.includeClient(), new MinestuckEnUsLanguageProvider(output));
+		
+		gen.addProvider(event.includeServer(), new MSLandTypeExtensionProvider(output, lookupProvider));
 		
 		gen.addProvider(event.includeServer(), ConsortDialogue.create(output, enUsLanguageProvider));
 		gen.addProvider(event.includeServer(), ShadyConsortDialogue.create(output, enUsLanguageProvider));
