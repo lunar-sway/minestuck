@@ -1,5 +1,7 @@
 package com.mraof.minestuck.data;
 
+import static com.mraof.minestuck.util.MSTags.Items.*;
+
 import com.mraof.minestuck.Minestuck;
 import com.mraof.minestuck.api.alchemy.GristAmount;
 import com.mraof.minestuck.api.alchemy.GristSet;
@@ -2587,5 +2589,15 @@ public class MinestuckEnUsLanguageProvider extends MinestuckLanguageProvider
 		addEntitySubtitles(MSEntityTypes.GICLOPS, "ambient", "Giclops wants to eat'cha");
 		addEntitySubtitles(MSEntityTypes.GICLOPS, "hurt", "Giclops hurts");
 		addEntitySubtitles(MSEntityTypes.GICLOPS, "death", "Giclops dies");
+		
+		add(GRIST_CANDY, "Grist Candies");
+		add(FAYGO, "Faygo Flavors");
+		add(MODUS_CARD, "Modus Cards");
+		add(CASSETTES, "Music Cassettes");
+		add(BUGS, "Bugs");
+		add(CONSORT_SNACKS, "Consort Snacks");
+		add(UNREADABLE, "Unreadable Captcha Codes");
+		add(LEGENDARY, "Legendary Weapons");
+		add(MAGIC_WEAPON, "Magic Weapons");
 	}
 }
