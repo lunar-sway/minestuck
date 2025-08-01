@@ -2596,7 +2596,7 @@ public class MinestuckEnUsLanguageProvider extends MinestuckLanguageProvider
 		add(CASSETTES, "Music Cassettes");
 		add(BUGS, "Bugs");
 		add(CONSORT_SNACKS, "Consort Snacks");
-		add(UNREADABLE, "Unreadable Captcha Code");
+		add(UNREADABLE, "Unreadable Captcha Codes");
 		add(LEGENDARY, "Legendary Weapons");
 		add(MAGIC_WEAPON, "Magic Weapons");
 	}
