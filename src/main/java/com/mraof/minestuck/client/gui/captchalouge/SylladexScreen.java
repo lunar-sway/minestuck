@@ -143,9 +143,10 @@ public abstract class SylladexScreen extends Screen
 	}
 	
 	@Override
-	protected void renderMenuBackground(GuiGraphics guiGraphics) {
+	protected void renderMenuBackground(GuiGraphics guiGraphics)
+	{
 		super.renderMenuBackground(guiGraphics);
-
+		
 		int xOffset = (width - GUI_WIDTH)/2;
 		int yOffset = (height - GUI_HEIGHT)/2;
 		
