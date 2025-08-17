@@ -73,7 +73,6 @@ import net.neoforged.neoforge.client.extensions.common.RegisterClientExtensionsE
 import net.neoforged.neoforge.registries.DeferredItem;
 import org.jetbrains.annotations.NotNull;
 import org.joml.Vector3f;
-import software.bernie.geckolib.renderer.GeoArmorRenderer;
 
 import javax.annotation.Nullable;
 import javax.annotation.ParametersAreNonnullByDefault;
@@ -306,23 +305,6 @@ public class ClientProxy
 				}
 			}, armorItem);
 		}
-		
-		event.registerItem(new IClientItemExtensions()
-		{
-			private GeoArmorRenderer<?> renderer;
-			
-			@Override
-			public @NotNull HumanoidModel<?> getHumanoidArmorModel(LivingEntity livingEntity, ItemStack itemStack, EquipmentSlot equipmentSlot, HumanoidModel<?> original)
-			{
-				if(this.renderer == null)
-					this.renderer = new GeoArmorRenderer<>(new IronLassArmorModel());
-				
-				Minecraft mc = Minecraft.getInstance();
-				this.renderer.prepForRender(livingEntity, itemStack, equipmentSlot, original, mc.renderBuffers().bufferSource(),
-						mc.getTimer().getGameTimeDeltaPartialTick(true), 0, 0, 0, 0);
-				return this.renderer;
-			}
-		}, MSItems.IRON_LASS_GLASSES, MSItems.IRON_LASS_CHESTPLATE, MSItems.IRON_LASS_SKIRT, MSItems.IRON_LASS_SHOES);
 	}
 	
 	private static IClientFluidTypeExtensions commonFluidExtension(ResourceLocation baseId, Vector3f fogColor, float fogDensity)
