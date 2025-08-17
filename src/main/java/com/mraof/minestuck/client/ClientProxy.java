@@ -315,23 +315,6 @@ public class ClientProxy
 			public @NotNull HumanoidModel<?> getHumanoidArmorModel(LivingEntity livingEntity, ItemStack itemStack, EquipmentSlot equipmentSlot, HumanoidModel<?> original)
 			{
 				if(this.renderer == null)
-					this.renderer = new GeoArmorRenderer<>(new PrismarineArmorModel());
-				
-				Minecraft mc = Minecraft.getInstance();
-				this.renderer.prepForRender(livingEntity, itemStack, equipmentSlot, original, mc.renderBuffers().bufferSource(),
-						mc.getTimer().getGameTimeDeltaPartialTick(true), 0, 0, 0, 0);
-				return this.renderer;
-			}
-		}, MSItems.PRISMARINE_HELMET, MSItems.PRISMARINE_CHESTPLATE, MSItems.PRISMARINE_LEGGINGS, MSItems.PRISMARINE_BOOTS);
-		
-		event.registerItem(new IClientItemExtensions()
-		{
-			private GeoArmorRenderer<?> renderer;
-			
-			@Override
-			public @NotNull HumanoidModel<?> getHumanoidArmorModel(LivingEntity livingEntity, ItemStack itemStack, EquipmentSlot equipmentSlot, HumanoidModel<?> original)
-			{
-				if(this.renderer == null)
 					this.renderer = new GeoArmorRenderer<>(new IronLassArmorModel());
 				
 				Minecraft mc = Minecraft.getInstance();
