@@ -55,8 +55,11 @@ public class CaptcharoidCameraItem extends Item
 				BlockState state = level.getBlockState(pos);
 				ItemStack block = state.getCloneItemStack(new BlockHitResult(context.getClickLocation(), facing, pos, inside), level, pos, player);
 				
-				player.getInventory().add(CaptchaCardItem.createGhostCard(block, serverLevel.getServer()));
-				context.getItemInHand().hurtAndBreak(1, player,  EquipmentSlot.MAINHAND);
+				if(!block.isEmpty())
+				{
+					player.getInventory().add(CaptchaCardItem.createGhostCard(block, serverLevel.getServer()));
+					context.getItemInHand().hurtAndBreak(1, player,  EquipmentSlot.MAINHAND);
+				}
 			}
 			return InteractionResult.PASS;
 		}

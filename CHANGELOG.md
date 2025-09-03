@@ -12,6 +12,7 @@ The format is based on [Keep a Changelog](https://keepachangelog.com/en/1.1.0/).
 
 ### Fixed
 
+- Fix Captcharoid Cameras crashing when used on blocks that do not have item counterparts
 - Empty Sylladex button being invisible
 - Fix Echeladder screen not displaying before Entry
 - Fix Prismarine and Iron Lass armors crashing when enchanted
