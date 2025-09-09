@@ -16,6 +16,7 @@ import net.minecraft.world.level.levelgen.structure.Structure;
 import net.minecraft.world.level.levelgen.structure.StructureType;
 import net.minecraft.world.level.levelgen.structure.pieces.StructurePieceType;
 import net.minecraft.world.level.levelgen.structure.placement.StructurePlacementType;
+import net.minecraft.world.level.levelgen.structure.pools.StructureTemplatePool;
 import net.neoforged.neoforge.registries.DeferredRegister;
 
 import java.util.function.Supplier;
@@ -38,6 +39,10 @@ public final class MSStructures
 	public static final Supplier<StructurePieceType>
 			FROG_TEMPLE_PIECE = PIECE_REGISTER.register("frog_temple", () -> contextless(FrogTemplePiece::new)),
 			FROG_TEMPLE_PILLAR_PIECE = PIECE_REGISTER.register("frog_temple/pillar", () -> contextless(FrogTemplePillarPiece::new));
+	
+	//Prospit
+	public static final ResourceKey<Structure> PROSPIT_DREAM_TOWER = key("prospit_dream_tower");
+	public static final ResourceKey<StructureTemplatePool> PROSPIT_DREAM_TOWER_START_POOL = templateKey("prospit/dream_tower/base");
 	
 	// Land
 	public static final Supplier<StructurePlacementType<LandGatePlacement>> LAND_GATE_PLACEMENT =
@@ -187,7 +192,12 @@ public final class MSStructures
 	
 	private static ResourceKey<Structure> key(String name)
 	{
-		return ResourceKey.create(Registries.STRUCTURE, ResourceLocation.fromNamespaceAndPath(Minestuck.MOD_ID, name));
+		return ResourceKey.create(Registries.STRUCTURE, Minestuck.id(name));
+	}
+	
+	private static ResourceKey<StructureTemplatePool> templateKey(String name)
+	{
+		return ResourceKey.create(Registries.TEMPLATE_POOL, Minestuck.id(name));
 	}
 	
 	private static StructurePieceType contextless(StructurePieceType.ContextlessType type)

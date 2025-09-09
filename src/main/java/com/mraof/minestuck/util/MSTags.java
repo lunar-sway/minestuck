@@ -217,6 +217,9 @@ public class MSTags
 		// Overworld
 		public static final TagKey<Biome> HAS_FROG_TEMPLE = tag("has_structure/frog_temple");
 		
+		//Prospit
+		public static final TagKey<Biome> HAS_PROSPIT_DREAM_TOWER = tag("has_structure/prospit_dream_tower");
+		
 		// Land
 		public static final TagKey<Biome> LAND_NORMAL = tag("land/normal");
 		public static final TagKey<Biome> LAND_OCEAN = tag("land/ocean");

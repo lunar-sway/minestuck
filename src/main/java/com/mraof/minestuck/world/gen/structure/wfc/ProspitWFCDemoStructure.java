@@ -1,6 +1,7 @@
 package com.mraof.minestuck.world.gen.structure.wfc;
 
 import com.mojang.serialization.MapCodec;
+import com.mojang.serialization.codecs.RecordCodecBuilder;
 import com.mraof.minestuck.Minestuck;
 import com.mraof.minestuck.world.gen.structure.MSStructures;
 import net.minecraft.MethodsReturnNonnullByDefault;
@@ -45,11 +46,19 @@ public final class ProspitWFCDemoStructure
 	
 	public static final class FixedPlacement extends StructurePlacement
 	{
-		public static final MapCodec<FixedPlacement> CODEC = MapCodec.unit(FixedPlacement::new);
+		//public static final MapCodec<FixedPlacement> CODEC = MapCodec.unit(FixedPlacement::new);
+		public static final MapCodec<FixedPlacement> CODEC = RecordCodecBuilder.mapCodec(instance -> instance.group(
+				ExclusionZone.CODEC.optionalFieldOf("exclusion_zone").forGetter(placement -> placement.exclusionZone)
+		).apply(instance, FixedPlacement::new));
 		
-		public FixedPlacement()
+		private final Optional<ExclusionZone> exclusionZone;
+		
+		public FixedPlacement(Optional<ExclusionZone> exclusionZone)
 		{
-			super(Vec3i.ZERO, FrequencyReductionMethod.DEFAULT, 1, 0, Optional.empty());
+			super(Vec3i.ZERO, FrequencyReductionMethod.DEFAULT, 1, 0, exclusionZone);
+			//super(Vec3i.ZERO, FrequencyReductionMethod.DEFAULT, 1, 0, Optional.of(new ExclusionZone(MSStructureProvider.PROSPIT_DREAM_TOWER_SET, 0)));
+			
+			this.exclusionZone = exclusionZone;
 		}
 		
 		@Override

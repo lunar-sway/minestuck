@@ -28,6 +28,8 @@ public class MinestuckBiomeTagsProvider extends BiomeTagsProvider
 	{
 		this.tag(HAS_FROG_TEMPLE).addTag(BiomeTags.IS_OVERWORLD);
 		
+		this.tag(HAS_PROSPIT_DREAM_TOWER).add(MSBiomes.PROSPIT);
+		
 		this.tag(LAND_NORMAL).add(MSBiomes.DEFAULT_LAND.NORMAL, MSBiomes.NO_RAIN_LAND.NORMAL, MSBiomes.SNOW_LAND.NORMAL, MSBiomes.HIGH_HUMID_LAND.NORMAL);
 		this.tag(LAND_OCEAN).add(MSBiomes.DEFAULT_LAND.OCEAN, MSBiomes.NO_RAIN_LAND.OCEAN, MSBiomes.SNOW_LAND.OCEAN, MSBiomes.HIGH_HUMID_LAND.OCEAN);
 		this.tag(LAND_ROUGH).add(MSBiomes.DEFAULT_LAND.ROUGH, MSBiomes.NO_RAIN_LAND.ROUGH, MSBiomes.SNOW_LAND.ROUGH, MSBiomes.HIGH_HUMID_LAND.ROUGH);

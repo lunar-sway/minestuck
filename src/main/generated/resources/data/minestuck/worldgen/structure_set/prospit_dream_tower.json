@@ -1,0 +1,16 @@
+{
+  "placement": {
+    "type": "minecraft:concentric_rings",
+    "count": 1,
+    "distance": 0,
+    "preferred_biomes": "minestuck:prospit",
+    "salt": 0,
+    "spread": 0
+  },
+  "structures": [
+    {
+      "structure": "minestuck:prospit_dream_tower",
+      "weight": 1
+    }
+  ]
+}
