@@ -2,15 +2,12 @@ package com.mraof.minestuck.data.worldgen;
 
 import com.mraof.minestuck.Minestuck;
 import com.mraof.minestuck.util.MSTags;
-import com.mraof.minestuck.world.biome.MSBiomes;
 import com.mraof.minestuck.world.gen.structure.*;
 import com.mraof.minestuck.world.gen.structure.castle.CastleStructure;
 import com.mraof.minestuck.world.gen.structure.gate.GateStructure;
 import com.mraof.minestuck.world.gen.structure.gate.LandGatePlacement;
 import com.mraof.minestuck.world.gen.structure.village.ConsortVillageStructure;
-import net.minecraft.core.Holder;
 import net.minecraft.core.HolderGetter;
-import net.minecraft.core.HolderSet;
 import net.minecraft.core.registries.Registries;
 import net.minecraft.data.worldgen.BootstrapContext;
 import net.minecraft.resources.ResourceKey;
@@ -24,7 +21,6 @@ import net.minecraft.world.level.levelgen.heightproviders.ConstantHeight;
 import net.minecraft.world.level.levelgen.structure.Structure;
 import net.minecraft.world.level.levelgen.structure.StructureSet;
 import net.minecraft.world.level.levelgen.structure.TerrainAdjustment;
-import net.minecraft.world.level.levelgen.structure.placement.ConcentricRingsStructurePlacement;
 import net.minecraft.world.level.levelgen.structure.placement.RandomSpreadStructurePlacement;
 import net.minecraft.world.level.levelgen.structure.placement.RandomSpreadType;
 import net.minecraft.world.level.levelgen.structure.pools.StructureTemplatePool;
@@ -79,7 +75,6 @@ public final class MSStructureProvider
 	public static void registerStructureSets(BootstrapContext<StructureSet> context)
 	{
 		HolderGetter<Structure> structures = context.lookup(Registries.STRUCTURE);
-		HolderGetter<Biome> biomes = context.lookup(Registries.BIOME);
 		
 		// Overworld
 		context.register(key("frog_temple"), new StructureSet(structures.getOrThrow(FROG_TEMPLE),
