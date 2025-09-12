@@ -33,7 +33,7 @@ public final class ProspitWFCDemoStructure
 	public static final int WIDTH_IN_PIECES = 16, HEIGHT_IN_PIECES = 14;
 	public static final WFCUtil.Dimensions WFC_DIMENSIONS = new WFCUtil.Dimensions(WIDTH_IN_PIECES, HEIGHT_IN_PIECES, WIDTH_IN_PIECES);
 	public static final int WIDTH_IN_CHUNKS = (CELL_SIZE.width() * WIDTH_IN_PIECES) / 16;
-	public static final int BOTTOM_Y = 1;
+	public static final int BOTTOM_Y = 0;
 	
 	public static void init()
 	{
@@ -46,7 +46,6 @@ public final class ProspitWFCDemoStructure
 	
 	public static final class FixedPlacement extends StructurePlacement
 	{
-		//public static final MapCodec<FixedPlacement> CODEC = MapCodec.unit(FixedPlacement::new);
 		public static final MapCodec<FixedPlacement> CODEC = RecordCodecBuilder.mapCodec(instance -> instance.group(
 				ExclusionZone.CODEC.optionalFieldOf("exclusion_zone").forGetter(placement -> placement.exclusionZone)
 		).apply(instance, FixedPlacement::new));
@@ -56,7 +55,6 @@ public final class ProspitWFCDemoStructure
 		public FixedPlacement(Optional<ExclusionZone> exclusionZone)
 		{
 			super(Vec3i.ZERO, FrequencyReductionMethod.DEFAULT, 1, 0, exclusionZone);
-			//super(Vec3i.ZERO, FrequencyReductionMethod.DEFAULT, 1, 0, Optional.of(new ExclusionZone(MSStructureProvider.PROSPIT_DREAM_TOWER_SET, 0)));
 			
 			this.exclusionZone = exclusionZone;
 		}

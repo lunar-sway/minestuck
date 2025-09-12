@@ -85,10 +85,6 @@ public final class MSStructureProvider
 		context.register(key("frog_temple"), new StructureSet(structures.getOrThrow(FROG_TEMPLE),
 				new RandomSpreadStructurePlacement(140, 92, RandomSpreadType.LINEAR, 41361201)));
 		
-		// Prospit
-		final Holder.Reference<StructureSet> PROSPIT_DREAM_TOWER_SET = context.register(key("prospit_dream_tower"), new StructureSet(structures.getOrThrow(PROSPIT_DREAM_TOWER),
-				new ConcentricRingsStructurePlacement(0, 0, 1, HolderSet.direct(biomes.getOrThrow(MSBiomes.PROSPIT)))));
-		
 		// Land
 		context.register(key("land_gate"), new StructureSet(structures.getOrThrow(LAND_GATE),
 				new LandGatePlacement()));

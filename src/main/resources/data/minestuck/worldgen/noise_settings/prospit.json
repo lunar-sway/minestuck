@@ -12,8 +12,8 @@
     "disable_mob_generation": true,
     "legacy_random_source": true,
     "noise": {
-        "height": 96,
-        "min_y": 0,
+        "height": 64,
+        "min_y": -64,
         "size_horizontal": 1,
         "size_vertical": 2
     },
@@ -39,9 +39,9 @@
                                 "argument1": {
                                     "type": "minecraft:y_clamped_gradient",
                                     "from_value": 0,
-                                    "from_y": -8,
+                                    "from_y": -48,
                                     "to_value": 1,
-                                    "to_y": 48
+                                    "to_y": -16
                                 },
                                 "argument2": {
                                     "type": "minecraft:add",
@@ -54,9 +54,9 @@
                                             "argument1": {
                                                 "type": "minecraft:y_clamped_gradient",
                                                 "from_value": 1,
-                                                "from_y": 48,
+                                                "from_y": -16,
                                                 "to_value": 0,
-                                                "to_y": 64
+                                                "to_y": 0
                                             },
                                             "argument2": {
                                                 "type": "minecraft:add",
@@ -84,7 +84,7 @@
         "vein_toggle": 0
     },
     "ore_veins_enabled": false,
-    "sea_level": 0,
+    "sea_level": -64,
     "spawn_target": [],
     "surface_rule": {
         "type": "minecraft:sequence",
