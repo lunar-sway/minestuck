@@ -32,7 +32,7 @@ public final class ProspitWFCDemoStructure
 	public static final int WIDTH_IN_PIECES = 16, HEIGHT_IN_PIECES = 14;
 	public static final WFCUtil.Dimensions WFC_DIMENSIONS = new WFCUtil.Dimensions(WIDTH_IN_PIECES, HEIGHT_IN_PIECES, WIDTH_IN_PIECES);
 	public static final int WIDTH_IN_CHUNKS = (CELL_SIZE.width() * WIDTH_IN_PIECES) / 16;
-	public static final int BOTTOM_Y = 1;
+	public static final int BOTTOM_Y = 0;
 	
 	public static void init()
 	{

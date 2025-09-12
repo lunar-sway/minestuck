@@ -12,6 +12,7 @@ import net.minecraft.core.registries.Registries;
 import net.minecraft.data.worldgen.BootstrapContext;
 import net.minecraft.resources.ResourceKey;
 import net.minecraft.resources.ResourceLocation;
+import net.minecraft.tags.TagKey;
 import net.minecraft.world.level.biome.Biome;
 import net.minecraft.world.level.levelgen.GenerationStep;
 import net.minecraft.world.level.levelgen.Heightmap;
@@ -24,8 +25,11 @@ import net.minecraft.world.level.levelgen.structure.placement.RandomSpreadStruct
 import net.minecraft.world.level.levelgen.structure.placement.RandomSpreadType;
 import net.minecraft.world.level.levelgen.structure.pools.StructureTemplatePool;
 import net.minecraft.world.level.levelgen.structure.structures.JigsawStructure;
+import net.minecraft.world.level.levelgen.structure.templatesystem.LiquidSettings;
 
+import java.util.List;
 import java.util.Map;
+import java.util.Optional;
 
 import static com.mraof.minestuck.world.gen.structure.MSStructures.*;
 
@@ -39,6 +43,9 @@ public final class MSStructureProvider
 		// Overworld
 		context.register(FROG_TEMPLE, new FrogTempleStructure(new Structure.StructureSettings(biomes.getOrThrow(MSTags.Biomes.HAS_FROG_TEMPLE),
 				Map.of(), GenerationStep.Decoration.SURFACE_STRUCTURES, TerrainAdjustment.NONE)));
+		
+		//Prospit
+		context.register(PROSPIT_DREAM_TOWER, jigsaw(biomes, pools, MSTags.Biomes.HAS_PROSPIT_DREAM_TOWER, PROSPIT_DREAM_TOWER_START_POOL, Optional.empty()));
 		
 		// Land
 		context.register(LAND_GATE, new GateStructure(new Structure.StructureSettings(biomes.getOrThrow(MSTags.Biomes.HAS_LAND_GATE),
@@ -83,6 +90,25 @@ public final class MSStructureProvider
 		
 		context.register(key("skaian_cathedral"), new StructureSet(structures.getOrThrow(SKAIAN_CATHEDRAL),
 				new RandomSpreadStructurePlacement(40, 10, RandomSpreadType.LINEAR, 1481098009)));
+	}
+	
+	private static JigsawStructure jigsaw(HolderGetter<Biome> biomes, HolderGetter<StructureTemplatePool> templatePools, TagKey<Biome> biome, ResourceKey<StructureTemplatePool> startPool, Optional<Heightmap.Types> heightmap)
+	{
+		return new JigsawStructure(
+				new Structure.StructureSettings.Builder(biomes.getOrThrow(biome))
+						.generationStep(GenerationStep.Decoration.SURFACE_STRUCTURES)
+						.build(),
+				templatePools.getOrThrow(startPool),
+				Optional.empty(),
+				20,
+				ConstantHeight.of(VerticalAnchor.absolute(0)),
+				false,
+				heightmap,
+				128,
+				List.of(),
+				JigsawStructure.DEFAULT_DIMENSION_PADDING,
+				LiquidSettings.IGNORE_WATERLOGGING
+		);
 	}
 	
 	private static ResourceKey<StructureSet> key(String path)
