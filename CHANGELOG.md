@@ -16,10 +16,11 @@ The format is based on [Keep a Changelog](https://keepachangelog.com/en/1.1.0/).
 - Empty Sylladex button being invisible
 - Fix Echeladder screen not displaying before Entry
 - Fix Prismarine and Iron Lass armors crashing when enchanted
+- Fix error saving consort merchant inventory
 
 ### Contributors for this release
 
-- medsal15
+- medsal15, Dweblenod
 
 ## [1.21.1-1.13.1.0] - 2025-07-26
 
