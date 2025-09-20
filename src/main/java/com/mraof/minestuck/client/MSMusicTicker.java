@@ -71,7 +71,7 @@ public class MSMusicTicker    //TODO Introduce types (something similar to vanil
 		
 		if(!wasInMedium)
 		{
-			ticksUntilMusic = Mth.nextInt(level.random, 0, 20);
+			ticksUntilMusic = Mth.nextInt(level.random, 0, 6000);
 			LOGGER.debug("Entered the Medium. MS music scheduled to play in {} ticks", ticksUntilMusic);
 		}
 		
@@ -94,7 +94,7 @@ public class MSMusicTicker    //TODO Introduce types (something similar to vanil
 		} else if(!mc.getSoundManager().isActive(currentMusic))
 		{
 			currentMusic = null;
-			ticksUntilMusic = Mth.nextInt(level.random, 100, 100);
+			ticksUntilMusic = Mth.nextInt(level.random, 12000, 24000);
 			LOGGER.debug("MS music finished playing. Scheduling music to be played again in {} ticks.", ticksUntilMusic);
 		}
 		
