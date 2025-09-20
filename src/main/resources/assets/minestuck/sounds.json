@@ -470,6 +470,38 @@
       }
     ]
   },
+  "music.prospit": {
+    "sounds": [
+      {
+        "name": "minestuck:music/medium/prospit",
+        "stream": true
+      }
+    ]
+  },
+  "music.derse": {
+    "sounds": [
+      {
+        "name": "minestuck:music/medium/derse",
+        "stream": true
+      }
+    ]
+  },
+  "music.veil": {
+    "sounds": [
+      {
+        "name": "minestuck:music/medium/deep",
+        "stream": true
+      }
+    ]
+  },
+  "music.skaia": {
+    "sounds": [
+      {
+        "name": "minestuck:music/medium/skaia_perseveres",
+        "stream": true
+      }
+    ]
+  },
   "entity.swoosh": {
     "category": "hostile",
     "subtitle": "subtitles.minestuck.swoosh",

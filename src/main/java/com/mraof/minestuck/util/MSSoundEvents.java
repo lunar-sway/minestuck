@@ -61,6 +61,8 @@ public final class MSSoundEvents
 	public static final Supplier<SoundEvent> MUSIC_RISE_UP = register("music.rise_up"); //is intended for use during godtiering
 	public static final Supplier<SoundEvent> MUSIC_PROSPIT = register("music.prospit");
 	public static final Supplier<SoundEvent> MUSIC_DERSE = register("music.derse");
+	public static final Supplier<SoundEvent> MUSIC_VEIL = register("music.veil");
+	public static final Supplier<SoundEvent> MUSIC_SKAIA = register("music.skaia");
 	
 	public static final Supplier<SoundEvent> ENTITY_SWOOSH = register("entity.swoosh");
 	public static final Supplier<SoundEvent> ENTITY_SLAM = register("entity.slam");
