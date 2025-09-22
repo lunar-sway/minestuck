@@ -6,6 +6,15 @@ The format is based on [Keep a Changelog](https://keepachangelog.com/en/1.1.0/).
 
 ## [Unreleased]
 
+### Fixed
+
+- Fix Glowing Mushroom Vines requiring itself for alchemizing
+- Fix missing Bucket of Glimmering Water and Magmatic Igneous Stone grist cost
+
+### Contributors for this release
+
+- medsal15
+
 ## [1.21.1-1.13.1.1] - 2025-09-14
 
 ### Added
