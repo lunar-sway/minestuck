@@ -3,6 +3,7 @@ package com.mraof.minestuck.computer.editmode;
 import com.google.gson.GsonBuilder;
 import com.google.gson.JsonElement;
 import com.mojang.serialization.Codec;
+import com.mojang.serialization.DataResult;
 import com.mojang.serialization.JsonOps;
 import com.mojang.serialization.codecs.RecordCodecBuilder;
 import com.mraof.minestuck.Minestuck;
@@ -268,7 +269,7 @@ public final class DeployList
 		registerItem("blue_concrete", new ItemStack(Blocks.BLUE_CONCRETE), GristSet.of(GristTypes.BUILD.get().amount(1), GristTypes.COBALT.get().amount(1), GristTypes.AMETHYST.get().amount(1)), 2, EntryLists.ATHENEUM);
 		registerItem("purple_concrete", new ItemStack(Blocks.PURPLE_CONCRETE), GristSet.of(GristTypes.BUILD.get().amount(1), GristTypes.COBALT.get().amount(1), GristTypes.GARNET.get().amount(1), GristTypes.AMETHYST.get().amount(1)), 2, EntryLists.ATHENEUM);
 		registerItem("magenta_concrete", new ItemStack(Blocks.MAGENTA_CONCRETE), GristSet.of(GristTypes.BUILD.get().amount(1), GristTypes.COBALT.get().amount(1), GristTypes.AMETHYST.get().amount(1), GristTypes.GARNET.get().amount(1)), 2, EntryLists.ATHENEUM);
-		registerItem("pink_concrete", new ItemStack(Blocks.PINK_CONCRETE), GristSet.of(GristTypes.BUILD.get().amount(1), GristTypes.COBALT.get().amount(1), GristTypes.CHALK.get().amount(1), GristTypes.GARNET.get().amount(1)), 2, EntryLists.ATHENEUM);		
+		registerItem("pink_concrete", new ItemStack(Blocks.PINK_CONCRETE), GristSet.of(GristTypes.BUILD.get().amount(1), GristTypes.COBALT.get().amount(1), GristTypes.CHALK.get().amount(1), GristTypes.GARNET.get().amount(1)), 2, EntryLists.ATHENEUM);
 	}
 	
 	public static void registerItem(String name, ItemStack stack, GristSet.Immutable cost, int tier, EntryLists entryList)
@@ -478,57 +479,70 @@ public final class DeployList
 		event.addListener(new Loader());
 	}
 	
-	private static final class Loader extends SimpleJsonResourceReloadListener {
+	private static final class Loader extends SimpleJsonResourceReloadListener
+	{
 		private static final Logger LOGGER = LogManager.getLogger();
-	
+		
 		private static List<String> added_with_datapack = new ArrayList<>();
 		
-		Loader() {
+		Loader()
+		{
 			super(new GsonBuilder().create(), "minestuck/deploy_list");
 		}
 		
 		@Override
 		protected void apply(Map<ResourceLocation, JsonElement> jsonEntries, ResourceManager resourceManager,
-				ProfilerFiller profiler) {
-			for (String added : added_with_datapack) {
+							 ProfilerFiller profiler)
+		{
+			for(String added : added_with_datapack)
+			{
 				allList.removeIf(entry -> entry.getName() == added);
 				deployList.removeIf(entry -> entry.getName() == added);
 				atheneumList.removeIf(entry -> entry.getName() == added);
 			}
 			added_with_datapack.clear();
 			
-			for (Map.Entry<ResourceLocation, JsonElement> entry : jsonEntries.entrySet()) {
+			for(Map.Entry<ResourceLocation, JsonElement> entry : jsonEntries.entrySet())
+			{
 				// TODO grist costs are only updated on rejoin
 				DeployDataEntry.LIST_CODEC.parse(JsonOps.INSTANCE, entry.getValue())
 						.resultOrPartial(message -> LOGGER.error("Couldn't parse deploylist entry {}: {}", entry.getKey(), message))
 						.ifPresent(list -> {
-							for (int i = 0; i < list.size(); i++) {
+							for(int i = 0; i < list.size(); i++)
+							{
 								DeployDataEntry data = list.get(i);
 								String name = entry.getKey().toString() + "-" + i;
 								added_with_datapack.add(name);
 								
 								registerItem(name, data.tier, d -> {
-									for (GristCost cost : data.cost) {
-										if (!cost.test(this.getContext())) return false;
+									for(GristCost cost : data.cost)
+									{
+										if(!cost.test(this.getContext())) return false;
 									}
 									return true;
 								}, (d, l) -> {
 									ItemStack stack = data.stack;
-									if (data.punched) {
+									if(data.punched)
+									{
 										stack = CaptchaCardItem.createPunchedCard(stack.getItem());
 									}
 									return stack;
 								}, (primary, playerdata) -> {
 									MutableGristSet set = MutableGristSet.newDefault();
-									if (data.cost.size() == 0) {
+									if(data.cost.size() == 0)
+									{
 										set = GristCostRecipe.findCostForItem(data.stack, null, false, ServerLifecycleHooks.getCurrentServer().overworld()).mutableCopy();
 									}
-									for (GristCost cost : data.cost) {
-										if (cost.test(this.getContext())) {
-											if (cost.grist.isPresent()) {
+									for(GristCost cost : data.cost)
+									{
+										if(cost.test(this.getContext()))
+										{
+											if(cost.grist.isPresent())
+											{
 												set.add(cost.grist.get());
 											}
-											if (cost.primary != 0) {
+											if(cost.primary != 0)
+											{
 												set.add(playerdata.getBaseGrist(), cost.primary);
 											}
 											break;
@@ -542,30 +556,37 @@ public final class DeployList
 		}
 	}
 	
-    public static record GristCost(Optional<GristSet.Immutable> grist, int primary, List<ICondition> conditions) {
-        public static final Codec<GristCost> CODEC = RecordCodecBuilder.create(instance -> instance.group(
-            GristSet.Codecs.MAP_CODEC.optionalFieldOf("grist").forGetter(GristCost::grist),
-            Codec.INT.optionalFieldOf("primary_grist", 0).forGetter(GristCost::primary),
-            ICondition.LIST_CODEC.optionalFieldOf("conditions", List.of()).forGetter(GristCost::conditions)
-        ).apply(instance, GristCost::new));
-        public static final Codec<List<GristCost>> LIST_CODEC = CODEC.listOf();
+	public static record GristCost(Optional<GristSet.Immutable> grist, int primary, List<ICondition> conditions)
+	{
+		public static final Codec<GristCost> CODEC = RecordCodecBuilder.create(instance -> instance.group(
+				GristSet.Codecs.MAP_CODEC.optionalFieldOf("grist").forGetter(GristCost::grist),
+				Codec.INT.optionalFieldOf("primary_grist", 0).forGetter(GristCost::primary),
+				ICondition.LIST_CODEC.optionalFieldOf("conditions", List.of()).forGetter(GristCost::conditions)
+		).apply(instance, GristCost::new));
+		public static final Codec<List<GristCost>> LIST_CODEC = CODEC.listOf();
 		
-		public boolean test(ICondition.IContext context) {
-			for (ICondition condition : conditions) {
-				if (!condition.test(context)) return false;
+		public boolean test(ICondition.IContext context)
+		{
+			for(ICondition condition : conditions)
+			{
+				if(!condition.test(context)) return false;
 			}
 			return true;
 		}
-    }
-
-    public static record DeployDataEntry(ItemStack stack, int tier, DeployList.EntryLists category, List<GristCost> cost, boolean punched) {
-        public static final Codec<DeployDataEntry> CODEC = RecordCodecBuilder.create(instance -> instance.group(
-			ItemStack.CODEC.fieldOf("item").forGetter(DeployDataEntry::stack),
-			Codec.INT.optionalFieldOf("tier", 0).forGetter(DeployDataEntry::tier),
-            StringRepresentable.fromValues(EntryLists::values).optionalFieldOf("category", DeployList.EntryLists.ATHENEUM).forGetter(DeployDataEntry::category),
-            GristCost.LIST_CODEC.optionalFieldOf("cost", List.of()).forGetter(DeployDataEntry::cost),
-            Codec.BOOL.optionalFieldOf("punched", false).forGetter(DeployDataEntry::punched)
-        ).apply(instance, DeployDataEntry::new));
-        public static final Codec<List<DeployDataEntry>> LIST_CODEC = CODEC.listOf();
-    }
+	}
+	
+	public static record DeployDataEntry(ItemStack stack, int tier, DeployList.EntryLists category,
+										 List<GristCost> cost, boolean punched)
+	{
+		public static final Codec<DeployDataEntry> CODEC = RecordCodecBuilder.create(instance -> instance.group(
+				ItemStack.CODEC.fieldOf("item").forGetter(DeployDataEntry::stack),
+				Codec.INT.optionalFieldOf("tier", 0).forGetter(DeployDataEntry::tier),
+				StringRepresentable.fromValues(EntryLists::values).optionalFieldOf("category", DeployList.EntryLists.ATHENEUM)
+						.validate(entry -> entry == EntryLists.ALL ? DataResult.error(() -> "Cannot add to all") : DataResult.success(entry))
+						.forGetter(DeployDataEntry::category),
+				GristCost.LIST_CODEC.optionalFieldOf("cost", List.of()).forGetter(DeployDataEntry::cost),
+				Codec.BOOL.optionalFieldOf("punched", false).forGetter(DeployDataEntry::punched)
+		).apply(instance, DeployDataEntry::new));
+		public static final Codec<List<DeployDataEntry>> LIST_CODEC = CODEC.listOf();
+	}
 }
