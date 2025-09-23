@@ -504,9 +504,9 @@ public final class DeployList
 			
 			for(Map.Entry<ResourceLocation, JsonElement> entry : jsonEntries.entrySet())
 			{
-				// TODO grist costs are only updated on rejoin
+				// FIXME grist costs are only updated on rejoin
 				DeployDataEntry.LIST_CODEC.parse(JsonOps.INSTANCE, entry.getValue())
-						.resultOrPartial(message -> LOGGER.error("Couldn't parse deploylist entry {}: {}", entry.getKey(), message))
+						.resultOrPartial(message -> LOGGER.error("Couldn't entirely parse deploylist entry {}: {}", entry.getKey(), message))
 						.ifPresent(list -> {
 							for(int i = 0; i < list.size(); i++)
 							{
@@ -515,13 +515,15 @@ public final class DeployList
 								added_with_datapack.add(name);
 								
 								registerItem(name, data.tier, d -> {
+									if(data.cost.isEmpty()) return true;
 									for(GristCost cost : data.cost)
 									{
-										if(!cost.test(this.getContext())) return false;
+										if(cost.test(this.getContext())) return true;
 									}
-									return true;
+									return false;
 								}, (d, l) -> {
-									ItemStack stack = data.stack;
+									ItemStack stack = data.stack.copy();
+									stack.setCount(1);
 									if(data.punched)
 									{
 										stack = CaptchaCardItem.createPunchedCard(stack.getItem());
@@ -579,10 +581,14 @@ public final class DeployList
 										 List<GristCost> cost, boolean punched)
 	{
 		public static final Codec<DeployDataEntry> CODEC = RecordCodecBuilder.create(instance -> instance.group(
-				ItemStack.CODEC.fieldOf("item").forGetter(DeployDataEntry::stack),
+				ItemStack.CODEC.fieldOf("item").validate(stack -> {
+					if(!stack.isComponentsPatchEmpty())
+						return DataResult.error(() -> "Deploylist item does not support additional components");
+					return DataResult.success(stack);
+				}).forGetter(DeployDataEntry::stack),
 				Codec.INT.optionalFieldOf("tier", 0).forGetter(DeployDataEntry::tier),
 				StringRepresentable.fromValues(EntryLists::values).optionalFieldOf("category", DeployList.EntryLists.ATHENEUM)
-						.validate(entry -> entry == EntryLists.ALL ? DataResult.error(() -> "Cannot add to all") : DataResult.success(entry))
+						.validate(entry -> entry == EntryLists.ALL ? DataResult.error(() -> "Cannot add a deploylist entry to all") : DataResult.success(entry))
 						.forGetter(DeployDataEntry::category),
 				GristCost.LIST_CODEC.optionalFieldOf("cost", List.of()).forGetter(DeployDataEntry::cost),
 				Codec.BOOL.optionalFieldOf("punched", false).forGetter(DeployDataEntry::punched)
