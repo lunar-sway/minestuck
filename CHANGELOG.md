@@ -8,7 +8,7 @@ The format is based on [Keep a Changelog](https://keepachangelog.com/en/1.1.0/).
 
 ### Fixed
 
-- Fix JEI crashing on newer versions
+- Fix JEI not loading grist (and by extension, alchemy recipes) on newer versions
 
 ### Contributors for this release
 
