@@ -473,7 +473,7 @@
   "music.prospit": {
     "sounds": [
       {
-        "name": "minestuck:music/medium/prospit",
+        "name": "minestuck:music/medium/golden_garrison",
         "stream": true
       }
     ]
@@ -481,7 +481,7 @@
   "music.derse": {
     "sounds": [
       {
-        "name": "minestuck:music/medium/derse",
+        "name": "minestuck:music/medium/obsidian_oppugnants",
         "stream": true
       }
     ]
@@ -490,6 +490,10 @@
     "sounds": [
       {
         "name": "minestuck:music/medium/deep",
+        "stream": true
+      },
+      {
+        "name": "minestuck:music/medium/voidal_sandbox",
         "stream": true
       }
     ]
