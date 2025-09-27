@@ -494,12 +494,9 @@ public final class DeployList
 		protected void apply(Map<ResourceLocation, JsonElement> jsonEntries, ResourceManager resourceManager,
 							 ProfilerFiller profiler)
 		{
-			for(String added : added_with_datapack)
-			{
-				allList.removeIf(entry -> entry.getName() == added);
-				deployList.removeIf(entry -> entry.getName() == added);
-				atheneumList.removeIf(entry -> entry.getName() == added);
-			}
+			allList.removeIf(entry -> added_with_datapack.contains(entry.getName()));
+			deployList.removeIf(entry -> added_with_datapack.contains(entry.getName()));
+			atheneumList.removeIf(entry -> added_with_datapack.contains(entry.getName()));
 			added_with_datapack.clear();
 			
 			for(Map.Entry<ResourceLocation, JsonElement> entry : jsonEntries.entrySet())
