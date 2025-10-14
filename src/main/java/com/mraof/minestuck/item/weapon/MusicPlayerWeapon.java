@@ -18,11 +18,12 @@ import net.minecraft.world.entity.LivingEntity;
 import net.minecraft.world.entity.ai.attributes.Attributes;
 import net.minecraft.world.entity.player.Player;
 import net.minecraft.world.item.ItemStack;
-import net.minecraft.world.item.component.ItemAttributeModifiers;
 import net.minecraft.world.item.component.ItemContainerContents;
 import net.minecraft.world.level.Level;
 import net.neoforged.bus.api.SubscribeEvent;
 import net.neoforged.fml.common.EventBusSubscriber;
+import net.neoforged.neoforge.common.NeoForge;
+import net.neoforged.neoforge.event.ItemAttributeModifierEvent;
 import net.neoforged.neoforge.event.tick.PlayerTickEvent;
 import net.neoforged.neoforge.network.PacketDistributor;
 
@@ -58,6 +59,7 @@ public class MusicPlayerWeapon extends WeaponItem
 		super(builder, properties.component(DataComponents.CONTAINER, ItemContainerContents.EMPTY));
 		this.volume = volume;
 		this.pitch = pitch;
+        NeoForge.EVENT_BUS.addListener(this::adjustDamage);
 		
 	}
 	
@@ -66,6 +68,7 @@ public class MusicPlayerWeapon extends WeaponItem
 		super(builder, properties);
 		this.volume = 4.0F;
 		this.pitch = 1.0F;
+        NeoForge.EVENT_BUS.addListener(this::adjustDamage);
 	}
 	
 	@Override
@@ -108,15 +111,6 @@ public class MusicPlayerWeapon extends WeaponItem
 			}
 		}
 		return InteractionResultHolder.sidedSuccess(musicPlayer, level.isClientSide);
-	}
-	
-	@Override
-	public ItemAttributeModifiers getDefaultAttributeModifiers(ItemStack stack)
-	{
-		if(hasCassette(stack))
-			return super.getDefaultAttributeModifiers(stack);
-		else
-			return ItemAttributeModifiers.EMPTY;
 	}
 	
 	@SubscribeEvent
@@ -181,5 +175,16 @@ public class MusicPlayerWeapon extends WeaponItem
 	public static boolean hasCassette(ItemStack stack)
 	{
 		return !stack.getOrDefault(DataComponents.CONTAINER, ItemContainerContents.EMPTY).copyOne().isEmpty();
+	}
+	
+	private void adjustDamage(ItemAttributeModifierEvent event)
+	{
+		ItemStack stack = event.getItemStack();
+		if(!(stack.getItem() instanceof MusicPlayerWeapon)) return;
+		
+		if(!hasCassette(stack))
+		{
+			event.removeAllModifiersFor(Attributes.ATTACK_DAMAGE);
+		}
 	}
 }
