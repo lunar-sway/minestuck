@@ -828,7 +828,7 @@ public final class MinestuckGristCostsProvider
 		GristCostRecipeBuilder.of(MSBlocks.CAST_IRON.get()).grist(BUILD, 3).grist(RUST, 2).build(recipeSaver);
 		GristCostRecipeBuilder.of(MSBlocks.STEEL_BEAM.get()).grist(BUILD, 2).grist(RUST, 3).build(recipeSaver);
 		GristCostRecipeBuilder.of(MSBlocks.BLACK_SAND.get()).grist(BUILD, 2).grist(SULFUR, 1).build(recipeSaver);
-		SourceGristCostBuilder.of(MSBlocks.MAGMATIC_IGNEOUS_STONE.get()).source(MSBlocks.MAGMATIC_POLISHED_IGNEOUS_BRICKS.asItem()).build(recipeSaver);
+		GristCostRecipeBuilder.of(MSBlocks.MAGMATIC_IGNEOUS_STONE.get()).grist(BUILD, 2).grist(TAR, 2).grist(URANIUM, 2).build(recipeSaver);
 		GristCostRecipeBuilder.of(MSBlocks.IGNEOUS_STONE.get()).grist(BUILD, 2).grist(TAR, 1).build(recipeSaver);
 		GristCostRecipeBuilder.of(MSBlocks.IGNEOUS_SPIKE.get()).grist(BUILD, 1).grist(TAR, 1).build(recipeSaver);
 		GristCostRecipeBuilder.of(MSBlocks.PUMICE_STONE.get()).grist(BUILD, 2).grist(TAR, 1).build(recipeSaver);
