@@ -3269,6 +3269,7 @@
   "minestuck.kind_abstratus": "Kind Abstratus",
   "minestuck.lotusflowerentity.regrow": "There are no petals on this plant, maybe it will regrow?",
   "minestuck.music_player": "Music Player",
+  "minestuck.music_player.hint_inactive": "Crouch and use to start playing",
   "minestuck.not_alchemizable": "Not Alchemizable",
   "minestuck.predefine.changed_title": "Changed predefined title from %s to %s due to a new title land type",
   "minestuck.predefine.changed_title_land": "Changed predefined title land type from %s to %s due to a new terrain land type",

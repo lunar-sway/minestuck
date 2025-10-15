@@ -1,5 +1,7 @@
 package com.mraof.minestuck.item.weapon;
 
+import java.util.List;
+
 import com.mraof.minestuck.Minestuck;
 import com.mraof.minestuck.block.EnumCassetteType;
 import com.mraof.minestuck.inventory.musicplayer.CassetteContainerMenu;
@@ -7,6 +9,8 @@ import com.mraof.minestuck.inventory.musicplayer.MusicPlaying;
 import com.mraof.minestuck.item.CassetteItem;
 import com.mraof.minestuck.network.MusicPlayerPacket;
 import com.mraof.minestuck.util.MSAttachments;
+
+import net.minecraft.ChatFormatting;
 import net.minecraft.core.component.DataComponents;
 import net.minecraft.network.chat.Component;
 import net.minecraft.server.level.ServerPlayer;
@@ -18,6 +22,7 @@ import net.minecraft.world.entity.LivingEntity;
 import net.minecraft.world.entity.ai.attributes.Attributes;
 import net.minecraft.world.entity.player.Player;
 import net.minecraft.world.item.ItemStack;
+import net.minecraft.world.item.TooltipFlag;
 import net.minecraft.world.item.component.ItemContainerContents;
 import net.minecraft.world.level.Level;
 import net.neoforged.bus.api.SubscribeEvent;
@@ -51,6 +56,7 @@ import net.neoforged.neoforge.network.PacketDistributor;
 public class MusicPlayerWeapon extends WeaponItem
 {
 	public static final String TITLE = "minestuck.music_player";
+	public static final String HINT_INACTIVE = "minestuck.music_player.hint_inactive";
 	private final float volume;
 	private final float pitch;
 	
@@ -113,6 +119,16 @@ public class MusicPlayerWeapon extends WeaponItem
 		return InteractionResultHolder.sidedSuccess(musicPlayer, level.isClientSide);
 	}
 	
+	@Override
+	public void appendHoverText(ItemStack stack, TooltipContext context, List<Component> tooltipComponents, TooltipFlag tooltipFlag)
+	{
+		ItemStack itemInMusicPlayer = stack.getOrDefault(DataComponents.CONTAINER, ItemContainerContents.EMPTY).copyOne();
+		if(itemInMusicPlayer.getItem() instanceof CassetteItem)
+		{
+			tooltipComponents.add(Component.translatable(HINT_INACTIVE).withStyle(ChatFormatting.GRAY));
+		}
+	}
+	
 	@SubscribeEvent
 	public static void playerTick(PlayerTickEvent.Post tickEvent)
 	{
@@ -148,25 +164,28 @@ public class MusicPlayerWeapon extends WeaponItem
 		MusicPlaying musicPlaying = attacker.getData(MSAttachments.MUSIC_PLAYING);
 		if(musicPlaying.getCassetteType() != EnumCassetteType.NONE && musicPlaying.getCurrentMusicPlayer() == stack)
 		{
-			RandomSource r = attacker.level().getRandom();
-			
-			double attackerLuckValue = 0;
-			double targetLuckValue = 0;
-			
-			if(attacker.getAttributes().hasAttribute(Attributes.LUCK))
-				attackerLuckValue = attacker.getAttributeValue(Attributes.LUCK);
-			if(target.getAttributes().hasAttribute(Attributes.LUCK))
-				targetLuckValue = target.getAttributeValue(Attributes.LUCK);
-			
 			EnumCassetteType.EffectContainer effectContainer = musicPlaying.getCassetteType().getEffectContainer();
-			double chanceToHit = effectContainer.applyingChance();
-			
-			//Compare the luck of the target with the user's
-			chanceToHit = chanceToHit + (attackerLuckValue / 10) - (targetLuckValue / 10);
-			
-			if(chanceToHit > r.nextFloat() && effectContainer.onHit())
+			if(effectContainer.onHit())
 			{
-				target.addEffect(effectContainer.effect().get());
+				RandomSource r = attacker.level().getRandom();
+				
+				double attackerLuckValue = 0;
+				double targetLuckValue = 0;
+				
+				if(attacker.getAttributes().hasAttribute(Attributes.LUCK))
+					attackerLuckValue = attacker.getAttributeValue(Attributes.LUCK);
+				if(target.getAttributes().hasAttribute(Attributes.LUCK))
+					targetLuckValue = target.getAttributeValue(Attributes.LUCK);
+				
+				double chanceToHit = effectContainer.applyingChance();
+				
+				//Compare the luck of the target with the user's
+				chanceToHit = chanceToHit + (attackerLuckValue / 10) - (targetLuckValue / 10);
+				
+				if(chanceToHit > r.nextFloat())
+				{
+					target.addEffect(effectContainer.effect().get());
+				}
 			}
 		}
 		return super.hurtEnemy(stack, target, attacker);

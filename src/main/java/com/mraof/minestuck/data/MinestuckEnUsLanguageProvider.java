@@ -2239,6 +2239,7 @@ public class MinestuckEnUsLanguageProvider extends MinestuckLanguageProvider
 		addStrife(KindAbstratusList.SPORK, "Sporkkind");
 		
 		add(MusicPlayerWeapon.TITLE, "Music Player");
+		add(MusicPlayerWeapon.HINT_INACTIVE, "Crouch and use to start playing");
 		add(GristCacheScreen.TITLE, "Grist Cache");
 		add(StrifeSpecibusScreen.TITLE, "Strife Specibus");
 		add(StrifeSpecibusScreen.KIND_ABSTRATUS, "Kind Abstratus");
