@@ -6,6 +6,10 @@ The format is based on [Keep a Changelog](https://keepachangelog.com/en/1.1.0/).
 
 ## [Unreleased]
 
+### Changed
+
+- Cassettes are now data-driven
+
 ## [1.21.1-1.13.1.1] - 2025-09-14
 
 ### Added

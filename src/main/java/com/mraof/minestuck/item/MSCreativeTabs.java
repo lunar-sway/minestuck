@@ -194,6 +194,10 @@ public final class MSCreativeTabs
 		output.accept(MSItems.CASSETTE_WARD.get());
 		output.accept(MSItems.CASSETTE_OTHERSIDE.get());
 		output.accept(MSItems.CASSETTE_5.get());
+		output.accept(MSItems.CASSETTE_RELIC.get());
+		output.accept(MSItems.CASSETTE_PRECIPICE.get());
+		output.accept(MSItems.CASSETTE_CREATOR.get());
+		output.accept(MSItems.CASSETTE_CREATOR_MUSIC_BOX.get());
 		
 		output.accept(MSItems.CRUXTRUDER.get());
 		output.accept(MSItems.CRUXTRUDER_LID.get());

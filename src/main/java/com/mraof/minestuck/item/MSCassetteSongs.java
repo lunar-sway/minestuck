@@ -1,27 +1,31 @@
 package com.mraof.minestuck.item;
 
 import com.mraof.minestuck.Minestuck;
-import net.minecraft.resources.ResourceLocation;
+import com.mraof.minestuck.item.components.CassettePlayable;
 
 public final class MSCassetteSongs
 {
-	public static final ResourceLocation FIVE = Minestuck.id("five");
-	public static final ResourceLocation OTHERSIDE = Minestuck.id("otherside");
-	public static final ResourceLocation ELEVEN = Minestuck.id("eleven");
-	public static final ResourceLocation THIRTEEN = Minestuck.id("thirdteen");
-	public static final ResourceLocation BLOCKS = Minestuck.id("blocks");
-	public static final ResourceLocation CAT = Minestuck.id("cat");
-	public static final ResourceLocation CHIRP = Minestuck.id("chirp");
-	public static final ResourceLocation FAR = Minestuck.id("far");
-	public static final ResourceLocation MALL = Minestuck.id("mall");
-	public static final ResourceLocation MELLOHI = Minestuck.id("mellohi");
-	public static final ResourceLocation PIGSTEP = Minestuck.id("pigstep");
-	public static final ResourceLocation STAL = Minestuck.id("stal");
-	public static final ResourceLocation STRAD = Minestuck.id("strad");
-	public static final ResourceLocation WAIT = Minestuck.id("wait");
-	public static final ResourceLocation WARD = Minestuck.id("ward");
+	public static final CassettePlayable FIVE = new CassettePlayable(Minestuck.id("five"));
+	public static final CassettePlayable OTHERSIDE = new CassettePlayable(Minestuck.id("otherside"));
+	public static final CassettePlayable ELEVEN = new CassettePlayable(Minestuck.id("eleven"));
+	public static final CassettePlayable THIRTEEN = new CassettePlayable(Minestuck.id("thirdteen"));
+	public static final CassettePlayable BLOCKS = new CassettePlayable(Minestuck.id("blocks"));
+	public static final CassettePlayable CAT = new CassettePlayable(Minestuck.id("cat"));
+	public static final CassettePlayable CHIRP = new CassettePlayable(Minestuck.id("chirp"));
+	public static final CassettePlayable FAR = new CassettePlayable(Minestuck.id("far"));
+	public static final CassettePlayable MALL = new CassettePlayable(Minestuck.id("mall"));
+	public static final CassettePlayable MELLOHI = new CassettePlayable(Minestuck.id("mellohi"));
+	public static final CassettePlayable PIGSTEP = new CassettePlayable(Minestuck.id("pigstep"));
+	public static final CassettePlayable STAL = new CassettePlayable(Minestuck.id("stal"));
+	public static final CassettePlayable STRAD = new CassettePlayable(Minestuck.id("strad"));
+	public static final CassettePlayable WAIT = new CassettePlayable(Minestuck.id("wait"));
+	public static final CassettePlayable WARD = new CassettePlayable(Minestuck.id("ward"));
+	public static final CassettePlayable RELIC = new CassettePlayable(Minestuck.id("relic"));
+	public static final CassettePlayable PRECIPICE = new CassettePlayable(Minestuck.id("precipice"));
+	public static final CassettePlayable CREATOR = new CassettePlayable(Minestuck.id("creator"));
+	public static final CassettePlayable CREATOR_MUSIC_BOX = new CassettePlayable(Minestuck.id("creator_music_box"));
 	
-	public static final ResourceLocation DANCE_STAB_DANCE = Minestuck.id("dance_stab_dance");
-	public static final ResourceLocation EMISSARY_OF_DANCE = Minestuck.id("emissary_of_dance");
-	public static final ResourceLocation RETRO_BATTLE_THEME = Minestuck.id("retro_battle");
+	public static final CassettePlayable DANCE_STAB_DANCE = new CassettePlayable(Minestuck.id("dance_stab_dance"));
+	public static final CassettePlayable EMISSARY_OF_DANCE = new CassettePlayable(Minestuck.id("emissary_of_dance"));
+	public static final CassettePlayable RETRO_BATTLE_THEME = new CassettePlayable(Minestuck.id("retro_battle"));
 }

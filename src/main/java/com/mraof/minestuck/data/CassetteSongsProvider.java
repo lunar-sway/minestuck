@@ -41,25 +41,29 @@ public class CassetteSongsProvider implements DataProvider
 	
 	protected void registerSongs()
 	{
-		addHitEffect(JukeboxSongs.FIVE, .9F, new MobEffectInstance(MobEffects.DARKNESS, 500, 0), MSCassetteSongs.FIVE);
-		addSelfEffect(JukeboxSongs.OTHERSIDE, new MobEffectInstance(MobEffects.DAMAGE_BOOST, 100, 1, false, false, false), MSCassetteSongs.OTHERSIDE);
-		addHitEffect(JukeboxSongs.ELEVEN, .1F, new MobEffectInstance(MobEffects.WITHER, 160, 0), MSCassetteSongs.ELEVEN);
-		addHitEffect(JukeboxSongs.THIRTEEN, .3F, new MobEffectInstance(MobEffects.HUNGER, 500, 0), MSCassetteSongs.THIRTEEN);
-		addHitEffect(JukeboxSongs.BLOCKS, .15F, new MobEffectInstance(MobEffects.BLINDNESS, 100, 0), MSCassetteSongs.BLOCKS);
-		addSelfEffect(JukeboxSongs.CAT, new MobEffectInstance(MobEffects.NIGHT_VISION, 200, 0, false, false, false), MSCassetteSongs.CAT);
-		addSelfEffect(JukeboxSongs.CHIRP, new MobEffectInstance(MobEffects.SLOW_FALLING, 100, 0, false, false, false), MSCassetteSongs.CHIRP);
-		addSelfEffect(JukeboxSongs.FAR, new MobEffectInstance(MobEffects.MOVEMENT_SPEED, 100, 0, false, false, false), MSCassetteSongs.FAR);
-		addSelfEffect(JukeboxSongs.MALL, new MobEffectInstance(MobEffects.WATER_BREATHING, 100, 0, false, false, false), MSCassetteSongs.MALL);
-		addHitEffect(JukeboxSongs.MELLOHI, .2F, new MobEffectInstance(MobEffects.LEVITATION, 60, 0), MSCassetteSongs.MELLOHI);
-		addSelfEffect(JukeboxSongs.PIGSTEP, new MobEffectInstance(MobEffects.FIRE_RESISTANCE, 100, 0, false, false, false), MSCassetteSongs.PIGSTEP);
-		addSelfEffect(JukeboxSongs.STAL, new MobEffectInstance(MobEffects.JUMP, 100, 0, false, false, false), MSCassetteSongs.STAL);
-		addHitEffect(JukeboxSongs.STRAD, .1F, new MobEffectInstance(MobEffects.UNLUCK, 200, 0), MSCassetteSongs.STRAD);
-		addHitEffect(JukeboxSongs.WAIT, .3F, new MobEffectInstance(MobEffects.MOVEMENT_SLOWDOWN, 200, 0), MSCassetteSongs.WAIT);
-		addHitEffect(JukeboxSongs.WARD, new MobEffectInstance(MobEffects.GLOWING, 750, 0), MSCassetteSongs.WARD);
+		addHitEffect(JukeboxSongs.FIVE, .9F, new MobEffectInstance(MobEffects.DARKNESS, 500, 0), MSCassetteSongs.FIVE.song());
+		addSelfEffect(JukeboxSongs.OTHERSIDE, new MobEffectInstance(MobEffects.DAMAGE_BOOST, 100, 1, false, false, false), MSCassetteSongs.OTHERSIDE.song());
+		addHitEffect(JukeboxSongs.ELEVEN, .1F, new MobEffectInstance(MobEffects.WITHER, 160, 0), MSCassetteSongs.ELEVEN.song());
+		addHitEffect(JukeboxSongs.THIRTEEN, .3F, new MobEffectInstance(MobEffects.HUNGER, 500, 0), MSCassetteSongs.THIRTEEN.song());
+		addHitEffect(JukeboxSongs.BLOCKS, .15F, new MobEffectInstance(MobEffects.BLINDNESS, 100, 0), MSCassetteSongs.BLOCKS.song());
+		addSelfEffect(JukeboxSongs.CAT, new MobEffectInstance(MobEffects.NIGHT_VISION, 200, 0, false, false, false), MSCassetteSongs.CAT.song());
+		addSelfEffect(JukeboxSongs.CHIRP, new MobEffectInstance(MobEffects.SLOW_FALLING, 100, 0, false, false, false), MSCassetteSongs.CHIRP.song());
+		addSelfEffect(JukeboxSongs.FAR, new MobEffectInstance(MobEffects.MOVEMENT_SPEED, 100, 0, false, false, false), MSCassetteSongs.FAR.song());
+		addSelfEffect(JukeboxSongs.MALL, new MobEffectInstance(MobEffects.WATER_BREATHING, 100, 0, false, false, false), MSCassetteSongs.MALL.song());
+		addHitEffect(JukeboxSongs.MELLOHI, .2F, new MobEffectInstance(MobEffects.LEVITATION, 60, 0), MSCassetteSongs.MELLOHI.song());
+		addSelfEffect(JukeboxSongs.PIGSTEP, new MobEffectInstance(MobEffects.FIRE_RESISTANCE, 100, 0, false, false, false), MSCassetteSongs.PIGSTEP.song());
+		addSelfEffect(JukeboxSongs.STAL, new MobEffectInstance(MobEffects.JUMP, 100, 0, false, false, false), MSCassetteSongs.STAL.song());
+		addHitEffect(JukeboxSongs.STRAD, .1F, new MobEffectInstance(MobEffects.UNLUCK, 200, 0), MSCassetteSongs.STRAD.song());
+		addHitEffect(JukeboxSongs.WAIT, .3F, new MobEffectInstance(MobEffects.MOVEMENT_SLOWDOWN, 200, 0), MSCassetteSongs.WAIT.song());
+		addHitEffect(JukeboxSongs.WARD, new MobEffectInstance(MobEffects.GLOWING, 750, 0), MSCassetteSongs.WARD.song());
+		addHitEffect(JukeboxSongs.RELIC, .2F, new MobEffectInstance(MobEffects.WEAKNESS, 100), MSCassetteSongs.RELIC.song());
+		addHitEffect(JukeboxSongs.PRECIPICE, .4F, new MobEffectInstance(MobEffects.GLOWING, 100), MSCassetteSongs.PRECIPICE.song());
+		addSelfEffect(JukeboxSongs.CREATOR, new MobEffectInstance(MobEffects.ABSORPTION, 100, 0, false, false, false), MSCassetteSongs.CREATOR.song());
+		addSelfEffect(JukeboxSongs.CREATOR_MUSIC_BOX, new MobEffectInstance(MobEffects.HEALTH_BOOST, 100, 0, false, false, false), MSCassetteSongs.CREATOR_MUSIC_BOX.song());
 		
-		addHitEffect(MSSoundEvents.JUKEBOX_SONG_DANCE_STAB_DANCE, .3F, new MobEffectInstance(MobEffects.DIG_SLOWDOWN, 600, 3), MSCassetteSongs.DANCE_STAB_DANCE);
-		addHitEffect(MSSoundEvents.JUKEBOX_SONG_EMISSARY_OF_DANCE, .1F, new MobEffectInstance(MobEffects.POISON, 200, 0), MSCassetteSongs.EMISSARY_OF_DANCE);
-		addSelfEffect(MSSoundEvents.JUKEBOX_SONG_RETRO_BATTLE_THEME, new MobEffectInstance(MobEffects.DIG_SPEED, 100, 2, false, false, false), MSCassetteSongs.RETRO_BATTLE_THEME);
+		addHitEffect(MSSoundEvents.JUKEBOX_SONG_DANCE_STAB_DANCE, .3F, new MobEffectInstance(MobEffects.DIG_SLOWDOWN, 600, 3), MSCassetteSongs.DANCE_STAB_DANCE.song());
+		addHitEffect(MSSoundEvents.JUKEBOX_SONG_EMISSARY_OF_DANCE, .1F, new MobEffectInstance(MobEffects.POISON, 200, 0), MSCassetteSongs.EMISSARY_OF_DANCE.song());
+		addSelfEffect(MSSoundEvents.JUKEBOX_SONG_RETRO_BATTLE_THEME, new MobEffectInstance(MobEffects.DIG_SPEED, 100, 2, false, false, false), MSCassetteSongs.RETRO_BATTLE_THEME.song());
 	}
 	
 	protected void addHitEffect(ResourceKey<JukeboxSong> song, MobEffectInstance effect, String name)

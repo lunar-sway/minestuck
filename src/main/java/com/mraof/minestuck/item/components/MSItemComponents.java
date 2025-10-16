@@ -45,8 +45,8 @@ public final class MSItemComponents
 			builder -> builder.persistent(Unit.CODEC).networkSynchronized(StreamCodec.unit(Unit.INSTANCE)));
 	public static final Supplier<DataComponentType<Holder<ProgramType<?>>>> PROGRAM_TYPE = REGISTRY.registerComponentType("program_type",
 			builder -> builder.persistent(ProgramTypes.REGISTRY.holderByNameCodec()).networkSynchronized(ByteBufCodecs.holderRegistry(ProgramTypes.REGISTRY_KEY)));
-	public static final Supplier<DataComponentType<ResourceLocation>> CASSETTE_SONG = REGISTRY.registerComponentType("cassette_song",
-			builder -> builder.persistent(ResourceLocation.CODEC).networkSynchronized(ResourceLocation.STREAM_CODEC));
+	public static final Supplier<DataComponentType<CassettePlayable>> CASSETTE_SONG = REGISTRY.registerComponentType("cassette_song",
+			builder -> builder.persistent(CassettePlayable.CODEC).networkSynchronized(CassettePlayable.STREAM_CODEC));
 	
 	public static final Supplier<DataComponentType<Long>> VALUE = REGISTRY.registerComponentType("value",
 			builder -> builder.persistent(Codec.LONG).networkSynchronized(ByteBufCodecs.VAR_LONG));

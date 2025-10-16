@@ -3,6 +3,9 @@ package com.mraof.minestuck.client.util;
 import com.mraof.minestuck.Minestuck;
 import com.mraof.minestuck.entity.consort.EnumConsort;
 import com.mraof.minestuck.inventory.ConsortMerchantMenu;
+import com.mraof.minestuck.item.components.CassettePlayable;
+import com.mraof.minestuck.item.components.MSItemComponents;
+
 import net.minecraft.ChatFormatting;
 import net.minecraft.client.resources.language.I18n;
 import net.minecraft.core.registries.BuiltInRegistries;
@@ -31,6 +34,13 @@ public final class ExtraTooltips
 	private static void addCustomTooltip(ItemTooltipEvent event)
 	{
 		ItemStack stack = event.getItemStack();
+		
+		// Handle cassettes
+		if (stack.has(MSItemComponents.CASSETTE_SONG)) {
+			CassettePlayable cassette = stack.get(MSItemComponents.CASSETTE_SONG);
+			cassette.addToTooltip(event.getContext(), component -> event.getToolTip().add(1, component), event.getFlags());
+		}
+
 		if(event.getEntity() != null && event.getEntity().containerMenu instanceof ConsortMerchantMenu menu
 				&& event.getEntity().containerMenu.getItems().contains(stack))
 			handleStoreTooltips(stack, event.getToolTip(), menu);

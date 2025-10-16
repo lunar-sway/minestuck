@@ -4,6 +4,7 @@ import com.google.common.collect.ImmutableMap;
 import com.google.gson.GsonBuilder;
 import com.google.gson.JsonElement;
 import com.mojang.serialization.JsonOps;
+import com.mraof.minestuck.item.components.CassettePlayable;
 import com.mraof.minestuck.item.components.MSItemComponents;
 import net.minecraft.resources.ResourceLocation;
 import net.minecraft.server.packs.resources.ResourceManager;
@@ -37,9 +38,14 @@ public final class CassetteSongs
 	{
 		if(stack.has(MSItemComponents.CASSETTE_SONG))
 		{
-			ResourceLocation song = stack.get(MSItemComponents.CASSETTE_SONG);
-			if(songs.containsKey(song)) return Optional.of(songs.get(song));
+			CassettePlayable song = stack.get(MSItemComponents.CASSETTE_SONG);
+			return findSong(song.song());
 		}
+		return Optional.empty();
+	}
+	
+	public Optional<CassetteSong> findSong(ResourceLocation song) {
+		if(songs.containsKey(song)) return Optional.of(songs.get(song));
 		return Optional.empty();
 	}
 	

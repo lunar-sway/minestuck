@@ -1,11 +1,10 @@
 {
   "effect": {
-    "applying_chance": 0.1,
+    "applying_chance": 0.4,
     "effect": {
-      "duration": 200,
-      "id": "minecraft:poison",
+      "duration": 100,
+      "id": "minecraft:glowing",
       "neoforge:cures": [
-        "honey",
         "protected_by_totem",
         "milk"
       ],
@@ -13,5 +12,5 @@
     },
     "on_hit": true
   },
-  "jukebox_song": "minestuck:emissary_of_dance"
+  "jukebox_song": "minecraft:precipice"
 }

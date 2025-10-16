@@ -16,6 +16,7 @@ import net.minecraft.util.RandomSource;
 import net.minecraft.world.InteractionHand;
 import net.minecraft.world.InteractionResultHolder;
 import net.minecraft.world.SimpleMenuProvider;
+import net.minecraft.world.effect.MobEffectInstance;
 import net.minecraft.world.entity.LivingEntity;
 import net.minecraft.world.entity.ai.attributes.Attributes;
 import net.minecraft.world.entity.player.Player;
@@ -159,7 +160,7 @@ public class MusicPlayerWeapon extends WeaponItem
 			{
 				CassetteSong.EffectContainer effectContainer = musicPlayingCap.getCassetteSong().getEffectContainer();
 				if(!effectContainer.onHit()) //Apply the cassette buff every 50 ticks, if there is any
-					player.addEffect(effectContainer.effect());
+					player.addEffect(new MobEffectInstance(effectContainer.effect()));
 			}
 		}
 	}
@@ -190,7 +191,7 @@ public class MusicPlayerWeapon extends WeaponItem
 				
 				if(chanceToHit > r.nextFloat())
 				{
-					target.addEffect(effectContainer.effect());
+					target.addEffect(new MobEffectInstance(effectContainer.effect()));
 				}
 			}
 		}
