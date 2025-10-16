@@ -18,6 +18,10 @@ import javax.annotation.Nullable;
 import java.util.Objects;
 import java.util.function.Supplier;
 
+/**
+ * @deprecated Use the <code>minestuck:cassette_code</code> components
+ */
+@Deprecated
 public enum EnumCassetteType implements StringRepresentable
 {
 	NONE(null, null),

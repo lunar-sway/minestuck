@@ -1,15 +1,13 @@
 package com.mraof.minestuck.item.weapon;
 
-import java.util.List;
-
 import com.mraof.minestuck.Minestuck;
-import com.mraof.minestuck.block.EnumCassetteType;
 import com.mraof.minestuck.inventory.musicplayer.CassetteContainerMenu;
+import com.mraof.minestuck.inventory.musicplayer.CassetteSong;
+import com.mraof.minestuck.inventory.musicplayer.CassetteSongs;
 import com.mraof.minestuck.inventory.musicplayer.MusicPlaying;
-import com.mraof.minestuck.item.CassetteItem;
+import com.mraof.minestuck.item.components.MSItemComponents;
 import com.mraof.minestuck.network.MusicPlayerPacket;
 import com.mraof.minestuck.util.MSAttachments;
-
 import net.minecraft.ChatFormatting;
 import net.minecraft.core.component.DataComponents;
 import net.minecraft.network.chat.Component;
@@ -31,6 +29,9 @@ import net.neoforged.neoforge.common.NeoForge;
 import net.neoforged.neoforge.event.ItemAttributeModifierEvent;
 import net.neoforged.neoforge.event.tick.PlayerTickEvent;
 import net.neoforged.neoforge.network.PacketDistributor;
+
+import java.util.List;
+import java.util.Optional;
 
 /**
  * <p>
@@ -65,7 +66,7 @@ public class MusicPlayerWeapon extends WeaponItem
 		super(builder, properties.component(DataComponents.CONTAINER, ItemContainerContents.EMPTY));
 		this.volume = volume;
 		this.pitch = pitch;
-        NeoForge.EVENT_BUS.addListener(this::adjustDamage);
+		NeoForge.EVENT_BUS.addListener(this::adjustDamage);
 		
 	}
 	
@@ -74,7 +75,7 @@ public class MusicPlayerWeapon extends WeaponItem
 		super(builder, properties);
 		this.volume = 4.0F;
 		this.pitch = 1.0F;
-        NeoForge.EVENT_BUS.addListener(this::adjustDamage);
+		NeoForge.EVENT_BUS.addListener(this::adjustDamage);
 	}
 	
 	@Override
@@ -89,26 +90,31 @@ public class MusicPlayerWeapon extends WeaponItem
 		{
 			if(playerIn.isCrouching())
 			{
-				if(itemInMusicPlayer.getItem() instanceof CassetteItem cassette)
+				if(itemInMusicPlayer.has(MSItemComponents.CASSETTE_SONG))
 				{
-					MusicPlayerPacket packet;
-					if(musicPlayingCap.getCassetteType() == EnumCassetteType.NONE)
+					Optional<CassetteSong> osong = CassetteSongs.getInstance().findSong(itemInMusicPlayer);
+					if(osong.isPresent())
 					{
-						packet = MusicPlayerPacket.createPacket(playerIn, cassette.cassetteType, volume, pitch);
-						musicPlayingCap.setMusicPlaying(musicPlayer, cassette.cassetteType);
-					} else
-					{
-						packet = MusicPlayerPacket.createPacket(playerIn, EnumCassetteType.NONE, 0, 0);
-						musicPlayingCap.setMusicPlaying(ItemStack.EMPTY, EnumCassetteType.NONE);
+						CassetteSong song = osong.get();
+						MusicPlayerPacket packet;
+						if(musicPlayingCap.getCassetteSong() == null)
+						{
+							packet = MusicPlayerPacket.createPacket(playerIn, song, volume, pitch);
+							musicPlayingCap.setMusicPlaying(musicPlayer, song);
+						} else
+						{
+							packet = MusicPlayerPacket.createPacket(playerIn, null, 0, 0);
+							musicPlayingCap.setMusicPlaying(ItemStack.EMPTY, null);
+						}
+						PacketDistributor.sendToPlayersTrackingEntityAndSelf(playerIn, packet);
 					}
-					PacketDistributor.sendToPlayersTrackingEntityAndSelf(playerIn, packet);
 				}
 			}
 			//open the GUI if right-clicked
 			else
 			{
-				MusicPlayerPacket packet = MusicPlayerPacket.createPacket(playerIn, EnumCassetteType.NONE, 0, 0);
-				musicPlayingCap.setMusicPlaying(ItemStack.EMPTY, EnumCassetteType.NONE);
+				MusicPlayerPacket packet = MusicPlayerPacket.createPacket(playerIn, null, 0, 0);
+				musicPlayingCap.setMusicPlaying(ItemStack.EMPTY, null);
 				//This will stop the music before opening the GUI
 				PacketDistributor.sendToPlayersTrackingEntityAndSelf(playerIn, packet);
 				serverPlayer.openMenu(new SimpleMenuProvider((pContainerId, pInventory, pPlayer) ->
@@ -123,7 +129,7 @@ public class MusicPlayerWeapon extends WeaponItem
 	public void appendHoverText(ItemStack stack, TooltipContext context, List<Component> tooltipComponents, TooltipFlag tooltipFlag)
 	{
 		ItemStack itemInMusicPlayer = stack.getOrDefault(DataComponents.CONTAINER, ItemContainerContents.EMPTY).copyOne();
-		if(itemInMusicPlayer.getItem() instanceof CassetteItem)
+		if(itemInMusicPlayer.has(MSItemComponents.CASSETTE_SONG))
 		{
 			tooltipComponents.add(Component.translatable(HINT_INACTIVE).withStyle(ChatFormatting.GRAY));
 		}
@@ -141,19 +147,19 @@ public class MusicPlayerWeapon extends WeaponItem
 					player.getItemInHand(InteractionHand.OFF_HAND) == musicPlayingCap.getCurrentMusicPlayer()) ||
 					musicPlayingCap.getCurrentMusicPlayer().isEmpty())
 			{
-				if(musicPlayingCap.getCassetteType() != EnumCassetteType.NONE)
+				if(musicPlayingCap.getCassetteSong() != null)
 				{ //If the Cassette player isn't in hand and is playing music, stop it
-					MusicPlayerPacket packet = MusicPlayerPacket.createPacket(player, EnumCassetteType.NONE, 0, 0);
-					musicPlayingCap.setMusicPlaying(ItemStack.EMPTY, EnumCassetteType.NONE);
+					MusicPlayerPacket packet = MusicPlayerPacket.createPacket(player, null, 0, 0);
+					musicPlayingCap.setMusicPlaying(ItemStack.EMPTY, null);
 					PacketDistributor.sendToPlayersTrackingEntityAndSelf(player, packet);
 				}
 			}
 			
-			if(player.level().getGameTime() % 50 == 0 && musicPlayingCap.getCassetteType() != EnumCassetteType.NONE)
+			if(player.level().getGameTime() % 50 == 0 && musicPlayingCap.getCassetteSong() != null)
 			{
-				EnumCassetteType.EffectContainer effectContainer = musicPlayingCap.getCassetteType().getEffectContainer();
+				CassetteSong.EffectContainer effectContainer = musicPlayingCap.getCassetteSong().getEffectContainer();
 				if(!effectContainer.onHit()) //Apply the cassette buff every 50 ticks, if there is any
-					player.addEffect(effectContainer.effect().get());
+					player.addEffect(effectContainer.effect());
 			}
 		}
 	}
@@ -162,9 +168,9 @@ public class MusicPlayerWeapon extends WeaponItem
 	public boolean hurtEnemy(ItemStack stack, LivingEntity target, LivingEntity attacker)
 	{
 		MusicPlaying musicPlaying = attacker.getData(MSAttachments.MUSIC_PLAYING);
-		if(musicPlaying.getCassetteType() != EnumCassetteType.NONE && musicPlaying.getCurrentMusicPlayer() == stack)
+		if(musicPlaying.getCassetteSong() != null && musicPlaying.getCurrentMusicPlayer() == stack)
 		{
-			EnumCassetteType.EffectContainer effectContainer = musicPlaying.getCassetteType().getEffectContainer();
+			CassetteSong.EffectContainer effectContainer = musicPlaying.getCassetteSong().getEffectContainer();
 			if(effectContainer.onHit())
 			{
 				RandomSource r = attacker.level().getRandom();
@@ -184,7 +190,7 @@ public class MusicPlayerWeapon extends WeaponItem
 				
 				if(chanceToHit > r.nextFloat())
 				{
-					target.addEffect(effectContainer.effect().get());
+					target.addEffect(effectContainer.effect());
 				}
 			}
 		}

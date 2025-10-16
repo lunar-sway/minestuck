@@ -1,0 +1,16 @@
+{
+  "effect": {
+    "applying_chance": 0.1,
+    "effect": {
+      "duration": 200,
+      "id": "minecraft:unluck",
+      "neoforge:cures": [
+        "protected_by_totem",
+        "milk"
+      ],
+      "show_icon": true
+    },
+    "on_hit": true
+  },
+  "jukebox_song": "minecraft:strad"
+}

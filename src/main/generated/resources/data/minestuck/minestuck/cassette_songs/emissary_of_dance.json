@@ -1,0 +1,17 @@
+{
+  "effect": {
+    "applying_chance": 0.1,
+    "effect": {
+      "duration": 200,
+      "id": "minecraft:poison",
+      "neoforge:cures": [
+        "protected_by_totem",
+        "honey",
+        "milk"
+      ],
+      "show_icon": true
+    },
+    "on_hit": true
+  },
+  "jukebox_song": "minestuck:emissary_of_dance"
+}

@@ -23,6 +23,10 @@ import net.minecraft.world.level.block.state.BlockState;
 import javax.annotation.ParametersAreNonnullByDefault;
 import java.util.List;
 
+/**
+ * @deprecated Use the <code>minestuck:cassette_code</code> components
+ */
+@Deprecated
 @ParametersAreNonnullByDefault
 public class CassetteItem extends Item
 {
@@ -42,7 +46,7 @@ public class CassetteItem extends Item
 		Level level = context.getLevel();
 		BlockPos blockpos = context.getClickedPos();
 		BlockState blockstate = level.getBlockState(blockpos);
-		if(blockstate.getBlock() == MSBlocks.CASSETTE_PLAYER.get() && blockstate.getValue(CassettePlayerBlock.CASSETTE) == EnumCassetteType.NONE && blockstate.getValue(CassettePlayerBlock.OPEN))
+		if(blockstate.getBlock() == MSBlocks.CASSETTE_PLAYER.get() && blockstate.getValue(CassettePlayerBlock.CASSETTE) && blockstate.getValue(CassettePlayerBlock.OPEN))
 		{
 			ItemStack itemstack = context.getItemInHand();
 			if(!level.isClientSide)

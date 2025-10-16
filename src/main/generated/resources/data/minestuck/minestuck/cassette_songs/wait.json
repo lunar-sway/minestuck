@@ -1,0 +1,16 @@
+{
+  "effect": {
+    "applying_chance": 0.3,
+    "effect": {
+      "duration": 200,
+      "id": "minecraft:slowness",
+      "neoforge:cures": [
+        "protected_by_totem",
+        "milk"
+      ],
+      "show_icon": true
+    },
+    "on_hit": true
+  },
+  "jukebox_song": "minecraft:wait"
+}

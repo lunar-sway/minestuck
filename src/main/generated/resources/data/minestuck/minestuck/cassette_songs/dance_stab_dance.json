@@ -1,0 +1,17 @@
+{
+  "effect": {
+    "applying_chance": 0.3,
+    "effect": {
+      "amplifier": 3,
+      "duration": 600,
+      "id": "minecraft:mining_fatigue",
+      "neoforge:cures": [
+        "protected_by_totem",
+        "milk"
+      ],
+      "show_icon": true
+    },
+    "on_hit": true
+  },
+  "jukebox_song": "minestuck:dance_stab_dance"
+}

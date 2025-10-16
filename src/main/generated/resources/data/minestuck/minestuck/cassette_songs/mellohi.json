@@ -1,0 +1,16 @@
+{
+  "effect": {
+    "applying_chance": 0.2,
+    "effect": {
+      "duration": 60,
+      "id": "minecraft:levitation",
+      "neoforge:cures": [
+        "protected_by_totem",
+        "milk"
+      ],
+      "show_icon": true
+    },
+    "on_hit": true
+  },
+  "jukebox_song": "minecraft:mellohi"
+}

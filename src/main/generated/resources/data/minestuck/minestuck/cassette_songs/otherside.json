@@ -1,0 +1,18 @@
+{
+  "effect": {
+    "applying_chance": 1.0,
+    "effect": {
+      "amplifier": 1,
+      "duration": 100,
+      "id": "minecraft:strength",
+      "neoforge:cures": [
+        "protected_by_totem",
+        "milk"
+      ],
+      "show_icon": false,
+      "show_particles": false
+    },
+    "on_hit": false
+  },
+  "jukebox_song": "minecraft:otherside"
+}
