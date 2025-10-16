@@ -44,7 +44,8 @@ public final class CassetteSongs
 		return Optional.empty();
 	}
 	
-	public Optional<CassetteSong> findSong(ResourceLocation song) {
+	public Optional<CassetteSong> findSong(ResourceLocation song)
+	{
 		if(songs.containsKey(song)) return Optional.of(songs.get(song));
 		return Optional.empty();
 	}

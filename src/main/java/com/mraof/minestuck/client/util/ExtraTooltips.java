@@ -36,7 +36,8 @@ public final class ExtraTooltips
 		ItemStack stack = event.getItemStack();
 		
 		// Handle cassettes
-		if (stack.has(MSItemComponents.CASSETTE_SONG)) {
+		if(stack.has(MSItemComponents.CASSETTE_SONG))
+		{
 			CassettePlayable cassette = stack.get(MSItemComponents.CASSETTE_SONG);
 			cassette.addToTooltip(event.getContext(), component -> event.getToolTip().add(1, component), event.getFlags());
 		}
