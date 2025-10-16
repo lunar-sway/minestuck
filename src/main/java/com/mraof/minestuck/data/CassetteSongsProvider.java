@@ -1,6 +1,8 @@
 package com.mraof.minestuck.data;
 
+import com.google.gson.JsonArray;
 import com.google.gson.JsonElement;
+import com.google.gson.JsonObject;
 import com.mojang.serialization.JsonOps;
 import com.mraof.minestuck.inventory.musicplayer.CassetteSong;
 import com.mraof.minestuck.inventory.musicplayer.CassetteSong.EffectContainer;
@@ -18,8 +20,10 @@ import net.minecraft.world.item.JukeboxSong;
 import net.minecraft.world.item.JukeboxSongs;
 
 import javax.annotation.ParametersAreNonnullByDefault;
+
 import java.nio.file.Path;
 import java.util.ArrayList;
+import java.util.Collections;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
@@ -128,6 +132,7 @@ public class CassetteSongsProvider implements DataProvider
 		{
 			Path songPath = getPath(outputPath, entry.getKey());
 			JsonElement jsonData = CassetteSong.CODEC.encodeStart(JsonOps.INSTANCE, entry.getValue()).getOrThrow();
+			sortCures(jsonData);
 			futures.add(DataProvider.saveStable(cache, jsonData, songPath));
 		}
 		
@@ -137,6 +142,31 @@ public class CassetteSongsProvider implements DataProvider
 	private static Path getPath(Path outputPath, ResourceLocation id)
 	{
 		return outputPath.resolve("data/" + id.getNamespace() + "/minestuck/cassette_songs/" + id.getPath() + ".json");
+	}
+	
+	/**
+	 * neoforge:cures has no determined sorting, so the datachecker has a chance to fail because of it
+	 * <p>
+	 * This method sorts the cures to prevent the issue from rising
+	 */
+	private static void sortCures(JsonElement jsonData)
+	{
+		JsonObject effect = jsonData.getAsJsonObject().get("effect").getAsJsonObject();
+		JsonObject subeffect = effect.get("effect").getAsJsonObject();
+		JsonArray cures = subeffect.get("neoforge:cures").getAsJsonArray();
+		List<String> values = new ArrayList<>();
+		for(int i = cures.size() - 1; i >= 0; i--)
+		{
+			values.add(cures.get(i).getAsString());
+			cures.remove(i);
+		}
+		Collections.sort(values);
+		for(int i = 0; i < values.size(); i++)
+		{
+			cures.add(values.get(i));
+		}
+		subeffect.add("neoforge:cures", cures);
+		effect.add("effect", subeffect);
 	}
 	
 	@Override
