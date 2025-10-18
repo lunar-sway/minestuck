@@ -613,7 +613,7 @@ public class MSItems
 	public static final DeferredItem<Item> GAMEBRO_MAGAZINE = REGISTER.register("gamebro_magazine", () -> new Item(new Item.Properties().stacksTo(1)));
 	public static final DeferredItem<Item> GAMEGRL_MAGAZINE = REGISTER.register("gamegrl_magazine", () -> new Item(new Item.Properties().stacksTo(1)));
 	public static final DeferredItem<Item> CREW_POSTER = REGISTER.register("crew_poster", () -> new PosterItem(PosterComponent.withDefaultBack(MSTags.PaintingVariants.MIDNIGHT_CREW_POSTERS), new Item.Properties().stacksTo(1)));
-	public static final DeferredItem<Item> SBAHJ_POSTER = REGISTER.register("sbahj_poster", () -> new PosterItem(new PosterComponent(MSTags.PaintingVariants.SBAHJ_POSTERS, Minestuck.id("textures/painting/back/sbahj_poster.png")), new Item.Properties().stacksTo(1)));
+	public static final DeferredItem<Item> SBAHJ_POSTER = REGISTER.register("sbahj_poster", () -> new PosterItem(new PosterComponent(MSTags.PaintingVariants.SBAHJ_POSTERS, Minestuck.id("back/sbahj_poster")), new Item.Properties().stacksTo(1)));
 	public static final DeferredItem<Item> BI_DYE = REGISTER.register("bi_dye", () -> new Item(new Item.Properties()));
 	public static final DeferredItem<Item> LIP_BALM = REGISTER.register("lip_balm", () -> new RightClickMessageItem(new Item.Properties(), RightClickMessageItem.Type.DEFAULT));
 	public static final DeferredItem<Item> ELECTRIC_AUTOHARP = REGISTER.register("electric_autoharp", () -> new RightClickMusicItem(new Item.Properties(), RightClickMusicItem.Type.ELECTRIC_AUTOHARP));
