@@ -82,6 +82,7 @@ public class PosterEntity extends Painting
 	{
 		super.readAdditionalSaveData(pCompound);
 		droppedItem = ItemStack.parseOptional(registryAccess(), pCompound.getCompound("item"));
+		entityData.set(STACK, droppedItem);
 	}
 	
 	@Override
@@ -140,6 +141,6 @@ public class PosterEntity extends Painting
 	
 	@Override
 	public ItemStack getPickResult() {
-		return droppedItem;
+		return entityData.get(STACK);
 	}
 }
