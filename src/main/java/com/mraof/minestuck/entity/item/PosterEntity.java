@@ -21,12 +21,10 @@ import net.minecraft.world.entity.player.Player;
 import net.minecraft.world.item.ItemStack;
 import net.minecraft.world.level.GameRules;
 import net.minecraft.world.level.Level;
-
-import javax.annotation.Nullable;
-
 import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.Logger;
 
+import javax.annotation.Nullable;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Optional;
@@ -34,7 +32,7 @@ import java.util.Optional;
 public class PosterEntity extends Painting
 {
 	private static final Logger LOGGER = LogManager.getLogger();
-    private static final EntityDataAccessor<ItemStack> STACK = SynchedEntityData.defineId(PosterEntity.class, EntityDataSerializers.ITEM_STACK);
+	private static final EntityDataAccessor<ItemStack> STACK = SynchedEntityData.defineId(PosterEntity.class, EntityDataSerializers.ITEM_STACK);
 	private ItemStack droppedItem;
 	
 	public PosterEntity(Level pLevel)
@@ -66,10 +64,13 @@ public class PosterEntity extends Painting
 	 * Called when this entity is broken. Entity parameter may be null.
 	 */
 	@Override
-	public void dropItem(@Nullable Entity pBrokenEntity) {
-		if (this.level().getGameRules().getBoolean(GameRules.RULE_DOENTITYDROPS)) {
+	public void dropItem(@Nullable Entity pBrokenEntity)
+	{
+		if(this.level().getGameRules().getBoolean(GameRules.RULE_DOENTITYDROPS))
+		{
 			this.playSound(SoundEvents.PAINTING_BREAK, 1.0F, 1.0F);
-			if (pBrokenEntity instanceof Player player && player.hasInfiniteMaterials()) {
+			if(pBrokenEntity instanceof Player player && player.hasInfiniteMaterials())
+			{
 				return;
 			}
 			
@@ -89,43 +90,52 @@ public class PosterEntity extends Painting
 	public void addAdditionalSaveData(CompoundTag pCompound)
 	{
 		super.addAdditionalSaveData(pCompound);
-		if (!droppedItem.isEmpty())
+		if(!droppedItem.isEmpty())
 			pCompound.put("item", droppedItem.save(registryAccess()));
 		else
 			LOGGER.error("Poster {} item is empty when it shouldn't be", getUUID());
 	}
 	
 	@Override
-	protected void defineSynchedData(Builder builder) {
+	protected void defineSynchedData(Builder builder)
+	{
 		super.defineSynchedData(builder);
-        builder.define(STACK, ItemStack.EMPTY);
+		builder.define(STACK, ItemStack.EMPTY);
 	}
 	
-	private static int variantArea(Holder<PaintingVariant> p_218899_) {
+	private static int variantArea(Holder<PaintingVariant> p_218899_)
+	{
 		return p_218899_.value().area();
 	}
 	
-	public static Optional<PosterEntity> createArt(Level pLevel, BlockPos pPos, Direction pDirection, ItemStack itemStack, TagKey<PaintingVariant> pool) {
+	public static Optional<PosterEntity> createArt(Level pLevel, BlockPos pPos, Direction pDirection, ItemStack itemStack, TagKey<PaintingVariant> pool)
+	{
 		PosterEntity painting = new PosterEntity(pLevel, pPos, itemStack);
 		List<Holder<PaintingVariant>> list = new ArrayList<>();
 		pLevel.registryAccess().registryOrThrow(Registries.PAINTING_VARIANT).getTagOrEmpty(pool).forEach(list::add);
-		if (list.isEmpty()) {
+		if(list.isEmpty())
+		{
 			return Optional.empty();
-		} else {
+		} else
+		{
 			painting.setDirection(pDirection);
 			list.removeIf(p_344343_ -> {
 				painting.setVariant(p_344343_);
 				return !painting.survives();
 			});
-			if (list.isEmpty()) {
+			if(list.isEmpty())
+			{
 				return Optional.empty();
-			} else {
+			} else
+			{
 				int i = list.stream().mapToInt(PosterEntity::variantArea).max().orElse(0);
 				list.removeIf(p_218883_ -> variantArea(p_218883_) < i);
 				Optional<Holder<PaintingVariant>> optional = Util.getRandomSafe(list, painting.random);
-				if (optional.isEmpty()) {
+				if(optional.isEmpty())
+				{
 					return Optional.empty();
-				} else {
+				} else
+				{
 					painting.setVariant(optional.get());
 					painting.setDirection(pDirection);
 					return Optional.of(painting);
@@ -140,7 +150,8 @@ public class PosterEntity extends Painting
 	}
 	
 	@Override
-	public ItemStack getPickResult() {
+	public ItemStack getPickResult()
+	{
 		return entityData.get(STACK);
 	}
 }
