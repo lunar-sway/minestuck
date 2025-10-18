@@ -3,6 +3,7 @@ package com.mraof.minestuck.client.renderer.entity;
 import com.mraof.minestuck.entity.item.PosterEntity;
 import com.mraof.minestuck.item.components.MSItemComponents;
 import com.mraof.minestuck.item.components.PosterComponent;
+
 import net.minecraft.client.renderer.entity.EntityRendererProvider;
 import net.minecraft.client.renderer.entity.PaintingRenderer;
 import net.minecraft.resources.ResourceLocation;
@@ -15,9 +16,9 @@ public class PosterRenderer extends PaintingRenderer
 		super(pContext);
 	}
 	
-	@Override
-	public ResourceLocation getTextureLocation(Painting pEntity)
+	public ResourceLocation _getTextureLocation(Painting pEntity)
 	{
+		// Stopped working as expected between 1.20.1 and 1.21.1 (included)
 		if(pEntity instanceof PosterEntity poster && poster.getItem().has(MSItemComponents.POSTER))
 			return poster.getItem().get(MSItemComponents.POSTER).backSprite();
 			

@@ -7,6 +7,10 @@ import net.minecraft.core.Direction;
 import net.minecraft.core.Holder;
 import net.minecraft.core.registries.Registries;
 import net.minecraft.nbt.CompoundTag;
+import net.minecraft.network.syncher.EntityDataAccessor;
+import net.minecraft.network.syncher.EntityDataSerializers;
+import net.minecraft.network.syncher.SynchedEntityData;
+import net.minecraft.network.syncher.SynchedEntityData.Builder;
 import net.minecraft.sounds.SoundEvents;
 import net.minecraft.tags.TagKey;
 import net.minecraft.world.entity.Entity;
@@ -19,12 +23,18 @@ import net.minecraft.world.level.GameRules;
 import net.minecraft.world.level.Level;
 
 import javax.annotation.Nullable;
+
+import org.apache.logging.log4j.LogManager;
+import org.apache.logging.log4j.Logger;
+
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Optional;
 
 public class PosterEntity extends Painting
 {
+	private static final Logger LOGGER = LogManager.getLogger();
+    private static final EntityDataAccessor<ItemStack> STACK = SynchedEntityData.defineId(PosterEntity.class, EntityDataSerializers.ITEM_STACK);
 	private ItemStack droppedItem;
 	
 	public PosterEntity(Level pLevel)
@@ -37,12 +47,14 @@ public class PosterEntity extends Painting
 		this(level);
 		this.pos = pos;
 		this.droppedItem = droppedItem;
+		entityData.set(STACK, droppedItem);
 	}
 	
 	public PosterEntity(Level pLevel, BlockPos pPos, Direction pDirection, Holder<PaintingVariant> pVariant, ItemStack droppedItem)
 	{
 		super(pLevel, pPos, pDirection, pVariant);
 		this.droppedItem = droppedItem;
+		entityData.set(STACK, droppedItem);
 	}
 	
 	public PosterEntity(EntityType<PosterEntity> hangingArtEntityEntityType, Level level)
@@ -68,13 +80,24 @@ public class PosterEntity extends Painting
 	@Override
 	public void readAdditionalSaveData(CompoundTag pCompound)
 	{
+		super.readAdditionalSaveData(pCompound);
 		droppedItem = ItemStack.parseOptional(registryAccess(), pCompound.getCompound("item"));
 	}
 	
 	@Override
 	public void addAdditionalSaveData(CompoundTag pCompound)
 	{
-		pCompound.put("item", droppedItem.save(registryAccess()));
+		super.addAdditionalSaveData(pCompound);
+		if (!droppedItem.isEmpty())
+			pCompound.put("item", droppedItem.save(registryAccess()));
+		else
+			LOGGER.error("Poster {} item is empty when it shouldn't be", getUUID());
+	}
+	
+	@Override
+	protected void defineSynchedData(Builder builder) {
+		super.defineSynchedData(builder);
+        builder.define(STACK, ItemStack.EMPTY);
 	}
 	
 	private static int variantArea(Holder<PaintingVariant> p_218899_) {
@@ -112,6 +135,11 @@ public class PosterEntity extends Painting
 	
 	public ItemStack getItem()
 	{
+		return entityData.get(STACK);
+	}
+	
+	@Override
+	public ItemStack getPickResult() {
 		return droppedItem;
 	}
 }
