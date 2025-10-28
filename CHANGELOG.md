@@ -9,6 +9,8 @@ The format is based on [Keep a Changelog](https://keepachangelog.com/en/1.1.0/).
 ### Fixed
 
 - Fix JEI not loading grist (and by extension, alchemy recipes) on newer versions
+- Fix Glowing Mushroom Vines requiring itself for alchemizing
+- Fix missing Bucket of Glimmering Water and Magmatic Igneous Stone grist cost
 
 ### Contributors for this release
 
