@@ -1,0 +1,16 @@
+{
+  "effect": {
+    "applying_chance": 1.0,
+    "effect": {
+      "duration": 750,
+      "id": "minecraft:glowing",
+      "neoforge:cures": [
+        "milk",
+        "protected_by_totem"
+      ],
+      "show_icon": true
+    },
+    "on_hit": true
+  },
+  "jukebox_song": "minecraft:ward"
+}

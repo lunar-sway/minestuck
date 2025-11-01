@@ -1,7 +1,6 @@
 package com.mraof.minestuck.item;
 
 import com.mraof.minestuck.Minestuck;
-import com.mraof.minestuck.block.EnumCassetteType;
 import com.mraof.minestuck.block.MSBlocks;
 import com.mraof.minestuck.computer.ProgramTypes;
 import com.mraof.minestuck.effects.MSEffects;
@@ -672,24 +671,28 @@ public class MSItems
 	public static final DeferredItem<Item> MUSIC_DISC_DANCE_STAB_DANCE = REGISTER.register("music_disc_dance_stab_dance", () -> new Item(new Item.Properties().rarity(Rarity.RARE).stacksTo(1).jukeboxPlayable(MSSoundEvents.JUKEBOX_SONG_DANCE_STAB_DANCE)));
 	public static final DeferredItem<Item> MUSIC_DISC_RETRO_BATTLE = REGISTER.register("music_disc_retro_battle", () -> new Item(new Item.Properties().rarity(Rarity.RARE).stacksTo(1).jukeboxPlayable(MSSoundEvents.JUKEBOX_SONG_RETRO_BATTLE_THEME)));
 	
-	public static final DeferredItem<Item> CASSETTE_13 = REGISTER.register("cassette_13", () -> new CassetteItem(1, EnumCassetteType.THIRTEEN, new Item.Properties().rarity(Rarity.RARE).stacksTo(1), 3560));
-	public static final DeferredItem<Item> CASSETTE_CAT = REGISTER.register("cassette_cat", () -> new CassetteItem(2, EnumCassetteType.CAT, new Item.Properties().rarity(Rarity.RARE).stacksTo(1), 3700));
-	public static final DeferredItem<Item> CASSETTE_BLOCKS = REGISTER.register("cassette_blocks", () -> new CassetteItem(3, EnumCassetteType.BLOCKS, new Item.Properties().rarity(Rarity.RARE).stacksTo(1), 6900));
-	public static final DeferredItem<Item> CASSETTE_CHIRP = REGISTER.register("cassette_chirp", () -> new CassetteItem(4, EnumCassetteType.CHIRP, new Item.Properties().rarity(Rarity.RARE).stacksTo(1), 3700));
-	public static final DeferredItem<Item> CASSETTE_FAR = REGISTER.register("cassette_far", () -> new CassetteItem(5, EnumCassetteType.FAR, new Item.Properties().rarity(Rarity.RARE).stacksTo(1), 3480));
-	public static final DeferredItem<Item> CASSETTE_MALL = REGISTER.register("cassette_mall", () -> new CassetteItem(6, EnumCassetteType.MALL, new Item.Properties().rarity(Rarity.RARE).stacksTo(1), 3940));
-	public static final DeferredItem<Item> CASSETTE_MELLOHI = REGISTER.register("cassette_mellohi", () -> new CassetteItem(7, EnumCassetteType.MELLOHI, new Item.Properties().rarity(Rarity.RARE).stacksTo(1), 1920));
-	public static final DeferredItem<Item> CASSETTE_DANCE_STAB = REGISTER.register("cassette_dance_stab", () -> new CassetteItem(2, EnumCassetteType.DANCE_STAB_DANCE, new Item.Properties().rarity(Rarity.RARE).stacksTo(1), 13440));
-	public static final DeferredItem<Item> CASSETTE_RETRO_BATTLE = REGISTER.register("cassette_retro_battle", () -> new CassetteItem(3, EnumCassetteType.RETRO_BATTLE_THEME, new Item.Properties().rarity(Rarity.RARE).stacksTo(1), 2760));
-	public static final DeferredItem<Item> CASSETTE_EMISSARY = REGISTER.register("cassette_emissary", () -> new CassetteItem(1, EnumCassetteType.EMISSARY_OF_DANCE, new Item.Properties().rarity(Rarity.RARE).stacksTo(1), 11040));
-	public static final DeferredItem<Item> CASSETTE_11 = REGISTER.register("cassette_11", () -> new CassetteItem(11, EnumCassetteType.ELEVEN, new Item.Properties().rarity(Rarity.RARE).stacksTo(1), 1420));
-	public static final DeferredItem<Item> CASSETTE_PIGSTEP = REGISTER.register("cassette_pigstep", () -> new CassetteItem(13, EnumCassetteType.PIGSTEP, new Item.Properties().rarity(Rarity.RARE).stacksTo(1), 2980));
-	public static final DeferredItem<Item> CASSETTE_STAL = REGISTER.register("cassette_stal", () -> new CassetteItem(8, EnumCassetteType.STAL, new Item.Properties().rarity(Rarity.RARE).stacksTo(1), 3000));
-	public static final DeferredItem<Item> CASSETTE_STRAD = REGISTER.register("cassette_strad", () -> new CassetteItem(9, EnumCassetteType.STRAD, new Item.Properties().rarity(Rarity.RARE).stacksTo(1), 3760));
-	public static final DeferredItem<Item> CASSETTE_WAIT = REGISTER.register("cassette_wait", () -> new CassetteItem(12, EnumCassetteType.WAIT, new Item.Properties().rarity(Rarity.RARE).stacksTo(1), 4760));
-	public static final DeferredItem<Item> CASSETTE_WARD = REGISTER.register("cassette_ward", () -> new CassetteItem(10, EnumCassetteType.WARD, new Item.Properties().rarity(Rarity.RARE).stacksTo(1), 5020));
-	public static final DeferredItem<Item> CASSETTE_OTHERSIDE = REGISTER.register("cassette_otherside", () -> new CassetteItem(14, EnumCassetteType.OTHERSIDE, new Item.Properties().rarity(Rarity.EPIC).stacksTo(1), 3900));
-	public static final DeferredItem<Item> CASSETTE_5 = REGISTER.register("cassette_5", () -> new CassetteItem(15, EnumCassetteType.FIVE, new Item.Properties().rarity(Rarity.RARE).stacksTo(1), 3560));
+	public static final DeferredItem<Item> CASSETTE_13 = REGISTER.register("cassette_13", () -> new Item(new Item.Properties().rarity(Rarity.RARE).stacksTo(1).component(MSItemComponents.CASSETTE_SONG, MSCassetteSongs.THIRTEEN)));
+	public static final DeferredItem<Item> CASSETTE_CAT = REGISTER.register("cassette_cat", () -> new Item(new Item.Properties().rarity(Rarity.RARE).stacksTo(1).component(MSItemComponents.CASSETTE_SONG, MSCassetteSongs.CAT)));
+	public static final DeferredItem<Item> CASSETTE_BLOCKS = REGISTER.register("cassette_blocks", () -> new Item(new Item.Properties().rarity(Rarity.RARE).stacksTo(1).component(MSItemComponents.CASSETTE_SONG, MSCassetteSongs.BLOCKS)));
+	public static final DeferredItem<Item> CASSETTE_CHIRP = REGISTER.register("cassette_chirp", () -> new Item(new Item.Properties().rarity(Rarity.RARE).stacksTo(1).component(MSItemComponents.CASSETTE_SONG, MSCassetteSongs.CHIRP)));
+	public static final DeferredItem<Item> CASSETTE_FAR = REGISTER.register("cassette_far", () -> new Item(new Item.Properties().rarity(Rarity.RARE).stacksTo(1).component(MSItemComponents.CASSETTE_SONG, MSCassetteSongs.FAR)));
+	public static final DeferredItem<Item> CASSETTE_MALL = REGISTER.register("cassette_mall", () -> new Item(new Item.Properties().rarity(Rarity.RARE).stacksTo(1).component(MSItemComponents.CASSETTE_SONG, MSCassetteSongs.MALL)));
+	public static final DeferredItem<Item> CASSETTE_MELLOHI = REGISTER.register("cassette_mellohi", () -> new Item(new Item.Properties().rarity(Rarity.RARE).stacksTo(1).component(MSItemComponents.CASSETTE_SONG, MSCassetteSongs.MELLOHI)));
+	public static final DeferredItem<Item> CASSETTE_DANCE_STAB = REGISTER.register("cassette_dance_stab", () -> new Item(new Item.Properties().rarity(Rarity.RARE).stacksTo(1).component(MSItemComponents.CASSETTE_SONG, MSCassetteSongs.DANCE_STAB_DANCE)));
+	public static final DeferredItem<Item> CASSETTE_RETRO_BATTLE = REGISTER.register("cassette_retro_battle", () -> new Item(new Item.Properties().rarity(Rarity.RARE).stacksTo(1).component(MSItemComponents.CASSETTE_SONG, MSCassetteSongs.RETRO_BATTLE_THEME)));
+	public static final DeferredItem<Item> CASSETTE_EMISSARY = REGISTER.register("cassette_emissary", () -> new Item(new Item.Properties().rarity(Rarity.RARE).stacksTo(1).component(MSItemComponents.CASSETTE_SONG, MSCassetteSongs.EMISSARY_OF_DANCE)));
+	public static final DeferredItem<Item> CASSETTE_11 = REGISTER.register("cassette_11", () -> new Item(new Item.Properties().rarity(Rarity.RARE).stacksTo(1).component(MSItemComponents.CASSETTE_SONG, MSCassetteSongs.ELEVEN)));
+	public static final DeferredItem<Item> CASSETTE_PIGSTEP = REGISTER.register("cassette_pigstep", () -> new Item(new Item.Properties().rarity(Rarity.RARE).stacksTo(1).component(MSItemComponents.CASSETTE_SONG, MSCassetteSongs.PIGSTEP)));
+	public static final DeferredItem<Item> CASSETTE_STAL = REGISTER.register("cassette_stal", () -> new Item(new Item.Properties().rarity(Rarity.RARE).stacksTo(1).component(MSItemComponents.CASSETTE_SONG, MSCassetteSongs.STAL)));
+	public static final DeferredItem<Item> CASSETTE_STRAD = REGISTER.register("cassette_strad", () -> new Item(new Item.Properties().rarity(Rarity.RARE).stacksTo(1).component(MSItemComponents.CASSETTE_SONG, MSCassetteSongs.STRAD)));
+	public static final DeferredItem<Item> CASSETTE_WAIT = REGISTER.register("cassette_wait", () -> new Item(new Item.Properties().rarity(Rarity.RARE).stacksTo(1).component(MSItemComponents.CASSETTE_SONG, MSCassetteSongs.WAIT)));
+	public static final DeferredItem<Item> CASSETTE_WARD = REGISTER.register("cassette_ward", () -> new Item(new Item.Properties().rarity(Rarity.RARE).stacksTo(1).component(MSItemComponents.CASSETTE_SONG, MSCassetteSongs.WARD)));
+	public static final DeferredItem<Item> CASSETTE_OTHERSIDE = REGISTER.register("cassette_otherside", () -> new Item(new Item.Properties().rarity(Rarity.RARE).stacksTo(1).component(MSItemComponents.CASSETTE_SONG, MSCassetteSongs.OTHERSIDE)));
+	public static final DeferredItem<Item> CASSETTE_5 = REGISTER.register("cassette_5", () -> new Item(new Item.Properties().rarity(Rarity.RARE).stacksTo(1).component(MSItemComponents.CASSETTE_SONG, MSCassetteSongs.FIVE)));
+	public static final DeferredItem<Item> CASSETTE_RELIC = REGISTER.register("cassette_relic", () -> new Item(new Item.Properties().rarity(Rarity.RARE).stacksTo(1).component(MSItemComponents.CASSETTE_SONG, MSCassetteSongs.RELIC)));
+	public static final DeferredItem<Item> CASSETTE_PRECIPICE = REGISTER.register("cassette_precipice", () -> new Item(new Item.Properties().rarity(Rarity.RARE).stacksTo(1).component(MSItemComponents.CASSETTE_SONG, MSCassetteSongs.PRECIPICE)));
+	public static final DeferredItem<Item> CASSETTE_CREATOR = REGISTER.register("cassette_creator", () -> new Item(new Item.Properties().rarity(Rarity.RARE).stacksTo(1).component(MSItemComponents.CASSETTE_SONG, MSCassetteSongs.CREATOR)));
+	public static final DeferredItem<Item> CASSETTE_CREATOR_MUSIC_BOX = REGISTER.register("cassette_creator_music_box", () -> new Item(new Item.Properties().rarity(Rarity.RARE).stacksTo(1).component(MSItemComponents.CASSETTE_SONG, MSCassetteSongs.CREATOR_MUSIC_BOX)));
 	
 	
 	//Spawn Eggs
