@@ -70,16 +70,6 @@ public class CassetteSongsProvider implements DataProvider
 		addSelfEffect(MSSoundEvents.JUKEBOX_SONG_RETRO_BATTLE_THEME, new MobEffectInstance(MobEffects.DIG_SPEED, 100, 2, false, false, false), MSCassetteSongs.RETRO_BATTLE_THEME.song());
 	}
 	
-	protected void addHitEffect(ResourceKey<JukeboxSong> song, MobEffectInstance effect, String name)
-	{
-		addHitEffect(song, 1, effect, name);
-	}
-	
-	protected void addHitEffect(ResourceKey<JukeboxSong> song, float chance, MobEffectInstance effect, String name)
-	{
-		add(song, chance, effect, true, name);
-	}
-	
 	protected void addHitEffect(ResourceKey<JukeboxSong> song, MobEffectInstance effect, ResourceLocation name)
 	{
 		addHitEffect(song, 1, effect, name);
@@ -90,24 +80,9 @@ public class CassetteSongsProvider implements DataProvider
 		add(new CassetteSong(song, new EffectContainer(effect, chance, true)), name);
 	}
 	
-	protected void addSelfEffect(ResourceKey<JukeboxSong> song, MobEffectInstance effect, String name)
-	{
-		add(song, 1, effect, false, name);
-	}
-	
 	protected void addSelfEffect(ResourceKey<JukeboxSong> song, MobEffectInstance effect, ResourceLocation name)
 	{
 		add(new CassetteSong(song, new EffectContainer(effect, 1, false)), name);
-	}
-	
-	protected void add(ResourceKey<JukeboxSong> song, MobEffectInstance effect, boolean onHit, String name)
-	{
-		add(song, 1, effect, onHit, name);
-	}
-	
-	protected void add(ResourceKey<JukeboxSong> song, float chance, MobEffectInstance effect, boolean onHit, String name)
-	{
-		add(new CassetteSong(song, new EffectContainer(effect, chance, onHit)), name);
 	}
 	
 	protected void add(CassetteSong song, String name)
@@ -141,7 +116,7 @@ public class CassetteSongsProvider implements DataProvider
 	
 	private static Path getPath(Path outputPath, ResourceLocation id)
 	{
-		return outputPath.resolve("data/" + id.getNamespace() + "/minestuck/cassette_songs/" + id.getPath() + ".json");
+		return outputPath.resolve("data/" + id.getNamespace() + "/minestuck/cassette_effects/" + id.getPath() + ".json");
 	}
 	
 	/**

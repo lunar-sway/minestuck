@@ -74,7 +74,7 @@ public final class CassetteSongs
 		
 		Loader()
 		{
-			super(new GsonBuilder().create(), "minestuck/cassette_songs");
+			super(new GsonBuilder().create(), "minestuck/cassette_effects");
 		}
 		
 		@Override
