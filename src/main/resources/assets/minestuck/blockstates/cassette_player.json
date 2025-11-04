@@ -31,18 +31,6 @@
         {
             "when":  { "facing": "east", "open": "true" },
             "apply": { "model": "minestuck:block/cassette_player_open", "y": 90 }
-        },
-        {   "when": { "facing": "north", "cassette": "true" },
-            "apply": { "model": "minestuck:block/cassette/cassette"}
-        },
-        {   "when": { "facing": "south", "cassette": "true" },
-            "apply": { "model": "minestuck:block/cassette/cassette", "y": 180 }
-        },
-        {   "when": { "facing": "west", "cassette": "true" },
-            "apply": { "model": "minestuck:block/cassette/cassette", "y": 270 }
-        },
-        {   "when": { "facing": "east", "cassette": "true" },
-            "apply": { "model": "minestuck:block/cassette/cassette", "y": 90 }
         }
     ]
 }
