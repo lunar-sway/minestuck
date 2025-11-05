@@ -143,6 +143,7 @@ public final class MSPayloads
 		//Item Packets
 		registerPlayToServer(registrar, CarveStoneTabletPacket.ID, CarveStoneTabletPacket.STREAM_CODEC);
 		registerPlayToClient(registrar, MusicPlayerPacket.ID, MusicPlayerPacket.STREAM_CODEC);
+		registerPlayToClient(registrar, CassetteSongsDataPacket.ID, CassetteSongsDataPacket.STREAM_CODEC);
 		
 		//Animation and Effect Packets
 		registerPlayToClient(registrar, MagicRangedEffectPacket.ID, MagicRangedEffectPacket.STREAM_CODEC);
