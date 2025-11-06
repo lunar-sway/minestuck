@@ -8,7 +8,7 @@ public final class MSCassetteSongs
 	public static final CassettePlayable FIVE = new CassettePlayable(Minestuck.id("five"));
 	public static final CassettePlayable OTHERSIDE = new CassettePlayable(Minestuck.id("otherside"));
 	public static final CassettePlayable ELEVEN = new CassettePlayable(Minestuck.id("eleven"));
-	public static final CassettePlayable THIRTEEN = new CassettePlayable(Minestuck.id("thirdteen"));
+	public static final CassettePlayable THIRTEEN = new CassettePlayable(Minestuck.id("thirteen"));
 	public static final CassettePlayable BLOCKS = new CassettePlayable(Minestuck.id("blocks"));
 	public static final CassettePlayable CAT = new CassettePlayable(Minestuck.id("cat"));
 	public static final CassettePlayable CHIRP = new CassettePlayable(Minestuck.id("chirp"));
