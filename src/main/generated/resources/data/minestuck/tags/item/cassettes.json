@@ -17,6 +17,10 @@
     "minestuck:cassette_wait",
     "minestuck:cassette_ward",
     "minestuck:cassette_otherside",
-    "minestuck:cassette_5"
+    "minestuck:cassette_5",
+    "minestuck:cassette_relic",
+    "minestuck:cassette_precipice",
+    "minestuck:cassette_creator",
+    "minestuck:cassette_creator_music_box"
   ]
 }
