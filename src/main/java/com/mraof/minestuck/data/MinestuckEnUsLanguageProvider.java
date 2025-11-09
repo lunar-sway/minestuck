@@ -2586,5 +2586,32 @@ public class MinestuckEnUsLanguageProvider extends MinestuckLanguageProvider
 		add(UNREADABLE, "Unreadable Captcha Codes");
 		add(LEGENDARY, "Legendary Weapons");
 		add(MAGIC_WEAPON, "Magic Weapons");
+		
+		addPainting("candy_shop_sign", "Candy Shop Sign", "Cibernet83");
+		addPainting("candy_shop_small", "Small Candy Shop", "Cibernet83");
+		addPainting("candy_shop_large", "Large Candy Shop", "Cibernet83");
+		addPainting("food_shop_sign", "Food Shop Sign", "Cibernet83");
+		addPainting("food_shop_small", "Small Food Shop", "Cibernet83");
+		addPainting("food_shop_large", "Large Food Shop", "Cibernet83");
+		addPainting("general_shop_sign", "General Shop Sign", "Cibernet83");
+		addPainting("general_shop_small", "Small General Shop", "Cibernet83");
+		addPainting("general_shop_large", "Large General Shop", "Cibernet83");
+		addPainting("hat_shop_sign", "Hat Shop Sign", "Cibernet83");
+		addPainting("hat_shop_small", "Small Hat Shop", "Cibernet83");
+		addPainting("hat_shop_large", "Large Hat Shop", "Cibernet83");
+		addPainting("skill_shop_sign", "Skill Shop Sign", "Cibernet83");
+		addPainting("skill_shop_small", "Small Skill Shop", "Cibernet83");
+		addPainting("skill_shop_large", "Large Skill Shop", "Cibernet83");
+		addPainting("sbahj_stairs", "I told you about stairs", "kirderf1");
+		addPainting("hella_jeff", "Hella Jeff", "kirderf1");
+		addPainting("sweet_bro", "Sweet Bro", "kirderf1");
+		addPainting("hella_jeff_small", "Small Hella Jeff", "kirderf1");
+		addPainting("sweet_bro_small", "Small Sweet Bro", "kirderf1");
+		addPainting("midnight_crew_small", "Small Midnight Crew", "kirderf1");
+		addPainting("midnight_crew", "Midnight Crew", "kirderf1");
+		addPainting("clubs", "Clubs", "kirderf1");
+		addPainting("spades", "Spades", "kirderf1");
+		addPainting("diamonds", "Diamonds", "kirderf1");
+		addPainting("hearts", "Hearts", "kirderf1");
 	}
 }

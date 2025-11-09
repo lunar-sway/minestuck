@@ -12,7 +12,7 @@ import net.minecraft.world.entity.decoration.PaintingVariant;
 
 public record PosterComponent(TagKey<PaintingVariant> variantPool, ResourceLocation backSprite)
 {
-	public static final ResourceLocation DEFAULT_BACK_SPRITE = Minestuck.id("textures/painting/back/poster.png");
+	public static final ResourceLocation DEFAULT_BACK_SPRITE = Minestuck.id("back/poster");
 	
 	private static final Codec<TagKey<PaintingVariant>> VARIANT_CODEC = TagKey.codec(Registries.PAINTING_VARIANT);
 	private static final Codec<PosterComponent> FULL_CODEC = RecordCodecBuilder.create((instance) -> instance.group(
