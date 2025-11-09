@@ -103,9 +103,9 @@ public class PosterEntity extends Painting
 		builder.define(STACK, ItemStack.EMPTY);
 	}
 	
-	private static int variantArea(Holder<PaintingVariant> p_218899_)
+	private static int variantArea(Holder<PaintingVariant> variantHolder)
 	{
-		return p_218899_.value().area();
+		return variantHolder.value().area();
 	}
 	
 	public static Optional<PosterEntity> createArt(Level pLevel, BlockPos pPos, Direction pDirection, ItemStack itemStack, TagKey<PaintingVariant> pool)
@@ -113,35 +113,29 @@ public class PosterEntity extends Painting
 		PosterEntity painting = new PosterEntity(pLevel, pPos, itemStack);
 		List<Holder<PaintingVariant>> list = new ArrayList<>();
 		pLevel.registryAccess().registryOrThrow(Registries.PAINTING_VARIANT).getTagOrEmpty(pool).forEach(list::add);
+		
 		if(list.isEmpty())
-		{
 			return Optional.empty();
-		} else
-		{
-			painting.setDirection(pDirection);
-			list.removeIf(p_344343_ -> {
-				painting.setVariant(p_344343_);
-				return !painting.survives();
-			});
-			if(list.isEmpty())
-			{
-				return Optional.empty();
-			} else
-			{
-				int i = list.stream().mapToInt(PosterEntity::variantArea).max().orElse(0);
-				list.removeIf(p_218883_ -> variantArea(p_218883_) < i);
-				Optional<Holder<PaintingVariant>> optional = Util.getRandomSafe(list, painting.random);
-				if(optional.isEmpty())
-				{
-					return Optional.empty();
-				} else
-				{
-					painting.setVariant(optional.get());
-					painting.setDirection(pDirection);
-					return Optional.of(painting);
-				}
-			}
-		}
+		
+		painting.setDirection(pDirection);
+		list.removeIf(entry -> {
+			painting.setVariant(entry);
+			return !painting.survives();
+		});
+		
+		if(list.isEmpty())
+			return Optional.empty();
+		
+		int i = list.stream().mapToInt(PosterEntity::variantArea).max().orElse(0);
+		list.removeIf(entry -> variantArea(entry) < i);
+		Optional<Holder<PaintingVariant>> optional = Util.getRandomSafe(list, painting.random);
+		
+		if(optional.isEmpty())
+			return Optional.empty();
+		
+		painting.setVariant(optional.get());
+		painting.setDirection(pDirection);
+		return Optional.of(painting);
 	}
 	
 	public ItemStack getItem()

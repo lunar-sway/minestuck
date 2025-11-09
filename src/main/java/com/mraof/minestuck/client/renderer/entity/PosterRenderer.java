@@ -29,6 +29,7 @@ public class PosterRenderer extends EntityRenderer<PosterEntity>
 		super(pContext);
 	}
 	
+	// (Mostly) copy of vanilla painting render
 	@Override
 	public void render(PosterEntity poster, float entityYaw, float partialTicks, PoseStack poseStack, MultiBufferSource buffer, int packedLight)
 	{
@@ -44,6 +45,7 @@ public class PosterRenderer extends EntityRenderer<PosterEntity>
 				paintingvariant.width(),
 				paintingvariant.height(),
 				paintingtexturemanager.get(paintingvariant),
+				// Except this line
 				getBackSprite(poster)
 		);
 		poseStack.popPose();
@@ -60,6 +62,7 @@ public class PosterRenderer extends EntityRenderer<PosterEntity>
 		return Minecraft.getInstance().getPaintingTextures().get(new PaintingVariant(1, 1, backPoster));
 	}
 	
+	// Copy of vanilla painting render
 	private void renderPoster(
 			PoseStack poseStack,
 			VertexConsumer consumer,
@@ -154,6 +157,7 @@ public class PosterRenderer extends EntityRenderer<PosterEntity>
 		}
 	}
 	
+	// Copy of vanilla painting render
 	private void vertex(
 			PoseStack.Pose pose,
 			VertexConsumer consumer,
@@ -176,6 +180,7 @@ public class PosterRenderer extends EntityRenderer<PosterEntity>
 				.setNormal(pose, (float) normalX, (float) normalY, (float) normalZ);
 	}
 	
+	// Copy of vanilla painting render
 	@Override
 	public ResourceLocation getTextureLocation(PosterEntity poster)
 	{
