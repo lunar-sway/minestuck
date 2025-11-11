@@ -1,0 +1,16 @@
+{
+  "effect": {
+    "applying_chance": 0.3,
+    "effect": {
+      "duration": 500,
+      "id": "minecraft:hunger",
+      "neoforge:cures": [
+        "milk",
+        "protected_by_totem"
+      ],
+      "show_icon": true
+    },
+    "on_hit": true
+  },
+  "jukebox_song": "minecraft:13"
+}
