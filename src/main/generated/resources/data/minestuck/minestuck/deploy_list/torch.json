@@ -1,0 +1,18 @@
+{
+  "entries": [
+    {
+      "cost": [
+        {
+          "grist": {
+            "minestuck:build": 1
+          }
+        }
+      ],
+      "item": {
+        "count": 1,
+        "id": "minecraft:torch"
+      }
+    }
+  ],
+  "priority": 11.0
+}

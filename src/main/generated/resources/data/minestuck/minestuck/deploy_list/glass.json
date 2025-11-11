@@ -1,0 +1,242 @@
+{
+  "entries": [
+    {
+      "cost": [
+        {
+          "grist": {
+            "minestuck:build": 1
+          }
+        }
+      ],
+      "item": {
+        "count": 1,
+        "id": "minecraft:glass"
+      }
+    },
+    {
+      "cost": [
+        {
+          "grist": {
+            "minestuck:build": 2
+          }
+        }
+      ],
+      "item": {
+        "count": 1,
+        "id": "minecraft:white_stained_glass"
+      },
+      "tier": 2
+    },
+    {
+      "cost": [
+        {
+          "grist": {
+            "minestuck:build": 3
+          }
+        }
+      ],
+      "item": {
+        "count": 1,
+        "id": "minecraft:light_gray_stained_glass"
+      },
+      "tier": 2
+    },
+    {
+      "cost": [
+        {
+          "grist": {
+            "minestuck:build": 3
+          }
+        }
+      ],
+      "item": {
+        "count": 1,
+        "id": "minecraft:gray_stained_glass"
+      },
+      "tier": 2
+    },
+    {
+      "cost": [
+        {
+          "grist": {
+            "minestuck:build": 2
+          }
+        }
+      ],
+      "item": {
+        "count": 1,
+        "id": "minecraft:black_stained_glass"
+      },
+      "tier": 2
+    },
+    {
+      "cost": [
+        {
+          "grist": {
+            "minestuck:build": 3
+          }
+        }
+      ],
+      "item": {
+        "count": 1,
+        "id": "minecraft:brown_stained_glass"
+      },
+      "tier": 2
+    },
+    {
+      "cost": [
+        {
+          "grist": {
+            "minestuck:build": 2
+          }
+        }
+      ],
+      "item": {
+        "count": 1,
+        "id": "minecraft:red_stained_glass"
+      },
+      "tier": 2
+    },
+    {
+      "cost": [
+        {
+          "grist": {
+            "minestuck:build": 3
+          }
+        }
+      ],
+      "item": {
+        "count": 1,
+        "id": "minecraft:orange_stained_glass"
+      },
+      "tier": 2
+    },
+    {
+      "cost": [
+        {
+          "grist": {
+            "minestuck:build": 2
+          }
+        }
+      ],
+      "item": {
+        "count": 1,
+        "id": "minecraft:yellow_stained_glass"
+      },
+      "tier": 2
+    },
+    {
+      "cost": [
+        {
+          "grist": {
+            "minestuck:build": 3
+          }
+        }
+      ],
+      "item": {
+        "count": 1,
+        "id": "minecraft:lime_stained_glass"
+      },
+      "tier": 2
+    },
+    {
+      "cost": [
+        {
+          "grist": {
+            "minestuck:build": 2
+          }
+        }
+      ],
+      "item": {
+        "count": 1,
+        "id": "minecraft:green_stained_glass"
+      },
+      "tier": 2
+    },
+    {
+      "cost": [
+        {
+          "grist": {
+            "minestuck:build": 3
+          }
+        }
+      ],
+      "item": {
+        "count": 1,
+        "id": "minecraft:cyan_stained_glass"
+      },
+      "tier": 2
+    },
+    {
+      "cost": [
+        {
+          "grist": {
+            "minestuck:build": 3
+          }
+        }
+      ],
+      "item": {
+        "count": 1,
+        "id": "minecraft:light_blue_stained_glass"
+      },
+      "tier": 2
+    },
+    {
+      "cost": [
+        {
+          "grist": {
+            "minestuck:build": 2
+          }
+        }
+      ],
+      "item": {
+        "count": 1,
+        "id": "minecraft:blue_stained_glass"
+      },
+      "tier": 2
+    },
+    {
+      "cost": [
+        {
+          "grist": {
+            "minestuck:build": 3
+          }
+        }
+      ],
+      "item": {
+        "count": 1,
+        "id": "minecraft:purple_stained_glass"
+      },
+      "tier": 2
+    },
+    {
+      "cost": [
+        {
+          "grist": {
+            "minestuck:build": 4
+          }
+        }
+      ],
+      "item": {
+        "count": 1,
+        "id": "minecraft:magenta_stained_glass"
+      },
+      "tier": 2
+    },
+    {
+      "cost": [
+        {
+          "grist": {
+            "minestuck:build": 3
+          }
+        }
+      ],
+      "item": {
+        "count": 1,
+        "id": "minecraft:pink_stained_glass"
+      },
+      "tier": 2
+    }
+  ],
+  "priority": 3.0
+}

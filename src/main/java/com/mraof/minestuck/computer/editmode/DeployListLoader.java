@@ -66,20 +66,30 @@ public class DeployListLoader extends SimpleJsonResourceReloadListener
 	{
 		this.clearAddedEntries();
 		
+		List<Map.Entry<ResourceLocation, DeployDataList>> entries = new ArrayList<>();
 		for(Map.Entry<ResourceLocation, JsonElement> entry : jsonEntries.entrySet())
 		{
-			DeployDataEntry.LIST_CODEC.parse(JsonOps.INSTANCE, entry.getValue())
+			DeployDataList.CODEC.parse(JsonOps.INSTANCE, entry.getValue())
 					.resultOrPartial(message -> LOGGER.error("Couldn't entirely parse deploylist entry {}: {}", entry.getKey(), message))
-					.ifPresent(list -> {
-						for(int i = 0; i < list.size(); i++)
-						{
-							DeployDataEntry data = list.get(i);
-							String name = entry.getKey() + "-" + i;
-							added_with_datapack.add(name);
-							
-							DeployList.registerItem(name, data.tier, entryCondition(data), entryItemStack(data), entryGristSet(data), data.category);
-						}
-					});
+					.ifPresent(list -> entries.add(Map.entry(entry.getKey(), list)));
+		}
+		
+		entries.sort((left, right) -> {
+			return -Float.compare(left.getValue().priority, right.getValue().priority);
+		});
+		
+		for(Map.Entry<ResourceLocation, DeployDataList> entry : entries)
+		{
+			String baseName = entry.getKey().toString() + "-";
+			List<DeployDataEntry> list = entry.getValue().entries;
+			for(int i = 0; i < list.size(); i++)
+			{
+				DeployDataEntry data = list.get(i);
+				String name = baseName + i;
+				added_with_datapack.add(name);
+				
+				DeployList.registerItem(name, data.tier, entryCondition(data), entryItemStack(data), entryGristSet(data), data.category);
+			}
 		}
 	}
 	
@@ -155,6 +165,10 @@ public class DeployListLoader extends SimpleJsonResourceReloadListener
 		).apply(instance, GristCost::new));
 		public static final Codec<List<GristCost>> LIST_CODEC = CODEC.listOf();
 		
+		public GristCost(GristSet grist, int primary, List<ICondition> conditions) {
+			this(Optional.of(grist.asImmutable()), primary, conditions);
+		}
+		
 		public boolean test(ICondition.IContext context)
 		{
 			for(ICondition condition : conditions)
@@ -182,5 +196,27 @@ public class DeployListLoader extends SimpleJsonResourceReloadListener
 				Codec.BOOL.optionalFieldOf("punched", false).forGetter(DeployDataEntry::punched)
 		).apply(instance, DeployDataEntry::new));
 		public static final Codec<List<DeployDataEntry>> LIST_CODEC = CODEC.listOf();
+		
+		public DeployDataEntry(ItemStack stack, int tier, DeployList.EntryLists category, GristCost cost, boolean punched) {
+			this(stack, tier, category, List.of(cost), punched);
+		}
+	}
+	
+	/**
+	 * @param priority Priority for adding to the atheneum
+	 *                 Higher priority means it's placed earlier
+	 *                 Float allows for datapacks to add more items inbetween (e.g. new stained glass from dye mods)
+	 * @param entries
+	 */
+	public record DeployDataList(float priority, List<DeployDataEntry> entries)
+	{
+		public static final Codec<DeployDataList> CODEC = RecordCodecBuilder.create(instance -> instance.group(
+				Codec.FLOAT.optionalFieldOf("priority", 0F).forGetter(DeployDataList::priority),
+				DeployDataEntry.LIST_CODEC.fieldOf("entries").forGetter(DeployDataList::entries)
+		).apply(instance, DeployDataList::new));
+		
+		public DeployDataList(float priority, DeployDataEntry ...entries) {
+			this(priority, List.of(entries));
+		}
 	}
 }
