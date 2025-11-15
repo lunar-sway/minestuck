@@ -16,6 +16,8 @@ The format is based on [Keep a Changelog](https://keepachangelog.com/en/1.1.0/).
 
 ### Fixed
 
+- Fix Captcharoid Cameras not giving ghost cards with full inventories
+- Fix Transportalizers not working when placed again
 - Fix posters not being placeable
 - Fix JEI not loading grist (and by extension, alchemy recipes) on newer versions
 - Fix Glowing Mushroom Vines requiring itself for alchemizing
