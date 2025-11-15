@@ -2093,7 +2093,7 @@ public class MinestuckEnUsLanguageProvider extends MinestuckLanguageProvider
 		addRung(24, "Overworld Overlord");
 		addRung(25, "Portal Knight");
 		addRung(26, "Fiery Fighter");
-		addRung(27, "Pigman Patriarch");
+		addRung(27, "Piglin Pillager");
 		addRung(28, "Blazing Batter");
 		addRung(29, "Ghaster Blaster");
 		addRung(30, "Nether Noble");
@@ -2113,7 +2113,7 @@ public class MinestuckEnUsLanguageProvider extends MinestuckLanguageProvider
 		addRung(44, "Otherworld Overlord");
 		addRung(45, "Vanilla Vanquisher");
 		addRung(46, "Forum Frequenter");
-		addRung(47, "Forge Fidaddler");
+		addRung(47, "NeoForge Neofidaddler");
 		addRung(48, "Installed Initiate");
 		addRung(49, "Master Of Mods");
 		

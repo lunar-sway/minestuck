@@ -510,7 +510,7 @@ public class MinestuckItemModelProvider extends ItemModelProvider
 		simpleItem(MSItems.CARVING_TOOL);
 		simpleItem(MSItems.CRUMPLY_HAT);
 		simpleItem(MSItems.STONE_EYEBALLS);
-		simpleItem(MSItems.SHOP_POSTER, "shop_poster1");
+		simpleItem(MSItems.SHOP_POSTER);
 		simpleItem(MSItems.GUTTER_THUMB_DRIVE);
 		simpleItem(MSItems.ANCIENT_THUMB_DRIVE);
 		simpleItem(MSItems.GUTTER_BALL);
