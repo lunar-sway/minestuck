@@ -1,6 +1,7 @@
 package com.mraof.minestuck.client.gui.captchalouge;
 
 import com.mraof.minestuck.MinestuckConfig;
+import com.mraof.minestuck.inventory.captchalogue.ArrayModus;
 import com.mraof.minestuck.inventory.captchalogue.HashMapModus;
 import com.mraof.minestuck.inventory.captchalogue.Modus;
 import com.mraof.minestuck.network.CaptchaDeckPackets;
@@ -12,19 +13,19 @@ import net.minecraft.world.item.ItemStack;
 import net.neoforged.neoforge.client.gui.widget.ExtendedButton;
 import net.neoforged.neoforge.network.PacketDistributor;
 
-public class HashMapSylladexScreen extends SylladexScreen
+public class ArraySylladexScreen extends SylladexScreen
 {
 	public static final String EJECT_BY_CHAT_ON = "minestuck.eject_by_chat.on";
 	public static final String EJECT_BY_CHAT_OFF = "minestuck.eject_by_chat.off";
 	
-	private final HashMapModus modus;
+	private final ArrayModus modus;
 	private Button guiButton;
 	
-	public HashMapSylladexScreen(Modus modus)
+	public ArraySylladexScreen(Modus modus)
 	{
 		super();
-		this.modus = (HashMapModus) modus;
-		this.textureIndex = 5;
+		this.modus = (ArrayModus) modus;
+		this.textureIndex = 0;
 	}
 	
 	@Override

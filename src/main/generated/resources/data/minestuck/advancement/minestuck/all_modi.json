@@ -1,6 +1,16 @@
 {
   "parent": "minestuck:minestuck/new_modus",
   "criteria": {
+    "array": {
+      "conditions": {
+        "items": [
+          {
+            "items": "minestuck:array_modus_card"
+          }
+        ]
+      },
+      "trigger":    "minecraft:inventory_changed"
+    },
     "hash_map": {
       "conditions": {
         "items": [
@@ -76,6 +86,9 @@
     }
   },
   "requirements": [
+    [
+      "array"
+    ],
     [
       "stack"
     ],

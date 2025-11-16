@@ -489,6 +489,7 @@ public class MSItems
 	public static final DeferredItem<Item> CLIENT_DISK = REGISTER.register("client_disk", () -> new Item(new Item.Properties().stacksTo(1).component(MSItemComponents.PROGRAM_TYPE, ProgramTypes.SBURB_CLIENT)));
 	public static final DeferredItem<Item> SERVER_DISK = REGISTER.register("server_disk", () -> new Item(new Item.Properties().stacksTo(1).component(MSItemComponents.PROGRAM_TYPE, ProgramTypes.SBURB_SERVER)));
 	
+	public static final DeferredItem<Item> ARRAY_MODUS_CARD = REGISTER.register("array_modus_card", () -> new Item(new Item.Properties().stacksTo(1)));
 	public static final DeferredItem<Item> CAPTCHA_CARD = REGISTER.register("captcha_card", () -> new CaptchaCardItem(new Item.Properties()));
 	public static final DeferredItem<Item> STACK_MODUS_CARD = REGISTER.register("stack_modus_card", () -> new Item(new Item.Properties().stacksTo(1)));
 	public static final DeferredItem<Item> QUEUE_MODUS_CARD = REGISTER.register("queue_modus_card", () -> new Item(new Item.Properties().stacksTo(1)));

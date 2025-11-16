@@ -52,6 +52,7 @@ public class MSScreenFactories
 		event.register(MSMenuTypes.CONSORT_MERCHANT.get(), ConsortShopScreen::new);
 		event.register(MSMenuTypes.CASSETTE_CONTAINER.get(), CassetteContainerScreen::new);
 		
+		registerSylladexFactory(ModusTypes.ARRAY, ArraySylladexScreen::new);
 		registerSylladexFactory(ModusTypes.STACK, StackSylladexScreen::new);
 		registerSylladexFactory(ModusTypes.QUEUE, QueueSylladexScreen::new);
 		registerSylladexFactory(ModusTypes.QUEUE_STACK, QueuestackSylladexScreen::new);

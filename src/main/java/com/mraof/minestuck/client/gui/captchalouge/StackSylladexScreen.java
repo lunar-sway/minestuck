@@ -13,7 +13,7 @@ public class StackSylladexScreen extends SylladexScreen
 	{
 		super();
 		this.modus = modus;
-		this.textureIndex = 0;
+		this.textureIndex = 1;
 	}
 	
 	@Override

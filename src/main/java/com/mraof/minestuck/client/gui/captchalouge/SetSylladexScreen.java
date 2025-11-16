@@ -13,7 +13,7 @@ public class SetSylladexScreen extends SylladexScreen
 	{
 		super();
 		this.modus = modus;
-		this.textureIndex = 5;
+		this.textureIndex = 6;
 	}
 	
 	@Override

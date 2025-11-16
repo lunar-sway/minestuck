@@ -87,6 +87,7 @@ public final class MSChestLootTables implements LootTableSubProvider
 						.add(LootItem.lootTableItem(MSBlocks.MINI_FROG_STATUE.get()).setWeight(1).setQuality(1).apply(countRange(0, 1)))
 						.add(LootItem.lootTableItem(MSItems.CARVING_TOOL.get()).setWeight(5).setQuality(0).apply(countRange(1, 2)))
 						.add(LootItem.lootTableItem(MSItems.STONE_TABLET.get()).setWeight(2).setQuality(0).apply(countRange(1, 2)))
+						.add(LootItem.lootTableItem(MSItems.ARRAY_MODUS_CARD.get()).setWeight(1).setQuality(1).apply(countRange(0, 1)))
 						.add(LootItem.lootTableItem(MSItems.HASHMAP_MODUS_CARD.get()).setWeight(1).setQuality(1).apply(countRange(0, 1)))
 						.add(LootItem.lootTableItem(MSItems.QUEUE_MODUS_CARD.get()).setWeight(1).setQuality(1).apply(countRange(0, 1)))
 						.add(LootItem.lootTableItem(MSItems.QUEUESTACK_MODUS_CARD.get()).setWeight(1).setQuality(1).apply(countRange(0, 1)))

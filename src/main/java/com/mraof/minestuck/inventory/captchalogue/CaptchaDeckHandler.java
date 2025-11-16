@@ -27,6 +27,7 @@ import net.minecraft.world.item.ItemStack;
 import net.minecraft.world.item.enchantment.EnchantmentEffectComponents;
 import net.minecraft.world.item.enchantment.EnchantmentHelper;
 import net.minecraft.world.level.GameRules;
+import net.minecraft.world.phys.Vec3;
 import net.neoforged.bus.api.EventPriority;
 import net.neoforged.bus.api.SubscribeEvent;
 import net.neoforged.fml.LogicalSide;
@@ -100,8 +101,12 @@ public final class CaptchaDeckHandler
 	public static void launchAnyItem(Player player, ItemStack item)
 	{
 		ItemEntity entity = new ItemEntity(player.level(), player.getX(), player.getY()+1, player.getZ(), item);
-		entity.setDeltaMovement(player.level().random.nextDouble() - 0.5, entity.getDeltaMovement().y, player.level().random.nextDouble() - 0.5);
-		entity.setDefaultPickUpDelay();
+		entity.setDeltaMovement( // regular heap drop, inspired by davespriting scene =]
+				player.getViewVector(1.0F).x * 0.25 + (player.level().random.nextDouble() - 0.5) * 0.05,
+				player.getViewVector(1.0F).y * 0.25 + 0.1,
+				player.getViewVector(1.0F).z * 0.25 + (player.level().random.nextDouble() - 0.5) * 0.05
+		);
+		entity.setPickUpDelay(20);
 		player.level().addFreshEntity(entity);
 	}
 	
