@@ -1,9 +1,13 @@
 package com.mraof.minestuck.network;
 
+import java.util.Optional;
+
+import javax.annotation.Nullable;
+
 import com.mraof.minestuck.Minestuck;
-import com.mraof.minestuck.block.EnumCassetteType;
 import com.mraof.minestuck.client.sounds.PlayerMusicClientHandler;
-import net.minecraft.network.FriendlyByteBuf;
+import com.mraof.minestuck.inventory.musicplayer.CassetteSong;
+
 import net.minecraft.network.RegistryFriendlyByteBuf;
 import net.minecraft.network.codec.ByteBufCodecs;
 import net.minecraft.network.codec.StreamCodec;
@@ -13,13 +17,13 @@ import net.minecraft.world.entity.player.Player;
 import net.neoforged.neoforge.network.codec.NeoForgeStreamCodecs;
 import net.neoforged.neoforge.network.handling.IPayloadContext;
 
-public record MusicPlayerPacket(int entityID, EnumCassetteType cassetteType, float volume, float pitch) implements MSPacket.PlayToClient
+public record MusicPlayerPacket(int entityID, Optional<CassetteSong> cassetteType, float volume, float pitch) implements MSPacket.PlayToClient
 {
 	public static final Type<MusicPlayerPacket> ID = new Type<>(Minestuck.id("music_player"));
-	public static final StreamCodec<FriendlyByteBuf, MusicPlayerPacket> STREAM_CODEC = StreamCodec.composite(
+	public static final StreamCodec<RegistryFriendlyByteBuf, MusicPlayerPacket> STREAM_CODEC = StreamCodec.composite(
 			ByteBufCodecs.INT,
 			MusicPlayerPacket::entityID,
-			NeoForgeStreamCodecs.enumCodec(EnumCassetteType.class),
+			ByteBufCodecs.optional(CassetteSong.STREAM_CODEC),
 			MusicPlayerPacket::cassetteType,
 			ByteBufCodecs.FLOAT,
 			MusicPlayerPacket::volume,
@@ -39,9 +43,9 @@ public record MusicPlayerPacket(int entityID, EnumCassetteType cassetteType, flo
 	 * @see PlayerMusicClientHandler
 	 */
 	
-	public static MusicPlayerPacket createPacket(Player entity, EnumCassetteType cassetteType, float volume, float pitch)
+	public static MusicPlayerPacket createPacket(Player entity, @Nullable CassetteSong cassetteType, float volume, float pitch)
 	{
-		return new MusicPlayerPacket(entity.getId(), cassetteType, volume, pitch);
+		return new MusicPlayerPacket(entity.getId(), Optional.ofNullable(cassetteType), volume, pitch);
 	}
 	
 	@Override

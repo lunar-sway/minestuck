@@ -6,6 +6,45 @@ The format is based on [Keep a Changelog](https://keepachangelog.com/en/1.1.0/).
 
 ## [Unreleased]
 
+### Added
+
+- Newer music discs have associated cassettes
+
+### Changed
+
+- Cassettes are now data-driven
+
+### Fixed
+
+- Fix Captcharoid Cameras not giving ghost cards with full inventories
+- Fix Transportalizers not working when placed again
+- Fix posters not being placeable
+- Fix JEI not loading grist (and by extension, alchemy recipes) on newer versions
+- Fix Glowing Mushroom Vines requiring itself for alchemizing
+- Fix missing Bucket of Glimmering Water and Magmatic Igneous Stone grist cost
+
+### Contributors for this release
+
+- medsal15
+
+## [1.21.1-1.13.1.1] - 2025-09-14
+
+### Added
+
+- Translated key for item tags used in JEI
+
+### Fixed
+
+- Fix Captcharoid Cameras crashing when used on blocks that do not have item counterparts
+- Empty Sylladex button being invisible
+- Fix Echeladder screen not displaying before Entry
+- Fix Prismarine and Iron Lass armors crashing when enchanted
+- Fix error saving consort merchant inventory
+
+### Contributors for this release
+
+- medsal15, Dweblenod, kirderf1
+
 ## [1.21.1-1.13.1.0] - 2025-07-26
 
 ### Added

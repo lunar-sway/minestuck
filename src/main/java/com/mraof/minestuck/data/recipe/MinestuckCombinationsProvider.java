@@ -765,6 +765,10 @@ public final class MinestuckCombinationsProvider
 		CombinationRecipeBuilder.of(MSItems.CASSETTE_WARD).input(Items.MUSIC_DISC_WARD).or().namedInput(MSBlocks.CASSETTE_PLAYER).build(consumer);
 		CombinationRecipeBuilder.of(MSItems.CASSETTE_OTHERSIDE).input(Items.MUSIC_DISC_OTHERSIDE).or().namedInput(MSBlocks.CASSETTE_PLAYER).build(consumer);
 		CombinationRecipeBuilder.of(MSItems.CASSETTE_5).input(Items.MUSIC_DISC_5).or().namedInput(MSBlocks.CASSETTE_PLAYER).build(consumer);
+		CombinationRecipeBuilder.of(MSItems.CASSETTE_RELIC).input(Items.MUSIC_DISC_RELIC).or().namedInput(MSBlocks.CASSETTE_PLAYER).build(consumer);
+		CombinationRecipeBuilder.of(MSItems.CASSETTE_PRECIPICE).input(Items.MUSIC_DISC_PRECIPICE).or().namedInput(MSBlocks.CASSETTE_PLAYER).build(consumer);
+		CombinationRecipeBuilder.of(MSItems.CASSETTE_CREATOR).input(Items.MUSIC_DISC_CREATOR).or().namedInput(MSBlocks.CASSETTE_PLAYER).build(consumer);
+		CombinationRecipeBuilder.of(MSItems.CASSETTE_CREATOR_MUSIC_BOX).input(Items.MUSIC_DISC_CREATOR_MUSIC_BOX).or().namedInput(MSBlocks.CASSETTE_PLAYER).build(consumer);
 		
 		CombinationRecipeBuilder.of(MSBlocks.BLUE_DIRT).input(Items.DIRT).or().input(Items.BLUE_DYE).build(consumer);
 		CombinationRecipeBuilder.of(MSBlocks.THOUGHT_DIRT).input(Items.DIRT).or().input(Items.LIME_DYE).build(consumer);
@@ -775,7 +779,7 @@ public final class MinestuckCombinationsProvider
 		CombinationRecipeBuilder.of(MSBlocks.VINE_LOG).input(Items.OAK_LOG).and().input(Items.VINE).build(consumer);
 		CombinationRecipeBuilder.of(MSBlocks.FLOWERY_VINE_LOG).input(MSBlocks.VINE_LOG).or().input(ItemTags.SMALL_FLOWERS).build(consumer);
 		CombinationRecipeBuilder.of(MSBlocks.GLOWING_MUSHROOM).input(Items.BROWN_MUSHROOM).or().input(Items.GLOWSTONE_DUST).build(consumer);
-		CombinationRecipeBuilder.of(MSBlocks.GLOWING_MUSHROOM_VINES).input(MSItems.GLOWING_MUSHROOM_VINES).and().input(Items.VINE).build(consumer);
+		CombinationRecipeBuilder.of(MSBlocks.GLOWING_MUSHROOM_VINES).input(MSItems.GLOWING_MUSHROOM).and().input(Items.VINE).build(consumer);
 		CombinationRecipeBuilder.of(MSBlocks.GLOWING_LOG).input(ItemTags.LOGS).or().input(MSBlocks.GLOWING_MUSHROOM).build(consumer);
 		CombinationRecipeBuilder.of(MSBlocks.GLOWING_PLANKS).input(ItemTags.PLANKS).or().input(MSBlocks.GLOWING_MUSHROOM).build(consumer);
 		CombinationRecipeBuilder.of(MSBlocks.GLOWY_GOOP).input(Items.SLIME_BLOCK).or().input(MSBlocks.GLOWING_MUSHROOM).build(consumer);

@@ -1,0 +1,16 @@
+{
+  "effect": {
+    "applying_chance": 0.2,
+    "effect": {
+      "duration": 100,
+      "id": "minecraft:weakness",
+      "neoforge:cures": [
+        "milk",
+        "protected_by_totem"
+      ],
+      "show_icon": true
+    },
+    "on_hit": true
+  },
+  "jukebox_song": "minecraft:relic"
+}
