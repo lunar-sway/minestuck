@@ -6,20 +6,20 @@
         "rough",
         "ocean"
       ],
-      "feature": {
+      "feature":     {
         "feature":   {
           "type":   "minecraft:ore",
           "config": {
             "discard_chance_on_air_exposure": 0,
-            "size":                           9,
+            "size":                           17,
             "targets":                        [
               {
                 "state":  {
-                  "Name": "minestuck:end_stone_iron_ore"
+                  "Name": "minestuck:pink_stone_coal_ore"
                 },
                 "target": {
-                  "block_state": {
-                    "Name": "minestuck:coarse_end_stone"
+                  "block_state":    {
+                    "Name": "minestuck:pink_stone"
                   },
                   "predicate_type": "minecraft:blockstate_match"
                 }
@@ -29,8 +29,8 @@
         },
         "placement": [
           {
-            "type": "minecraft:count",
-            "count": 40
+            "type":  "minecraft:count",
+            "count": 26
           },
           {
             "type": "minecraft:in_square"
@@ -38,7 +38,7 @@
           {
             "type":   "minecraft:height_range",
             "height": {
-              "type": "minecraft:uniform",
+              "type":          "minecraft:uniform",
               "max_inclusive": {
                 "absolute": 64
               },
@@ -52,7 +52,7 @@
           }
         ]
       },
-      "step":    "underground_ores"
+      "step":        "underground_ores"
     },
     {
       "biome_types": [
@@ -60,23 +60,20 @@
         "rough",
         "ocean"
       ],
-      "feature": {
+      "feature":     {
         "feature":   {
           "type":   "minecraft:ore",
           "config": {
             "discard_chance_on_air_exposure": 0,
-            "size":                           8,
+            "size":                           7,
             "targets":                        [
               {
                 "state":  {
-                  "Name": "minestuck:end_stone_redstone_ore",
-                  "Properties": {
-                    "lit": "false"
-                  }
+                  "Name": "minestuck:pink_stone_lapis_ore"
                 },
                 "target": {
-                  "block_state": {
-                    "Name": "minestuck:coarse_end_stone"
+                  "block_state":    {
+                    "Name": "minestuck:pink_stone"
                   },
                   "predicate_type": "minecraft:blockstate_match"
                 }
@@ -86,8 +83,8 @@
         },
         "placement": [
           {
-            "type": "minecraft:count",
-            "count": 30
+            "type":  "minecraft:count",
+            "count": 15
           },
           {
             "type": "minecraft:in_square"
@@ -95,7 +92,61 @@
           {
             "type":   "minecraft:height_range",
             "height": {
-              "type": "minecraft:uniform",
+              "type":          "minecraft:uniform",
+              "max_inclusive": {
+                "absolute": 24
+              },
+              "min_inclusive": {
+                "above_bottom": 0
+              }
+            }
+          },
+          {
+            "type": "minecraft:biome"
+          }
+        ]
+      },
+      "step":        "underground_ores"
+    },
+    {
+      "biome_types": [
+        "normal",
+        "rough",
+        "ocean"
+      ],
+      "feature":     {
+        "feature":   {
+          "type":   "minecraft:ore",
+          "config": {
+            "discard_chance_on_air_exposure": 0,
+            "size":                           9,
+            "targets":                        [
+              {
+                "state":  {
+                  "Name": "minestuck:pink_stone_gold_ore"
+                },
+                "target": {
+                  "block_state":    {
+                    "Name": "minestuck:pink_stone"
+                  },
+                  "predicate_type": "minecraft:blockstate_match"
+                }
+              }
+            ]
+          }
+        },
+        "placement": [
+          {
+            "type":  "minecraft:count",
+            "count": 12
+          },
+          {
+            "type": "minecraft:in_square"
+          },
+          {
+            "type":   "minecraft:height_range",
+            "height": {
+              "type":          "minecraft:uniform",
               "max_inclusive": {
                 "absolute": 32
               },
@@ -109,7 +160,7 @@
           }
         ]
       },
-      "step":    "underground_ores"
+      "step":        "underground_ores"
     },
     {
       "biome_types": [
@@ -117,20 +168,20 @@
         "rough",
         "ocean"
       ],
-      "feature": {
+      "feature":     {
         "feature":   {
           "type":   "minecraft:ore",
           "config": {
             "discard_chance_on_air_exposure": 0,
-            "size":                           36,
+            "size":                           6,
             "targets":                        [
               {
                 "state":  {
-                  "Name": "minecraft:end_stone"
+                  "Name": "minestuck:pink_stone_diamond_ore"
                 },
                 "target": {
-                  "block_state": {
-                    "Name": "minestuck:coarse_end_stone"
+                  "block_state":    {
+                    "Name": "minestuck:pink_stone"
                   },
                   "predicate_type": "minecraft:blockstate_match"
                 }
@@ -140,8 +191,8 @@
         },
         "placement": [
           {
-            "type": "minecraft:count",
-            "count": 80
+            "type":  "minecraft:count",
+            "count": 11
           },
           {
             "type": "minecraft:in_square"
@@ -149,9 +200,9 @@
           {
             "type":   "minecraft:height_range",
             "height": {
-              "type": "minecraft:uniform",
+              "type":          "minecraft:uniform",
               "max_inclusive": {
-                "absolute": 64
+                "absolute": 24
               },
               "min_inclusive": {
                 "above_bottom": 0
@@ -163,44 +214,7 @@
           }
         ]
       },
-      "step":    "underground_ores"
-    },
-    {
-      "step":    "vegetal_decoration",
-      "feature": "minestuck:tree/end",
-      "biome_types": [
-        "normal",
-        "rough"
-      ]
-    },
-    {
-      "step":    "local_modifications",
-      "feature": "minestuck:end_grass_surface_disk",
-      "biome_types": [
-        "normal"
-      ]
-    },
-    {
-      "step":    "vegetal_decoration",
-      "feature": "minestuck:tall_end_grass_patch",
-      "biome_types": [
-        "normal",
-        "rough"
-      ]
-    },
-    {
-      "step":    "local_modifications",
-      "feature": "minestuck:end_stone_surface_disk",
-      "biome_types": [
-        "rough"
-      ]
-    },
-    {
-      "step":    "local_modifications",
-      "feature": "minecraft:chorus_plant",
-      "biome_types": [
-        "rough"
-      ]
+      "step":        "underground_ores"
     }
   ]
 }

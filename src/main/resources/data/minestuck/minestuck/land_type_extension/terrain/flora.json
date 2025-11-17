@@ -1,0 +1,368 @@
+{
+  "features": [
+    {
+      "biome_types": [
+        "normal",
+        "rough",
+        "ocean"
+      ],
+      "feature":     {
+        "feature":   {
+          "type":   "minecraft:ore",
+          "config": {
+            "discard_chance_on_air_exposure": 0,
+            "size":                           33,
+            "targets":                        [
+              {
+                "state":  {
+                  "Name": "minecraft:dirt"
+                },
+                "target": {
+                  "predicate_type": "minecraft:tag_match",
+                  "tag":            "minecraft:base_stone_overworld"
+                }
+              }
+            ]
+          }
+        },
+        "placement": [
+          {
+            "type":  "minecraft:count",
+            "count": 10
+          },
+          {
+            "type": "minecraft:in_square"
+          },
+          {
+            "type":   "minecraft:height_range",
+            "height": {
+              "type":          "minecraft:uniform",
+              "max_inclusive": {
+                "absolute": 256
+              },
+              "min_inclusive": {
+                "above_bottom": 0
+              }
+            }
+          },
+          {
+            "type": "minecraft:biome"
+          }
+        ]
+      },
+      "step":        "underground_ores"
+    },
+    {
+      "biome_types": [
+        "normal",
+        "rough",
+        "ocean"
+      ],
+      "feature":     {
+        "feature":   {
+          "type":   "minecraft:ore",
+          "config": {
+            "discard_chance_on_air_exposure": 0,
+            "size":                           33,
+            "targets":                        [
+              {
+                "state":  {
+                  "Name": "minecraft:gravel"
+                },
+                "target": {
+                  "predicate_type": "minecraft:tag_match",
+                  "tag":            "minecraft:base_stone_overworld"
+                }
+              }
+            ]
+          }
+        },
+        "placement": [
+          {
+            "type":  "minecraft:count",
+            "count": 10
+          },
+          {
+            "type": "minecraft:in_square"
+          },
+          {
+            "type":   "minecraft:height_range",
+            "height": {
+              "type":          "minecraft:uniform",
+              "max_inclusive": {
+                "absolute": 256
+              },
+              "min_inclusive": {
+                "above_bottom": 0
+              }
+            }
+          },
+          {
+            "type": "minecraft:biome"
+          }
+        ]
+      },
+      "step":        "underground_ores"
+    },
+    {
+      "biome_types": [
+        "normal",
+        "rough",
+        "ocean"
+      ],
+      "feature":     {
+        "feature":   {
+          "type":   "minecraft:ore",
+          "config": {
+            "discard_chance_on_air_exposure": 0,
+            "size":                           17,
+            "targets":                        [
+              {
+                "state":  {
+                  "Name": "minecraft:coal_ore"
+                },
+                "target": {
+                  "predicate_type": "minecraft:tag_match",
+                  "tag":            "minecraft:base_stone_overworld"
+                }
+              }
+            ]
+          }
+        },
+        "placement": [
+          {
+            "type":  "minecraft:count",
+            "count": 26
+          },
+          {
+            "type": "minecraft:in_square"
+          },
+          {
+            "type":   "minecraft:height_range",
+            "height": {
+              "type":          "minecraft:uniform",
+              "max_inclusive": {
+                "absolute": 64
+              },
+              "min_inclusive": {
+                "above_bottom": 0
+              }
+            }
+          },
+          {
+            "type": "minecraft:biome"
+          }
+        ]
+      },
+      "step":        "underground_ores"
+    },
+    {
+      "biome_types": [
+        "normal",
+        "rough",
+        "ocean"
+      ],
+      "feature":     {
+        "feature":   {
+          "type":   "minecraft:ore",
+          "config": {
+            "discard_chance_on_air_exposure": 0,
+            "size":                           3,
+            "targets":                        [
+              {
+                "state":  {
+                  "Name": "minecraft:emerald_ore"
+                },
+                "target": {
+                  "predicate_type": "minecraft:tag_match",
+                  "tag":            "minecraft:base_stone_overworld"
+                }
+              }
+            ]
+          }
+        },
+        "placement": [
+          {
+            "type":  "minecraft:count",
+            "count": 24
+          },
+          {
+            "type": "minecraft:in_square"
+          },
+          {
+            "type":   "minecraft:height_range",
+            "height": {
+              "type":          "minecraft:uniform",
+              "max_inclusive": {
+                "absolute": 32
+              },
+              "min_inclusive": {
+                "above_bottom": 0
+              }
+            }
+          },
+          {
+            "type": "minecraft:biome"
+          }
+        ]
+      },
+      "step":        "underground_ores"
+    },
+    {
+      "biome_types": [
+        "normal",
+        "rough",
+        "ocean"
+      ],
+      "feature":     {
+        "feature":   {
+          "type":   "minecraft:ore",
+          "config": {
+            "discard_chance_on_air_exposure": 0,
+            "size":                           3,
+            "targets":                        [
+              {
+                "state":  {
+                  "Name": "minecraft:diamond_ore"
+                },
+                "target": {
+                  "predicate_type": "minecraft:tag_match",
+                  "tag":            "minecraft:base_stone_overworld"
+                }
+              }
+            ]
+          }
+        },
+        "placement": [
+          {
+            "type":  "minecraft:count",
+            "count": 24
+          },
+          {
+            "type": "minecraft:in_square"
+          },
+          {
+            "type":   "minecraft:height_range",
+            "height": {
+              "type":          "minecraft:uniform",
+              "max_inclusive": {
+                "absolute": 32
+              },
+              "min_inclusive": {
+                "above_bottom": 0
+              }
+            }
+          },
+          {
+            "type": "minecraft:biome"
+          }
+        ]
+      },
+      "step":        "underground_ores"
+    },
+    {
+      "biome_types": [
+        "normal",
+        "rough",
+        "ocean"
+      ],
+      "feature":     {
+        "feature":   {
+          "type":   "minecraft:ore",
+          "config": {
+            "discard_chance_on_air_exposure": 0,
+            "size":                           3,
+            "targets":                        [
+              {
+                "state":  {
+                  "Name": "minecraft:lapis_ore"
+                },
+                "target": {
+                  "predicate_type": "minecraft:tag_match",
+                  "tag":            "minecraft:base_stone_overworld"
+                }
+              }
+            ]
+          }
+        },
+        "placement": [
+          {
+            "type":  "minecraft:count",
+            "count": 24
+          },
+          {
+            "type": "minecraft:in_square"
+          },
+          {
+            "type":   "minecraft:height_range",
+            "height": {
+              "type":          "minecraft:uniform",
+              "max_inclusive": {
+                "absolute": 32
+              },
+              "min_inclusive": {
+                "above_bottom": 0
+              }
+            }
+          },
+          {
+            "type": "minecraft:biome"
+          }
+        ]
+      },
+      "step":        "underground_ores"
+    },
+    {
+      "biome_types": [
+        "normal",
+        "rough",
+        "ocean"
+      ],
+      "feature":     {
+        "feature":   {
+          "type":   "minecraft:ore",
+          "config": {
+            "discard_chance_on_air_exposure": 0,
+            "size":                           5,
+            "targets":                        [
+              {
+                "state":  {
+                  "Name": "minestuck:stone_quartz_ore"
+                },
+                "target": {
+                  "predicate_type": "minecraft:tag_match",
+                  "tag":            "minecraft:base_stone_overworld"
+                }
+              }
+            ]
+          }
+        },
+        "placement": [
+          {
+            "type":  "minecraft:count",
+            "count": 24
+          },
+          {
+            "type": "minecraft:in_square"
+          },
+          {
+            "type":   "minecraft:height_range",
+            "height": {
+              "type":          "minecraft:uniform",
+              "max_inclusive": {
+                "absolute": 32
+              },
+              "min_inclusive": {
+                "above_bottom": 0
+              }
+            }
+          },
+          {
+            "type": "minecraft:biome"
+          }
+        ]
+      },
+      "step":        "underground_ores"
+    }
+  ]
+}

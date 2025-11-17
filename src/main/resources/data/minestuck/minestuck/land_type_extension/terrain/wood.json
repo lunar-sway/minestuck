@@ -1,0 +1,277 @@
+{
+  "features": [
+    {
+      "biome_types": [
+        "normal",
+        "rough",
+        "ocean"
+      ],
+      "feature":     {
+        "feature":   {
+          "type":   "minecraft:ore",
+          "config": {
+            "discard_chance_on_air_exposure": 0,
+            "size":                           33,
+            "targets":                        [
+              {
+                "state":  {
+                  "Name": "minestuck:wood_shavings"
+                },
+                "target": {
+                  "block_state":    {
+                    "Name": "minestuck:uncarved_wood"
+                  },
+                  "predicate_type": "minecraft:blockstate_match"
+                }
+              }
+            ]
+          }
+        },
+        "placement": [
+          {
+            "type":  "minecraft:count",
+            "count": 10
+          },
+          {
+            "type": "minecraft:in_square"
+          },
+          {
+            "type":   "minecraft:height_range",
+            "height": {
+              "type":          "minecraft:uniform",
+              "max_inclusive": {
+                "absolute": 256
+              },
+              "min_inclusive": {
+                "above_bottom": 0
+              }
+            }
+          },
+          {
+            "type": "minecraft:biome"
+          }
+        ]
+      },
+      "step":        "underground_ores"
+    },
+    {
+      "biome_types": [
+        "normal",
+        "rough",
+        "ocean"
+      ],
+      "feature":     {
+        "feature":   {
+          "type":   "minecraft:ore",
+          "config": {
+            "discard_chance_on_air_exposure": 0,
+            "size":                           17,
+            "targets":                        [
+              {
+                "state":  {
+                  "Name": "minestuck:chipboard"
+                },
+                "target": {
+                  "block_state":    {
+                    "Name": "minestuck:uncarved_wood"
+                  },
+                  "predicate_type": "minecraft:blockstate_match"
+                }
+              }
+            ]
+          }
+        },
+        "placement": [
+          {
+            "type":  "minecraft:count",
+            "count": 27
+          },
+          {
+            "type": "minecraft:in_square"
+          },
+          {
+            "type":   "minecraft:height_range",
+            "height": {
+              "type":          "minecraft:uniform",
+              "max_inclusive": {
+                "absolute": 128
+              },
+              "min_inclusive": {
+                "above_bottom": 0
+              }
+            }
+          },
+          {
+            "type": "minecraft:biome"
+          }
+        ]
+      },
+      "step":        "underground_ores"
+    },
+    {
+      "biome_types": [
+        "normal",
+        "rough",
+        "ocean"
+      ],
+      "feature":     {
+        "feature":   {
+          "type":   "minecraft:ore",
+          "config": {
+            "discard_chance_on_air_exposure": 0,
+            "size":                           7,
+            "targets":                        [
+              {
+                "state":  {
+                  "Name":       "minestuck:uncarved_wood_redstone_ore",
+                  "Properties": {
+                    "lit": "false"
+                  }
+                },
+                "target": {
+                  "block_state":    {
+                    "Name": "minestuck:uncarved_wood"
+                  },
+                  "predicate_type": "minecraft:blockstate_match"
+                }
+              }
+            ]
+          }
+        },
+        "placement": [
+          {
+            "type":  "minecraft:count",
+            "count": 24
+          },
+          {
+            "type": "minecraft:in_square"
+          },
+          {
+            "type":   "minecraft:height_range",
+            "height": {
+              "type":          "minecraft:uniform",
+              "max_inclusive": {
+                "absolute": 32
+              },
+              "min_inclusive": {
+                "above_bottom": 0
+              }
+            }
+          },
+          {
+            "type": "minecraft:biome"
+          }
+        ]
+      },
+      "step":        "underground_ores"
+    },
+    {
+      "biome_types": [
+        "normal",
+        "rough",
+        "ocean"
+      ],
+      "feature":     {
+        "feature":   {
+          "type":   "minecraft:ore",
+          "config": {
+            "discard_chance_on_air_exposure": 0,
+            "size":                           9,
+            "targets":                        [
+              {
+                "state":  {
+                  "Name": "minestuck:uncarved_wood_iron_ore"
+                },
+                "target": {
+                  "block_state":    {
+                    "Name": "minestuck:uncarved_wood"
+                  },
+                  "predicate_type": "minecraft:blockstate_match"
+                }
+              }
+            ]
+          }
+        },
+        "placement": [
+          {
+            "type":  "minecraft:count",
+            "count": 48
+          },
+          {
+            "type": "minecraft:in_square"
+          },
+          {
+            "type":   "minecraft:height_range",
+            "height": {
+              "type":          "minecraft:uniform",
+              "max_inclusive": {
+                "absolute": 64
+              },
+              "min_inclusive": {
+                "above_bottom": 0
+              }
+            }
+          },
+          {
+            "type": "minecraft:biome"
+          }
+        ]
+      },
+      "step":        "underground_ores"
+    },
+    {
+      "biome_types": [
+        "normal",
+        "rough",
+        "ocean"
+      ],
+      "feature":     {
+        "feature":   {
+          "type":   "minecraft:ore",
+          "config": {
+            "discard_chance_on_air_exposure": 0,
+            "size":                           3,
+            "targets":                        [
+              {
+                "state":  {
+                  "Name": "minestuck:uncarved_wood_emerald_ore"
+                },
+                "target": {
+                  "block_state":    {
+                    "Name": "minestuck:uncarved_wood"
+                  },
+                  "predicate_type": "minecraft:blockstate_match"
+                }
+              }
+            ]
+          }
+        },
+        "placement": [
+          {
+            "type":  "minecraft:count",
+            "count": 29
+          },
+          {
+            "type": "minecraft:in_square"
+          },
+          {
+            "type":   "minecraft:height_range",
+            "height": {
+              "type":          "minecraft:uniform",
+              "max_inclusive": {
+                "absolute": 24
+              },
+              "min_inclusive": {
+                "above_bottom": 0
+              }
+            }
+          },
+          {
+            "type": "minecraft:biome"
+          }
+        ]
+      },
+      "step":        "underground_ores"
+    }
+  ]
+}
