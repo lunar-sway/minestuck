@@ -105,6 +105,7 @@ public final class CaptchaDeckHandler
 		entity.setDefaultPickUpDelay();
 		player.level().addFreshEntity(entity);
 	}
+	
 	public static void ejectAnyItem(Player player, ItemStack item)
 	{
 		ItemEntity entity = new ItemEntity(player.level(), player.getX(), player.getY()+1, player.getZ(), item);
