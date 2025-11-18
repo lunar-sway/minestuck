@@ -5,8 +5,6 @@ import com.mraof.minestuck.item.CaptchaCardItem;
 import com.mraof.minestuck.item.MSItems;
 import net.minecraft.core.HolderLookup;
 import net.minecraft.core.NonNullList;
-import net.minecraft.core.component.DataComponents;
-import net.minecraft.core.registries.BuiltInRegistries;
 import net.minecraft.nbt.CompoundTag;
 import net.minecraft.nbt.Tag;
 import net.minecraft.network.chat.Component;
@@ -131,7 +129,7 @@ public class ArrayModus extends Modus
 			for(int i = 0; i < list.size(); i++)
 				if(!list.get(i).isEmpty())
 				{
-					CaptchaDeckHandler.launchAnyItem(player, list.get(i));
+					CaptchaDeckHandler.ejectAnyItem(player, list.get(i));
 					list.set(i, ItemStack.EMPTY);
 					markDirty();
 				}

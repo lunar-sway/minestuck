@@ -170,7 +170,7 @@ public class HashMapModus extends Modus
 			for(int i = 0; i < list.size(); i++)
 				if(!list.get(i).isEmpty())
 				{
-					CaptchaDeckHandler.launchAnyItem(player, list.get(i));
+					CaptchaDeckHandler.ejectAnyItem(player, list.get(i));
 					list.set(i, ItemStack.EMPTY);
 					markDirty();
 				}
