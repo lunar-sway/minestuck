@@ -37,7 +37,10 @@ public class PosterItem extends Item
 		if (posterComponent == null || (player != null && !this.mayPlace(player, direction, itemstack, blockpos1)))
 			return InteractionResult.FAIL;
 		
-		Optional<PosterEntity> optional = PosterEntity.createArt(level, blockpos1, direction, itemstack, posterComponent.variantPool());
+		// Copy stack to prevent consuming it from the poster
+		ItemStack posterStack = itemstack.copy();
+		posterStack.setCount(1);
+		Optional<PosterEntity> optional = PosterEntity.createArt(level, blockpos1, direction, posterStack, posterComponent.variantPool());
 		if (optional.isEmpty()) {
 			return InteractionResult.CONSUME;
 		}

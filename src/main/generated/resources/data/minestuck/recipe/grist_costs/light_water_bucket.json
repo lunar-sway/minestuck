@@ -1,0 +1,10 @@
+{
+  "type": "minestuck:container_grist_cost",
+  "grist_cost": {
+    "minestuck:chalk": 8,
+    "minestuck:cobalt": 4
+  },
+  "ingredient": {
+    "item": "minestuck:light_water_bucket"
+  }
+}
