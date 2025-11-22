@@ -255,7 +255,8 @@ public class HashMapModus extends Modus
 		checkAndResend(player);
 	}
 	
-	private void handleName(ServerPlayer player, String key) {
+	private void handleName(ServerPlayer player, String key)
+	{
 		if(key.isEmpty()) return;
 		
 		key = key.toLowerCase();
