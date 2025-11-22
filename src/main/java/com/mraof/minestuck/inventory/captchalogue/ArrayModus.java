@@ -94,8 +94,8 @@ public class ArrayModus extends Modus
 				list.set(i, item);
 				markDirty();
 				
-				if(ejectByChat && MinestuckConfig.SERVER.hashmapChatModusSetting.get() != MinestuckConfig.AvailableOptions.OFF
-						|| MinestuckConfig.SERVER.hashmapChatModusSetting.get() == MinestuckConfig.AvailableOptions.ON)
+				if(ejectByChat && MinestuckConfig.SERVER.arrayChatModusSetting.get() != MinestuckConfig.AvailableOptions.OFF
+						|| MinestuckConfig.SERVER.arrayChatModusSetting.get() == MinestuckConfig.AvailableOptions.ON)
 				{
 					player.sendSystemMessage(
 							Component.translatable(MESSAGE, item.getDisplayName(), i)
@@ -213,8 +213,8 @@ public class ArrayModus extends Modus
 	
 	public void onChatMessage(ServerPlayer player, String str)
 	{
-		if(!ejectByChat && MinestuckConfig.SERVER.hashmapChatModusSetting.get() != MinestuckConfig.AvailableOptions.ON
-				|| MinestuckConfig.SERVER.hashmapChatModusSetting.get() == MinestuckConfig.AvailableOptions.OFF)
+		if(!ejectByChat && MinestuckConfig.SERVER.arrayChatModusSetting.get() != MinestuckConfig.AvailableOptions.ON
+				|| MinestuckConfig.SERVER.arrayChatModusSetting.get() == MinestuckConfig.AvailableOptions.OFF)
 			return;
 		
 		boolean isPrevLetter = false;

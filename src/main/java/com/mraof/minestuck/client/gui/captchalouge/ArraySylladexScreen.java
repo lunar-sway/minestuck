@@ -41,9 +41,9 @@ public class ArraySylladexScreen extends SylladexScreen
 	{
 		guiButton.setX((width - GUI_WIDTH)/2 + 15);
 		guiButton.setY((height - GUI_HEIGHT)/2 + 175);
-		boolean active = MinestuckConfig.SERVER.hashmapChatModusSetting.get() == MinestuckConfig.AvailableOptions.BOTH ? modus.ejectByChat : MinestuckConfig.SERVER.hashmapChatModusSetting.get() == MinestuckConfig.AvailableOptions.ON;
+		boolean active = MinestuckConfig.SERVER.arrayChatModusSetting.get() == MinestuckConfig.AvailableOptions.BOTH ? modus.ejectByChat : MinestuckConfig.SERVER.arrayChatModusSetting.get() == MinestuckConfig.AvailableOptions.ON;
 		guiButton.setMessage(Component.translatable(active ? EJECT_BY_CHAT_ON : EJECT_BY_CHAT_OFF));
-		guiButton.active = MinestuckConfig.SERVER.hashmapChatModusSetting.get() == MinestuckConfig.AvailableOptions.BOTH;
+		guiButton.active = MinestuckConfig.SERVER.arrayChatModusSetting.get() == MinestuckConfig.AvailableOptions.BOTH;
 		super.render(guiGraphics, mouseX, mouseY, f);
 	}
 	
@@ -104,7 +104,7 @@ public class ArraySylladexScreen extends SylladexScreen
 	
 	private void changeSetting()
 	{
-		if(MinestuckConfig.SERVER.hashmapChatModusSetting.get() == MinestuckConfig.AvailableOptions.BOTH)
+		if(MinestuckConfig.SERVER.arrayChatModusSetting.get() == MinestuckConfig.AvailableOptions.BOTH)
 		{
 			modus.ejectByChat = !modus.ejectByChat;
 			PacketDistributor.sendToServer(new CaptchaDeckPackets.SetModusParameter((byte) 0, modus.ejectByChat ? 1 : 0));

@@ -89,6 +89,7 @@ public class MinestuckConfig
 		public final EnumValue<DropMode> sylladexDropMode;
 		public final EnumValue<AvailableOptions> treeModusSetting;
 		public final EnumValue<AvailableOptions> hashmapChatModusSetting;
+		public final EnumValue<AvailableOptions> arrayChatModusSetting;
 		
 		//Mechanics
 		public final BooleanValue hardMode;
@@ -148,6 +149,8 @@ public class MinestuckConfig
 					.defineEnum("treeModusSetting", AvailableOptions.BOTH);
 			hashmapChatModusSetting = builder.comment("This determines if hashmap chat ejection should be forced. 'both' if the player should choose, 'on' if forced at on, and 'off' if forced at off.")
 					.defineEnum("hashmapModusSetting", AvailableOptions.BOTH);
+			arrayChatModusSetting = builder.comment("This determines if array chat ejection should be forced. 'both' if the player should choose, 'on' if forced at on, and 'off' if forced at off.")
+					.defineEnum("arrayModusSetting", AvailableOptions.BOTH);
 			builder.pop();
 			
 			builder.push("computer");
