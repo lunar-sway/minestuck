@@ -671,7 +671,7 @@ public final class MinestuckGristCostsProvider
 		GristCostRecipeBuilder.of(MSItems.SORCERERS_PINBALL.get()).grist(BUILD, 200).grist(MERCURY, 30).grist(IODINE, 5).build(recipeSaver);
 		GristCostRecipeBuilder.of(MSItems.MUSIC_SWORD.get()).grist(BUILD, 18760).grist(MARBLE, 1876 ).grist(RUST, 1407).grist(AMBER, 2345 ).build(recipeSaver);
 		
-		GristCostRecipeBuilder.of(MSItems.ARRAY_MODUS_CARD.get()).grist(BUILD, 280).grist(COBALT, 70).grist(DIAMOND, 6).build(recipeSaver);
+		GristCostRecipeBuilder.of(MSItems.ARRAY_MODUS_CARD.get()).grist(BUILD, 280).grist(COBALT, 70).grist(DIAMOND, 60).build(recipeSaver);
 		GristCostRecipeBuilder.of(MSItems.CAPTCHAROID_CAMERA.get()).grist(BUILD, 5000).grist(CAULK, 500).grist(GOLD, 500).grist(MARBLE, 500).grist(MERCURY, 500).grist(SHALE, 500).build(recipeSaver);
 		GristCostRecipeBuilder.of(MSBlocks.TRANSPORTALIZER.get()).grist(BUILD, 350).grist(AMETHYST, 27).grist(RUST, 36).grist(URANIUM, 18).build(recipeSaver);
 		GristCostRecipeBuilder.of(MSItems.QUEUESTACK_MODUS_CARD.get()).grist(BUILD, 140).build(recipeSaver);
