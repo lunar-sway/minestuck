@@ -6,8 +6,7 @@
           "grist": {
             "minestuck:build": 1,
             "minestuck:chalk": 1,
-            "minestuck:cobalt": 1,
-            "minestuck:garnet": 1
+            "minestuck:cobalt": 1
           }
         }
       ],

@@ -213,7 +213,7 @@ public class DeployListProvider implements DataProvider
 				new DeployDataEntry(new ItemStack(Blocks.PINK_STAINED_GLASS_PANE), 2, EntryLists.ATHENEUM, new GristCost(GristSet.of(GristTypes.BUILD.get().amount(3)), 0, List.of()), false)
 		));
 		add("concrete", new DeployDataList(1,
-				new DeployDataEntry(new ItemStack(Blocks.WHITE_CONCRETE), 2, EntryLists.ATHENEUM, new GristCost(GristSet.of(GristTypes.BUILD.get().amount(1), GristTypes.COBALT.get().amount(1), GristTypes.CHALK.get().amount(1), GristTypes.GARNET.get().amount(1)), 0, List.of()), false),
+				new DeployDataEntry(new ItemStack(Blocks.WHITE_CONCRETE), 2, EntryLists.ATHENEUM, new GristCost(GristSet.of(GristTypes.BUILD.get().amount(1), GristTypes.COBALT.get().amount(1), GristTypes.CHALK.get().amount(1)), 0, List.of()), false),
 				new DeployDataEntry(new ItemStack(Blocks.LIGHT_GRAY_CONCRETE), 2, EntryLists.ATHENEUM, new GristCost(GristSet.of(GristTypes.BUILD.get().amount(1), GristTypes.COBALT.get().amount(1), GristTypes.CHALK.get().amount(1), GristTypes.TAR.get().amount(1)), 0, List.of()), false),
 				new DeployDataEntry(new ItemStack(Blocks.GRAY_CONCRETE), 2, EntryLists.ATHENEUM, new GristCost(GristSet.of(GristTypes.BUILD.get().amount(1), GristTypes.COBALT.get().amount(1), GristTypes.CHALK.get().amount(1), GristTypes.TAR.get().amount(1)), 0, List.of()), false),
 				new DeployDataEntry(new ItemStack(Blocks.BLACK_CONCRETE), 2, EntryLists.ATHENEUM, new GristCost(GristSet.of(GristTypes.BUILD.get().amount(1), GristTypes.COBALT.get().amount(1), GristTypes.TAR.get().amount(1)), 0, List.of()), false),
