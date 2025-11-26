@@ -12,9 +12,13 @@ import com.mraof.minestuck.api.alchemy.MutableGristSet;
 import com.mraof.minestuck.api.alchemy.recipe.GristCostRecipe;
 import com.mraof.minestuck.computer.editmode.DeployList.EntryLists;
 import com.mraof.minestuck.computer.editmode.DeployList.IAvailabilityCondition;
+import com.mraof.minestuck.entity.dialogue.condition.Condition;
+import com.mraof.minestuck.entity.dialogue.condition.Condition.PlayerOnlyCondition;
 import com.mraof.minestuck.item.CaptchaCardItem;
 import com.mraof.minestuck.skaianet.SburbPlayerData;
 import net.minecraft.resources.ResourceLocation;
+import net.minecraft.server.MinecraftServer;
+import net.minecraft.server.level.ServerPlayer;
 import net.minecraft.server.packs.resources.ResourceManager;
 import net.minecraft.server.packs.resources.SimpleJsonResourceReloadListener;
 import net.minecraft.util.StringRepresentable;
@@ -74,9 +78,7 @@ public class DeployListLoader extends SimpleJsonResourceReloadListener
 					.ifPresent(list -> entries.add(Map.entry(entry.getKey(), list)));
 		}
 		
-		entries.sort((left, right) -> {
-			return -Float.compare(left.getValue().priority, right.getValue().priority);
-		});
+		entries.sort((left, right) -> -Float.compare(left.getValue().priority, right.getValue().priority));
 		
 		for(Map.Entry<ResourceLocation, DeployDataList> entry : entries)
 		{
@@ -104,12 +106,18 @@ public class DeployListLoader extends SimpleJsonResourceReloadListener
 	
 	private IAvailabilityCondition entryCondition(DeployDataEntry entry)
 	{
-		return d -> {
+		return playerData -> {
 			// Will default to the item's cost
 			if(entry.cost.isEmpty()) return true;
+			
+			MinecraftServer server = ServerLifecycleHooks.getCurrentServer();
+			if(server == null) return false;
+			ServerPlayer player = playerData.playerId().getPlayer(server);
+			if(player == null) return false;
+			
 			for(GristCost cost : entry.cost)
 			{
-				if(cost.test(this.getContext())) return true;
+				if(cost.test(this.getContext(), player)) return true;
 			}
 			return false;
 		};
@@ -138,9 +146,15 @@ public class DeployListLoader extends SimpleJsonResourceReloadListener
 				stack.setCount(1);
 				set = GristCostRecipe.findCostForItem(stack, null, false, ServerLifecycleHooks.getCurrentServer().overworld()).mutableCopy();
 			}
+			
+			MinecraftServer server = ServerLifecycleHooks.getCurrentServer();
+			if(server == null) return set.asImmutable();
+			ServerPlayer player = playerData.playerId().getPlayer(server);
+			if(player == null) return set.asImmutable();
+			
 			for(GristCost cost : entry.cost)
 			{
-				if(cost.test(this.getContext()))
+				if(cost.test(this.getContext(), player))
 				{
 					if(cost.grist.isPresent())
 					{
@@ -150,30 +164,44 @@ public class DeployListLoader extends SimpleJsonResourceReloadListener
 					{
 						set.add(playerData.getBaseGrist(), cost.primary);
 					}
+					break;
 				}
 			}
 			return set.asImmutable();
 		};
 	}
 	
-	public record GristCost(Optional<GristSet.Immutable> grist, int primary, List<ICondition> conditions)
+	public record GristCost(Optional<GristSet.Immutable> grist, int primary,
+							List<ICondition> neoforgeConditions, List<PlayerOnlyCondition> clientConditions)
 	{
 		public static final Codec<GristCost> CODEC = RecordCodecBuilder.create(instance -> instance.group(
 				GristSet.Codecs.MAP_CODEC.optionalFieldOf("grist").forGetter(GristCost::grist),
 				Codec.INT.optionalFieldOf("primary_grist", 0).forGetter(GristCost::primary),
-				ICondition.LIST_CODEC.optionalFieldOf("conditions", List.of()).forGetter(GristCost::conditions)
+				// Makes the difference between neoforge conditions and client conditions clear
+				ICondition.LIST_CODEC.optionalFieldOf("neoforge:conditions", List.of()).forGetter(GristCost::neoforgeConditions),
+				Condition.PLAYER_ONLY_CODEC.listOf().optionalFieldOf("client_conditions", List.of()).forGetter(GristCost::clientConditions)
 		).apply(instance, GristCost::new));
 		public static final Codec<List<GristCost>> LIST_CODEC = CODEC.listOf();
 		
-		public GristCost(GristSet grist, int primary, List<ICondition> conditions) {
-			this(Optional.of(grist.asImmutable()), primary, conditions);
+		public GristCost(GristSet grist, int primary, List<ICondition> conditions)
+		{
+			this(Optional.of(grist.asImmutable()), primary, conditions, List.of());
 		}
 		
-		public boolean test(ICondition.IContext context)
+		public GristCost(GristSet grist)
 		{
-			for(ICondition condition : conditions)
+			this(Optional.of(grist.asImmutable()), 0, List.of(), List.of());
+		}
+		
+		public boolean test(ICondition.IContext context, ServerPlayer player)
+		{
+			for(ICondition condition : neoforgeConditions)
 			{
 				if(!condition.test(context)) return false;
+			}
+			for(PlayerOnlyCondition condition : clientConditions)
+			{
+				if(!condition.test(player)) return false;
 			}
 			return true;
 		}
@@ -197,7 +225,8 @@ public class DeployListLoader extends SimpleJsonResourceReloadListener
 		).apply(instance, DeployDataEntry::new));
 		public static final Codec<List<DeployDataEntry>> LIST_CODEC = CODEC.listOf();
 		
-		public DeployDataEntry(ItemStack stack, int tier, DeployList.EntryLists category, GristCost cost, boolean punched) {
+		public DeployDataEntry(ItemStack stack, int tier, DeployList.EntryLists category, GristCost cost, boolean punched)
+		{
 			this(stack, tier, category, List.of(cost), punched);
 		}
 	}
@@ -215,7 +244,8 @@ public class DeployListLoader extends SimpleJsonResourceReloadListener
 				DeployDataEntry.LIST_CODEC.fieldOf("entries").forGetter(DeployDataList::entries)
 		).apply(instance, DeployDataList::new));
 		
-		public DeployDataList(float priority, DeployDataEntry ...entries) {
+		public DeployDataList(float priority, DeployDataEntry... entries)
+		{
 			this(priority, List.of(entries));
 		}
 	}
