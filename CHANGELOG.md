@@ -13,6 +13,7 @@ The format is based on [Keep a Changelog](https://keepachangelog.com/en/1.1.0/).
 ### Changed
 
 - Cassettes are now data-driven
+- Boondollars can be split/stacked together like normal items
 
 ### Fixed
 

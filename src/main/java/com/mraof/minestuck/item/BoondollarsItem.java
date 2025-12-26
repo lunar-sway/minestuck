@@ -7,7 +7,10 @@ import net.minecraft.network.chat.Component;
 import net.minecraft.server.level.ServerPlayer;
 import net.minecraft.world.InteractionHand;
 import net.minecraft.world.InteractionResultHolder;
+import net.minecraft.world.entity.SlotAccess;
 import net.minecraft.world.entity.player.Player;
+import net.minecraft.world.inventory.ClickAction;
+import net.minecraft.world.inventory.Slot;
 import net.minecraft.world.item.Item;
 import net.minecraft.world.item.ItemStack;
 import net.minecraft.world.item.TooltipFlag;
@@ -41,6 +44,65 @@ public class BoondollarsItem extends Item
 	{
 		long amount = getCount(stack);
 		tooltip.add(Component.translatable("item.minestuck.boondollars.amount", amount));
+	}
+	
+	@Override
+	public boolean overrideStackedOnOther(ItemStack stack, Slot slot, ClickAction action, Player player)
+	{
+		if(stack.getCount() == 1)
+		{
+			ItemStack other = slot.getItem();
+			if(action == ClickAction.SECONDARY)
+			{
+				// Transfer 1 boondollar to stack below (or create a stack of boondollars if there's nothing)
+				if(other.isEmpty())
+				{
+					if(getCount(stack) > 1)
+					{
+						setCount(stack, getCount(stack) - 1);
+					} else
+					{
+						stack.setCount(0);
+					}
+					slot.set(setCount(MSItems.BOONDOLLARS.toStack(), 1));
+					return true;
+				} else if(other.is(MSItems.BOONDOLLARS))
+				{
+					if(getCount(stack) > 1)
+					{
+						setCount(stack, getCount(stack) - 1);
+					} else
+					{
+						stack.setCount(0);
+					}
+					setCount(other, getCount(other) + 1);
+					return true;
+				}
+			} else if(other.is(MSItems.BOONDOLLARS))
+			{
+				// Add all boondollars together
+				setCount(other, getCount(other) + getCount(stack));
+				stack.setCount(0);
+				return true;
+			}
+		}
+		
+		return super.overrideStackedOnOther(stack, slot, action, player);
+	}
+	
+	@Override
+	public boolean overrideOtherStackedOnMe(ItemStack stack, ItemStack other, Slot slot, ClickAction action, Player player, SlotAccess access)
+	{
+		if(stack.getCount() == 1 && slot.allowModification(player) && other.isEmpty() && action == ClickAction.SECONDARY && getCount(stack) > 1)
+		{
+			// Split boondollars like vanilla stacks, giving the larger half to the held amount
+			long count = getCount(stack);
+			long half = count / 2;
+			access.set(setCount(MSItems.BOONDOLLARS.toStack(), count - half));
+			setCount(stack, half);
+			return true;
+		}
+		return super.overrideOtherStackedOnMe(stack, other, slot, action, player, access);
 	}
 	
 	public static long getCount(ItemStack stack)
