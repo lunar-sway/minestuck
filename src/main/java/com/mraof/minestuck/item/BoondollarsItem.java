@@ -3,8 +3,10 @@ package com.mraof.minestuck.item;
 import com.mraof.minestuck.item.components.MSItemComponents;
 import com.mraof.minestuck.player.PlayerBoondollars;
 import com.mraof.minestuck.player.PlayerData;
+import com.mraof.minestuck.util.MSSoundEvents;
 import net.minecraft.network.chat.Component;
 import net.minecraft.server.level.ServerPlayer;
+import net.minecraft.sounds.SoundSource;
 import net.minecraft.world.InteractionHand;
 import net.minecraft.world.InteractionResultHolder;
 import net.minecraft.world.entity.player.Player;
@@ -27,6 +29,8 @@ public class BoondollarsItem extends Item
 	@Override
 	public InteractionResultHolder<ItemStack> use(Level level, Player playerIn, InteractionHand handIn)
 	{
+		playerIn.level().playSound(playerIn,playerIn.blockPosition(), MSSoundEvents.ITEM_BOONDOLLARS_USE.get(), SoundSource.PLAYERS,1,(playerIn.getRandom().nextFloat()/2)+0.75f);
+		
 		if(playerIn instanceof ServerPlayer serverPlayer)
 		{
 			PlayerData.get(serverPlayer).ifPresent(

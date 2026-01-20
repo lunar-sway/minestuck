@@ -806,6 +806,13 @@
       "minestuck:item/jetpack_flight"
     ]
   },
+  "item.boondollars.use": {
+    "category": "ambient",
+    "subtitle": "subtitles.minestuck.boondollar_get",
+    "sounds": [
+      "minestuck:random/boondollar_get"
+    ]
+  },
   "event.echeladder.increase": {
     "category": "ambient",
     "subtitle": "subtitles.minestuck.upcheladder",
