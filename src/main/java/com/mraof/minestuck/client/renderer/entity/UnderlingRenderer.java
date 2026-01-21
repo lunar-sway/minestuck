@@ -17,6 +17,7 @@ import net.minecraft.server.packs.resources.Resource;
 import net.minecraft.server.packs.resources.ResourceManager;
 import net.minecraft.util.FastColor;
 import org.jetbrains.annotations.Nullable;
+import org.joml.Quaternionf;
 import software.bernie.geckolib.cache.GeckoLibCache;
 import software.bernie.geckolib.cache.object.BakedGeoModel;
 import software.bernie.geckolib.cache.object.GeoBone;
@@ -65,11 +66,13 @@ public class UnderlingRenderer<T extends UnderlingEntity> extends GeoEntityRende
 		if(bone.getName().equals("head"))
 		{
 			poseStack.pushPose();
+			Quaternionf quat = new Quaternionf();
+			poseStack.mulPose(bone.getLocalSpaceMatrix());
+			//poseStack.rotateAround(bone.getModelRotationMatrix().getNormalizedRotation(), );
+			//poseStack.;
 			//TODO needs to be anchored
-			poseStack.translate(0.0, 4.0, 0.0);
-			//TODO the below does not appear. May need texture?
-			//BakedGeoModel model = GeckoLibCache.getBakedModels().get(Minestuck.id("geo/entity/prototyping/chicken/torso_side.geo.json"));
-			BakedGeoModel model = GeckoLibCache.getBakedModels().get(Minestuck.id("geo/lotus_flower.geo.json"));
+			//poseStack.translate(0.0, 4.0, 0.0);
+			BakedGeoModel model = GeckoLibCache.getBakedModels().get(Minestuck.id("geo/entity/prototyping/chicken/torso_side.geo.json"));
 			if(buffer != null && model != null)
 				actuallyRender(poseStack, animatable, model, renderType, bufferSource, buffer, isReRender, partialTick, packedLight, packedOverlay, colour);
 			poseStack.popPose();
