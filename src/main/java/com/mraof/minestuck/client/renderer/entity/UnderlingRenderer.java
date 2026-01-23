@@ -17,7 +17,6 @@ import net.minecraft.server.packs.resources.Resource;
 import net.minecraft.server.packs.resources.ResourceManager;
 import net.minecraft.util.FastColor;
 import org.jetbrains.annotations.Nullable;
-import org.joml.Quaternionf;
 import software.bernie.geckolib.cache.GeckoLibCache;
 import software.bernie.geckolib.cache.object.BakedGeoModel;
 import software.bernie.geckolib.cache.object.GeoBone;
@@ -26,6 +25,7 @@ import software.bernie.geckolib.renderer.GeoEntityRenderer;
 import software.bernie.geckolib.renderer.GeoRenderer;
 import software.bernie.geckolib.renderer.layer.GeoRenderLayer;
 import software.bernie.geckolib.util.Color;
+import software.bernie.geckolib.util.RenderUtil;
 
 import java.io.IOException;
 import java.io.InputStream;
@@ -66,12 +66,49 @@ public class UnderlingRenderer<T extends UnderlingEntity> extends GeoEntityRende
 		if(bone.getName().equals("head"))
 		{
 			poseStack.pushPose();
-			Quaternionf quat = new Quaternionf();
-			poseStack.mulPose(bone.getLocalSpaceMatrix());
-			//poseStack.rotateAround(bone.getModelRotationMatrix().getNormalizedRotation(), );
-			//poseStack.;
-			//TODO needs to be anchored
-			//poseStack.translate(0.0, 4.0, 0.0);
+			
+			//anchored to body direction, not head. at feet
+			//Quaternionf quat = new Quaternionf();
+			//poseStack.rotateAround(quat, bone.getPosX(), bone.getPosY(), bone.getPosZ());
+			
+			//changes in scale but not direction. anchored to body direction, not head. at feet
+			//Quaternionf quat = new Quaternionf(bone.getPosX(), bone.getPosY(), bone.getPosZ(), (float) (Minecraft.getInstance().level.getGameTime() % 100) / 100);
+			//poseStack.rotateAround(quat, bone.getPosX(), bone.getPosY(), bone.getPosZ());
+			
+			//anchored to body direction, not head. at feet
+			//Quaternionf quat = new Quaternionf(bone.getPosX(), bone.getPosY(), bone.getPosZ(), 1);
+			//poseStack.mulPose(quat);
+			
+			//centered around and follows head but is warped
+			//poseStack.mulPose(bone.getLocalSpaceMatrix());
+			
+			//flies around in a wide circle around the entity, even when static
+			//poseStack.mulPose(bone.getModelRotationMatrix());
+			
+			//was visible momentarily, vibrating around body, before flying away
+			//poseStack.mulPose(bone.getModelSpaceMatrix());
+			
+			//see nothing
+			//poseStack.mulPose(bone.getWorldSpaceMatrix());
+			
+			//anchored to body position, around head
+			//RenderUtil.translateToPivotPoint(poseStack, bone);
+			
+			//anchored to body position, around feet
+			//RenderUtil.translateMatrixToBone(poseStack, bone);
+			
+			//Changes in scale, stretches, and warps, but is near head. The rotation of other mobs seems to change how it looks
+			//poseStack.translate(bone.getPosX(), bone.getPosY(), bone.getPosZ());
+			//RenderUtil.translateMatrixToBone(poseStack, bone);
+			//RenderUtil.translateToPivotPoint(poseStack, bone);
+			//poseStack.mulPose(bone.getLocalSpaceMatrix());
+			
+			//factors in head rotation, but at strange angles
+			//RenderUtil.faceRotation(poseStack, animatable, partialTick);
+			
+			RenderUtil.translateAndRotateMatrixForBone(poseStack, bone);
+			poseStack.translate(0.0, 0.8, 0.0);
+			
 			BakedGeoModel model = GeckoLibCache.getBakedModels().get(Minestuck.id("geo/entity/prototyping/chicken/torso_side.geo.json"));
 			if(buffer != null && model != null)
 				actuallyRender(poseStack, animatable, model, renderType, bufferSource, buffer, isReRender, partialTick, packedLight, packedOverlay, colour);
