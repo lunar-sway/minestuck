@@ -16,12 +16,16 @@ import net.minecraft.resources.ResourceLocation;
 import net.minecraft.server.packs.resources.Resource;
 import net.minecraft.server.packs.resources.ResourceManager;
 import net.minecraft.util.FastColor;
+import org.jetbrains.annotations.Nullable;
+import software.bernie.geckolib.cache.GeckoLibCache;
 import software.bernie.geckolib.cache.object.BakedGeoModel;
+import software.bernie.geckolib.cache.object.GeoBone;
 import software.bernie.geckolib.model.DefaultedEntityGeoModel;
 import software.bernie.geckolib.renderer.GeoEntityRenderer;
 import software.bernie.geckolib.renderer.GeoRenderer;
 import software.bernie.geckolib.renderer.layer.GeoRenderLayer;
 import software.bernie.geckolib.util.Color;
+import software.bernie.geckolib.util.RenderUtil;
 
 import java.io.IOException;
 import java.io.InputStream;
@@ -50,6 +54,69 @@ public class UnderlingRenderer<T extends UnderlingEntity> extends GeoEntityRende
 		return 0;
 	}
 	
+	@Override
+	public void defaultRender(PoseStack poseStack, T animatable, MultiBufferSource bufferSource, @Nullable RenderType renderType, @Nullable VertexConsumer buffer, float yaw, float partialTick, int packedLight)
+	{
+		super.defaultRender(poseStack, animatable, bufferSource, renderType, buffer, yaw, partialTick, packedLight);
+	}
+	
+	@Override
+	public void renderRecursively(PoseStack poseStack, T animatable, GeoBone bone, RenderType renderType, MultiBufferSource bufferSource, VertexConsumer buffer, boolean isReRender, float partialTick, int packedLight, int packedOverlay, int colour)
+	{
+		if(bone.getName().equals("head"))
+		{
+			poseStack.pushPose();
+			
+			//anchored to body direction, not head. at feet
+			//Quaternionf quat = new Quaternionf();
+			//poseStack.rotateAround(quat, bone.getPosX(), bone.getPosY(), bone.getPosZ());
+			
+			//changes in scale but not direction. anchored to body direction, not head. at feet
+			//Quaternionf quat = new Quaternionf(bone.getPosX(), bone.getPosY(), bone.getPosZ(), (float) (Minecraft.getInstance().level.getGameTime() % 100) / 100);
+			//poseStack.rotateAround(quat, bone.getPosX(), bone.getPosY(), bone.getPosZ());
+			
+			//anchored to body direction, not head. at feet
+			//Quaternionf quat = new Quaternionf(bone.getPosX(), bone.getPosY(), bone.getPosZ(), 1);
+			//poseStack.mulPose(quat);
+			
+			//centered around and follows head but is warped
+			//poseStack.mulPose(bone.getLocalSpaceMatrix());
+			
+			//flies around in a wide circle around the entity, even when static
+			//poseStack.mulPose(bone.getModelRotationMatrix());
+			
+			//was visible momentarily, vibrating around body, before flying away
+			//poseStack.mulPose(bone.getModelSpaceMatrix());
+			
+			//see nothing
+			//poseStack.mulPose(bone.getWorldSpaceMatrix());
+			
+			//anchored to body position, around head
+			//RenderUtil.translateToPivotPoint(poseStack, bone);
+			
+			//anchored to body position, around feet
+			//RenderUtil.translateMatrixToBone(poseStack, bone);
+			
+			//Changes in scale, stretches, and warps, but is near head. The rotation of other mobs seems to change how it looks
+			//poseStack.translate(bone.getPosX(), bone.getPosY(), bone.getPosZ());
+			//RenderUtil.translateMatrixToBone(poseStack, bone);
+			//RenderUtil.translateToPivotPoint(poseStack, bone);
+			//poseStack.mulPose(bone.getLocalSpaceMatrix());
+			
+			//factors in head rotation, but at strange angles
+			//RenderUtil.faceRotation(poseStack, animatable, partialTick);
+			
+			RenderUtil.translateAndRotateMatrixForBone(poseStack, bone);
+			poseStack.translate(0.0, 0.8, 0.0);
+			
+			BakedGeoModel model = GeckoLibCache.getBakedModels().get(Minestuck.id("geo/entity/prototyping/chicken/torso_side.geo.json"));
+			if(buffer != null && model != null)
+				actuallyRender(poseStack, animatable, model, renderType, bufferSource, buffer, isReRender, partialTick, packedLight, packedOverlay, colour);
+			poseStack.popPose();
+		}
+		
+		super.renderRecursively(poseStack, animatable, bone, renderType, bufferSource, buffer, isReRender, partialTick, packedLight, packedOverlay, colour);
+	}
 	
 	@Override
 	public Color getRenderColor(T animatable, float partialTick, int packedLight)
@@ -80,7 +147,8 @@ public class UnderlingRenderer<T extends UnderlingEntity> extends GeoEntityRende
 		return resource;
 	}
 	
-	private DynamicTexture createLayeredTexture(T entity) {
+	private DynamicTexture createLayeredTexture(T entity)
+	{
 		ResourceManager resourceManager = Minecraft.getInstance().getResourceManager();
 		NativeImage base = loadImage(resourceManager, super.getTextureLocation(entity));
 		NativeImage texture = loadImage(resourceManager, getGristTexture(entity));
@@ -105,11 +173,14 @@ public class UnderlingRenderer<T extends UnderlingEntity> extends GeoEntityRende
 		return new DynamicTexture(computed);
 	}
 	
-	private NativeImage loadImage(ResourceManager resourceManager, ResourceLocation location) {
+	private NativeImage loadImage(ResourceManager resourceManager, ResourceLocation location)
+	{
 		Resource resource = resourceManager.getResource(location).orElseThrow(() -> new RuntimeException("Couldn't find image %s".formatted(location)));
-		try(InputStream inputStream = resource.open()) {
+		try(InputStream inputStream = resource.open())
+		{
 			return NativeImage.read(inputStream);
-		} catch (IOException e) {
+		} catch(IOException e)
+		{
 			throw new RuntimeException("Failed to load image %s".formatted(location), e);
 		}
 	}
@@ -117,7 +188,8 @@ public class UnderlingRenderer<T extends UnderlingEntity> extends GeoEntityRende
 	private ResourceLocation getGristTexture(T entity)
 	{
 		var textureLocation = entity.getGristType().getTextureId().withPath(textureName -> "textures/entity/underlings/" + textureName + ".png");
-		if (Minecraft.getInstance().getResourceManager().getResource(textureLocation).isEmpty()) {
+		if(Minecraft.getInstance().getResourceManager().getResource(textureLocation).isEmpty())
+		{
 			return this.model.getTextureResource(entity);
 		}
 		return textureLocation;

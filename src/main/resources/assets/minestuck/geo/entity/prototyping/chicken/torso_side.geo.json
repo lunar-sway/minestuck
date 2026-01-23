@@ -1,0 +1,35 @@
+{
+  "format_version":     "1.12.0",
+  "minecraft:geometry": [
+    {
+      "description": {
+        "identifier":            "geometry.torso_side",
+        "texture_width":         128,
+        "texture_height":        128,
+        "visible_bounds_width":  5,
+        "visible_bounds_height": 5,
+        "visible_bounds_offset": [ 0, 0, 0 ]
+      },
+      "bones":       [
+        {
+          "name":  "root",
+          "pivot": [ 8, 8, 8 ],
+          "cubes": [
+            {
+              "origin": [ -8, -8, -8 ],
+              "size":   [ 16, 16, 16 ],
+              "uv":     {
+                "north": { "uv": [ 16, 0 ], "uv_size": [ 16, 16 ] },
+                "east":  { "uv": [ 16, 0 ], "uv_size": [ 16, 16 ] },
+                "south": { "uv": [ 16, 0 ], "uv_size": [ 16, 16 ] },
+                "west":  { "uv": [ 16, 0 ], "uv_size": [ 16, 16 ] },
+                "up":    { "uv": [ 32, 16 ], "uv_size": [ -16, -16 ] },
+                "down":  { "uv": [ 32, 16 ], "uv_size": [ -16, -16 ] }
+              }
+            }
+          ]
+        }
+      ]
+    }
+  ]
+}
