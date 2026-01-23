@@ -1,6 +1,10 @@
 package com.mraof.minestuck.util;
 
 import net.minecraft.core.BlockPos;
+import net.minecraft.nbt.CompoundTag;
+import net.minecraft.nbt.DoubleTag;
+import net.minecraft.nbt.FloatTag;
+import net.minecraft.nbt.ListTag;
 import net.minecraft.server.level.ServerLevel;
 import net.minecraft.server.level.ServerPlayer;
 import net.minecraft.server.level.TicketType;
@@ -68,9 +72,24 @@ public class Teleport	//TODO there might still be things that vanilla does that 
 				if (entity == null)
 					return null;
 				
-				entity.restoreFrom(oldEntity);
-				entity.moveTo(x, y, z, yaw, pitch);
-				entity.setYHeadRot(yaw);
+				CompoundTag compoundtag = oldEntity.saveWithoutId(new CompoundTag());
+				compoundtag.remove("Dimension");
+				
+				// Update position in compound tag before load() because some entities (such as ControlledContraptionEntity from Create)
+				// depend on the new position during load()
+				ListTag posTag = new ListTag();
+				posTag.add(DoubleTag.valueOf(x));
+				posTag.add(DoubleTag.valueOf(y));
+				posTag.add(DoubleTag.valueOf(z));
+				compoundtag.put("Pos", posTag);
+				
+				ListTag rotationTag = new ListTag();
+				rotationTag.add(FloatTag.valueOf(yaw));
+				rotationTag.add(FloatTag.valueOf(pitch));
+				compoundtag.put("Rotation", rotationTag);
+				
+				entity.load(compoundtag);
+				
 				oldEntity.remove(Entity.RemovalReason.CHANGED_DIMENSION);
 				level.addDuringTeleport(entity);
 			}

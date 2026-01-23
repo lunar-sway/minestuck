@@ -836,8 +836,10 @@
 						}
 					},
 					"position": {
-						"post": [0, 0, 0],
-						"lerp_mode": "catmullrom"
+						"0.0": {
+							"post": [0, 0, 0],
+							"lerp_mode": "catmullrom"
+						}
 					}
 				},
 				"left_uparm": {

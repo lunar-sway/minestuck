@@ -122,6 +122,7 @@ public class ComputerThemeScreen extends ThemedScreen
 	
 	private void finish()
 	{
+		//TODO consider returning to computer screen
 		if(!selectedTheme.id().equals(computer.getTheme()))
 		{
 			PacketDistributor.sendToServer(ThemeSelectPacket.create(computer, selectedTheme.id()));

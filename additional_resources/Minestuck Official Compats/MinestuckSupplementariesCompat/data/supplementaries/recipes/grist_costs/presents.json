@@ -1,0 +1,10 @@
+{
+  "type": "minestuck:grist_cost",
+  "grist_cost": {
+    "minestuck:amber": 24,
+    "minestuck:iodine": 24
+  },
+  "ingredient": {
+    "tag": "supplementaries:presents"
+  }
+}

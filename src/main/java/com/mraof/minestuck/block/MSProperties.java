@@ -26,11 +26,11 @@ public class MSProperties
 	public static final BooleanProperty INVISIBLE = BooleanProperty.create("invisible");
 	public static final BooleanProperty UNTRIGGERABLE = BooleanProperty.create("untriggerable"); //for use in SummonerBlock, if used in other blocks with correlating properties then add those cases to StuctureCoreTileEntity
 	public static final BooleanProperty CLICKED = BooleanProperty.create("clicked");
+	public static final BooleanProperty CASSETTE = BooleanProperty.create("cassette");
 	
 	public static final IntegerProperty COUNT_0_2 = IntegerProperty.create("count", 0, 2);
 	public static final IntegerProperty DISTANCE_1_16 = IntegerProperty.create("distance", 1, 16);
 	
-	public static final EnumProperty<EnumCassetteType> CASSETTE = EnumProperty.create("cassette", EnumCassetteType.class);
 	public static final EnumProperty<EnumDowelType> DOWEL_OR_NONE = EnumProperty.create("dowel", EnumDowelType.class);
 	public static final EnumProperty<CruxiteDowelBlock.Type> DOWEL_BLOCK = EnumProperty.create("dowel", CruxiteDowelBlock.Type.class);
 	public static final EnumProperty<Direction.Axis> AXIS_2 = EnumProperty.create("axis_2", Direction.Axis.class);

@@ -24,6 +24,8 @@ public class MinestuckItemModelProvider extends ItemModelProvider
 	@Override
 	protected void registerModels()
 	{
+		DreamerMoonBlocksData.addItems(this);
+		
 		//Hammers
 		handheldItem(MSItems.CLAW_HAMMER);
 		handheldItem(MSItems.SLEDGE_HAMMER);
@@ -603,7 +605,7 @@ public class MinestuckItemModelProvider extends ItemModelProvider
 		simpleItem(MSItems.SCALEMATE_WITNESS);
 		
 		simpleItem(MSItems.PLUSH_MUTATED_CAT);
-		
+	
 		//Incredibly Useful Items
 		handheldItem(MSItems.URANIUM_POWERED_STICK);
 		simpleItem(MSItems.IRON_BOAT);
@@ -634,6 +636,10 @@ public class MinestuckItemModelProvider extends ItemModelProvider
 		simpleItem(MSItems.CASSETTE_WARD, "cassette/cassette_ward");
 		simpleItem(MSItems.CASSETTE_OTHERSIDE, "cassette/cassette_otherside");
 		simpleItem(MSItems.CASSETTE_5, "cassette/cassette_5");
+		simpleItem(MSItems.CASSETTE_RELIC, "cassette/cassette_relic");
+		simpleItem(MSItems.CASSETTE_PRECIPICE, "cassette/cassette_precipice");
+		simpleItem(MSItems.CASSETTE_CREATOR, "cassette/cassette_creator");
+		simpleItem(MSItems.CASSETTE_CREATOR_MUSIC_BOX, "cassette/cassette_creator_music_box");
 		
 		//Spawn Eggs
 		simpleItem(MSItems.IMP_SPAWN_EGG);

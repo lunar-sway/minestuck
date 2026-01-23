@@ -1,0 +1,16 @@
+{
+  "variants": {
+    "axis=x": {
+      "model": "minestuck:block/derse_cable",
+      "x": 90,
+      "y": 90
+    },
+    "axis=y": {
+      "model": "minestuck:block/derse_cable"
+    },
+    "axis=z": {
+      "model": "minestuck:block/derse_cable",
+      "x": 90
+    }
+  }
+}

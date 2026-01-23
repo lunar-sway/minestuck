@@ -24,22 +24,11 @@ repositories {
         }
     }
     maven {
-        url = uri("https://maven.pkg.github.com/refinedmods/refinedstorage")
-        /* As of december 2021, GitHub packages requires authentication.
-           The password below is a personal access token that has read access to the Refined Mods repos.
-           It can be reused in other projects.
-           See: https://github.community/t/download-from-github-package-registry-without-authentication/14407/38 and
-                https://github.community/t/download-from-github-package-registry-without-authentication/14407/44
-         */
-        credentials {
-            username = "anything"
-            password = "\u0067hp_oGjcDFCn8jeTzIj4Ke9pLoEVtpnZMP4VQgaX"
-        }
-    }
-    maven {
         // maven that contains infiniverse
         url "https://commoble.net/maven/"
     }
+    maven { url = "https://maven.createmod.net" } // Create, Ponder, Flywheel
+    maven { url = "https://maven.ithundxr.dev/snapshots" } // Registrate
 }
 
 version = project.getProperty('mc_ms_version')
@@ -66,12 +55,12 @@ runs {
     client {
         // Add an uuid arg if you have specified it in a relevant gradle.properties file. NOTE: Do not use the gradle.properties file in the project! (because that one is supposed to be shared among all devs) Create one in your "gradle user home" instead.
         if (project.hasProperty('mc_uuid')) {
-            programArguments.addAll '--uuid', project.getProperty('mc_uuid')
+            arguments '--uuid', project.getProperty('mc_uuid')
         }
 
         // Add an username arg if you have specified it in a relevant gradle.properties file. Note that specifying a uuid and a non-matching username (or no username specified) may cause single-player worlds to freeze up when exiting the world.
         if (project.hasProperty('mc_username')) {
-            programArguments.addAll '--username', project.getProperty('mc_username')
+            arguments '--username', project.getProperty('mc_username')
         }
     }
     server {
@@ -79,7 +68,7 @@ runs {
     gameTestServer {
     }
     data {
-        programArguments.addAll '--mod', 'minestuck', '--all', '--output', file('src/main/generated/resources/').getAbsolutePath(), '--existing', file('src/main/resources/').getAbsolutePath()
+        arguments '--mod', 'minestuck', '--all', '--output', file('src/main/generated/resources/').getAbsolutePath(), '--existing', file('src/main/resources/').getAbsolutePath()
     }
 }
 
@@ -92,10 +81,15 @@ dependencies {
     compileOnly "mezz.jei:jei-${mc_version}-common-api:${mc_jei_version}"
     compileOnly "mezz.jei:jei-${mc_version}-neoforge-api:${mc_jei_version}"
     runtimeOnly "mezz.jei:jei-${mc_version}-neoforge:${mc_jei_version}"
-    compileOnly "com.refinedmods:refinedstorage:${mc_refined_storage_version}"
 
     implementation "software.bernie.geckolib:geckolib-${mc_gecko_version}"
     implementation "net.commoble.infiniverse:${infiniverse_branch}:${infiniverse_version}"
+
+    // Add the Create mod to runtime to help test mod interactions
+    runtimeOnly("com.simibubi.create:create-${mc_version}:${create_version}:slim") { transitive = false }
+    runtimeOnly("net.createmod.ponder:Ponder-NeoForge-${mc_version}:${ponder_version}")
+    runtimeOnly("dev.engine-room.flywheel:flywheel-neoforge-${mc_version}:${flywheel_version}")
+    runtimeOnly("com.tterrag.registrate:Registrate:${registrate_version}")
 }
 
 sourceSets.main.resources {
@@ -106,7 +100,6 @@ mixin {
     config 'mixins.minestuck.json'
 }
 
-// Example for how to get properties into the manifest for reading by the runtime..
 jar {
     manifest {
         attributes([
@@ -118,27 +111,5 @@ jar {
                 "Implementation-Vendor" :"Minestuck Dev Team",
                 "Implementation-Timestamp": new Date().format("yyyy-MM-dd'T'HH:mm:ssZ")
         ])
-    }
-}
-
-// Example configuration to allow publishing using the maven-publish task
-// we define a custom artifact that is sourced from the reobfJar output task
-// and then declare that to be published
-// Note you'll need to add a repository here
-def reobfFile = file("$buildDir/reobfJar/output.jar")
-def reobfArtifact = artifacts.add('default', reobfFile) {
-    type 'jar'
-    builtBy 'reobfJar'
-}
-publishing {
-    publications {
-        mavenJava(MavenPublication) {
-            artifact reobfArtifact
-        }
-    }
-    repositories {
-        maven {
-            url "file:///${project.projectDir}/mcmodsrepo"
-        }
     }
 }

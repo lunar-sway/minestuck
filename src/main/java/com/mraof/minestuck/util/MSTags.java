@@ -74,6 +74,7 @@ public class MSTags
 		public static final TagKey<Block> PUSHABLE_BLOCK_REPLACEABLE = tag("portable_block_replaceable");
 		public static final TagKey<Block> PETRIFIED_FLORA_PLACEABLE = tag("petrified_flora_placeable");
 		public static final TagKey<Block> EDITMODE_BREAK_BLACKLIST = tag("editmode_break_blacklist");
+		public static final TagKey<Block> FARMINE_BREAK_BLACKLIST = tag("farmine_break_blacklist");
 		
 		public static final TagKey<Block> MINEABLE_WITH_SICKLE = tag("mineable_with_sickle");
 		public static final TagKey<Block> MINEABLE_WITH_SCYTHE = tag("mineable_with_scythe");
@@ -229,6 +230,7 @@ public class MSTags
 		
 		// Skaia
 		public static final TagKey<Biome> HAS_SKAIA_CASTLE = tag("has_structure/skaia_castle");
+		public static final TagKey<Biome> HAS_SKAIAN_CATHEDRAL = tag("has_structure/skaian_cathedral");
 		
 		private static TagKey<Biome> tag(String name)
 		{

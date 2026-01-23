@@ -67,6 +67,7 @@ public class MSAdvancementProvider implements AdvancementProvider.AdvancementGen
 	public static final String INTELLIBEAM = "minestuck.intellibeam";
 	public static final String LEGENDARY_WEAPON = "minestuck.legendary_weapon";
 	public static final String BUY_OUT_SHOP = "minestuck.buy_out_shop";
+	public static final String BRICK_COMPUTER = "minestuck.brick_computer";
 	
 	public static DataProvider create(PackOutput output, CompletableFuture<HolderLookup.Provider> registries, ExistingFileHelper existingFileHelper)
 	{
@@ -155,6 +156,9 @@ public class MSAdvancementProvider implements AdvancementProvider.AdvancementGen
 		AdvancementHolder buyOutShop = Advancement.Builder.advancement().parent(commune)
 				.display(MSItems.CONE_OF_FLIES.get(), Component.translatable(title(BUY_OUT_SHOP)), Component.translatable(desc(BUY_OUT_SHOP)), null, AdvancementType.TASK, true, true, false)
 				.addCriterion("buy_everything", EventTrigger.Instance.buyOutShop()).save(saver, save_loc(BUY_OUT_SHOP));
+		AdvancementHolder brickComputer = Advancement.Builder.advancement().parent(connect)
+				.display(MSItems.OLD_COMPUTER.get(), Component.translatable(title(BRICK_COMPUTER)), Component.translatable(desc(BRICK_COMPUTER)), null, AdvancementType.CHALLENGE, true, true, true)
+				.addCriterion("brick_computer", EventTrigger.Instance.brickComputer()).save(saver, save_loc(BRICK_COMPUTER));
 	}
 	
 	private static Advancement.Builder changeModusCriteria(Advancement.Builder builder)

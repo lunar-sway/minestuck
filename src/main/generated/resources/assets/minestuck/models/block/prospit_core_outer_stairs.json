@@ -1,0 +1,8 @@
+{
+  "parent": "minecraft:block/outer_stairs",
+  "textures": {
+    "bottom": "minestuck:block/prospit_core",
+    "side": "minestuck:block/prospit_core",
+    "top": "minestuck:block/prospit_core"
+  }
+}

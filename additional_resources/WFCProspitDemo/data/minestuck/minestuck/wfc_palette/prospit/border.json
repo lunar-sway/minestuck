@@ -1,0 +1,13 @@
+{
+  "connection_set": "minestuck:prospit",
+  "entries": [
+    { "prototype": "minestuck:prospit/empty", "weight": 10 },
+    { "prototype": "minestuck:prospit/solid", "weight": 10 },
+    { "prototype": "minestuck:prospit/support", "weight": 1 },
+    { "prototype": "minestuck:prospit/pyramid_roof", "weight": 3 },
+    { "prototype": "minestuck:prospit/spike", "weight": 1 },
+    { "prototype": "minestuck:prospit/corridor", "weight": 3 },
+    { "prototype": "minestuck:prospit/t_corridor", "weight": 5 },
+    { "prototype": "minestuck:prospit/interior_stairs", "weight": 4 }
+  ]
+}

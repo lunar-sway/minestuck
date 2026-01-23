@@ -1,0 +1,16 @@
+{
+  "effect": {
+    "applying_chance": 0.15,
+    "effect": {
+      "duration": 100,
+      "id": "minecraft:blindness",
+      "neoforge:cures": [
+        "milk",
+        "protected_by_totem"
+      ],
+      "show_icon": true
+    },
+    "on_hit": true
+  },
+  "jukebox_song": "minecraft:blocks"
+}

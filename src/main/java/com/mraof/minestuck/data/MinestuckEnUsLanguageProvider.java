@@ -1,5 +1,7 @@
 package com.mraof.minestuck.data;
 
+import static com.mraof.minestuck.util.MSTags.Items.*;
+
 import com.mraof.minestuck.Minestuck;
 import com.mraof.minestuck.api.alchemy.GristAmount;
 import com.mraof.minestuck.api.alchemy.GristSet;
@@ -11,6 +13,7 @@ import com.mraof.minestuck.block.machine.TransportalizerBlock;
 import com.mraof.minestuck.block.redstone.AreaEffectBlock;
 import com.mraof.minestuck.block.redstone.SummonerBlock;
 import com.mraof.minestuck.block.redstone.WirelessRedstoneReceiverBlock;
+import com.mraof.minestuck.blockentity.ComputerBlockEntity;
 import com.mraof.minestuck.blockentity.TransportalizerBlockEntity;
 import com.mraof.minestuck.blockentity.machine.*;
 import com.mraof.minestuck.blockentity.redstone.RedstoneClockBlockEntity;
@@ -67,6 +70,7 @@ public class MinestuckEnUsLanguageProvider extends MinestuckLanguageProvider
 	{
 		SkaiaBlocksData.addEnUsTranslations(this);
 		AspectTreeBlocksData.addEnUsTranslations(this);
+		DreamerMoonBlocksData.addEnUsTranslations(this);
 		
 		add("message.shift_for_more_info", "Press §eSHIFT§r for more info");
 		
@@ -155,6 +159,8 @@ public class MinestuckEnUsLanguageProvider extends MinestuckLanguageProvider
 		addBlock(MSBlocks.PERFECTLY_GENERIC_TRAPDOOR, "Perfectly Generic Trapdoor");
 		addBlock(MSBlocks.PERFECTLY_GENERIC_SIGN, "Perfectly Generic Sign");
 		addBlock(MSBlocks.PERFECTLY_GENERIC_HANGING_SIGN, "Perfectly Generic Hanging Sign");
+		
+		addBlock(MSBlocks.METEORIC_STONE, "Meteoric Stone");
 		
 		addBlock(MSBlocks.BLUE_DIRT, "Blue Dirt");
 		addBlock(MSBlocks.THOUGHT_DIRT, "Thought Dirt");
@@ -974,6 +980,7 @@ public class MinestuckEnUsLanguageProvider extends MinestuckLanguageProvider
 		addBlock(MSBlocks.PINK_FROSTED_TOP_LARGE_CAKE, "Pink Frosted Top Large Cake");
 		addBlock(MSBlocks.CHOCOLATEY_CAKE, "Chocolatey Cake");
 		addBlockStoreTooltip(MSBlocks.CHOCOLATEY_CAKE, "The most scrumptious cake in the entire world!");
+		addBlock(MSBlocks.MOON_CAKE, "Moon Cake");
 		addBlock(MSBlocks.PRIMED_TNT, "Primed TNT");
 		addBlock(MSBlocks.UNSTABLE_TNT, "Unstable TNT");
 		addBlock(MSBlocks.INSTANT_TNT, "Instant TNT");
@@ -1693,14 +1700,17 @@ public class MinestuckEnUsLanguageProvider extends MinestuckLanguageProvider
 		addItemExtra(MSItems.FROG, "eyes.light", "Lighter Eyes");
 		addItemExtra(MSItems.FROG, "eyes.dark", "Darker Eyes");
 		addItemExtra(MSItems.FROG, "eyes.blank", "Blank Eyes");
+		addItemExtra(MSItems.FROG, "eyes.random", "Random Eyes");
 		addItemExtra(MSItems.FROG, "belly.solid", "Solid-Colored Belly");
 		addItemExtra(MSItems.FROG, "belly.spotted", "Spotted Belly");
 		addItemExtra(MSItems.FROG, "belly.striped", "Striped Belly");
+		addItemExtra(MSItems.FROG, "belly.random", "Random Belly");
 		addItemExtra(MSItems.FROG, "size.0", "Tiny");
 		addItemExtra(MSItems.FROG, "size.1", "Small");
 		addItemExtra(MSItems.FROG, "size.2", "Normal Sized");
 		addItemExtra(MSItems.FROG, "size.3", "Big");
 		addItemExtra(MSItems.FROG, "size.4", "Huge");
+		addItemExtra(MSItems.FROG, "size.random", "Random Size");
 		addItem(MSItems.CARVING_TOOL, "Carving Tool");
 		addItemStoreTooltip(MSItems.CARVING_TOOL, "You gotta BE the marble!");
 		addItem(MSItems.CRUMPLY_HAT, "Crumply Hat");
@@ -1803,41 +1813,27 @@ public class MinestuckEnUsLanguageProvider extends MinestuckLanguageProvider
 		addItem(MSItems.MUSIC_DISC_RETRO_BATTLE, "Music Disc");
 		addItemExtra(MSItems.MUSIC_DISC_RETRO_BATTLE, "desc", "SinFrog - Retro Battle Theme");
 		addItem(MSItems.CASSETTE_MELLOHI, "Cassette");
-		addItemExtra(MSItems.CASSETTE_MELLOHI, "desc", "C418 - mellohi");
 		addItem(MSItems.CASSETTE_13, "Cassette");
-		addItemExtra(MSItems.CASSETTE_13, "desc", "C418 - 13");
 		addItem(MSItems.CASSETTE_BLOCKS, "Cassette");
-		addItemExtra(MSItems.CASSETTE_BLOCKS, "desc", "C418 - blocks");
 		addItem(MSItems.CASSETTE_CAT, "Cassette");
-		addItemExtra(MSItems.CASSETTE_CAT, "desc", "C418 - cat");
 		addItem(MSItems.CASSETTE_CHIRP, "Cassette");
-		addItemExtra(MSItems.CASSETTE_CHIRP, "desc", "C418 - chirp");
 		addItem(MSItems.CASSETTE_FAR, "Cassette");
-		addItemExtra(MSItems.CASSETTE_FAR, "desc", "C418 - far");
 		addItem(MSItems.CASSETTE_MALL, "Cassette");
-		addItemExtra(MSItems.CASSETTE_MALL, "desc", "C418 - mall");
 		addItem(MSItems.CASSETTE_11, "Cassette");
-		addItemExtra(MSItems.CASSETTE_11, "desc", "C418 - 11");
 		addItem(MSItems.CASSETTE_STAL, "Cassette");
-		addItemExtra(MSItems.CASSETTE_STAL, "desc", "C418 - Stal");
 		addItem(MSItems.CASSETTE_STRAD, "Cassette");
-		addItemExtra(MSItems.CASSETTE_STRAD, "desc", "C418 - Strad");
 		addItem(MSItems.CASSETTE_WAIT, "Cassette");
-		addItemExtra(MSItems.CASSETTE_WAIT, "desc", "C418 - Wait");
 		addItem(MSItems.CASSETTE_WARD, "Cassette");
-		addItemExtra(MSItems.CASSETTE_WARD, "desc", "C418 - Ward");
 		addItem(MSItems.CASSETTE_EMISSARY, "Cassette");
-		addItemExtra(MSItems.CASSETTE_EMISSARY, "desc", "Catboss - Emissary of Dance");
 		addItem(MSItems.CASSETTE_DANCE_STAB, "Cassette");
-		addItemExtra(MSItems.CASSETTE_DANCE_STAB, "desc", "Catboss - Dance-Stab-Dance");
 		addItem(MSItems.CASSETTE_RETRO_BATTLE, "Cassette");
-		addItemExtra(MSItems.CASSETTE_RETRO_BATTLE, "desc", "SinFrog - Retro Battle Theme");
 		addItem(MSItems.CASSETTE_PIGSTEP, "Cassette");
-		addItemExtra(MSItems.CASSETTE_PIGSTEP, "desc", "Lena Raine - Pigstep");
 		addItem(MSItems.CASSETTE_5, "Cassette");
-		addItemExtra(MSItems.CASSETTE_5, "desc", "Samuel Åberg - 5");
 		addItem(MSItems.CASSETTE_OTHERSIDE, "Cassette");
-		addItemExtra(MSItems.CASSETTE_OTHERSIDE, "desc", "Lena Raine - otherside");
+		addItem(MSItems.CASSETTE_RELIC, "Cassette");
+		addItem(MSItems.CASSETTE_PRECIPICE, "Cassette");
+		addItem(MSItems.CASSETTE_CREATOR, "Cassette");
+		addItem(MSItems.CASSETTE_CREATOR_MUSIC_BOX, "Cassette");
 		addItem(MSItems.GUTTER_THUMB_DRIVE, "Impetus Drive");
 		addItemTooltip(MSItems.GUTTER_THUMB_DRIVE, "A mysterious USB containing invaluable secrets.");
 		addItemExtra(MSItems.GUTTER_THUMB_DRIVE, "press_shift", "Press §eSHIFT§r for more info");
@@ -2070,6 +2066,7 @@ public class MinestuckEnUsLanguageProvider extends MinestuckLanguageProvider
 		add(Title.FORMAT, "%1$s of %2$s");
 		
 		add(Echeladder.NEW_RUNG, "You reached rung %s!");
+		add(RungsProvider.MUST_ENTER, "You must Enter before initiating this Rung!");
 		addRung(0, "Greentike");
 		addRung(1, "Sir Dies-a-lot");
 		addRung(2, "Soil Architect");
@@ -2146,6 +2143,7 @@ public class MinestuckEnUsLanguageProvider extends MinestuckLanguageProvider
 		addAdvancement(MSAdvancementProvider.INTELLIBEAM, "Captcha Captured", "Use an Intellibeam Laserstation to decode a particularly challenging captcha");
 		addAdvancement(MSAdvancementProvider.LEGENDARY_WEAPON, "Legendary Weapon", "Obtain a Zilly, Welsh, or Denizen tier weapon");
 		addAdvancement(MSAdvancementProvider.BUY_OUT_SHOP, "Beware the Buyer", "Purchase every item available from a consort merchant");
+		addAdvancement(MSAdvancementProvider.BRICK_COMPUTER, "Brick Your Computer", "Did you try turning it on and off again?");
 		
 		addLand(FungiLandType.FUNGI, "Fungi");
 		addLand(FungiLandType.DANK, "Dank");
@@ -2228,6 +2226,7 @@ public class MinestuckEnUsLanguageProvider extends MinestuckLanguageProvider
 		addStrife(KindAbstratusList.SPORK, "Sporkkind");
 		
 		add(MusicPlayerWeapon.TITLE, "Music Player");
+		add(MusicPlayerWeapon.HINT_INACTIVE, "Crouch and use to start playing");
 		add(GristCacheScreen.TITLE, "Grist Cache");
 		add(StrifeSpecibusScreen.TITLE, "Strife Specibus");
 		add(StrifeSpecibusScreen.KIND_ABSTRATUS, "Kind Abstratus");
@@ -2253,6 +2252,7 @@ public class MinestuckEnUsLanguageProvider extends MinestuckLanguageProvider
 		add(SylladexScreen.EMPTY_SYLLADEX_2, "This will empty your sylladex.");
 		add(SylladexScreen.EMPTY_SYLLADEX_BUTTON, "Empty Sylladex");
 		add(AlchemiterScreen.TITLE, "Alchemiter");
+		add(ComputerBlockEntity.DISK_REJECT, "Cannot fit any more disks in the computer!");
 		add(CruxtruderBlockEntity.EMPTY, "The cruxtruder gives off an empty click. Perhaps it needs some sort of material to function?");
 		add(MiniCruxtruderBlockEntity.TITLE, "Miniature Cruxtruder");
 		add(MiniTotemLatheBlockEntity.TITLE, "Miniature Totem Lathe");
@@ -2440,6 +2440,7 @@ public class MinestuckEnUsLanguageProvider extends MinestuckLanguageProvider
 		add(GristLayerInfo.INFO, "Grist types at this position; common: %s, uncommon: %s, any: %s");
 		add(CheckLandCommand.CHECK, "You are currently in %s.");
 		add(CheckLandCommand.FAIL, "You are currently not in a land dimension.");
+		add(GutterCommand.SHOW, "Gutter modifier: %s, remaining capacity: %s, grist contained: %s");
 		add(SendGristCommand.SUCCESS, "Successfully gave grist to %s: %s");
 		add(SendGristCommand.RECEIVE, "Received grist from %s: %s");
 		add(SendGristCommand.NOT_PERMITTED, "You are not permitted to send grist to %s.");
@@ -2522,6 +2523,7 @@ public class MinestuckEnUsLanguageProvider extends MinestuckLanguageProvider
 		addSubtitles("horn", "Horn honks");
 		addSubtitles("screech", "Estrogen-empowered screech");
 		addSubtitles("upcheladder", "Echeladder levels up");
+		addSubtitles("boondollar_get", "Received Boondollars");
 		addSubtitles("electric_shock", "Electric Shock");
 		addSubtitles("electric_autoharp_stroke", "Chord plays on electric autoharp");
 		addSubtitles("magic_cast", "Spell cast");
@@ -2536,6 +2538,10 @@ public class MinestuckEnUsLanguageProvider extends MinestuckLanguageProvider
 		addSubtitles("projectile_bounce", "Projectile bounces");
 		addSubtitles("tool_revise", "Server uses Revise tool");
 		addSubtitles("tool_recycle", "Server recycles blocks");
+		addSubtitles("computer_boot", "Computer booting up");
+		addSubtitles("computer_disk_insert", "Disk inserted");
+		addSubtitles("computer_disk_remove", "Disk removed");
+		addSubtitles("computer_keyboard", "Typing on computer");
 		addSubtitles("alchemiter_resonate", "Alchemize!");
 		addSubtitles("transportalizer_teleport", "Transportalize!");
 		addSubtitles("totem_lathe_lathe", "Latheify!");
@@ -2574,5 +2580,42 @@ public class MinestuckEnUsLanguageProvider extends MinestuckLanguageProvider
 		addEntitySubtitles(MSEntityTypes.GICLOPS, "ambient", "Giclops wants to eat'cha");
 		addEntitySubtitles(MSEntityTypes.GICLOPS, "hurt", "Giclops hurts");
 		addEntitySubtitles(MSEntityTypes.GICLOPS, "death", "Giclops dies");
+		
+		add(GRIST_CANDY, "Grist Candies");
+		add(FAYGO, "Faygo Flavors");
+		add(MODUS_CARD, "Modus Cards");
+		add(CASSETTES, "Music Cassettes");
+		add(BUGS, "Bugs");
+		add(CONSORT_SNACKS, "Consort Snacks");
+		add(UNREADABLE, "Unreadable Captcha Codes");
+		add(LEGENDARY, "Legendary Weapons");
+		add(MAGIC_WEAPON, "Magic Weapons");
+		
+		addPainting("candy_shop_sign", "Candy Shop Sign", "Cibernet83");
+		addPainting("candy_shop_small", "Small Candy Shop", "Cibernet83");
+		addPainting("candy_shop_large", "Large Candy Shop", "Cibernet83");
+		addPainting("food_shop_sign", "Food Shop Sign", "Cibernet83");
+		addPainting("food_shop_small", "Small Food Shop", "Cibernet83");
+		addPainting("food_shop_large", "Large Food Shop", "Cibernet83");
+		addPainting("general_shop_sign", "General Shop Sign", "Cibernet83");
+		addPainting("general_shop_small", "Small General Shop", "Cibernet83");
+		addPainting("general_shop_large", "Large General Shop", "Cibernet83");
+		addPainting("hat_shop_sign", "Hat Shop Sign", "Cibernet83");
+		addPainting("hat_shop_small", "Small Hat Shop", "Cibernet83");
+		addPainting("hat_shop_large", "Large Hat Shop", "Cibernet83");
+		addPainting("skill_shop_sign", "Skill Shop Sign", "Cibernet83");
+		addPainting("skill_shop_small", "Small Skill Shop", "Cibernet83");
+		addPainting("skill_shop_large", "Large Skill Shop", "Cibernet83");
+		addPainting("sbahj_stairs", "I told you about stairs", "kirderf1");
+		addPainting("hella_jeff", "Hella Jeff", "kirderf1");
+		addPainting("sweet_bro", "Sweet Bro", "kirderf1");
+		addPainting("hella_jeff_small", "Small Hella Jeff", "kirderf1");
+		addPainting("sweet_bro_small", "Small Sweet Bro", "kirderf1");
+		addPainting("midnight_crew_small", "Small Midnight Crew", "kirderf1");
+		addPainting("midnight_crew", "Midnight Crew", "kirderf1");
+		addPainting("clubs", "Clubs", "kirderf1");
+		addPainting("spades", "Spades", "kirderf1");
+		addPainting("diamonds", "Diamonds", "kirderf1");
+		addPainting("hearts", "Hearts", "kirderf1");
 	}
 }

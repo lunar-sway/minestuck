@@ -1,0 +1,10 @@
+{
+  "type": "minecraft:stonecutting",
+  "ingredient": {
+    "item": "minestuck:derse_core_tiles"
+  },
+  "result": {
+    "count": 1,
+    "id": "minestuck:derse_core_tile_stairs"
+  }
+}

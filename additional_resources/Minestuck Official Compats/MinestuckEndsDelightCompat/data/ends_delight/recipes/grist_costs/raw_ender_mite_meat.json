@@ -1,0 +1,11 @@
+{
+  "type": "minestuck:grist_cost",
+  "grist_cost": {
+    "minestuck:diamond": 5,
+    "minestuck:mercury": 5,
+    "minestuck:iodine": 10
+  },
+  "ingredient": {
+    "item": "ends_delight:raw_ender_mite_meat"
+  }
+}

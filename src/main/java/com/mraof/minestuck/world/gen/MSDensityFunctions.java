@@ -24,6 +24,13 @@ public final class MSDensityFunctions
 	public static final ResourceKey<DensityFunction> SKAIA_INITIAL_DENSITY = key("skaia/initial_density");
 	public static final ResourceKey<DensityFunction> SKAIA_FINAL_DENSITY = key("skaia/final_density");
 	
+	public static final ResourceKey<DensityFunction> VEIL_RIDGES = key("veil/ridges");
+	
+	public static final ResourceKey<DensityFunction> VEIL_OFFSET = key("veil/offset");
+	public static final ResourceKey<DensityFunction> VEIL_DEPTH = key("veil/depth");
+	public static final ResourceKey<DensityFunction> VEIL_INITIAL_DENSITY = key("veil/initial_density");
+	public static final ResourceKey<DensityFunction> VEIL_FINAL_DENSITY = key("veil/final_density");
+	
 	public static final ResourceKey<DensityFunction> LAND_CONTINENTS = key("land/continents");
 	public static final ResourceKey<DensityFunction> LAND_EROSION = key("land/erosion");
 	
@@ -34,7 +41,12 @@ public final class MSDensityFunctions
 	
 	public static DensityFunction depth(DensityFunction offset)
 	{
-		return DensityFunctions.add(DensityFunctions.yClampedGradient(-64, 320, 1.5, -1.5), offset);
+		return depth(offset, -64, 320);
+	}
+	
+	public static DensityFunction depth(DensityFunction offset, int fromY, int toY)
+	{
+		return DensityFunctions.add(DensityFunctions.yClampedGradient(fromY, toY, 1.5, -1.5), offset);
 	}
 	
 	public static DensityFunction initialDensity(DensityFunction depth, DensityFunction factor)
@@ -43,14 +55,14 @@ public final class MSDensityFunctions
 	}
 	
 	@SuppressWarnings("ConstantConditions")
-	public static DensityFunction finalDensity(DensityFunction depth, DensityFunction factor, DensityFunction jaggedness, Holder<NormalNoise.NoiseParameters> jagged, int height)
+	public static DensityFunction finalDensity(DensityFunction depth, DensityFunction factor, DensityFunction jaggedness, Holder<NormalNoise.NoiseParameters> jagged, int height, float xzScale)
 	{
 		DensityFunction noise = DensityFunctions.noise(jagged, 1500, 0);
 		DensityFunction jaggednessFactor = DensityFunctions.mul(jaggedness, noise.halfNegative());
 		
 		DensityFunction modifiedDepth = DensityFunctions.add(depth, jaggednessFactor);
 		DensityFunction baseDensity = initialDensity(modifiedDepth, factor);
-		DensityFunction base3dNoise = BlendedNoise.createUnseeded(0.25, 0.125, 80, 160, 8);
+		DensityFunction base3dNoise = BlendedNoise.createUnseeded(xzScale, 0.125, 80, 160, 8);
 		return DensityFunctions.mul(DensityFunctions.constant(0.64), DensityFunctions.interpolated(DensityFunctions.blendDensity(
 				yLerpSlide(height, height - 16, -1, yLerpSlide(-64, -40, 1, DensityFunctions.add(base3dNoise, baseDensity)))))).squeeze();
 	}

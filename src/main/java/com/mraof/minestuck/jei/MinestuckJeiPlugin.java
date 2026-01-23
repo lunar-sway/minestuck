@@ -51,7 +51,7 @@ public class MinestuckJeiPlugin implements IModPlugin
 	@Override
 	public void registerIngredients(IModIngredientRegistration registry)
 	{
-		registry.register(GRIST, GristIngredientHelper.createList(), new GristIngredientHelper(), new GristIngredientRenderer());
+		registry.register(GRIST, GristIngredientHelper.createList(), new GristIngredientHelper(), new GristIngredientRenderer(), GristAmount.CODEC);
 	}
 	
 	@Override

@@ -1,8 +1,9 @@
 package com.mraof.minestuck.inventory.musicplayer;
 
-import com.mraof.minestuck.block.EnumCassetteType;
 import com.mraof.minestuck.item.weapon.MusicPlayerWeapon;
 import net.minecraft.world.item.ItemStack;
+
+import javax.annotation.Nullable;
 
 /**
  * The music playing capability keeps track of
@@ -13,16 +14,18 @@ import net.minecraft.world.item.ItemStack;
  */
 public final class MusicPlaying
 {
-	private EnumCassetteType cassetteType = EnumCassetteType.NONE;
+	@Nullable
+	private CassetteSong cassetteType = null;
 	private ItemStack currentCassettePlayer = ItemStack.EMPTY;
 	
-	public void setMusicPlaying(ItemStack cassettePlayer, EnumCassetteType cassetteType)
+	public void setMusicPlaying(ItemStack cassettePlayer, @Nullable CassetteSong cassetteType)
 	{
 		this.currentCassettePlayer = cassettePlayer;
 		this.cassetteType = cassetteType;
 	}
 	
-	public EnumCassetteType getCassetteType()
+	@Nullable
+	public CassetteSong getCassetteSong()
 	{
 		return cassetteType;
 	}

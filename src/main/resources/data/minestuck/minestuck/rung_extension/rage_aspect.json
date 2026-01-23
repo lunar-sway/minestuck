@@ -1,0 +1,10 @@
+{
+  "aspect": "rage",
+  "effects": [
+    {
+      "effect": "minecraft:strength",
+      "amplifier": 0,
+      "rung": 25
+    }
+  ]
+}

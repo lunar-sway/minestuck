@@ -43,7 +43,7 @@ public abstract class PlayerStatsScreen extends MinestuckScreen
 		
 		CAPTCHA_DECK(CaptchaDeckScreen::new, CaptchaDeckScreen.TITLE, false),
 		STRIFE_SPECIBUS(StrifeSpecibusScreen::new, StrifeSpecibusScreen.TITLE, false),
-		ECHELADDER(EcheladderScreen::new, EcheladderScreen.TITLE, true),
+		ECHELADDER(EcheladderScreen::new, EcheladderScreen.TITLE, false),
 		GRIST_CACHE(GristCacheScreen::new, GristCacheScreen.TITLE, true);
 		
 		final Supplier<? extends Screen> factory;
@@ -82,9 +82,7 @@ public abstract class PlayerStatsScreen extends MinestuckScreen
 		
 		public boolean reqMedium()
 		{
-			if(this == ECHELADDER)
-				return MinestuckConfig.SERVER.preEntryRungLimit.get() == 0;
-			else return this.reqMedium;
+			return this.reqMedium;
 		}
 		
 	}

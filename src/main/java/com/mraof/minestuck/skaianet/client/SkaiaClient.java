@@ -107,7 +107,7 @@ public final class SkaiaClient
 		if(playerStateMap.get(playerId).hasPrimaryConnectionAsClient())
 			return false;
 		
-		return connections.stream().anyMatch(c -> c.client().id() == playerId);
+		return connections.stream().noneMatch(c -> c.client().id() == playerId);
 	}
 	
 	//Methods called from the actionPerformed method in the gui.

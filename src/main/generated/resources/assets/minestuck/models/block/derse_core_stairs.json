@@ -1,0 +1,8 @@
+{
+  "parent": "minecraft:block/stairs",
+  "textures": {
+    "bottom": "minestuck:block/derse_core",
+    "side": "minestuck:block/derse_core",
+    "top": "minestuck:block/derse_core"
+  }
+}

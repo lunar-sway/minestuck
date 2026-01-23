@@ -1,0 +1,25 @@
+{
+  "aspect": "void",
+  "effects": [
+    {
+      "effect": "minecraft:invisibility",
+      "amplifier": 0,
+      "rung": 12
+    },
+    {
+      "effect": "minecraft:invisibility",
+      "amplifier": 1,
+      "rung": 24
+    },
+    {
+      "effect": "minecraft:invisibility",
+      "amplifier": 2,
+      "rung": 36
+    },
+    {
+      "effect": "minecraft:invisibility",
+      "amplifier": 3,
+      "rung": 48
+    }
+  ]
+}

@@ -1,0 +1,12 @@
+{
+  "type": "minestuck:grist_cost",
+  "grist_cost": {
+    "minestuck:cobalt": 1,
+    "minestuck:build": 16,
+    "minestuck:iodine": 3,
+    "minestuck:marble": 1
+  },
+  "ingredient": {
+    "item": "delightful:azalea_tea"
+  }
+}

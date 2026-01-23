@@ -18,34 +18,32 @@ public final class SettingsAppGui implements ProgramGui<ProgramType.EmptyData>
 	private final ButtonListHelper buttonListHelper = new ButtonListHelper();
 	
 	@Override
-	public void onInit(ComputerScreen gui)
+	public void onInit(ThemedScreen gui)
 	{
 		this.buttonListHelper.init(gui);
 	}
 	
 	@Override
-	public void onUpdate(ComputerScreen gui, ProgramType.EmptyData data)
+	public void onUpdate(ThemedScreen gui, ProgramType.EmptyData data)
 	{
 		this.buttonListHelper.updateButtons(List.of(
-				new ButtonListHelper.ButtonData(Component.translatable(THEME), () -> openThemeScreen(gui.be)),
-				new ButtonListHelper.ButtonData(Component.translatable(DISK_MANAGER), () -> openDiskManagerScreen(gui))
+				new ButtonListHelper.ButtonData(Component.translatable(THEME), () -> openThemeScreen(gui.computer)),
+				new ButtonListHelper.ButtonData(Component.translatable(DISK_MANAGER), () -> openDiskManagerScreen(gui.computer))
 		));
 	}
 	
 	private static void openThemeScreen(ComputerBlockEntity computer)
 	{
-		Minecraft.getInstance().setScreen(null);
 		Minecraft.getInstance().setScreen(new ComputerThemeScreen(computer));
 	}
 	
-	private void openDiskManagerScreen(ComputerScreen gui)
+	private void openDiskManagerScreen(ComputerBlockEntity computer)
 	{
-		Minecraft.getInstance().setScreen(null);
-		Minecraft.getInstance().setScreen(new DiskManagerScreen(gui));
+		Minecraft.getInstance().setScreen(new DiskManagerScreen(computer));
 	}
 	
 	@Override
-	public final void render(GuiGraphics guiGraphics, ComputerScreen gui)
+	public void render(GuiGraphics guiGraphics, ThemedScreen gui)
 	{
 		ProgramGui.drawHeaderMessage(Component.translatable(TITLE), guiGraphics, gui);
 	}

@@ -1,0 +1,13 @@
+{
+  "type": "minestuck:source_grist_cost",
+  "grist_cost": {
+  	"minestuck:build": 5
+  },
+  "ingredient": {
+    "item": "create:andesite_casing"
+  },
+  "sources": [
+    "create:andesite_alloy",
+    "#minecraft:logs"
+  ]
+}

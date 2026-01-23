@@ -123,9 +123,6 @@ public abstract class SylladexScreen extends Screen
 		RenderSystem.applyModelViewMatrix();
 		RenderSystem.disableDepthTest();
 		
-		RenderSystem.setShaderColor(1, 1, 1, 1);
-		guiGraphics.blit(sylladexFrame, xOffset, yOffset, 0, 0, GUI_WIDTH, GUI_HEIGHT);
-		
 		guiGraphics.drawString(font, getTitle().getString(), xOffset + 15, yOffset + 5, 0x404040, false);
 		
 		String str = ClientPlayerData.getModus().getName().getString();
@@ -143,6 +140,18 @@ public abstract class SylladexScreen extends Screen
 					break;
 				}
 		}
+	}
+	
+	@Override
+	protected void renderMenuBackground(GuiGraphics guiGraphics)
+	{
+		super.renderMenuBackground(guiGraphics);
+		
+		int xOffset = (width - GUI_WIDTH)/2;
+		int yOffset = (height - GUI_HEIGHT)/2;
+		
+		RenderSystem.setShaderColor(1, 1, 1, 1);
+		guiGraphics.blit(sylladexFrame, xOffset, yOffset, 0, 0, GUI_WIDTH, GUI_HEIGHT);
 	}
 	
 	@Override

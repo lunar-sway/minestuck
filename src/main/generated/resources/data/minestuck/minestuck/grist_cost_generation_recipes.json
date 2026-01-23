@@ -22,15 +22,6 @@
       "type": "minestuck:default"
     },
     "source": {
-      "type": "recipe_serializer",
-      "serializer": "minestuck:non_mirrored"
-    }
-  },
-  {
-    "interpreter": {
-      "type": "minestuck:default"
-    },
-    "source": {
       "type": "recipe_type",
       "recipe_type": "minecraft:stonecutting"
     }

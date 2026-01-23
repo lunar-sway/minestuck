@@ -1,0 +1,13 @@
+{
+  "type": "minestuck:combination",
+  "input1": {
+    "item": "enlightened_end:bismuth_sheets"
+  },
+  "input2": {
+    "item": "enlightened_end:pure_radium"
+  },
+  "mode": "or",
+  "output": {
+    "item": "enlightened_end:pure_radium_block"
+  }
+}

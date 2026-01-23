@@ -1,0 +1,32 @@
+{
+  "parent": "minecraft:recipes/root",
+  "criteria": {
+    "has_prospit_gilding": {
+      "conditions": {
+        "items": [
+          {
+            "items": "minestuck:prospit_gilding"
+          }
+        ]
+      },
+      "trigger": "minecraft:inventory_changed"
+    },
+    "has_the_recipe": {
+      "conditions": {
+        "recipe": "minestuck:prospit_gilded_path_from_stonecutting"
+      },
+      "trigger": "minecraft:recipe_unlocked"
+    }
+  },
+  "requirements": [
+    [
+      "has_the_recipe",
+      "has_prospit_gilding"
+    ]
+  ],
+  "rewards": {
+    "recipes": [
+      "minestuck:prospit_gilded_path_from_stonecutting"
+    ]
+  }
+}

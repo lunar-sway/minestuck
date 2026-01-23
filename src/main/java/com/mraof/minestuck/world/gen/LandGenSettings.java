@@ -88,7 +88,7 @@ public final class LandGenSettings
 		
 		SurfaceRules.RuleSource surfaceRule = SurfaceRules.sequence(bedrockFloor, landTypes.getTerrain().getSurfaceRule(blockRegistry));
 		
-		NoiseGeneratorSettings settings = new NoiseGeneratorSettings(noiseSettings, blockRegistry.getBlockState("ground"), blockRegistry.getBlockState("ocean"),
+		NoiseGeneratorSettings settings = new NoiseGeneratorSettings(noiseSettings, blockRegistry.getBlockState(StructureBlockRegistry.GROUND), blockRegistry.getBlockState(StructureBlockRegistry.OCEAN),
 				makeLandNoiseRouter(noises, densityFunctions),
 				surfaceRule, List.of(), 64, false, true, false, false);
 		
@@ -123,7 +123,7 @@ public final class LandGenSettings
 		DensityFunction depth = MSDensityFunctions.depth(offset(continents));
 		DensityFunction factor = factor(continents, erosion);
 		DensityFunction initialDensity = MSDensityFunctions.initialDensity(depth, factor);
-		DensityFunction finalDensity = MSDensityFunctions.finalDensity(depth, factor, DensityFunctions.zero(), noises.getOrThrow(Noises.JAGGED), 320);
+		DensityFunction finalDensity = MSDensityFunctions.finalDensity(depth, factor, DensityFunctions.zero(), noises.getOrThrow(Noises.JAGGED), 320, 0.25F);
 		
 		return new NoiseRouter(
 				DensityFunctions.zero(), DensityFunctions.constant(-1), DensityFunctions.zero(), DensityFunctions.zero(),	// aquifer info

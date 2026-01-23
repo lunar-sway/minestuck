@@ -40,7 +40,7 @@ public final class ProgramType<D extends ProgramType.Data>
 	public MutableComponent name()
 	{
 		ResourceLocation key = ProgramTypes.REGISTRY.getKey(this);
-		return key != null ? Component.translatable("minestuck.program." + key.getPath()) : Component.literal("Unknown Program");
+		return key != null ? Component.translatable(key.getNamespace() + ".program." + key.getPath()) : Component.literal("Unknown Program");
 	}
 	
 	public interface Data

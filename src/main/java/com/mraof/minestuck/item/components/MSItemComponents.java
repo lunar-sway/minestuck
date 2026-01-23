@@ -11,6 +11,7 @@ import net.minecraft.core.component.DataComponentType;
 import net.minecraft.core.registries.Registries;
 import net.minecraft.network.codec.ByteBufCodecs;
 import net.minecraft.network.codec.StreamCodec;
+import net.minecraft.resources.ResourceLocation;
 import net.minecraft.util.Unit;
 import net.neoforged.neoforge.registries.DeferredHolder;
 import net.neoforged.neoforge.registries.DeferredRegister;
@@ -44,6 +45,8 @@ public final class MSItemComponents
 			builder -> builder.persistent(Unit.CODEC).networkSynchronized(StreamCodec.unit(Unit.INSTANCE)));
 	public static final Supplier<DataComponentType<Holder<ProgramType<?>>>> PROGRAM_TYPE = REGISTRY.registerComponentType("program_type",
 			builder -> builder.persistent(ProgramTypes.REGISTRY.holderByNameCodec()).networkSynchronized(ByteBufCodecs.holderRegistry(ProgramTypes.REGISTRY_KEY)));
+	public static final Supplier<DataComponentType<CassettePlayable>> CASSETTE_SONG = REGISTRY.registerComponentType("cassette_song",
+			builder -> builder.persistent(CassettePlayable.CODEC).networkSynchronized(CassettePlayable.STREAM_CODEC));
 	
 	public static final Supplier<DataComponentType<Long>> VALUE = REGISTRY.registerComponentType("value",
 			builder -> builder.persistent(Codec.LONG).networkSynchronized(ByteBufCodecs.VAR_LONG));

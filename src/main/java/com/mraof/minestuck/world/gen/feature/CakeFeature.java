@@ -44,6 +44,8 @@ public class CakeFeature extends Feature<ProbabilityFeatureConfiguration>
 			cake = MSBlocks.CARROT_CAKE.get();
 		else if (f < 0.6F)
 			cake = MSBlocks.CHOCOLATEY_CAKE.get();
+		else if (f < 0.65F)
+			cake = MSBlocks.CHOCOLATEY_CAKE.get();
 		else if(rand.nextFloat() < 0.01)
 			cake = MSBlocks.REVERSE_CAKE.get();
 		else
