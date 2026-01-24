@@ -50,10 +50,10 @@ public final class TorrentHelper
 	
 	public static void debugStuff(MinecraftServer server, MSExtraData data)
 	{
-		for(ServerPlayer player : server.getPlayerList().getPlayers())
-			if(player.isHolding(MSItems.ALLWEDDOL.get()))
-				data.removesSessions();
-		for(ServerPlayer player : server.getPlayerList().getPlayers())
+		//for(ServerPlayer player : server.getPlayerList().getPlayers())
+		//	if(player.isHolding(MSItems.ALLWEDDOL.get()))
+		//		data.removesSessions();
+		/*for(ServerPlayer player : server.getPlayerList().getPlayers())
 			if(player.isHolding(MSItems.MWRTHWL.get()))
 			{
 				TorrentSession playerSession = createPlayerTorrentSession(player, server);
@@ -81,6 +81,7 @@ public final class TorrentHelper
 				playerSession.addLeech(new TorrentSession.Leech(testIDs.get(0), leechGrist));
 				MSExtraData.get(server).tryAddTorrentSession(playerSession);
 			}
+		 */
 	}
 	
 	public static void handleTorrent(TorrentSession torrentSession, List<TorrentSession> sessions, MinecraftServer server)
@@ -128,7 +129,7 @@ public final class TorrentHelper
 				boolean isVisible = globalVisibility || (sessionOnly && inSameSession);
 				
 				//TODO remove this, temp testing
-				isVisible = true;
+				//isVisible = true;
 				
 				if(isVisible)
 				{
@@ -150,7 +151,7 @@ public final class TorrentHelper
 		List<TorrentSession.Leech> eligibleLeeches = leeching.stream().filter(leech -> leech.gristTypes().contains(grist)).toList();
 		int leechCount = eligibleLeeches.size();
 		
-		int combinedRate = Math.max(1, leechCount / seedRateMod);
+		int combinedRate = Math.max(1, leechCount * seedRateMod);
 		GristAmount gristAmount = new GristAmount(grist, combinedRate);
 		
 		//TODO ensure that grist cannot enter the leeches gutter
