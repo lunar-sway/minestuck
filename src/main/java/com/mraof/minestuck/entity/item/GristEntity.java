@@ -64,7 +64,6 @@ public class GristEntity extends Entity implements IEntityWithComplexSpawn
 	{
 		super(MSEntityTypes.GRIST.get(), level);
 		this.gristValue = gristData.amount();
-		//this.yOffset = this.height / 2.0F;
 		this.setPos(x, y, z);
 		this.setYRot((float) (Math.random() * 360.0D));
 		this.setDeltaMovement(level.random.nextGaussian() * 0.2D - 0.1D, level.random.nextGaussian() * 0.2D, level.random.nextGaussian() * 0.2D - 0.1D);
@@ -364,7 +363,7 @@ public class GristEntity extends Entity implements IEntityWithComplexSpawn
 	
 	public float getSizeByValue()
 	{
-		return (float) (Math.pow((double) this.gristValue, 0.25D) / 3.0D);
+		return (float) (Math.pow((double) this.gristValue, 0.4D) / 3D) - 0.15F;
 	}
 	
 	@Override
