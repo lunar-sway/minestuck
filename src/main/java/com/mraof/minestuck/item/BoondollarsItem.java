@@ -55,12 +55,15 @@ public class BoondollarsItem extends Item
 			if(action == ClickAction.SECONDARY)
 			{
 				// Transfer 1 boondollar to stack below (or create a stack of boondollars if there's nothing)
-				if(getCount(stack) > 1)
+				if(other.isEmpty() || other.is(MSItems.BOONDOLLARS))
 				{
-					setCount(stack, getCount(stack) - 1);
-				} else
-				{
-					stack.setCount(0);
+					if(getCount(stack) > 1)
+					{
+						setCount(stack, getCount(stack) - 1);
+					} else
+					{
+						stack.setCount(0);
+					}
 				}
 				if(other.isEmpty())
 				{
