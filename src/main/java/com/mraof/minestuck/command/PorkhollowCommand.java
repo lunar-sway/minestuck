@@ -50,11 +50,11 @@ public class PorkhollowCommand    //Much like /gristSend and /land, is a tempora
 		
 		if(PlayerBoondollars.tryTakeBoondollars(PlayerData.get(player).orElseThrow(), amount))
 		{
-			player.playNotifySound(MSSoundEvents.ITEM_BOONDOLLARS_USE.get(),SoundSource.PLAYERS,1,(player.getRandom().nextFloat()/2)+0.75f);
+			player.playNotifySound(MSSoundEvents.ITEM_BOONDOLLARS_USE.get(), SoundSource.PLAYERS, 1, (player.getRandom().nextFloat() / 2) + 0.75f);
 			
 			PlayerBoondollars.addBoondollars(PlayerData.get(target).orElseThrow(), amount);
 			
-			target.playNotifySound(MSSoundEvents.ITEM_BOONDOLLARS_USE.get(),SoundSource.PLAYERS,1,(target.getRandom().nextFloat()/2)+0.75f);
+			target.playNotifySound(MSSoundEvents.ITEM_BOONDOLLARS_USE.get(), SoundSource.PLAYERS, 1, (target.getRandom().nextFloat() / 2) + 0.75f);
 			source.sendSuccess(() -> Component.translatable(SEND, amount, target.getDisplayName()), true);
 			target.sendSystemMessage(Component.translatable(RECEIVE, amount, player.getDisplayName()));
 			return 1;
@@ -71,7 +71,7 @@ public class PorkhollowCommand    //Much like /gristSend and /land, is a tempora
 			if(!player.addItem(stack))
 			{
 				ItemEntity entity = player.drop(stack, false);
-				if (entity != null)
+				if(entity != null)
 					entity.setNoPickUpDelay();
 			}
 			
