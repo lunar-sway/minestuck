@@ -14,6 +14,8 @@ The format is based on [Keep a Changelog](https://keepachangelog.com/en/1.1.0/).
 ### Changed
 
 - Cassettes are now data-driven
+- Updated all grist and vitality gel sprites
+- Tweaked some Rung names
 - New rung-up jingle.
 
 ### Fixed
@@ -27,7 +29,7 @@ The format is based on [Keep a Changelog](https://keepachangelog.com/en/1.1.0/).
 
 ### Contributors for this release
 
-- medsal15, heartsremedy, caldw3ll
+- medsal15, heartsremedy, caldw3ll, v_sabitron, Dweblenod
 
 ## [1.21.1-1.13.1.1] - 2025-09-14
 
