@@ -38,7 +38,7 @@ and [Carapacian rook](src/main/java/com/mraof/minestuck/client/model/entity/Rook
 
 # Music
 
-- Caldw3ll: [`the_note_desolation_plays.ogg`](src/main/resources/assets/minestuck/sounds/music/lands/the_note_desolation_plays.ogg)
+- Caldw3ll
 
 - FrostyMac: [`rise_up.ogg`](src/main/resources/assets/minestuck/sounds/music/miscellaneous/rise_up.ogg)
 
