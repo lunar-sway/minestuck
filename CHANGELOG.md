@@ -9,10 +9,12 @@ The format is based on [Keep a Changelog](https://keepachangelog.com/en/1.1.0/).
 ### Added
 
 - Newer music discs have associated cassettes
+- Sound effect for boondollar item and porkhollow command.
 
 ### Changed
 
 - Cassettes are now data-driven
+- New rung-up jingle.
 
 ### Fixed
 
@@ -25,7 +27,7 @@ The format is based on [Keep a Changelog](https://keepachangelog.com/en/1.1.0/).
 
 ### Contributors for this release
 
-- medsal15
+- medsal15, heartsremedy, caldw3ll
 
 ## [1.21.1-1.13.1.1] - 2025-09-14
 

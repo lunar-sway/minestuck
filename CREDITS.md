@@ -38,7 +38,7 @@ and [Carapacian rook](src/main/java/com/mraof/minestuck/client/model/entity/Rook
 
 # Music
 
-- Caldw3ll
+- Caldw3ll: [`the_note_desolation_plays.ogg`](src/main/resources/assets/minestuck/sounds/music/lands/the_note_desolation_plays.ogg)
 
 - FrostyMac: [`rise_up.ogg`](src/main/resources/assets/minestuck/sounds/music/miscellaneous/rise_up.ogg)
 
@@ -47,7 +47,6 @@ and [Carapacian rook](src/main/java/com/mraof/minestuck/client/model/entity/Rook
 - SinFrog: [`retro_battle_theme.ogg`](src/main/resources/assets/minestuck/sounds/records/retro_battle_theme.ogg)
 
 - triagegremlin: [`october.ogg`](src/main/resources/assets/minestuck/sounds/music/lands/october.ogg)
-and [`the_note_desolation_plays.ogg`](src/main/resources/assets/minestuck/sounds/music/lands/the_note_desolation_plays.ogg)
 
 - ["Dance-Stab-Dance"](src/main/resources/assets/minestuck/sounds/records/dance_stab_dance.ogg) from [LOFAM2](https://unofficialmspafans.bandcamp.com/track/dance-stab-dance)
 and ["Emissary of Dance"](src/main/resources/assets/minestuck/sounds/records/emissary_of_dance.ogg) from [LOFAM3](https://unofficialmspafans.bandcamp.com/track/emissary-of-dance) by Mai Yishan (Catboss)
@@ -60,7 +59,7 @@ and ["Emissary of Dance"](src/main/resources/assets/minestuck/sounds/records/emi
 
 - Jup
 
-- SinFrog: [`upcheladder.ogg`](src/main/resources/assets/minestuck/sounds/random/upcheladder.ogg)
+- heartsremedy: [`upcheladder.ogg`](src/main/resources/assets/minestuck/sounds/random/upcheladder.ogg) (old echeladder sound by SinFrog)
 
 - triageGremlin: [`slam.ogg`](src/main/resources/assets/minestuck/sounds/mob/slam.ogg)
 
@@ -70,6 +69,7 @@ and ["Emissary of Dance"](src/main/resources/assets/minestuck/sounds/records/emi
 [Computer Disk Insert](src/main/resources/assets/minestuck/sounds/random/computer_disk_insert.ogg)
 and [Computer Disk Remove](src/main/resources/assets/minestuck/sounds/random/computer_disk_remove.ogg) edited by heartsremedy
 from [Pixabay CD Whirring In Drive](https://pixabay.com/sv/sound-effects/cd-whirring-in-drive-26799/)
+- [Boondollar Get](src/main/resources/assets/minestuck/sounds/random/boondollar_get.ogg) edited by heartsremedy from [Film Special Effects Cash Register Purchase](https://pixabay.com/sound-effects/film-special-effects-cash-register-purchase-87313/)
 
 - [Frog sound effects](src/main/resources/assets/minestuck/sounds/mob/frog/) edited by Cibernet
 from [soundbible.com](https://soundbible.com/1336-Frog-Croaking.html) by snottyboy
