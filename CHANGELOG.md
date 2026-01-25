@@ -9,6 +9,7 @@ The format is based on [Keep a Changelog](https://keepachangelog.com/en/1.1.0/).
 ### Added
 
 - Newer music discs have associated cassettes
+- Sound effect for boondollar item and porkhollow command.
 
 ### Changed
 
@@ -16,6 +17,7 @@ The format is based on [Keep a Changelog](https://keepachangelog.com/en/1.1.0/).
 - Boondollars can be split/stacked together like normal items
 - Updated all grist and vitality gel sprites
 - Tweaked some Rung names
+- New rung-up jingle.
 
 ### Fixed
 
@@ -28,7 +30,7 @@ The format is based on [Keep a Changelog](https://keepachangelog.com/en/1.1.0/).
 
 ### Contributors for this release
 
-- medsal15, v_sabitron, Dweblenod
+- medsal15, heartsremedy, caldw3ll, v_sabitron, Dweblenod
 
 ## [1.21.1-1.13.1.1] - 2025-09-14
 

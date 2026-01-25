@@ -2520,6 +2520,7 @@ public class MinestuckEnUsLanguageProvider extends MinestuckLanguageProvider
 		addSubtitles("horn", "Horn honks");
 		addSubtitles("screech", "Estrogen-empowered screech");
 		addSubtitles("upcheladder", "Echeladder levels up");
+		addSubtitles("boondollar_get", "Received Boondollars");
 		addSubtitles("electric_shock", "Electric Shock");
 		addSubtitles("electric_autoharp_stroke", "Chord plays on electric autoharp");
 		addSubtitles("magic_cast", "Spell cast");
