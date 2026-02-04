@@ -9,13 +9,16 @@ The format is based on [Keep a Changelog](https://keepachangelog.com/en/1.1.0/).
 ### Added
 
 - Newer music discs have associated cassettes
-- Added music to the other dimensions in the Medium
+- Sound effect for boondollar item and porkhollow command.
+- Added music tracks made by heartsremedy to all non-Land dimensions in the Medium
 
 ### Changed
 
 - Cassettes are now data-driven
+- Boondollars can be split/stacked together like normal items
 - Updated all grist and vitality gel sprites
 - Tweaked some Rung names
+- New rung-up jingle.
 
 ### Fixed
 
@@ -28,7 +31,7 @@ The format is based on [Keep a Changelog](https://keepachangelog.com/en/1.1.0/).
 
 ### Contributors for this release
 
-- medsal15, v_sabitron, Dweblenod, heartsremedy
+- medsal15, heartsremedy, caldw3ll, v_sabitron, Dweblenod
 
 ## [1.21.1-1.13.1.1] - 2025-09-14
 
