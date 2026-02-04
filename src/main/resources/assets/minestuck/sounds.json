@@ -470,6 +470,42 @@
       }
     ]
   },
+  "music.prospit": {
+    "sounds": [
+      {
+        "name": "minestuck:music/medium/endless_light",
+        "stream": true
+      }
+    ]
+  },
+  "music.derse": {
+    "sounds": [
+      {
+        "name": "minestuck:music/medium/obsidian_oppugnants",
+        "stream": true
+      }
+    ]
+  },
+  "music.veil": {
+    "sounds": [
+      {
+        "name": "minestuck:music/medium/deep",
+        "stream": true
+      },
+      {
+        "name": "minestuck:music/medium/auxillary",
+        "stream": true
+      }
+    ]
+  },
+  "music.skaia": {
+    "sounds": [
+      {
+        "name": "minestuck:music/medium/skaia_perseveres",
+        "stream": true
+      }
+    ]
+  },
   "entity.swoosh": {
     "category": "hostile",
     "subtitle": "subtitles.minestuck.swoosh",

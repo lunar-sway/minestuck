@@ -2,6 +2,7 @@ package com.mraof.minestuck.client;
 
 import com.mraof.minestuck.Minestuck;
 import com.mraof.minestuck.network.LandTypesDataPacket;
+import com.mraof.minestuck.world.MSDimensions;
 import com.mraof.minestuck.world.lands.LandProperties;
 import com.mraof.minestuck.world.lands.LandTypePair;
 import net.minecraft.client.multiplayer.ClientLevel;
@@ -31,6 +32,11 @@ public class ClientDimensionData
 	public static boolean isLand(ResourceKey<Level> level)
 	{
 		return landTypes.containsKey(level);
+	}
+	
+	public static boolean isInMedium(ResourceKey<Level> level)
+	{
+		return isLand(level) || MSDimensions.isSkaia(level) || MSDimensions.isProspit(level) || MSDimensions.isVeil(level) || MSDimensions.isDerse(level);
 	}
 	
 	public static LandProperties getProperties(ClientLevel level)
