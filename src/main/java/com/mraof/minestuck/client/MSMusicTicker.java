@@ -22,7 +22,7 @@ import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.Logger;
 
 @EventBusSubscriber(modid = Minestuck.MOD_ID, value = Dist.CLIENT)
-public class MSMusicTicker    //TODO Introduce types (something similar to vanilla) such that this class could be reused for prospit, derse etc
+public class MSMusicTicker
 {
 	private static final Logger LOGGER = LogManager.getLogger();
 	
