@@ -473,7 +473,7 @@
   "music.prospit": {
     "sounds": [
       {
-        "name": "minestuck:music/medium/golden_garrison",
+        "name": "minestuck:music/medium/endless_light",
         "stream": true
       }
     ]
@@ -493,7 +493,7 @@
         "stream": true
       },
       {
-        "name": "minestuck:music/medium/voidal_sandbox",
+        "name": "minestuck:music/medium/auxillary",
         "stream": true
       }
     ]
