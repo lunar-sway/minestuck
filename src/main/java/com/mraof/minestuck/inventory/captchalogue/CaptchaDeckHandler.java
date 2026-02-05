@@ -233,25 +233,37 @@ public final class CaptchaDeckHandler
 		}
 	}
 	
+	/**
+	 * Adds a card that contains items to the player's modus
+	 */
 	private static void handleCardCaptchalogue(ServerPlayer player, Modus modus, ItemStack card)
 	{
 		ItemStack stackInCard = CardStoredItemComponent.getContainedRealItem(card);
-		boolean spentCard = modus.increaseSize(player);
+		int addedCards = 0;
+		for(; addedCards < card.getCount(); addedCards++)
+		{
+			if(!modus.increaseSize(player)) break;
+		}
 		
-		if(spentCard)
-			card.shrink(1);
+		if(addedCards > 0)
+			card.shrink(addedCards);
 		
 		if(!stackInCard.isEmpty())
 		{
-			boolean captchaloguedItem = putInModus(player, modus, stackInCard.copy());
+			int addedItems = 0;
+			for(; addedItems < addedCards + card.getCount(); addedItems++)
+			{
+				if(!putInModus(player, modus, stackInCard.copy())) break;
+			}
 			
-			if(captchaloguedItem && !spentCard)
-			{	//Item was captchalogued, but the card remained
-				launchAnyItem(player, new ItemStack(MSItems.CAPTCHA_CARD.get(), 1));    //TODO split existing stack and instead remove the content to keep any other nbt data
-				card.shrink(1);
-			} else if(!captchaloguedItem && spentCard)
-			{	//The card was used, but the item failed to captchalogue
-				launchAnyItem(player, stackInCard);
+			if(addedItems > addedCards)
+			{    //Item was captchalogued, but the card remained
+				launchAnyItem(player, new ItemStack(MSItems.CAPTCHA_CARD.get(), addedItems - addedCards));    //TODO split existing stack and instead remove the content to keep any other nbt data
+				card.shrink(addedCards);
+			} else if(addedCards > addedItems)
+			{    //The card was used, but the item failed to captchalogue
+				for(int i = addedItems; i < addedCards; i++)
+					launchAnyItem(player, stackInCard);
 			}
 			
 		}
