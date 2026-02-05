@@ -11,6 +11,7 @@ The format is based on [Keep a Changelog](https://keepachangelog.com/en/1.1.0/).
 - Newer music discs have associated cassettes
 - Sound effect for boondollar item and porkhollow command.
 - Captchaloguing multiple cards that contain items will store as many of both as possible
+- Added music tracks made by heartsremedy to all non-Land dimensions in the Medium
 
 ### Changed
 
