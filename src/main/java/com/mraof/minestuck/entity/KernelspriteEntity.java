@@ -6,16 +6,16 @@ import net.minecraft.world.level.Level;
 
 public class KernelspriteEntity extends PathfinderMob
 {
-	
-	
-	
-	
-	
-	
-	
-	
 	protected KernelspriteEntity(EntityType<? extends PathfinderMob> entityType, Level level)
 	{
 		super(entityType, level);
 	}
+	
+	
+	
+	
+	
+	
+	
+	
 }
