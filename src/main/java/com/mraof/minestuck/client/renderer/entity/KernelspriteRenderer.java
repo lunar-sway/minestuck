@@ -11,8 +11,6 @@ import net.minecraft.client.renderer.entity.EntityRenderer;
 import net.minecraft.client.renderer.entity.EntityRendererProvider;
 import net.minecraft.client.renderer.texture.OverlayTexture;
 import net.minecraft.resources.ResourceLocation;
-import net.minecraft.server.packs.resources.Resource;
-import net.neoforged.neoforge.client.extensions.IVertexConsumerExtension;
 import org.joml.Matrix4f;
 import software.bernie.geckolib.cache.texture.AnimatableTexture;
 
@@ -45,12 +43,18 @@ public class KernelspriteRenderer extends EntityRenderer<KernelspriteEntity>
 		super.render(kernelsprite, entityYaw, partialTick, poseStack, bufferSource, packedLight);
 		
 		poseStack.pushPose();
-		poseStack.translate(0.0f,1.0f,0.0f);
+		poseStack.translate(0.0f,0.75f,0.0f);
 		poseStack.mulPose(this.entityRenderDispatcher.cameraOrientation());
 		
+		spriteVertex(poseStack, bufferSource, packedLight, BACK);
+		spriteVertex(poseStack, bufferSource, packedLight, COLOR);
+		poseStack.popPose();
+	}
+	
+	private void spriteVertex(PoseStack poseStack, MultiBufferSource bufferSource, int packedLight, ResourceLocation sprite)
+	{
 		PoseStack.Pose matrixstack = poseStack.last();
 		Matrix4f matrix4f = matrixstack.pose();
-		ResourceLocation sprite = getTextureLocation(kernelsprite);
 		AnimatableTexture.setAndUpdate(sprite, animationTick++);
 		VertexConsumer iVertexbuilder = bufferSource.getBuffer(RenderType.entityCutoutNoCull(sprite));
 		iVertexbuilder.addVertex(matrix4f,0.0f - 0.5f, 0.0f - 0.25f, 0.0f).setColor(225,225,225,225).setUv(0,1)
@@ -61,6 +65,5 @@ public class KernelspriteRenderer extends EntityRenderer<KernelspriteEntity>
 				.setOverlay(OverlayTexture.NO_OVERLAY).setLight(packedLight).setNormal(matrixstack,0.0f,1.0f,0.0f);
 		iVertexbuilder.addVertex(matrix4f,0.0f - 0.5f, 1.0f - 0.25f, 0.0f).setColor(225,225,225,225).setUv(0,0)
 				.setOverlay(OverlayTexture.NO_OVERLAY).setLight(packedLight).setNormal(matrixstack,0.0f,1.0f,0.0f);
-		poseStack.popPose();
 	}
 }
