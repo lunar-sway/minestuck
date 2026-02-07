@@ -39,7 +39,7 @@ public class CruxtruderBlockEntity extends BlockEntity
 	
 	private int color = -1;
 	private boolean isBroken = false;
-	private int material = 0;
+	private int material = 1;
 	
 	public CruxtruderBlockEntity(BlockPos pos, BlockState state)
 	{
@@ -90,58 +90,68 @@ public class CruxtruderBlockEntity extends BlockEntity
 			this.setMaterial(0);
 		}
 	}
-
+	
 	public void onRightClick(Player player, boolean top)
 	{
 		this.checkIfValid();
-		if(!this.isBroken && level != null)
+		boolean cruxtruderIntake = MinestuckConfig.SERVER.cruxtruderIntake.get();
+		
+		if(this.isBroken || level == null)
+			return;
+		
+		BlockPos pos = getBlockPos().above();
+		BlockState state = level.getBlockState(pos);
+		boolean hasCruxiteStored = !cruxtruderIntake || (-1 < material && material < CRUXITE_CAPACITY);
+		
+		if(top && state.isAir() && hasCruxiteStored)
+			whenValidTop(player, pos, cruxtruderIntake);
+		else if(!top)
+			whenNotTop(player, state, pos, cruxtruderIntake);
+	}
+	
+	private void whenNotTop(Player player, BlockState state, BlockPos pos, boolean cruxtruderIntake)
+	{
+		if(state.is(MSBlocks.EMERGING_CRUXITE_DOWEL.get()))
 		{
-			BlockPos pos = getBlockPos().above();
-			BlockState state = level.getBlockState(pos);
-			if(top && MinestuckConfig.SERVER.cruxtruderIntake.get() && state.isAir() && -1 < material && material < CRUXITE_CAPACITY)
+			CruxiteDowelBlock.dropDowel(level, pos);
+		} else if(state.isAir())
+		{
+			if(cruxtruderIntake && material == 0)
 			{
-				ItemStack stack = player.getMainHandItem();
-				if(!stack.is(MSItems.RAW_CRUXITE.get()))
-					stack = player.getOffhandItem();
+				level.levelEvent(LevelEvent.SOUND_DISPENSER_FAIL, pos, 0);
+				player.sendSystemMessage(Component.translatable(EMPTY));
+			} else
+			{
+				level.setBlockAndUpdate(pos, MSBlocks.EMERGING_CRUXITE_DOWEL.get().defaultBlockState());
+				level.playSound(null, pos, MSSoundEvents.CRUXTRUDER_DOWEL.get(), SoundSource.BLOCKS, 1F, 1.75F);
 				
-				if(stack.is(MSItems.RAW_CRUXITE.get()))
-				{
-					int count = 1;
-					if(player.isShiftKeyDown())	//Doesn't actually work just yet
-						count = Math.min(CRUXITE_CAPACITY - material, stack.getCount());
-					
-					if(!player.isCreative())
-						stack.shrink(count);
-					
-					this.setMaterial(this.material + count);
-					
-					level.playSound(null, pos, MSSoundEvents.CRUXTRUDER_DOWEL.get(), SoundSource.BLOCKS, 1F, 1F);
-				}
-			} else if(!top)
-			{
-				if(state.is(MSBlocks.EMERGING_CRUXITE_DOWEL.get()))
-				{
-					CruxiteDowelBlock.dropDowel(level, pos);
-				} else if(state.isAir())
-				{
-					if(MinestuckConfig.SERVER.cruxtruderIntake.get() && material == 0)
-					{
-						level.levelEvent(LevelEvent.SOUND_DISPENSER_FAIL, pos, 0);
-						player.sendSystemMessage(Component.translatable(EMPTY));
-					} else
-					{
-						level.setBlockAndUpdate(pos, MSBlocks.EMERGING_CRUXITE_DOWEL.get().defaultBlockState());
-						level.playSound(null, pos, MSSoundEvents.CRUXTRUDER_DOWEL.get(), SoundSource.BLOCKS, 1F, 1.75F);
-						
-						if(level.getBlockEntity(pos) instanceof ItemStackBlockEntity blockEntity)
-							ColorHandler.setColor(blockEntity.getStack(), color);
-						else
-							LOGGER.warn("Did not find block entity for setting cruxite color after placing cruxtruder dowel at {}", pos);
-						if(0 < material)
-							this.setMaterial(this.material - 1);
-					}
-				}
+				if(level.getBlockEntity(pos) instanceof ItemStackBlockEntity blockEntity)
+					ColorHandler.setColor(blockEntity.getStack(), color);
+				else
+					LOGGER.warn("Did not find block entity for setting cruxite color after placing cruxtruder dowel at {}", pos);
+				
+				if(0 < material)
+					this.setMaterial(this.material - 1);
 			}
+		}
+	}
+	
+	private void whenValidTop(Player player, BlockPos pos, boolean cruxtruderIntake)
+	{
+		ItemStack stack = player.getMainHandItem();
+		if(!stack.is(MSItems.RAW_CRUXITE.get()))
+			stack = player.getOffhandItem();
+		
+		if(stack.is(MSItems.RAW_CRUXITE.get()) && cruxtruderIntake)
+		{
+			int count = 1;
+			
+			if(!player.isCreative())
+				stack.shrink(count);
+			
+			this.setMaterial(this.material + count);
+			
+			level.playSound(null, pos, MSSoundEvents.CRUXTRUDER_DOWEL.get(), SoundSource.BLOCKS, 1F, 1F);
 		}
 	}
 	
