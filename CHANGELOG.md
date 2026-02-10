@@ -8,6 +8,53 @@ The format is based on [Keep a Changelog](https://keepachangelog.com/en/1.1.0/).
 
 ### Added
 
+- Newer music discs have associated cassettes
+- Sound effect for boondollar item and porkhollow command.
+- Added music tracks made by heartsremedy to all non-Land dimensions in the Medium
+
+### Changed
+
+- Cassettes are now data-driven
+- Boondollars can be split/stacked together like normal items
+- Updated all grist and vitality gel sprites
+- Tweaked some Rung names
+- New rung-up jingle.
+
+### Fixed
+
+- Fix Captcharoid Cameras not giving ghost cards with full inventories
+- Fix Transportalizers not working when placed again
+- Fix posters not being placeable
+- Fix JEI not loading grist (and by extension, alchemy recipes) on newer versions
+- Fix Glowing Mushroom Vines requiring itself for alchemizing
+- Fix missing Bucket of Glimmering Water and Magmatic Igneous Stone grist cost
+
+### Contributors for this release
+
+- medsal15, heartsremedy, caldw3ll, v_sabitron, Dweblenod
+
+## [1.21.1-1.13.1.1] - 2025-09-14
+
+### Added
+
+- Translated key for item tags used in JEI
+
+### Fixed
+
+- Fix Captcharoid Cameras crashing when used on blocks that do not have item counterparts
+- Empty Sylladex button being invisible
+- Fix Echeladder screen not displaying before Entry
+- Fix Prismarine and Iron Lass armors crashing when enchanted
+- Fix error saving consort merchant inventory
+
+### Contributors for this release
+
+- medsal15, Dweblenod, kirderf1
+
+## [1.21.1-1.13.1.0] - 2025-07-26
+
+### Added
+
 - New rook themed towers on the Battlefield
 - Increased number of blocks used in land specific structure block palettes
 - Land Type Extensions now support structure sets.
@@ -42,6 +89,7 @@ The format is based on [Keep a Changelog](https://keepachangelog.com/en/1.1.0/).
 - Add back song description for cassette items
 - Fix hover area for some tooltip in the echeladder screen
 - Removed Refined Storage compatibility feature that was not compatible with Refined Storage 2
+- Fix entry breaking certain Create contraptions
 - Improve land skybox performance
 
 ### Removed
@@ -52,7 +100,7 @@ The format is based on [Keep a Changelog](https://keepachangelog.com/en/1.1.0/).
 
 ### Contributors for this release
 
-- medsal15, Dweblenod, TangleKat, kirderf1, shadowLink, ThalliumSulfate, pancake
+- medsal15, Dweblenod, TangleKat, kirderf1, ambiguousChronology, ThalliumSulfate
 
 ## [1.20.1-1.12.1.1] - 2025-04-18
 

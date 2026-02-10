@@ -27,6 +27,8 @@ repositories {
         // maven that contains infiniverse
         url "https://commoble.net/maven/"
     }
+    maven { url = "https://maven.createmod.net" } // Create, Ponder, Flywheel
+    maven { url = "https://maven.ithundxr.dev/snapshots" } // Registrate
 }
 
 version = project.getProperty('mc_ms_version')
@@ -82,6 +84,12 @@ dependencies {
 
     implementation "software.bernie.geckolib:geckolib-${mc_gecko_version}"
     implementation "net.commoble.infiniverse:${infiniverse_branch}:${infiniverse_version}"
+
+    // Add the Create mod to runtime to help test mod interactions
+    runtimeOnly("com.simibubi.create:create-${mc_version}:${create_version}:slim") { transitive = false }
+    runtimeOnly("net.createmod.ponder:Ponder-NeoForge-${mc_version}:${ponder_version}")
+    runtimeOnly("dev.engine-room.flywheel:flywheel-neoforge-${mc_version}:${flywheel_version}")
+    runtimeOnly("com.tterrag.registrate:Registrate:${registrate_version}")
 }
 
 sourceSets.main.resources {
