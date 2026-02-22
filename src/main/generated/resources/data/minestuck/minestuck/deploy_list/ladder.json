@@ -1,0 +1,18 @@
+{
+  "entries": [
+    {
+      "cost": [
+        {
+          "grist": {
+            "minestuck:build": 16
+          }
+        }
+      ],
+      "item": {
+        "count": 1,
+        "id": "minecraft:ladder"
+      }
+    }
+  ],
+  "priority": 10.0
+}

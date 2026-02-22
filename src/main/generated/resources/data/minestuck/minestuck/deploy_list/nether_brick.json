@@ -1,0 +1,95 @@
+{
+  "entries": [
+    {
+      "cost": [
+        {
+          "grist": {
+            "minestuck:build": 1,
+            "minestuck:tar": 1
+          }
+        }
+      ],
+      "item": {
+        "count": 1,
+        "id": "minecraft:nether_bricks"
+      },
+      "tier": 3
+    },
+    {
+      "cost": [
+        {
+          "grist": {
+            "minestuck:build": 2,
+            "minestuck:tar": 2
+          }
+        }
+      ],
+      "item": {
+        "count": 1,
+        "id": "minecraft:nether_brick_stairs"
+      },
+      "tier": 3
+    },
+    {
+      "cost": [
+        {
+          "grist": {
+            "minestuck:build": 1,
+            "minestuck:tar": 1
+          }
+        }
+      ],
+      "item": {
+        "count": 1,
+        "id": "minecraft:nether_brick_slab"
+      },
+      "tier": 3
+    },
+    {
+      "cost": [
+        {
+          "grist": {
+            "minestuck:build": 2,
+            "minestuck:tar": 2
+          }
+        }
+      ],
+      "item": {
+        "count": 1,
+        "id": "minecraft:nether_brick_wall"
+      },
+      "tier": 3
+    },
+    {
+      "cost": [
+        {
+          "grist": {
+            "minestuck:build": 2,
+            "minestuck:tar": 2
+          }
+        }
+      ],
+      "item": {
+        "count": 1,
+        "id": "minecraft:nether_brick_fence"
+      },
+      "tier": 3
+    },
+    {
+      "cost": [
+        {
+          "grist": {
+            "minestuck:build": 1,
+            "minestuck:tar": 1
+          }
+        }
+      ],
+      "item": {
+        "count": 1,
+        "id": "minecraft:chiseled_nether_bricks"
+      },
+      "tier": 4
+    }
+  ],
+  "priority": 4.0
+}

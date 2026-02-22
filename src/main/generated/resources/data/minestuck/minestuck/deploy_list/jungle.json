@@ -1,0 +1,96 @@
+{
+  "entries": [
+    {
+      "cost": [
+        {
+          "grist": {
+            "minestuck:build": 4
+          }
+        }
+      ],
+      "item": {
+        "count": 1,
+        "id": "minecraft:jungle_log"
+      }
+    },
+    {
+      "cost": [
+        {
+          "grist": {
+            "minestuck:build": 1
+          }
+        }
+      ],
+      "item": {
+        "count": 1,
+        "id": "minecraft:jungle_planks"
+      }
+    },
+    {
+      "cost": [
+        {
+          "grist": {
+            "minestuck:build": 2
+          }
+        }
+      ],
+      "item": {
+        "count": 1,
+        "id": "minecraft:jungle_stairs"
+      }
+    },
+    {
+      "cost": [
+        {
+          "grist": {
+            "minestuck:build": 1
+          }
+        }
+      ],
+      "item": {
+        "count": 1,
+        "id": "minecraft:jungle_slab"
+      }
+    },
+    {
+      "cost": [
+        {
+          "grist": {
+            "minestuck:build": 2
+          }
+        }
+      ],
+      "item": {
+        "count": 1,
+        "id": "minecraft:jungle_fence"
+      }
+    },
+    {
+      "cost": [
+        {
+          "grist": {
+            "minestuck:build": 2
+          }
+        }
+      ],
+      "item": {
+        "count": 1,
+        "id": "minecraft:jungle_door"
+      }
+    },
+    {
+      "cost": [
+        {
+          "grist": {
+            "minestuck:build": 2
+          }
+        }
+      ],
+      "item": {
+        "count": 1,
+        "id": "minecraft:jungle_trapdoor"
+      }
+    }
+  ],
+  "priority": 14.0
+}

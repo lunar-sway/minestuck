@@ -1,0 +1,96 @@
+{
+  "entries": [
+    {
+      "cost": [
+        {
+          "grist": {
+            "minestuck:build": 4
+          }
+        }
+      ],
+      "item": {
+        "count": 1,
+        "id": "minecraft:birch_log"
+      }
+    },
+    {
+      "cost": [
+        {
+          "grist": {
+            "minestuck:build": 1
+          }
+        }
+      ],
+      "item": {
+        "count": 1,
+        "id": "minecraft:birch_planks"
+      }
+    },
+    {
+      "cost": [
+        {
+          "grist": {
+            "minestuck:build": 2
+          }
+        }
+      ],
+      "item": {
+        "count": 1,
+        "id": "minecraft:birch_stairs"
+      }
+    },
+    {
+      "cost": [
+        {
+          "grist": {
+            "minestuck:build": 1
+          }
+        }
+      ],
+      "item": {
+        "count": 1,
+        "id": "minecraft:birch_slab"
+      }
+    },
+    {
+      "cost": [
+        {
+          "grist": {
+            "minestuck:build": 2
+          }
+        }
+      ],
+      "item": {
+        "count": 1,
+        "id": "minecraft:birch_fence"
+      }
+    },
+    {
+      "cost": [
+        {
+          "grist": {
+            "minestuck:build": 2
+          }
+        }
+      ],
+      "item": {
+        "count": 1,
+        "id": "minecraft:birch_door"
+      }
+    },
+    {
+      "cost": [
+        {
+          "grist": {
+            "minestuck:build": 2
+          }
+        }
+      ],
+      "item": {
+        "count": 1,
+        "id": "minecraft:birch_trapdoor"
+      }
+    }
+  ],
+  "priority": 15.0
+}

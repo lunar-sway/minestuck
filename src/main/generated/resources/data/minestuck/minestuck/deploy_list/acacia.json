@@ -1,0 +1,96 @@
+{
+  "entries": [
+    {
+      "cost": [
+        {
+          "grist": {
+            "minestuck:build": 4
+          }
+        }
+      ],
+      "item": {
+        "count": 1,
+        "id": "minecraft:acacia_log"
+      }
+    },
+    {
+      "cost": [
+        {
+          "grist": {
+            "minestuck:build": 1
+          }
+        }
+      ],
+      "item": {
+        "count": 1,
+        "id": "minecraft:acacia_planks"
+      }
+    },
+    {
+      "cost": [
+        {
+          "grist": {
+            "minestuck:build": 2
+          }
+        }
+      ],
+      "item": {
+        "count": 1,
+        "id": "minecraft:acacia_stairs"
+      }
+    },
+    {
+      "cost": [
+        {
+          "grist": {
+            "minestuck:build": 1
+          }
+        }
+      ],
+      "item": {
+        "count": 1,
+        "id": "minecraft:acacia_slab"
+      }
+    },
+    {
+      "cost": [
+        {
+          "grist": {
+            "minestuck:build": 2
+          }
+        }
+      ],
+      "item": {
+        "count": 1,
+        "id": "minecraft:acacia_fence"
+      }
+    },
+    {
+      "cost": [
+        {
+          "grist": {
+            "minestuck:build": 2
+          }
+        }
+      ],
+      "item": {
+        "count": 1,
+        "id": "minecraft:acacia_door"
+      }
+    },
+    {
+      "cost": [
+        {
+          "grist": {
+            "minestuck:build": 2
+          }
+        }
+      ],
+      "item": {
+        "count": 1,
+        "id": "minecraft:acacia_trapdoor"
+      }
+    }
+  ],
+  "priority": 13.0
+}

@@ -1,0 +1,96 @@
+{
+  "entries": [
+    {
+      "cost": [
+        {
+          "grist": {
+            "minestuck:build": 4
+          }
+        }
+      ],
+      "item": {
+        "count": 1,
+        "id": "minecraft:oak_log"
+      }
+    },
+    {
+      "cost": [
+        {
+          "grist": {
+            "minestuck:build": 1
+          }
+        }
+      ],
+      "item": {
+        "count": 1,
+        "id": "minecraft:oak_planks"
+      }
+    },
+    {
+      "cost": [
+        {
+          "grist": {
+            "minestuck:build": 2
+          }
+        }
+      ],
+      "item": {
+        "count": 1,
+        "id": "minecraft:oak_stairs"
+      }
+    },
+    {
+      "cost": [
+        {
+          "grist": {
+            "minestuck:build": 1
+          }
+        }
+      ],
+      "item": {
+        "count": 1,
+        "id": "minecraft:oak_slab"
+      }
+    },
+    {
+      "cost": [
+        {
+          "grist": {
+            "minestuck:build": 2
+          }
+        }
+      ],
+      "item": {
+        "count": 1,
+        "id": "minecraft:oak_fence"
+      }
+    },
+    {
+      "cost": [
+        {
+          "grist": {
+            "minestuck:build": 2
+          }
+        }
+      ],
+      "item": {
+        "count": 1,
+        "id": "minecraft:oak_door"
+      }
+    },
+    {
+      "cost": [
+        {
+          "grist": {
+            "minestuck:build": 2
+          }
+        }
+      ],
+      "item": {
+        "count": 1,
+        "id": "minecraft:oak_trapdoor"
+      }
+    }
+  ],
+  "priority": 17.0
+}
