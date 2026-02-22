@@ -19,6 +19,7 @@ The format is based on [Keep a Changelog](https://keepachangelog.com/en/1.1.0/).
 - Updated all grist and vitality gel sprites
 - Tweaked some Rung names
 - New rung-up jingle.
+- cruxtruderIntake config for cruxtruders now false by default, and now start with a value of one if set to true
 
 ### Fixed
 
