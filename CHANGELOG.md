@@ -61,6 +61,7 @@ The format is based on [Keep a Changelog](https://keepachangelog.com/en/1.1.0/).
 - Land Type Extensions now support structure sets.
 - New Cathedral Structure on the Battlefield
 - Added tooltip to rungs which have gated conditions
+- Added 3 bunker structures to Lands
 
 ### Changed
 
@@ -69,6 +70,8 @@ The format is based on [Keep a Changelog](https://keepachangelog.com/en/1.1.0/).
 - Disabled Skaian Castle structure
 - Moved `prospit_wfc_demo` dimension and related wfc examples to `additional_resources` datapack
 - Disabled `wfc_performance_test` command
+- Reduced imp dungeon generation frequency
+- Imp dungeons will not spawn near villages
 
 ### Fixed
 

@@ -225,6 +225,9 @@ public class MSTags
 		
 		public static final TagKey<Biome> HAS_LAND_GATE = tag("has_structure/land_gate");
 		public static final TagKey<Biome> HAS_SMALL_RUIN = tag("has_structure/small_ruin");
+		public static final TagKey<Biome> HAS_PROSPIT_BUNKER = tag("has_structure/prospit_bunker");
+		public static final TagKey<Biome> HAS_DERSE_BUNKER = tag("has_structure/derse_bunker");
+		public static final TagKey<Biome> HAS_IMP_BUNKER = tag("has_structure/imp_bunker");
 		public static final TagKey<Biome> HAS_IMP_DUNGEON = tag("has_structure/imp_dungeon");
 		public static final TagKey<Biome> HAS_CONSORT_VILLAGE = tag("has_structure/consort_village");
 		
