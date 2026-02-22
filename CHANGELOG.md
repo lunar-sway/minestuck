@@ -11,6 +11,7 @@ The format is based on [Keep a Changelog](https://keepachangelog.com/en/1.1.0/).
 - Newer music discs have associated cassettes
 - Sound effect for boondollar item and porkhollow command.
 - Added music tracks made by heartsremedy to all non-Land dimensions in the Medium
+- Added 3 bunker structures to Lands
 
 ### Changed
 
@@ -19,6 +20,9 @@ The format is based on [Keep a Changelog](https://keepachangelog.com/en/1.1.0/).
 - Updated all grist and vitality gel sprites
 - Tweaked some Rung names
 - New rung-up jingle.
+- Reduced imp dungeon generation frequency
+- Imp dungeons will not spawn near villages
+- Underlings no longer spawn naturally in consort villages
 
 ### Fixed
 
@@ -60,7 +64,6 @@ The format is based on [Keep a Changelog](https://keepachangelog.com/en/1.1.0/).
 - Land Type Extensions now support structure sets.
 - New Cathedral Structure on the Battlefield
 - Added tooltip to rungs which have gated conditions
-- Added 3 bunker structures to Lands
 
 ### Changed
 
@@ -69,8 +72,6 @@ The format is based on [Keep a Changelog](https://keepachangelog.com/en/1.1.0/).
 - Disabled Skaian Castle structure
 - Moved `prospit_wfc_demo` dimension and related wfc examples to `additional_resources` datapack
 - Disabled `wfc_performance_test` command
-- Reduced imp dungeon generation frequency
-- Imp dungeons will not spawn near villages
 
 ### Fixed
 
