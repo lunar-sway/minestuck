@@ -172,6 +172,8 @@ public final class StructureBlockRegistry
 		registerBlock(UPPER, GROUND, Blocks.DIRT);
 		registerBlock(SURFACE, UPPER, Blocks.GRASS_BLOCK);
 		registerBlock(SURFACE_ROUGH, SURFACE, Blocks.PODZOL);
+		//use light blue stained glass if it needs to remain water
+		//blue stained glass is used for bucket features
 		registerBlock(OCEAN, Blocks.WATER.defaultBlockState());
 		registerBlock(OCEAN_SURFACE, UPPER, Blocks.GRAVEL);
 		registerBlock(RIVER, OCEAN, Blocks.BLUE_WOOL);
@@ -216,8 +218,8 @@ public final class StructureBlockRegistry
 		registerBlock(STRUCTURE_WOOL_3, Blocks.GRAY_WOOL.defaultBlockState());
 		registerBlock(CARPET, Blocks.WHITE_CARPET.defaultBlockState());
 		
-		registerBlock(STRUCTURE_GROUND_COVER, Blocks.MOSS_CARPET.defaultBlockState());
-		registerBlock(STRUCTURE_ROOF_COVER, Blocks.HANGING_ROOTS.defaultBlockState());
+		registerEmptyFallbackBlock(STRUCTURE_GROUND_COVER, Blocks.MOSS_CARPET);
+		registerEmptyFallbackBlock(STRUCTURE_ROOF_COVER, Blocks.HANGING_ROOTS);
 		
 		registerBlock(VILLAGE_DOOR, STRUCTURE_PLANKS_DOOR, Blocks.DARK_OAK_DOOR, DoorBlock.class);
 		registerBlock(VILLAGE_PATH, STRUCTURE_SECONDARY, Blocks.COBBLESTONE);

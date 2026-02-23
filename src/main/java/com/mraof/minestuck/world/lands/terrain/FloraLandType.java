@@ -80,6 +80,9 @@ public class FloraLandType extends TerrainLandType
 		registry.setBlock(STRUCTURE_PLANKS_DOOR, Blocks.DARK_OAK_DOOR);
 		registry.setBlock(STRUCTURE_PLANKS_TRAPDOOR, Blocks.DARK_OAK_TRAPDOOR);
 		
+		registry.setBlock(STRUCTURE_GROUND_COVER, Blocks.MOSS_CARPET);
+		registry.setBlock(STRUCTURE_ROOF_COVER, Blocks.HANGING_ROOTS);
+		
 		registry.setBlock(VILLAGE_PATH, Blocks.DIRT_PATH);
 		registry.setBlock(BUSH, Blocks.FERN);
 		registry.setBlock(STRUCTURE_WOOL_1, Blocks.YELLOW_WOOL);

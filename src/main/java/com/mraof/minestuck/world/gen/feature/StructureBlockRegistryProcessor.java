@@ -53,6 +53,11 @@ public final class StructureBlockRegistryProcessor extends StructureProcessor
 				continue;
 			
 			BlockState newState = blockRegistry.getTemplateState(current.state());
+			
+			//unconditionally add water
+			if(original.state().is(Blocks.LIGHT_BLUE_STAINED_GLASS))
+				newState = Blocks.WATER.defaultBlockState();
+			
 			currents.set(i, new StructureTemplate.StructureBlockInfo(current.pos(), newState, current.nbt()));
 		}
 		

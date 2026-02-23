@@ -69,6 +69,10 @@ public class ForestLandType extends TerrainLandType
 		registry.setBlock(STRUCTURE_SECONDARY, Blocks.STONE_BRICKS);
 		registry.setBlock(STRUCTURE_SECONDARY_DECORATIVE, Blocks.CHISELED_STONE_BRICKS);
 		registry.setBlock(STRUCTURE_SECONDARY_STAIRS, Blocks.STONE_BRICK_STAIRS);
+		
+		registry.setBlock(STRUCTURE_GROUND_COVER, Blocks.MOSS_CARPET);
+		registry.setBlock(STRUCTURE_ROOF_COVER, Blocks.HANGING_ROOTS);
+		
 		registry.setBlock(VILLAGE_PATH, Blocks.DIRT_PATH);
 		registry.setBlock(BUSH, Blocks.FERN);
 		registry.setBlock(STRUCTURE_WOOL_1, Blocks.GREEN_WOOL);
