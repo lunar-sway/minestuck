@@ -7,7 +7,7 @@
         "element_type": "minecraft:single_pool_element",
         "projection": "rigid",
         "location": "minestuck:imp_bunker/entry_lower",
-        "processors": "minestuck:structure_block_registry"
+        "processors": "minestuck:imp_bunker"
       }
     }
   ]

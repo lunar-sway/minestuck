@@ -5,7 +5,7 @@
       "weight": 1,
       "element": {
         "location": "minestuck:imp_bunker/decorator_006",
-        "processors": "minestuck:structure_block_registry",
+        "processors": "minestuck:imp_bunker",
         "projection": "rigid",
         "element_type": "minecraft:single_pool_element"
       }
@@ -14,7 +14,7 @@
       "weight": 1,
       "element": {
         "location": "minestuck:imp_bunker/decorator_007",
-        "processors": "minestuck:structure_block_registry",
+        "processors": "minestuck:imp_bunker",
         "projection": "rigid",
         "element_type": "minecraft:single_pool_element"
       }
@@ -23,7 +23,7 @@
       "weight": 1,
       "element": {
         "location": "minestuck:imp_bunker/decorator_008",
-        "processors": "minestuck:structure_block_registry",
+        "processors": "minestuck:imp_bunker",
         "projection": "rigid",
         "element_type": "minecraft:single_pool_element"
       }
