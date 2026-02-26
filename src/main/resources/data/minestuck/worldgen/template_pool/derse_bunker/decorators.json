@@ -2,7 +2,7 @@
   "fallback": "minecraft:empty",
   "elements": [
     {
-      "weight": 1,
+      "weight": 2,
       "element": {
         "location": "minestuck:derse_bunker/decorator_001",
         "processors": "minestuck:structure_block_registry",

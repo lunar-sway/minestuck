@@ -1,6 +1,11 @@
 {
   "type": "minestuck:imp_dungeon",
   "biomes": "#minestuck:has_structure/imp_dungeon",
-  "spawn_overrides": {},
+  "spawn_overrides": {
+    "minestuck:consort": {
+      "bounding_box": "full",
+      "spawns":       [ ]
+    }
+  },
   "step": "surface_structures"
 }

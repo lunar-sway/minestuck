@@ -22,7 +22,7 @@ The format is based on [Keep a Changelog](https://keepachangelog.com/en/1.1.0/).
 - New rung-up jingle.
 - Reduced imp dungeon generation frequency
 - Imp dungeons will not spawn near villages
-- Underlings no longer spawn naturally in consort villages
+- Underlings no longer spawn naturally in consort villages and consorts no longer spawn in dungeons
 
 ### Fixed
 

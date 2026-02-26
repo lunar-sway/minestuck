@@ -63,7 +63,7 @@ public final class MSStructureProvider
 		context.register(DERSE_BUNKER, jigsaw(biomes, pools, MSTags.Biomes.HAS_DERSE_BUNKER, minestuckMobCategoriesSpawnOverride, DERSE_BUNKER_START_POOL));
 		context.register(IMP_BUNKER, jigsaw(biomes, pools, MSTags.Biomes.HAS_IMP_BUNKER, consortSpawnOverride, IMP_BUNKER_START_POOL));
 		context.register(ImpDungeon.KEY, new ImpDungeonStructure(new Structure.StructureSettings(biomes.getOrThrow(MSTags.Biomes.HAS_IMP_DUNGEON),
-				Map.of(), GenerationStep.Decoration.SURFACE_STRUCTURES, TerrainAdjustment.NONE)));
+				consortSpawnOverride, GenerationStep.Decoration.SURFACE_STRUCTURES, TerrainAdjustment.NONE)));
 		context.register(ConsortVillage.KEY, new ConsortVillageStructure(new Structure.StructureSettings(biomes.getOrThrow(MSTags.Biomes.HAS_CONSORT_VILLAGE),
 				underlingSpawnOverride, GenerationStep.Decoration.SURFACE_STRUCTURES, TerrainAdjustment.NONE)));
 		
@@ -107,6 +107,7 @@ public final class MSStructureProvider
 		return new JigsawStructure(
 				new Structure.StructureSettings.Builder(biomes.getOrThrow(biome))
 						.generationStep(GenerationStep.Decoration.SURFACE_STRUCTURES)
+						.terrainAdapation(TerrainAdjustment.BEARD_THIN)
 						.spawnOverrides(spawnOverrides)
 						.build(),
 				templatePools.getOrThrow(startPool),
@@ -115,7 +116,7 @@ public final class MSStructureProvider
 				ConstantHeight.of(VerticalAnchor.absolute(0)),
 				false,
 				Optional.of(Heightmap.Types.WORLD_SURFACE_WG),
-				128,
+				116,
 				List.of(),
 				JigsawStructure.DEFAULT_DIMENSION_PADDING,
 				LiquidSettings.IGNORE_WATERLOGGING
