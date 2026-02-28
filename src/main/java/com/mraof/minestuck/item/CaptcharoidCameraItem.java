@@ -41,14 +41,12 @@ public class CaptcharoidCameraItem extends Item
 			
 			AABB bb = new AABB(pos.relative(facing));
 			List<ItemFrame> list = level.getEntitiesOfClass(ItemFrame.class, bb);
+			ItemStack content = ItemStack.EMPTY;
 			
 			if(!list.isEmpty())
 			{
-				ItemStack item = list.get(0).getItem();
-				if(item.isEmpty()) item = new ItemStack(Items.ITEM_FRAME);
-				
-				player.getInventory().add(CaptchaCardItem.createGhostCard(item, serverLevel.getServer()));
-				context.getItemInHand().hurtAndBreak(1, player, EquipmentSlot.MAINHAND);
+				content = list.get(0).getItem();
+				if(content.isEmpty()) content = new ItemStack(Items.ITEM_FRAME);
 			}
 			else
 			{
@@ -57,10 +55,20 @@ public class CaptcharoidCameraItem extends Item
 				
 				if(!block.isEmpty())
 				{
-					player.getInventory().add(CaptchaCardItem.createGhostCard(block, serverLevel.getServer()));
-					context.getItemInHand().hurtAndBreak(1, player,  EquipmentSlot.MAINHAND);
+					content = block;
 				}
 			}
+			
+			if(!content.isEmpty())
+			{
+				ItemStack card = CaptchaCardItem.createGhostCard(content, serverLevel.getServer());
+				if(!player.getInventory().add(card))
+				{
+					player.drop(card, false);
+				}
+				context.getItemInHand().hurtAndBreak(1, player, EquipmentSlot.MAINHAND);
+			}
+			
 			return InteractionResult.PASS;
 		}
 		

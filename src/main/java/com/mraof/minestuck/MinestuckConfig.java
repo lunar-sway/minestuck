@@ -187,7 +187,7 @@ public class MinestuckConfig
 			puzzleBlockTickRate = builder.comment("How often puzzle/redstone related blocks such as the remote observer tick.")
 					.defineInRange("puzzleBlockTickRate",6,2,10);
 			cruxtruderIntake = builder.comment("If enabled, the regular cruxtruder will require raw cruxite to function, which is inserted through the pipe.")
-					.define("cruxtruderIntake",true);
+					.define("cruxtruderIntake", false);
 			forbiddenWorldsTpz = builder.comment("A list of worlds that you cannot travel to or from using transportalizers.")
 					.define("forbiddenWorldsTpz", new ArrayList<>());
 			forbiddenDimensionTypesTpz = builder.comment("A list of dimension types that you cannot travel to or from using transportalizers.")
