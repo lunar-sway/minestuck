@@ -265,13 +265,10 @@ public class HashMapModus extends Modus
 			ItemStack stack = list.get(i);
 			if(stack.isEmpty()) continue;
 			
-			String customName = stack.get(DataComponents.CUSTOM_NAME) != null
-					? stack.get(DataComponents.CUSTOM_NAME).getString().toLowerCase()
-					: null;
 			String itemId = BuiltInRegistries.ITEM.getKey(stack.getItem()).getPath().toLowerCase();
-			String baseName = stack.getHoverName().getString().toLowerCase();
+			String hoverName = stack.getHoverName().getString().toLowerCase();
 			
-			if((customName != null && customName.contains(key)) || itemId.equals(key) || baseName.contains(key)) {
+			if(itemId.equals(key) || hoverName.contains(key)) {
 				if(player.getInventory().getSelected().isEmpty())
 					player.getInventory().setItem(player.getInventory().selected, stack);
 				else

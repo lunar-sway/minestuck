@@ -9,10 +9,13 @@ The format is based on [Keep a Changelog](https://keepachangelog.com/en/1.1.0/).
 ### Added
 
 - Newer music discs have associated cassettes
+- Eject item function
+- Array modus
 
 ### Changed
 
 - Cassettes are now data-driven
+- HashmapModus now could handle with localized names, tags, anvil names
 
 ### Fixed
 
@@ -23,7 +26,7 @@ The format is based on [Keep a Changelog](https://keepachangelog.com/en/1.1.0/).
 
 ### Contributors for this release
 
-- medsal15
+- medsal15, Fl1s
 
 ## [1.21.1-1.13.1.1] - 2025-09-14
 

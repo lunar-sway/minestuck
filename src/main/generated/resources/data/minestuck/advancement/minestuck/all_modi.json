@@ -9,7 +9,7 @@
           }
         ]
       },
-      "trigger":    "minecraft:inventory_changed"
+      "trigger": "minecraft:inventory_changed"
     },
     "hash_map": {
       "conditions": {
@@ -87,9 +87,6 @@
   },
   "requirements": [
     [
-      "array"
-    ],
-    [
       "stack"
     ],
     [
@@ -103,6 +100,9 @@
     ],
     [
       "hash_map"
+    ],
+    [
+      "array"
     ],
     [
       "set"
