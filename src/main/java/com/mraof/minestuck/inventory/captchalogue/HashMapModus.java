@@ -19,6 +19,7 @@ import java.util.Iterator;
 public class HashMapModus extends Modus
 {
 	public static final String MESSAGE = "minestuck.hash_map";
+	public static final String MESSAGE_EJECTED = "minestuck.hash_map.ejected";
 	
 	protected NonNullList<ItemStack> list;
 	public boolean ejectByChat = true;
@@ -40,8 +41,7 @@ public class HashMapModus extends Modus
 		{
 			list.addAll(prev);
 		}
-		while(list.size() < size)
-			list.add(ItemStack.EMPTY);
+		while(list.size() < size) list.add(ItemStack.EMPTY);
 		
 		if(side == LogicalSide.CLIENT)
 		{
@@ -58,13 +58,12 @@ public class HashMapModus extends Modus
 		list = NonNullList.create();
 		
 		for(int i = 0; i < size; i++)
-			if(nbt.contains("item"+i, Tag.TAG_COMPOUND))
-				list.add(ItemStack.parse(provider, nbt.getCompound("item"+i)).orElseThrow());
+			if(nbt.contains("item" + i, Tag.TAG_COMPOUND))
+				list.add(ItemStack.parse(provider, nbt.getCompound("item" + i)).orElseThrow());
 			else list.add(ItemStack.EMPTY);
 		if(side == LogicalSide.CLIENT)
 		{
-			if(items == null)
-				items = NonNullList.create();
+			if(items == null) items = NonNullList.create();
 			changed = true;
 		}
 	}
@@ -78,8 +77,7 @@ public class HashMapModus extends Modus
 		for(int i = 0; i < list.size(); i++)
 		{
 			ItemStack stack = iterator.next();
-			if(!stack.isEmpty())
-				nbt.put("item"+i, stack.save(provider));
+			if(!stack.isEmpty()) nbt.put("item" + i, stack.save(provider));
 		}
 		return nbt;
 	}
@@ -87,22 +85,19 @@ public class HashMapModus extends Modus
 	@Override
 	public boolean putItemStack(ServerPlayer player, ItemStack item)
 	{
-		if(list.size() == 0 || item.isEmpty())
-			return false;
+		if(list.size() == 0 || item.isEmpty()) return false;
 		
 		String itemName = BuiltInRegistries.ITEM.getKey(item.getItem()).getPath().replace('_', ' ');
 		
 		Component customName = item.get(DataComponents.CUSTOM_NAME);
-		int index = ((customName != null) ? customName.getString() : itemName).hashCode() % list.size();	//TODO Perhaps use a custom hashcode function that behaves more like the one in comic
+		int index = ((customName != null) ? customName.getString() : itemName).hashCode() % list.size();    //TODO Perhaps use a custom hashcode function that behaves more like the one in comic
 		
-		if(index < 0)
-			index += list.size();
+		if(index < 0) index += list.size();
 		
 		if(!list.get(index).isEmpty())
 		{
 			ItemStack otherItem = list.get(index);
-			if(ItemStack.isSameItemSameComponents(otherItem, item)
-					&& otherItem.getCount() + item.getCount() <= otherItem.getMaxStackSize())
+			if(ItemStack.isSameItemSameComponents(otherItem, item) && otherItem.getCount() + item.getCount() <= otherItem.getMaxStackSize())
 			{
 				otherItem.grow(item.getCount());
 				markDirty();
@@ -122,7 +117,7 @@ public class HashMapModus extends Modus
 	@Override
 	public NonNullList<ItemStack> getItems()
 	{
-		if(side == LogicalSide.SERVER)	//Used only when replacing the modus
+		if(side == LogicalSide.SERVER)    //Used only when replacing the modus
 		{
 			NonNullList<ItemStack> items = NonNullList.create();
 			fillList(items);
@@ -158,18 +153,17 @@ public class HashMapModus extends Modus
 	{
 		if(id == CaptchaDeckHandler.EMPTY_CARD)
 		{
-			return ItemStack.EMPTY;	//Empty card is retrieved the same way as a normal item
+			return ItemStack.EMPTY;    //Empty card is retrieved the same way as a normal item
 		}
 		
-		if(list.isEmpty())
-			return ItemStack.EMPTY;
+		if(list.isEmpty()) return ItemStack.EMPTY;
 		
 		if(id == CaptchaDeckHandler.EMPTY_SYLLADEX)
 		{
 			for(int i = 0; i < list.size(); i++)
 				if(!list.get(i).isEmpty())
 				{
-					CaptchaDeckHandler.launchAnyItem(player, list.get(i));
+					CaptchaDeckHandler.ejectAnyItem(player, list.get(i));
 					list.set(i, ItemStack.EMPTY);
 					markDirty();
 				}
@@ -184,10 +178,8 @@ public class HashMapModus extends Modus
 		{
 			list.remove(id);
 			markDirty();
-			if(item.isEmpty())
-				return new ItemStack(MSItems.CAPTCHA_CARD.get());
-			else
-				return CaptchaCardItem.createCardWithItem(item, player.server);
+			if(item.isEmpty()) return new ItemStack(MSItems.CAPTCHA_CARD.get());
+			else return CaptchaCardItem.createCardWithItem(item, player.server);
 		} else
 		{
 			list.set(id, ItemStack.EMPTY);
@@ -223,57 +215,33 @@ public class HashMapModus extends Modus
 		if(!ejectByChat && MinestuckConfig.SERVER.hashmapChatModusSetting.get() != MinestuckConfig.AvailableOptions.ON || MinestuckConfig.SERVER.hashmapChatModusSetting.get() == MinestuckConfig.AvailableOptions.OFF)
 			return;
 		
-		boolean isPrevLetter = false;
-		StringBuilder number = new StringBuilder();
-		for(int i = 0; i < str.length(); i++)
-		{
-			char c = str.charAt(i);
-			if(Character.isLetter(c))
-				isPrevLetter = true;
-			else if(Character.isDigit(c) || (number.length() == 0 && c == '-'))
-			{
-				if(!isPrevLetter)
-					number.append(c);
-				continue;
-			} else
-			{
-				isPrevLetter = false;
-				
-				if(number.length() > 0)
-					handleNumber(player, number.toString());
-			}
-			
-			number = new StringBuilder();
-		}
+		String key = str.trim().toLowerCase();
 		
-		if(number.length() > 0)
-			handleNumber(player, number.toString());
+		if(key.isEmpty()) return;
+		
+		key = key.toLowerCase();
+		
+		for(int i = 0; i < list.size(); i++)
+		{
+			ItemStack stack = list.get(i);
+			if(stack.isEmpty()) continue;
+			
+			String itemId = BuiltInRegistries.ITEM.getKey(stack.getItem()).getPath().toLowerCase();
+			String hoverName = stack.getHoverName().getString().toLowerCase();
+			
+			if(itemId.equals(key) || hoverName.contains(key))
+			{
+				if(player.getInventory().getSelected().isEmpty())
+					player.getInventory().setItem(player.getInventory().selected, stack);
+				else CaptchaDeckHandler.launchAnyItem(player, stack);
+				
+				player.sendSystemMessage(Component.translatable(MESSAGE_EJECTED, stack.getDisplayName(), i, getSize()));
+				list.set(i, ItemStack.EMPTY);
+				markDirty();
+				return;
+			}
+		}
 		
 		checkAndResend(player);
 	}
-	
-	private void handleNumber(ServerPlayer player, String str)
-	{
-		int i;
-		
-		try
-		{
-			i = Integer.parseInt(str);
-		} catch(NumberFormatException e) {return;}
-		
-		int index = i % getSize();
-		if(index < 0)
-			index += getSize();
-		
-		ItemStack stack = getItem(player, index, false);
-		if(stack == null)
-			return;
-		
-		if(player.getInventory().getSelected().isEmpty())
-			player.getInventory().setItem(player.getInventory().selected, stack);
-		else CaptchaDeckHandler.launchAnyItem(player, stack);
-		
-		player.sendSystemMessage(Component.translatable(MESSAGE, i, getSize(), index, stack.getDisplayName()));
-	}
-	
 }

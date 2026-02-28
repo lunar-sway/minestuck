@@ -37,6 +37,7 @@ import com.mraof.minestuck.entity.MSEntityTypes;
 import com.mraof.minestuck.entity.dialogue.Dialogue;
 import com.mraof.minestuck.entry.EntryProcess;
 import com.mraof.minestuck.inventory.ConsortMerchantInventory;
+import com.mraof.minestuck.inventory.captchalogue.ArrayModus;
 import com.mraof.minestuck.inventory.captchalogue.HashMapModus;
 import com.mraof.minestuck.item.MSCreativeTabs;
 import com.mraof.minestuck.item.MSItems;
@@ -1571,6 +1572,8 @@ public class MinestuckEnUsLanguageProvider extends MinestuckLanguageProvider
 		addItem(MSItems.QUEUESTACK_MODUS_CARD, "Queue-Stack Modus");
 		addItem(MSItems.TREE_MODUS_CARD, "Tree Modus");
 		addItem(MSItems.HASHMAP_MODUS_CARD, "Hashmap Modus");
+		addItem(MSItems.ARRAY_MODUS_CARD, "Array Modus");
+		addItemTooltip(MSItems.ARRAY_MODUS_CARD, "This modus allows you to store and retrieve any item from any card at any time... BOOOOOOOORING!");
 		addItem(MSItems.SET_MODUS_CARD, "Set Modus");
 		addItemTooltip(MSItems.SET_MODUS_CARD, "This modus is quite similar to the array modus. Surely this is what you were looking for?");
 		addItem(MSItems.SHUNT, "Punch Card Shunt");
@@ -2363,7 +2366,10 @@ public class MinestuckEnUsLanguageProvider extends MinestuckLanguageProvider
 		add(SummonerScreen.UNTRIGGERABLE_MESSAGE, "UNTRIGGERABLE");
 		add(SummonerScreen.TRIGGERABLE_MESSAGE, "TRIGGERABLE");
 		add(SummonerBlock.SUMMON_TYPE_CHANGE, "Summoned entity type changed to %s.");
+		add(ArrayModus.MESSAGE, "[ARRAY] %s - %s");
+		add(ArrayModus.MESSAGE_EJECTED, "[ARRAY] %s (%s / %s)");
 		add(HashMapModus.MESSAGE, "[HASHMAP] %s %% %s -> %s");
+		add(HashMapModus.MESSAGE_EJECTED, "[HASHMAP] %s (%s / %s)");
 		
 		add(ButtonListHelper.CLEAR_BUTTON, "Clear message");
 		add(SburbClientGui.NAME, "SBURB Client");

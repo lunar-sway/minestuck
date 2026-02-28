@@ -25,7 +25,7 @@ public class TreeSylladexScreen extends SylladexScreen
 	public TreeSylladexScreen(Modus modus)
 	{
 		this.modus = (TreeModus) modus;
-		textureIndex = 3;
+		textureIndex = 4;
 	}
 	
 	@Override

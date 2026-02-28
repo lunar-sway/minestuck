@@ -8,6 +8,7 @@ import com.mraof.minestuck.effects.MSEffects;
 import com.mraof.minestuck.entity.MSAttributes;
 import com.mraof.minestuck.entity.underling.UnderlingEntity;
 import com.mraof.minestuck.entry.EntryEvent;
+import com.mraof.minestuck.inventory.captchalogue.ArrayModus;
 import com.mraof.minestuck.inventory.captchalogue.CaptchaDeckHandler;
 import com.mraof.minestuck.inventory.captchalogue.HashMapModus;
 import com.mraof.minestuck.inventory.captchalogue.Modus;
@@ -200,6 +201,8 @@ public class ServerEventHandler
 		Modus modus = CaptchaDeckHandler.getModus(event.getPlayer());
 		if(modus instanceof HashMapModus hashMapModus)
 			hashMapModus.onChatMessage(event.getPlayer(), event.getMessage().getString());
+		else if(modus instanceof ArrayModus arrayModus)
+			arrayModus.onChatMessage(event.getPlayer(), event.getMessage().getString());
 	}
 	
 	@SubscribeEvent
