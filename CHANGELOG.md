@@ -21,6 +21,7 @@ The format is based on [Keep a Changelog](https://keepachangelog.com/en/1.1.0/).
 - New rung-up jingle.
 - The sylladex GUIs have been unified
   - Addons that add moduses will need to be updated (see [related PR](https://github.com/lunar-sway/minestuck/pull/721))
+- cruxtruderIntake config for cruxtruders now false by default, and now start with a value of one if set to true
 
 ### Fixed
 
