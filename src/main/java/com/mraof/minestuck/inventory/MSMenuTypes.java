@@ -23,7 +23,7 @@ public class MSMenuTypes
 	public static final Supplier<MenuType<GristWidgetMenu>> GRIST_WIDGET = REGISTER.register("grist_widget", () -> new MenuType<>((IContainerFactory<GristWidgetMenu>) GristWidgetMenu::new, FeatureFlags.VANILLA_SET));
 	public static final Supplier<MenuType<UraniumCookerMenu>> URANIUM_COOKER = REGISTER.register("uranium_cooker", () -> new MenuType<>((IContainerFactory<UraniumCookerMenu>) UraniumCookerMenu::new, FeatureFlags.VANILLA_SET));
 	public static final Supplier<MenuType<AnthvilMenu>> ANTHVIL = REGISTER.register("anthvil", () -> new MenuType<>(AnthvilMenu::new, FeatureFlags.VANILLA_SET));
-	public static final Supplier<MenuType<CaptchaDeckMenu>> CAPTCHA_DECK = REGISTER.register("captcha_deck", () -> new MenuType<>(CaptchaDeckMenu::new, FeatureFlags.VANILLA_SET));
+	public static final Supplier<MenuType<CaptchaDeckMenu>> CAPTCHA_DECK = REGISTER.register("captcha_deck2", () -> new MenuType<>(CaptchaDeckMenu::new, FeatureFlags.VANILLA_SET));
 	public static final Supplier<MenuType<EditmodeMenu>> EDIT_MODE = REGISTER.register("edit_mode", () -> new MenuType<>(EditmodeMenu::new, FeatureFlags.VANILLA_SET));
 	public static final Supplier<MenuType<AtheneumMenu>> ATHENEUM = REGISTER.register("atheneum", () -> new MenuType<>(AtheneumMenu::new, FeatureFlags.VANILLA_SET));
 	public static final Supplier<MenuType<ConsortMerchantMenu>> CONSORT_MERCHANT = REGISTER.register("consort_merchant", () -> new MenuType<>((IContainerFactory<ConsortMerchantMenu>) ConsortMerchantMenu::load, FeatureFlags.VANILLA_SET));
