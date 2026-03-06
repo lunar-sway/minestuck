@@ -2452,7 +2452,6 @@
   "minestuck.block_teleporter.z_message": "Z Offset",
   "minestuck.button.go": "GO",
   "minestuck.button.stop": "STOP",
-  "minestuck.captcha_deck": "Captchalogue Deck",
   "minestuck.captcha_deck.use_item": "Use Item",
   "minestuck.chat_land_entry": "Welcome to %s.",
   "minestuck.clear_button": "Clear message",
