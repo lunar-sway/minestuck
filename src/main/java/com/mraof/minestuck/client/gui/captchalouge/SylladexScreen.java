@@ -20,6 +20,8 @@ import net.minecraft.world.entity.player.Inventory;
 import net.minecraft.world.item.ItemStack;
 import net.neoforged.neoforge.client.gui.widget.ExtendedButton;
 import net.neoforged.neoforge.network.PacketDistributor;
+
+import org.jetbrains.annotations.MustBeInvokedByOverriders;
 import org.joml.Matrix4fStack;
 
 import javax.annotation.Nullable;
@@ -42,6 +44,8 @@ public abstract class SylladexScreen extends PlayerStatsContainerScreen<CaptchaD
 	protected static final int MAP_WIDTH = 224, MAP_HEIGHT = 124;
 	protected static final int X_OFFSET = 16, Y_OFFSET = 17;
 	protected static final int CARD_WIDTH = 21, CARD_HEIGHT = 26;
+	// Helps for button placements
+	protected static final int BUTTON_HEIGHT = 16, BUTTON_Y_OFFSET = 144;
 	
 	protected ArrayList<GuiCard> cards = new ArrayList<>();
 	protected int textureIndex;
@@ -72,9 +76,9 @@ public abstract class SylladexScreen extends PlayerStatsContainerScreen<CaptchaD
 		this.modus = modus;
 		
 		guiWidth = 256;
-		guiHeight = 256;
+		guiHeight = 245;
 		imageWidth = 256;
-		imageHeight = 256;
+		imageHeight = 245;
 		
 		titleLabelX = X_OFFSET;
 	}
@@ -84,8 +88,8 @@ public abstract class SylladexScreen extends PlayerStatsContainerScreen<CaptchaD
 	{
 		super.init();
 		
-		emptySylladex = addRenderableWidget(new ExtendedButton((width - guiWidth) / 2 + 140, (height - guiHeight) / 2 + 146, 100, 20, Component.translatable(EMPTY_SYLLADEX_BUTTON), button -> emptySylladex()));
-		modusButton = addRenderableWidget(new ExtendedButton(xOffset + 197, yOffset + 173, 50, 18, Component.translatable(USE_ITEM), button -> use()));
+		emptySylladex = addRenderableWidget(new ExtendedButton((width - guiWidth) / 2 + 140, (height - guiHeight) / 2 + BUTTON_Y_OFFSET, 100, BUTTON_HEIGHT, Component.translatable(EMPTY_SYLLADEX_BUTTON), button -> emptySylladex()));
+		modusButton = addRenderableWidget(new ExtendedButton(xOffset + 197, yOffset + BUTTON_Y_OFFSET + 18, 50, 18, Component.translatable(USE_ITEM), button -> use()));
 		
 		updateContent();
 	}
@@ -94,7 +98,7 @@ public abstract class SylladexScreen extends PlayerStatsContainerScreen<CaptchaD
 	public void render(GuiGraphics guiGraphics, int xcor, int ycor, float f)
 	{
 		emptySylladex.setX(xOffset + 140);
-		emptySylladex.setY(yOffset + 146);
+		emptySylladex.setY(yOffset + BUTTON_Y_OFFSET);
 		
 		// Handles using the mouse to move
 		if(mousePressed)
@@ -336,13 +340,26 @@ public abstract class SylladexScreen extends PlayerStatsContainerScreen<CaptchaD
 				ycor >= yOffset + Y_OFFSET && ycor < yOffset + Y_OFFSET + MAP_HEIGHT;
 	}
 	
-	public void updateContent()
-	{
+	/**
+	 * Checks if the modus is still valid
+	 * <p>
+	 * If not, reopens the sylladex gui (effectively rendering this instance useless)
+	 * @return True if the sylladex gui is reopened
+	 */
+	@MustBeInvokedByOverriders
+	protected boolean checkAndReopen() {
 		if(ClientPlayerData.getModus() != this.modus)
 		{
 			PlayerStatsScreen.openGui(true);
-			return;
+			return true;
 		}
+		return false;
+	}
+	
+	public void updateContent()
+	{
+		if(checkAndReopen())
+			return;
 		mapX = Math.min(mapX, maxWidth - mapWidth);
 		mapY = Math.min(mapY, maxHeight - mapHeight);
 	}
