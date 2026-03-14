@@ -10,13 +10,22 @@ The format is based on [Keep a Changelog](https://keepachangelog.com/en/1.1.0/).
 
 - DeployList can be expanded with datapacks
 - Newer music discs have associated cassettes
+- Sound effect for boondollar item and porkhollow command.
+- Added music tracks made by heartsremedy to all non-Land dimensions in the Medium
 
 ### Changed
 
 - Cassettes are now data-driven
+- Boondollars can be split/stacked together like normal items
+- Updated all grist and vitality gel sprites
+- Tweaked some Rung names
+- New rung-up jingle.
+- cruxtruderIntake config for cruxtruders now false by default, and now start with a value of one if set to true
 
 ### Fixed
 
+- Fix Captcharoid Cameras not giving ghost cards with full inventories
+- Fix Transportalizers not working when placed again
 - Fix posters not being placeable
 - Fix JEI not loading grist (and by extension, alchemy recipes) on newer versions
 - Fix Glowing Mushroom Vines requiring itself for alchemizing
@@ -24,7 +33,7 @@ The format is based on [Keep a Changelog](https://keepachangelog.com/en/1.1.0/).
 
 ### Contributors for this release
 
-- medsal15
+- medsal15, heartsremedy, caldw3ll, v_sabitron, Dweblenod
 
 ## [1.21.1-1.13.1.1] - 2025-09-14
 

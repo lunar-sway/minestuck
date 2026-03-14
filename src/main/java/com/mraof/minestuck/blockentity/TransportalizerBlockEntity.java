@@ -357,6 +357,8 @@ public class TransportalizerBlockEntity extends OnCollisionTeleporterBlockEntity
 			this.id = data.id().orElse("");
 			this.destId = data.destinationId().orElse("");
 			this.locked = data.locked();
+			if(!level.isClientSide)
+				tryReactivate();
 		}
 	}
 	
