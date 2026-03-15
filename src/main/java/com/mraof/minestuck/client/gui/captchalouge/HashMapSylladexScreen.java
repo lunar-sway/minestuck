@@ -8,6 +8,7 @@ import net.minecraft.client.gui.GuiGraphics;
 import net.minecraft.client.gui.components.Button;
 import net.minecraft.core.NonNullList;
 import net.minecraft.network.chat.Component;
+import net.minecraft.world.entity.player.Inventory;
 import net.minecraft.world.item.ItemStack;
 import net.neoforged.neoforge.client.gui.widget.ExtendedButton;
 import net.neoforged.neoforge.network.PacketDistributor;
@@ -20,9 +21,9 @@ public class HashMapSylladexScreen extends SylladexScreen
 	private final HashMapModus modus;
 	private Button guiButton;
 	
-	public HashMapSylladexScreen(Modus modus)
+	public HashMapSylladexScreen(int windowId, Inventory inventory, Modus modus)
 	{
-		super();
+		super(windowId, inventory, modus);
 		this.modus = (HashMapModus) modus;
 		this.textureIndex = 4;
 	}
@@ -31,15 +32,15 @@ public class HashMapSylladexScreen extends SylladexScreen
 	public void init()
 	{
 		super.init();
-		guiButton = new ExtendedButton((width - GUI_WIDTH)/2 + 15, (height - GUI_HEIGHT)/2 + 175, 120, 20, Component.empty(), button -> changeSetting());
+		guiButton = new ExtendedButton((width - guiWidth) / 2 + 15, (height - guiHeight) / 2 + BUTTON_Y_OFFSET, 120, BUTTON_HEIGHT, Component.empty(), button -> changeSetting());
 		addRenderableWidget(guiButton);
 	}
 	
 	@Override
 	public void render(GuiGraphics guiGraphics, int mouseX, int mouseY, float f)
 	{
-		guiButton.setX((width - GUI_WIDTH)/2 + 15);
-		guiButton.setY((height - GUI_HEIGHT)/2 + 175);
+		guiButton.setX(xOffset + 15);
+		guiButton.setY(yOffset + BUTTON_Y_OFFSET);
 		boolean active = MinestuckConfig.SERVER.hashmapChatModusSetting.get() == MinestuckConfig.AvailableOptions.BOTH ? modus.ejectByChat : MinestuckConfig.SERVER.hashmapChatModusSetting.get() == MinestuckConfig.AvailableOptions.ON;
 		guiButton.setMessage(Component.translatable(active ? EJECT_BY_CHAT_ON : EJECT_BY_CHAT_OFF));
 		guiButton.active = MinestuckConfig.SERVER.hashmapChatModusSetting.get() == MinestuckConfig.AvailableOptions.BOTH;
@@ -51,13 +52,13 @@ public class HashMapSylladexScreen extends SylladexScreen
 	{
 		NonNullList<ItemStack> stacks = modus.getItems();
 		this.cards.clear();
-		this.maxWidth = Math.max(mapWidth, 10 + (stacks.size()*CARD_WIDTH + (stacks.size() - 1)*5));
+		this.maxWidth = Math.max(mapWidth, 10 + (stacks.size() * CARD_WIDTH + (stacks.size() - 1) * 5));
 		this.maxHeight = mapHeight;
 		super.updateContent();
-		int start = Math.max(5, (mapWidth - (stacks.size()*CARD_WIDTH + (stacks.size() - 1)*5))/2);
+		int start = Math.max(5, (mapWidth - (stacks.size() * CARD_WIDTH + (stacks.size() - 1) * 5)) / 2);
 		
 		for(int i = 0; i < stacks.size(); i++)
-			this.cards.add(new GuiCard(stacks.get(i), this, i, start + i*(CARD_WIDTH + 5), (mapHeight - CARD_HEIGHT)/2)
+			this.cards.add(new GuiCard(stacks.get(i), this, i, start + i * (CARD_WIDTH + 5), (mapHeight - CARD_HEIGHT) / 2)
 			{
 				@Override
 				public void onClick(int mouseButton)
@@ -73,14 +74,14 @@ public class HashMapSylladexScreen extends SylladexScreen
 	@Override
 	public void updatePosition()
 	{
-		this.maxWidth = Math.max(mapWidth, 10 + (cards.size()*CARD_WIDTH + (cards.size() - 1)*5));
+		this.maxWidth = Math.max(mapWidth, 10 + (cards.size() * CARD_WIDTH + (cards.size() - 1) * 5));
 		this.maxHeight = mapHeight;
-		int start = Math.max(5, (mapWidth - (cards.size()*CARD_WIDTH + (cards.size() - 1)*5))/2);
+		int start = Math.max(5, (mapWidth - (cards.size() * CARD_WIDTH + (cards.size() - 1) * 5)) / 2);
 		for(int i = 0; i < cards.size(); i++)
 		{
 			GuiCard card = cards.get(i);
-			card.xPos = start + i*(CARD_WIDTH + 5);
-			card.yPos = (mapHeight - CARD_HEIGHT)/2;
+			card.xPos = start + i * (CARD_WIDTH + 5);
+			card.yPos = (mapHeight - CARD_HEIGHT) / 2;
 		}
 	}
 	
@@ -88,14 +89,14 @@ public class HashMapSylladexScreen extends SylladexScreen
 	public void drawGuiMap(GuiGraphics guiGraphics, int mouseX, int mouseY)
 	{
 		super.drawGuiMap(guiGraphics, mouseX, mouseY);
-		int y = mapHeight/2 - CARD_HEIGHT/2 - 3 - font.lineHeight;
-		int start = Math.max(5, (mapWidth - (cards.size()*CARD_WIDTH + (cards.size() - 1)*5))/2);
+		int y = mapHeight / 2 - CARD_HEIGHT / 2 - 3 - font.lineHeight;
+		int start = Math.max(5, (mapWidth - (cards.size() * CARD_WIDTH + (cards.size() - 1) * 5)) / 2);
 		
 		for(int i = 0; i < cards.size(); i++)
 		{
 			String s = String.valueOf(i);
 			int width = font.width(s);
-			int x = start + i*(CARD_WIDTH + 5) + CARD_WIDTH/2 - mapX - width/2;
+			int x = start + i * (CARD_WIDTH + 5) + CARD_WIDTH / 2 - mapX - width / 2;
 			if(x + width > 0 && x < mapWidth)
 				guiGraphics.drawString(font, s, x, y, 0x000000, false);
 		}
