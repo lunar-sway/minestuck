@@ -23,7 +23,7 @@ The format is based on [Keep a Changelog](https://keepachangelog.com/en/1.1.0/).
 - Tweaked some Rung names
 - New rung-up jingle.
 - cruxtruderIntake config for cruxtruders now false by default, and now start with a value of one if set to true
-- Reduced imp dungeon generation frequency
+- Reduced imp dungeon generation frequency to accommodate new bunkers
 - Imp dungeons will not spawn near villages
 - Underlings no longer spawn naturally in consort villages and consorts no longer spawn in dungeons
 

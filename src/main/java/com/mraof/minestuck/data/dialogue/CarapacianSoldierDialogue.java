@@ -134,6 +134,8 @@ public final class CarapacianSoldierDialogue
 				descriptionNode(l.defaultKeyMsg("They are focused on sweeping the floors.")));
 		provider.addRandomlySelectable("bunker_restock", defaultWeight(all(none(new Condition.AtOrAboveY(64)), any(new Condition.NPCInStructure(MSStructures.DERSE_BUNKER.location()), new Condition.NPCInStructure(MSStructures.PROSPIT_BUNKER.location())))),
 				descriptionNode(l.defaultKeyMsg("They are thinking about restocking the chests again.")));
+		provider.addRandomlySelectable("bunker_abandonment", defaultWeight(any(new Condition.NPCInStructure(MSStructures.DERSE_BUNKER.location()), new Condition.NPCInStructure(MSStructures.PROSPIT_BUNKER.location()))),
+				descriptionNode(l.defaultKeyMsg("They mention how they have had to abandoned bunkers before. When they came back to check on them, they were overrun with underlings.")));
 		provider.addRandomlySelectable("bunker_camouflage", defaultWeight(all(isInTitleLand(TOWERS), any(new Condition.NPCInStructure(MSStructures.DERSE_BUNKER.location()), new Condition.NPCInStructure(MSStructures.PROSPIT_BUNKER.location())))),
 				descriptionNode(l.defaultKeyMsg("They comment how all the other towers here cause this one to blend in, kind of like camouflage.")));
 		
