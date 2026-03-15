@@ -9,7 +9,6 @@ The format is based on [Keep a Changelog](https://keepachangelog.com/en/1.1.0/).
 ### Added
 
 - Newer music discs have associated cassettes
-- Eject item function
 - Array modus
 - Sound effect for boondollar item and porkhollow command.
 - Added music tracks made by heartsremedy to all non-Land dimensions in the Medium
@@ -17,7 +16,8 @@ The format is based on [Keep a Changelog](https://keepachangelog.com/en/1.1.0/).
 ### Changed
 
 - Cassettes are now data-driven
-- HashmapModus now could handle with localized names, tags, anvil names
+- Inventory item discharge is now divided into separate eject and launch mechanics
+- HashmapModus now can handle with localized names, tags, anvil names
 - Boondollars can be split/stacked together like normal items
 - Updated all grist and vitality gel sprites
 - Tweaked some Rung names

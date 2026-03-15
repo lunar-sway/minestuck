@@ -97,7 +97,9 @@ public final class CaptchaDeckHandler
 		if(item.getCount() > 0)
 			launchAnyItem(player, item);
 	}
-	
+	/**
+	 * Spontaneously launches items from the inventory in different directions
+	 * */
 	public static void launchAnyItem(Player player, ItemStack item)
 	{
 		ItemEntity entity = new ItemEntity(player.level(), player.getX(), player.getY()+1, player.getZ(), item);
@@ -106,10 +108,13 @@ public final class CaptchaDeckHandler
 		player.level().addFreshEntity(entity);
 	}
 	
+	/**
+	 * Ejects all items from the inventory into a pile in front of the player
+	 * */
 	public static void ejectAnyItem(Player player, ItemStack item)
 	{
 		ItemEntity entity = new ItemEntity(player.level(), player.getX(), player.getY()+1, player.getZ(), item);
-		entity.setDeltaMovement( // regular heap drop, inspired by davespriting scene =]
+		entity.setDeltaMovement(
 				player.getViewVector(1.0F).x * 0.25 + (player.level().random.nextDouble() - 0.5) * 0.05,
 				player.getViewVector(1.0F).y * 0.25 + 0.1,
 				player.getViewVector(1.0F).z * 0.25 + (player.level().random.nextDouble() - 0.5) * 0.05
