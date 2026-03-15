@@ -30,13 +30,6 @@ public final class StructureBlockRegistryProcessor extends StructureProcessor
 	}
 	
 	@Override
-	public StructureTemplate.StructureEntityInfo processEntity(LevelReader world, BlockPos seedPos, StructureTemplate.StructureEntityInfo rawEntityInfo, StructureTemplate.StructureEntityInfo entityInfo, StructurePlaceSettings placementSettings, StructureTemplate template)
-	{
-		
-		return super.processEntity(world, seedPos, rawEntityInfo, entityInfo, placementSettings, template);
-	}
-	
-	@Override
 	public List<StructureTemplate.StructureBlockInfo> finalizeProcessing(ServerLevelAccessor levelAccessor, BlockPos pOffset, BlockPos pPos, List<StructureTemplate.StructureBlockInfo> originals, List<StructureTemplate.StructureBlockInfo> currents, StructurePlaceSettings placementSettings)
 	{
 		ServerLevel serverLevel = levelAccessor.getLevel();
