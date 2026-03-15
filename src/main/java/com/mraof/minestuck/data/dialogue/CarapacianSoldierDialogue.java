@@ -12,8 +12,10 @@ import com.mraof.minestuck.entity.dialogue.RandomlySelectableDialogue;
 import com.mraof.minestuck.entity.dialogue.Trigger;
 import com.mraof.minestuck.entity.dialogue.condition.Condition;
 import com.mraof.minestuck.item.MSItems;
+import com.mraof.minestuck.world.gen.structure.MSStructures;
 import net.minecraft.data.DataProvider;
 import net.minecraft.data.PackOutput;
+import net.minecraft.resources.ResourceLocation;
 import net.minecraft.tags.ItemTags;
 import net.minecraft.world.entity.EquipmentSlot;
 import net.neoforged.neoforge.common.data.LanguageProvider;
@@ -21,6 +23,7 @@ import net.neoforged.neoforge.common.data.LanguageProvider;
 import static com.mraof.minestuck.data.dialogue.SelectableDialogueProvider.defaultWeight;
 import static com.mraof.minestuck.data.dialogue.SelectableDialogueProvider.weighted;
 import static com.mraof.minestuck.entity.dialogue.condition.Conditions.*;
+import static com.mraof.minestuck.world.lands.LandTypes.*;
 
 public final class CarapacianSoldierDialogue
 {
@@ -121,6 +124,53 @@ public final class CarapacianSoldierDialogue
 							.animation(DialogueAnimationData.ANXIOUS_EMOTION)
 							.addResponse(new ResponseBuilder(l.subMsg("go_where", "Go back to where?"))
 									.nextDialogue(veil))
+							.addClosingResponse(l.subMsg("bye", "Goodbye."))
+			);
+		}));
+		
+		provider.addRandomlySelectable("bunker_thieves", weighted(2, all(none(new Condition.AtOrAboveY(64)), any(new Condition.NPCInStructure(MSStructures.DERSE_BUNKER.location()), new Condition.NPCInStructure(MSStructures.PROSPIT_BUNKER.location())))),
+				descriptionNode(l.defaultKeyMsg("They are complaining about a consort that came through and stolen food.")));
+		provider.addRandomlySelectable("bunker_sweep", defaultWeight(all(none(new Condition.AtOrAboveY(64)), any(new Condition.NPCInStructure(MSStructures.DERSE_BUNKER.location()), new Condition.NPCInStructure(MSStructures.PROSPIT_BUNKER.location())))),
+				descriptionNode(l.defaultKeyMsg("They are focused on sweeping the floors.")));
+		provider.addRandomlySelectable("bunker_restock", defaultWeight(all(none(new Condition.AtOrAboveY(64)), any(new Condition.NPCInStructure(MSStructures.DERSE_BUNKER.location()), new Condition.NPCInStructure(MSStructures.PROSPIT_BUNKER.location())))),
+				descriptionNode(l.defaultKeyMsg("They are thinking about restocking the chests again.")));
+		provider.addRandomlySelectable("bunker_camouflage", defaultWeight(all(isInTitleLand(TOWERS), any(new Condition.NPCInStructure(MSStructures.DERSE_BUNKER.location()), new Condition.NPCInStructure(MSStructures.PROSPIT_BUNKER.location())))),
+				descriptionNode(l.defaultKeyMsg("They comment how all the other towers here cause this one to blend in, kind of like camouflage.")));
+		
+		provider.addRandomlySelectable("bunker_greet", weighted(35, any(new Condition.NPCInStructure(MSStructures.DERSE_BUNKER.location()), new Condition.NPCInStructure(MSStructures.PROSPIT_BUNKER.location()))), new FolderedDialogue(builder ->
+		{
+			var explainPlaceKey = "explain_place";
+			var goodToKnow = l.subMsg("good_to_know", "Oh, good to know.");
+			
+			var suspicion = builder.add("suspicion", descriptionNode(l.defaultKeyMsg("They eye you up before deciding you are probably not a threat."))
+					.animation(DialogueAnimationData.ANGRY_EMOTION));
+			
+			var dontKnow = builder.add("dont_know", descriptionNode(l.defaultKeyMsg("They don't know how to answer that question succinctly.")));
+			
+			var access = builder.add("access", new ChainBuilder()
+					.node(descriptionNode(l.defaultKeyMsg("They exclaim it's simple! If there's anything underground, they hide a hatch under the rug."))
+							.animation(DialogueAnimationData.HAPPY_EMOTION))
+					.node(descriptionNode(l.defaultKeyMsg(".")))
+					.node(descriptionNode(l.defaultKeyMsg("They shouldn't have told you that."))
+							.animation(DialogueAnimationData.ANXIOUS_EMOTION)));
+			
+			var explainPlace = builder.add(explainPlaceKey, new ChainBuilder()
+					.node(descriptionNode(l.defaultKeyMsg("They say that this is a bunker, built by their kingdom as a way to protect their interests on this Land.")))
+					.node(descriptionNode(l.defaultKeyMsg("While Lands are considered neutral territory, that doesn't mean it always will be.")))
+					.node(descriptionNode(l.defaultKeyMsg("So a small portion of the military has set up post and created a sprawling section below ground in some of them."))
+							.addResponse(new ResponseBuilder(l.subMsg("access", "How do you access the section below ground?"))
+									.condition(new Condition.AtOrAboveY(64)) //otherwise assumed to be inside already
+									.nextDialogue(access))
+							.addResponse(new ResponseBuilder(l.subMsg("why_fight", "Why are you fighting?"))
+									.nextDialogue(dontKnow))
+							.addClosingResponse(goodToKnow)));
+			
+			builder.addStart(
+					descriptionNode(l.defaultKeyMsg("They ask you what your business is here."))
+							.addResponse(new ResponseBuilder(l.subMsg("what", "What is this place?"))
+									.nextDialogue(explainPlace))
+							.addResponse(new ResponseBuilder(l.subMsg("splorin", "Just exploring"))
+									.nextDialogue(suspicion))
 							.addClosingResponse(l.subMsg("bye", "Goodbye."))
 			);
 		}));

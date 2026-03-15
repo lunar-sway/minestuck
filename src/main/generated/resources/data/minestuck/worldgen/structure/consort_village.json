@@ -4,7 +4,7 @@
   "spawn_overrides": {
     "minestuck:underling": {
       "bounding_box": "full",
-      "spawns":       [ ]
+      "spawns": [ ]
     }
   },
   "step": "surface_structures"

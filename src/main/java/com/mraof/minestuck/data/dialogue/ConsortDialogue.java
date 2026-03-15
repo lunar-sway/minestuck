@@ -745,6 +745,21 @@ public final class ConsortDialogue
 					.next(afterInvitation));
 		}));
 		
+		provider.addRandomlySelectable("secret_bunker", weighted(5, isInLand()), new FolderedDialogue(builder ->
+		{
+			var explainCarapacian = builder.add("explain_carapacian", new NodeBuilder(l.defaultKeyMsg("%s, carapacians are those chess people. What, have you never seen one?", Argument.ENTITY_SOUND)));
+			
+			var access = builder.add("access", new NodeBuilder(l.defaultKeyMsg("Yes. Not all of them have one. I learned about it by exploring the abandoned ones filled with imps. They dont seem to care too much about intruders unless they are from the opposing kingdom.")));
+			
+			builder.addStart(new NodeBuilder(l.subMsg("start", "Have you ever seen those bunkers with Carapacians in them? I love sneaking in and nabbing food from their underground section. Not to mention using their toilets!"))
+					.animation(HAPPY_EMOTION)
+					.addResponse(new ResponseBuilder(l.subMsg("who", "Who are the Carapacians?"))
+							.nextDialogue(explainCarapacian))
+					.addResponse(new ResponseBuilder(l.subMsg("how", "Theres an underground section?"))
+							.nextDialogue(access))
+			);
+		}));
+		
 		provider.addRandomlySelectable("underling_commission", weighted(12, isInHomeLand()), new FolderedDialogue(builder ->
 		{
 			var explainCarapacian = builder.add("explain_carapacian", new ChainBuilder()
