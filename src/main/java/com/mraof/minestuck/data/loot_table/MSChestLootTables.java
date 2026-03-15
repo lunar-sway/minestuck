@@ -852,7 +852,12 @@ public final class MSChestLootTables implements LootTableSubProvider
 						.add(LootItem.lootTableItem(MSItems.BOONDOLLARS).setWeight(2).setQuality(0).apply(SetBoondollarCount.builder(UniformGenerator.between(250, 1000))))
 				));
 		
-		
+		lootProcessor.accept(MSLootTables.MEDIUM_SUPPLY_CHEST, LootTable.lootTable()
+				.withPool(LootPool.lootPool().name("supplies").setRolls(UniformGenerator.between(2, 4))
+						.add(NestedLootTable.lootTableReference(SUPPLY_ITEM_TABLE))
+				).withPool(LootPool.lootPool().name("misc").setRolls(UniformGenerator.between(1, 2))
+						.add(NestedLootTable.lootTableReference(MISC_ITEM_TABLE))
+				));
 	}
 	
 	public static ResourceKey<LootTable> locationForTerrain(Supplier<TerrainLandType> landType, ResourceKey<LootTable> baseLoot)

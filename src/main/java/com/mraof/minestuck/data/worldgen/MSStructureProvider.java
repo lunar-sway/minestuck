@@ -12,6 +12,7 @@ import net.minecraft.core.registries.Registries;
 import net.minecraft.data.worldgen.BootstrapContext;
 import net.minecraft.resources.ResourceKey;
 import net.minecraft.resources.ResourceLocation;
+import net.minecraft.tags.TagKey;
 import net.minecraft.world.level.biome.Biome;
 import net.minecraft.world.level.levelgen.GenerationStep;
 import net.minecraft.world.level.levelgen.Heightmap;
@@ -24,8 +25,11 @@ import net.minecraft.world.level.levelgen.structure.placement.RandomSpreadStruct
 import net.minecraft.world.level.levelgen.structure.placement.RandomSpreadType;
 import net.minecraft.world.level.levelgen.structure.pools.StructureTemplatePool;
 import net.minecraft.world.level.levelgen.structure.structures.JigsawStructure;
+import net.minecraft.world.level.levelgen.structure.templatesystem.LiquidSettings;
 
+import java.util.List;
 import java.util.Map;
+import java.util.Optional;
 
 import static com.mraof.minestuck.world.gen.structure.MSStructures.*;
 
@@ -45,6 +49,9 @@ public final class MSStructureProvider
 				Map.of(), GenerationStep.Decoration.SURFACE_STRUCTURES, TerrainAdjustment.NONE)));
 		context.register(SMALL_RUIN, new SmallRuinStructure(new Structure.StructureSettings(biomes.getOrThrow(MSTags.Biomes.HAS_SMALL_RUIN),
 				Map.of(), GenerationStep.Decoration.SURFACE_STRUCTURES, TerrainAdjustment.NONE)));
+		context.register(PROSPIT_BUNKER, jigsaw(biomes, pools, MSTags.Biomes.HAS_PROSPIT_BUNKER, PROSPIT_BUNKER_START_POOL));
+		context.register(DERSE_BUNKER, jigsaw(biomes, pools, MSTags.Biomes.HAS_DERSE_BUNKER, DERSE_BUNKER_START_POOL));
+		context.register(IMP_BUNKER, jigsaw(biomes, pools, MSTags.Biomes.HAS_IMP_BUNKER, IMP_BUNKER_START_POOL));
 		context.register(ImpDungeon.KEY, new ImpDungeonStructure(new Structure.StructureSettings(biomes.getOrThrow(MSTags.Biomes.HAS_IMP_DUNGEON),
 				Map.of(), GenerationStep.Decoration.SURFACE_STRUCTURES, TerrainAdjustment.NONE)));
 		context.register(ConsortVillage.KEY, new ConsortVillageStructure(new Structure.StructureSettings(biomes.getOrThrow(MSTags.Biomes.HAS_CONSORT_VILLAGE),
@@ -83,6 +90,25 @@ public final class MSStructureProvider
 		
 		context.register(key("skaian_cathedral"), new StructureSet(structures.getOrThrow(SKAIAN_CATHEDRAL),
 				new RandomSpreadStructurePlacement(40, 10, RandomSpreadType.LINEAR, 1481098009)));
+	}
+	
+	private static JigsawStructure jigsaw(HolderGetter<Biome> biomes, HolderGetter<StructureTemplatePool> templatePools, TagKey<Biome> biome, ResourceKey<StructureTemplatePool> startPool)
+	{
+		return new JigsawStructure(
+				new Structure.StructureSettings.Builder(biomes.getOrThrow(biome))
+						.generationStep(GenerationStep.Decoration.SURFACE_STRUCTURES)
+						.build(),
+				templatePools.getOrThrow(startPool),
+				Optional.empty(),
+				20,
+				ConstantHeight.of(VerticalAnchor.absolute(0)),
+				false,
+				Optional.of(Heightmap.Types.WORLD_SURFACE_WG),
+				128,
+				List.of(),
+				JigsawStructure.DEFAULT_DIMENSION_PADDING,
+				LiquidSettings.IGNORE_WATERLOGGING
+		);
 	}
 	
 	private static ResourceKey<StructureSet> key(String path)
