@@ -8,8 +8,10 @@ The format is based on [Keep a Changelog](https://keepachangelog.com/en/1.1.0/).
 
 ### Added
 
+- DeployList can be expanded with datapacks
 - Newer music discs have associated cassettes
 - Sound effect for boondollar item and porkhollow command.
+- Captchaloguing multiple cards that contain items will store as many of both as possible
 - Added music tracks made by heartsremedy to all non-Land dimensions in the Medium
 - Added 3 bunker structures to Lands
 
@@ -20,6 +22,7 @@ The format is based on [Keep a Changelog](https://keepachangelog.com/en/1.1.0/).
 - Updated all grist and vitality gel sprites
 - Tweaked some Rung names
 - New rung-up jingle.
+- cruxtruderIntake config for cruxtruders now false by default, and now start with a value of one if set to true
 - Reduced imp dungeon generation frequency
 - Imp dungeons will not spawn near villages
 - Underlings no longer spawn naturally in consort villages and consorts no longer spawn in dungeons
@@ -32,6 +35,7 @@ The format is based on [Keep a Changelog](https://keepachangelog.com/en/1.1.0/).
 - Fix JEI not loading grist (and by extension, alchemy recipes) on newer versions
 - Fix Glowing Mushroom Vines requiring itself for alchemizing
 - Fix missing Bucket of Glimmering Water and Magmatic Igneous Stone grist cost
+- Fix crash when captchaloguing multiple cards that contain items
 
 ### Contributors for this release
 
