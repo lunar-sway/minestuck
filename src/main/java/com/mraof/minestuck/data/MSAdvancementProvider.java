@@ -163,7 +163,7 @@ public class MSAdvancementProvider implements AdvancementProvider.AdvancementGen
 	
 	private static Advancement.Builder changeModusCriteria(Advancement.Builder builder)
 	{
-		for(Supplier<? extends ModusType<?>> type : Arrays.asList(ModusTypes.STACK, ModusTypes.QUEUE, ModusTypes.QUEUE_STACK, ModusTypes.TREE, ModusTypes.HASH_MAP, ModusTypes.SET))
+		for(Supplier<? extends ModusType<?>> type : Arrays.asList(ModusTypes.STACK, ModusTypes.QUEUE, ModusTypes.QUEUE_STACK, ModusTypes.TREE, ModusTypes.HASH_MAP, ModusTypes.ARRAY, ModusTypes.SET))
 		{
 			ResourceLocation id = Objects.requireNonNull(ModusTypes.REGISTRY.getKey(type.get()));
 			builder = builder.addCriterion(id.getPath(), InventoryChangeTrigger.TriggerInstance.hasItems(type.get().getItem()));

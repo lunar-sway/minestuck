@@ -722,6 +722,7 @@ public final class MinestuckCombinationsProvider
 		CombinationRecipeBuilder.of(MSItems.CAPTCHAROID_CAMERA).input(MSItems.CAPTCHA_CARD).and().namedInput(MSBlocks.COMPUTER).build(consumer);
 		CombinationRecipeBuilder.of(MSItems.CAPTCHAROID_CAMERA).input(MSItems.CAPTCHA_CARD).or().namedInput(Items.ENDER_EYE).build(consumer);
 		
+		CombinationRecipeBuilder.of(MSItems.ARRAY_MODUS_CARD).input(MSItems.QUEUESTACK_MODUS_CARD).and().input(MSItems.BARBASOL).build(consumer);
 		CombinationRecipeBuilder.of(MSItems.QUEUESTACK_MODUS_CARD).input(MSItems.STACK_MODUS_CARD).and().input(MSItems.QUEUE_MODUS_CARD).build(consumer);
 		CombinationRecipeBuilder.of(MSItems.TREE_MODUS_CARD).input(MSTags.Items.MODUS_CARD).or().namedInput(Items.STICK).build(consumer);
 		CombinationRecipeBuilder.of(MSItems.TREE_MODUS_CARD).input(MSTags.Items.MODUS_CARD).or().namedInput(ItemTags.SAPLINGS).build(consumer);

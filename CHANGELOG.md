@@ -10,6 +10,8 @@ The format is based on [Keep a Changelog](https://keepachangelog.com/en/1.1.0/).
 
 - DeployList can be expanded with datapacks
 - Newer music discs have associated cassettes
+- Eject item function
+- Array modus
 - Sound effect for boondollar item and porkhollow command.
 - Captchaloguing multiple cards that contain items will store as many of both as possible
 - Added music tracks made by heartsremedy to all non-Land dimensions in the Medium
@@ -17,6 +19,7 @@ The format is based on [Keep a Changelog](https://keepachangelog.com/en/1.1.0/).
 ### Changed
 
 - Cassettes are now data-driven
+- HashmapModus now could handle with localized names, tags, anvil names
 - Boondollars can be split/stacked together like normal items
 - Updated all grist and vitality gel sprites
 - Tweaked some Rung names
@@ -35,7 +38,7 @@ The format is based on [Keep a Changelog](https://keepachangelog.com/en/1.1.0/).
 
 ### Contributors for this release
 
-- medsal15, heartsremedy, caldw3ll, v_sabitron, Dweblenod
+- medsal15, heartsremedy, caldw3ll, v_sabitron, Dweblenod, Fl1s
 
 ## [1.21.1-1.13.1.1] - 2025-09-14
 

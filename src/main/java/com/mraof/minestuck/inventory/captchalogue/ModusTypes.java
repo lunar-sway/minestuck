@@ -16,6 +16,7 @@ public final class ModusTypes
 	
 	public static final Registry<ModusType<?>> REGISTRY = REGISTER.makeRegistry(builder -> builder.sync(true));
 	
+	public static final Supplier<ModusType<ArrayModus>> ARRAY = REGISTER.register("array", () -> new ModusType<>(ArrayModus::new, MSItems.ARRAY_MODUS_CARD));
 	public static final Supplier<ModusType<StackModus>> STACK = REGISTER.register("stack", () -> new ModusType<>(StackModus::new, MSItems.STACK_MODUS_CARD));
 	public static final Supplier<ModusType<QueueModus>> QUEUE = REGISTER.register("queue", () -> new ModusType<>(QueueModus::new, MSItems.QUEUE_MODUS_CARD));
 	public static final Supplier<ModusType<QueueStackModus>> QUEUE_STACK = REGISTER.register("queue_stack", () -> new ModusType<>(QueueStackModus::new, MSItems.QUEUESTACK_MODUS_CARD));
