@@ -35,10 +35,8 @@ public class ArrayModus extends Modus
 	public void initModus(ItemStack modusItem, ServerPlayer player, NonNullList<ItemStack> prev, int size)
 	{
 		list = NonNullList.create();
-		if(prev != null)
-			list.addAll(prev);
-		while(list.size() < size)
-			list.add(ItemStack.EMPTY);
+		if(prev != null) list.addAll(prev);
+		while(list.size() < size) list.add(ItemStack.EMPTY);
 		
 		if(side == LogicalSide.CLIENT)
 		{
@@ -55,8 +53,8 @@ public class ArrayModus extends Modus
 		list = NonNullList.create();
 		for(int i = 0; i < size; i++)
 		{
-			if(nbt.contains("item"+i, Tag.TAG_COMPOUND))
-				list.add(ItemStack.parse(provider, nbt.getCompound("item"+i)).orElseThrow());
+			if(nbt.contains("item" + i, Tag.TAG_COMPOUND))
+				list.add(ItemStack.parse(provider, nbt.getCompound("item" + i)).orElseThrow());
 			else list.add(ItemStack.EMPTY);
 		}
 		if(side == LogicalSide.CLIENT)
@@ -75,8 +73,7 @@ public class ArrayModus extends Modus
 		for(int i = 0; i < list.size(); i++)
 		{
 			ItemStack stack = iterator.next();
-			if(!stack.isEmpty())
-				nbt.put("item"+i, stack.save(provider));
+			if(!stack.isEmpty()) nbt.put("item" + i, stack.save(provider));
 		}
 		return nbt;
 	}
@@ -84,8 +81,7 @@ public class ArrayModus extends Modus
 	@Override
 	public boolean putItemStack(ServerPlayer player, ItemStack item)
 	{
-		if(list.size() == 0 || item.isEmpty())
-			return false;
+		if(list.size() == 0 || item.isEmpty()) return false;
 		
 		for(int i = 0; i < list.size(); i++)
 		{
@@ -94,12 +90,9 @@ public class ArrayModus extends Modus
 				list.set(i, item);
 				markDirty();
 				
-				if(ejectByChat && MinestuckConfig.SERVER.arrayChatModusSetting.get() != MinestuckConfig.AvailableOptions.OFF
-						|| MinestuckConfig.SERVER.arrayChatModusSetting.get() == MinestuckConfig.AvailableOptions.ON)
+				if(ejectByChat && MinestuckConfig.SERVER.arrayChatModusSetting.get() != MinestuckConfig.AvailableOptions.OFF || MinestuckConfig.SERVER.arrayChatModusSetting.get() == MinestuckConfig.AvailableOptions.ON)
 				{
-					player.sendSystemMessage(
-							Component.translatable(MESSAGE, item.getDisplayName(), i)
-					);
+					player.sendSystemMessage(Component.translatable(MESSAGE, item.getDisplayName(), i));
 				}
 				return true;
 			}
@@ -109,10 +102,7 @@ public class ArrayModus extends Modus
 		list.set(0, item);
 		markDirty();
 		
-		if(ejectByChat)
-			player.sendSystemMessage(
-					Component.translatable(MESSAGE, item.getDisplayName(), 0)
-			);
+		if(ejectByChat) player.sendSystemMessage(Component.translatable(MESSAGE, item.getDisplayName(), 0));
 		
 		return true;
 	}
@@ -120,10 +110,8 @@ public class ArrayModus extends Modus
 	@Override
 	public ItemStack getItem(ServerPlayer player, int id, boolean asCard)
 	{
-		if(id == CaptchaDeckHandler.EMPTY_CARD)
-			return ItemStack.EMPTY;
-		if(list.isEmpty())
-			return ItemStack.EMPTY;
+		if(id == CaptchaDeckHandler.EMPTY_CARD) return ItemStack.EMPTY;
+		if(list.isEmpty()) return ItemStack.EMPTY;
 		if(id == CaptchaDeckHandler.EMPTY_SYLLADEX)
 		{
 			for(int i = 0; i < list.size(); i++)
@@ -143,12 +131,9 @@ public class ArrayModus extends Modus
 		{
 			list.remove(id);
 			markDirty();
-			if(item.isEmpty())
-				return new ItemStack(MSItems.CAPTCHA_CARD.get());
-			else
-				return CaptchaCardItem.createCardWithItem(item, player.server);
-		}
-		else
+			if(item.isEmpty()) return new ItemStack(MSItems.CAPTCHA_CARD.get());
+			else return CaptchaCardItem.createCardWithItem(item, player.server);
+		} else
 		{
 			list.set(id, ItemStack.EMPTY);
 			markDirty();
@@ -183,8 +168,7 @@ public class ArrayModus extends Modus
 			return items;
 		}
 		
-		if(changed)
-			fillList(items);
+		if(changed) fillList(items);
 		
 		return items;
 	}
@@ -213,8 +197,7 @@ public class ArrayModus extends Modus
 	
 	public void onChatMessage(ServerPlayer player, String str)
 	{
-		if(!ejectByChat && MinestuckConfig.SERVER.arrayChatModusSetting.get() != MinestuckConfig.AvailableOptions.ON
-				|| MinestuckConfig.SERVER.arrayChatModusSetting.get() == MinestuckConfig.AvailableOptions.OFF)
+		if(!ejectByChat && MinestuckConfig.SERVER.arrayChatModusSetting.get() != MinestuckConfig.AvailableOptions.ON || MinestuckConfig.SERVER.arrayChatModusSetting.get() == MinestuckConfig.AvailableOptions.OFF)
 			return;
 		
 		boolean isPrevLetter = false;
@@ -222,25 +205,20 @@ public class ArrayModus extends Modus
 		for(int i = 0; i < str.length(); i++)
 		{
 			char c = str.charAt(i);
-			if(Character.isLetter(c))
-				isPrevLetter = true;
+			if(Character.isLetter(c)) isPrevLetter = true;
 			else if(Character.isDigit(c) || (number.length() == 0 && c == '-'))
 			{
-				if(!isPrevLetter)
-					number.append(c);
+				if(!isPrevLetter) number.append(c);
 				continue;
-			}
-			else
+			} else
 			{
 				isPrevLetter = false;
-				if(number.length() > 0)
-					handleNumber(player, number.toString());
+				if(number.length() > 0) handleNumber(player, number.toString());
 			}
 			number = new StringBuilder();
 		}
 		
-		if(number.length() > 0)
-			handleNumber(player, number.toString());
+		if(number.length() > 0) handleNumber(player, number.toString());
 		
 		checkAndResend(player);
 	}
@@ -252,23 +230,21 @@ public class ArrayModus extends Modus
 		try
 		{
 			i = Integer.parseInt(str);
-		} catch(NumberFormatException e) {return;}
+		} catch(NumberFormatException e)
+		{
+			return;
+		}
 		
 		int index = i % getSize();
-		if(index < 0)
-			index += getSize();
+		if(index < 0) index += getSize();
 		
 		ItemStack stack = getItem(player, index, false);
-		if(stack == null)
-			return;
+		if(stack.isEmpty()) return;
 		
 		if(player.getInventory().getSelected().isEmpty())
 			player.getInventory().setItem(player.getInventory().selected, stack);
-		else
-			CaptchaDeckHandler.launchAnyItem(player, stack);
+		else CaptchaDeckHandler.launchAnyItem(player, stack);
 		
-		player.sendSystemMessage(
-				Component.translatable(MESSAGE_EJECTED, stack.getDisplayName(), index, getSize())
-		);
+		player.sendSystemMessage(Component.translatable(MESSAGE_EJECTED, stack.getDisplayName(), index, getSize()));
 	}
 }

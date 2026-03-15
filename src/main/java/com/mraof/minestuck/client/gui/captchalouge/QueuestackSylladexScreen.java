@@ -8,7 +8,7 @@ public class QueuestackSylladexScreen extends StackSylladexScreen
 	public QueuestackSylladexScreen(Modus modus)
 	{
 		super(modus);
-		textureIndex = 3;
+		textureIndex = 2;
 	}
 	
 	@Override

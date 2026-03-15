@@ -24,7 +24,7 @@ public class HashMapSylladexScreen extends SylladexScreen
 	{
 		super();
 		this.modus = (HashMapModus) modus;
-		this.textureIndex = 5;
+		this.textureIndex = 4;
 	}
 	
 	@Override

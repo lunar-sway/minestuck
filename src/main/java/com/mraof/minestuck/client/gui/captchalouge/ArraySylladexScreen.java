@@ -25,7 +25,7 @@ public class ArraySylladexScreen extends SylladexScreen
 	{
 		super();
 		this.modus = (ArrayModus) modus;
-		this.textureIndex = 0;
+		this.textureIndex = 6;
 	}
 	
 	@Override
