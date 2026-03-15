@@ -143,8 +143,8 @@ public abstract class TerrainLandType implements ILandType
 				1.0F,
 				34527185,
 				Optional.of(new StructurePlacement.ExclusionZone(Holder.direct(villageSet), 8)),
-				18,
-				6,
+				16,
+				5,
 				RandomSpreadType.LINEAR
 		);
 		consumer.accept(new StructureSet(List.of(

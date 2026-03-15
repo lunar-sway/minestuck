@@ -107,7 +107,7 @@ public final class MSStructureProvider
 		return new JigsawStructure(
 				new Structure.StructureSettings.Builder(biomes.getOrThrow(biome))
 						.generationStep(GenerationStep.Decoration.SURFACE_STRUCTURES)
-						.terrainAdapation(TerrainAdjustment.BEARD_THIN)
+						.terrainAdapation(TerrainAdjustment.NONE)
 						.spawnOverrides(spawnOverrides)
 						.build(),
 				templatePools.getOrThrow(startPool),
