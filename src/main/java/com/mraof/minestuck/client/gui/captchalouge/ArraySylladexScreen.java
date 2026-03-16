@@ -2,13 +2,13 @@ package com.mraof.minestuck.client.gui.captchalouge;
 
 import com.mraof.minestuck.MinestuckConfig;
 import com.mraof.minestuck.inventory.captchalogue.ArrayModus;
-import com.mraof.minestuck.inventory.captchalogue.HashMapModus;
 import com.mraof.minestuck.inventory.captchalogue.Modus;
 import com.mraof.minestuck.network.CaptchaDeckPackets;
 import net.minecraft.client.gui.GuiGraphics;
 import net.minecraft.client.gui.components.Button;
 import net.minecraft.core.NonNullList;
 import net.minecraft.network.chat.Component;
+import net.minecraft.world.entity.player.Inventory;
 import net.minecraft.world.item.ItemStack;
 import net.neoforged.neoforge.client.gui.widget.ExtendedButton;
 import net.neoforged.neoforge.network.PacketDistributor;
@@ -21,9 +21,9 @@ public class ArraySylladexScreen extends SylladexScreen
 	private final ArrayModus modus;
 	private Button guiButton;
 	
-	public ArraySylladexScreen(Modus modus)
+	public ArraySylladexScreen(int windowId, Inventory inventory, Modus modus)
 	{
-		super();
+		super(windowId, inventory, modus);
 		this.modus = (ArrayModus) modus;
 		this.textureIndex = 6;
 	}
@@ -32,15 +32,13 @@ public class ArraySylladexScreen extends SylladexScreen
 	public void init()
 	{
 		super.init();
-		guiButton = new ExtendedButton((width - GUI_WIDTH) / 2 + 15, (height - GUI_HEIGHT) / 2 + 175, 120, 20, Component.empty(), button -> changeSetting());
+		guiButton = new ExtendedButton(xOffset + BUTTON_X_OFFSET, yOffset + BUTTON_Y_OFFSET + BUTTON_HEIGHT * 2 + 6, BUTTON_WIDTH, BUTTON_HEIGHT, Component.empty(), button -> changeSetting());
 		addRenderableWidget(guiButton);
 	}
 	
 	@Override
 	public void render(GuiGraphics guiGraphics, int mouseX, int mouseY, float f)
 	{
-		guiButton.setX((width - GUI_WIDTH) / 2 + 15);
-		guiButton.setY((height - GUI_HEIGHT) / 2 + 175);
 		boolean active = MinestuckConfig.SERVER.arrayChatModusSetting.get() == MinestuckConfig.AvailableOptions.BOTH ? modus.ejectByChat : MinestuckConfig.SERVER.arrayChatModusSetting.get() == MinestuckConfig.AvailableOptions.ON;
 		guiButton.setMessage(Component.translatable(active ? EJECT_BY_CHAT_ON : EJECT_BY_CHAT_OFF));
 		guiButton.active = MinestuckConfig.SERVER.arrayChatModusSetting.get() == MinestuckConfig.AvailableOptions.BOTH;
