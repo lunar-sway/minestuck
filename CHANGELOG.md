@@ -15,6 +15,7 @@ The format is based on [Keep a Changelog](https://keepachangelog.com/en/1.1.0/).
 - Added music tracks made by heartsremedy to all non-Land dimensions in the Medium
 - Added 3 bunker structures to Lands
 - Increased block diversity in structures
+- Array modus
 
 ### Changed
 
@@ -29,6 +30,8 @@ The format is based on [Keep a Changelog](https://keepachangelog.com/en/1.1.0/).
 - Reduced imp dungeon generation frequency to accommodate new bunkers
 - Imp dungeons will not spawn near villages
 - Underlings no longer spawn naturally in consort villages and consorts no longer spawn in dungeons
+- Inventory item discharge is now divided into separate eject and launch mechanics
+- HashmapModus now can handle with localized names, tags, anvil names
 
 ### Fixed
 
@@ -42,7 +45,7 @@ The format is based on [Keep a Changelog](https://keepachangelog.com/en/1.1.0/).
 
 ### Contributors for this release
 
-- medsal15, heartsremedy, caldw3ll, v_sabitron, Dweblenod, TangleKat, Pancake
+- medsal15, heartsremedy, caldw3ll, v_sabitron, Dweblenod, TangleKat, Pancake, Fl1s
 
 ## [1.21.1-1.13.1.1] - 2025-09-14
 

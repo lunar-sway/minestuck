@@ -1,0 +1,12 @@
+{
+  "type": "minestuck:grist_cost",
+  "grist_cost": {
+    "minestuck:build": 1024,
+    "minestuck:cobalt":  512,
+    "minestuck:diamond": 256,
+    "minestuck:shale":   128
+  },
+  "ingredient": {
+    "item": "minestuck:array_modus_card"
+  }
+}
