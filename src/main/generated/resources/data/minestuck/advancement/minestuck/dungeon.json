@@ -9,7 +9,12 @@
             "entity": "this",
             "predicate": {
               "location": {
-                "structures": "minestuck:imp_dungeon"
+                "structures": [
+                  "minestuck:imp_dungeon",
+                  "minestuck:prospit_bunker",
+                  "minestuck:derse_bunker",
+                  "minestuck:imp_bunker"
+                ]
               }
             }
           }

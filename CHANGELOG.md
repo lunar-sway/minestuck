@@ -13,6 +13,8 @@ The format is based on [Keep a Changelog](https://keepachangelog.com/en/1.1.0/).
 - Sound effect for boondollar item and porkhollow command.
 - Captchaloguing multiple cards that contain items will store as many of both as possible
 - Added music tracks made by heartsremedy to all non-Land dimensions in the Medium
+- Added 3 bunker structures to Lands
+- Increased block diversity in structures
 
 ### Changed
 
@@ -24,6 +26,9 @@ The format is based on [Keep a Changelog](https://keepachangelog.com/en/1.1.0/).
 - The sylladex GUIs have been unified
   - Addons that add moduses will need to be updated (see [related PR](https://github.com/lunar-sway/minestuck/pull/721))
 - cruxtruderIntake config for cruxtruders now false by default, and now start with a value of one if set to true
+- Reduced imp dungeon generation frequency to accommodate new bunkers
+- Imp dungeons will not spawn near villages
+- Underlings no longer spawn naturally in consort villages and consorts no longer spawn in dungeons
 
 ### Fixed
 
@@ -37,7 +42,7 @@ The format is based on [Keep a Changelog](https://keepachangelog.com/en/1.1.0/).
 
 ### Contributors for this release
 
-- medsal15, heartsremedy, caldw3ll, v_sabitron, Dweblenod
+- medsal15, heartsremedy, caldw3ll, v_sabitron, Dweblenod, TangleKat, Pancake
 
 ## [1.21.1-1.13.1.1] - 2025-09-14
 
