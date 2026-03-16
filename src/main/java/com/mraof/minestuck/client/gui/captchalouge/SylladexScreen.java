@@ -104,24 +104,10 @@ public abstract class SylladexScreen extends PlayerStatsContainerScreen<CaptchaD
 		
 		// Tooltips are rendered afterwards, as the text is subject to move from the posestack
 		shouldRenderTooltip = false;
+		List<GuiCard> visibleCards = getVisibleCards();
 		super.render(guiGraphics, xcor, ycor, f);
 		
-		guiGraphics.enableScissor(leftPos + X_OFFSET, topPos + Y_OFFSET, leftPos + X_OFFSET + Mth.ceil(mapWidth / scroll), topPos + Y_OFFSET + Mth.ceil(mapHeight / scroll));
-		Matrix4fStack modelPoseStack = RenderSystem.getModelViewStack();
-		modelPoseStack.pushMatrix();
-		modelPoseStack.translate(xOffset + X_OFFSET, yOffset + Y_OFFSET, 0);
-		modelPoseStack.scale(1 / this.scroll, 1 / this.scroll, 1);
-		RenderSystem.applyModelViewMatrix();
-		
-		drawGuiMap(guiGraphics, xcor, ycor);
-		
-		List<GuiCard> visibleCards = getVisibleCards();
-		renderVisibleCards(guiGraphics, visibleCards);
-		
-		modelPoseStack.popMatrix();
-		RenderSystem.applyModelViewMatrix();
-		RenderSystem.disableDepthTest();
-		guiGraphics.disableScissor();
+		renderVisibleCards(guiGraphics, visibleCards, xcor, ycor);
 		
 		shouldRenderTooltip = true;
 		renderTooltip(guiGraphics, xcor, ycor);
@@ -143,13 +129,27 @@ public abstract class SylladexScreen extends PlayerStatsContainerScreen<CaptchaD
 		return visibleCards;
 	}
 	
-	protected void renderVisibleCards(GuiGraphics guiGraphics, List<GuiCard> visibleCards)
+	protected void renderVisibleCards(GuiGraphics guiGraphics, List<GuiCard> visibleCards, int xcor, int ycor)
 	{
+		guiGraphics.enableScissor(leftPos + X_OFFSET, topPos + Y_OFFSET, leftPos + X_OFFSET + Mth.ceil(mapWidth / scroll), topPos + Y_OFFSET + Mth.ceil(mapHeight / scroll));
+		Matrix4fStack modelPoseStack = RenderSystem.getModelViewStack();
+		modelPoseStack.pushMatrix();
+		modelPoseStack.translate(xOffset + X_OFFSET, yOffset + Y_OFFSET, 0);
+		modelPoseStack.scale(1 / this.scroll, 1 / this.scroll, 1);
+		RenderSystem.applyModelViewMatrix();
+		
+		drawGuiMap(guiGraphics, xcor, ycor);
+		
 		for(GuiCard card : visibleCards)
 			card.drawItemBackground(guiGraphics);
 		
 		for(GuiCard card : visibleCards)
 			card.drawItem(guiGraphics);
+		
+		modelPoseStack.popMatrix();
+		RenderSystem.applyModelViewMatrix();
+		RenderSystem.disableDepthTest();
+		guiGraphics.disableScissor();
 	}
 	
 	@Override
