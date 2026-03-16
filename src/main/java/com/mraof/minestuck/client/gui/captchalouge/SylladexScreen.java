@@ -106,6 +106,7 @@ public abstract class SylladexScreen extends PlayerStatsContainerScreen<CaptchaD
 		shouldRenderTooltip = false;
 		super.render(guiGraphics, xcor, ycor, f);
 		
+		guiGraphics.enableScissor(leftPos + X_OFFSET, topPos + Y_OFFSET, leftPos + X_OFFSET + Mth.ceil(mapWidth / scroll), topPos + Y_OFFSET + Mth.ceil(mapHeight / scroll));
 		Matrix4fStack modelPoseStack = RenderSystem.getModelViewStack();
 		modelPoseStack.pushMatrix();
 		modelPoseStack.translate(xOffset + X_OFFSET, yOffset + Y_OFFSET, 0);
@@ -120,6 +121,7 @@ public abstract class SylladexScreen extends PlayerStatsContainerScreen<CaptchaD
 		modelPoseStack.popMatrix();
 		RenderSystem.applyModelViewMatrix();
 		RenderSystem.disableDepthTest();
+		guiGraphics.disableScissor();
 		
 		shouldRenderTooltip = true;
 		renderTooltip(guiGraphics, xcor, ycor);
