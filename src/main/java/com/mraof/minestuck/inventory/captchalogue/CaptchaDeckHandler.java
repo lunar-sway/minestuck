@@ -28,7 +28,6 @@ import net.minecraft.world.item.ItemStack;
 import net.minecraft.world.item.enchantment.EnchantmentEffectComponents;
 import net.minecraft.world.item.enchantment.EnchantmentHelper;
 import net.minecraft.world.level.GameRules;
-import net.minecraft.world.phys.Vec3;
 import net.neoforged.bus.api.EventPriority;
 import net.neoforged.bus.api.SubscribeEvent;
 import net.neoforged.fml.LogicalSide;
@@ -247,7 +246,7 @@ public final class CaptchaDeckHandler
 		
 		if(stack.is(MSItems.BOONDOLLARS))
 		{
-			PlayerBoondollars.addBoondollars(PlayerData.get(player).orElseThrow(), BoondollarsItem.getCount(stack));
+			PlayerBoondollars.addBoondollars(PlayerData.get(player).orElseThrow(), BoondollarsItem.getCount(stack), true);
 			stack.shrink(1);
 			return;
 		}
