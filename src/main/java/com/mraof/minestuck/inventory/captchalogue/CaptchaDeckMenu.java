@@ -37,8 +37,8 @@ public class CaptchaDeckMenu extends AbstractContainerMenu
 	
 	private void addSlots(Inventory playerInventory)
 	{
-		ContainerHelper.addPlayerInventorySlots(this::addSlot, 9, 163, playerInventory);
-		addSlot(new Slot(this.inventory, 0, 177, 163)
+		ContainerHelper.addPlayerInventorySlots(this::addSlot, 9, 156, playerInventory);
+		addSlot(new Slot(this.inventory, 0, 177, 156)
 		{
 			@Override
 			public boolean mayPlace(ItemStack stack)

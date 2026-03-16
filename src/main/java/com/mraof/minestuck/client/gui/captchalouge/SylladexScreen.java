@@ -41,11 +41,11 @@ public abstract class SylladexScreen extends PlayerStatsContainerScreen<CaptchaD
 	
 	protected static final ResourceLocation sylladexFrame = ResourceLocation.fromNamespaceAndPath("minestuck", "textures/gui/sylladex_gui.png");
 	protected static final ResourceLocation cardTexture = ResourceLocation.fromNamespaceAndPath("minestuck", "textures/gui/icons.png");
-	protected static final int MAP_WIDTH = 224, MAP_HEIGHT = 124;
+	protected static final int MAP_WIDTH = 279, MAP_HEIGHT = 124;
 	protected static final int X_OFFSET = 16, Y_OFFSET = 17;
 	protected static final int CARD_WIDTH = 21, CARD_HEIGHT = 26;
 	// Helps for button placements
-	protected static final int BUTTON_HEIGHT = 16, BUTTON_Y_OFFSET = 144;
+	protected static final int BUTTON_HEIGHT = 16, BUTTON_WIDTH = 120, BUTTON_Y_OFFSET = 155, BUTTON_X_OFFSET = 176;
 	
 	protected ArrayList<GuiCard> cards = new ArrayList<>();
 	protected int textureIndex;
@@ -75,12 +75,11 @@ public abstract class SylladexScreen extends PlayerStatsContainerScreen<CaptchaD
 		super(new CaptchaDeckMenu(windowId, inventory), inventory, Component.translatable(TITLE));
 		this.modus = modus;
 		
-		guiWidth = 256;
-		guiHeight = 245;
-		imageWidth = 256;
-		imageHeight = 245;
+		imageWidth = guiWidth = 311;
+		imageHeight = guiHeight = 238;
 		
 		titleLabelX = X_OFFSET;
+        inventoryLabelY = imageHeight - 94;
 	}
 	
 	@Override
@@ -88,8 +87,8 @@ public abstract class SylladexScreen extends PlayerStatsContainerScreen<CaptchaD
 	{
 		super.init();
 		
-		emptySylladex = addRenderableWidget(new ExtendedButton((width - guiWidth) / 2 + 140, (height - guiHeight) / 2 + BUTTON_Y_OFFSET, 100, BUTTON_HEIGHT, Component.translatable(EMPTY_SYLLADEX_BUTTON), button -> emptySylladex()));
-		modusButton = addRenderableWidget(new ExtendedButton(xOffset + 197, yOffset + BUTTON_Y_OFFSET + 18, 50, 18, Component.translatable(USE_ITEM), button -> use()));
+		emptySylladex = addRenderableWidget(new ExtendedButton(xOffset + BUTTON_X_OFFSET, yOffset + BUTTON_Y_OFFSET + BUTTON_HEIGHT + 4, BUTTON_WIDTH, BUTTON_HEIGHT, Component.translatable(EMPTY_SYLLADEX_BUTTON), button -> emptySylladex()));
+		modusButton = addRenderableWidget(new ExtendedButton(xOffset + BUTTON_X_OFFSET + 20, yOffset + BUTTON_Y_OFFSET, BUTTON_WIDTH - 20, 18, Component.translatable(USE_ITEM), button -> use()));
 		
 		updateContent();
 	}
@@ -97,9 +96,6 @@ public abstract class SylladexScreen extends PlayerStatsContainerScreen<CaptchaD
 	@Override
 	public void render(GuiGraphics guiGraphics, int xcor, int ycor, float f)
 	{
-		emptySylladex.setX(xOffset + 140);
-		emptySylladex.setY(yOffset + BUTTON_Y_OFFSET);
-
 		handleDragging(xcor, ycor);
 		
 		// Tooltips are rendered afterwards, as the text is subject to move from the posestack
@@ -155,12 +151,10 @@ public abstract class SylladexScreen extends PlayerStatsContainerScreen<CaptchaD
 	@Override
 	protected void renderLabels(GuiGraphics guiGraphics, int mouseX, int mouseY)
 	{
-		guiGraphics.drawString(this.font, this.title, this.titleLabelX, this.titleLabelY, 0x404040, false);
+		super.renderLabels(guiGraphics, mouseX, mouseY);
 		
 		String str = ClientPlayerData.getModus().getName().getString();
 		guiGraphics.drawString(font, str, guiWidth - font.width(str) - 16, 5, 0x404040, false);
-		
-		//Do not render inventory label as it may overlap with custom modus buttons (see hashmap and tree moduses)
 	}
 	
 	@Override
@@ -210,7 +204,8 @@ public abstract class SylladexScreen extends PlayerStatsContainerScreen<CaptchaD
 		drawTabs(guiGraphics);
 		
 		RenderSystem.setShaderColor(1, 1, 1, 1);
-		guiGraphics.blit(sylladexFrame, xOffset, yOffset, 0, 0, guiWidth, guiHeight);
+		// Required, as (by default) the image is cropped at 256x256
+		guiGraphics.blit(sylladexFrame, xOffset, yOffset, 0, 0, guiWidth, guiHeight, 311, 256);
 		
 		drawActiveTabAndIcons(guiGraphics);
 	}

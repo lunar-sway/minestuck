@@ -32,15 +32,13 @@ public class HashMapSylladexScreen extends SylladexScreen
 	public void init()
 	{
 		super.init();
-		guiButton = new ExtendedButton((width - guiWidth) / 2 + 15, (height - guiHeight) / 2 + BUTTON_Y_OFFSET, 120, BUTTON_HEIGHT, Component.empty(), button -> changeSetting());
+		guiButton = new ExtendedButton(xOffset + BUTTON_X_OFFSET, yOffset + BUTTON_Y_OFFSET + BUTTON_HEIGHT * 2 + 6, BUTTON_WIDTH, BUTTON_HEIGHT, Component.empty(), button -> changeSetting());
 		addRenderableWidget(guiButton);
 	}
 	
 	@Override
 	public void render(GuiGraphics guiGraphics, int mouseX, int mouseY, float f)
 	{
-		guiButton.setX(xOffset + 15);
-		guiButton.setY(yOffset + BUTTON_Y_OFFSET);
 		boolean active = MinestuckConfig.SERVER.hashmapChatModusSetting.get() == MinestuckConfig.AvailableOptions.BOTH ? modus.ejectByChat : MinestuckConfig.SERVER.hashmapChatModusSetting.get() == MinestuckConfig.AvailableOptions.ON;
 		guiButton.setMessage(Component.translatable(active ? EJECT_BY_CHAT_ON : EJECT_BY_CHAT_OFF));
 		guiButton.active = MinestuckConfig.SERVER.hashmapChatModusSetting.get() == MinestuckConfig.AvailableOptions.BOTH;
