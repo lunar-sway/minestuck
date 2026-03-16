@@ -1,0 +1,36 @@
+[
+  {
+    "processor_type": "minecraft:rule",
+    "rules":          [
+      {
+        "location_predicate": {
+          "predicate_type": "minecraft:always_true"
+        },
+        "input_predicate":    {
+          "predicate_type": "minecraft:random_block_match",
+          "block":          "minecraft:hanging_roots",
+          "probability":    0.35
+        },
+        "output_state":       {
+          "Name": "minecraft:air"
+        }
+      },
+      {
+        "location_predicate": {
+          "predicate_type": "minecraft:always_true"
+        },
+        "input_predicate":    {
+          "predicate_type": "minecraft:random_block_match",
+          "block":          "minecraft:moss_carpet",
+          "probability":    0.65
+        },
+        "output_state":       {
+          "Name": "minecraft:air"
+        }
+      }
+    ]
+  },
+  {
+    "processor_type": "minestuck:block_registry"
+  }
+]

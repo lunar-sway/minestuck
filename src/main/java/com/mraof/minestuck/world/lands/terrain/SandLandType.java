@@ -110,6 +110,8 @@ public class SandLandType extends TerrainLandType
 		
 		registry.setBlock(STRUCTURE_WOOL_1, Blocks.YELLOW_WOOL);
 		registry.setBlock(STRUCTURE_WOOL_3, Blocks.MAGENTA_WOOL);
+		
+		registry.setBlock(STRUCTURE_ROOF_COVER, Blocks.HANGING_ROOTS);
 	}
 	
 	@Override

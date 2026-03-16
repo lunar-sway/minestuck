@@ -1,0 +1,19 @@
+{
+  "condition":       {
+    "type":       "minestuck:list",
+    "conditions": [
+      {
+        "type":      "minestuck:npc_in_structure",
+        "structure": "minestuck:derse_bunker"
+      },
+      {
+        "type":      "minestuck:npc_in_structure",
+        "structure": "minestuck:prospit_bunker"
+      }
+    ],
+    "list_type":  "any"
+  },
+  "dialogue":        "minestuck:carapacian_soldier/bunker_abandonment",
+  "dialogue_weight": 10,
+  "keep_on_reset":   false
+}
