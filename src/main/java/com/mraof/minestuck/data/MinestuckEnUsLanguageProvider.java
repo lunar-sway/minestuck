@@ -1,7 +1,5 @@
 package com.mraof.minestuck.data;
 
-import static com.mraof.minestuck.util.MSTags.Items.*;
-
 import com.mraof.minestuck.Minestuck;
 import com.mraof.minestuck.api.alchemy.GristAmount;
 import com.mraof.minestuck.api.alchemy.GristSet;
@@ -58,6 +56,8 @@ import net.minecraft.data.PackOutput;
 import net.minecraft.world.item.Items;
 import net.minecraft.world.item.alchemy.PotionContents;
 import net.minecraft.world.item.alchemy.Potions;
+
+import static com.mraof.minestuck.util.MSTags.Items.*;
 
 public class MinestuckEnUsLanguageProvider extends MinestuckLanguageProvider
 {
@@ -839,7 +839,7 @@ public class MinestuckEnUsLanguageProvider extends MinestuckLanguageProvider
 		addBlock(MSBlocks.RAINBOW_SLAB, "Rainbow Planks Slab");
 		addBlock(MSBlocks.END_SLAB, "End Planks Slab");
 		addBlock(MSBlocks.DEAD_SLAB, "Dead Planks Slab");
-	
+		
 		addBlock(MSBlocks.MYCELIUM_SLAB, "Mycelium Slab");
 		addBlock(MSBlocks.MYCELIUM_BRICK_SLAB, "Mycelium Brick Slab");
 		addBlock(MSBlocks.FROST_TILE_SLAB, "Frost Tile Slab");
@@ -2232,8 +2232,7 @@ public class MinestuckEnUsLanguageProvider extends MinestuckLanguageProvider
 		add(GristCacheScreen.TITLE, "Grist Cache");
 		add(StrifeSpecibusScreen.TITLE, "Strife Specibus");
 		add(StrifeSpecibusScreen.KIND_ABSTRATUS, "Kind Abstratus");
-		add(CaptchaDeckScreen.TITLE, "Captchalogue Deck");
-		add(CaptchaDeckScreen.USE_ITEM, "Use Item");
+		add(SylladexScreen.USE_ITEM, "Use Item");
 		add(EcheladderScreen.TITLE, "Echeladder");
 		add(EcheladderScreen.ATTACK, "Attack");
 		add(EcheladderScreen.HEALTH, "Health");

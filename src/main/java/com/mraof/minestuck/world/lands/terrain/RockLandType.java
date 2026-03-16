@@ -10,6 +10,7 @@ import com.mraof.minestuck.world.gen.structure.blocks.StructureBlockRegistry;
 import com.mraof.minestuck.world.gen.structure.village.ConsortVillageCenter;
 import com.mraof.minestuck.world.gen.structure.village.NakagatorVillagePieces;
 import com.mraof.minestuck.world.lands.LandBiomeGenBuilder;
+import net.minecraft.core.Direction;
 import net.minecraft.core.registries.BuiltInRegistries;
 import net.minecraft.data.worldgen.Carvers;
 import net.minecraft.data.worldgen.placement.CavePlacements;
@@ -20,6 +21,8 @@ import net.minecraft.util.RandomSource;
 import net.minecraft.util.valueproviders.UniformFloat;
 import net.minecraft.util.valueproviders.UniformInt;
 import net.minecraft.world.level.block.Blocks;
+import net.minecraft.world.level.block.MultifaceBlock;
+import net.minecraft.world.level.block.PointedDripstoneBlock;
 import net.minecraft.world.level.levelgen.GenerationStep;
 import net.minecraft.world.level.levelgen.VerticalAnchor;
 import net.minecraft.world.level.levelgen.blockpredicates.BlockPredicate;
@@ -91,6 +94,9 @@ public class RockLandType extends TerrainLandType
 		registry.setBlock(STRUCTURE_WOOD, MSBlocks.PETRIFIED_WOOD);
 		registry.setBlock(STRUCTURE_LOG, MSBlocks.PETRIFIED_LOG);
 		registry.setBlock(STRUCTURE_PLANKS_SLAB, Blocks.BRICK_SLAB);
+		
+		registry.setBlockState(STRUCTURE_GROUND_COVER, Blocks.GLOW_LICHEN.defaultBlockState().setValue(MultifaceBlock.getFaceProperty(Direction.DOWN), true));
+		registry.setBlockState(STRUCTURE_ROOF_COVER, Blocks.POINTED_DRIPSTONE.defaultBlockState().setValue(PointedDripstoneBlock.TIP_DIRECTION, Direction.DOWN));
 		
 		registry.setBlock(VILLAGE_PATH, Blocks.MOSSY_COBBLESTONE);
 		registry.setBlock(VILLAGE_FENCE, Blocks.COBBLESTONE_WALL);

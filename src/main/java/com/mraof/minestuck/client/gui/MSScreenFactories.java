@@ -1,6 +1,5 @@
 package com.mraof.minestuck.client.gui;
 
-import com.google.common.collect.Maps;
 import com.mraof.minestuck.Minestuck;
 import com.mraof.minestuck.blockentity.ComputerBlockEntity;
 import com.mraof.minestuck.blockentity.TransportalizerBlockEntity;
@@ -16,7 +15,9 @@ import com.mraof.minestuck.inventory.captchalogue.ModusType;
 import com.mraof.minestuck.inventory.captchalogue.ModusTypes;
 import com.mraof.minestuck.player.Title;
 import net.minecraft.client.Minecraft;
+import net.minecraft.data.models.blockstates.PropertyDispatch.TriFunction;
 import net.minecraft.world.InteractionHand;
+import net.minecraft.world.entity.player.Inventory;
 import net.minecraft.world.entity.player.Player;
 import net.minecraft.world.level.block.Block;
 import net.neoforged.api.distmarker.Dist;
@@ -24,9 +25,10 @@ import net.neoforged.bus.api.SubscribeEvent;
 import net.neoforged.fml.common.EventBusSubscriber;
 import net.neoforged.neoforge.client.event.RegisterMenuScreensEvent;
 
+import javax.annotation.Nullable;
+import java.util.HashMap;
 import java.util.Map;
 import java.util.Set;
-import java.util.function.Function;
 import java.util.function.Supplier;
 
 /**
@@ -36,7 +38,7 @@ import java.util.function.Supplier;
 @EventBusSubscriber(value = Dist.CLIENT, bus = EventBusSubscriber.Bus.MOD, modid = Minestuck.MOD_ID)
 public class MSScreenFactories
 {
-	private static final Map<ModusType<?>, Function<Modus, ? extends SylladexScreen>> SYLLADEX_FACTORIES = Maps.newHashMap();
+	private static final Map<ModusType<?>, TriFunction<Integer, Inventory, Modus, ? extends SylladexScreen>> SYLLADEX_FACTORIES = new HashMap<>();
 	
 	@SubscribeEvent
 	public static void registerScreenFactories(RegisterMenuScreensEvent event)
@@ -61,12 +63,12 @@ public class MSScreenFactories
 		registerSylladexFactory(ModusTypes.SET, SetSylladexScreen::new);
 	}
 	
-	public static void registerSylladexFactory(Supplier<? extends ModusType<?>> type, Function<Modus, ? extends SylladexScreen> factory)
+	public static void registerSylladexFactory(Supplier<? extends ModusType<?>> type, TriFunction<Integer, Inventory, Modus, ? extends SylladexScreen> factory)
 	{
 		registerSylladexFactory(type.get(), factory);
 	}
 	
-	public static void registerSylladexFactory(ModusType<?> type, Function<Modus, ? extends SylladexScreen> factory)
+	public static void registerSylladexFactory(ModusType<?> type, TriFunction<Integer, Inventory, Modus, ? extends SylladexScreen> factory)
 	{
 		SYLLADEX_FACTORIES.put(type, factory);
 	}
@@ -141,13 +143,14 @@ public class MSScreenFactories
 		Minecraft.getInstance().setScreen(new TitleSelectorScreen(title));
 	}
 	
-	public static void displaySylladexScreen(Modus modus)
+	public static SylladexScreen displaySylladexScreen(Modus modus, int windowId, Inventory playerInventory) throws NoModusFactoryException
 	{
+		ModusType<?> type = modus.getType();
 		if(SYLLADEX_FACTORIES.containsKey(modus.getType()))
 		{
-			SylladexScreen screen = SYLLADEX_FACTORIES.get(modus.getType()).apply(modus);
-			Minecraft.getInstance().setScreen(screen);
+			return SYLLADEX_FACTORIES.get(modus.getType()).apply(windowId, playerInventory, modus);
 		}
+		throw new NoModusFactoryException(type);
 	}
 	
 	public static void displayDialogueScreen(int dialogueId, Dialogue.DialogueData dialogueData)
@@ -166,5 +169,31 @@ public class MSScreenFactories
 	{
 		if(Minecraft.getInstance().screen instanceof SylladexScreen screen)
 			screen.updateContent();
+	}
+	
+	public static class NoModusFactoryException extends Exception
+	{
+		@Nullable
+		private final ModusType<?> modusType;
+		
+		public NoModusFactoryException()
+		{
+			modusType = null;
+		}
+		
+		public NoModusFactoryException(ModusType<?> modus)
+		{
+			this.modusType = modus;
+		}
+		
+		@Override
+		public String getMessage()
+		{
+			if(modusType != null)
+			{
+				return String.format("No modus factory found for %s", modusType);
+			}
+			return super.getMessage();
+		}
 	}
 }

@@ -22,6 +22,7 @@ import net.minecraft.server.level.ServerPlayer;
 import net.minecraft.world.InteractionHand;
 import net.minecraft.world.entity.item.ItemEntity;
 import net.minecraft.world.entity.player.Player;
+import net.minecraft.world.inventory.AbstractContainerMenu;
 import net.minecraft.world.inventory.Slot;
 import net.minecraft.world.item.ItemStack;
 import net.minecraft.world.item.enchantment.EnchantmentEffectComponents;
@@ -102,7 +103,7 @@ public final class CaptchaDeckHandler
 	 * */
 	public static void launchAnyItem(Player player, ItemStack item)
 	{
-		ItemEntity entity = new ItemEntity(player.level(), player.getX(), player.getY()+1, player.getZ(), item);
+		ItemEntity entity = new ItemEntity(player.level(), player.getX(), player.getY() + 1, player.getZ(), item);
 		entity.setDeltaMovement(player.level().random.nextDouble() - 0.5, entity.getDeltaMovement().y, player.level().random.nextDouble() - 0.5);
 		entity.setDefaultPickUpDelay();
 		player.level().addFreshEntity(entity);
@@ -126,7 +127,7 @@ public final class CaptchaDeckHandler
 	public static void useItem(ServerPlayer player)
 	{
 		if(!(player.containerMenu instanceof CaptchaDeckMenu containerMenu) || !canPlayerUseModus(player))
-			 return;
+			return;
 		ItemStack stack = containerMenu.getMenuItem();
 		if(stack.isEmpty())
 			return;
@@ -136,9 +137,11 @@ public final class CaptchaDeckHandler
 		if(type != null)
 		{
 			ItemStack newItem = changeModus(player, stack, modus, type);
-			containerMenu.setMenuItem(newItem);
-		}
-		else if(CaptchaCardItem.isUnpunchedCard(stack) && modus != null)
+			// The menu won't be around anyways, so give the modus back
+			containerMenu.setMenuItem(ItemStack.EMPTY);
+			if(!player.getInventory().add(newItem))
+				player.drop(newItem, false);
+		} else if(CaptchaCardItem.isUnpunchedCard(stack) && modus != null)
 		{
 			consumeCards(player, stack, modus);
 		}
@@ -154,8 +157,7 @@ public final class CaptchaDeckHandler
 			newModus.initModus(modusItem, player, null, modusHolder.givenModus
 					? 0
 					: MinestuckConfig.SERVER.initialModusSize.get());
-		}
-		else
+		} else
 		{
 			ModusType<?> oldType = oldModus.getType();
 			if(newType.equals(oldType))
@@ -230,6 +232,15 @@ public final class CaptchaDeckHandler
 		player.containerMenu.broadcastChanges();
 	}
 	
+	public static void captchalogueItemCarried(ServerPlayer player)
+	{
+		AbstractContainerMenu containerMenu = player.containerMenu;
+		if(canPlayerUseModus(player) && hasModus(player) && containerMenu != null)
+		{
+			captchalogueItem(player, containerMenu.getCarried());
+		}
+	}
+	
 	private static void captchalogueItem(ServerPlayer player, ItemStack stack)
 	{
 		Modus modus = getModus(player);
@@ -251,25 +262,37 @@ public final class CaptchaDeckHandler
 		}
 	}
 	
+	/**
+	 * Adds a card that contains items to the player's modus
+	 */
 	private static void handleCardCaptchalogue(ServerPlayer player, Modus modus, ItemStack card)
 	{
 		ItemStack stackInCard = CardStoredItemComponent.getContainedRealItem(card);
-		boolean spentCard = modus.increaseSize(player);
+		int addedCards = 0;
+		for(; addedCards < card.getCount(); addedCards++)
+		{
+			if(!modus.increaseSize(player)) break;
+		}
 		
-		if(spentCard)
-			card.shrink(1);
+		if(addedCards > 0)
+			card.shrink(addedCards);
 		
 		if(!stackInCard.isEmpty())
 		{
-			boolean captchaloguedItem = putInModus(player, modus, stackInCard);
+			int addedItems = 0;
+			for(; addedItems < addedCards + card.getCount(); addedItems++)
+			{
+				if(!putInModus(player, modus, stackInCard.copy())) break;
+			}
 			
-			if(captchaloguedItem && !spentCard)
-			{	//Item was captchalogued, but the card remained
-				launchAnyItem(player, new ItemStack(MSItems.CAPTCHA_CARD.get(), 1));    //TODO split existing stack and instead remove the content to keep any other nbt data
-				card.shrink(1);
-			} else if(!captchaloguedItem && spentCard)
-			{	//The card was used, but the item failed to captchalogue
-				launchAnyItem(player, stackInCard);
+			if(addedItems > addedCards)
+			{    //Item was captchalogued, but the card remained
+				launchAnyItem(player, new ItemStack(MSItems.CAPTCHA_CARD.get(), addedItems - addedCards));    //TODO split existing stack and instead remove the content to keep any other nbt data
+				card.shrink(addedCards);
+			} else if(addedCards > addedItems)
+			{    //The card was used, but the item failed to captchalogue
+				for(int i = addedItems; i < addedCards; i++)
+					launchAnyItem(player, stackInCard);
 			}
 			
 		}
@@ -296,15 +319,19 @@ public final class CaptchaDeckHandler
 		ItemStack stack = modus.getItem(player, index, asCard);
 		if(!stack.isEmpty())
 		{
-			ItemStack otherStack = player.getMainHandItem();
+			AbstractContainerMenu containerMenu = player.containerMenu;
+			ItemStack otherStack = containerMenu != null ? containerMenu.getCarried() : player.getMainHandItem();
 			if(otherStack.isEmpty())
-				player.setItemInHand(InteractionHand.MAIN_HAND, stack);
-			else if(canMergeItemStacks(stack, otherStack))
+			{
+				if(containerMenu != null)
+					containerMenu.setCarried(stack);
+				else
+					player.setItemInHand(InteractionHand.MAIN_HAND, stack);
+			} else if(canMergeItemStacks(stack, otherStack))
 			{
 				otherStack.grow(stack.getCount());
 				stack.setCount(0);
-			}
-			else
+			} else
 			{
 				boolean placed = false;
 				for(int i = 0; i < player.getInventory().items.size(); i++)
@@ -339,11 +366,11 @@ public final class CaptchaDeckHandler
 		NonNullList<ItemStack> stacks = modus.getItems();
 		int size = modus.getSize();
 		int cardsToKeep = switch(MinestuckConfig.SERVER.sylladexDropMode.get())
-				{
-					case ITEMS -> size;
-					case CARDS_AND_ITEMS -> MinestuckConfig.SERVER.initialModusSize.get();
-					case ALL -> 0;
-				};
+		{
+			case ITEMS -> size;
+			case CARDS_AND_ITEMS -> MinestuckConfig.SERVER.initialModusSize.get();
+			case ALL -> 0;
+		};
 		
 		for(ItemStack stack : stacks)
 		{
@@ -427,7 +454,7 @@ public final class CaptchaDeckHandler
 	private static boolean canMergeItemStacks(ItemStack stack1, ItemStack stack2)
 	{
 		return ItemStack.isSameItemSameComponents(stack1, stack2)
-				&& stack1.isStackable() && stack1.getCount() + stack2.getCount() < stack1.getMaxStackSize();
+				&& stack1.isStackable() && stack1.getCount() + stack2.getCount() <= stack1.getMaxStackSize();
 	}
 	
 	private static boolean canPlayerUseModus(ServerPlayer player)
@@ -500,12 +527,11 @@ public final class CaptchaDeckHandler
 		@Override
 		public void deserializeNBT(HolderLookup.Provider provider, CompoundTag nbt)
 		{
-			if (nbt.contains("modus"))
+			if(nbt.contains("modus"))
 			{
 				this.modus = readFromNBT(nbt.getCompound("modus"), LogicalSide.SERVER, provider);
 				givenModus = true;
-			}
-			else
+			} else
 				givenModus = nbt.getBoolean("given_modus");
 		}
 	}
