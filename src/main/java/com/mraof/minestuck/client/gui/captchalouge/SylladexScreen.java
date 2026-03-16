@@ -99,26 +99,8 @@ public abstract class SylladexScreen extends PlayerStatsContainerScreen<CaptchaD
 	{
 		emptySylladex.setX(xOffset + 140);
 		emptySylladex.setY(yOffset + BUTTON_Y_OFFSET);
-		
-		// Handles using the mouse to move
-		if(mousePressed)
-		{
-			if(isMouseInContainer(xcor, ycor))
-			{
-				if(isMouseInContainer(mousePosX, mousePosY))
-				{
-					mapX = Math.max(0, Math.min(maxWidth - mapWidth, mapX + mousePosX - xcor));
-					mapY = Math.max(0, Math.min(maxHeight - mapHeight, mapY + mousePosY - ycor));
-				}
-				mousePosX = xcor;
-				mousePosY = ycor;
-			}
-			
-		} else
-		{
-			mousePosX = -1;
-			mousePosY = -1;
-		}
+
+		handleDragging(xcor, ycor);
 		
 		// Tooltips are rendered afterwards, as the text is subject to move from the posestack
 		shouldRenderTooltip = false;
@@ -229,6 +211,31 @@ public abstract class SylladexScreen extends PlayerStatsContainerScreen<CaptchaD
 		guiGraphics.blit(sylladexFrame, xOffset, yOffset, 0, 0, guiWidth, guiHeight);
 		
 		drawActiveTabAndIcons(guiGraphics);
+	}
+	
+	/**
+	 * Handles using the mouse to move
+	 */
+	protected void handleDragging(int xcor, int ycor)
+	{
+		if(mousePressed)
+		{
+			if(isMouseInContainer(xcor, ycor))
+			{
+				if(isMouseInContainer(mousePosX, mousePosY))
+				{
+					mapX = Math.max(0, Math.min(maxWidth - mapWidth, mapX + mousePosX - xcor));
+					mapY = Math.max(0, Math.min(maxHeight - mapHeight, mapY + mousePosY - ycor));
+				}
+				mousePosX = xcor;
+				mousePosY = ycor;
+			}
+			
+		} else
+		{
+			mousePosX = -1;
+			mousePosY = -1;
+		}
 	}
 	
 	@Override
