@@ -16,6 +16,7 @@ The format is based on [Keep a Changelog](https://keepachangelog.com/en/1.1.0/).
 - Added 3 bunker structures to Lands
 - Increased block diversity in structures
 - Array modus
+- Added a limit to captchaloguing cards with large amounts of stored data
 
 ### Changed
 
