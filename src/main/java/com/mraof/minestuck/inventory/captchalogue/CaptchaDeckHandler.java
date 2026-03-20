@@ -19,7 +19,6 @@ import net.minecraft.core.NonNullList;
 import net.minecraft.nbt.CompoundTag;
 import net.minecraft.resources.ResourceLocation;
 import net.minecraft.server.level.ServerPlayer;
-import net.minecraft.world.InteractionHand;
 import net.minecraft.world.entity.item.ItemEntity;
 import net.minecraft.world.entity.player.Player;
 import net.minecraft.world.inventory.AbstractContainerMenu;
@@ -28,7 +27,6 @@ import net.minecraft.world.item.ItemStack;
 import net.minecraft.world.item.enchantment.EnchantmentEffectComponents;
 import net.minecraft.world.item.enchantment.EnchantmentHelper;
 import net.minecraft.world.level.GameRules;
-import net.minecraft.world.phys.Vec3;
 import net.neoforged.bus.api.EventPriority;
 import net.neoforged.bus.api.SubscribeEvent;
 import net.neoforged.fml.LogicalSide;
@@ -42,6 +40,7 @@ import org.apache.logging.log4j.Logger;
 import javax.annotation.Nullable;
 import java.util.List;
 import java.util.Optional;
+import java.util.concurrent.atomic.AtomicLong;
 
 //todo this class could use some spring cleaning
 @EventBusSubscriber(modid = Minestuck.MOD_ID, bus = EventBusSubscriber.Bus.GAME)
@@ -204,10 +203,20 @@ public final class CaptchaDeckHandler
 	
 	public static void captchalogueItem(ServerPlayer player)
 	{
-		if(canPlayerUseModus(player) && hasModus(player))
+		ItemStack stack = player.getMainHandItem();
+		if(canPlayerUseModus(player) && hasModus(player) && meetsComponentSizeLimit(stack))
 		{
-			captchalogueItem(player, player.getMainHandItem());
+			captchalogueItem(player, stack);
 		}
+	}
+	
+	public static boolean meetsComponentSizeLimit(ItemStack stack)
+	{
+		AtomicLong componentDataSize = new AtomicLong(0);
+		
+		stack.getComponents().forEach(component -> componentDataSize.addAndGet(component.value().toString().chars().sum()));
+		
+		return MinestuckConfig.SERVER.captchaComponentSize.get() >= (int) componentDataSize.get();
 	}
 	
 	public static void captchalogueItemInSlot(ServerPlayer player, int slotIndex, int windowId)
@@ -235,7 +244,7 @@ public final class CaptchaDeckHandler
 	public static void captchalogueItemCarried(ServerPlayer player)
 	{
 		AbstractContainerMenu containerMenu = player.containerMenu;
-		if(canPlayerUseModus(player) && hasModus(player) && containerMenu != null)
+		if(canPlayerUseModus(player) && hasModus(player))
 		{
 			captchalogueItem(player, containerMenu.getCarried());
 		}
@@ -320,13 +329,10 @@ public final class CaptchaDeckHandler
 		if(!stack.isEmpty())
 		{
 			AbstractContainerMenu containerMenu = player.containerMenu;
-			ItemStack otherStack = containerMenu != null ? containerMenu.getCarried() : player.getMainHandItem();
+			ItemStack otherStack = containerMenu.getCarried();
 			if(otherStack.isEmpty())
 			{
-				if(containerMenu != null)
-					containerMenu.setCarried(stack);
-				else
-					player.setItemInHand(InteractionHand.MAIN_HAND, stack);
+				containerMenu.setCarried(stack);
 			} else if(canMergeItemStacks(stack, otherStack))
 			{
 				otherStack.grow(stack.getCount());
@@ -446,9 +452,7 @@ public final class CaptchaDeckHandler
 	public static Modus getModus(ServerPlayer player)
 	{
 		Optional<PlayerData> playerData = PlayerData.get(player);
-		if(playerData.isEmpty())
-			return null;
-		return playerData.get().getData(MSAttachments.MODUS_HOLDER).modus;
+		return playerData.map(data -> data.getData(MSAttachments.MODUS_HOLDER).modus).orElse(null);
 	}
 	
 	private static boolean canMergeItemStacks(ItemStack stack1, ItemStack stack2)
