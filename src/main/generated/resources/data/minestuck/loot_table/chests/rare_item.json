@@ -80,8 +80,7 @@
         {
           "type": "minecraft:item",
           "name": "minestuck:transportalizer",
-          "quality": 2,
-          "weight": 2
+          "quality": 2
         },
         {
           "type": "minecraft:item",

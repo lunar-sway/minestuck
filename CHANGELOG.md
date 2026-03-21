@@ -16,6 +16,7 @@ The format is based on [Keep a Changelog](https://keepachangelog.com/en/1.1.0/).
 - Added 3 bunker structures to Lands
 - Increased block diversity in structures
 - Array modus
+- Most Minestuck fluids are now bottomless in the context of Create
 
 ### Changed
 
@@ -35,6 +36,9 @@ The format is based on [Keep a Changelog](https://keepachangelog.com/en/1.1.0/).
 - Grist widget now only rewards 20% of the grist the item was worth
 - Stat storer radius now controlled by config
 - Reverse cake now uses mirror in combination recipe instead of glass
+- Increased costs of multiple weapons and transportalizers, with transportalizers now also being rarer in loot chests
+- More weapons qualify for the legendary achievement
+- More items qualify for the captcha Unreadable tag
 
 ### Fixed
 

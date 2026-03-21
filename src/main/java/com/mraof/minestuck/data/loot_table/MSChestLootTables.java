@@ -818,7 +818,7 @@ public final class MSChestLootTables implements LootTableSubProvider
 						.add(LootItem.lootTableItem(MSBlocks.MINI_WIZARD_STATUE).setWeight(5).setQuality(1))
 						.add(LootItem.lootTableItem(MSBlocks.CASSETTE_PLAYER).setWeight(1).setQuality(3))
 						.add(LootItem.lootTableItem(MSBlocks.SENDIFICATOR).setWeight(1).setQuality(3))
-						.add(LootItem.lootTableItem(MSBlocks.TRANSPORTALIZER).setWeight(2).setQuality(2))
+						.add(LootItem.lootTableItem(MSBlocks.TRANSPORTALIZER).setWeight(1).setQuality(2))
 						.add(LootItem.lootTableItem(MSItems.DICE).setWeight(5).setQuality(0))
 						.add(LootItem.lootTableItem(MSItems.CUEBALL).setWeight(1).setQuality(4))
 						.add(LootItem.lootTableItem(MSItems.CRYPTID_PHOTO).setWeight(1).setQuality(4))
