@@ -33,6 +33,7 @@ The format is based on [Keep a Changelog](https://keepachangelog.com/en/1.1.0/).
 - Inventory item discharge is now divided into separate eject and launch mechanics
 - HashmapModus now can handle with localized names, tags, anvil names
 - Grist widget now only rewards 20% of the grist the item was worth
+- Stat storer radius now controlled by config
 
 ### Fixed
 
@@ -43,6 +44,7 @@ The format is based on [Keep a Changelog](https://keepachangelog.com/en/1.1.0/).
 - Fix Glowing Mushroom Vines requiring itself for alchemizing
 - Fix missing Bucket of Glimmering Water and Magmatic Igneous Stone grist cost
 - Fix crash when captchaloguing multiple cards that contain items
+- Fix stat storer not updating its redstone signal
 
 ### Contributors for this release
 
