@@ -34,6 +34,7 @@ The format is based on [Keep a Changelog](https://keepachangelog.com/en/1.1.0/).
 - HashmapModus now can handle with localized names, tags, anvil names
 - Grist widget now only rewards 20% of the grist the item was worth
 - Stat storer radius now controlled by config
+- Reverse cake now uses mirror in combination recipe instead of glass
 
 ### Fixed
 
