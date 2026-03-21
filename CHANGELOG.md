@@ -32,6 +32,7 @@ The format is based on [Keep a Changelog](https://keepachangelog.com/en/1.1.0/).
 - Underlings no longer spawn naturally in consort villages and consorts no longer spawn in dungeons
 - Inventory item discharge is now divided into separate eject and launch mechanics
 - HashmapModus now can handle with localized names, tags, anvil names
+- Grist widget now only rewards 20% of the grist the item was worth
 
 ### Fixed
 

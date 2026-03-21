@@ -49,11 +49,11 @@ public class GristWidgetScreen extends MachineScreen<GristWidgetMenu>
 		if (menu.getSlot(0).hasItem())
 		{
 			//Render grist requirements
-			GristSet set = GristWidgetBlockEntity.getGristWidgetResult(menu.getSlot(0).getItem(), minecraft.level);
+			GristSet set = GristWidgetBlockEntity.getGristWidgetResult(menu.getSlot(0).getItem(), minecraft.level, false);
 
 			GuiUtil.drawGristBoard(guiGraphics, set, GuiUtil.GristboardMode.GRIST_WIDGET, 9, 45, font);
 			
-			int cost = GristWidgetBlockEntity.getGristWidgetBoondollarValue(set);
+			int cost = GristWidgetBlockEntity.getGristWidgetBoondollarValue(GristWidgetBlockEntity.getGristWidgetResult(menu.getSlot(0).getItem(), minecraft.level, true));
 			long has = ClientPlayerData.getBoondollars();
 			String costText = GuiUtil.addSuffix(cost)+"£("+GuiUtil.addSuffix(has)+")";
 			guiGraphics.drawString(font, costText, imageWidth - 9 - font.width(costText), imageHeight - 96 + 3, cost > has ? 0xFF0000 : 0x00FF00, false);

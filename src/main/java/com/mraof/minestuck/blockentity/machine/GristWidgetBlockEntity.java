@@ -80,13 +80,7 @@ public class GristWidgetBlockEntity extends MachineProcessBlockEntity implements
 	}
 	
 	@Nullable
-	public GristSet getGristWidgetResult()
-	{
-		return getGristWidgetResult(itemHandler.getStackInSlot(0), level);
-	}
-	
-	@Nullable
-	public static GristSet getGristWidgetResult(ItemStack stack, Level level)
+	public static GristSet getGristWidgetResult(ItemStack stack, Level level, boolean fullValue)
 	{
 		if(level == null)
 			return null;
@@ -96,12 +90,8 @@ public class GristWidgetBlockEntity extends MachineProcessBlockEntity implements
 		if(containedItem.isEmpty())
 			return null;
 		
-		return GristCostRecipe.findCostForItem(containedItem, null, true, level);
-	}
-	
-	public int getGristWidgetBoondollarValue()
-	{
-		return getGristWidgetBoondollarValue(getGristWidgetResult());
+		GristSet gristSet = GristCostRecipe.findCostForItem(containedItem, null, true, level);
+		return fullValue ? gristSet : gristSet.mutableCopy().scale(0.2F, false);
 	}
 	
 	public static int getGristWidgetBoondollarValue(GristSet set)
@@ -121,17 +111,17 @@ public class GristWidgetBlockEntity extends MachineProcessBlockEntity implements
 			return false;
 		if(level.hasNeighborSignal(this.getBlockPos()))
 			return false;
-		int i = getGristWidgetBoondollarValue();
+		int i = getGristWidgetBoondollarValue(getGristWidgetResult(itemHandler.getStackInSlot(0), level, true));
 		return owner != null && i != 0 && i <= PlayerBoondollars.getBoondollars(PlayerData.get(owner, level));
 	}
 	
 	private void processContents()
 	{
-		GristSet gristSet = getGristWidgetResult();
+		GristSet gristSet = getGristWidgetResult(itemHandler.getStackInSlot(0), level, false);
 		if(gristSet == null)
 			return;
 		
-		if(!PlayerBoondollars.tryTakeBoondollars(PlayerData.get(owner, level), getGristWidgetBoondollarValue()))
+		if(!PlayerBoondollars.tryTakeBoondollars(PlayerData.get(owner, level), getGristWidgetBoondollarValue(getGristWidgetResult(itemHandler.getStackInSlot(0), level, true))))
 		{
 			LOGGER.warn("Failed to remove boondollars for a grist widget from {}'s porkhollow", owner.getUsername());
 			return;
