@@ -709,6 +709,23 @@ public final class ConsortDialogue
 				.node(new NodeBuilder(l.defaultKeyMsg("They are coming...")))    //todo custom response message?
 				.node(new NodeBuilder(l.defaultKeyMsg("Huh? 'Who the fuck is They'? What kind of question is that?! I don't know! Who the fuck are you?")).animation(ANGRY_EMOTION)));
 		
+		provider.addRandomlySelectable("return_node", defaultWeight(all(isAnyEntityType(SALAMANDER, NAKAGATOR), isInLand())), new FolderedDialogue(builder ->
+		{
+			var explainNode = builder.add("explain_node", new NodeBuilder(l.defaultKeyMsg("Return nodes are those glowy circle thingies you find all across the surface. They are supposed to help the heroes return back to their home. Lucky bastards."))
+					.addClosingResponse(thanksGoodbyeMsg));
+			
+			var retort = builder.add("retort", new NodeBuilder(l.defaultKeyMsg("One day it will work, then you will see. Then you will ALL see..")));
+			
+			builder.addStart(new NodeBuilder(l.defaultKeyMsg("I am frequently overcome with the desire to hop into a return node. Every time my dreams of being transported back to my house are utterly shattered and I risk losing all hope."))
+					.addResponse(new ResponseBuilder(l.subMsg("what", "What is a return node?"))
+							.nextDialogue(explainNode))
+					.addResponse(new ResponseBuilder(l.subMsg("sorry", "Sorry to hear that?"))
+							.nextDialogue(retort))
+					.addResponse(new ResponseBuilder(l.subMsg("sucks", "Sucks to be you I guess"))
+							.nextDialogue(retort))
+			);
+		}));
+		
 		provider.addRandomlySelectable("cult", defaultWeight(isAnyEntityType(TURTLE, SALAMANDER)), new FolderedDialogue(builder ->
 		{
 			String hasSulfur = "has_sulfur";

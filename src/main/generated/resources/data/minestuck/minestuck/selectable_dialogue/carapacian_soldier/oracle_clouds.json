@@ -1,0 +1,14 @@
+{
+  "condition":       {
+    "type":       "minestuck:list",
+    "conditions": [
+      {
+        "type": "minestuck:is_in_skaia"
+      }
+    ],
+    "list_type":  "none"
+  },
+  "dialogue":        "minestuck:carapacian_soldier/oracle_clouds",
+  "dialogue_weight": 10,
+  "keep_on_reset":   false
+}

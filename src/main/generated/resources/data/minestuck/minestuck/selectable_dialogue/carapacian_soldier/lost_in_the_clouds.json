@@ -1,0 +1,8 @@
+{
+  "condition":       {
+    "type": "minestuck:is_in_skaia"
+  },
+  "dialogue":        "minestuck:carapacian_soldier/lost_in_the_clouds",
+  "dialogue_weight": 10,
+  "keep_on_reset":   false
+}
