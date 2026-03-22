@@ -8,19 +8,19 @@
           "type": "minecraft:item",
           "name": "minecraft:oak_sapling",
           "quality": -1,
-          "weight": 5
+          "weight": 3
         },
         {
           "type": "minecraft:item",
           "name": "minecraft:spruce_sapling",
           "quality": -1,
-          "weight": 5
+          "weight": 8
         },
         {
           "type": "minecraft:item",
           "name": "minecraft:birch_sapling",
           "quality": -1,
-          "weight": 5
+          "weight": 3
         },
         {
           "type": "minecraft:item",
@@ -37,7 +37,7 @@
           ],
           "name": "minecraft:oak_log",
           "quality": -1,
-          "weight": 5
+          "weight": 3
         },
         {
           "type": "minecraft:item",
@@ -54,7 +54,7 @@
           ],
           "name": "minecraft:spruce_log",
           "quality": -1,
-          "weight": 5
+          "weight": 8
         },
         {
           "type": "minecraft:item",
@@ -71,7 +71,7 @@
           ],
           "name": "minecraft:birch_log",
           "quality": -1,
-          "weight": 5
+          "weight": 3
         },
         {
           "type": "minecraft:item",
@@ -88,7 +88,7 @@
           ],
           "name": "minecraft:jungle_log",
           "quality": -1,
-          "weight": 5
+          "weight": 3
         },
         {
           "type": "minecraft:item",
@@ -105,7 +105,7 @@
           ],
           "name": "minecraft:acacia_log",
           "quality": -1,
-          "weight": 5
+          "weight": 3
         },
         {
           "type": "minecraft:item",
@@ -122,7 +122,7 @@
           ],
           "name": "minecraft:dark_oak_log",
           "quality": -1,
-          "weight": 5
+          "weight": 3
         },
         {
           "type": "minecraft:item",
@@ -139,7 +139,7 @@
           ],
           "name": "minecraft:oak_planks",
           "quality": -2,
-          "weight": 3
+          "weight": 2
         },
         {
           "type": "minecraft:item",
@@ -156,7 +156,7 @@
           ],
           "name": "minecraft:spruce_planks",
           "quality": -2,
-          "weight": 3
+          "weight": 5
         },
         {
           "type": "minecraft:item",
@@ -173,7 +173,7 @@
           ],
           "name": "minecraft:birch_planks",
           "quality": -2,
-          "weight": 3
+          "weight": 2
         },
         {
           "type": "minecraft:item",
@@ -188,9 +188,26 @@
               "function": "minecraft:set_count"
             }
           ],
-          "name": "minecraft:oak_leaves",
+          "name": "minecraft:spruce_leaves",
           "quality": -2,
           "weight": 10
+        },
+        {
+          "type":      "minecraft:item",
+          "functions": [
+            {
+              "add":      false,
+              "count":    {
+                "type": "minecraft:uniform",
+                "max":  8.0,
+                "min":  2.0
+              },
+              "function": "minecraft:set_count"
+            }
+          ],
+          "name":      "minecraft:rooted_dirt",
+          "quality":   -1,
+          "weight":    15
         }
       ],
       "name": "item",

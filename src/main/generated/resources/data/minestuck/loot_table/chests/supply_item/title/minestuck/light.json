@@ -9,6 +9,32 @@
           "name": "minecraft:torch",
           "quality": -1,
           "weight": 10
+        },
+        {
+          "type":   "minecraft:item",
+          "name":   "minecraft:lantern",
+          "weight": 6
+        },
+        {
+          "type": "minecraft:item",
+          "name": "minecraft:daylight_detector"
+        },
+        {
+          "type":      "minecraft:item",
+          "functions": [
+            {
+              "add":      false,
+              "count":    {
+                "type": "minecraft:uniform",
+                "max":  8.0,
+                "min":  1.0
+              },
+              "function": "minecraft:set_count"
+            }
+          ],
+          "name":      "minecraft:tinted_glass",
+          "quality":   1,
+          "weight":    2
         }
       ],
       "name": "item",
