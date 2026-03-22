@@ -10,7 +10,11 @@
         }
       ],
       "name": "weapons",
-      "rolls": 1.0
+      "rolls": {
+        "type": "minecraft:uniform",
+        "max":  1.0,
+        "min":  0.0
+      }
     },
     {
       "bonus_rolls": 0.0,
@@ -60,23 +64,6 @@
           "type": "minecraft:item",
           "functions": [
             {
-              "add": false,
-              "count": {
-                "type": "minecraft:uniform",
-                "max": 7.0,
-                "min": 3.0
-              },
-              "function": "minecraft:set_count"
-            }
-          ],
-          "name": "minestuck:sorrow_gushers",
-          "quality": -1,
-          "weight": 7
-        },
-        {
-          "type": "minecraft:item",
-          "functions": [
-            {
               "count": {
                 "type": "minecraft:uniform",
                 "max": 50.0,
@@ -121,7 +108,11 @@
         }
       ],
       "name": "boondollars",
-      "rolls": 1.0
+      "rolls": {
+        "type": "minecraft:uniform",
+        "max":  1.0,
+        "min":  0.0
+      }
     }
   ],
   "random_sequence": "minestuck:chests/medium_basic"

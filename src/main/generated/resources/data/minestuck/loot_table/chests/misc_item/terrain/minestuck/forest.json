@@ -191,6 +191,23 @@
           "name": "minecraft:oak_leaves",
           "quality": -2,
           "weight": 10
+        },
+        {
+          "type":      "minecraft:item",
+          "functions": [
+            {
+              "add":      false,
+              "count":    {
+                "type": "minecraft:uniform",
+                "max":  8.0,
+                "min":  2.0
+              },
+              "function": "minecraft:set_count"
+            }
+          ],
+          "name":      "minecraft:rooted_dirt",
+          "quality":   -1,
+          "weight":    15
         }
       ],
       "name": "item",

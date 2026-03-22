@@ -42,6 +42,39 @@
           "type": "minecraft:item",
           "functions": [
             {
+              "add":      false,
+              "count":    {
+                "type": "minecraft:uniform",
+                "max":  3.0,
+                "min":  0.0
+              },
+              "function": "minecraft:set_count"
+            }
+          ],
+          "name":      "minecraft:copper_ingot",
+          "weight":    10
+        },
+        {
+          "type":      "minecraft:item",
+          "functions": [
+            {
+              "add":      false,
+              "count":    {
+                "type": "minecraft:uniform",
+                "max":  6.0,
+                "min":  0.0
+              },
+              "function": "minecraft:set_count"
+            }
+          ],
+          "name":      "minecraft:lapis_lazuli",
+          "quality":   1,
+          "weight":    15
+        },
+        {
+          "type": "minecraft:item",
+          "functions": [
+            {
               "add": false,
               "count": {
                 "type": "minecraft:uniform",
@@ -138,16 +171,22 @@
         {
           "type": "minecraft:item",
           "name": "minestuck:energy_core",
-          "weight": 10
+          "weight": 7
         },
         {
           "type": "minecraft:item",
-          "name": "minestuck:gutter_ball"
+          "name":    "minestuck:gutter_ball",
+          "quality": 3
         },
         {
           "type": "minecraft:item",
           "name": "minestuck:plush_mutated_cat",
           "quality": 1,
+          "weight": 2
+        },
+        {
+          "type":   "minecraft:item",
+          "name":   "minestuck:mirror",
           "weight": 2
         }
       ],
