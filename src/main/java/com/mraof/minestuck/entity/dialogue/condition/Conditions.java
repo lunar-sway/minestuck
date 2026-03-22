@@ -5,6 +5,7 @@ import com.mraof.minestuck.Minestuck;
 import com.mraof.minestuck.entity.carapacian.EnumEntityKingdom;
 import com.mraof.minestuck.entity.consort.ConsortEntity;
 import com.mraof.minestuck.entity.consort.EnumConsort;
+import com.mraof.minestuck.world.MSDimensions;
 import com.mraof.minestuck.world.lands.terrain.TerrainLandType;
 import com.mraof.minestuck.world.lands.title.TitleLandType;
 import net.minecraft.core.Registry;
@@ -41,6 +42,7 @@ public final class Conditions
 		REGISTER.register("title_land_type_tag", () -> InTitleLandTypeTag.CODEC);
 		REGISTER.register("at_or_above_y", () -> AtOrAboveY.CODEC);
 		REGISTER.register("npc_in_structure", () -> NPCInStructure.CODEC);
+		REGISTER.register("npc_in_dimension", () -> NPCInDimension.CODEC);
 		REGISTER.register("npc_holding_item", () -> NPCIsHoldingItem.CODEC);
 		REGISTER.register("player_item", () -> PlayerHasItem.CODEC);
 		REGISTER.register("item_tag_match", () -> ItemTagMatch.CODEC);
@@ -58,7 +60,6 @@ public final class Conditions
 		REGISTER.register("move_restriction", () -> HasMoveRestriction.CODEC);
 		REGISTER.register("flag", () -> Flag.CODEC);
 		REGISTER.register("near_spawn", () -> NearSpawn.CODEC);
-		REGISTER.register("is_in_skaia", () -> IsInSkaia.CODEC);
 		REGISTER.register("consort_visited_skaia", () -> ConsortVisitedSkaia.CODEC);
 	}
 	
@@ -129,7 +130,7 @@ public final class Conditions
 	
 	public static Condition isInSkaia()
 	{
-		return IsInSkaia.INSTANCE;
+		return new NPCInDimension(MSDimensions.SKAIA.location());
 	}
 	
 	public static Condition isProspitian()

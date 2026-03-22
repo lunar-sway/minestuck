@@ -1,6 +1,7 @@
 {
   "condition": {
-    "type": "minestuck:is_in_skaia"
+    "type":      "minestuck:npc_in_dimension",
+    "dimension": "minestuck:skaia"
   },
   "dialogue": "minestuck:carapacian_soldier/forlorn",
   "dialogue_weight": 10,

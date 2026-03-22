@@ -85,7 +85,7 @@ public final class CarapacianSoldierDialogue
 		}));
 		
 		provider.addRandomlySelectable("not_so_bad", defaultWeight(isInSkaia()), new ChainBuilder()
-				.node(descriptionNode(l.defaultKeyMsg("They recount one time where they went out to an isolated part of the Battlefield. Unexpectedly, a member of enemy scouting party came across them while sat on a hill side.")))
+				.node(descriptionNode(l.defaultKeyMsg("They recount one time where they went out to an isolated part of the Battlefield. Unexpectedly, a member of the enemy scouting party came across them while sat on a hill side.")))
 				.node(descriptionNode(l.defaultKeyMsg("They went to draw their weapon only to realize they forgot it back at camp. The two soldiers stared at each other for what felt like ages.")))
 				.node(descriptionNode(l.defaultKeyMsg("To make things worse, the rest of the scouting party called out to see what was going on. But just when they thought their life was coming to an end, the other soldier pretended like they weren't there and announced that the area was clear.")))
 				.node(descriptionNode(l.defaultKeyMsg("They never ran so fast, trying to get back somewhere safe. And they certainly never leave anywhere without a weapon now.")))

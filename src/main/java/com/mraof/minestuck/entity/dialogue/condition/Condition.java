@@ -559,6 +559,37 @@ public interface Condition
 		}
 	}
 	
+	record NPCInDimension(ResourceLocation dimension) implements NpcOnlyCondition
+	{
+		static final MapCodec<NPCInDimension> CODEC = RecordCodecBuilder.mapCodec(instance -> instance.group(
+				ResourceLocation.CODEC.fieldOf("dimension").forGetter(NPCInDimension::dimension)
+		).apply(instance, NPCInDimension::new));
+		
+		@Override
+		public MapCodec<NPCInDimension> codec()
+		{
+			return CODEC;
+		}
+		
+		@Override
+		public boolean test(LivingEntity entity)
+		{
+			if(entity.level() instanceof ServerLevel serverLevel)
+			{
+				ResourceLocation registry = serverLevel.dimension().location();
+				return registry.equals(dimension);
+			}
+			
+			return false;
+		}
+		
+		@Override
+		public Component getFailureTooltip()
+		{
+			return Component.literal("NPC is not in the correct dimension");
+		}
+	}
+	
 	record NPCIsHoldingItem(Item item) implements NpcOnlyCondition
 	{
 		static final MapCodec<NPCIsHoldingItem> CODEC = RecordCodecBuilder.mapCodec(instance -> instance.group(
@@ -1079,25 +1110,6 @@ public interface Condition
 			LevelData levelData = entity.level().getLevelData();
 			Vec3 spawn = Vec3.atCenterOf(levelData.getSpawnPos());
 			return entity.distanceToSqr(spawn) <= maxDistance * maxDistance;
-		}
-	}
-	
-	enum IsInSkaia implements NpcOnlyCondition
-	{
-		INSTANCE;
-		static final MapCodec<IsInSkaia> CODEC = MapCodec.unit(INSTANCE);
-		
-		
-		@Override
-		public MapCodec<IsInSkaia> codec()
-		{
-			return CODEC;
-		}
-		
-		@Override
-		public boolean test(LivingEntity entity)
-		{
-			return MSDimensions.isSkaia(entity.level().dimension());
 		}
 	}
 	

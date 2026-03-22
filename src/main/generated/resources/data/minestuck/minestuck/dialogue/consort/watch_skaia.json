@@ -5,7 +5,8 @@
         "type": "minestuck:list",
         "conditions": [
           {
-            "type": "minestuck:is_in_skaia"
+            "type":      "minestuck:npc_in_dimension",
+            "dimension": "minestuck:skaia"
           },
           {
             "type": "minestuck:entity_type",
@@ -23,7 +24,8 @@
     },
     {
       "condition": {
-        "type": "minestuck:is_in_skaia"
+        "type":      "minestuck:npc_in_dimension",
+        "dimension": "minestuck:skaia"
       },
       "node": {
         "animation": {
