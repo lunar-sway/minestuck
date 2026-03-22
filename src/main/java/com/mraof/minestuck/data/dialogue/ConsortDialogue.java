@@ -1,6 +1,7 @@
 package com.mraof.minestuck.data.dialogue;
 
 import com.mraof.minestuck.Minestuck;
+import com.mraof.minestuck.block.MSBlocks;
 import com.mraof.minestuck.data.MSAdvancementProvider;
 import com.mraof.minestuck.data.dialogue.DialogueProvider.NodeBuilder;
 import com.mraof.minestuck.data.dialogue.DialogueProvider.NodeSelectorBuilder;
@@ -12,6 +13,7 @@ import com.mraof.minestuck.entity.dialogue.condition.Condition;
 import com.mraof.minestuck.item.MSItems;
 import com.mraof.minestuck.item.loot.MSLootTables;
 import com.mraof.minestuck.util.MSTags;
+import com.mraof.minestuck.world.gen.structure.MSStructures;
 import net.minecraft.data.DataProvider;
 import net.minecraft.data.PackOutput;
 import net.minecraft.world.item.Item;
@@ -400,8 +402,9 @@ public final class ConsortDialogue
 				new NodeBuilder(l.defaultKeyMsg("Have you ever had a lava-roasted cricket? The lava really brings out the cricket juices.")));
 		provider.addRandomlySelectable("tummy_tunnel", defaultWeight(isInTerrainLand(HEAT)),    //todo review this. This dialogue was set up as regular dialogue in the old system, but its location in the language provider suggested that it might have meant to be food merchant dialogue.
 				new NodeBuilder(l.defaultKeyMsg("Man this shop is packed tighter then my tummy tunnel when I gotta make brown on the john after eating one too many of them incandescent pies what be popping around.")));
-		provider.addRandomlySelectable("the_water_is_molten", defaultWeight(isInTerrainLand(HEAT)),
-				new NodeBuilder(l.defaultKeyMsg("You know the water is fucking molten goo? Who thought it would be a good idea to make water out of lava or some shit? How do we even stay hydrated in this place dude?")).animation(ANGRY_EMOTION));
+		provider.addRandomlySelectable("the_water_is_molten", defaultWeight(isInTerrainLand(HEAT)), new NodeSelectorBuilder()
+				.node(new Condition.NearBlock(MSBlocks.MOLTEN_AMBER.getKey(), 8, 5), new NodeBuilder(l.subMsg("too_close", "Sorry I can't talk right now, we are wayyyy too close to this magma shit and I just know a bubble will pop and spray me with 10000 degree bullshit.")).animation(ANGRY_EMOTION))
+				.defaultNode(new NodeBuilder(l.defaultKeyMsg("You know the water is fucking molten goo? Who thought it would be a good idea to make water out of lava or some shit? How do we even stay hydrated in this place dude?")).animation(ANGRY_EMOTION)));
 		terrainFaygoDialogue(provider, l, MSItems.CANDY_APPLE_FAYGO, "Candy Apple", MSItems.SCALEMATE_APPLESCAB, "Applescab", isInTerrainLand(HEAT));
 		
 		
@@ -629,8 +632,10 @@ public final class ConsortDialogue
 				new NodeBuilder(l.defaultKeyMsg("Red is much better than yellow, don't you think?")));
 		provider.addRandomlySelectable("yellow_better", defaultWeight(any(isInTerrainLand(SAND), isInTerrainLand(SANDSTONE))),
 				new NodeBuilder(l.defaultKeyMsg("In our village, we have tales of monsters that are attracted to red. That's why everything is yellow!")));
-		provider.addRandomlySelectable("bad_water", defaultWeight(any(isInTerrainLand(SHADE), isInTerrainLand(HEAT), isInTerrainLand(WOOD), isInTerrainLand(RAINBOW), isInTerrainLand(END))),
+		provider.addRandomlySelectable("bad_water", weighted(11, any(isInTerrainLand(SHADE), isInTerrainLand(HEAT), isInTerrainLand(WOOD), isInTerrainLand(RAINBOW), isInTerrainLand(END), isInTitleLand(PULSE))),
 				new NodeBuilder(l.defaultKeyMsg("Can you imagine living in a world where the liquid in the oceans is actually drinkable?")));
+		provider.addRandomlySelectable("strange_shores", weighted(16, all(any(isInTerrainLand(SHADE), isInTerrainLand(HEAT), isInTerrainLand(WOOD), isInTerrainLand(RAINBOW), isInTerrainLand(END)), new Condition.NearBlockTag(MSTags.Blocks.LAND_OCEAN_FLUIDS, 9, 5))),
+				new NodeBuilder(l.defaultKeyMsg("I like hanging out on the shore. Most people think its strange, who's ever heard of just sitting and watching fluid move?")));
 		terrainFaygoDialogue(provider, l, MSItems.FAYGO_COLA, "Cola", MSItems.SCALEMATE_PYRALSPITE, "Pyralspite", any(isInTerrainLand(WOOD), isInTerrainLand(FROST), isInTerrainLand(FUNGI), isInTerrainLand(RAIN)));
 		
 		
@@ -700,6 +705,8 @@ public final class ConsortDialogue
 				new NodeBuilder(l.defaultKeyMsg("I bought a bunch of stocks on the market... Now I'm broke...")).animation(ANXIOUS_EMOTION));
 		provider.addRandomlySelectable("identity", defaultWeight(all(isAnyEntityType(SALAMANDER), isFromLand())),
 				new NodeBuilder(l.defaultKeyMsg("I heard that the true name of the %s is %s. Isn't that cool?", Argument.LAND_TITLE, Argument.LAND_PLAYER_NAME)));
+		provider.addRandomlySelectable("too_crowded", defaultWeight(new Condition.NearEntityTypeTag(MSTags.EntityTypes.CONSORTS, 12, 8)),
+				new NodeBuilder(l.defaultKeyMsg("There are way too many consorts here. Don't they know what personal space is??")).animation(ANGRY_EMOTION));
 		provider.addRandomlySelectable("college", defaultWeight(alwaysTrue()), new NodeSelectorBuilder()
 				.node(new Condition.PlayerHasBoondollars(1000), new ChainBuilder()
 						.node(new NodeBuilder(l.defaultKeyMsg("Wow, you have so many boondollars! I'll never make that much in my short, amphibious lifetime.")))
@@ -830,6 +837,8 @@ public final class ConsortDialogue
 		));
 		provider.addRandomlySelectable("floating_island", defaultWeight(all(isInHomeLand(), new Condition.NearSpawn(256))),
 				new NodeBuilder(l.defaultKeyMsg("I heard a floating island just appeared somewhere near here recently and falling chunks destroyed a village underneath it!")));
+		provider.addRandomlySelectable("best_village", defaultWeight(all(isAnyEntityType(SALAMANDER, IGUANA, NAKAGATOR), new Condition.NPCInStructure(MSStructures.ConsortVillage.KEY.location()))),
+				new NodeBuilder(l.defaultKeyMsg("This village? Yeah, this is the best village around. You haven't been to a village until you've been here.")));
 		provider.addRandomlySelectable("heroic_stench", defaultWeight(isInLand()), new NodeSelectorBuilder()
 				.node(Condition.PlayerHasEntered.INSTANCE, new NodeBuilder(l.defaultKeyMsg("You smell kind of... heroic... like a hero, perhaps? It makes me kinda nervous to be around you!")).animation(ANXIOUS_EMOTION))
 				.defaultNode(new NodeBuilder(l.subMsg("leech", "You smell like you're leeching from the success from another hero... is this true?"))));

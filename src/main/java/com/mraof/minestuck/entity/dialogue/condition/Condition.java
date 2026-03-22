@@ -21,25 +21,28 @@ import com.mraof.minestuck.world.lands.terrain.TerrainLandType;
 import com.mraof.minestuck.world.lands.title.TitleLandType;
 import net.minecraft.advancements.AdvancementHolder;
 import net.minecraft.advancements.critereon.LocationPredicate;
+import net.minecraft.core.BlockPos;
 import net.minecraft.core.Holder;
 import net.minecraft.core.HolderSet;
 import net.minecraft.core.Registry;
 import net.minecraft.core.registries.BuiltInRegistries;
 import net.minecraft.core.registries.Registries;
 import net.minecraft.network.chat.Component;
+import net.minecraft.resources.ResourceKey;
 import net.minecraft.resources.ResourceLocation;
 import net.minecraft.server.level.ServerLevel;
 import net.minecraft.server.level.ServerPlayer;
 import net.minecraft.tags.TagKey;
-import net.minecraft.world.entity.EntityType;
-import net.minecraft.world.entity.LivingEntity;
-import net.minecraft.world.entity.Mob;
+import net.minecraft.world.entity.*;
 import net.minecraft.world.entity.player.Player;
 import net.minecraft.world.item.Item;
 import net.minecraft.world.item.ItemStack;
 import net.minecraft.world.level.Level;
+import net.minecraft.world.level.block.Block;
+import net.minecraft.world.level.block.state.BlockState;
 import net.minecraft.world.level.levelgen.structure.Structure;
 import net.minecraft.world.level.storage.LevelData;
+import net.minecraft.world.phys.AABB;
 import net.minecraft.world.phys.Vec3;
 import net.minecraft.world.scores.Objective;
 import net.minecraft.world.scores.PlayerScoreEntry;
@@ -524,6 +527,176 @@ public interface Condition
 		public Component getFailureTooltip()
 		{
 			return Component.literal("Is not at the right height");
+		}
+	}
+	
+	record NearBlock(ResourceKey<Block> blockID, int radius, int count) implements NpcOnlyCondition
+	{
+		static final MapCodec<NearBlock> CODEC = RecordCodecBuilder.mapCodec(instance -> instance.group(
+				ResourceKey.codec(Registries.BLOCK).fieldOf("block_id").forGetter(NearBlock::blockID),
+				Codec.INT.optionalFieldOf("radius", 8).forGetter(NearBlock::radius),
+				Codec.INT.optionalFieldOf("count", 1).forGetter(NearBlock::count)
+		).apply(instance, NearBlock::new));
+		
+		@Override
+		public MapCodec<NearBlock> codec()
+		{
+			return CODEC;
+		}
+		
+		@Override
+		public boolean test(LivingEntity entity)
+		{
+			if(entity.level() instanceof ServerLevel serverLevel)
+			{
+				int matches = 0;
+				for(BlockPos blockPos : BlockPos.betweenClosed(entity.blockPosition().offset(radius, radius, radius), entity.blockPosition().offset(-radius, -radius, -radius)))
+				{
+					BlockState blockState = serverLevel.getBlockState(blockPos);
+					if(blockState.is(blockID))
+						matches++;
+					
+					if(matches >= count)
+						return true;
+				}
+			}
+			
+			return false;
+		}
+		
+		@Override
+		public Component getFailureTooltip()
+		{
+			return Component.literal("NPC is not near the correct block, or enough units of it");
+		}
+	}
+	
+	record NearBlockTag(TagKey<Block> blockTag, int radius, int count) implements NpcOnlyCondition
+	{
+		static final MapCodec<NearBlockTag> CODEC = RecordCodecBuilder.mapCodec(instance -> instance.group(
+				TagKey.codec(Registries.BLOCK).fieldOf("block_tag").forGetter(NearBlockTag::blockTag),
+				Codec.INT.optionalFieldOf("radius", 8).forGetter(NearBlockTag::radius),
+				Codec.INT.optionalFieldOf("count", 1).forGetter(NearBlockTag::count)
+		).apply(instance, NearBlockTag::new));
+		
+		@Override
+		public MapCodec<NearBlockTag> codec()
+		{
+			return CODEC;
+		}
+		
+		@Override
+		public boolean test(LivingEntity entity)
+		{
+			if(entity.level() instanceof ServerLevel serverLevel)
+			{
+				int matches = 0;
+				for(BlockPos blockPos : BlockPos.betweenClosed(entity.blockPosition().offset(radius, radius, radius), entity.blockPosition().offset(-radius, -radius, -radius)))
+				{
+					BlockState blockState = serverLevel.getBlockState(blockPos);
+					if(blockState.is(blockTag))
+						matches++;
+					
+					if(matches >= count)
+						return true;
+				}
+			}
+			
+			return false;
+		}
+		
+		@Override
+		public Component getFailureTooltip()
+		{
+			return Component.literal("NPC is not near the correct block tag, or enough units of it");
+		}
+	}
+	
+	record NearEntityType(EntityType<?> entityType, int radius, int count) implements NpcOnlyCondition
+	{
+		static final MapCodec<NearEntityType> CODEC = RecordCodecBuilder.mapCodec(instance -> instance.group(
+				BuiltInRegistries.ENTITY_TYPE.byNameCodec().fieldOf("entity_type").forGetter(NearEntityType::entityType),
+				Codec.INT.optionalFieldOf("radius", 12).forGetter(NearEntityType::radius),
+				Codec.INT.optionalFieldOf("count", 1).forGetter(NearEntityType::count)
+		).apply(instance, NearEntityType::new));
+		
+		@Override
+		public MapCodec<NearEntityType> codec()
+		{
+			return CODEC;
+		}
+		
+		@Override
+		public boolean test(LivingEntity entity)
+		{
+			AABB axisalignedbb = entity.getBoundingBox().inflate(radius);
+			List<Entity> list = entity.level().getEntitiesOfClass(Entity.class, axisalignedbb);
+			list.remove(entity);
+			
+			int matches = 0;
+			if(!list.isEmpty() && !entity.level().isClientSide)
+			{
+				for(Entity entityIterate : list)
+				{
+					if(entityIterate.getType().equals(entityType))
+						matches++;
+					
+					if(matches >= count)
+						return true;
+				}
+			}
+			
+			return false;
+		}
+		
+		@Override
+		public Component getFailureTooltip()
+		{
+			return Component.literal("NPC is not near the correct entity, or enough units of it");
+		}
+	}
+	
+	record NearEntityTypeTag(TagKey<EntityType<?>> entityTypeTag, int radius, int count) implements NpcOnlyCondition
+	{
+		static final MapCodec<NearEntityTypeTag> CODEC = RecordCodecBuilder.mapCodec(instance -> instance.group(
+				TagKey.codec(Registries.ENTITY_TYPE).fieldOf("entity_type").forGetter(NearEntityTypeTag::entityTypeTag),
+				Codec.INT.optionalFieldOf("radius", 12).forGetter(NearEntityTypeTag::radius),
+				Codec.INT.optionalFieldOf("count", 1).forGetter(NearEntityTypeTag::count)
+		).apply(instance, NearEntityTypeTag::new));
+		
+		@Override
+		public MapCodec<NearEntityTypeTag> codec()
+		{
+			return CODEC;
+		}
+		
+		@Override
+		public boolean test(LivingEntity entity)
+		{
+			AABB axisalignedbb = entity.getBoundingBox().inflate(radius);
+			List<Entity> list = entity.level().getEntitiesOfClass(Entity.class, axisalignedbb);
+			list.remove(entity);
+			
+			int matches = 0;
+			if(!list.isEmpty() && !entity.level().isClientSide)
+			{
+				for(Entity entityIterate : list)
+				{
+					if(entityIterate.getType().is(entityTypeTag))
+						matches++;
+					
+					if(matches >= count)
+						return true;
+				}
+			}
+			
+			return false;
+		}
+		
+		@Override
+		public Component getFailureTooltip()
+		{
+			return Component.literal("NPC is not near the correct entity tag, or enough units of it");
 		}
 	}
 	

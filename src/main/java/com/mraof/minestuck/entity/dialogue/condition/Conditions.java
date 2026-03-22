@@ -32,7 +32,7 @@ public final class Conditions
 		REGISTER.register("carapacian", () -> IsCarapacian.CODEC);
 		REGISTER.register("is_from_kingdom", () -> IsFromKingdom.CODEC);
 		REGISTER.register("entity_type", () -> IsEntityType.CODEC);
-		REGISTER.register("is_is_land", () -> IsInLand.CODEC);
+		REGISTER.register("is_in_land", () -> IsInLand.CODEC);
 		REGISTER.register("is_consort_from_land", () -> IsConsortFromLand.CODEC);
 		REGISTER.register("is_consort_in_home_land", () -> IsConsortInHomeLand.CODEC);
 		REGISTER.register("terrain_land_type", () -> InTerrainLandType.CODEC);
@@ -41,6 +41,10 @@ public final class Conditions
 		REGISTER.register("title_land_type", () -> InTitleLandType.CODEC);
 		REGISTER.register("title_land_type_tag", () -> InTitleLandTypeTag.CODEC);
 		REGISTER.register("at_or_above_y", () -> AtOrAboveY.CODEC);
+		REGISTER.register("near_block", () -> NearBlock.CODEC);
+		REGISTER.register("near_block_tag", () -> NearBlockTag.CODEC);
+		REGISTER.register("near_entity_type", () -> NearEntityType.CODEC);
+		REGISTER.register("near_entity_type_tag", () -> NearEntityTypeTag.CODEC);
 		REGISTER.register("npc_in_structure", () -> NPCInStructure.CODEC);
 		REGISTER.register("npc_in_dimension", () -> NPCInDimension.CODEC);
 		REGISTER.register("npc_holding_item", () -> NPCIsHoldingItem.CODEC);

@@ -1,5 +1,22 @@
 {
-  "node": {
+  "conditioned_nodes": [
+    {
+      "condition": {
+        "type":     "minestuck:near_block",
+        "block_id": "minestuck:molten_amber",
+        "count":    5
+      },
+      "node":      {
+        "animation": {
+          "emotion": "angry"
+        },
+        "gui":       "minestuck:textures/gui/dialogue/dialogue.png",
+        "message":   "minestuck.dialogue.consort.the_water_is_molten.too_close",
+        "responses": [ ]
+      }
+    }
+  ],
+  "default_node":      {
     "animation": {
       "emotion": "angry"
     },
