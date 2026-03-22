@@ -2,8 +2,14 @@
   "conditioned_nodes": [
     {
       "condition": {
-        "type": "minestuck:at_or_above_y",
-        "y": 78.0
+        "type":      "minestuck:npc_location_predicate",
+        "predicate": {
+          "position": {
+            "y": {
+              "min": 78.0
+            }
+          }
+        }
       },
       "node": {
         "animation": {

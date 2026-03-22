@@ -8,14 +8,20 @@ import com.mraof.minestuck.entity.consort.EnumConsort;
 import com.mraof.minestuck.world.MSDimensions;
 import com.mraof.minestuck.world.lands.terrain.TerrainLandType;
 import com.mraof.minestuck.world.lands.title.TitleLandType;
+import net.minecraft.advancements.critereon.*;
+import net.minecraft.core.HolderSet;
 import net.minecraft.core.Registry;
+import net.minecraft.nbt.CompoundTag;
+import net.minecraft.nbt.Tag;
 import net.minecraft.tags.TagKey;
 import net.minecraft.world.entity.EntityType;
 import net.minecraft.world.item.Item;
 import net.neoforged.neoforge.registries.DeferredRegister;
 
+import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.List;
+import java.util.Optional;
 import java.util.function.Supplier;
 
 import static com.mraof.minestuck.entity.dialogue.condition.Condition.*;
@@ -25,7 +31,8 @@ public final class Conditions
 	public static final DeferredRegister<MapCodec<? extends Condition>> REGISTER = DeferredRegister.create(Minestuck.id("dialogue_condition"), Minestuck.MOD_ID);
 	public static final Registry<MapCodec<? extends Condition>> REGISTRY = REGISTER.makeRegistry(builder -> {});
 	
-	static {
+	static
+	{
 		REGISTER.register("always_true", () -> AlwaysTrue.CODEC);
 		REGISTER.register("first_time_generating", () -> FirstTimeGenerating.CODEC);
 		REGISTER.register("list", () -> ListCondition.CODEC);
@@ -40,13 +47,13 @@ public final class Conditions
 		REGISTER.register("consort_terrain_land_type", () -> InConsortTerrainLandType.CODEC);
 		REGISTER.register("title_land_type", () -> InTitleLandType.CODEC);
 		REGISTER.register("title_land_type_tag", () -> InTitleLandTypeTag.CODEC);
-		REGISTER.register("at_or_above_y", () -> AtOrAboveY.CODEC);
 		REGISTER.register("near_block", () -> NearBlock.CODEC);
 		REGISTER.register("near_block_tag", () -> NearBlockTag.CODEC);
 		REGISTER.register("near_entity_type", () -> NearEntityType.CODEC);
 		REGISTER.register("near_entity_type_tag", () -> NearEntityTypeTag.CODEC);
+		REGISTER.register("npc_location_predicate", () -> NPCLocationPredicate.CODEC);
+		REGISTER.register("npc_entity_predicate", () -> NPCEntityPredicate.CODEC);
 		REGISTER.register("npc_in_structure", () -> NPCInStructure.CODEC);
-		REGISTER.register("npc_in_dimension", () -> NPCInDimension.CODEC);
 		REGISTER.register("npc_holding_item", () -> NPCIsHoldingItem.CODEC);
 		REGISTER.register("player_item", () -> PlayerHasItem.CODEC);
 		REGISTER.register("item_tag_match", () -> ItemTagMatch.CODEC);
@@ -64,7 +71,6 @@ public final class Conditions
 		REGISTER.register("move_restriction", () -> HasMoveRestriction.CODEC);
 		REGISTER.register("flag", () -> Flag.CODEC);
 		REGISTER.register("near_spawn", () -> NearSpawn.CODEC);
-		REGISTER.register("consort_visited_skaia", () -> ConsortVisitedSkaia.CODEC);
 	}
 	
 	public static Condition alwaysTrue()
@@ -134,7 +140,12 @@ public final class Conditions
 	
 	public static Condition isInSkaia()
 	{
-		return new NPCInDimension(MSDimensions.SKAIA.location());
+		return new NPCLocationPredicate(new LocationPredicate.Builder().setDimension(MSDimensions.SKAIA).build());
+	}
+	
+	public static Condition isAtOrAboveY(int minY)
+	{
+		return new Condition.NPCLocationPredicate(LocationPredicate.Builder.location().setY(MinMaxBounds.Doubles.atLeast(minY)).build());
 	}
 	
 	public static Condition isProspitian()
@@ -151,6 +162,7 @@ public final class Conditions
 	{
 		return PlayerHasEntered.INSTANCE;
 	}
+	
 	public static PlayerOnlyCondition hasAdvancement(String name)
 	{
 		return new PlayerHasAdvancement(Minestuck.id(name.replace(".", "/")));
@@ -159,6 +171,13 @@ public final class Conditions
 	public static Condition isHolding(Item item)
 	{
 		return new NPCIsHoldingItem(item);
+	}
+	
+	public static Condition hasVisitedSkaia()
+	{
+		CompoundTag nbt = new CompoundTag();
+		nbt.putBoolean("Skaia", true);
+		return new NPCEntityPredicate(new EntityPredicate.Builder().nbt(new NbtPredicate(nbt)).build());
 	}
 	
 	@SafeVarargs

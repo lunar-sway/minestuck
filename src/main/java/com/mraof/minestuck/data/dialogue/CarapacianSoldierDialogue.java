@@ -15,7 +15,6 @@ import com.mraof.minestuck.item.MSItems;
 import com.mraof.minestuck.world.gen.structure.MSStructures;
 import net.minecraft.data.DataProvider;
 import net.minecraft.data.PackOutput;
-import net.minecraft.resources.ResourceLocation;
 import net.minecraft.tags.ItemTags;
 import net.minecraft.world.entity.EquipmentSlot;
 import net.neoforged.neoforge.common.data.LanguageProvider;
@@ -146,11 +145,11 @@ public final class CarapacianSoldierDialogue
 			);
 		}));
 		
-		provider.addRandomlySelectable("bunker_thieves", weighted(2, all(none(new Condition.AtOrAboveY(64)), any(new Condition.NPCInStructure(MSStructures.DERSE_BUNKER.location()), new Condition.NPCInStructure(MSStructures.PROSPIT_BUNKER.location())))),
-				descriptionNode(l.defaultKeyMsg("They are complaining about a consort that came through and stolen food.")));
-		provider.addRandomlySelectable("bunker_sweep", defaultWeight(all(none(new Condition.AtOrAboveY(64)), any(new Condition.NPCInStructure(MSStructures.DERSE_BUNKER.location()), new Condition.NPCInStructure(MSStructures.PROSPIT_BUNKER.location())))),
+		provider.addRandomlySelectable("bunker_thieves", weighted(2, all(none(isAtOrAboveY(64)), any(new Condition.NPCInStructure(MSStructures.DERSE_BUNKER.location()), new Condition.NPCInStructure(MSStructures.PROSPIT_BUNKER.location())))),
+				descriptionNode(l.defaultKeyMsg("They are complaining about a consort that came through and stole food.")));
+		provider.addRandomlySelectable("bunker_sweep", defaultWeight(all(none(isAtOrAboveY(64)), any(new Condition.NPCInStructure(MSStructures.DERSE_BUNKER.location()), new Condition.NPCInStructure(MSStructures.PROSPIT_BUNKER.location())))),
 				descriptionNode(l.defaultKeyMsg("They are focused on sweeping the floors.")));
-		provider.addRandomlySelectable("bunker_restock", defaultWeight(all(none(new Condition.AtOrAboveY(64)), any(new Condition.NPCInStructure(MSStructures.DERSE_BUNKER.location()), new Condition.NPCInStructure(MSStructures.PROSPIT_BUNKER.location())))),
+		provider.addRandomlySelectable("bunker_restock", defaultWeight(all(none(isAtOrAboveY(64)), any(new Condition.NPCInStructure(MSStructures.DERSE_BUNKER.location()), new Condition.NPCInStructure(MSStructures.PROSPIT_BUNKER.location())))),
 				descriptionNode(l.defaultKeyMsg("They are thinking about restocking the chests again.")));
 		provider.addRandomlySelectable("bunker_abandonment", defaultWeight(any(new Condition.NPCInStructure(MSStructures.DERSE_BUNKER.location()), new Condition.NPCInStructure(MSStructures.PROSPIT_BUNKER.location()))),
 				descriptionNode(l.defaultKeyMsg("They mention how they have had to abandoned bunkers before. When they came back to check on them, they were overrun with underlings.")));
@@ -179,7 +178,7 @@ public final class CarapacianSoldierDialogue
 					.node(descriptionNode(l.defaultKeyMsg("While Lands are considered neutral territory, that doesn't mean it always will be.")))
 					.node(descriptionNode(l.defaultKeyMsg("So a small portion of the military has set up post and created a sprawling section below ground in some of them."))
 							.addResponse(new ResponseBuilder(l.subMsg("access", "How do you access the section below ground?"))
-									.condition(new Condition.AtOrAboveY(64)) //otherwise assumed to be inside already
+									.condition(isAtOrAboveY(64)) //otherwise assumed to be inside already
 									.nextDialogue(access))
 							.addResponse(new ResponseBuilder(l.subMsg("why_fight", "Why are you fighting?"))
 									.nextDialogue(dontKnow))

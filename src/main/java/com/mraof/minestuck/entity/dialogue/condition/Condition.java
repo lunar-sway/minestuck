@@ -19,7 +19,8 @@ import com.mraof.minestuck.world.lands.LandTypePair;
 import com.mraof.minestuck.world.lands.LandTypes;
 import com.mraof.minestuck.world.lands.terrain.TerrainLandType;
 import com.mraof.minestuck.world.lands.title.TitleLandType;
-import net.minecraft.advancements.AdvancementHolder;
+import net.minecraft.advancements.*;
+import net.minecraft.advancements.critereon.EntityPredicate;
 import net.minecraft.advancements.critereon.LocationPredicate;
 import net.minecraft.core.BlockPos;
 import net.minecraft.core.Holder;
@@ -228,6 +229,7 @@ public interface Condition
 		}
 	}
 	
+	//TODO this is redundant to NPCEntityPredicate, figure out crashes related to CompletableFuture
 	record IsEntityType(EntityType<?> entityType) implements NpcOnlyCondition
 	{
 		static final MapCodec<IsEntityType> CODEC = RecordCodecBuilder.mapCodec(instance -> instance.group(
@@ -505,31 +507,6 @@ public interface Condition
 		}
 	}
 	
-	record AtOrAboveY(double y) implements NpcOnlyCondition
-	{
-		static final MapCodec<AtOrAboveY> CODEC = RecordCodecBuilder.mapCodec(instance -> instance.group(
-				Codec.DOUBLE.fieldOf("y").forGetter(AtOrAboveY::y)
-		).apply(instance, AtOrAboveY::new));
-		
-		@Override
-		public MapCodec<AtOrAboveY> codec()
-		{
-			return CODEC;
-		}
-		
-		@Override
-		public boolean test(LivingEntity entity)
-		{
-			return this.y <= entity.getY();
-		}
-		
-		@Override
-		public Component getFailureTooltip()
-		{
-			return Component.literal("Is not at the right height");
-		}
-	}
-	
 	record NearBlock(ResourceKey<Block> blockID, int radius, int count) implements NpcOnlyCondition
 	{
 		static final MapCodec<NearBlock> CODEC = RecordCodecBuilder.mapCodec(instance -> instance.group(
@@ -700,6 +677,63 @@ public interface Condition
 		}
 	}
 	
+	record NPCLocationPredicate(LocationPredicate predicate) implements NpcOnlyCondition
+	{
+		static final MapCodec<NPCLocationPredicate> CODEC = RecordCodecBuilder.mapCodec(instance -> instance.group(
+				LocationPredicate.CODEC.fieldOf("predicate").forGetter(NPCLocationPredicate::predicate)
+		).apply(instance, NPCLocationPredicate::new));
+		
+		@Override
+		public MapCodec<NPCLocationPredicate> codec()
+		{
+			return CODEC;
+		}
+		
+		@Override
+		public boolean test(LivingEntity entity)
+		{
+			if(entity.level() instanceof ServerLevel serverLevel)
+				return predicate.matches(serverLevel, entity.getX(), entity.getY(), entity.getZ());
+			
+			return false;
+		}
+		
+		@Override
+		public Component getFailureTooltip()
+		{
+			return Component.literal("NPC is not in the correct location");
+		}
+	}
+	
+	record NPCEntityPredicate(EntityPredicate predicate) implements NpcOnlyCondition
+	{
+		static final MapCodec<NPCEntityPredicate> CODEC = RecordCodecBuilder.mapCodec(instance -> instance.group(
+				EntityPredicate.CODEC.fieldOf("predicate").forGetter(NPCEntityPredicate::predicate)
+		).apply(instance, NPCEntityPredicate::new));
+		
+		@Override
+		public MapCodec<NPCEntityPredicate> codec()
+		{
+			return CODEC;
+		}
+		
+		@Override
+		public boolean test(LivingEntity entity)
+		{
+			if(entity.level() instanceof ServerLevel serverLevel)
+				return predicate.matches(serverLevel, null, entity);
+			
+			return false;
+		}
+		
+		@Override
+		public Component getFailureTooltip()
+		{
+			return Component.literal("The NPC does not match the predicate");
+		}
+	}
+	
+	//TODO this is redundant to NPCLocationPredicate, figure out crashes related to CompletableFuture
 	record NPCInStructure(ResourceLocation structureID) implements NpcOnlyCondition
 	{
 		static final MapCodec<NPCInStructure> CODEC = RecordCodecBuilder.mapCodec(instance -> instance.group(
@@ -732,37 +766,7 @@ public interface Condition
 		}
 	}
 	
-	record NPCInDimension(ResourceLocation dimension) implements NpcOnlyCondition
-	{
-		static final MapCodec<NPCInDimension> CODEC = RecordCodecBuilder.mapCodec(instance -> instance.group(
-				ResourceLocation.CODEC.fieldOf("dimension").forGetter(NPCInDimension::dimension)
-		).apply(instance, NPCInDimension::new));
-		
-		@Override
-		public MapCodec<NPCInDimension> codec()
-		{
-			return CODEC;
-		}
-		
-		@Override
-		public boolean test(LivingEntity entity)
-		{
-			if(entity.level() instanceof ServerLevel serverLevel)
-			{
-				ResourceLocation registry = serverLevel.dimension().location();
-				return registry.equals(dimension);
-			}
-			
-			return false;
-		}
-		
-		@Override
-		public Component getFailureTooltip()
-		{
-			return Component.literal("NPC is not in the correct dimension");
-		}
-	}
-	
+	//TODO this is redundant to NPCEntityPredicate, figure out crashes related to CompletableFuture
 	record NPCIsHoldingItem(Item item) implements NpcOnlyCondition
 	{
 		static final MapCodec<NPCIsHoldingItem> CODEC = RecordCodecBuilder.mapCodec(instance -> instance.group(
@@ -1285,24 +1289,4 @@ public interface Condition
 			return entity.distanceToSqr(spawn) <= maxDistance * maxDistance;
 		}
 	}
-	
-	enum ConsortVisitedSkaia implements NpcOnlyCondition
-	{
-		INSTANCE;
-		static final MapCodec<ConsortVisitedSkaia> CODEC = MapCodec.unit(INSTANCE);
-		
-		
-		@Override
-		public MapCodec<ConsortVisitedSkaia> codec()
-		{
-			return CODEC;
-		}
-		
-		@Override
-		public boolean test(LivingEntity entity)
-		{
-			return entity instanceof ConsortEntity consort && consort.visitedSkaia();
-		}
-	}
-	
 }

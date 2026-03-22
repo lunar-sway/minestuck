@@ -358,7 +358,7 @@ public final class ConsortDialogue
 		provider.addRandomlySelectable("climb_high", defaultWeight(all(any(isInTitleLand(TOWERS), isInTitleLand(WIND)), isAnyEntityType(IGUANA))),
 				new NodeBuilder(l.defaultKeyMsg("Climb up high and you'll be up for a great view!")));
 		provider.addRandomlySelectable("height_fear", defaultWeight(all(any(isInTitleLand(TOWERS), isInTitleLand(WIND)), isAnyEntityType(TURTLE))), new NodeSelectorBuilder()
-				.node(new Condition.AtOrAboveY(78), new NodeBuilder(l.subMsg("panic", "AAH, I am scared of heights!")).animation(ANXIOUS_EMOTION))
+				.node(isAtOrAboveY(78), new NodeBuilder(l.subMsg("panic", "AAH, I am scared of heights!")).animation(ANXIOUS_EMOTION))
 				.node(isInTitleLand(TOWERS), "towers", new ChainBuilder()
 						.node(new NodeBuilder(l.defaultKeyMsg("I'd climb up one of those towers and look at the view, but I am scared of heights.")))
 						.node(new NodeBuilder(l.defaultKeyMsg("I mean, what if I slipped and fell off the stairs?"))))
@@ -845,7 +845,7 @@ public final class ConsortDialogue
 		provider.addRandomlySelectable("watch_skaia", defaultWeight(isFromLand()), new NodeSelectorBuilder()
 				.node(all(isInSkaia(), isAnyEntityType(TURTLE)), new NodeBuilder(l.subMsg("at_skaia.turtle", "Oh my...! I'm actually on Skaia!")))
 				.node(isInSkaia(), new NodeBuilder(l.subMsg("at_skaia", "OH MY %s! I'M ACTUALLY ON SKAIA!", Argument.ENTITY_SOUND_2)).animation(HAPPY_EMOTION))
-				.node(Condition.ConsortVisitedSkaia.INSTANCE, new NodeBuilder(l.subMsg("has_visited", "You know, I have actually visited Skaia at one point!")))
+				.node(hasVisitedSkaia(), new NodeBuilder(l.subMsg("has_visited", "You know, I have actually visited Skaia at one point!")))
 				.defaultNode(new NodeBuilder(l.defaultKeyMsg("Sometimes, I look up in the sky to see Skaia and wish I could visit there some day..."))));
 		provider.addRandomlySelectable("echeladder_progress", defaultWeight(alwaysTrue()), new FolderedDialogue(builder ->
 		{

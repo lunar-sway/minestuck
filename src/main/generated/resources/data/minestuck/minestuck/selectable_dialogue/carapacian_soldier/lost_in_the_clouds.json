@@ -1,9 +1,11 @@
 {
-  "condition":     {
-    "type":      "minestuck:npc_in_dimension",
-    "dimension": "minestuck:skaia"
+  "condition": {
+    "type":      "minestuck:npc_location_predicate",
+    "predicate": {
+      "dimension": "minestuck:skaia"
+    }
   },
-  "dialogue":      "minestuck:carapacian_soldier/lost_in_the_clouds",
+  "dialogue":  "minestuck:carapacian_soldier/lost_in_the_clouds",
   "dialogue_weight": 10,
   "keep_on_reset": false
 }
