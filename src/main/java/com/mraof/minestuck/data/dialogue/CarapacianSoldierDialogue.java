@@ -15,7 +15,6 @@ import com.mraof.minestuck.item.MSItems;
 import com.mraof.minestuck.world.gen.structure.MSStructures;
 import net.minecraft.data.DataProvider;
 import net.minecraft.data.PackOutput;
-import net.minecraft.resources.ResourceLocation;
 import net.minecraft.tags.ItemTags;
 import net.minecraft.world.entity.EquipmentSlot;
 import net.neoforged.neoforge.common.data.LanguageProvider;
@@ -61,6 +60,15 @@ public final class CarapacianSoldierDialogue
 		provider.addRandomlySelectable("rain_sleet_or_snow", defaultWeight(alwaysTrue()),
 				descriptionNode(l.defaultKeyMsg("They sigh and share that they would love to deliver mail one day. That has to be one of the most honorable professions out there.")));
 		
+		provider.addRandomlySelectable("chess_desire", defaultWeight(alwaysTrue()),
+				descriptionNode(l.defaultKeyMsg("They are daydreaming about playing chess.")));
+		
+		provider.addRandomlySelectable("good_memory", defaultWeight(alwaysTrue()),
+				descriptionNode(l.defaultKeyMsg("They inform you about how good carapacian memory can be. Especially when it comes to when and where they have traveled.")));
+		
+		provider.addRandomlySelectable("oracle_clouds", defaultWeight(none(isInSkaia())),
+				descriptionNode(l.defaultKeyMsg("They say that the clouds of Skaia are capable of showing you events. Past, present, and future. Time is a more moldable construct than one might want to believe.")));
+		
 		provider.addRandomlySelectable("dreamer", defaultWeight(alwaysTrue()), new FolderedDialogue(builder ->
 		{
 			var explainDreamers = builder.add("explain_dreamers", new ChainBuilder()
@@ -76,7 +84,7 @@ public final class CarapacianSoldierDialogue
 		}));
 		
 		provider.addRandomlySelectable("not_so_bad", defaultWeight(isInSkaia()), new ChainBuilder()
-				.node(descriptionNode(l.defaultKeyMsg("They recount one time where they went out to an isolated part of the Battlefield. Unexpectedly, a member of enemy scouting party came across them while sat on a hill side.")))
+				.node(descriptionNode(l.defaultKeyMsg("They recount one time where they went out to an isolated part of the Battlefield. Unexpectedly, a member of the enemy scouting party came across them while sat on a hill side.")))
 				.node(descriptionNode(l.defaultKeyMsg("They went to draw their weapon only to realize they forgot it back at camp. The two soldiers stared at each other for what felt like ages.")))
 				.node(descriptionNode(l.defaultKeyMsg("To make things worse, the rest of the scouting party called out to see what was going on. But just when they thought their life was coming to an end, the other soldier pretended like they weren't there and announced that the area was clear.")))
 				.node(descriptionNode(l.defaultKeyMsg("They never ran so fast, trying to get back somewhere safe. And they certainly never leave anywhere without a weapon now.")))
@@ -88,6 +96,9 @@ public final class CarapacianSoldierDialogue
 		provider.addRandomlySelectable("propaganda", defaultWeight(all(isInSkaia(), isDersite())),
 				descriptionNode(l.defaultKeyMsg("They already knew that the propaganda surrounding Prospitians was fake but it was still surprising to see that they didn't have horns or cool fangs or blood red eyes. Kind of a bummer honestly.")));
 		
+		provider.addRandomlySelectable("lost_in_the_clouds", defaultWeight(isInSkaia()),
+				descriptionNode(l.defaultKeyMsg("They are getting lost looking at the clouds, wondering if they will bring visions of the future.")));
+		
 		provider.addRandomlySelectable("teeth", defaultWeight(alwaysTrue()),
 				descriptionNode(l.defaultKeyMsg("They find it curious that certain carapacians have sharp jagged teeth when the vast majority have rounded ones.")));
 		
@@ -96,6 +107,12 @@ public final class CarapacianSoldierDialogue
 		
 		provider.addRandomlySelectable("poor_frogs", defaultWeight(isProspitian()),
 				descriptionNode(l.defaultKeyMsg("They lament how Dersites treat frogs and frog paraphernalia. Croaks and ribbits are in the top 5 best sounds to exist, why would you want to squish an animal that makes those sorts of sounds?")));
+		
+		provider.addRandomlySelectable("temple_pilgrimage", defaultWeight(isProspitian()),
+				descriptionNode(l.defaultKeyMsg("They have heard rumors of a frog temple in The Veil and want to take a pilgrimage. It sounds like a beautiful sight to behold.")));
+		
+		provider.addRandomlySelectable("temple_pillage", defaultWeight(isDersite()),
+				descriptionNode(l.defaultKeyMsg("They have heard rumors of a frog temple in The Veil and are wondering when the Queen will hear about it. When she does, it might be destroyed next day.")));
 		
 		provider.addRandomlySelectable("meditative_travel", defaultWeight(isDersite()),
 				descriptionNode(l.defaultKeyMsg("They say that not everyone enjoys how far the travel is from Derse to Skaia, but that they do. It can be nice to just close your eyes while in the shuttle or stare out into the inky blackness.")));
@@ -128,11 +145,11 @@ public final class CarapacianSoldierDialogue
 			);
 		}));
 		
-		provider.addRandomlySelectable("bunker_thieves", weighted(2, all(none(new Condition.AtOrAboveY(64)), any(new Condition.NPCInStructure(MSStructures.DERSE_BUNKER.location()), new Condition.NPCInStructure(MSStructures.PROSPIT_BUNKER.location())))),
-				descriptionNode(l.defaultKeyMsg("They are complaining about a consort that came through and stolen food.")));
-		provider.addRandomlySelectable("bunker_sweep", defaultWeight(all(none(new Condition.AtOrAboveY(64)), any(new Condition.NPCInStructure(MSStructures.DERSE_BUNKER.location()), new Condition.NPCInStructure(MSStructures.PROSPIT_BUNKER.location())))),
+		provider.addRandomlySelectable("bunker_thieves", weighted(2, all(none(isAtOrAboveY(64)), any(new Condition.NPCInStructure(MSStructures.DERSE_BUNKER.location()), new Condition.NPCInStructure(MSStructures.PROSPIT_BUNKER.location())))),
+				descriptionNode(l.defaultKeyMsg("They are complaining about a consort that came through and stole food.")));
+		provider.addRandomlySelectable("bunker_sweep", defaultWeight(all(none(isAtOrAboveY(64)), any(new Condition.NPCInStructure(MSStructures.DERSE_BUNKER.location()), new Condition.NPCInStructure(MSStructures.PROSPIT_BUNKER.location())))),
 				descriptionNode(l.defaultKeyMsg("They are focused on sweeping the floors.")));
-		provider.addRandomlySelectable("bunker_restock", defaultWeight(all(none(new Condition.AtOrAboveY(64)), any(new Condition.NPCInStructure(MSStructures.DERSE_BUNKER.location()), new Condition.NPCInStructure(MSStructures.PROSPIT_BUNKER.location())))),
+		provider.addRandomlySelectable("bunker_restock", defaultWeight(all(none(isAtOrAboveY(64)), any(new Condition.NPCInStructure(MSStructures.DERSE_BUNKER.location()), new Condition.NPCInStructure(MSStructures.PROSPIT_BUNKER.location())))),
 				descriptionNode(l.defaultKeyMsg("They are thinking about restocking the chests again.")));
 		provider.addRandomlySelectable("bunker_abandonment", defaultWeight(any(new Condition.NPCInStructure(MSStructures.DERSE_BUNKER.location()), new Condition.NPCInStructure(MSStructures.PROSPIT_BUNKER.location()))),
 				descriptionNode(l.defaultKeyMsg("They mention how they have had to abandoned bunkers before. When they came back to check on them, they were overrun with underlings.")));
@@ -161,7 +178,7 @@ public final class CarapacianSoldierDialogue
 					.node(descriptionNode(l.defaultKeyMsg("While Lands are considered neutral territory, that doesn't mean it always will be.")))
 					.node(descriptionNode(l.defaultKeyMsg("So a small portion of the military has set up post and created a sprawling section below ground in some of them."))
 							.addResponse(new ResponseBuilder(l.subMsg("access", "How do you access the section below ground?"))
-									.condition(new Condition.AtOrAboveY(64)) //otherwise assumed to be inside already
+									.condition(isAtOrAboveY(64)) //otherwise assumed to be inside already
 									.nextDialogue(access))
 							.addResponse(new ResponseBuilder(l.subMsg("why_fight", "Why are you fighting?"))
 									.nextDialogue(dontKnow))

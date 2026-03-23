@@ -19,18 +19,22 @@ import com.mraof.minestuck.world.lands.LandTypePair;
 import com.mraof.minestuck.world.lands.LandTypes;
 import com.mraof.minestuck.world.lands.terrain.TerrainLandType;
 import com.mraof.minestuck.world.lands.title.TitleLandType;
-import net.minecraft.advancements.AdvancementHolder;
+import net.minecraft.advancements.critereon.EntityPredicate;
 import net.minecraft.advancements.critereon.LocationPredicate;
+import net.minecraft.advancements.critereon.PlayerPredicate;
+import net.minecraft.core.BlockPos;
 import net.minecraft.core.Holder;
 import net.minecraft.core.HolderSet;
 import net.minecraft.core.Registry;
 import net.minecraft.core.registries.BuiltInRegistries;
 import net.minecraft.core.registries.Registries;
 import net.minecraft.network.chat.Component;
+import net.minecraft.resources.ResourceKey;
 import net.minecraft.resources.ResourceLocation;
 import net.minecraft.server.level.ServerLevel;
 import net.minecraft.server.level.ServerPlayer;
 import net.minecraft.tags.TagKey;
+import net.minecraft.world.entity.Entity;
 import net.minecraft.world.entity.EntityType;
 import net.minecraft.world.entity.LivingEntity;
 import net.minecraft.world.entity.Mob;
@@ -38,8 +42,11 @@ import net.minecraft.world.entity.player.Player;
 import net.minecraft.world.item.Item;
 import net.minecraft.world.item.ItemStack;
 import net.minecraft.world.level.Level;
+import net.minecraft.world.level.block.Block;
+import net.minecraft.world.level.block.state.BlockState;
 import net.minecraft.world.level.levelgen.structure.Structure;
 import net.minecraft.world.level.storage.LevelData;
+import net.minecraft.world.phys.AABB;
 import net.minecraft.world.phys.Vec3;
 import net.minecraft.world.scores.Objective;
 import net.minecraft.world.scores.PlayerScoreEntry;
@@ -174,79 +181,6 @@ public interface Condition
 				return !dialogueEntity.getDialogueComponent().hasGeneratedOnce();
 			else
 				return false;
-		}
-	}
-	
-	record IsCarapacian() implements NpcOnlyCondition
-	{
-		static final MapCodec<IsCarapacian> CODEC = MapCodec.unit(IsCarapacian::new);
-		
-		@Override
-		public MapCodec<IsCarapacian> codec()
-		{
-			return CODEC;
-		}
-		
-		@Override
-		public boolean test(LivingEntity entity)
-		{
-			return entity instanceof CarapacianEntity;
-		}
-		
-		@Override
-		public Component getFailureTooltip()
-		{
-			return Component.literal("NPC is not carapacian");
-		}
-	}
-	
-	record IsFromKingdom(EnumEntityKingdom kingdom) implements NpcOnlyCondition
-	{
-		static final MapCodec<IsFromKingdom> CODEC = RecordCodecBuilder.mapCodec(instance -> instance.group(
-				EnumEntityKingdom.CODEC.fieldOf("kingdom").forGetter(IsFromKingdom::kingdom)
-		).apply(instance, IsFromKingdom::new));
-		
-		@Override
-		public MapCodec<IsFromKingdom> codec()
-		{
-			return CODEC;
-		}
-		
-		@Override
-		public boolean test(LivingEntity entity)
-		{
-			return entity instanceof CarapacianEntity carapacianEntity && carapacianEntity.getKingdom() == kingdom;
-		}
-		
-		@Override
-		public Component getFailureTooltip()
-		{
-			return Component.literal("NPC is not from the correct kingdom");
-		}
-	}
-	
-	record IsEntityType(EntityType<?> entityType) implements NpcOnlyCondition
-	{
-		static final MapCodec<IsEntityType> CODEC = RecordCodecBuilder.mapCodec(instance -> instance.group(
-				BuiltInRegistries.ENTITY_TYPE.byNameCodec().fieldOf("entity_type").forGetter(IsEntityType::entityType)
-		).apply(instance, IsEntityType::new));
-		
-		@Override
-		public MapCodec<IsEntityType> codec()
-		{
-			return CODEC;
-		}
-		
-		@Override
-		public boolean test(LivingEntity entity)
-		{
-			return entityType != null && entity.getType().equals(entityType);
-		}
-		
-		@Override
-		public Component getFailureTooltip()
-		{
-			return Component.literal("NPC is wrong entity type");
 		}
 	}
 	
@@ -502,14 +436,15 @@ public interface Condition
 		}
 	}
 	
-	record AtOrAboveY(double y) implements NpcOnlyCondition
+	//TODO this is redundant to NPCEntityPredicate, figure out crashes related to CompletableFuture
+	record IsEntityType(EntityType<?> entityType) implements NpcOnlyCondition
 	{
-		static final MapCodec<AtOrAboveY> CODEC = RecordCodecBuilder.mapCodec(instance -> instance.group(
-				Codec.DOUBLE.fieldOf("y").forGetter(AtOrAboveY::y)
-		).apply(instance, AtOrAboveY::new));
+		static final MapCodec<IsEntityType> CODEC = RecordCodecBuilder.mapCodec(instance -> instance.group(
+				BuiltInRegistries.ENTITY_TYPE.byNameCodec().fieldOf("entity_type").forGetter(IsEntityType::entityType)
+		).apply(instance, IsEntityType::new));
 		
 		@Override
-		public MapCodec<AtOrAboveY> codec()
+		public MapCodec<IsEntityType> codec()
 		{
 			return CODEC;
 		}
@@ -517,16 +452,358 @@ public interface Condition
 		@Override
 		public boolean test(LivingEntity entity)
 		{
-			return this.y <= entity.getY();
+			return entityType != null && entity.getType().equals(entityType);
 		}
 		
 		@Override
 		public Component getFailureTooltip()
 		{
-			return Component.literal("Is not at the right height");
+			return Component.literal("NPC is wrong entity type");
 		}
 	}
 	
+	//TODO this is redundant to NPCEntityPredicate, figure out crashes related to CompletableFuture
+	record IsEntityTypeTag(TagKey<EntityType<?>> entityTypeTag) implements NpcOnlyCondition
+	{
+		static final MapCodec<IsEntityTypeTag> CODEC = RecordCodecBuilder.mapCodec(instance -> instance.group(
+				TagKey.codec(BuiltInRegistries.ENTITY_TYPE.key()).fieldOf("entity_type_tag").forGetter(IsEntityTypeTag::entityTypeTag)
+		).apply(instance, IsEntityTypeTag::new));
+		
+		@Override
+		public MapCodec<IsEntityTypeTag> codec()
+		{
+			return CODEC;
+		}
+		
+		@Override
+		public boolean test(LivingEntity entity)
+		{
+			return entity.getType().is(entityTypeTag);
+		}
+		
+		@Override
+		public Component getFailureTooltip()
+		{
+			return Component.literal("NPC is wrong entity type tag");
+		}
+	}
+	
+	record NearBlock(ResourceKey<Block> blockID, int radius, int count) implements NpcOnlyCondition
+	{
+		static final MapCodec<NearBlock> CODEC = RecordCodecBuilder.mapCodec(instance -> instance.group(
+				ResourceKey.codec(Registries.BLOCK).fieldOf("block_id").forGetter(NearBlock::blockID),
+				Codec.INT.optionalFieldOf("radius", 8).forGetter(NearBlock::radius),
+				Codec.INT.optionalFieldOf("count", 1).forGetter(NearBlock::count)
+		).apply(instance, NearBlock::new));
+		
+		@Override
+		public MapCodec<NearBlock> codec()
+		{
+			return CODEC;
+		}
+		
+		@Override
+		public boolean test(LivingEntity entity)
+		{
+			if(entity.level() instanceof ServerLevel serverLevel)
+			{
+				int matches = 0;
+				for(BlockPos blockPos : BlockPos.betweenClosed(entity.blockPosition().offset(radius, radius, radius), entity.blockPosition().offset(-radius, -radius, -radius)))
+				{
+					BlockState blockState = serverLevel.getBlockState(blockPos);
+					if(blockState.is(blockID))
+						matches++;
+					
+					if(matches >= count)
+						return true;
+				}
+			}
+			
+			return false;
+		}
+		
+		@Override
+		public Component getFailureTooltip()
+		{
+			return Component.literal("NPC is not near the correct block, or enough units of it");
+		}
+	}
+	
+	record NearBlockTag(TagKey<Block> blockTag, int radius, int count) implements NpcOnlyCondition
+	{
+		static final MapCodec<NearBlockTag> CODEC = RecordCodecBuilder.mapCodec(instance -> instance.group(
+				TagKey.codec(Registries.BLOCK).fieldOf("block_tag").forGetter(NearBlockTag::blockTag),
+				Codec.INT.optionalFieldOf("radius", 8).forGetter(NearBlockTag::radius),
+				Codec.INT.optionalFieldOf("count", 1).forGetter(NearBlockTag::count)
+		).apply(instance, NearBlockTag::new));
+		
+		@Override
+		public MapCodec<NearBlockTag> codec()
+		{
+			return CODEC;
+		}
+		
+		@Override
+		public boolean test(LivingEntity entity)
+		{
+			if(entity.level() instanceof ServerLevel serverLevel)
+			{
+				int matches = 0;
+				for(BlockPos blockPos : BlockPos.betweenClosed(entity.blockPosition().offset(radius, radius, radius), entity.blockPosition().offset(-radius, -radius, -radius)))
+				{
+					BlockState blockState = serverLevel.getBlockState(blockPos);
+					if(blockState.is(blockTag))
+						matches++;
+					
+					if(matches >= count)
+						return true;
+				}
+			}
+			
+			return false;
+		}
+		
+		@Override
+		public Component getFailureTooltip()
+		{
+			return Component.literal("NPC is not near the correct block tag, or enough units of it");
+		}
+	}
+	
+	record NearEntityType(EntityType<?> entityType, int radius, int count) implements NpcOnlyCondition
+	{
+		static final MapCodec<NearEntityType> CODEC = RecordCodecBuilder.mapCodec(instance -> instance.group(
+				BuiltInRegistries.ENTITY_TYPE.byNameCodec().fieldOf("entity_type").forGetter(NearEntityType::entityType),
+				Codec.INT.optionalFieldOf("radius", 12).forGetter(NearEntityType::radius),
+				Codec.INT.optionalFieldOf("count", 1).forGetter(NearEntityType::count)
+		).apply(instance, NearEntityType::new));
+		
+		@Override
+		public MapCodec<NearEntityType> codec()
+		{
+			return CODEC;
+		}
+		
+		@Override
+		public boolean test(LivingEntity entity)
+		{
+			AABB axisalignedbb = entity.getBoundingBox().inflate(radius);
+			List<Entity> list = entity.level().getEntitiesOfClass(Entity.class, axisalignedbb);
+			list.remove(entity);
+			
+			int matches = 0;
+			if(!list.isEmpty() && !entity.level().isClientSide)
+			{
+				for(Entity entityIterate : list)
+				{
+					if(entityIterate.getType().equals(entityType))
+						matches++;
+					
+					if(matches >= count)
+						return true;
+				}
+			}
+			
+			return false;
+		}
+		
+		@Override
+		public Component getFailureTooltip()
+		{
+			return Component.literal("NPC is not near the correct entity, or enough units of it");
+		}
+	}
+	
+	record NearEntityTypeTag(TagKey<EntityType<?>> entityTypeTag, int radius, int count) implements NpcOnlyCondition
+	{
+		static final MapCodec<NearEntityTypeTag> CODEC = RecordCodecBuilder.mapCodec(instance -> instance.group(
+				TagKey.codec(Registries.ENTITY_TYPE).fieldOf("entity_type").forGetter(NearEntityTypeTag::entityTypeTag),
+				Codec.INT.optionalFieldOf("radius", 12).forGetter(NearEntityTypeTag::radius),
+				Codec.INT.optionalFieldOf("count", 1).forGetter(NearEntityTypeTag::count)
+		).apply(instance, NearEntityTypeTag::new));
+		
+		@Override
+		public MapCodec<NearEntityTypeTag> codec()
+		{
+			return CODEC;
+		}
+		
+		@Override
+		public boolean test(LivingEntity entity)
+		{
+			AABB axisalignedbb = entity.getBoundingBox().inflate(radius);
+			List<Entity> list = entity.level().getEntitiesOfClass(Entity.class, axisalignedbb);
+			list.remove(entity);
+			
+			int matches = 0;
+			if(!list.isEmpty() && !entity.level().isClientSide)
+			{
+				for(Entity entityIterate : list)
+				{
+					if(entityIterate.getType().is(entityTypeTag))
+						matches++;
+					
+					if(matches >= count)
+						return true;
+				}
+			}
+			
+			return false;
+		}
+		
+		@Override
+		public Component getFailureTooltip()
+		{
+			return Component.literal("NPC is not near the correct entity tag, or enough units of it");
+		}
+	}
+	
+	record NPCLocationPredicate(LocationPredicate predicate) implements NpcOnlyCondition
+	{
+		static final MapCodec<NPCLocationPredicate> CODEC = RecordCodecBuilder.mapCodec(instance -> instance.group(
+				LocationPredicate.CODEC.fieldOf("predicate").forGetter(NPCLocationPredicate::predicate)
+		).apply(instance, NPCLocationPredicate::new));
+		
+		@Override
+		public MapCodec<NPCLocationPredicate> codec()
+		{
+			return CODEC;
+		}
+		
+		@Override
+		public boolean test(LivingEntity entity)
+		{
+			if(entity.level() instanceof ServerLevel serverLevel)
+				return predicate.matches(serverLevel, entity.getX(), entity.getY(), entity.getZ());
+			
+			return false;
+		}
+		
+		@Override
+		public Component getFailureTooltip()
+		{
+			return Component.literal("NPC is not in the correct location");
+		}
+	}
+	
+	record NPCEntityPredicate(EntityPredicate predicate) implements NpcOnlyCondition
+	{
+		static final MapCodec<NPCEntityPredicate> CODEC = RecordCodecBuilder.mapCodec(instance -> instance.group(
+				EntityPredicate.CODEC.fieldOf("predicate").forGetter(NPCEntityPredicate::predicate)
+		).apply(instance, NPCEntityPredicate::new));
+		
+		@Override
+		public MapCodec<NPCEntityPredicate> codec()
+		{
+			return CODEC;
+		}
+		
+		@Override
+		public boolean test(LivingEntity entity)
+		{
+			if(entity.level() instanceof ServerLevel serverLevel)
+				return predicate.matches(serverLevel, null, entity);
+			
+			return false;
+		}
+		
+		@Override
+		public Component getFailureTooltip()
+		{
+			return Component.literal("NPC does not match the predicate");
+		}
+	}
+	
+	record PlayerLocationPredicate(LocationPredicate predicate) implements PlayerOnlyCondition
+	{
+		static final MapCodec<PlayerLocationPredicate> CODEC = RecordCodecBuilder.mapCodec(instance -> instance.group(
+				LocationPredicate.CODEC.fieldOf("predicate").forGetter(PlayerLocationPredicate::predicate)
+		).apply(instance, PlayerLocationPredicate::new));
+		
+		@Override
+		public MapCodec<PlayerLocationPredicate> codec()
+		{
+			return CODEC;
+		}
+		
+		@Override
+		public boolean test(ServerPlayer player)
+		{
+			if(player.level() instanceof ServerLevel serverLevel)
+			{
+				return predicate.matches(serverLevel, player.getX(), player.getY(), player.getZ());
+			}
+			
+			return false;
+		}
+		
+		@Override
+		public Component getFailureTooltip()
+		{
+			return Component.literal("You are not in the correct location");
+		}
+	}
+	
+	record PlayerEntityPredicate(EntityPredicate predicate) implements NpcOnlyCondition
+	{
+		static final MapCodec<PlayerEntityPredicate> CODEC = RecordCodecBuilder.mapCodec(instance -> instance.group(
+				EntityPredicate.CODEC.fieldOf("predicate").forGetter(PlayerEntityPredicate::predicate)
+		).apply(instance, PlayerEntityPredicate::new));
+		
+		@Override
+		public MapCodec<PlayerEntityPredicate> codec()
+		{
+			return CODEC;
+		}
+		
+		@Override
+		public boolean test(LivingEntity entity)
+		{
+			if(entity.level() instanceof ServerLevel serverLevel)
+				return predicate.matches(serverLevel, null, entity);
+			
+			return false;
+		}
+		
+		@Override
+		public Component getFailureTooltip()
+		{
+			return Component.literal("You do not match the predicate");
+		}
+	}
+	
+	record PlayerPredicateCondition(PlayerPredicate predicate) implements PlayerOnlyCondition
+	{
+		static final MapCodec<PlayerPredicateCondition> CODEC = RecordCodecBuilder.mapCodec(instance -> instance.group(
+				PlayerPredicate.CODEC.fieldOf("predicate").forGetter(PlayerPredicateCondition::predicate)
+		).apply(instance, PlayerPredicateCondition::new));
+		
+		@Override
+		public MapCodec<PlayerPredicateCondition> codec()
+		{
+			return CODEC;
+		}
+		
+		@Override
+		public boolean test(ServerPlayer player)
+		{
+			if(player == null)
+				return false;
+			
+			if(player.level() instanceof ServerLevel serverLevel)
+				return predicate.matches(player, serverLevel, player.position());
+			
+			return false;
+		}
+		
+		@Override
+		public Component getFailureTooltip()
+		{
+			return Component.literal("You do not match the conditions needed");
+		}
+	}
+	
+	//TODO this is redundant to NPCLocationPredicate, figure out crashes related to CompletableFuture
 	record NPCInStructure(ResourceLocation structureID) implements NpcOnlyCondition
 	{
 		static final MapCodec<NPCInStructure> CODEC = RecordCodecBuilder.mapCodec(instance -> instance.group(
@@ -559,6 +836,7 @@ public interface Condition
 		}
 	}
 	
+	//TODO this is redundant to NPCEntityPredicate, figure out crashes related to CompletableFuture
 	record NPCIsHoldingItem(Item item) implements NpcOnlyCondition
 	{
 		static final MapCodec<NPCIsHoldingItem> CODEC = RecordCodecBuilder.mapCodec(instance -> instance.group(
@@ -888,39 +1166,6 @@ public interface Condition
 		}
 	}
 	
-	record PlayerHasAdvancement(ResourceLocation advancementId) implements PlayerOnlyCondition
-	{
-		static final MapCodec<PlayerHasAdvancement> CODEC = RecordCodecBuilder.mapCodec(instance -> instance.group(
-				ResourceLocation.CODEC.fieldOf("advancement_id").forGetter(PlayerHasAdvancement::advancementId)
-		).apply(instance, PlayerHasAdvancement::new));
-		
-		@Override
-		public MapCodec<PlayerHasAdvancement> codec()
-		{
-			return CODEC;
-		}
-		
-		@Override
-		public boolean test(ServerPlayer player)
-		{
-			if(player == null)
-				return false;
-			
-			AdvancementHolder holder = player.server.getAdvancements().get(advancementId);
-			
-			if(holder == null)
-				return false;
-			
-			return player.getAdvancements().getOrStartProgress(holder).isDone();
-		}
-		
-		@Override
-		public Component getFailureTooltip()
-		{
-			return Component.literal("Player has not completed advancement");
-		}
-	}
-	
 	record CustomHasScore(int value, String ownerName, String objectiveName) implements Condition
 	{
 		static final MapCodec<CustomHasScore> CODEC = RecordCodecBuilder.mapCodec(instance -> instance.group(
@@ -964,38 +1209,6 @@ public interface Condition
 		public Component getFailureTooltip()
 		{
 			return Component.literal("A custom scoreboard value does not match");
-		}
-	}
-	
-	record CustomHasTag(boolean checkPlayer, String tagName) implements Condition
-	{
-		static final MapCodec<CustomHasTag> CODEC = RecordCodecBuilder.mapCodec(instance -> instance.group(
-				Codec.BOOL.optionalFieldOf("check_player", true).forGetter(CustomHasTag::checkPlayer),
-				Codec.STRING.fieldOf("tag_name").forGetter(CustomHasTag::tagName)
-		).apply(instance, CustomHasTag::new));
-		
-		@Override
-		public MapCodec<CustomHasTag> codec()
-		{
-			return CODEC;
-		}
-		
-		@Override
-		public boolean test(LivingEntity entity, ServerPlayer player)
-		{
-			if(player == null)
-				return false;
-			
-			if(checkPlayer)
-				return player.getTags().contains(tagName);
-			else
-				return entity.getTags().contains(tagName);
-		}
-		
-		@Override
-		public Component getFailureTooltip()
-		{
-			return Component.literal("The target does not have the correct tag");
 		}
 	}
 	
@@ -1081,43 +1294,4 @@ public interface Condition
 			return entity.distanceToSqr(spawn) <= maxDistance * maxDistance;
 		}
 	}
-	
-	enum IsInSkaia implements NpcOnlyCondition
-	{
-		INSTANCE;
-		static final MapCodec<IsInSkaia> CODEC = MapCodec.unit(INSTANCE);
-		
-		
-		@Override
-		public MapCodec<IsInSkaia> codec()
-		{
-			return CODEC;
-		}
-		
-		@Override
-		public boolean test(LivingEntity entity)
-		{
-			return MSDimensions.isSkaia(entity.level().dimension());
-		}
-	}
-	
-	enum ConsortVisitedSkaia implements NpcOnlyCondition
-	{
-		INSTANCE;
-		static final MapCodec<ConsortVisitedSkaia> CODEC = MapCodec.unit(INSTANCE);
-		
-		
-		@Override
-		public MapCodec<ConsortVisitedSkaia> codec()
-		{
-			return CODEC;
-		}
-		
-		@Override
-		public boolean test(LivingEntity entity)
-		{
-			return entity instanceof ConsortEntity consort && consort.visitedSkaia();
-		}
-	}
-	
 }
