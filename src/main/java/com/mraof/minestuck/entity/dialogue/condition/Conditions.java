@@ -9,19 +9,15 @@ import com.mraof.minestuck.world.MSDimensions;
 import com.mraof.minestuck.world.lands.terrain.TerrainLandType;
 import com.mraof.minestuck.world.lands.title.TitleLandType;
 import net.minecraft.advancements.critereon.*;
-import net.minecraft.core.HolderSet;
 import net.minecraft.core.Registry;
 import net.minecraft.nbt.CompoundTag;
-import net.minecraft.nbt.Tag;
 import net.minecraft.tags.TagKey;
 import net.minecraft.world.entity.EntityType;
 import net.minecraft.world.item.Item;
 import net.neoforged.neoforge.registries.DeferredRegister;
 
-import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.List;
-import java.util.Optional;
 import java.util.function.Supplier;
 
 import static com.mraof.minestuck.entity.dialogue.condition.Condition.*;
@@ -53,6 +49,9 @@ public final class Conditions
 		REGISTER.register("near_entity_type_tag", () -> NearEntityTypeTag.CODEC);
 		REGISTER.register("npc_location_predicate", () -> NPCLocationPredicate.CODEC);
 		REGISTER.register("npc_entity_predicate", () -> NPCEntityPredicate.CODEC);
+		REGISTER.register("player_location_predicate", () -> PlayerLocationPredicate.CODEC);
+		REGISTER.register("player_entity_predicate", () -> PlayerEntityPredicate.CODEC);
+		REGISTER.register("player_predicate_condition", () -> PlayerPredicateCondition.CODEC);
 		REGISTER.register("npc_in_structure", () -> NPCInStructure.CODEC);
 		REGISTER.register("npc_holding_item", () -> NPCIsHoldingItem.CODEC);
 		REGISTER.register("player_item", () -> PlayerHasItem.CODEC);
@@ -64,9 +63,7 @@ public final class Conditions
 		REGISTER.register("player_reputation", () -> PlayerHasReputation.CODEC);
 		REGISTER.register("player_boondollars", () -> PlayerHasBoondollars.CODEC);
 		REGISTER.register("player_entered", () -> PlayerHasEntered.CODEC);
-		REGISTER.register("player_advancement", () -> PlayerHasAdvancement.CODEC);
 		REGISTER.register("custom_score", () -> CustomHasScore.CODEC);
-		REGISTER.register("custom_tag", () -> CustomHasTag.CODEC);
 		REGISTER.register("dialogue_exists", () -> DialogueExists.CODEC);
 		REGISTER.register("move_restriction", () -> HasMoveRestriction.CODEC);
 		REGISTER.register("flag", () -> Flag.CODEC);
@@ -140,12 +137,12 @@ public final class Conditions
 	
 	public static Condition isInSkaia()
 	{
-		return new NPCLocationPredicate(new LocationPredicate.Builder().setDimension(MSDimensions.SKAIA).build());
+		return new NPCLocationPredicate(LocationPredicate.Builder.location().setDimension(MSDimensions.SKAIA).build());
 	}
 	
 	public static Condition isAtOrAboveY(int minY)
 	{
-		return new Condition.NPCLocationPredicate(LocationPredicate.Builder.location().setY(MinMaxBounds.Doubles.atLeast(minY)).build());
+		return new NPCLocationPredicate(LocationPredicate.Builder.location().setY(MinMaxBounds.Doubles.atLeast(minY)).build());
 	}
 	
 	public static Condition isProspitian()
@@ -165,7 +162,7 @@ public final class Conditions
 	
 	public static PlayerOnlyCondition hasAdvancement(String name)
 	{
-		return new PlayerHasAdvancement(Minestuck.id(name.replace(".", "/")));
+		return new PlayerPredicateCondition(PlayerPredicate.Builder.player().checkAdvancementDone(Minestuck.id(name.replace(".", "/")), true).build());
 	}
 	
 	public static Condition isHolding(Item item)
@@ -177,6 +174,7 @@ public final class Conditions
 	{
 		CompoundTag nbt = new CompoundTag();
 		nbt.putBoolean("Skaia", true);
+		
 		return new NPCEntityPredicate(new EntityPredicate.Builder().nbt(new NbtPredicate(nbt)).build());
 	}
 	

@@ -19,9 +19,9 @@ import com.mraof.minestuck.world.lands.LandTypePair;
 import com.mraof.minestuck.world.lands.LandTypes;
 import com.mraof.minestuck.world.lands.terrain.TerrainLandType;
 import com.mraof.minestuck.world.lands.title.TitleLandType;
-import net.minecraft.advancements.*;
 import net.minecraft.advancements.critereon.EntityPredicate;
 import net.minecraft.advancements.critereon.LocationPredicate;
+import net.minecraft.advancements.critereon.PlayerPredicate;
 import net.minecraft.core.BlockPos;
 import net.minecraft.core.Holder;
 import net.minecraft.core.HolderSet;
@@ -34,7 +34,10 @@ import net.minecraft.resources.ResourceLocation;
 import net.minecraft.server.level.ServerLevel;
 import net.minecraft.server.level.ServerPlayer;
 import net.minecraft.tags.TagKey;
-import net.minecraft.world.entity.*;
+import net.minecraft.world.entity.Entity;
+import net.minecraft.world.entity.EntityType;
+import net.minecraft.world.entity.LivingEntity;
+import net.minecraft.world.entity.Mob;
 import net.minecraft.world.entity.player.Player;
 import net.minecraft.world.item.Item;
 import net.minecraft.world.item.ItemStack;
@@ -701,7 +704,7 @@ public interface Condition
 		@Override
 		public Component getFailureTooltip()
 		{
-			return Component.literal("NPC is not in the correct location");
+			return Component.literal("The NPC is not in the correct location");
 		}
 	}
 	
@@ -730,6 +733,95 @@ public interface Condition
 		public Component getFailureTooltip()
 		{
 			return Component.literal("The NPC does not match the predicate");
+		}
+	}
+	
+	record PlayerLocationPredicate(LocationPredicate predicate) implements PlayerOnlyCondition
+	{
+		static final MapCodec<PlayerLocationPredicate> CODEC = RecordCodecBuilder.mapCodec(instance -> instance.group(
+				LocationPredicate.CODEC.fieldOf("predicate").forGetter(PlayerLocationPredicate::predicate)
+		).apply(instance, PlayerLocationPredicate::new));
+		
+		@Override
+		public MapCodec<PlayerLocationPredicate> codec()
+		{
+			return CODEC;
+		}
+		
+		@Override
+		public boolean test(ServerPlayer player)
+		{
+			if(player.level() instanceof ServerLevel serverLevel)
+			{
+				return predicate.matches(serverLevel, player.getX(), player.getY(), player.getZ());
+			}
+			
+			return false;
+		}
+		
+		@Override
+		public Component getFailureTooltip()
+		{
+			return Component.literal("You are not in the correct location");
+		}
+	}
+	
+	record PlayerEntityPredicate(EntityPredicate predicate) implements NpcOnlyCondition
+	{
+		static final MapCodec<PlayerEntityPredicate> CODEC = RecordCodecBuilder.mapCodec(instance -> instance.group(
+				EntityPredicate.CODEC.fieldOf("predicate").forGetter(PlayerEntityPredicate::predicate)
+		).apply(instance, PlayerEntityPredicate::new));
+		
+		@Override
+		public MapCodec<PlayerEntityPredicate> codec()
+		{
+			return CODEC;
+		}
+		
+		@Override
+		public boolean test(LivingEntity entity)
+		{
+			if(entity.level() instanceof ServerLevel serverLevel)
+				return predicate.matches(serverLevel, null, entity);
+			
+			return false;
+		}
+		
+		@Override
+		public Component getFailureTooltip()
+		{
+			return Component.literal("You do not match the predicate");
+		}
+	}
+	
+	record PlayerPredicateCondition(PlayerPredicate predicate) implements PlayerOnlyCondition
+	{
+		static final MapCodec<PlayerPredicateCondition> CODEC = RecordCodecBuilder.mapCodec(instance -> instance.group(
+				PlayerPredicate.CODEC.fieldOf("predicate").forGetter(PlayerPredicateCondition::predicate)
+		).apply(instance, PlayerPredicateCondition::new));
+		
+		@Override
+		public MapCodec<PlayerPredicateCondition> codec()
+		{
+			return CODEC;
+		}
+		
+		@Override
+		public boolean test(ServerPlayer player)
+		{
+			if(player == null)
+				return false;
+			
+			if(player.level() instanceof ServerLevel serverLevel)
+				return predicate.matches(player, serverLevel, player.position());
+			
+			return false;
+		}
+		
+		@Override
+		public Component getFailureTooltip()
+		{
+			return Component.literal("You do not match the conditions needed");
 		}
 	}
 	
@@ -1096,39 +1188,6 @@ public interface Condition
 		}
 	}
 	
-	record PlayerHasAdvancement(ResourceLocation advancementId) implements PlayerOnlyCondition
-	{
-		static final MapCodec<PlayerHasAdvancement> CODEC = RecordCodecBuilder.mapCodec(instance -> instance.group(
-				ResourceLocation.CODEC.fieldOf("advancement_id").forGetter(PlayerHasAdvancement::advancementId)
-		).apply(instance, PlayerHasAdvancement::new));
-		
-		@Override
-		public MapCodec<PlayerHasAdvancement> codec()
-		{
-			return CODEC;
-		}
-		
-		@Override
-		public boolean test(ServerPlayer player)
-		{
-			if(player == null)
-				return false;
-			
-			AdvancementHolder holder = player.server.getAdvancements().get(advancementId);
-			
-			if(holder == null)
-				return false;
-			
-			return player.getAdvancements().getOrStartProgress(holder).isDone();
-		}
-		
-		@Override
-		public Component getFailureTooltip()
-		{
-			return Component.literal("Player has not completed advancement");
-		}
-	}
-	
 	record CustomHasScore(int value, String ownerName, String objectiveName) implements Condition
 	{
 		static final MapCodec<CustomHasScore> CODEC = RecordCodecBuilder.mapCodec(instance -> instance.group(
@@ -1172,38 +1231,6 @@ public interface Condition
 		public Component getFailureTooltip()
 		{
 			return Component.literal("A custom scoreboard value does not match");
-		}
-	}
-	
-	record CustomHasTag(boolean checkPlayer, String tagName) implements Condition
-	{
-		static final MapCodec<CustomHasTag> CODEC = RecordCodecBuilder.mapCodec(instance -> instance.group(
-				Codec.BOOL.optionalFieldOf("check_player", true).forGetter(CustomHasTag::checkPlayer),
-				Codec.STRING.fieldOf("tag_name").forGetter(CustomHasTag::tagName)
-		).apply(instance, CustomHasTag::new));
-		
-		@Override
-		public MapCodec<CustomHasTag> codec()
-		{
-			return CODEC;
-		}
-		
-		@Override
-		public boolean test(LivingEntity entity, ServerPlayer player)
-		{
-			if(player == null)
-				return false;
-			
-			if(checkPlayer)
-				return player.getTags().contains(tagName);
-			else
-				return entity.getTags().contains(tagName);
-		}
-		
-		@Override
-		public Component getFailureTooltip()
-		{
-			return Component.literal("The target does not have the correct tag");
 		}
 	}
 	

@@ -2,7 +2,7 @@
   "conditioned_nodes": [
     {
       "condition": {
-        "type":      "minestuck:npc_location_predicate",
+        "type": "minestuck:location_predicate_condition",
         "predicate": {
           "position": {
             "y": {
