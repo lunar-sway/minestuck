@@ -5,9 +5,12 @@ import com.mraof.minestuck.Minestuck;
 import com.mraof.minestuck.entity.carapacian.EnumEntityKingdom;
 import com.mraof.minestuck.entity.consort.ConsortEntity;
 import com.mraof.minestuck.entity.consort.EnumConsort;
+import com.mraof.minestuck.world.MSDimensions;
 import com.mraof.minestuck.world.lands.terrain.TerrainLandType;
 import com.mraof.minestuck.world.lands.title.TitleLandType;
+import net.minecraft.advancements.critereon.*;
 import net.minecraft.core.Registry;
+import net.minecraft.nbt.CompoundTag;
 import net.minecraft.tags.TagKey;
 import net.minecraft.world.entity.EntityType;
 import net.minecraft.world.item.Item;
@@ -24,14 +27,15 @@ public final class Conditions
 	public static final DeferredRegister<MapCodec<? extends Condition>> REGISTER = DeferredRegister.create(Minestuck.id("dialogue_condition"), Minestuck.MOD_ID);
 	public static final Registry<MapCodec<? extends Condition>> REGISTRY = REGISTER.makeRegistry(builder -> {});
 	
-	static {
+	static
+	{
 		REGISTER.register("always_true", () -> AlwaysTrue.CODEC);
 		REGISTER.register("first_time_generating", () -> FirstTimeGenerating.CODEC);
 		REGISTER.register("list", () -> ListCondition.CODEC);
 		REGISTER.register("carapacian", () -> IsCarapacian.CODEC);
 		REGISTER.register("is_from_kingdom", () -> IsFromKingdom.CODEC);
 		REGISTER.register("entity_type", () -> IsEntityType.CODEC);
-		REGISTER.register("is_is_land", () -> IsInLand.CODEC);
+		REGISTER.register("is_in_land", () -> IsInLand.CODEC);
 		REGISTER.register("is_consort_from_land", () -> IsConsortFromLand.CODEC);
 		REGISTER.register("is_consort_in_home_land", () -> IsConsortInHomeLand.CODEC);
 		REGISTER.register("terrain_land_type", () -> InTerrainLandType.CODEC);
@@ -39,7 +43,15 @@ public final class Conditions
 		REGISTER.register("consort_terrain_land_type", () -> InConsortTerrainLandType.CODEC);
 		REGISTER.register("title_land_type", () -> InTitleLandType.CODEC);
 		REGISTER.register("title_land_type_tag", () -> InTitleLandTypeTag.CODEC);
-		REGISTER.register("at_or_above_y", () -> AtOrAboveY.CODEC);
+		REGISTER.register("near_block", () -> NearBlock.CODEC);
+		REGISTER.register("near_block_tag", () -> NearBlockTag.CODEC);
+		REGISTER.register("near_entity_type", () -> NearEntityType.CODEC);
+		REGISTER.register("near_entity_type_tag", () -> NearEntityTypeTag.CODEC);
+		REGISTER.register("npc_location_predicate", () -> NPCLocationPredicate.CODEC);
+		REGISTER.register("npc_entity_predicate", () -> NPCEntityPredicate.CODEC);
+		REGISTER.register("player_location_predicate", () -> PlayerLocationPredicate.CODEC);
+		REGISTER.register("player_entity_predicate", () -> PlayerEntityPredicate.CODEC);
+		REGISTER.register("player_predicate_condition", () -> PlayerPredicateCondition.CODEC);
 		REGISTER.register("npc_in_structure", () -> NPCInStructure.CODEC);
 		REGISTER.register("npc_holding_item", () -> NPCIsHoldingItem.CODEC);
 		REGISTER.register("player_item", () -> PlayerHasItem.CODEC);
@@ -51,15 +63,11 @@ public final class Conditions
 		REGISTER.register("player_reputation", () -> PlayerHasReputation.CODEC);
 		REGISTER.register("player_boondollars", () -> PlayerHasBoondollars.CODEC);
 		REGISTER.register("player_entered", () -> PlayerHasEntered.CODEC);
-		REGISTER.register("player_advancement", () -> PlayerHasAdvancement.CODEC);
 		REGISTER.register("custom_score", () -> CustomHasScore.CODEC);
-		REGISTER.register("custom_tag", () -> CustomHasTag.CODEC);
 		REGISTER.register("dialogue_exists", () -> DialogueExists.CODEC);
 		REGISTER.register("move_restriction", () -> HasMoveRestriction.CODEC);
 		REGISTER.register("flag", () -> Flag.CODEC);
 		REGISTER.register("near_spawn", () -> NearSpawn.CODEC);
-		REGISTER.register("is_in_skaia", () -> IsInSkaia.CODEC);
-		REGISTER.register("consort_visited_skaia", () -> ConsortVisitedSkaia.CODEC);
 	}
 	
 	public static Condition alwaysTrue()
@@ -129,7 +137,12 @@ public final class Conditions
 	
 	public static Condition isInSkaia()
 	{
-		return IsInSkaia.INSTANCE;
+		return new NPCLocationPredicate(LocationPredicate.Builder.location().setDimension(MSDimensions.SKAIA).build());
+	}
+	
+	public static Condition isAtOrAboveY(int minY)
+	{
+		return new NPCLocationPredicate(LocationPredicate.Builder.location().setY(MinMaxBounds.Doubles.atLeast(minY)).build());
 	}
 	
 	public static Condition isProspitian()
@@ -146,14 +159,23 @@ public final class Conditions
 	{
 		return PlayerHasEntered.INSTANCE;
 	}
+	
 	public static PlayerOnlyCondition hasAdvancement(String name)
 	{
-		return new PlayerHasAdvancement(Minestuck.id(name.replace(".", "/")));
+		return new PlayerPredicateCondition(PlayerPredicate.Builder.player().checkAdvancementDone(Minestuck.id(name.replace(".", "/")), true).build());
 	}
 	
 	public static Condition isHolding(Item item)
 	{
 		return new NPCIsHoldingItem(item);
+	}
+	
+	public static Condition hasVisitedSkaia()
+	{
+		CompoundTag nbt = new CompoundTag();
+		nbt.putBoolean("Skaia", true);
+		
+		return new NPCEntityPredicate(new EntityPredicate.Builder().nbt(new NbtPredicate(nbt)).build());
 	}
 	
 	@SafeVarargs

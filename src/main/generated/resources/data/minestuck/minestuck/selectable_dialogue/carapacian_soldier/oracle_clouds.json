@@ -1,21 +1,17 @@
 {
   "condition": {
-    "type": "minestuck:list",
+    "type":       "minestuck:list",
     "conditions": [
       {
         "type":      "minestuck:npc_location_predicate",
         "predicate": {
           "dimension": "minestuck:skaia"
         }
-      },
-      {
-        "type": "minestuck:is_from_kingdom",
-        "kingdom": "prospitian"
       }
     ],
-    "list_type": "all"
+    "list_type":  "none"
   },
-  "dialogue": "minestuck:carapacian_soldier/enemy",
+  "dialogue":  "minestuck:carapacian_soldier/oracle_clouds",
   "dialogue_weight": 10,
   "keep_on_reset": false
 }

@@ -21,11 +21,15 @@
       {
         "type": "minestuck:terrain_land_type",
         "land_type": "minestuck:end"
+      },
+      {
+        "type":      "minestuck:title_land_type",
+        "land_type": "minestuck:pulse"
       }
     ],
     "list_type": "any"
   },
   "dialogue": "minestuck:consort/bad_water",
-  "dialogue_weight": 10,
+  "dialogue_weight": 11,
   "keep_on_reset": false
 }
