@@ -7,22 +7,22 @@
     "message":   "minestuck.dialogue.consort.secret_bunker.start.start",
     "responses": [
       {
-        "condition":      {
+        "condition":     {
           "type": "minestuck:always_true"
         },
         "hide_if_failed": true,
-        "message":        "minestuck.dialogue.consort.secret_bunker.start.who",
-        "next_dialogue":  "minestuck:consort/secret_bunker/explain_carapacian",
-        "triggers":       [ ]
+        "message":       "minestuck.dialogue.consort.secret_bunker.start.who",
+        "next_dialogue": "minestuck:consort/secret_bunker/explain_carapacian",
+        "triggers":      [ ]
       },
       {
-        "condition":      {
+        "condition":     {
           "type": "minestuck:always_true"
         },
         "hide_if_failed": true,
-        "message":        "minestuck.dialogue.consort.secret_bunker.start.how",
-        "next_dialogue":  "minestuck:consort/secret_bunker/access",
-        "triggers":       [ ]
+        "message":       "minestuck.dialogue.consort.secret_bunker.start.how",
+        "next_dialogue": "minestuck:consort/secret_bunker/access",
+        "triggers":      [ ]
       }
     ]
   }

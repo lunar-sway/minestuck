@@ -1,9 +1,9 @@
 {
-  "condition":       {
-    "type":    "minestuck:is_from_kingdom",
-    "kingdom": "prospitian"
+  "condition":     {
+    "type":            "minestuck:entity_type_tag",
+    "entity_type_tag": "minestuck:carapacians/prospitian"
   },
-  "dialogue":        "minestuck:carapacian_soldier/temple_pilgrimage",
+  "dialogue":      "minestuck:carapacian_soldier/temple_pilgrimage",
   "dialogue_weight": 10,
-  "keep_on_reset":   false
+  "keep_on_reset": false
 }

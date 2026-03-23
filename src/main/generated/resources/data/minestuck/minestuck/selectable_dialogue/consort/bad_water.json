@@ -23,7 +23,7 @@
         "land_type": "minestuck:end"
       },
       {
-        "type":      "minestuck:title_land_type",
+        "type": "minestuck:title_land_type",
         "land_type": "minestuck:pulse"
       }
     ],

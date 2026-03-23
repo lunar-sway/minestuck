@@ -5,12 +5,12 @@
     "message":   "minestuck.dialogue.consort.return_node.explain_node",
     "responses": [
       {
-        "condition":      {
+        "condition": {
           "type": "minestuck:always_true"
         },
         "hide_if_failed": true,
-        "message":        "minestuck.dialogue.goodbye",
-        "triggers":       [ ]
+        "message":   "minestuck.dialogue.goodbye",
+        "triggers":  [ ]
       }
     ]
   }

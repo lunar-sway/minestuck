@@ -184,80 +184,6 @@ public interface Condition
 		}
 	}
 	
-	record IsCarapacian() implements NpcOnlyCondition
-	{
-		static final MapCodec<IsCarapacian> CODEC = MapCodec.unit(IsCarapacian::new);
-		
-		@Override
-		public MapCodec<IsCarapacian> codec()
-		{
-			return CODEC;
-		}
-		
-		@Override
-		public boolean test(LivingEntity entity)
-		{
-			return entity instanceof CarapacianEntity;
-		}
-		
-		@Override
-		public Component getFailureTooltip()
-		{
-			return Component.literal("NPC is not carapacian");
-		}
-	}
-	
-	record IsFromKingdom(EnumEntityKingdom kingdom) implements NpcOnlyCondition
-	{
-		static final MapCodec<IsFromKingdom> CODEC = RecordCodecBuilder.mapCodec(instance -> instance.group(
-				EnumEntityKingdom.CODEC.fieldOf("kingdom").forGetter(IsFromKingdom::kingdom)
-		).apply(instance, IsFromKingdom::new));
-		
-		@Override
-		public MapCodec<IsFromKingdom> codec()
-		{
-			return CODEC;
-		}
-		
-		@Override
-		public boolean test(LivingEntity entity)
-		{
-			return entity instanceof CarapacianEntity carapacianEntity && carapacianEntity.getKingdom() == kingdom;
-		}
-		
-		@Override
-		public Component getFailureTooltip()
-		{
-			return Component.literal("NPC is not from the correct kingdom");
-		}
-	}
-	
-	//TODO this is redundant to NPCEntityPredicate, figure out crashes related to CompletableFuture
-	record IsEntityType(EntityType<?> entityType) implements NpcOnlyCondition
-	{
-		static final MapCodec<IsEntityType> CODEC = RecordCodecBuilder.mapCodec(instance -> instance.group(
-				BuiltInRegistries.ENTITY_TYPE.byNameCodec().fieldOf("entity_type").forGetter(IsEntityType::entityType)
-		).apply(instance, IsEntityType::new));
-		
-		@Override
-		public MapCodec<IsEntityType> codec()
-		{
-			return CODEC;
-		}
-		
-		@Override
-		public boolean test(LivingEntity entity)
-		{
-			return entityType != null && entity.getType().equals(entityType);
-		}
-		
-		@Override
-		public Component getFailureTooltip()
-		{
-			return Component.literal("NPC is wrong entity type");
-		}
-	}
-	
 	enum IsInLand implements NpcOnlyCondition
 	{
 		INSTANCE;
@@ -510,6 +436,58 @@ public interface Condition
 		}
 	}
 	
+	//TODO this is redundant to NPCEntityPredicate, figure out crashes related to CompletableFuture
+	record IsEntityType(EntityType<?> entityType) implements NpcOnlyCondition
+	{
+		static final MapCodec<IsEntityType> CODEC = RecordCodecBuilder.mapCodec(instance -> instance.group(
+				BuiltInRegistries.ENTITY_TYPE.byNameCodec().fieldOf("entity_type").forGetter(IsEntityType::entityType)
+		).apply(instance, IsEntityType::new));
+		
+		@Override
+		public MapCodec<IsEntityType> codec()
+		{
+			return CODEC;
+		}
+		
+		@Override
+		public boolean test(LivingEntity entity)
+		{
+			return entityType != null && entity.getType().equals(entityType);
+		}
+		
+		@Override
+		public Component getFailureTooltip()
+		{
+			return Component.literal("NPC is wrong entity type");
+		}
+	}
+	
+	//TODO this is redundant to NPCEntityPredicate, figure out crashes related to CompletableFuture
+	record IsEntityTypeTag(TagKey<EntityType<?>> entityTypeTag) implements NpcOnlyCondition
+	{
+		static final MapCodec<IsEntityTypeTag> CODEC = RecordCodecBuilder.mapCodec(instance -> instance.group(
+				TagKey.codec(BuiltInRegistries.ENTITY_TYPE.key()).fieldOf("entity_type_tag").forGetter(IsEntityTypeTag::entityTypeTag)
+		).apply(instance, IsEntityTypeTag::new));
+		
+		@Override
+		public MapCodec<IsEntityTypeTag> codec()
+		{
+			return CODEC;
+		}
+		
+		@Override
+		public boolean test(LivingEntity entity)
+		{
+			return entity.getType().is(entityTypeTag);
+		}
+		
+		@Override
+		public Component getFailureTooltip()
+		{
+			return Component.literal("NPC is wrong entity type tag");
+		}
+	}
+	
 	record NearBlock(ResourceKey<Block> blockID, int radius, int count) implements NpcOnlyCondition
 	{
 		static final MapCodec<NearBlock> CODEC = RecordCodecBuilder.mapCodec(instance -> instance.group(
@@ -704,7 +682,7 @@ public interface Condition
 		@Override
 		public Component getFailureTooltip()
 		{
-			return Component.literal("The NPC is not in the correct location");
+			return Component.literal("NPC is not in the correct location");
 		}
 	}
 	
@@ -732,7 +710,7 @@ public interface Condition
 		@Override
 		public Component getFailureTooltip()
 		{
-			return Component.literal("The NPC does not match the predicate");
+			return Component.literal("NPC does not match the predicate");
 		}
 	}
 	

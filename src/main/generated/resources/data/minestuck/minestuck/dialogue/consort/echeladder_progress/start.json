@@ -2,7 +2,7 @@
   "conditioned_nodes": [
     {
       "condition": {
-        "type":      "minestuck:player_predicate_condition",
+        "type": "minestuck:player_predicate_condition",
         "predicate": {
           "advancements": {
             "minestuck:minestuck/big_one_mil": true
@@ -28,7 +28,7 @@
     },
     {
       "condition": {
-        "type":      "minestuck:player_predicate_condition",
+        "type": "minestuck:player_predicate_condition",
         "predicate": {
           "advancements": {
             "minestuck:minestuck/halfway_point": true
@@ -54,7 +54,7 @@
     },
     {
       "condition": {
-        "type":      "minestuck:player_predicate_condition",
+        "type": "minestuck:player_predicate_condition",
         "predicate": {
           "advancements": {
             "minestuck:minestuck/double_digits": true

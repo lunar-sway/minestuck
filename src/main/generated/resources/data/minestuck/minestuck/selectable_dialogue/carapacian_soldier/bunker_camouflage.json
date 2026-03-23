@@ -1,20 +1,20 @@
 {
-  "condition":       {
+  "condition":     {
     "type":       "minestuck:list",
     "conditions": [
       {
-        "type":      "minestuck:title_land_type",
+        "type": "minestuck:title_land_type",
         "land_type": "minestuck:towers"
       },
       {
         "type":       "minestuck:list",
         "conditions": [
           {
-            "type":      "minestuck:npc_in_structure",
+            "type": "minestuck:npc_in_structure",
             "structure": "minestuck:derse_bunker"
           },
           {
-            "type":      "minestuck:npc_in_structure",
+            "type": "minestuck:npc_in_structure",
             "structure": "minestuck:prospit_bunker"
           }
         ],
@@ -23,7 +23,7 @@
     ],
     "list_type":  "all"
   },
-  "dialogue":        "minestuck:carapacian_soldier/bunker_camouflage",
+  "dialogue":      "minestuck:carapacian_soldier/bunker_camouflage",
   "dialogue_weight": 10,
-  "keep_on_reset":   false
+  "keep_on_reset": false
 }

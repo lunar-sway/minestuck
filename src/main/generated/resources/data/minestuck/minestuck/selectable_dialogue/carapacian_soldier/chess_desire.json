@@ -1,8 +1,8 @@
 {
-  "condition":       {
+  "condition":     {
     "type": "minestuck:always_true"
   },
-  "dialogue":        "minestuck:carapacian_soldier/chess_desire",
+  "dialogue":      "minestuck:carapacian_soldier/chess_desire",
   "dialogue_weight": 10,
-  "keep_on_reset":   false
+  "keep_on_reset": false
 }

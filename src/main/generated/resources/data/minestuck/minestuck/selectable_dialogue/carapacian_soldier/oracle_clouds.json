@@ -3,7 +3,7 @@
     "type":       "minestuck:list",
     "conditions": [
       {
-        "type":      "minestuck:npc_location_predicate",
+        "type": "minestuck:npc_location_predicate",
         "predicate": {
           "dimension": "minestuck:skaia"
         }

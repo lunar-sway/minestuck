@@ -9,7 +9,7 @@
             "flag": "helpingPlayer"
           },
           {
-            "type":      "minestuck:player_predicate_condition",
+            "type": "minestuck:player_predicate_condition",
             "predicate": {
               "advancements": {
                 "minestuck:minestuck/brick_computer": true

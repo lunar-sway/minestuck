@@ -15,7 +15,7 @@
     "responses": [
       {
         "condition": {
-          "type": "minestuck:location_predicate_condition",
+          "type": "minestuck:npc_location_predicate",
           "predicate": {
             "position": {
               "y": {
@@ -34,9 +34,9 @@
           "type": "minestuck:always_true"
         },
         "hide_if_failed": true,
-        "message":   "minestuck.dialogue.carapacian_soldier.bunker_greet.explain_place.3.why_fight",
+        "message":  "minestuck.dialogue.carapacian_soldier.bunker_greet.explain_place.3.why_fight",
         "next_dialogue": "minestuck:carapacian_soldier/bunker_greet/dont_know",
-        "triggers":  [ ]
+        "triggers": [ ]
       },
       {
         "condition": {

@@ -2,9 +2,9 @@ package com.mraof.minestuck.entity.dialogue.condition;
 
 import com.mojang.serialization.MapCodec;
 import com.mraof.minestuck.Minestuck;
-import com.mraof.minestuck.entity.carapacian.EnumEntityKingdom;
 import com.mraof.minestuck.entity.consort.ConsortEntity;
 import com.mraof.minestuck.entity.consort.EnumConsort;
+import com.mraof.minestuck.util.MSTags;
 import com.mraof.minestuck.world.MSDimensions;
 import com.mraof.minestuck.world.lands.terrain.TerrainLandType;
 import com.mraof.minestuck.world.lands.title.TitleLandType;
@@ -32,9 +32,6 @@ public final class Conditions
 		REGISTER.register("always_true", () -> AlwaysTrue.CODEC);
 		REGISTER.register("first_time_generating", () -> FirstTimeGenerating.CODEC);
 		REGISTER.register("list", () -> ListCondition.CODEC);
-		REGISTER.register("carapacian", () -> IsCarapacian.CODEC);
-		REGISTER.register("is_from_kingdom", () -> IsFromKingdom.CODEC);
-		REGISTER.register("entity_type", () -> IsEntityType.CODEC);
 		REGISTER.register("is_in_land", () -> IsInLand.CODEC);
 		REGISTER.register("is_consort_from_land", () -> IsConsortFromLand.CODEC);
 		REGISTER.register("is_consort_in_home_land", () -> IsConsortInHomeLand.CODEC);
@@ -43,6 +40,8 @@ public final class Conditions
 		REGISTER.register("consort_terrain_land_type", () -> InConsortTerrainLandType.CODEC);
 		REGISTER.register("title_land_type", () -> InTitleLandType.CODEC);
 		REGISTER.register("title_land_type_tag", () -> InTitleLandTypeTag.CODEC);
+		REGISTER.register("entity_type", () -> IsEntityType.CODEC);
+		REGISTER.register("entity_type_tag", () -> IsEntityTypeTag.CODEC);
 		REGISTER.register("near_block", () -> NearBlock.CODEC);
 		REGISTER.register("near_block_tag", () -> NearBlockTag.CODEC);
 		REGISTER.register("near_entity_type", () -> NearEntityType.CODEC);
@@ -147,12 +146,12 @@ public final class Conditions
 	
 	public static Condition isProspitian()
 	{
-		return new IsFromKingdom(EnumEntityKingdom.PROSPITIAN);
+		return new IsEntityTypeTag(MSTags.EntityTypes.PROSPITIAN_CARAPACIANS);
 	}
 	
 	public static Condition isDersite()
 	{
-		return new IsFromKingdom(EnumEntityKingdom.DERSITE);
+		return new IsEntityTypeTag(MSTags.EntityTypes.DERSITE_CARAPACIANS);
 	}
 	
 	public static PlayerOnlyCondition hasEntered()

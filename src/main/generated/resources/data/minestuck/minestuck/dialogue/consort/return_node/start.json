@@ -5,31 +5,31 @@
     "message":   "minestuck.dialogue.consort.return_node.start",
     "responses": [
       {
-        "condition":      {
+        "condition":     {
           "type": "minestuck:always_true"
         },
         "hide_if_failed": true,
-        "message":        "minestuck.dialogue.consort.return_node.start.what",
-        "next_dialogue":  "minestuck:consort/return_node/explain_node",
-        "triggers":       [ ]
+        "message":       "minestuck.dialogue.consort.return_node.start.what",
+        "next_dialogue": "minestuck:consort/return_node/explain_node",
+        "triggers":      [ ]
       },
       {
-        "condition":      {
+        "condition":     {
           "type": "minestuck:always_true"
         },
         "hide_if_failed": true,
-        "message":        "minestuck.dialogue.consort.return_node.start.sorry",
-        "next_dialogue":  "minestuck:consort/return_node/retort",
-        "triggers":       [ ]
+        "message":       "minestuck.dialogue.consort.return_node.start.sorry",
+        "next_dialogue": "minestuck:consort/return_node/retort",
+        "triggers":      [ ]
       },
       {
-        "condition":      {
+        "condition":     {
           "type": "minestuck:always_true"
         },
         "hide_if_failed": true,
-        "message":        "minestuck.dialogue.consort.return_node.start.sucks",
-        "next_dialogue":  "minestuck:consort/return_node/retort",
-        "triggers":       [ ]
+        "message":       "minestuck.dialogue.consort.return_node.start.sucks",
+        "next_dialogue": "minestuck:consort/return_node/retort",
+        "triggers":      [ ]
       }
     ]
   }

@@ -1,10 +1,10 @@
 {
-  "condition":       {
-    "type":        "minestuck:near_entity_type_tag",
-    "count":       8,
+  "condition":     {
+    "type":  "minestuck:near_entity_type_tag",
+    "count": 8,
     "entity_type": "minestuck:consorts"
   },
-  "dialogue":        "minestuck:consort/too_crowded",
+  "dialogue":      "minestuck:consort/too_crowded",
   "dialogue_weight": 10,
-  "keep_on_reset":   false
+  "keep_on_reset": false
 }

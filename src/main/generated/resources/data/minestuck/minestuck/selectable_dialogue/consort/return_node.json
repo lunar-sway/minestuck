@@ -1,9 +1,9 @@
 {
-  "condition":     {
+  "condition": {
     "type":       "minestuck:list",
     "conditions": [
       {
-        "type":       "minestuck:list",
+        "type":      "minestuck:list",
         "conditions": [
           {
             "type": "minestuck:entity_type",
@@ -14,7 +14,7 @@
             "entity_type": "minestuck:nakagator"
           }
         ],
-        "list_type":  "any"
+        "list_type": "any"
       },
       {
         "type": "minestuck:is_in_land"
@@ -22,7 +22,7 @@
     ],
     "list_type":  "all"
   },
-  "dialogue":      "minestuck:consort/return_node/start",
+  "dialogue":  "minestuck:consort/return_node/start",
   "dialogue_weight": 10,
   "keep_on_reset": false
 }

@@ -1,43 +1,43 @@
 {
-  "condition":       {
+  "condition":     {
     "type":       "minestuck:list",
     "conditions": [
       {
         "type":       "minestuck:list",
         "conditions": [
           {
-            "type":      "minestuck:terrain_land_type",
+            "type": "minestuck:terrain_land_type",
             "land_type": "minestuck:shade"
           },
           {
-            "type":      "minestuck:terrain_land_type",
+            "type": "minestuck:terrain_land_type",
             "land_type": "minestuck:heat"
           },
           {
-            "type":      "minestuck:terrain_land_type",
+            "type": "minestuck:terrain_land_type",
             "land_type": "minestuck:wood"
           },
           {
-            "type":      "minestuck:terrain_land_type",
+            "type": "minestuck:terrain_land_type",
             "land_type": "minestuck:rainbow"
           },
           {
-            "type":      "minestuck:terrain_land_type",
+            "type": "minestuck:terrain_land_type",
             "land_type": "minestuck:end"
           }
         ],
         "list_type":  "any"
       },
       {
-        "type":      "minestuck:near_block_tag",
+        "type":   "minestuck:near_block_tag",
         "block_tag": "minestuck:land_ocean_fluids",
-        "count":     5,
-        "radius":    9
+        "count":  5,
+        "radius": 9
       }
     ],
     "list_type":  "all"
   },
-  "dialogue":        "minestuck:consort/strange_shores",
+  "dialogue":      "minestuck:consort/strange_shores",
   "dialogue_weight": 16,
-  "keep_on_reset":   false
+  "keep_on_reset": false
 }

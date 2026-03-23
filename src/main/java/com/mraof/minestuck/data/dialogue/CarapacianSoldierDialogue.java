@@ -112,7 +112,7 @@ public final class CarapacianSoldierDialogue
 				descriptionNode(l.defaultKeyMsg("They have heard rumors of a frog temple in The Veil and want to take a pilgrimage. It sounds like a beautiful sight to behold.")));
 		
 		provider.addRandomlySelectable("temple_pillage", defaultWeight(isDersite()),
-				descriptionNode(l.defaultKeyMsg("They have heard rumors of a frog temple in The Veil and are worried that the Queen might hear about it. If she did, it wouldn't take long for it to be destroyed.")));
+				descriptionNode(l.defaultKeyMsg("They have heard rumors of a frog temple in The Veil and are wondering when the Queen will hear about it. When she does, it might be destroyed next day.")));
 		
 		provider.addRandomlySelectable("meditative_travel", defaultWeight(isDersite()),
 				descriptionNode(l.defaultKeyMsg("They say that not everyone enjoys how far the travel is from Derse to Skaia, but that they do. It can be nice to just close your eyes while in the shuttle or stare out into the inky blackness.")));
