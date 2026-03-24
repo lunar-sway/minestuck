@@ -69,7 +69,7 @@ public class MinestuckConfig
 		public final BooleanValue cruxtruderIntake;
 		public final ConfigValue<List<String>> forbiddenWorldsTpz;
 		public final ConfigValue<List<String>> forbiddenDimensionTypesTpz;
-		public final BooleanValue disableGristWidget;
+		public final DoubleValue gristWidgetPercentage;
 		public final IntValue alchemiterMaxStacks;
 		public final IntValue puzzleBlockTickRate;
 		public final IntValue statStorerRadius;
@@ -181,8 +181,8 @@ public class MinestuckConfig
 			builder.pop();
 			
 			builder.push("machines");
-			disableGristWidget = builder.comment("Disable Grist Widget")
-					.define("disableGristWidget",false);
+			gristWidgetPercentage = builder.comment("The percentage of grist loss the widget incurs. 1.0 will have no loss.")
+					.defineInRange("gristWidgetPercentage", 0.75D, 0.0D, 1.0D);
 			alchemiterMaxStacks = builder.comment("The number of stacks that can be alchemized at the same time with the alchemiter.")
 					.defineInRange("alchemiterMaxStacks",16,0,999);
 			puzzleBlockTickRate = builder.comment("How often puzzle/redstone related blocks such as the remote observer tick.")

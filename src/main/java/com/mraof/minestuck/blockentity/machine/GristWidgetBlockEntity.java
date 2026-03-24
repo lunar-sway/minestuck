@@ -91,7 +91,7 @@ public class GristWidgetBlockEntity extends MachineProcessBlockEntity implements
 			return null;
 		
 		GristSet gristSet = GristCostRecipe.findCostForItem(containedItem, null, true, level);
-		return fullValue ? gristSet : gristSet.mutableCopy().scale(0.2F, false);
+		return fullValue ? gristSet : gristSet.mutableCopy().scale(MinestuckConfig.SERVER.gristWidgetPercentage.get().floatValue(), false);
 	}
 	
 	public static int getGristWidgetBoondollarValue(GristSet set)
@@ -107,7 +107,7 @@ public class GristWidgetBlockEntity extends MachineProcessBlockEntity implements
 	
 	private boolean contentsValid()
 	{
-		if(MinestuckConfig.SERVER.disableGristWidget.get())
+		if(MinestuckConfig.SERVER.gristWidgetPercentage.get() == 0)
 			return false;
 		if(level.hasNeighborSignal(this.getBlockPos()))
 			return false;

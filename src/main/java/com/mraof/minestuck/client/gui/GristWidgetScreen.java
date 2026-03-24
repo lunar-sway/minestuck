@@ -91,7 +91,7 @@ public class GristWidgetScreen extends MachineScreen<GristWidgetMenu>
 		super.init();
 		
 		goButton = addRenderableWidget(new GoButton(this.leftPos + BUTTON_X, this.topPos + BUTTON_Y, 30, 12, this.menu, true));
-		if(MinestuckConfig.SERVER.disableGristWidget.get())
+		if(MinestuckConfig.SERVER.gristWidgetPercentage.get() == 0)
 			goButton.active = false;
 	}
 }
