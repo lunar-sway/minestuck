@@ -19,7 +19,7 @@
           ],
           "name": "minestuck:bug_net",
           "quality": 2,
-          "weight": 6
+          "weight": 4
         },
         {
           "type": "minecraft:item",
@@ -42,6 +42,23 @@
           "type": "minecraft:item",
           "name": "minestuck:golden_grasshopper",
           "quality": 2
+        },
+        {
+          "type":      "minecraft:item",
+          "functions": [
+            {
+              "add":      false,
+              "count":    {
+                "type": "minecraft:uniform",
+                "max":  5.0,
+                "min":  2.0
+              },
+              "function": "minecraft:set_count"
+            }
+          ],
+          "name":      "minecraft:slime_ball",
+          "quality":   2,
+          "weight":    3
         }
       ],
       "name": "item",
