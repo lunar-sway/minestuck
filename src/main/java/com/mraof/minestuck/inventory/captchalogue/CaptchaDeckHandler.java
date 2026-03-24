@@ -4,6 +4,7 @@ import com.mraof.minestuck.Minestuck;
 import com.mraof.minestuck.MinestuckConfig;
 import com.mraof.minestuck.advancements.MSCriteriaTriggers;
 import com.mraof.minestuck.computer.editmode.ServerEditHandler;
+import com.mraof.minestuck.entity.MSAttributes;
 import com.mraof.minestuck.item.BoondollarsItem;
 import com.mraof.minestuck.item.CaptchaCardItem;
 import com.mraof.minestuck.item.MSItems;
@@ -155,7 +156,7 @@ public final class CaptchaDeckHandler
 			ModusHolder modusHolder = getHolder(player);
 			newModus.initModus(modusItem, player, null, modusHolder.givenModus
 					? 0
-					: MinestuckConfig.SERVER.initialModusSize.get());
+					: getInitialModusSize(player));
 		} else
 		{
 			ModusType<?> oldType = oldModus.getType();
@@ -374,7 +375,7 @@ public final class CaptchaDeckHandler
 		int cardsToKeep = switch(MinestuckConfig.SERVER.sylladexDropMode.get())
 		{
 			case ITEMS -> size;
-			case CARDS_AND_ITEMS -> MinestuckConfig.SERVER.initialModusSize.get();
+			case CARDS_AND_ITEMS -> getInitialModusSize(player);
 			case ALL -> 0;
 		};
 		
@@ -498,7 +499,7 @@ public final class CaptchaDeckHandler
 			return;
 		}
 		
-		modus.initModus(null, player, null, MinestuckConfig.SERVER.initialModusSize.get());
+		modus.initModus(null, player, null, getInitialModusSize(player));
 		setModus(modusHolder, player, modus);
 	}
 	
@@ -506,6 +507,11 @@ public final class CaptchaDeckHandler
 	{
 		PlayerData data = PlayerData.get(player).orElseThrow();
 		return data.getData(MSAttachments.MODUS_HOLDER);
+	}
+	
+	private static int getInitialModusSize(ServerPlayer player)
+	{
+		return (int) Math.min(MinestuckConfig.SERVER.initialModusSize.get(), player.getAttributeValue(MSAttributes.CAPTCHALOGUE_CAPACITY));
 	}
 	
 	public static class ModusHolder implements INBTSerializable<CompoundTag>

@@ -35,6 +35,13 @@
       "operation": "add_value",
       "value": 0.0,
       "change_per_rung": -0.01275
+    },
+    {
+      "attribute":       "minestuck:player.captchalogue_capacity",
+      "id":              "minestuck:echeladder_captchalogue_capacity",
+      "operation":       "add_value",
+      "value":           5.0,
+      "change_per_rung": 1.0
     }
   ]
 }

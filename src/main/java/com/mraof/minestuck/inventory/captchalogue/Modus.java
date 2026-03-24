@@ -14,6 +14,8 @@ import java.util.Objects;
 
 public abstract class Modus
 {
+	public static final String CAPTCHA_LIMIT = "minestuck.modus.captcha_limit";
+	
 	private final ModusType<?> type;
 	public final LogicalSide side;
 	private boolean needResend;

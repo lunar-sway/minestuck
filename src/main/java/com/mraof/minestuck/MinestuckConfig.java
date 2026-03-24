@@ -85,7 +85,6 @@ public class MinestuckConfig
 		//Sylladex
 		public final BooleanValue dropItemsInCards;
 		public final IntValue initialModusSize;
-		public final IntValue modusMaxSize;
 		public final IntValue captchaComponentSize;
 		public final EnumValue<DropMode> sylladexDropMode;
 		public final EnumValue<AvailableOptions> treeModusSetting;
@@ -140,10 +139,8 @@ public class MinestuckConfig
 			builder.push("sylladex");
 			dropItemsInCards = builder.comment("When sylladices may drop items and cards at the same time, this option determines if items should be dropped inside of cards or items and cards as different stacks.")
 					.define("dropItemsInCards", true);
-			initialModusSize = builder.comment("The initial amount of captchalogue cards in your sylladex.")
+			initialModusSize = builder.comment("The initial amount of captchalogue cards in your sylladex. The value is capped by the captchalogue_capacity Attribute")
 					.defineInRange("initialModusSize", 5, 0, Integer.MAX_VALUE);
-			modusMaxSize = builder.comment("The max size on a modus. Ignored if the value is 0.")
-					.defineInRange("modusMaxSize", 0, 0, Integer.MAX_VALUE);
 			captchaComponentSize = builder.comment("The max size of the data in NBT/Components allowed on a card being stored. Captchaloguing items with lots of data can cause crashes.")
 					.defineInRange("captchaComponentSize", 500000, 0, Integer.MAX_VALUE);
 			sylladexDropMode = builder.comment("Determines which items from the modus that are dropped on death. \"items\": Only the items are dropped. \"cards_and_items\": Both items and cards are dropped. (So that you have at most initial_modus_size amount of cards) \"all\": Everything is dropped, even the modus.")

@@ -1,12 +1,13 @@
 package com.mraof.minestuck.inventory.captchalogue;
 
-import com.mraof.minestuck.MinestuckConfig;
+import com.mraof.minestuck.entity.MSAttributes;
 import com.mraof.minestuck.item.CaptchaCardItem;
 import com.mraof.minestuck.item.MSItems;
 import net.minecraft.core.HolderLookup;
 import net.minecraft.core.NonNullList;
 import net.minecraft.nbt.CompoundTag;
 import net.minecraft.nbt.Tag;
+import net.minecraft.network.chat.Component;
 import net.minecraft.server.level.ServerPlayer;
 import net.minecraft.world.item.ItemStack;
 import net.neoforged.fml.LogicalSide;
@@ -132,8 +133,11 @@ public class StackModus extends Modus
 	@Override
 	public boolean increaseSize(ServerPlayer player)
 	{
-		if(MinestuckConfig.SERVER.modusMaxSize.get() > 0 && size >= MinestuckConfig.SERVER.modusMaxSize.get())
+		if(player.getAttributeValue(MSAttributes.CAPTCHALOGUE_CAPACITY) > 0 && size >= player.getAttributeValue(MSAttributes.CAPTCHALOGUE_CAPACITY))
+		{
+			player.displayClientMessage(Component.translatable(CAPTCHA_LIMIT), true);
 			return false;
+		}
 		
 		size++;
 		markDirty();
