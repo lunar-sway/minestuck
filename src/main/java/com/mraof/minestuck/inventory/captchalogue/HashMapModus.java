@@ -141,7 +141,7 @@ public class HashMapModus extends Modus
 	@Override
 	public boolean increaseSize(ServerPlayer player)
 	{
-		if(player.getAttributeValue(MSAttributes.CAPTCHALOGUE_CAPACITY) > 0 && list.size() >= player.getAttributeValue(MSAttributes.CAPTCHALOGUE_CAPACITY))
+		if(hasHitMaxCards(player, list.size()))
 		{
 			player.displayClientMessage(Component.translatable(CAPTCHA_LIMIT), true);
 			return false;
