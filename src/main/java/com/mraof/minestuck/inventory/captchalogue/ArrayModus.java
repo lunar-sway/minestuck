@@ -1,6 +1,7 @@
 package com.mraof.minestuck.inventory.captchalogue;
 
 import com.mraof.minestuck.MinestuckConfig;
+import com.mraof.minestuck.entity.MSAttributes;
 import com.mraof.minestuck.item.CaptchaCardItem;
 import com.mraof.minestuck.item.MSItems;
 import net.minecraft.core.HolderLookup;
@@ -144,8 +145,11 @@ public class ArrayModus extends Modus
 	@Override
 	public boolean increaseSize(ServerPlayer player)
 	{
-		if(MinestuckConfig.SERVER.modusMaxSize.get() > 0 && list.size() >= MinestuckConfig.SERVER.modusMaxSize.get())
+		if(hasHitMaxCards(player, list.size()))
+		{
+			player.displayClientMessage(Component.translatable(CAPTCHA_LIMIT), true);
 			return false;
+		}
 		
 		list.add(ItemStack.EMPTY);
 		markDirty();

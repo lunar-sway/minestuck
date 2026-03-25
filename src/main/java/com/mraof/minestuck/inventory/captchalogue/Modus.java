@@ -1,5 +1,6 @@
 package com.mraof.minestuck.inventory.captchalogue;
 
+import com.mraof.minestuck.entity.MSAttributes;
 import com.mraof.minestuck.network.CaptchaDeckPackets;
 import net.minecraft.core.HolderLookup;
 import net.minecraft.core.NonNullList;
@@ -14,6 +15,8 @@ import java.util.Objects;
 
 public abstract class Modus
 {
+	public static final String CAPTCHA_LIMIT = "minestuck.modus.captcha_limit";
+	
 	private final ModusType<?> type;
 	public final LogicalSide side;
 	private boolean needResend;
@@ -70,6 +73,11 @@ public abstract class Modus
 	public Component getName()
 	{
 		return new ItemStack(type.getItem()).getHoverName();
+	}
+	
+	public static boolean hasHitMaxCards(ServerPlayer player, int size)
+	{
+		return size >= (int) player.getAttributeValue(MSAttributes.CAPTCHALOGUE_CAPACITY);
 	}
 	
 	/**

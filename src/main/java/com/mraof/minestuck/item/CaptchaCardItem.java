@@ -1,6 +1,7 @@
 package com.mraof.minestuck.item;
 
 import com.mraof.minestuck.alchemy.CardCaptchas;
+import com.mraof.minestuck.client.util.MSKeyHandler;
 import com.mraof.minestuck.item.components.CaptchaCodeComponent;
 import com.mraof.minestuck.item.components.CardStoredItemComponent;
 import com.mraof.minestuck.item.components.EncodedItemComponent;
@@ -27,6 +28,8 @@ import java.util.List;
 @MethodsReturnNonnullByDefault
 public class CaptchaCardItem extends Item
 {
+	public static final String USE_KEYS = "minestuck.captcha_card.use_keys";
+	
 	public CaptchaCardItem(Properties properties)
 	{
 		super(properties.component(MSItemComponents.CAPTCHA_CODE, CaptchaCodeComponent.ZERO));
@@ -93,6 +96,8 @@ public class CaptchaCardItem extends Item
 			tooltipComponents.add(Component.literal(CardCaptchas.EMPTY_CARD_CAPTCHA));
 			tooltipComponents.add(makeTooltipInfo(Component.translatable(getDescriptionId() + ".empty")));
 		}
+		
+		tooltipComponents.add(Component.translatable(USE_KEYS, MSKeyHandler.captchaKey.getTranslatedKeyMessage(), MSKeyHandler.sylladexKey.getTranslatedKeyMessage()));
 	}
 	
 	@Override
