@@ -38,6 +38,7 @@ import com.mraof.minestuck.inventory.ConsortMerchantInventory;
 import com.mraof.minestuck.inventory.captchalogue.ArrayModus;
 import com.mraof.minestuck.inventory.captchalogue.HashMapModus;
 import com.mraof.minestuck.inventory.captchalogue.Modus;
+import com.mraof.minestuck.item.CaptchaCardItem;
 import com.mraof.minestuck.item.MSCreativeTabs;
 import com.mraof.minestuck.item.MSItems;
 import com.mraof.minestuck.item.StructureScannerItem;
@@ -1568,6 +1569,7 @@ public class MinestuckEnUsLanguageProvider extends MinestuckLanguageProvider
 		addItemExtra(MSItems.CAPTCHA_CARD, "invalid", "Invalid Data");
 		addItemExtra(MSItems.CAPTCHA_CARD, "punched", "Punched");
 		addItemExtra(MSItems.CAPTCHA_CARD, "ghost", "Ghost");
+		add(CaptchaCardItem.USE_KEYS, "Store your held item to an empty card in your Sylladex by pressing [%s]");
 		addItem(MSItems.STACK_MODUS_CARD, "Stack Modus");
 		addItem(MSItems.QUEUE_MODUS_CARD, "Queue Modus");
 		addItem(MSItems.QUEUESTACK_MODUS_CARD, "Queue-Stack Modus");
