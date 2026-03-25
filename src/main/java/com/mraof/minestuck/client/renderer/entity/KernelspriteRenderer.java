@@ -22,8 +22,6 @@ public class KernelspriteRenderer extends EntityRenderer<KernelspriteEntity>
 	
 	private int animationTick = 0;
 	
-	
-	
 	public KernelspriteRenderer(EntityRendererProvider.Context context)
 	{
 		super(context);
@@ -34,16 +32,16 @@ public class KernelspriteRenderer extends EntityRenderer<KernelspriteEntity>
 	@Override
 	public ResourceLocation getTextureLocation(KernelspriteEntity entity)
 	{
-	 return BACK;
-	 
+		return BACK;
 	}
+	
 	@Override
 	public void render(KernelspriteEntity kernelsprite, float entityYaw, float partialTick, PoseStack poseStack, MultiBufferSource bufferSource, int packedLight)
 	{
 		super.render(kernelsprite, entityYaw, partialTick, poseStack, bufferSource, packedLight);
 		
 		poseStack.pushPose();
-		poseStack.translate(0.0f,0.75f,0.0f);
+		poseStack.translate(0.0f, 0.75f, 0.0f);
 		poseStack.mulPose(this.entityRenderDispatcher.cameraOrientation());
 		
 		spriteVertex(poseStack, bufferSource, packedLight, BACK);
@@ -53,17 +51,17 @@ public class KernelspriteRenderer extends EntityRenderer<KernelspriteEntity>
 	
 	private void spriteVertex(PoseStack poseStack, MultiBufferSource bufferSource, int packedLight, ResourceLocation sprite)
 	{
-		PoseStack.Pose matrixstack = poseStack.last();
-		Matrix4f matrix4f = matrixstack.pose();
+		PoseStack.Pose pose = poseStack.last();
+		Matrix4f matrix4f = pose.pose();
 		AnimatableTexture.setAndUpdate(sprite, animationTick++);
 		VertexConsumer iVertexbuilder = bufferSource.getBuffer(RenderType.entityCutoutNoCull(sprite));
-		iVertexbuilder.addVertex(matrix4f,0.0f - 0.5f, 0.0f - 0.25f, 0.0f).setColor(225,225,225,225).setUv(0,1)
-				.setOverlay(OverlayTexture.NO_OVERLAY).setLight(packedLight).setNormal(matrixstack,0.0f,1.0f,0.0f);
-		iVertexbuilder.addVertex(matrix4f,1.0f - 0.5f, 0.0f - 0.25f, 0.0f).setColor(225,225,225,225).setUv(1,1)
-				.setOverlay(OverlayTexture.NO_OVERLAY).setLight(packedLight).setNormal(matrixstack,0.0f,1.0f,0.0f);
-		iVertexbuilder.addVertex(matrix4f,1.0f - 0.5f, 1.0f - 0.25f, 0.0f).setColor(225,225,225,225).setUv(1,0)
-				.setOverlay(OverlayTexture.NO_OVERLAY).setLight(packedLight).setNormal(matrixstack,0.0f,1.0f,0.0f);
-		iVertexbuilder.addVertex(matrix4f,0.0f - 0.5f, 1.0f - 0.25f, 0.0f).setColor(225,225,225,225).setUv(0,0)
-				.setOverlay(OverlayTexture.NO_OVERLAY).setLight(packedLight).setNormal(matrixstack,0.0f,1.0f,0.0f);
+		iVertexbuilder.addVertex(matrix4f, 0.0f - 0.5f, 0.0f - 0.25f, 0.0f).setColor(225, 225, 225, 225).setUv(0, 1)
+				.setOverlay(OverlayTexture.NO_OVERLAY).setLight(packedLight).setNormal(pose, 0.0f, 1.0f, 0.0f);
+		iVertexbuilder.addVertex(matrix4f, 1.0f - 0.5f, 0.0f - 0.25f, 0.0f).setColor(225, 225, 225, 225).setUv(1, 1)
+				.setOverlay(OverlayTexture.NO_OVERLAY).setLight(packedLight).setNormal(pose, 0.0f, 1.0f, 0.0f);
+		iVertexbuilder.addVertex(matrix4f, 1.0f - 0.5f, 1.0f - 0.25f, 0.0f).setColor(225, 225, 225, 225).setUv(1, 0)
+				.setOverlay(OverlayTexture.NO_OVERLAY).setLight(packedLight).setNormal(pose, 0.0f, 1.0f, 0.0f);
+		iVertexbuilder.addVertex(matrix4f, 0.0f - 0.5f, 1.0f - 0.25f, 0.0f).setColor(225, 225, 225, 225).setUv(0, 0)
+				.setOverlay(OverlayTexture.NO_OVERLAY).setLight(packedLight).setNormal(pose, 0.0f, 1.0f, 0.0f);
 	}
 }
