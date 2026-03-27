@@ -1996,6 +1996,7 @@ public class MinestuckEnUsLanguageProvider extends MinestuckLanguageProvider
 		addEntityType(MSEntityTypes.METAL_BOAT, "Metal Boat");
 		addEntityType(MSEntityTypes.POSTER, "Poster");
 		addEntityType(MSEntityTypes.LOTUS_FLOWER, "Lotus Flower");
+		addEntityType(MSEntityTypes.KERNELSPRITE, "Kernelsprite");
 		
 		addGristType(GristTypes.BUILD, "Build");
 		addGristType(GristTypes.AMBER, "Amber");

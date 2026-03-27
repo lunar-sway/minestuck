@@ -12,8 +12,10 @@ import net.minecraft.network.syncher.SynchedEntityData;
 import net.minecraft.server.level.ServerPlayer;
 import net.minecraft.world.InteractionHand;
 import net.minecraft.world.InteractionResult;
+import net.minecraft.world.entity.Entity;
 import net.minecraft.world.entity.EntityType;
 import net.minecraft.world.entity.PathfinderMob;
+import net.minecraft.world.entity.ai.goal.MoveToBlockGoal;
 import net.minecraft.world.entity.ai.goal.WrappedGoal;
 import net.minecraft.world.entity.player.Player;
 import net.minecraft.world.level.Level;
@@ -27,21 +29,36 @@ public class KernelspriteEntity extends PathfinderMob implements DialogueEntity
 	protected KernelspriteEntity(EntityType<? extends PathfinderMob> entityType, Level level)
 	{
 		super(entityType, level);
+		setInvulnerable(true);
+		setPersistenceRequired();
+		
 		dialogueComponent.setDialogue(Minestuck.id("individual/kernelsprite/start"), true);
+	}
+	
+	@Override
+	public boolean canBeCollidedWith()
+	{
+		return false;
+	}
+	
+	@Override
+	protected MovementEmission getMovementEmission()
+	{
+		return Entity.MovementEmission.NONE;
 	}
 	
 	@Override
 	protected void defineSynchedData(SynchedEntityData.Builder builder)
 	{
 		super.defineSynchedData(builder);
-		builder.define(COLOR, ChatFormatting.AQUA.getColor());
+		builder.define(COLOR, ChatFormatting.BLUE.getColor());
 	}
 	
 	@Override
 	protected InteractionResult mobInteract(Player player, InteractionHand hand)
 	{
 		boolean isBusy = this.goalSelector.getAvailableGoals().stream().filter(WrappedGoal::isRunning)
-				.anyMatch(goal -> goal.getGoal() instanceof MoveToTargetGoal);
+				.anyMatch(goal -> goal.getGoal() instanceof MoveToBlockGoal);
 		
 		if(!this.isAlive() || player.isShiftKeyDown() || isBusy)
 			return InteractionResult.PASS;
@@ -98,7 +115,7 @@ public class KernelspriteEntity extends PathfinderMob implements DialogueEntity
 	@Override
 	public ChatFormatting getChatColor()
 	{
-		return ChatFormatting.AQUA;
+		return ChatFormatting.BLACK;
 		//return getColor();
 	}
 	
