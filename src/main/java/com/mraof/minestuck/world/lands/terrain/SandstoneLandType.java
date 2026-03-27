@@ -92,6 +92,8 @@ public class SandstoneLandType extends TerrainLandType
 		registry.setBlock(STRUCTURE_WOOL_1, Blocks.WHITE_WOOL);
 		registry.setBlock(STRUCTURE_WOOL_3, Blocks.MAGENTA_WOOL);
 		
+		registry.setBlock(STRUCTURE_ROOF_COVER, Blocks.HANGING_ROOTS);
+		
 		registry.setBlock(TORCH, Blocks.REDSTONE_TORCH);
 		registry.setBlock(WALL_TORCH, Blocks.REDSTONE_WALL_TORCH);
 	}

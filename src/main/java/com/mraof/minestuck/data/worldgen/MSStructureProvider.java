@@ -1,6 +1,7 @@
 package com.mraof.minestuck.data.worldgen;
 
 import com.mraof.minestuck.Minestuck;
+import com.mraof.minestuck.entity.MSEntityTypes;
 import com.mraof.minestuck.util.MSTags;
 import com.mraof.minestuck.world.gen.structure.*;
 import com.mraof.minestuck.world.gen.structure.castle.CastleStructure;
@@ -12,6 +13,9 @@ import net.minecraft.core.registries.Registries;
 import net.minecraft.data.worldgen.BootstrapContext;
 import net.minecraft.resources.ResourceKey;
 import net.minecraft.resources.ResourceLocation;
+import net.minecraft.tags.TagKey;
+import net.minecraft.util.random.WeightedRandomList;
+import net.minecraft.world.entity.MobCategory;
 import net.minecraft.world.level.biome.Biome;
 import net.minecraft.world.level.levelgen.GenerationStep;
 import net.minecraft.world.level.levelgen.Heightmap;
@@ -19,13 +23,17 @@ import net.minecraft.world.level.levelgen.VerticalAnchor;
 import net.minecraft.world.level.levelgen.heightproviders.ConstantHeight;
 import net.minecraft.world.level.levelgen.structure.Structure;
 import net.minecraft.world.level.levelgen.structure.StructureSet;
+import net.minecraft.world.level.levelgen.structure.StructureSpawnOverride;
 import net.minecraft.world.level.levelgen.structure.TerrainAdjustment;
 import net.minecraft.world.level.levelgen.structure.placement.RandomSpreadStructurePlacement;
 import net.minecraft.world.level.levelgen.structure.placement.RandomSpreadType;
 import net.minecraft.world.level.levelgen.structure.pools.StructureTemplatePool;
 import net.minecraft.world.level.levelgen.structure.structures.JigsawStructure;
+import net.minecraft.world.level.levelgen.structure.templatesystem.LiquidSettings;
 
+import java.util.List;
 import java.util.Map;
+import java.util.Optional;
 
 import static com.mraof.minestuck.world.gen.structure.MSStructures.*;
 
@@ -36,6 +44,12 @@ public final class MSStructureProvider
 		HolderGetter<Biome> biomes = context.lookup(Registries.BIOME);
 		HolderGetter<StructureTemplatePool> pools = context.lookup(Registries.TEMPLATE_POOL);
 		
+		Map<MobCategory, StructureSpawnOverride> underlingSpawnOverride = Map.of(MSEntityTypes.UNDERLING, new StructureSpawnOverride(StructureSpawnOverride.BoundingBoxType.STRUCTURE, WeightedRandomList.create()));
+		Map<MobCategory, StructureSpawnOverride> consortSpawnOverride = Map.of(MSEntityTypes.CONSORT, new StructureSpawnOverride(StructureSpawnOverride.BoundingBoxType.STRUCTURE, WeightedRandomList.create()));
+		Map<MobCategory, StructureSpawnOverride> minestuckMobCategoriesSpawnOverride = Map.of(
+				MSEntityTypes.UNDERLING, new StructureSpawnOverride(StructureSpawnOverride.BoundingBoxType.STRUCTURE, WeightedRandomList.create()),
+				MSEntityTypes.CONSORT, new StructureSpawnOverride(StructureSpawnOverride.BoundingBoxType.STRUCTURE, WeightedRandomList.create()));
+		
 		// Overworld
 		context.register(FROG_TEMPLE, new FrogTempleStructure(new Structure.StructureSettings(biomes.getOrThrow(MSTags.Biomes.HAS_FROG_TEMPLE),
 				Map.of(), GenerationStep.Decoration.SURFACE_STRUCTURES, TerrainAdjustment.NONE)));
@@ -45,10 +59,13 @@ public final class MSStructureProvider
 				Map.of(), GenerationStep.Decoration.SURFACE_STRUCTURES, TerrainAdjustment.NONE)));
 		context.register(SMALL_RUIN, new SmallRuinStructure(new Structure.StructureSettings(biomes.getOrThrow(MSTags.Biomes.HAS_SMALL_RUIN),
 				Map.of(), GenerationStep.Decoration.SURFACE_STRUCTURES, TerrainAdjustment.NONE)));
+		context.register(PROSPIT_BUNKER, jigsaw(biomes, pools, MSTags.Biomes.HAS_PROSPIT_BUNKER, minestuckMobCategoriesSpawnOverride, PROSPIT_BUNKER_START_POOL));
+		context.register(DERSE_BUNKER, jigsaw(biomes, pools, MSTags.Biomes.HAS_DERSE_BUNKER, minestuckMobCategoriesSpawnOverride, DERSE_BUNKER_START_POOL));
+		context.register(IMP_BUNKER, jigsaw(biomes, pools, MSTags.Biomes.HAS_IMP_BUNKER, consortSpawnOverride, IMP_BUNKER_START_POOL));
 		context.register(ImpDungeon.KEY, new ImpDungeonStructure(new Structure.StructureSettings(biomes.getOrThrow(MSTags.Biomes.HAS_IMP_DUNGEON),
-				Map.of(), GenerationStep.Decoration.SURFACE_STRUCTURES, TerrainAdjustment.NONE)));
+				consortSpawnOverride, GenerationStep.Decoration.SURFACE_STRUCTURES, TerrainAdjustment.NONE)));
 		context.register(ConsortVillage.KEY, new ConsortVillageStructure(new Structure.StructureSettings(biomes.getOrThrow(MSTags.Biomes.HAS_CONSORT_VILLAGE),
-				Map.of(), GenerationStep.Decoration.SURFACE_STRUCTURES, TerrainAdjustment.NONE)));
+				underlingSpawnOverride, GenerationStep.Decoration.SURFACE_STRUCTURES, TerrainAdjustment.NONE)));
 		
 		context.register(LARGE_WOOD_OBJECT, new LargeWoodObjectStructure(new Structure.StructureSettings(biomes.getOrThrow(MSTags.Biomes.LAND_ROUGH),
 				Map.of(), GenerationStep.Decoration.SURFACE_STRUCTURES, TerrainAdjustment.NONE)));
@@ -83,6 +100,27 @@ public final class MSStructureProvider
 		
 		context.register(key("skaian_cathedral"), new StructureSet(structures.getOrThrow(SKAIAN_CATHEDRAL),
 				new RandomSpreadStructurePlacement(40, 10, RandomSpreadType.LINEAR, 1481098009)));
+	}
+	
+	private static JigsawStructure jigsaw(HolderGetter<Biome> biomes, HolderGetter<StructureTemplatePool> templatePools, TagKey<Biome> biome, Map<MobCategory, StructureSpawnOverride> spawnOverrides, ResourceKey<StructureTemplatePool> startPool)
+	{
+		return new JigsawStructure(
+				new Structure.StructureSettings.Builder(biomes.getOrThrow(biome))
+						.generationStep(GenerationStep.Decoration.SURFACE_STRUCTURES)
+						.terrainAdapation(TerrainAdjustment.NONE)
+						.spawnOverrides(spawnOverrides)
+						.build(),
+				templatePools.getOrThrow(startPool),
+				Optional.empty(),
+				20,
+				ConstantHeight.of(VerticalAnchor.absolute(0)),
+				false,
+				Optional.of(Heightmap.Types.WORLD_SURFACE_WG),
+				116,
+				List.of(),
+				JigsawStructure.DEFAULT_DIMENSION_PADDING,
+				LiquidSettings.IGNORE_WATERLOGGING
+		);
 	}
 	
 	private static ResourceKey<StructureSet> key(String path)

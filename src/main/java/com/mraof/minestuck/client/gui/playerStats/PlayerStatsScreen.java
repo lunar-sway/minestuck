@@ -3,8 +3,10 @@ package com.mraof.minestuck.client.gui.playerStats;
 import com.mojang.blaze3d.platform.InputConstants;
 import com.mojang.blaze3d.systems.RenderSystem;
 import com.mraof.minestuck.Minestuck;
-import com.mraof.minestuck.MinestuckConfig;
+import com.mraof.minestuck.client.gui.MSScreenFactories;
+import com.mraof.minestuck.client.gui.MSScreenFactories.NoModusFactoryException;
 import com.mraof.minestuck.client.gui.MinestuckScreen;
+import com.mraof.minestuck.client.gui.captchalouge.SylladexScreen;
 import com.mraof.minestuck.client.util.MSKeyHandler;
 import com.mraof.minestuck.computer.editmode.ClientEditmodeData;
 import com.mraof.minestuck.network.MiscContainerPacket;
@@ -34,14 +36,27 @@ import java.util.function.Supplier;
 public abstract class PlayerStatsScreen extends MinestuckScreen
 {
 	//TODO A better way of working with inventory-like guis like these?
-	public static final int WINDOW_ID_START = 105;	//Note that window ids used MUST be a byte. (that's how the window id is serialized in minecraft's packets)
+	public static final int WINDOW_ID_START = 105;    //Note that window ids used MUST be a byte. (that's how the window id is serialized in minecraft's packets)
 	
 	public static final ResourceLocation icons = ResourceLocation.fromNamespaceAndPath("minestuck", "textures/gui/icons.png");
 	
 	public enum NormalGuiType
 	{
 		
-		CAPTCHA_DECK(CaptchaDeckScreen::new, CaptchaDeckScreen.TITLE, false),
+		CAPTCHA_DECK((windowId, inventory) -> {
+			if(ClientPlayerData.getModus() != null)
+			{
+				try
+				{
+					return MSScreenFactories.displaySylladexScreen(ClientPlayerData.getModus(), windowId, inventory);
+				} catch(NoModusFactoryException e)
+				{
+					e.printStackTrace();
+					Minecraft.getInstance().screen = null;
+				}
+			}
+			return null;
+		}, SylladexScreen.TITLE, false),
 		STRIFE_SPECIBUS(StrifeSpecibusScreen::new, StrifeSpecibusScreen.TITLE, false),
 		ECHELADDER(EcheladderScreen::new, EcheladderScreen.TITLE, false),
 		GRIST_CACHE(GristCacheScreen::new, GristCacheScreen.TITLE, true);
@@ -147,8 +162,8 @@ public abstract class PlayerStatsScreen extends MinestuckScreen
 	public void init()
 	{
 		super.init();
-		xOffset = (width-guiWidth)/2;
-		yOffset = (height-guiHeight+tabHeight-tabOverlap)/2;
+		xOffset = (width - guiWidth) / 2;
+		yOffset = (height - guiHeight + tabHeight - tabOverlap) / 2;
 		mc = Minecraft.getInstance();
 	}
 	
@@ -160,7 +175,7 @@ public abstract class PlayerStatsScreen extends MinestuckScreen
 	
 	protected void drawTabs(GuiGraphics guiGraphics)
 	{
-		RenderSystem.setShaderColor(1,1,1, 1);
+		RenderSystem.setShaderColor(1, 1, 1, 1);
 		
 		if(mode)
 		{
@@ -168,7 +183,7 @@ public abstract class PlayerStatsScreen extends MinestuckScreen
 				if(type != normalTab && (!type.reqMedium() || SkaiaClient.hasPlayerEntered() || mc.gameMode.hasInfiniteItems()))
 				{
 					int i = type.ordinal();
-					guiGraphics.blit(icons, xOffset + i*(tabWidth + 2), yOffset - tabHeight + tabOverlap, i==0? 0:tabWidth, 0, tabWidth, tabHeight);
+					guiGraphics.blit(icons, xOffset + i * (tabWidth + 2), yOffset - tabHeight + tabOverlap, i == 0 ? 0 : tabWidth, 0, tabWidth, tabHeight);
 				}
 		} else
 		{
@@ -176,36 +191,36 @@ public abstract class PlayerStatsScreen extends MinestuckScreen
 				if(type != editmodeTab)
 				{
 					int i = type.ordinal();
-					guiGraphics.blit(icons, xOffset + i*(tabWidth + 2), yOffset - tabHeight + tabOverlap, i==0? 0:tabWidth, 0, tabWidth, tabHeight);
+					guiGraphics.blit(icons, xOffset + i * (tabWidth + 2), yOffset - tabHeight + tabOverlap, i == 0 ? 0 : tabWidth, 0, tabWidth, tabHeight);
 				}
 		}
 		
 		if(ClientPlayerData.hasDataCheckerAccess())
-			guiGraphics.blit(icons, xOffset + guiWidth - tabWidth, yOffset -tabHeight + tabOverlap, 2*tabWidth, 0, tabWidth, tabHeight);
+			guiGraphics.blit(icons, xOffset + guiWidth - tabWidth, yOffset - tabHeight + tabOverlap, 2 * tabWidth, 0, tabWidth, tabHeight);
 	}
 	
 	protected void drawActiveTabAndOther(GuiGraphics guiGraphics, int xcor, int ycor)
 	{
-		RenderSystem.setShaderColor(1,1,1, 1);
+		RenderSystem.setShaderColor(1, 1, 1, 1);
 		
-		int index = (mode? normalTab:editmodeTab).ordinal();
-		guiGraphics.blit(icons, xOffset + index*(tabWidth+2), yOffset - tabHeight + tabOverlap,
-				index == 0? 0:tabWidth, tabHeight, tabWidth, tabHeight);
+		int index = (mode ? normalTab : editmodeTab).ordinal();
+		guiGraphics.blit(icons, xOffset + index * (tabWidth + 2), yOffset - tabHeight + tabOverlap,
+				index == 0 ? 0 : tabWidth, tabHeight, tabWidth, tabHeight);
 		
-		for(int i = 0; i < (mode? NormalGuiType.values():EditmodeGuiType.values()).length; i++)
+		for(int i = 0; i < (mode ? NormalGuiType.values() : EditmodeGuiType.values()).length; i++)
 			if(!mode || !NormalGuiType.values()[i].reqMedium() || SkaiaClient.hasPlayerEntered() || mc.gameMode.hasInfiniteItems())
-				guiGraphics.blit(icons, xOffset + (tabWidth - 16)/2 + (tabWidth+2)*i, yOffset - tabHeight + tabOverlap + 8, i*16, tabHeight*2 + (mode? 0:16), 16, 16);
+				guiGraphics.blit(icons, xOffset + (tabWidth - 16) / 2 + (tabWidth + 2) * i, yOffset - tabHeight + tabOverlap + 8, i * 16, tabHeight * 2 + (mode ? 0 : 16), 16, 16);
 		
 		if(ClientPlayerData.hasDataCheckerAccess())
-			guiGraphics.blit(icons, xOffset + guiWidth + (tabWidth - 16)/2 - tabWidth, yOffset - tabHeight + tabOverlap + 8, 5*16, tabHeight*2, 16, 16);
+			guiGraphics.blit(icons, xOffset + guiWidth + (tabWidth - 16) / 2 - tabWidth, yOffset - tabHeight + tabOverlap + 8, 5 * 16, tabHeight * 2, 16, 16);
 		
 		if(ycor < yOffset && ycor > yOffset - tabHeight + 4)
-			for(int i = 0; i < (mode? NormalGuiType.values():EditmodeGuiType.values()).length; i++)
-				if(xcor < xOffset + i*(tabWidth + 2))
+			for(int i = 0; i < (mode ? NormalGuiType.values() : EditmodeGuiType.values()).length; i++)
+				if(xcor < xOffset + i * (tabWidth + 2))
 					break;
-				else if(xcor < xOffset + i*(tabWidth + 2) + tabWidth
+				else if(xcor < xOffset + i * (tabWidth + 2) + tabWidth
 						&& (!mode || !NormalGuiType.values()[i].reqMedium() || SkaiaClient.hasPlayerEntered() || mc.gameMode.hasInfiniteItems()))
-					guiGraphics.renderTooltip(font, Component.translatable(mode? NormalGuiType.values()[i].name:EditmodeGuiType.values()[i].name),
+					guiGraphics.renderTooltip(font, Component.translatable(mode ? NormalGuiType.values()[i].name : EditmodeGuiType.values()[i].name),
 							xcor, ycor);
 	}
 	
@@ -213,17 +228,17 @@ public abstract class PlayerStatsScreen extends MinestuckScreen
 	@Override
 	public boolean mouseClicked(double xcor, double ycor, int mouseButton)
 	{
-		if(mouseButton == 0 && ycor < (height - guiHeight + tabHeight - tabOverlap)/2 && ycor > (height - guiHeight - tabHeight + tabOverlap)/2)
+		if(mouseButton == 0 && ycor < (height - guiHeight + tabHeight - tabOverlap) / 2 && ycor > (height - guiHeight - tabHeight + tabOverlap) / 2)
 		{
-			for(int i = 0; i < (mode? NormalGuiType.values():EditmodeGuiType.values()).length; i++)
-				if(xcor < xOffset + i*(tabWidth + 2))
+			for(int i = 0; i < (mode ? NormalGuiType.values() : EditmodeGuiType.values()).length; i++)
+				if(xcor < xOffset + i * (tabWidth + 2))
 					break;
-				else if(xcor < xOffset + i*(tabWidth + 2) + tabWidth)
+				else if(xcor < xOffset + i * (tabWidth + 2) + tabWidth)
 				{
 					if(mode && NormalGuiType.values()[i].reqMedium() && !SkaiaClient.hasPlayerEntered() && mc.gameMode.hasMissTime())
 						return true;
 					mc.getSoundManager().play(SimpleSoundInstance.forUI(SoundEvents.UI_BUTTON_CLICK, 1.0F));
-					if(i != (mode? normalTab:editmodeTab).ordinal())
+					if(i != (mode ? normalTab : editmodeTab).ordinal())
 					{
 						if(mode)
 							normalTab = NormalGuiType.values()[i];
@@ -273,10 +288,9 @@ public abstract class PlayerStatsScreen extends MinestuckScreen
 				mc.setScreen(containerScreen);
 				if(mc.screen == containerScreen)
 					PacketDistributor.sendToServer(new MiscContainerPacket(ordinal, ClientEditmodeData.isInEditmode()));
-			}
-			else mc.setScreen(ClientEditmodeData.isInEditmode() ? editmodeTab.createGuiInstance():normalTab.createGuiInstance());
-		}
-		else if(mc.screen instanceof PlayerStatsScreen || mc.screen instanceof PlayerStatsContainerScreen)
+			} else
+				mc.setScreen(ClientEditmodeData.isInEditmode() ? editmodeTab.createGuiInstance() : normalTab.createGuiInstance());
+		} else if(mc.screen instanceof PlayerStatsScreen || mc.screen instanceof PlayerStatsContainerScreen)
 			mc.setScreen(null);
 	}
 	
@@ -287,8 +301,7 @@ public abstract class PlayerStatsScreen extends MinestuckScreen
 		{
 			mc.setScreen(null);
 			return true;
-		}
-		else return super.keyPressed(keyCode, scanCode, i);
+		} else return super.keyPressed(keyCode, scanCode, i);
 	}
 	
 	@SubscribeEvent

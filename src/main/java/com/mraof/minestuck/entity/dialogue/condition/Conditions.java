@@ -40,6 +40,7 @@ public final class Conditions
 		REGISTER.register("title_land_type", () -> InTitleLandType.CODEC);
 		REGISTER.register("title_land_type_tag", () -> InTitleLandTypeTag.CODEC);
 		REGISTER.register("at_or_above_y", () -> AtOrAboveY.CODEC);
+		REGISTER.register("npc_in_structure", () -> NPCInStructure.CODEC);
 		REGISTER.register("npc_holding_item", () -> NPCIsHoldingItem.CODEC);
 		REGISTER.register("player_item", () -> PlayerHasItem.CODEC);
 		REGISTER.register("item_tag_match", () -> ItemTagMatch.CODEC);

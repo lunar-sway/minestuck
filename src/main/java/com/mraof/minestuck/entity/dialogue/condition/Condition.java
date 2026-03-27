@@ -20,8 +20,10 @@ import com.mraof.minestuck.world.lands.LandTypes;
 import com.mraof.minestuck.world.lands.terrain.TerrainLandType;
 import com.mraof.minestuck.world.lands.title.TitleLandType;
 import net.minecraft.advancements.AdvancementHolder;
+import net.minecraft.advancements.critereon.LocationPredicate;
 import net.minecraft.core.Holder;
 import net.minecraft.core.HolderSet;
+import net.minecraft.core.Registry;
 import net.minecraft.core.registries.BuiltInRegistries;
 import net.minecraft.core.registries.Registries;
 import net.minecraft.network.chat.Component;
@@ -36,6 +38,7 @@ import net.minecraft.world.entity.player.Player;
 import net.minecraft.world.item.Item;
 import net.minecraft.world.item.ItemStack;
 import net.minecraft.world.level.Level;
+import net.minecraft.world.level.levelgen.structure.Structure;
 import net.minecraft.world.level.storage.LevelData;
 import net.minecraft.world.phys.Vec3;
 import net.minecraft.world.scores.Objective;
@@ -504,6 +507,7 @@ public interface Condition
 		static final MapCodec<AtOrAboveY> CODEC = RecordCodecBuilder.mapCodec(instance -> instance.group(
 				Codec.DOUBLE.fieldOf("y").forGetter(AtOrAboveY::y)
 		).apply(instance, AtOrAboveY::new));
+		
 		@Override
 		public MapCodec<AtOrAboveY> codec()
 		{
@@ -520,6 +524,38 @@ public interface Condition
 		public Component getFailureTooltip()
 		{
 			return Component.literal("Is not at the right height");
+		}
+	}
+	
+	record NPCInStructure(ResourceLocation structureID) implements NpcOnlyCondition
+	{
+		static final MapCodec<NPCInStructure> CODEC = RecordCodecBuilder.mapCodec(instance -> instance.group(
+				ResourceLocation.CODEC.fieldOf("structure").forGetter(NPCInStructure::structureID)
+		).apply(instance, NPCInStructure::new));
+		
+		@Override
+		public MapCodec<NPCInStructure> codec()
+		{
+			return CODEC;
+		}
+		
+		@Override
+		public boolean test(LivingEntity entity)
+		{
+			if(entity.level() instanceof ServerLevel serverLevel)
+			{
+				Registry<Structure> registry = serverLevel.registryAccess().registryOrThrow(Registries.STRUCTURE);
+				Holder<Structure> structureHolder = registry.wrapAsHolder(registry.get(structureID));
+				return LocationPredicate.Builder.inStructure(structureHolder).build().matches(serverLevel, entity.getX(), entity.getY(), entity.getZ());
+			}
+			
+			return false;
+		}
+		
+		@Override
+		public Component getFailureTooltip()
+		{
+			return Component.literal("NPC is not in the correct structure");
 		}
 	}
 	
@@ -601,6 +637,7 @@ public interface Condition
 		static final MapCodec<ItemTagMatch> CODEC = RecordCodecBuilder.mapCodec(instance -> instance.group(
 				TagKey.codec(Registries.ITEM).fieldOf("tag").forGetter(ItemTagMatch::itemTag)
 		).apply(instance, ItemTagMatch::new));
+		
 		@Override
 		public MapCodec<ItemTagMatch> codec()
 		{

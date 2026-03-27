@@ -66,8 +66,18 @@ public class FrostLandType extends TerrainLandType
 		registry.setBlock(STRUCTURE_SECONDARY_SLAB, MSBlocks.FROST_TILE_SLAB);
 		registry.setBlock(STRUCTURE_SECONDARY_WALL, MSBlocks.FROST_TILE_WALL);
 		
-		registry.setBlock(STRUCTURE_PLANKS, Blocks.SPRUCE_PLANKS);
-		registry.setBlock(STRUCTURE_PLANKS_SLAB, Blocks.SPRUCE_SLAB);
+		registry.setBlock(STRUCTURE_WOOD, MSBlocks.FROST_WOOD);
+		registry.setBlock(STRUCTURE_LOG, MSBlocks.FROST_LOG);
+		registry.setBlock(STRUCTURE_STRIPPED_WOOD, MSBlocks.STRIPPED_FROST_WOOD);
+		registry.setBlock(STRUCTURE_STRIPPED_LOG, MSBlocks.STRIPPED_FROST_LOG);
+		registry.setBlock(STRUCTURE_PLANKS, MSBlocks.FROST_PLANKS);
+		registry.setBlock(STRUCTURE_BOOKSHELF, MSBlocks.FROST_BOOKSHELF);
+		registry.setBlock(STRUCTURE_PLANKS_STAIRS, MSBlocks.FROST_STAIRS);
+		registry.setBlock(STRUCTURE_PLANKS_SLAB, MSBlocks.FROST_SLAB);
+		registry.setBlock(STRUCTURE_PLANKS_FENCE, MSBlocks.FROST_FENCE);
+		registry.setBlock(STRUCTURE_PLANKS_FENCE_GATE, MSBlocks.FROST_FENCE_GATE);
+		registry.setBlock(STRUCTURE_PLANKS_DOOR, MSBlocks.FROST_DOOR);
+		registry.setBlock(STRUCTURE_PLANKS_TRAPDOOR, MSBlocks.FROST_TRAPDOOR);
 		
 		registry.setBlock(STRUCTURE_WOOL_1, Blocks.WHITE_WOOL);
 		registry.setBlock(STRUCTURE_WOOL_3, Blocks.CYAN_WOOL);

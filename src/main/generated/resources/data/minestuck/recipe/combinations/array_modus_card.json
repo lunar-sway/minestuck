@@ -1,0 +1,11 @@
+{
+  "type": "minestuck:combination",
+  "input1": {
+    "item": "minestuck:set_modus_card"
+  },
+  "input2": {
+    "item": "minecraft:shulker_box"
+  },
+  "mode": "and",
+  "output": "minestuck:array_modus_card"
+}
