@@ -32,6 +32,8 @@ The format is based on [Keep a Changelog](https://keepachangelog.com/en/1.1.0/).
 - Underlings no longer spawn naturally in consort villages and consorts no longer spawn in dungeons
 - Inventory item discharge is now divided into separate eject and launch mechanics
 - HashmapModus now can handle with localized names, tags, anvil names
+- New talksprites for consorts
+- Picked new colors for consort text that improve contrast
 
 ### Fixed
 
@@ -45,7 +47,7 @@ The format is based on [Keep a Changelog](https://keepachangelog.com/en/1.1.0/).
 
 ### Contributors for this release
 
-- medsal15, heartsremedy, caldw3ll, v_sabitron, Dweblenod, TangleKat, Pancake, Fl1s
+- medsal15, heartsremedy, caldw3ll, v_sabitron, Dweblenod, TangleKat, Pancake, Fl1s, Emma "Dilemma"
 
 ## [1.21.1-1.13.1.1] - 2025-09-14
 
