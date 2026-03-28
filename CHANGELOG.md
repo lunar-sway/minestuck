@@ -10,7 +10,7 @@ The format is based on [Keep a Changelog](https://keepachangelog.com/en/1.1.0/).
 
 - DeployList can be expanded with datapacks
 - Newer music discs have associated cassettes
-- Sound effect for boondollar item and porkhollow command.
+- Added sound effects related to captchaloguing/boondollars
 - Captchaloguing multiple cards that contain items will store as many of both as possible
 - Added music tracks made by heartsremedy to all non-Land dimensions in the Medium
 - Added 3 bunker structures to Lands
@@ -23,7 +23,7 @@ The format is based on [Keep a Changelog](https://keepachangelog.com/en/1.1.0/).
 - Boondollars can be split/stacked together like normal items
 - Updated all grist and vitality gel sprites
 - Tweaked some Rung names
-- New rung-up jingle.
+- New rung-up jingle
 - The sylladex GUIs have been unified
   - Addons that add moduses will need to be updated (see [related PR](https://github.com/lunar-sway/minestuck/pull/721))
 - cruxtruderIntake config for cruxtruders now false by default, and now start with a value of one if set to true

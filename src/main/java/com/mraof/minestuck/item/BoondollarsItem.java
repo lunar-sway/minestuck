@@ -32,12 +32,10 @@ public class BoondollarsItem extends Item
 	@Override
 	public InteractionResultHolder<ItemStack> use(Level level, Player playerIn, InteractionHand handIn)
 	{
-		playerIn.level().playSound(playerIn, playerIn.blockPosition(), MSSoundEvents.ITEM_BOONDOLLARS_USE.get(), SoundSource.PLAYERS, 1, (playerIn.getRandom().nextFloat() / 2) + 0.75f);
-		
 		if(playerIn instanceof ServerPlayer serverPlayer)
 		{
 			PlayerData.get(serverPlayer).ifPresent(
-					playerData -> PlayerBoondollars.addBoondollars(playerData, getCount(playerIn.getItemInHand(handIn)))
+					playerData -> PlayerBoondollars.addBoondollars(playerData, getCount(playerIn.getItemInHand(handIn)), true)
 			);
 		}
 		return InteractionResultHolder.success(ItemStack.EMPTY);

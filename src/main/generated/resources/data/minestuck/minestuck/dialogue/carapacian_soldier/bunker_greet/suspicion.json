@@ -3,17 +3,17 @@
     "animation": {
       "emotion": "angry"
     },
-    "gui":       "minestuck:textures/gui/dialogue/dialogue.png",
-    "messages":  [
+    "gui": "minestuck:textures/gui/dialogue/dialogue.png",
+    "messages": [
       {
-        "type":    "entity",
+        "type": "entity",
         "message": "minestuck.dots"
       },
       {
-        "type":    "description",
+        "type": "description",
         "message": "minestuck.dialogue.carapacian_soldier.bunker_greet.suspicion"
       }
     ],
-    "responses": [ ]
+    "responses": []
   }
 }
