@@ -19,6 +19,7 @@ import com.mraof.minestuck.world.lands.LandTypePair;
 import com.mraof.minestuck.world.lands.LandTypes;
 import com.mraof.minestuck.world.lands.terrain.TerrainLandType;
 import com.mraof.minestuck.world.lands.title.TitleLandType;
+import net.minecraft.advancements.critereon.BlockPredicate;
 import net.minecraft.advancements.critereon.EntityPredicate;
 import net.minecraft.advancements.critereon.LocationPredicate;
 import net.minecraft.advancements.critereon.PlayerPredicate;
@@ -488,6 +489,7 @@ public interface Condition
 		}
 	}
 	
+	//TODO this is redundant to NearBlockPredicate, figure out crashes related to CompletableFuture
 	record NearBlock(ResourceKey<Block> blockID, int radius, int count) implements NpcOnlyCondition
 	{
 		static final MapCodec<NearBlock> CODEC = RecordCodecBuilder.mapCodec(instance -> instance.group(
@@ -529,6 +531,7 @@ public interface Condition
 		}
 	}
 	
+	//TODO this is redundant to NearBlockPredicate, figure out crashes related to CompletableFuture
 	record NearBlockTag(TagKey<Block> blockTag, int radius, int count) implements NpcOnlyCondition
 	{
 		static final MapCodec<NearBlockTag> CODEC = RecordCodecBuilder.mapCodec(instance -> instance.group(
@@ -570,6 +573,47 @@ public interface Condition
 		}
 	}
 	
+	record NPCNearBlockPredicate(BlockPredicate predicate, int radius, int count) implements NpcOnlyCondition
+	{
+		static final MapCodec<NPCNearBlockPredicate> CODEC = RecordCodecBuilder.mapCodec(instance -> instance.group(
+				BlockPredicate.CODEC.fieldOf("predicate").forGetter(NPCNearBlockPredicate::predicate),
+				Codec.INT.optionalFieldOf("radius", 8).forGetter(NPCNearBlockPredicate::radius),
+				Codec.INT.optionalFieldOf("count", 1).forGetter(NPCNearBlockPredicate::count)
+		).apply(instance, NPCNearBlockPredicate::new));
+		
+		@Override
+		public MapCodec<NPCNearBlockPredicate> codec()
+		{
+			return CODEC;
+		}
+		
+		@Override
+		public boolean test(LivingEntity entity)
+		{
+			if(entity.level() instanceof ServerLevel serverLevel)
+			{
+				int matches = 0;
+				for(BlockPos blockPos : BlockPos.betweenClosed(entity.blockPosition().offset(radius, radius, radius), entity.blockPosition().offset(-radius, -radius, -radius)))
+				{
+					if(predicate.matches(serverLevel, blockPos))
+						matches++;
+					
+					if(matches >= count)
+						return true;
+				}
+			}
+			
+			return false;
+		}
+		
+		@Override
+		public Component getFailureTooltip()
+		{
+			return Component.literal("NPC is not near the correct block(s)");
+		}
+	}
+	
+	//TODO this is redundant to NPCNearEntityPredicate, figure out crashes related to CompletableFuture
 	record NearEntityType(EntityType<?> entityType, int radius, int count) implements NpcOnlyCondition
 	{
 		static final MapCodec<NearEntityType> CODEC = RecordCodecBuilder.mapCodec(instance -> instance.group(
@@ -614,6 +658,7 @@ public interface Condition
 		}
 	}
 	
+	//TODO this is redundant to NPCNearEntityPredicate, figure out crashes related to CompletableFuture
 	record NearEntityTypeTag(TagKey<EntityType<?>> entityTypeTag, int radius, int count) implements NpcOnlyCondition
 	{
 		static final MapCodec<NearEntityTypeTag> CODEC = RecordCodecBuilder.mapCodec(instance -> instance.group(
@@ -655,6 +700,53 @@ public interface Condition
 		public Component getFailureTooltip()
 		{
 			return Component.literal("NPC is not near the correct entity tag, or enough units of it");
+		}
+	}
+	
+	record NPCNearEntityPredicate(EntityPredicate predicate, int radius, int count) implements NpcOnlyCondition
+	{
+		static final MapCodec<NPCNearEntityPredicate> CODEC = RecordCodecBuilder.mapCodec(instance -> instance.group(
+				EntityPredicate.CODEC.fieldOf("predicate").forGetter(NPCNearEntityPredicate::predicate),
+				Codec.INT.optionalFieldOf("radius", 12).forGetter(NPCNearEntityPredicate::radius),
+				Codec.INT.optionalFieldOf("count", 1).forGetter(NPCNearEntityPredicate::count)
+		).apply(instance, NPCNearEntityPredicate::new));
+		
+		@Override
+		public MapCodec<NPCNearEntityPredicate> codec()
+		{
+			return CODEC;
+		}
+		
+		@Override
+		public boolean test(LivingEntity entity)
+		{
+			if(entity.level() instanceof ServerLevel serverLevel)
+			{
+				AABB axisalignedbb = entity.getBoundingBox().inflate(radius);
+				List<Entity> list = serverLevel.getEntitiesOfClass(Entity.class, axisalignedbb);
+				list.remove(entity);
+				
+				int matches = 0;
+				if(!list.isEmpty())
+				{
+					for(Entity entityIterate : list)
+					{
+						if(predicate.matches(serverLevel, null, entityIterate))
+							matches++;
+						
+						if(matches >= count)
+							return true;
+					}
+				}
+			}
+			
+			return false;
+		}
+		
+		@Override
+		public Component getFailureTooltip()
+		{
+			return Component.literal("NPC is not near the correct entity or entities");
 		}
 	}
 	
@@ -862,6 +954,7 @@ public interface Condition
 		}
 	}
 	
+	//TODO this is redundant to PlayerEntityPredicate, figure out crashes related to CompletableFuture
 	record PlayerHasItem(Item item, int amount) implements PlayerOnlyCondition
 	{
 		static final MapCodec<PlayerHasItem> CODEC = RecordCodecBuilder.mapCodec(instance -> instance.group(

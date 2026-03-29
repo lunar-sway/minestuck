@@ -1,6 +1,6 @@
 {
   "condition": {
-    "type":            "minestuck:entity_type_tag",
+    "type": "minestuck:entity_type_tag",
     "entity_type_tag": "minestuck:carapacians/dersite"
   },
   "dialogue": "minestuck:carapacian_soldier/meditative_travel",

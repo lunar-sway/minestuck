@@ -1,9 +1,9 @@
 {
   "condition": {
-    "type":       "minestuck:list",
+    "type": "minestuck:list",
     "conditions": [
       {
-        "type":       "minestuck:list",
+        "type": "minestuck:list",
         "conditions": [
           {
             "type": "minestuck:npc_location_predicate",
@@ -16,10 +16,10 @@
             }
           }
         ],
-        "list_type":  "none"
+        "list_type": "none"
       },
       {
-        "type":      "minestuck:list",
+        "type": "minestuck:list",
         "conditions": [
           {
             "type": "minestuck:npc_in_structure",
@@ -33,9 +33,9 @@
         "list_type": "any"
       }
     ],
-    "list_type":  "all"
+    "list_type": "all"
   },
-  "dialogue":  "minestuck:carapacian_soldier/bunker_sweep",
+  "dialogue": "minestuck:carapacian_soldier/bunker_sweep",
   "dialogue_weight": 10,
   "keep_on_reset": false
 }

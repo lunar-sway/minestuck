@@ -44,8 +44,10 @@ public final class Conditions
 		REGISTER.register("entity_type_tag", () -> IsEntityTypeTag.CODEC);
 		REGISTER.register("near_block", () -> NearBlock.CODEC);
 		REGISTER.register("near_block_tag", () -> NearBlockTag.CODEC);
+		REGISTER.register("npc_near_block_predicate", () -> NPCNearBlockPredicate.CODEC);
 		REGISTER.register("near_entity_type", () -> NearEntityType.CODEC);
 		REGISTER.register("near_entity_type_tag", () -> NearEntityTypeTag.CODEC);
+		REGISTER.register("npc_near_entity_predicate", () -> NPCNearEntityPredicate.CODEC);
 		REGISTER.register("npc_location_predicate", () -> NPCLocationPredicate.CODEC);
 		REGISTER.register("npc_entity_predicate", () -> NPCEntityPredicate.CODEC);
 		REGISTER.register("player_location_predicate", () -> PlayerLocationPredicate.CODEC);
@@ -132,6 +134,21 @@ public final class Conditions
 	public static Condition isInTitleLand(TagKey<TitleLandType> tag)
 	{
 		return new InTitleLandTypeTag(tag);
+	}
+	
+	public static Condition isNearBlock()
+	{
+		return new Condition.NPCNearBlockPredicate(BlockPredicate.Builder.block().build(), 8, 1);
+	}
+	
+	public static Condition isNearEntity()
+	{
+		return new Condition.NPCNearEntityPredicate(EntityPredicate.Builder.entity().build(), 12, 1);
+	}
+	
+	public static Condition meetsEntityPredicate()
+	{
+		return new Condition.NPCEntityPredicate(EntityPredicate.Builder.entity().build());
 	}
 	
 	public static Condition isInSkaia()

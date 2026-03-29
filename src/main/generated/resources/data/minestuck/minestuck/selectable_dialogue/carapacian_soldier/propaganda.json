@@ -9,7 +9,7 @@
         }
       },
       {
-        "type":            "minestuck:entity_type_tag",
+        "type": "minestuck:entity_type_tag",
         "entity_type_tag": "minestuck:carapacians/dersite"
       }
     ],

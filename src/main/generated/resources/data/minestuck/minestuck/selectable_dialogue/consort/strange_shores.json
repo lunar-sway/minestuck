@@ -1,9 +1,9 @@
 {
-  "condition":     {
-    "type":       "minestuck:list",
+  "condition": {
+    "type": "minestuck:list",
     "conditions": [
       {
-        "type":       "minestuck:list",
+        "type": "minestuck:list",
         "conditions": [
           {
             "type": "minestuck:terrain_land_type",
@@ -26,18 +26,18 @@
             "land_type": "minestuck:end"
           }
         ],
-        "list_type":  "any"
+        "list_type": "any"
       },
       {
-        "type":   "minestuck:near_block_tag",
+        "type": "minestuck:near_block_tag",
         "block_tag": "minestuck:land_ocean_fluids",
-        "count":  5,
+        "count": 5,
         "radius": 9
       }
     ],
-    "list_type":  "all"
+    "list_type": "all"
   },
-  "dialogue":      "minestuck:consort/strange_shores",
+  "dialogue": "minestuck:consort/strange_shores",
   "dialogue_weight": 16,
   "keep_on_reset": false
 }

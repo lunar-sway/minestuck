@@ -28,7 +28,7 @@
       },
       {
         "condition": {
-          "type":            "minestuck:entity_type_tag",
+          "type": "minestuck:entity_type_tag",
           "entity_type_tag": "minestuck:carapacians/dersite"
         },
         "hide_if_failed": true,
@@ -38,7 +38,7 @@
       },
       {
         "condition": {
-          "type":            "minestuck:entity_type_tag",
+          "type": "minestuck:entity_type_tag",
           "entity_type_tag": "minestuck:carapacians/prospitian"
         },
         "hide_if_failed": true,
