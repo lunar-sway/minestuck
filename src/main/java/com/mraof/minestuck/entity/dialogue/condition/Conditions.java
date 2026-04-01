@@ -6,18 +6,25 @@ import com.mraof.minestuck.entity.consort.ConsortEntity;
 import com.mraof.minestuck.entity.consort.EnumConsort;
 import com.mraof.minestuck.util.MSTags;
 import com.mraof.minestuck.world.MSDimensions;
+import com.mraof.minestuck.world.gen.structure.MSStructures;
 import com.mraof.minestuck.world.lands.terrain.TerrainLandType;
 import com.mraof.minestuck.world.lands.title.TitleLandType;
 import net.minecraft.advancements.critereon.*;
+import net.minecraft.core.Holder;
+import net.minecraft.core.HolderLookup;
+import net.minecraft.core.HolderSet;
 import net.minecraft.core.Registry;
+import net.minecraft.core.registries.Registries;
 import net.minecraft.nbt.CompoundTag;
 import net.minecraft.tags.TagKey;
 import net.minecraft.world.entity.EntityType;
 import net.minecraft.world.item.Item;
+import net.minecraft.world.level.levelgen.structure.Structure;
 import net.neoforged.neoforge.registries.DeferredRegister;
 
 import java.util.Arrays;
 import java.util.List;
+import java.util.concurrent.atomic.AtomicReference;
 import java.util.function.Supplier;
 
 import static com.mraof.minestuck.entity.dialogue.condition.Condition.*;
@@ -155,6 +162,13 @@ public final class Conditions
 	{
 		return new NPCLocationPredicate(LocationPredicate.Builder.location().setDimension(MSDimensions.SKAIA).build());
 	}
+	
+	/*public static Condition isInSkaia(HolderLookup.Provider holderLookupProvider)
+	{
+		AtomicReference<Holder<Structure>> structureHolder;
+		//Holder<Structure>[] structures = new Holder<Structure>[].;
+		return new NPCLocationPredicate(LocationPredicate.Builder.location().setStructures(HolderSet.direct(holderLookupProvider.lookup(Registries.STRUCTURE).flatMap(lookup -> lookup.get(MSStructures.DERSE_BUNKER)).get().getDelegate())).build());
+	}*/
 	
 	public static Condition isAtOrAboveY(int minY)
 	{

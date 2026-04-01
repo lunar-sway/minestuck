@@ -14,6 +14,7 @@ import com.mraof.minestuck.item.MSItems;
 import com.mraof.minestuck.item.loot.MSLootTables;
 import com.mraof.minestuck.util.MSTags;
 import com.mraof.minestuck.world.gen.structure.MSStructures;
+import net.minecraft.core.HolderLookup;
 import net.minecraft.data.DataProvider;
 import net.minecraft.data.PackOutput;
 import net.minecraft.world.item.Item;
@@ -23,6 +24,7 @@ import net.neoforged.neoforge.common.data.LanguageProvider;
 import net.neoforged.neoforge.registries.DeferredItem;
 
 import java.util.List;
+import java.util.concurrent.CompletableFuture;
 
 import static com.mraof.minestuck.data.dialogue.DialogueLangHelper.msg;
 import static com.mraof.minestuck.data.dialogue.DialogueProvider.ARROW;
@@ -36,9 +38,9 @@ import static com.mraof.minestuck.world.lands.LandTypes.*;
 
 public final class ConsortDialogue
 {
-	public static DataProvider create(PackOutput output, LanguageProvider enUsLanguageProvider)
+	public static DataProvider create(PackOutput output, LanguageProvider enUsLanguageProvider, CompletableFuture<HolderLookup.Provider> lookup)
 	{
-		SelectableDialogueProvider provider = new SelectableDialogueProvider(Minestuck.MOD_ID, RandomlySelectableDialogue.DialogueCategory.CONSORT, output);
+		SelectableDialogueProvider provider = new SelectableDialogueProvider(Minestuck.MOD_ID, RandomlySelectableDialogue.DialogueCategory.CONSORT, lookup, output);
 		DialogueLangHelper l = new DialogueLangHelper(Minestuck.MOD_ID, enUsLanguageProvider);
 		
 		//Run dialogue creation early so that language stuff gets added before the language provider generates its file

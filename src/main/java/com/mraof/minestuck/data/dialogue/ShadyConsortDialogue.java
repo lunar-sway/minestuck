@@ -8,9 +8,12 @@ import com.mraof.minestuck.entity.dialogue.RandomlySelectableDialogue;
 import com.mraof.minestuck.entity.dialogue.Trigger;
 import com.mraof.minestuck.entity.dialogue.condition.Condition;
 import com.mraof.minestuck.item.loot.MSLootTables;
+import net.minecraft.core.HolderLookup;
 import net.minecraft.data.DataProvider;
 import net.minecraft.data.PackOutput;
 import net.neoforged.neoforge.common.data.LanguageProvider;
+
+import java.util.concurrent.CompletableFuture;
 
 import static com.mraof.minestuck.data.dialogue.SelectableDialogueProvider.defaultWeight;
 import static com.mraof.minestuck.entity.MSEntityTypes.*;
@@ -18,9 +21,9 @@ import static com.mraof.minestuck.entity.dialogue.condition.Conditions.isAnyEnti
 
 public final class ShadyConsortDialogue
 {
-	public static DataProvider create(PackOutput output, LanguageProvider enUsLanguageProvider)
+	public static DataProvider create(PackOutput output, LanguageProvider enUsLanguageProvider, CompletableFuture<HolderLookup.Provider> lookup)
 	{
-		SelectableDialogueProvider provider = new SelectableDialogueProvider(Minestuck.MOD_ID, RandomlySelectableDialogue.DialogueCategory.SHADY_CONSORT, output);
+		SelectableDialogueProvider provider = new SelectableDialogueProvider(Minestuck.MOD_ID, RandomlySelectableDialogue.DialogueCategory.SHADY_CONSORT, lookup, output);
 		
 		dialogue(provider, new DialogueLangHelper(Minestuck.MOD_ID, enUsLanguageProvider));
 		

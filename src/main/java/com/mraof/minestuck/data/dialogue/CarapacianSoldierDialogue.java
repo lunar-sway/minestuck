@@ -13,11 +13,28 @@ import com.mraof.minestuck.entity.dialogue.Trigger;
 import com.mraof.minestuck.entity.dialogue.condition.Condition;
 import com.mraof.minestuck.item.MSItems;
 import com.mraof.minestuck.world.gen.structure.MSStructures;
+import net.minecraft.advancements.critereon.EntityEquipmentPredicate;
+import net.minecraft.advancements.critereon.EntityPredicate;
+import net.minecraft.advancements.critereon.ItemPredicate;
+import net.minecraft.advancements.critereon.LocationPredicate;
+import net.minecraft.core.Holder;
+import net.minecraft.core.HolderLookup;
+import net.minecraft.core.HolderSet;
+import net.minecraft.core.registries.BuiltInRegistries;
+import net.minecraft.core.registries.Registries;
 import net.minecraft.data.DataProvider;
 import net.minecraft.data.PackOutput;
+import net.minecraft.data.tags.TagsProvider;
 import net.minecraft.tags.ItemTags;
 import net.minecraft.world.entity.EquipmentSlot;
+import net.minecraft.world.item.Items;
+import net.minecraft.world.level.levelgen.structure.BuiltinStructures;
+import net.minecraft.world.level.levelgen.structure.Structure;
 import net.neoforged.neoforge.common.data.LanguageProvider;
+import net.neoforged.neoforge.registries.DeferredHolder;
+import net.neoforged.neoforge.registries.DeferredRegister;
+
+import java.util.concurrent.CompletableFuture;
 
 import static com.mraof.minestuck.data.dialogue.SelectableDialogueProvider.defaultWeight;
 import static com.mraof.minestuck.data.dialogue.SelectableDialogueProvider.weighted;
@@ -26,9 +43,9 @@ import static com.mraof.minestuck.world.lands.LandTypes.*;
 
 public final class CarapacianSoldierDialogue
 {
-	public static DataProvider create(PackOutput output, LanguageProvider enUsLanguageProvider)
+	public static DataProvider create(PackOutput output, LanguageProvider enUsLanguageProvider, CompletableFuture<HolderLookup.Provider> lookup)
 	{
-		SelectableDialogueProvider provider = new SelectableDialogueProvider(Minestuck.MOD_ID, RandomlySelectableDialogue.DialogueCategory.CARAPACIAN_SOLDIER, output);
+		SelectableDialogueProvider provider = new SelectableDialogueProvider(Minestuck.MOD_ID, RandomlySelectableDialogue.DialogueCategory.CARAPACIAN_SOLDIER, lookup, output);
 		DialogueLangHelper l = new DialogueLangHelper(Minestuck.MOD_ID, enUsLanguageProvider);
 		
 		//Run dialogue creation early so that language stuff gets added before the language provider generates its file
@@ -145,7 +162,20 @@ public final class CarapacianSoldierDialogue
 			);
 		}));
 		
-		provider.addRandomlySelectable("bunker_thieves", weighted(2, all(none(isAtOrAboveY(64)), any(new Condition.NPCInStructure(MSStructures.DERSE_BUNKER.location()), new Condition.NPCInStructure(MSStructures.PROSPIT_BUNKER.location())))),
+		//DeferredRegister.create(Registries.STRUCTURE, Minestuck.MOD_ID);
+		//DeferredHolder.create(Registries.STRUCTURE, MSStructures.DERSE_BUNKER.location());
+		//HolderSet<Holder<Structure>> structure = HolderSet.Named.Direct.direct(DeferredHolder.create(Registries.STRUCTURE, MSStructures.DERSE_BUNKER.location()).getDelegate());
+		//CompletableFuture.completedFuture(HolderLookup.Provider.);
+		//DeferredHolder.create(Registries.STRUCTURE, MSStructures.DERSE_BUNKER.location())
+		//lookup..lookupOrThrow(Registries.STRUCTURE.)
+		
+		provider.addRandomlySelectable("test", weighted(2, all(none(isAtOrAboveY(64)),
+				//new Condition.NPCLocationPredicate(LocationPredicate.Builder.inStructure(MSStructures.DERSE_BUNKER).build())
+				//new Condition.NPCLocationPredicate(LocationPredicate.Builder.inStructure(MSStructures.DERSE_BUNKER).build())
+				new Condition.NPCInStructure(MSStructures.DERSE_BUNKER.location())
+		)), descriptionNode(l.defaultKeyMsg("They are complaining about a consort that came through and stole food.")));
+		
+		provider.addRandomlySelectable("bunker_thieves", weighted(2, all(none(isAtOrAboveY(64)), any(new Condition.NPCInStructure(MSStructures.DERSE_BUNKER.location())))),
 				descriptionNode(l.defaultKeyMsg("They are complaining about a consort that came through and stole food.")));
 		provider.addRandomlySelectable("bunker_sweep", defaultWeight(all(none(isAtOrAboveY(64)), any(new Condition.NPCInStructure(MSStructures.DERSE_BUNKER.location()), new Condition.NPCInStructure(MSStructures.PROSPIT_BUNKER.location())))),
 				descriptionNode(l.defaultKeyMsg("They are focused on sweeping the floors.")));
@@ -194,7 +224,16 @@ public final class CarapacianSoldierDialogue
 			);
 		}));
 		
-		provider.addRandomlySelectable("sword_barter", weighted(40, isHolding(MSItems.REGISWORD.get())), new FolderedDialogue(builder ->
+		//lookup
+		//BuiltInRegistries.ITEM.;
+		//isHolding(MSItems.REGISWORD.get())
+		//new Condition.NPCEntityPredicate(EntityPredicate.Builder.entity().equipment(EntityEquipmentPredicate.Builder.equipment().mainhand(ItemPredicate.Builder.item().of(MSItems.REGISWORD.get())).build()).build())
+		provider.addRandomlySelectable("sword_barter", weighted(40,
+				new Condition.NPCEntityPredicate(EntityPredicate.Builder.entity().equipment(EntityEquipmentPredicate.Builder.equipment().mainhand(ItemPredicate.Builder.item().of(Items.ARROW))).build())
+				//new Condition.NPCEntityPredicate(EntityPredicate.Builder.entity().equipment(EntityEquipmentPredicate.Builder.equipment().mainhand(ItemPredicate.Builder.item().of(BuiltInRegistries.ITEM.get(MSItems.REGISWORD.getKey())))).build())
+				//new Condition.NPCEntityPredicate(EntityPredicate.Builder.entity().equipment(EntityEquipmentPredicate.Builder.equipment().mainhand(ItemPredicate.Builder.item().of(DeferredRegister.Items.))).build())
+				//isHolding(MSItems.REGISWORD.get())
+		), new FolderedDialogue(builder ->
 		{
 			var goodbye = l.subMsg("goodbye", "That's really strange. Good luck with that!");
 			

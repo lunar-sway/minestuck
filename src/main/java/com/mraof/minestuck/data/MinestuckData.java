@@ -69,11 +69,11 @@ public final class MinestuckData
 		gen.addProvider(event.includeClient(), new MinestuckItemModelProvider(output, fileHelper));
 		var enUsLanguageProvider = gen.addProvider(event.includeClient(), new MinestuckEnUsLanguageProvider(output));
 		
-		gen.addProvider(event.includeServer(), ConsortDialogue.create(output, enUsLanguageProvider));
-		gen.addProvider(event.includeServer(), ShadyConsortDialogue.create(output, enUsLanguageProvider));
-		gen.addProvider(event.includeServer(), ConsortFoodMerchantDialogue.create(output, enUsLanguageProvider));
-		gen.addProvider(event.includeServer(), ConsortGeneralMerchantDialogue.create(output, enUsLanguageProvider));
-		gen.addProvider(event.includeServer(), CarapacianSoldierDialogue.create(output, enUsLanguageProvider));
+		gen.addProvider(event.includeServer(), ConsortDialogue.create(output, enUsLanguageProvider, lookupProvider));
+		gen.addProvider(event.includeServer(), ShadyConsortDialogue.create(output, enUsLanguageProvider, lookupProvider));
+		gen.addProvider(event.includeServer(), ConsortFoodMerchantDialogue.create(output, enUsLanguageProvider, lookupProvider));
+		gen.addProvider(event.includeServer(), ConsortGeneralMerchantDialogue.create(output, enUsLanguageProvider, lookupProvider));
+		gen.addProvider(event.includeServer(), CarapacianSoldierDialogue.create(output, enUsLanguageProvider, lookupProvider));
 		
 		gen.addProvider(event.includeServer(), new BetterCombatProvider(output));
 	}

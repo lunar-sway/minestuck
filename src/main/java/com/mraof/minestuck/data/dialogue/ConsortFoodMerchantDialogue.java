@@ -8,9 +8,12 @@ import com.mraof.minestuck.entity.dialogue.RandomlySelectableDialogue;
 import com.mraof.minestuck.entity.dialogue.Trigger;
 import com.mraof.minestuck.item.loot.MSLootTables;
 import com.mraof.minestuck.util.MSTags;
+import net.minecraft.core.HolderLookup;
 import net.minecraft.data.DataProvider;
 import net.minecraft.data.PackOutput;
 import net.neoforged.neoforge.common.data.LanguageProvider;
+
+import java.util.concurrent.CompletableFuture;
 
 import static com.mraof.minestuck.data.dialogue.DialogueLangHelper.msg;
 import static com.mraof.minestuck.data.dialogue.DialogueProvider.ARROW;
@@ -23,9 +26,9 @@ public final class ConsortFoodMerchantDialogue
 {
 	private static final Trigger.OpenConsortMerchantGui SHOP_TRIGGER = new Trigger.OpenConsortMerchantGui(MSLootTables.CONSORT_FOOD_STOCK);
 	
-	public static DataProvider create(PackOutput output, LanguageProvider enUsLanguageProvider)
+	public static DataProvider create(PackOutput output, LanguageProvider enUsLanguageProvider, CompletableFuture<HolderLookup.Provider> lookup)
 	{
-		SelectableDialogueProvider provider = new SelectableDialogueProvider(Minestuck.MOD_ID, RandomlySelectableDialogue.DialogueCategory.CONSORT_FOOD_MERCHANT, output);
+		SelectableDialogueProvider provider = new SelectableDialogueProvider(Minestuck.MOD_ID, RandomlySelectableDialogue.DialogueCategory.CONSORT_FOOD_MERCHANT, lookup, output);
 		
 		dialogue(provider, new DialogueLangHelper(Minestuck.MOD_ID, enUsLanguageProvider));
 		
