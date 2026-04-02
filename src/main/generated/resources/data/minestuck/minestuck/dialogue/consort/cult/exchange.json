@@ -15,13 +15,26 @@
               "type": "minestuck:list",
               "conditions": [
                 {
-                  "type": "minestuck:player_item",
-                  "amount": 10,
-                  "item": "minestuck:native_sulfur"
+                  "type": "minestuck:player_entity_predicate",
+                  "predicate": {
+                    "slots": {
+                      "inventory.*": {
+                        "count": 10,
+                        "items": "minestuck:native_sulfur"
+                      }
+                    }
+                  }
                 },
                 {
-                  "type": "minestuck:player_item",
-                  "item": "minecraft:goat_horn"
+                  "type": "minestuck:player_entity_predicate",
+                  "predicate": {
+                    "slots": {
+                      "inventory.*": {
+                        "count": 1,
+                        "items": "minecraft:goat_horn"
+                      }
+                    }
+                  }
                 }
               ],
               "list_type": "all"

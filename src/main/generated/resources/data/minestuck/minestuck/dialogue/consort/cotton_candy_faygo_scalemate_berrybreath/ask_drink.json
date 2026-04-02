@@ -15,8 +15,15 @@
       },
       {
         "condition": {
-          "type": "minestuck:player_item",
-          "item": "minestuck:cotton_candy_faygo"
+          "type": "minestuck:player_entity_predicate",
+          "predicate": {
+            "slots": {
+              "inventory.*": {
+                "count": 1,
+                "items": "minestuck:cotton_candy_faygo"
+              }
+            }
+          }
         },
         "hide_if_failed": false,
         "message": "minestuck.dialogue.consort.cotton_candy_faygo_scalemate_berrybreath.ask_drink.exchange",

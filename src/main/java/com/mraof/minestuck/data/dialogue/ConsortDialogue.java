@@ -405,7 +405,7 @@ public final class ConsortDialogue
 		provider.addRandomlySelectable("tummy_tunnel", defaultWeight(isInTerrainLand(HEAT)),    //todo review this. This dialogue was set up as regular dialogue in the old system, but its location in the language provider suggested that it might have meant to be food merchant dialogue.
 				new NodeBuilder(l.defaultKeyMsg("Man this shop is packed tighter then my tummy tunnel when I gotta make brown on the john after eating one too many of them incandescent pies what be popping around.")));
 		provider.addRandomlySelectable("the_water_is_molten", defaultWeight(isInTerrainLand(HEAT)), new NodeSelectorBuilder()
-				.node(new Condition.NearBlock(MSBlocks.MOLTEN_AMBER.getKey(), 8, 5), new NodeBuilder(l.subMsg("too_close", "Sorry I can't talk right now, we are wayyyy too close to this magma shit and I just know a bubble will pop and spray me with 10000 degree bullshit.")).animation(ANGRY_EMOTION))
+				.node(isNearBlock(MSBlocks.MOLTEN_AMBER.get(), 8, 5), new NodeBuilder(l.subMsg("too_close", "Sorry I can't talk right now, we are wayyyy too close to this magma shit and I just know a bubble will pop and spray me with 10000 degree bullshit.")).animation(ANGRY_EMOTION))
 				.defaultNode(new NodeBuilder(l.defaultKeyMsg("You know the water is fucking molten goo? Who thought it would be a good idea to make water out of lava or some shit? How do we even stay hydrated in this place dude?")).animation(ANGRY_EMOTION)));
 		terrainFaygoDialogue(provider, l, MSItems.CANDY_APPLE_FAYGO, "Candy Apple", MSItems.SCALEMATE_APPLESCAB, "Applescab", isInTerrainLand(HEAT));
 		
@@ -636,7 +636,7 @@ public final class ConsortDialogue
 				new NodeBuilder(l.defaultKeyMsg("In our village, we have tales of monsters that are attracted to red. That's why everything is yellow!")));
 		provider.addRandomlySelectable("bad_water", weighted(11, any(isInTerrainLand(SHADE), isInTerrainLand(HEAT), isInTerrainLand(WOOD), isInTerrainLand(RAINBOW), isInTerrainLand(END), isInTitleLand(PULSE))),
 				new NodeBuilder(l.defaultKeyMsg("Can you imagine living in a world where the liquid in the oceans is actually drinkable?")));
-		provider.addRandomlySelectable("strange_shores", weighted(16, all(any(isInTerrainLand(SHADE), isInTerrainLand(HEAT), isInTerrainLand(WOOD), isInTerrainLand(RAINBOW), isInTerrainLand(END)), new Condition.NearBlockTag(MSTags.Blocks.LAND_OCEAN_FLUIDS, 9, 5))),
+		provider.addRandomlySelectable("strange_shores", weighted(16, all(any(isInTerrainLand(SHADE), isInTerrainLand(HEAT), isInTerrainLand(WOOD), isInTerrainLand(RAINBOW), isInTerrainLand(END)), isNearBlockTag(MSTags.Blocks.LAND_OCEAN_FLUIDS, 9, 5))),
 				new NodeBuilder(l.defaultKeyMsg("I like hanging out on the shore. Most people think its strange, who's ever heard of just sitting and watching fluid move?")));
 		terrainFaygoDialogue(provider, l, MSItems.FAYGO_COLA, "Cola", MSItems.SCALEMATE_PYRALSPITE, "Pyralspite", any(isInTerrainLand(WOOD), isInTerrainLand(FROST), isInTerrainLand(FUNGI), isInTerrainLand(RAIN)));
 		
@@ -652,7 +652,7 @@ public final class ConsortDialogue
 				builder.addStart(new NodeBuilder(l.defaultKeyMsg("Holy leapin' god, you have such wonderful hair! Can I eat some?"))
 						.addResponse(new ResponseBuilder(l.subMsg("no", "I don't have any hair."))
 								.nextDialogue(builder.add("disappointed", new NodeBuilder(l.defaultKeyMsg("Aw, is that not hair? I have such a hard time telling with your freakish kind.")))))
-						.addResponse(new ResponseBuilder(l.subMsg("yes", "[Hand over some hair]")).visibleCondition(new Condition.PlayerHasItem(MSItems.PONYTAIL.get(), 1))
+						.addResponse(new ResponseBuilder(l.subMsg("yes", "[Hand over some hair]")).visibleCondition(playerHasItem(MSItems.PONYTAIL.get(), 1))
 								.addPlayerMessage(l.subMsg("yes.reply", "Sure here you go"))
 								.nextDialogue(builder.add("happy", new NodeBuilder(l.defaultKeyMsg("Oh %s, thank you for the snack!", Argument.ENTITY_SOUND)).animation(HAPPY_EMOTION)))
 								.addTrigger(new Trigger.TakeItem(MSItems.PONYTAIL.get()))
@@ -707,7 +707,7 @@ public final class ConsortDialogue
 				new NodeBuilder(l.defaultKeyMsg("I bought a bunch of stocks on the market... Now I'm broke...")).animation(ANXIOUS_EMOTION));
 		provider.addRandomlySelectable("identity", defaultWeight(all(isAnyEntityType(SALAMANDER), isFromLand())),
 				new NodeBuilder(l.defaultKeyMsg("I heard that the true name of the %s is %s. Isn't that cool?", Argument.LAND_TITLE, Argument.LAND_PLAYER_NAME)));
-		provider.addRandomlySelectable("too_crowded", defaultWeight(new Condition.NearEntityTypeTag(MSTags.EntityTypes.CONSORTS, 12, 8)),
+		provider.addRandomlySelectable("too_crowded", defaultWeight(isNearEntityTag(MSTags.EntityTypes.CONSORTS, 12, 8)),
 				new NodeBuilder(l.defaultKeyMsg("There are way too many consorts here. Don't they know what personal space is??")).animation(ANGRY_EMOTION));
 		provider.addRandomlySelectable("college", defaultWeight(alwaysTrue()), new NodeSelectorBuilder()
 				.node(new Condition.PlayerHasBoondollars(1000), new ChainBuilder()
@@ -744,7 +744,7 @@ public final class ConsortDialogue
 			var exchange = builder.add("exchange", new NodeSelectorBuilder()
 					.node(new Condition.Flag(hasSulfur), new NodeBuilder(l.subMsg("exchange.proceed", "There is hope for you yet... bring me 10 sulfur and the horn of a goat and I shall have something to exchange with you."))
 							.addResponse(new ResponseBuilder(l.subMsg("give_items", "[Hand over items]"))
-									.visibleCondition(all(new Condition.PlayerHasItem(MSItems.NATIVE_SULFUR.get(), 10), new Condition.PlayerHasItem(Items.GOAT_HORN, 1)))
+									.visibleCondition(all(playerHasItem(MSItems.NATIVE_SULFUR.get(), 10), playerHasItem(Items.GOAT_HORN, 1)))
 									.addTrigger(new Trigger.TakeItem(MSItems.NATIVE_SULFUR.get(), 10)).addTrigger(new Trigger.TakeItem(Items.GOAT_HORN, 1))
 									.addTrigger(new Trigger.GiveItem(MSItems.LONG_FORGOTTEN_WARHORN.get()))
 									.addTrigger(new Trigger.SetDialogue(oneDay))
@@ -761,7 +761,7 @@ public final class ConsortDialogue
 					.addResponse(new ResponseBuilder(l.subMsg("no", "No thanks, I'm good."))
 							.nextDialogue(oneDay))
 					.addResponse(new ResponseBuilder(l.subMsg("start", "I only have some sulfur, is this enough?"))
-							.condition(new Condition.PlayerHasItem(MSItems.NATIVE_SULFUR.get(), 1))
+							.condition(playerHasItem(MSItems.NATIVE_SULFUR.get(), 1))
 							.addTrigger(new Trigger.SetFlag(hasSulfur, true))
 							.nextDialogue(disappointment))
 					.addResponse(new ResponseBuilder(l.subMsg("candy_question", "Will grist candy work?"))
@@ -1039,7 +1039,7 @@ public final class ConsortDialogue
 		String drinkRegistryName = drink.getId().getPath();
 		String dialogueId = drinkRegistryName + "_" + scalemateItem.getId().getPath();
 		Item drinkItem = drink.asItem();
-		Condition faygoCondition = new Condition.PlayerHasItem(drinkItem, 1);
+		Condition faygoCondition = playerHasItem(drinkItem, 1);
 		
 		provider.addRandomlySelectable(dialogueId, defaultWeight(terrain), new FolderedDialogue(builder ->
 		{

@@ -15,8 +15,15 @@
       },
       {
         "condition": {
-          "type": "minestuck:player_item",
-          "item": "minestuck:native_sulfur"
+          "type": "minestuck:player_entity_predicate",
+          "predicate": {
+            "slots": {
+              "inventory.*": {
+                "count": 1,
+                "items": "minestuck:native_sulfur"
+              }
+            }
+          }
         },
         "hide_if_failed": true,
         "message": "minestuck.dialogue.consort.cult.after_invitation.start",

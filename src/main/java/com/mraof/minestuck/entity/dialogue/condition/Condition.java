@@ -4,8 +4,6 @@ import com.mojang.serialization.Codec;
 import com.mojang.serialization.DataResult;
 import com.mojang.serialization.MapCodec;
 import com.mojang.serialization.codecs.RecordCodecBuilder;
-import com.mraof.minestuck.entity.carapacian.CarapacianEntity;
-import com.mraof.minestuck.entity.carapacian.EnumEntityKingdom;
 import com.mraof.minestuck.entity.consort.ConsortEntity;
 import com.mraof.minestuck.entity.consort.ConsortReputation;
 import com.mraof.minestuck.entity.consort.EnumConsort;
@@ -30,21 +28,17 @@ import net.minecraft.core.Registry;
 import net.minecraft.core.registries.BuiltInRegistries;
 import net.minecraft.core.registries.Registries;
 import net.minecraft.network.chat.Component;
-import net.minecraft.resources.ResourceKey;
 import net.minecraft.resources.ResourceLocation;
 import net.minecraft.server.level.ServerLevel;
 import net.minecraft.server.level.ServerPlayer;
 import net.minecraft.tags.TagKey;
 import net.minecraft.world.entity.Entity;
-import net.minecraft.world.entity.EntityType;
 import net.minecraft.world.entity.LivingEntity;
 import net.minecraft.world.entity.Mob;
 import net.minecraft.world.entity.player.Player;
 import net.minecraft.world.item.Item;
 import net.minecraft.world.item.ItemStack;
 import net.minecraft.world.level.Level;
-import net.minecraft.world.level.block.Block;
-import net.minecraft.world.level.block.state.BlockState;
 import net.minecraft.world.level.levelgen.structure.Structure;
 import net.minecraft.world.level.storage.LevelData;
 import net.minecraft.world.phys.AABB;
@@ -437,90 +431,6 @@ public interface Condition
 		}
 	}
 	
-	//TODO this is redundant to NearBlockPredicate, figure out crashes related to CompletableFuture
-	record NearBlock(ResourceKey<Block> blockID, int radius, int count) implements NpcOnlyCondition
-	{
-		static final MapCodec<NearBlock> CODEC = RecordCodecBuilder.mapCodec(instance -> instance.group(
-				ResourceKey.codec(Registries.BLOCK).fieldOf("block_id").forGetter(NearBlock::blockID),
-				Codec.INT.optionalFieldOf("radius", 8).forGetter(NearBlock::radius),
-				Codec.INT.optionalFieldOf("count", 1).forGetter(NearBlock::count)
-		).apply(instance, NearBlock::new));
-		
-		@Override
-		public MapCodec<NearBlock> codec()
-		{
-			return CODEC;
-		}
-		
-		@Override
-		public boolean test(LivingEntity entity)
-		{
-			if(entity.level() instanceof ServerLevel serverLevel)
-			{
-				int matches = 0;
-				for(BlockPos blockPos : BlockPos.betweenClosed(entity.blockPosition().offset(radius, radius, radius), entity.blockPosition().offset(-radius, -radius, -radius)))
-				{
-					BlockState blockState = serverLevel.getBlockState(blockPos);
-					if(blockState.is(blockID))
-						matches++;
-					
-					if(matches >= count)
-						return true;
-				}
-			}
-			
-			return false;
-		}
-		
-		@Override
-		public Component getFailureTooltip()
-		{
-			return Component.literal("NPC is not near the correct block, or enough units of it");
-		}
-	}
-	
-	//TODO this is redundant to NearBlockPredicate, figure out crashes related to CompletableFuture
-	record NearBlockTag(TagKey<Block> blockTag, int radius, int count) implements NpcOnlyCondition
-	{
-		static final MapCodec<NearBlockTag> CODEC = RecordCodecBuilder.mapCodec(instance -> instance.group(
-				TagKey.codec(Registries.BLOCK).fieldOf("block_tag").forGetter(NearBlockTag::blockTag),
-				Codec.INT.optionalFieldOf("radius", 8).forGetter(NearBlockTag::radius),
-				Codec.INT.optionalFieldOf("count", 1).forGetter(NearBlockTag::count)
-		).apply(instance, NearBlockTag::new));
-		
-		@Override
-		public MapCodec<NearBlockTag> codec()
-		{
-			return CODEC;
-		}
-		
-		@Override
-		public boolean test(LivingEntity entity)
-		{
-			if(entity.level() instanceof ServerLevel serverLevel)
-			{
-				int matches = 0;
-				for(BlockPos blockPos : BlockPos.betweenClosed(entity.blockPosition().offset(radius, radius, radius), entity.blockPosition().offset(-radius, -radius, -radius)))
-				{
-					BlockState blockState = serverLevel.getBlockState(blockPos);
-					if(blockState.is(blockTag))
-						matches++;
-					
-					if(matches >= count)
-						return true;
-				}
-			}
-			
-			return false;
-		}
-		
-		@Override
-		public Component getFailureTooltip()
-		{
-			return Component.literal("NPC is not near the correct block tag, or enough units of it");
-		}
-	}
-	
 	record NPCNearBlockPredicate(BlockPredicate predicate, int radius, int count) implements NpcOnlyCondition
 	{
 		static final MapCodec<NPCNearBlockPredicate> CODEC = RecordCodecBuilder.mapCodec(instance -> instance.group(
@@ -558,96 +468,6 @@ public interface Condition
 		public Component getFailureTooltip()
 		{
 			return Component.literal("NPC is not near the correct block(s)");
-		}
-	}
-	
-	//TODO this is redundant to NPCNearEntityPredicate, figure out crashes related to CompletableFuture
-	record NearEntityType(EntityType<?> entityType, int radius, int count) implements NpcOnlyCondition
-	{
-		static final MapCodec<NearEntityType> CODEC = RecordCodecBuilder.mapCodec(instance -> instance.group(
-				BuiltInRegistries.ENTITY_TYPE.byNameCodec().fieldOf("entity_type").forGetter(NearEntityType::entityType),
-				Codec.INT.optionalFieldOf("radius", 12).forGetter(NearEntityType::radius),
-				Codec.INT.optionalFieldOf("count", 1).forGetter(NearEntityType::count)
-		).apply(instance, NearEntityType::new));
-		
-		@Override
-		public MapCodec<NearEntityType> codec()
-		{
-			return CODEC;
-		}
-		
-		@Override
-		public boolean test(LivingEntity entity)
-		{
-			AABB axisalignedbb = entity.getBoundingBox().inflate(radius);
-			List<Entity> list = entity.level().getEntitiesOfClass(Entity.class, axisalignedbb);
-			list.remove(entity);
-			
-			int matches = 0;
-			if(!list.isEmpty() && !entity.level().isClientSide)
-			{
-				for(Entity entityIterate : list)
-				{
-					if(entityIterate.getType().equals(entityType))
-						matches++;
-					
-					if(matches >= count)
-						return true;
-				}
-			}
-			
-			return false;
-		}
-		
-		@Override
-		public Component getFailureTooltip()
-		{
-			return Component.literal("NPC is not near the correct entity, or enough units of it");
-		}
-	}
-	
-	//TODO this is redundant to NPCNearEntityPredicate, figure out crashes related to CompletableFuture
-	record NearEntityTypeTag(TagKey<EntityType<?>> entityTypeTag, int radius, int count) implements NpcOnlyCondition
-	{
-		static final MapCodec<NearEntityTypeTag> CODEC = RecordCodecBuilder.mapCodec(instance -> instance.group(
-				TagKey.codec(Registries.ENTITY_TYPE).fieldOf("entity_type").forGetter(NearEntityTypeTag::entityTypeTag),
-				Codec.INT.optionalFieldOf("radius", 12).forGetter(NearEntityTypeTag::radius),
-				Codec.INT.optionalFieldOf("count", 1).forGetter(NearEntityTypeTag::count)
-		).apply(instance, NearEntityTypeTag::new));
-		
-		@Override
-		public MapCodec<NearEntityTypeTag> codec()
-		{
-			return CODEC;
-		}
-		
-		@Override
-		public boolean test(LivingEntity entity)
-		{
-			AABB axisalignedbb = entity.getBoundingBox().inflate(radius);
-			List<Entity> list = entity.level().getEntitiesOfClass(Entity.class, axisalignedbb);
-			list.remove(entity);
-			
-			int matches = 0;
-			if(!list.isEmpty() && !entity.level().isClientSide)
-			{
-				for(Entity entityIterate : list)
-				{
-					if(entityIterate.getType().is(entityTypeTag))
-						matches++;
-					
-					if(matches >= count)
-						return true;
-				}
-			}
-			
-			return false;
-		}
-		
-		@Override
-		public Component getFailureTooltip()
-		{
-			return Component.literal("NPC is not near the correct entity tag, or enough units of it");
 		}
 	}
 	
@@ -741,6 +561,7 @@ public interface Condition
 		@Override
 		public boolean test(LivingEntity entity)
 		{
+			//TODO seems to be getting treated as optional in certain selectable dialogue conditions
 			if(entity.level() instanceof ServerLevel serverLevel)
 				return predicate.matches(serverLevel, null, entity);
 			
@@ -784,7 +605,7 @@ public interface Condition
 		}
 	}
 	
-	record PlayerEntityPredicate(EntityPredicate predicate) implements NpcOnlyCondition
+	record PlayerEntityPredicate(EntityPredicate predicate) implements PlayerOnlyCondition
 	{
 		static final MapCodec<PlayerEntityPredicate> CODEC = RecordCodecBuilder.mapCodec(instance -> instance.group(
 				EntityPredicate.CODEC.fieldOf("predicate").forGetter(PlayerEntityPredicate::predicate)
@@ -797,12 +618,27 @@ public interface Condition
 		}
 		
 		@Override
-		public boolean test(LivingEntity entity)
+		public boolean test(ServerPlayer player)
 		{
-			if(entity.level() instanceof ServerLevel serverLevel)
-				return predicate.matches(serverLevel, null, entity);
+			if(player.level() instanceof ServerLevel serverLevel)
+				return predicate.matches(serverLevel, null, player);
 			
 			return false;
+		}
+		
+		@Nullable
+		public static ItemStack findPlayerItem(Item item, Player player, int minAmount)
+		{
+			for(ItemStack invItem : player.getInventory().items)
+			{
+				if(invItem.is(item))
+				{
+					if(invItem.getCount() >= minAmount)
+						return invItem;
+				}
+			}
+			
+			return null;
 		}
 		
 		@Override
@@ -876,75 +712,6 @@ public interface Condition
 		}
 	}
 	
-	//TODO this is redundant to NPCEntityPredicate, figure out crashes related to CompletableFuture
-	record NPCIsHoldingItem(Item item) implements NpcOnlyCondition
-	{
-		static final MapCodec<NPCIsHoldingItem> CODEC = RecordCodecBuilder.mapCodec(instance -> instance.group(
-				BuiltInRegistries.ITEM.byNameCodec().fieldOf("item").forGetter(NPCIsHoldingItem::item)
-		).apply(instance, NPCIsHoldingItem::new));
-		
-		@Override
-		public MapCodec<NPCIsHoldingItem> codec()
-		{
-			return CODEC;
-		}
-		
-		@Override
-		public boolean test(LivingEntity entity)
-		{
-			return entity.getMainHandItem().is(item) || entity.getOffhandItem().is(item);
-		}
-		
-		@Override
-		public Component getFailureTooltip()
-		{
-			return Component.literal("NPC is not holding the right item");
-		}
-	}
-	
-	//TODO this is redundant to PlayerEntityPredicate, figure out crashes related to CompletableFuture
-	record PlayerHasItem(Item item, int amount) implements PlayerOnlyCondition
-	{
-		static final MapCodec<PlayerHasItem> CODEC = RecordCodecBuilder.mapCodec(instance -> instance.group(
-				BuiltInRegistries.ITEM.byNameCodec().fieldOf("item").forGetter(PlayerHasItem::item),
-				Codec.INT.optionalFieldOf("amount", 1).forGetter(PlayerHasItem::amount)
-		).apply(instance, PlayerHasItem::new));
-		
-		@Override
-		public MapCodec<PlayerHasItem> codec()
-		{
-			return CODEC;
-		}
-		
-		@Override
-		public boolean test(ServerPlayer player)
-		{
-			ItemStack stack = findPlayerItem(this.item, player, this.amount);
-			return stack != null;
-		}
-		
-		@Override
-		public Component getFailureTooltip()
-		{
-			return Component.literal("You don't have the required item(s)");
-		}
-		
-		@Nullable
-		public static ItemStack findPlayerItem(Item item, Player player, int minAmount)
-		{
-			for(ItemStack invItem : player.getInventory().items)
-			{
-				if(invItem.is(item))
-				{
-					if(invItem.getCount() >= minAmount)
-						return invItem;
-				}
-			}
-			
-			return null;
-		}
-	}
-	
 	/**
 	 * Looks for an item in the player inventory that matches the tag.
 	 * If an item matches, it will be set for this player to be available for
@@ -968,7 +735,7 @@ public interface Condition
 		{
 			DialogueComponent component = ((DialogueEntity) entity).getDialogueComponent();
 			Optional<Item> lastMatched = component.getMatchedItem(player);
-			if(lastMatched.isPresent() && lastMatched.get().builtInRegistryHolder().is(this.itemTag) && PlayerHasItem.findPlayerItem(lastMatched.get(), player, 1) != null)
+			if(lastMatched.isPresent() && lastMatched.get().builtInRegistryHolder().is(this.itemTag) && PlayerEntityPredicate.findPlayerItem(lastMatched.get(), player, 1) != null)
 				return true;
 			
 			Optional<HolderSet.Named<Item>> tag = BuiltInRegistries.ITEM.getTag(this.itemTag);
@@ -977,7 +744,7 @@ public interface Condition
 			while(!items.isEmpty())
 			{
 				Item nextItem = items.remove(entity.getRandom().nextInt(items.size()));
-				if(PlayerHasItem.findPlayerItem(nextItem, player, 1) != null)
+				if(PlayerEntityPredicate.findPlayerItem(nextItem, player, 1) != null)
 				{
 					component.setMatchedItem(nextItem, player);
 					return true;
@@ -1007,7 +774,7 @@ public interface Condition
 		{
 			DialogueComponent component = ((DialogueEntity) entity).getDialogueComponent();
 			Optional<Item> lastMatched = component.getMatchedItem(player);
-			if(lastMatched.isPresent() && lastMatched.get().builtInRegistryHolder().is(this.itemTag) && PlayerHasItem.findPlayerItem(lastMatched.get(), player, 1) != null)
+			if(lastMatched.isPresent() && lastMatched.get().builtInRegistryHolder().is(this.itemTag) && PlayerEntityPredicate.findPlayerItem(lastMatched.get(), player, 1) != null)
 				return true;
 			
 			Optional<HolderSet.Named<Item>> tag = BuiltInRegistries.ITEM.getTag(this.itemTag);
@@ -1016,7 +783,7 @@ public interface Condition
 			while(!items.isEmpty())
 			{
 				Item nextItem = items.remove(entity.getRandom().nextInt(items.size()));
-				if(PlayerHasItem.findPlayerItem(nextItem, player, 1) != null)
+				if(PlayerEntityPredicate.findPlayerItem(nextItem, player, 1) != null)
 				{
 					component.setMatchedItem(nextItem, player);
 					return true;
@@ -1047,7 +814,7 @@ public interface Condition
 		{
 			DialogueComponent component = ((DialogueEntity) entity).getDialogueComponent();
 			Optional<Item> lastMatched = component.getMatchedItem(player);
-			return lastMatched.isPresent() && PlayerHasItem.findPlayerItem(lastMatched.get(), player, 1) != null;
+			return lastMatched.isPresent() && PlayerEntityPredicate.findPlayerItem(lastMatched.get(), player, 1) != null;
 		}
 	}
 	

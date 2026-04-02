@@ -32,8 +32,15 @@
       },
       {
         "condition": {
-          "type": "minestuck:player_item",
-          "item": "minestuck:creme_soda_faygo"
+          "type": "minestuck:player_entity_predicate",
+          "predicate": {
+            "slots": {
+              "inventory.*": {
+                "count": 1,
+                "items": "minestuck:creme_soda_faygo"
+              }
+            }
+          }
         },
         "hide_if_failed": false,
         "message": "minestuck.dialogue.consort.creme_soda_faygo_scalemate_honeytongue.start.possess",

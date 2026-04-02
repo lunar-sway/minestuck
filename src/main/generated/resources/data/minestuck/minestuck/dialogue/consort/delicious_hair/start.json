@@ -15,8 +15,15 @@
       },
       {
         "condition": {
-          "type": "minestuck:player_item",
-          "item": "minestuck:ponytail"
+          "type": "minestuck:player_entity_predicate",
+          "predicate": {
+            "slots": {
+              "inventory.*": {
+                "count": 1,
+                "items": "minestuck:ponytail"
+              }
+            }
+          }
         },
         "hide_if_failed": false,
         "message": "minestuck.dialogue.consort.delicious_hair.start.yes",

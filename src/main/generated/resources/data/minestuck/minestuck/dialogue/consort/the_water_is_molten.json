@@ -2,9 +2,11 @@
   "conditioned_nodes": [
     {
       "condition": {
-        "type": "minestuck:near_block",
-        "block_id": "minestuck:molten_amber",
-        "count": 5
+        "type": "minestuck:npc_near_block_predicate",
+        "count": 5,
+        "predicate": {
+          "blocks": "minestuck:molten_amber"
+        }
       },
       "node": {
         "animation": {

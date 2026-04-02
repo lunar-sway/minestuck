@@ -155,13 +155,10 @@ public final class CarapacianSoldierDialogue
 		//DeferredHolder.create(Registries.STRUCTURE, MSStructures.DERSE_BUNKER.location())
 		//lookup..lookupOrThrow(Registries.STRUCTURE.)
 		
-		provider.addRandomlySelectable("test", weighted(2, all(none(isAtOrAboveY(64)),
-				//new Condition.NPCLocationPredicate(LocationPredicate.Builder.inStructure(MSStructures.DERSE_BUNKER).build())
-				//new Condition.NPCLocationPredicate(LocationPredicate.Builder.inStructure(MSStructures.DERSE_BUNKER).build())
+		provider.addRandomlySelectable("bunker_thieves", weighted(2, all(none(isAtOrAboveY(64)), any(
 				new Condition.NPCInStructure(MSStructures.DERSE_BUNKER.location())
-		)), descriptionNode(l.defaultKeyMsg("They are complaining about a consort that came through and stole food.")));
-		
-		provider.addRandomlySelectable("bunker_thieves", weighted(2, all(none(isAtOrAboveY(64)), any(new Condition.NPCInStructure(MSStructures.DERSE_BUNKER.location())))),
+				//new Condition.NPCLocationPredicate(LocationPredicate.Builder.inStructure(MSStructures.DERSE_BUNKER).build())
+				))),
 				descriptionNode(l.defaultKeyMsg("They are complaining about a consort that came through and stole food.")));
 		provider.addRandomlySelectable("bunker_sweep", defaultWeight(all(none(isAtOrAboveY(64)), any(new Condition.NPCInStructure(MSStructures.DERSE_BUNKER.location()), new Condition.NPCInStructure(MSStructures.PROSPIT_BUNKER.location())))),
 				descriptionNode(l.defaultKeyMsg("They are focused on sweeping the floors.")));

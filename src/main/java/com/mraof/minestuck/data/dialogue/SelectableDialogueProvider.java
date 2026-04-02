@@ -37,7 +37,7 @@ public final class SelectableDialogueProvider implements DataProvider
 	
 	public SelectableDialogueProvider(String modId, RandomlySelectableDialogue.DialogueCategory category, CompletableFuture<HolderLookup.Provider> lookup, PackOutput output)
 	{
-		this.dialogueProvider = new DialogueProvider(modId, category.folderName(), output);
+		this.dialogueProvider = new DialogueProvider(modId, category.folderName(), lookup, output);
 		this.modId = modId;
 		this.category = category;
 		this.lookupProvider = lookup;

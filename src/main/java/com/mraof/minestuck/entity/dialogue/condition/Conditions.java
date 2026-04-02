@@ -14,12 +14,16 @@ import net.minecraft.core.Registry;
 import net.minecraft.nbt.CompoundTag;
 import net.minecraft.tags.TagKey;
 import net.minecraft.world.entity.EntityType;
+import net.minecraft.world.inventory.SlotRanges;
+import net.minecraft.world.item.Item;
 import net.minecraft.world.level.ItemLike;
+import net.minecraft.world.level.block.Block;
 import net.minecraft.world.level.levelgen.structure.Structure;
 import net.neoforged.neoforge.registries.DeferredRegister;
 
 import java.util.Arrays;
 import java.util.List;
+import java.util.Map;
 import java.util.function.Supplier;
 
 import static com.mraof.minestuck.entity.dialogue.condition.Condition.*;
@@ -42,11 +46,7 @@ public final class Conditions
 		REGISTER.register("consort_terrain_land_type", () -> InConsortTerrainLandType.CODEC);
 		REGISTER.register("title_land_type", () -> InTitleLandType.CODEC);
 		REGISTER.register("title_land_type_tag", () -> InTitleLandTypeTag.CODEC);
-		REGISTER.register("near_block", () -> NearBlock.CODEC);
-		REGISTER.register("near_block_tag", () -> NearBlockTag.CODEC);
 		REGISTER.register("npc_near_block_predicate", () -> NPCNearBlockPredicate.CODEC);
-		REGISTER.register("near_entity_type", () -> NearEntityType.CODEC);
-		REGISTER.register("near_entity_type_tag", () -> NearEntityTypeTag.CODEC);
 		REGISTER.register("npc_near_entity_predicate", () -> NPCNearEntityPredicate.CODEC);
 		REGISTER.register("npc_location_predicate", () -> NPCLocationPredicate.CODEC);
 		REGISTER.register("npc_entity_predicate", () -> NPCEntityPredicate.CODEC);
@@ -54,8 +54,6 @@ public final class Conditions
 		REGISTER.register("player_entity_predicate", () -> PlayerEntityPredicate.CODEC);
 		REGISTER.register("player_predicate_condition", () -> PlayerPredicateCondition.CODEC);
 		REGISTER.register("npc_in_structure", () -> NPCInStructure.CODEC);
-		REGISTER.register("npc_holding_item", () -> NPCIsHoldingItem.CODEC);
-		REGISTER.register("player_item", () -> PlayerHasItem.CODEC);
 		REGISTER.register("item_tag_match", () -> ItemTagMatch.CODEC);
 		REGISTER.register("item_tag_match_exclude", () -> ItemTagMatchExclude.CODEC);
 		REGISTER.register("has_matched_item", () -> HasMatchedItem.CODEC);
@@ -136,19 +134,24 @@ public final class Conditions
 		return new InTitleLandTypeTag(tag);
 	}
 	
-	public static Condition isNearBlock()
+	public static Condition isNearBlock(Block block, int radius, int count)
 	{
-		return new Condition.NPCNearBlockPredicate(BlockPredicate.Builder.block().build(), 8, 1);
+		return new NPCNearBlockPredicate(BlockPredicate.Builder.block().of(block).build(), radius, count);
 	}
 	
-	public static Condition isNearEntity()
+	public static Condition isNearBlockTag(TagKey<Block> blockTag, int radius, int count)
 	{
-		return new Condition.NPCNearEntityPredicate(EntityPredicate.Builder.entity().build(), 12, 1);
+		return new NPCNearBlockPredicate(BlockPredicate.Builder.block().of(blockTag).build(), radius, count);
 	}
 	
-	public static Condition meetsEntityPredicate()
+	public static Condition isNearEntity(EntityType<?> entityType, int radius, int count)
 	{
-		return new Condition.NPCEntityPredicate(EntityPredicate.Builder.entity().build());
+		return new NPCNearEntityPredicate(EntityPredicate.Builder.entity().of(entityType).build(), radius, count);
+	}
+	
+	public static Condition isNearEntityTag(TagKey<EntityType<?>> entityTypeTag, int radius, int count)
+	{
+		return new NPCNearEntityPredicate(EntityPredicate.Builder.entity().of(entityTypeTag).build(), radius, count);
 	}
 	
 	public static Condition isInSkaia()
@@ -175,12 +178,12 @@ public final class Conditions
 	
 	public static Condition isProspitian()
 	{
-		return new Condition.NPCEntityPredicate(EntityPredicate.Builder.entity().of(MSTags.EntityTypes.PROSPITIAN_CARAPACIANS).build());
+		return new NPCEntityPredicate(EntityPredicate.Builder.entity().of(MSTags.EntityTypes.PROSPITIAN_CARAPACIANS).build());
 	}
 	
 	public static Condition isDersite()
 	{
-		return new Condition.NPCEntityPredicate(EntityPredicate.Builder.entity().of(MSTags.EntityTypes.DERSITE_CARAPACIANS).build());
+		return new NPCEntityPredicate(EntityPredicate.Builder.entity().of(MSTags.EntityTypes.DERSITE_CARAPACIANS).build());
 	}
 	
 	public static PlayerOnlyCondition hasEntered()
@@ -193,9 +196,14 @@ public final class Conditions
 		return new PlayerPredicateCondition(PlayerPredicate.Builder.player().checkAdvancementDone(Minestuck.id(name.replace(".", "/")), true).build());
 	}
 	
+	public static PlayerOnlyCondition playerHasItem(Item item, int count)
+	{
+		return new PlayerEntityPredicate(EntityPredicate.Builder.entity().slots(new SlotsPredicate(Map.of(SlotRanges.nameToIds("inventory.*"), ItemPredicate.Builder.item().of(item).withCount(MinMaxBounds.Ints.exactly(count)).build()))).build());
+	}
+	
 	public static Condition isHolding(ItemLike... items)
 	{
-		return new Condition.NPCEntityPredicate(EntityPredicate.Builder.entity().equipment(EntityEquipmentPredicate.Builder.equipment().mainhand(ItemPredicate.Builder.item().of(items))).build());
+		return new NPCEntityPredicate(EntityPredicate.Builder.entity().equipment(EntityEquipmentPredicate.Builder.equipment().mainhand(ItemPredicate.Builder.item().of(items))).build());
 	}
 	
 	public static Condition hasVisitedSkaia()
@@ -215,8 +223,8 @@ public final class Conditions
 	public static Condition isAnyEntityType(EntityType<?>... entityTypes)
 	{
 		if(entityTypes.length == 1)
-			return new Condition.NPCEntityPredicate(EntityPredicate.Builder.entity().of(MSTags.EntityTypes.DERSITE_CARAPACIANS).build());
+			return new NPCEntityPredicate(EntityPredicate.Builder.entity().of(MSTags.EntityTypes.DERSITE_CARAPACIANS).build());
 		else
-			return new ListCondition(Arrays.stream(entityTypes).<Condition>map(entityType -> new Condition.NPCEntityPredicate(EntityPredicate.Builder.entity().of(entityType).build())).toList(), ListCondition.ListType.ANY);
+			return new ListCondition(Arrays.stream(entityTypes).<Condition>map(entityType -> new NPCEntityPredicate(EntityPredicate.Builder.entity().of(entityType).build())).toList(), ListCondition.ListType.ANY);
 	}
 }

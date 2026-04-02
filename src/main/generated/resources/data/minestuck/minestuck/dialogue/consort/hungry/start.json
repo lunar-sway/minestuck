@@ -49,7 +49,7 @@
             "condition": {
               "type": "minestuck:npc_entity_predicate",
               "predicate": {
-                "type": []
+                "type": "#minestuck:carapacians/dersite"
               }
             },
             "hide_if_failed": true,
@@ -71,7 +71,7 @@
             "condition": {
               "type": "minestuck:npc_entity_predicate",
               "predicate": {
-                "type": []
+                "type": "#minestuck:carapacians/dersite"
               }
             },
             "hide_if_failed": true,
@@ -93,7 +93,7 @@
             "condition": {
               "type": "minestuck:npc_entity_predicate",
               "predicate": {
-                "type": []
+                "type": "#minestuck:carapacians/dersite"
               }
             },
             "hide_if_failed": true,

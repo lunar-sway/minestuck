@@ -32,8 +32,15 @@
       },
       {
         "condition": {
-          "type": "minestuck:player_item",
-          "item": "minestuck:moon_mist_faygo"
+          "type": "minestuck:player_entity_predicate",
+          "predicate": {
+            "slots": {
+              "inventory.*": {
+                "count": 1,
+                "items": "minestuck:moon_mist_faygo"
+              }
+            }
+          }
         },
         "hide_if_failed": false,
         "message": "minestuck.dialogue.consort.moon_mist_faygo_scalemate_pumpkinsnuffle.start.possess",

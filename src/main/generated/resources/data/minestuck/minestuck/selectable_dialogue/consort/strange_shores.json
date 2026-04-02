@@ -29,9 +29,11 @@
         "list_type": "any"
       },
       {
-        "type": "minestuck:near_block_tag",
-        "block_tag": "minestuck:land_ocean_fluids",
+        "type": "minestuck:npc_near_block_predicate",
         "count": 5,
+        "predicate": {
+          "blocks": "#minestuck:land_ocean_fluids"
+        },
         "radius": 9
       }
     ],
