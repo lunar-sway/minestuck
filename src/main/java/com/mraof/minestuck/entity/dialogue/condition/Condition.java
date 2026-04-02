@@ -437,58 +437,6 @@ public interface Condition
 		}
 	}
 	
-	//TODO this is redundant to NPCEntityPredicate, figure out crashes related to CompletableFuture
-	record IsEntityType(EntityType<?> entityType) implements NpcOnlyCondition
-	{
-		static final MapCodec<IsEntityType> CODEC = RecordCodecBuilder.mapCodec(instance -> instance.group(
-				BuiltInRegistries.ENTITY_TYPE.byNameCodec().fieldOf("entity_type").forGetter(IsEntityType::entityType)
-		).apply(instance, IsEntityType::new));
-		
-		@Override
-		public MapCodec<IsEntityType> codec()
-		{
-			return CODEC;
-		}
-		
-		@Override
-		public boolean test(LivingEntity entity)
-		{
-			return entityType != null && entity.getType().equals(entityType);
-		}
-		
-		@Override
-		public Component getFailureTooltip()
-		{
-			return Component.literal("NPC is wrong entity type");
-		}
-	}
-	
-	//TODO this is redundant to NPCEntityPredicate, figure out crashes related to CompletableFuture
-	record IsEntityTypeTag(TagKey<EntityType<?>> entityTypeTag) implements NpcOnlyCondition
-	{
-		static final MapCodec<IsEntityTypeTag> CODEC = RecordCodecBuilder.mapCodec(instance -> instance.group(
-				TagKey.codec(BuiltInRegistries.ENTITY_TYPE.key()).fieldOf("entity_type_tag").forGetter(IsEntityTypeTag::entityTypeTag)
-		).apply(instance, IsEntityTypeTag::new));
-		
-		@Override
-		public MapCodec<IsEntityTypeTag> codec()
-		{
-			return CODEC;
-		}
-		
-		@Override
-		public boolean test(LivingEntity entity)
-		{
-			return entity.getType().is(entityTypeTag);
-		}
-		
-		@Override
-		public Component getFailureTooltip()
-		{
-			return Component.literal("NPC is wrong entity type tag");
-		}
-	}
-	
 	//TODO this is redundant to NearBlockPredicate, figure out crashes related to CompletableFuture
 	record NearBlock(ResourceKey<Block> blockID, int radius, int count) implements NpcOnlyCondition
 	{

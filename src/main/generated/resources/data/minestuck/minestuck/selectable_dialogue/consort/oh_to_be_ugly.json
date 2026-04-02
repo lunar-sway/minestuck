@@ -1,7 +1,9 @@
 {
   "condition": {
-    "type": "minestuck:entity_type",
-    "entity_type": "minestuck:nakagator"
+    "type": "minestuck:npc_entity_predicate",
+    "predicate": {
+      "type": "#minestuck:carapacians/dersite"
+    }
   },
   "dialogue": "minestuck:consort/oh_to_be_ugly",
   "dialogue_weight": 10,

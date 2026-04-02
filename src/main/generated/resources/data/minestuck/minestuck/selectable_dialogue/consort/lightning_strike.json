@@ -7,8 +7,10 @@
         "land_type": "minestuck:thunder"
       },
       {
-        "type": "minestuck:entity_type",
-        "entity_type": "minestuck:turtle"
+        "type": "minestuck:npc_entity_predicate",
+        "predicate": {
+          "type": "#minestuck:carapacians/dersite"
+        }
       }
     ],
     "list_type": "all"

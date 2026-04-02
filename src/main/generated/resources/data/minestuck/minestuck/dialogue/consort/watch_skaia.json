@@ -11,8 +11,10 @@
             }
           },
           {
-            "type": "minestuck:entity_type",
-            "entity_type": "minestuck:turtle"
+            "type": "minestuck:npc_entity_predicate",
+            "predicate": {
+              "type": []
+            }
           }
         ],
         "list_type": "all"

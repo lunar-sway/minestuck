@@ -9,8 +9,10 @@
         }
       },
       {
-        "type": "minestuck:entity_type_tag",
-        "entity_type_tag": "minestuck:carapacians/prospitian"
+        "type": "minestuck:npc_entity_predicate",
+        "predicate": {
+          "type": "#minestuck:carapacians/prospitian"
+        }
       }
     ],
     "list_type": "all"

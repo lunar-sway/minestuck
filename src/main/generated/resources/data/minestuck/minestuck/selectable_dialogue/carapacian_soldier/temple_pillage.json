@@ -1,7 +1,9 @@
 {
   "condition": {
-    "type": "minestuck:entity_type_tag",
-    "entity_type_tag": "minestuck:carapacians/dersite"
+    "type": "minestuck:npc_entity_predicate",
+    "predicate": {
+      "type": "#minestuck:carapacians/dersite"
+    }
   },
   "dialogue": "minestuck:carapacian_soldier/temple_pillage",
   "dialogue_weight": 10,

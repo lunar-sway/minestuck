@@ -6,8 +6,10 @@
     "responses": [
       {
         "condition": {
-          "type": "minestuck:entity_type",
-          "entity_type": "minestuck:nakagator"
+          "type": "minestuck:npc_entity_predicate",
+          "predicate": {
+            "type": []
+          }
         },
         "hide_if_failed": true,
         "message": "minestuck.arrow",

@@ -1,7 +1,5 @@
 package com.mraof.minestuck.data.dialogue;
 
-import com.google.gson.JsonElement;
-import com.mojang.serialization.JsonOps;
 import com.mraof.minestuck.entity.dialogue.Dialogue;
 import com.mraof.minestuck.entity.dialogue.RandomlySelectableDialogue;
 import com.mraof.minestuck.entity.dialogue.condition.Condition;
@@ -10,7 +8,6 @@ import net.minecraft.core.HolderLookup;
 import net.minecraft.data.CachedOutput;
 import net.minecraft.data.DataProvider;
 import net.minecraft.data.PackOutput;
-import net.minecraft.resources.RegistryOps;
 import net.minecraft.resources.ResourceLocation;
 
 import javax.annotation.ParametersAreNonnullByDefault;
@@ -89,9 +86,9 @@ public final class SelectableDialogueProvider implements DataProvider
 			for(Map.Entry<ResourceLocation, Dialogue.SelectableDialogue> entry : this.selectableDialogueMap.entrySet())
 			{
 				Path selectablePath = outputPath.resolve("data/" + entry.getKey().getNamespace() + "/" + this.category.folderNameForSelectable() + "/" + entry.getKey().getPath() + ".json");
-				JsonElement selectableJson = Dialogue.SelectableDialogue.CODEC.encodeStart(RegistryOps.create(JsonOps.INSTANCE, provider), entry.getValue()).getOrThrow();
-				futures.add(DataProvider.saveStable(cache, selectableJson, selectablePath));
+				futures.add(DataProvider.saveStable(cache, provider, Dialogue.SelectableDialogue.CODEC, entry.getValue(), selectablePath));
 			}
+			
 			return CompletableFuture.allOf(futures.toArray(new CompletableFuture[0]));
 		});
 	}

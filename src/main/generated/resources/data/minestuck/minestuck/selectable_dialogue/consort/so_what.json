@@ -1,7 +1,9 @@
 {
   "condition": {
-    "type": "minestuck:entity_type",
-    "entity_type": "minestuck:salamander"
+    "type": "minestuck:npc_entity_predicate",
+    "predicate": {
+      "type": "#minestuck:carapacians/dersite"
+    }
   },
   "dialogue": "minestuck:consort/so_what",
   "dialogue_weight": 10,

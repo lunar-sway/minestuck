@@ -1,7 +1,9 @@
 {
   "condition": {
-    "type": "minestuck:entity_type",
-    "entity_type": "minestuck:nakagator"
+    "type": "minestuck:npc_entity_predicate",
+    "predicate": {
+      "type": "#minestuck:carapacians/dersite"
+    }
   },
   "dialogue": "minestuck:consort_food_merchant/fast_food",
   "dialogue_weight": 10,

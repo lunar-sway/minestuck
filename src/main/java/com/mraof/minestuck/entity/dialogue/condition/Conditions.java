@@ -6,25 +6,20 @@ import com.mraof.minestuck.entity.consort.ConsortEntity;
 import com.mraof.minestuck.entity.consort.EnumConsort;
 import com.mraof.minestuck.util.MSTags;
 import com.mraof.minestuck.world.MSDimensions;
-import com.mraof.minestuck.world.gen.structure.MSStructures;
 import com.mraof.minestuck.world.lands.terrain.TerrainLandType;
 import com.mraof.minestuck.world.lands.title.TitleLandType;
 import net.minecraft.advancements.critereon.*;
 import net.minecraft.core.Holder;
-import net.minecraft.core.HolderLookup;
-import net.minecraft.core.HolderSet;
 import net.minecraft.core.Registry;
-import net.minecraft.core.registries.Registries;
 import net.minecraft.nbt.CompoundTag;
 import net.minecraft.tags.TagKey;
 import net.minecraft.world.entity.EntityType;
-import net.minecraft.world.item.Item;
+import net.minecraft.world.level.ItemLike;
 import net.minecraft.world.level.levelgen.structure.Structure;
 import net.neoforged.neoforge.registries.DeferredRegister;
 
 import java.util.Arrays;
 import java.util.List;
-import java.util.concurrent.atomic.AtomicReference;
 import java.util.function.Supplier;
 
 import static com.mraof.minestuck.entity.dialogue.condition.Condition.*;
@@ -47,8 +42,6 @@ public final class Conditions
 		REGISTER.register("consort_terrain_land_type", () -> InConsortTerrainLandType.CODEC);
 		REGISTER.register("title_land_type", () -> InTitleLandType.CODEC);
 		REGISTER.register("title_land_type_tag", () -> InTitleLandTypeTag.CODEC);
-		REGISTER.register("entity_type", () -> IsEntityType.CODEC);
-		REGISTER.register("entity_type_tag", () -> IsEntityTypeTag.CODEC);
 		REGISTER.register("near_block", () -> NearBlock.CODEC);
 		REGISTER.register("near_block_tag", () -> NearBlockTag.CODEC);
 		REGISTER.register("npc_near_block_predicate", () -> NPCNearBlockPredicate.CODEC);
@@ -163,6 +156,11 @@ public final class Conditions
 		return new NPCLocationPredicate(LocationPredicate.Builder.location().setDimension(MSDimensions.SKAIA).build());
 	}
 	
+	public static Condition isInStructure(Holder<Structure> structureHolder)
+	{
+		return new NPCLocationPredicate(LocationPredicate.Builder.inStructure(structureHolder).build());
+	}
+	
 	/*public static Condition isInSkaia(HolderLookup.Provider holderLookupProvider)
 	{
 		AtomicReference<Holder<Structure>> structureHolder;
@@ -177,12 +175,12 @@ public final class Conditions
 	
 	public static Condition isProspitian()
 	{
-		return new IsEntityTypeTag(MSTags.EntityTypes.PROSPITIAN_CARAPACIANS);
+		return new Condition.NPCEntityPredicate(EntityPredicate.Builder.entity().of(MSTags.EntityTypes.PROSPITIAN_CARAPACIANS).build());
 	}
 	
 	public static Condition isDersite()
 	{
-		return new IsEntityTypeTag(MSTags.EntityTypes.DERSITE_CARAPACIANS);
+		return new Condition.NPCEntityPredicate(EntityPredicate.Builder.entity().of(MSTags.EntityTypes.DERSITE_CARAPACIANS).build());
 	}
 	
 	public static PlayerOnlyCondition hasEntered()
@@ -195,9 +193,9 @@ public final class Conditions
 		return new PlayerPredicateCondition(PlayerPredicate.Builder.player().checkAdvancementDone(Minestuck.id(name.replace(".", "/")), true).build());
 	}
 	
-	public static Condition isHolding(Item item)
+	public static Condition isHolding(ItemLike... items)
 	{
-		return new NPCIsHoldingItem(item);
+		return new Condition.NPCEntityPredicate(EntityPredicate.Builder.entity().equipment(EntityEquipmentPredicate.Builder.equipment().mainhand(ItemPredicate.Builder.item().of(items))).build());
 	}
 	
 	public static Condition hasVisitedSkaia()
@@ -217,8 +215,8 @@ public final class Conditions
 	public static Condition isAnyEntityType(EntityType<?>... entityTypes)
 	{
 		if(entityTypes.length == 1)
-			return new IsEntityType(entityTypes[0]);
+			return new Condition.NPCEntityPredicate(EntityPredicate.Builder.entity().of(MSTags.EntityTypes.DERSITE_CARAPACIANS).build());
 		else
-			return new ListCondition(Arrays.stream(entityTypes).<Condition>map(IsEntityType::new).toList(), ListCondition.ListType.ANY);
+			return new ListCondition(Arrays.stream(entityTypes).<Condition>map(entityType -> new Condition.NPCEntityPredicate(EntityPredicate.Builder.entity().of(entityType).build())).toList(), ListCondition.ListType.ANY);
 	}
 }

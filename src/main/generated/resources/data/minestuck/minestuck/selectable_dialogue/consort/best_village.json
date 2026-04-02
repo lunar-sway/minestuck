@@ -6,16 +6,22 @@
         "type": "minestuck:list",
         "conditions": [
           {
-            "type": "minestuck:entity_type",
-            "entity_type": "minestuck:salamander"
+            "type": "minestuck:npc_entity_predicate",
+            "predicate": {
+              "type": "minestuck:salamander"
+            }
           },
           {
-            "type": "minestuck:entity_type",
-            "entity_type": "minestuck:iguana"
+            "type": "minestuck:npc_entity_predicate",
+            "predicate": {
+              "type": "minestuck:iguana"
+            }
           },
           {
-            "type": "minestuck:entity_type",
-            "entity_type": "minestuck:nakagator"
+            "type": "minestuck:npc_entity_predicate",
+            "predicate": {
+              "type": "minestuck:nakagator"
+            }
           }
         ],
         "list_type": "any"
