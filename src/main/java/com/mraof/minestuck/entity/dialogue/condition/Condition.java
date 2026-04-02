@@ -499,7 +499,7 @@ public interface Condition
 				{
 					for(Entity entityIterate : list)
 					{
-						if(predicate.matches(serverLevel, null, entityIterate))
+						if(predicate.matches(serverLevel, entity.position(), entityIterate))
 							matches++;
 						
 						if(matches >= count)
@@ -563,7 +563,7 @@ public interface Condition
 		{
 			//TODO seems to be getting treated as optional in certain selectable dialogue conditions
 			if(entity.level() instanceof ServerLevel serverLevel)
-				return predicate.matches(serverLevel, null, entity);
+				return predicate.matches(serverLevel, entity.position(), entity);
 			
 			return false;
 		}
@@ -621,7 +621,7 @@ public interface Condition
 		public boolean test(ServerPlayer player)
 		{
 			if(player.level() instanceof ServerLevel serverLevel)
-				return predicate.matches(serverLevel, null, player);
+				return predicate.matches(serverLevel, player.position(), player);
 			
 			return false;
 		}
