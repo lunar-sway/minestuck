@@ -5,7 +5,6 @@ import com.google.common.collect.ImmutableBiMap;
 import com.google.gson.Gson;
 import com.google.gson.GsonBuilder;
 import com.google.gson.JsonElement;
-import com.mojang.serialization.JsonOps;
 import net.minecraft.MethodsReturnNonnullByDefault;
 import net.minecraft.resources.ResourceLocation;
 import net.minecraft.server.packs.resources.ResourceManager;
@@ -13,6 +12,7 @@ import net.minecraft.server.packs.resources.SimpleJsonResourceReloadListener;
 import net.minecraft.util.profiling.ProfilerFiller;
 import net.neoforged.bus.api.SubscribeEvent;
 import net.neoforged.fml.common.EventBusSubscriber;
+import net.neoforged.neoforge.common.conditions.ICondition;
 import net.neoforged.neoforge.event.AddReloadListenerEvent;
 import net.neoforged.neoforge.event.server.ServerStoppedEvent;
 import org.apache.logging.log4j.LogManager;
@@ -83,9 +83,13 @@ public class DialogueNodes
 			ImmutableBiMap.Builder<ResourceLocation, Dialogue.NodeSelector> dialogues = ImmutableBiMap.builder();
 			for(Map.Entry<ResourceLocation, JsonElement> entry : jsonEntries.entrySet())
 			{
-				Dialogue.NodeSelector.CODEC.parse(JsonOps.INSTANCE, entry.getValue())
-						.resultOrPartial(message -> LOGGER.error("Problem parsing dialogue {}: {}", entry.getKey(), message))
-						.ifPresent(dialogue -> dialogues.put(entry.getKey(), dialogue));
+				try
+				{
+					dialogues.put(entry.getKey(), ICondition.getWithWithConditionsCodec(Dialogue.NodeSelector.CONDITIONAL_CODEC, this.makeConditionalOps(), entry.getValue()).orElseThrow());
+				} catch(Exception exception)
+				{
+					LOGGER.error("Problem parsing dialogue {}: {}", entry.getKey(), exception.getMessage());
+				}
 			}
 			
 			INSTANCE = new DialogueNodes(dialogues.build());
