@@ -19,14 +19,13 @@
         "list_type": "none"
       },
       {
-        "type": "minestuck:list",
-        "conditions": [
-          {
-            "type": "minestuck:npc_in_structure",
-            "structure": "minestuck:derse_bunker"
-          }
-        ],
-        "list_type": "any"
+        "type": "minestuck:npc_location_predicate",
+        "predicate": {
+          "structures": [
+            "minestuck:derse_bunker",
+            "minestuck:prospit_bunker"
+          ]
+        }
       }
     ],
     "list_type": "all"

@@ -18,13 +18,14 @@
           "type": "minestuck:player_entity_predicate",
           "predicate": {
             "slots": {
-              "inventory.*": {
+              "container.*": {
                 "count": 1,
                 "items": "minestuck:grape_faygo"
               }
             }
           }
         },
+        "fail_tooltip": "minestuck.dialogue.consort.grape_faygo_scalemate_pucefoot.ask_drink.condition",
         "hide_if_failed": false,
         "message": "minestuck.dialogue.consort.grape_faygo_scalemate_pucefoot.ask_drink.exchange",
         "next_dialogue": {

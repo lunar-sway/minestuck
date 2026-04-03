@@ -35,13 +35,14 @@
           "type": "minestuck:player_entity_predicate",
           "predicate": {
             "slots": {
-              "inventory.*": {
+              "container.*": {
                 "count": 1,
                 "items": "minestuck:redpop_faygo"
               }
             }
           }
         },
+        "fail_tooltip": "minestuck.dialogue.consort.redpop_faygo_scalemate_pyralspite.start.condition",
         "hide_if_failed": false,
         "message": "minestuck.dialogue.consort.redpop_faygo_scalemate_pyralspite.start.possess",
         "next_dialogue": "minestuck:consort/redpop_faygo_scalemate_pyralspite/ask_drink",

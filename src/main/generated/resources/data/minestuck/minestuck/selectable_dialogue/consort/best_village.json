@@ -27,8 +27,10 @@
         "list_type": "any"
       },
       {
-        "type": "minestuck:npc_in_structure",
-        "structure": "minestuck:consort_village"
+        "type": "minestuck:npc_location_predicate",
+        "predicate": {
+          "structures": "minestuck:consort_village"
+        }
       }
     ],
     "list_type": "all"

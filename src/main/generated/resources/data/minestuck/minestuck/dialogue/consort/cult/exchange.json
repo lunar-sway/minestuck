@@ -18,7 +18,7 @@
                   "type": "minestuck:player_entity_predicate",
                   "predicate": {
                     "slots": {
-                      "inventory.*": {
+                      "container.*": {
                         "count": 10,
                         "items": "minestuck:native_sulfur"
                       }
@@ -29,7 +29,7 @@
                   "type": "minestuck:player_entity_predicate",
                   "predicate": {
                     "slots": {
-                      "inventory.*": {
+                      "container.*": {
                         "count": 1,
                         "items": "minecraft:goat_horn"
                       }

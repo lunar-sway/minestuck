@@ -24,7 +24,6 @@ import net.minecraft.advancements.critereon.PlayerPredicate;
 import net.minecraft.core.BlockPos;
 import net.minecraft.core.Holder;
 import net.minecraft.core.HolderSet;
-import net.minecraft.core.Registry;
 import net.minecraft.core.registries.BuiltInRegistries;
 import net.minecraft.core.registries.Registries;
 import net.minecraft.network.chat.Component;
@@ -39,7 +38,6 @@ import net.minecraft.world.entity.player.Player;
 import net.minecraft.world.item.Item;
 import net.minecraft.world.item.ItemStack;
 import net.minecraft.world.level.Level;
-import net.minecraft.world.level.levelgen.structure.Structure;
 import net.minecraft.world.level.storage.LevelData;
 import net.minecraft.world.phys.AABB;
 import net.minecraft.world.phys.Vec3;
@@ -561,7 +559,6 @@ public interface Condition
 		@Override
 		public boolean test(LivingEntity entity)
 		{
-			//TODO seems to be getting treated as optional in certain selectable dialogue conditions
 			if(entity.level() instanceof ServerLevel serverLevel)
 				return predicate.matches(serverLevel, entity.position(), entity);
 			
@@ -676,39 +673,6 @@ public interface Condition
 		public Component getFailureTooltip()
 		{
 			return Component.literal("You do not match the conditions needed");
-		}
-	}
-	
-	//TODO this is redundant to NPCLocationPredicate, figure out crashes related to CompletableFuture
-	record NPCInStructure(ResourceLocation structureID) implements NpcOnlyCondition
-	{
-		static final MapCodec<NPCInStructure> CODEC = RecordCodecBuilder.mapCodec(instance -> instance.group(
-				ResourceLocation.CODEC.fieldOf("structure").forGetter(NPCInStructure::structureID)
-		).apply(instance, NPCInStructure::new));
-		
-		@Override
-		public MapCodec<NPCInStructure> codec()
-		{
-			return CODEC;
-		}
-		
-		@Override
-		public boolean test(LivingEntity entity)
-		{
-			if(entity.level() instanceof ServerLevel serverLevel)
-			{
-				Registry<Structure> registry = serverLevel.registryAccess().registryOrThrow(Registries.STRUCTURE);
-				Holder<Structure> structureHolder = registry.wrapAsHolder(registry.get(structureID));
-				return LocationPredicate.Builder.inStructure(structureHolder).build().matches(serverLevel, entity.getX(), entity.getY(), entity.getZ());
-			}
-			
-			return false;
-		}
-		
-		@Override
-		public Component getFailureTooltip()
-		{
-			return Component.literal("NPC is not in the correct structure");
 		}
 	}
 	

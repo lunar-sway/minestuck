@@ -44,6 +44,11 @@ public final class SelectableDialogueProvider implements DataProvider
 		this.output = output;
 	}
 	
+	public CompletableFuture<HolderLookup.Provider> getLookupProvider()
+	{
+		return lookupProvider;
+	}
+	
 	@SuppressWarnings("unused")
 	public static SelectableBuilder weighted(int weight, Condition condition)
 	{

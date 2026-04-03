@@ -10,6 +10,7 @@ import com.mraof.minestuck.world.lands.terrain.TerrainLandType;
 import com.mraof.minestuck.world.lands.title.TitleLandType;
 import net.minecraft.advancements.critereon.*;
 import net.minecraft.core.Holder;
+import net.minecraft.core.HolderSet;
 import net.minecraft.core.Registry;
 import net.minecraft.nbt.CompoundTag;
 import net.minecraft.tags.TagKey;
@@ -53,7 +54,6 @@ public final class Conditions
 		REGISTER.register("player_location_predicate", () -> PlayerLocationPredicate.CODEC);
 		REGISTER.register("player_entity_predicate", () -> PlayerEntityPredicate.CODEC);
 		REGISTER.register("player_predicate_condition", () -> PlayerPredicateCondition.CODEC);
-		REGISTER.register("npc_in_structure", () -> NPCInStructure.CODEC);
 		REGISTER.register("item_tag_match", () -> ItemTagMatch.CODEC);
 		REGISTER.register("item_tag_match_exclude", () -> ItemTagMatchExclude.CODEC);
 		REGISTER.register("has_matched_item", () -> HasMatchedItem.CODEC);
@@ -159,17 +159,11 @@ public final class Conditions
 		return new NPCLocationPredicate(LocationPredicate.Builder.location().setDimension(MSDimensions.SKAIA).build());
 	}
 	
-	public static Condition isInStructure(Holder<Structure> structureHolder)
+	@SafeVarargs
+	public static Condition isInStructure(Holder<Structure>... structureHolder)
 	{
-		return new NPCLocationPredicate(LocationPredicate.Builder.inStructure(structureHolder).build());
+		return new NPCLocationPredicate(LocationPredicate.Builder.location().setStructures(HolderSet.direct(structureHolder)).build());
 	}
-	
-	/*public static Condition isInSkaia(HolderLookup.Provider holderLookupProvider)
-	{
-		AtomicReference<Holder<Structure>> structureHolder;
-		//Holder<Structure>[] structures = new Holder<Structure>[].;
-		return new NPCLocationPredicate(LocationPredicate.Builder.location().setStructures(HolderSet.direct(holderLookupProvider.lookup(Registries.STRUCTURE).flatMap(lookup -> lookup.get(MSStructures.DERSE_BUNKER)).get().getDelegate())).build());
-	}*/
 	
 	public static Condition isAtOrAboveY(int minY)
 	{
@@ -198,7 +192,7 @@ public final class Conditions
 	
 	public static PlayerOnlyCondition playerHasItem(Item item, int count)
 	{
-		return new PlayerEntityPredicate(EntityPredicate.Builder.entity().slots(new SlotsPredicate(Map.of(SlotRanges.nameToIds("inventory.*"), ItemPredicate.Builder.item().of(item).withCount(MinMaxBounds.Ints.exactly(count)).build()))).build());
+		return new PlayerEntityPredicate(EntityPredicate.Builder.entity().slots(new SlotsPredicate(Map.of(SlotRanges.nameToIds("container.*"), ItemPredicate.Builder.item().of(item).withCount(MinMaxBounds.Ints.exactly(count)).build()))).build());
 	}
 	
 	public static Condition isHolding(ItemLike... items)
