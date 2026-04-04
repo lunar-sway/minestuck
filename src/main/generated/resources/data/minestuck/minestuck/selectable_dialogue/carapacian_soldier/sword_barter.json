@@ -2,8 +2,8 @@
   "condition": {
     "type": "minestuck:npc_entity_predicate",
     "predicate": {
-      "equipment": {
-        "mainhand": {
+      "slots": {
+        "weapon.*": {
           "items": "minestuck:regisword"
         }
       }

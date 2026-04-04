@@ -200,7 +200,7 @@ public final class Conditions
 	
 	public static Condition isHolding(ItemLike... items)
 	{
-		return new NPCEntityPredicate(EntityPredicate.Builder.entity().equipment(EntityEquipmentPredicate.Builder.equipment().mainhand(ItemPredicate.Builder.item().of(items))).build());
+		return new NPCEntityPredicate(EntityPredicate.Builder.entity().slots(new SlotsPredicate(Map.of(SlotRanges.nameToIds("weapon.*"), ItemPredicate.Builder.item().of(items).build()))).build());
 	}
 	
 	public static Condition hasVisitedSkaia()
