@@ -857,6 +857,9 @@ public final class ConsortDialogue
 					.node(isInSkaia(), new NodeBuilder(l.subMsg("at_skaia", "OH MY %s! I'M ACTUALLY ON SKAIA!", Argument.ENTITY_SOUND_2)).animation(HAPPY_EMOTION))
 					.node(hasVisitedSkaia(), new NodeBuilder(l.subMsg("has_visited", "You know, I have actually visited Skaia at one point!")))
 					.defaultNode(new NodeBuilder(l.defaultKeyMsg("Sometimes, I look up in the sky to see Skaia and wish I could visit there some day..."))));
+			provider.addRandomlySelectable("checkerboard_hop", defaultWeight(isInSkaia()),
+					new NodeBuilder(l.defaultKeyMsg("I feel compelled to hop from tile to tile, but I keep stumbling because of my tiny fucking feet. %s", Argument.ENTITY_SOUND)));
+			
 			provider.addRandomlySelectable("echeladder_progress", defaultWeight(alwaysTrue()), new FolderedDialogue(builder ->
 			{
 				var whatIs = l.msg("what_is", "What is an Echeladder?");
@@ -950,7 +953,7 @@ public final class ConsortDialogue
 						.defaultNode(new NodeBuilder(l.defaultKeyMsg("I'm hungry. Have any bugs? Maybe a chocolate chip cookie? Mmm."))));
 			}));
 			
-			provider.addRandomlySelectable("computer_expert", defaultWeight(alwaysTrue()), new FolderedDialogue(builder ->
+			provider.addRandomlySelectable("computer_expert", weighted(7, alwaysTrue()), new FolderedDialogue(builder ->
 			{
 				var done = builder.add("done", new NodeSelectorBuilder()
 						.node(all(new Condition.Flag(helpingPlayer), hasAdvancement(MSAdvancementProvider.BRICK_COMPUTER)), new NodeBuilder(l.subMsg("player_specific_advancement", "Hey by the look on your face you've installed one of my custom programs! Glad to be of service.")))
