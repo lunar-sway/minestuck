@@ -36,7 +36,9 @@
           "predicate": {
             "slots": {
               "container.*": {
-                "count": 1,
+                "count": {
+                  "min": 1
+                },
                 "items": "minestuck:creme_soda_faygo"
               }
             }

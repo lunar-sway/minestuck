@@ -19,7 +19,9 @@
                   "predicate": {
                     "slots": {
                       "container.*": {
-                        "count": 10,
+                        "count": {
+                          "min": 10
+                        },
                         "items": "minestuck:native_sulfur"
                       }
                     }
@@ -30,7 +32,9 @@
                   "predicate": {
                     "slots": {
                       "container.*": {
-                        "count": 1,
+                        "count": {
+                          "min": 1
+                        },
                         "items": "minecraft:goat_horn"
                       }
                     }
@@ -39,6 +43,7 @@
               ],
               "list_type": "all"
             },
+            "fail_tooltip": "minestuck.dialogue.consort.cult.exchange.condition",
             "hide_if_failed": false,
             "message": "minestuck.dialogue.consort.cult.exchange.give_items",
             "next_dialogue": "minestuck:consort/cult/pleased",

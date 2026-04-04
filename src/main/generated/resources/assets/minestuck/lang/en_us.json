@@ -2701,6 +2701,7 @@
   "minestuck.dialogue.consort.cult.disappointment": "Hmm... perhaps you are not as ready for the arcane as we suspected. Pretend I said nothing.",
   "minestuck.dialogue.consort.cult.disappointment.argue": "Wait! Will this %s prove I am ready?",
   "minestuck.dialogue.consort.cult.disappointment.resign": "Alright fine. Bye.",
+  "minestuck.dialogue.consort.cult.exchange.condition": "Must have 1 goat horn and a stack with at least 10 sulfur",
   "minestuck.dialogue.consort.cult.exchange.exchange.decline": "No, there is no helping you without any materials.",
   "minestuck.dialogue.consort.cult.exchange.exchange.proceed": "There is hope for you yet... bring me 10 sulfur and the horn of a goat and I shall have something to exchange with you.",
   "minestuck.dialogue.consort.cult.exchange.give_items": "[Hand over items]",

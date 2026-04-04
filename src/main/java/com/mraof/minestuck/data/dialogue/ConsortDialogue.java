@@ -35,6 +35,7 @@ import static com.mraof.minestuck.data.dialogue.SelectableDialogueProvider.defau
 import static com.mraof.minestuck.data.dialogue.SelectableDialogueProvider.weighted;
 import static com.mraof.minestuck.entity.MSEntityTypes.*;
 import static com.mraof.minestuck.entity.dialogue.DialogueAnimationData.*;
+import static com.mraof.minestuck.entity.dialogue.Triggers.*;
 import static com.mraof.minestuck.entity.dialogue.condition.Conditions.*;
 import static com.mraof.minestuck.world.lands.LandTypes.*;
 
@@ -216,7 +217,7 @@ public final class ConsortDialogue
 								.addResponse(new ResponseBuilder(l.subMsg("dont_give_up", "That's no reason to give up!"))
 										.addPlayerMessage(l.subMsg("dont_give_up.reply", "Just because you haven't made a better tower yet doesn't mean you never will!"))
 										.nextDialogue("motivation", new NodeBuilder(l.defaultKeyMsg("You know what? Yeah! I'm ready to take out another loan and try again. Thanks!")))
-										.addTrigger(new Trigger.SetDialogue(newTower)))
+										.addTrigger(setDialogue(newTower)))
 								.addClosingResponse(thanksGoodbyeMsg)));
 			}));
 			
@@ -468,8 +469,8 @@ public final class ConsortDialogue
 									.addTrigger(new Trigger.AddBoondollars(-100))
 									.addTrigger(new Trigger.GiveFromLootTable(MSLootTables.CONSORT_JUNK_REWARD))
 									.addTrigger(new Trigger.AddConsortReputation(50))
-									.addTrigger(new Trigger.SetDialogue(genericThanks))
-									.addTrigger(new Trigger.SetFlag(helpingPlayer, true))
+									.addTrigger(setDialogue(genericThanks))
+									.addTrigger(setFlag(helpingPlayer, true))
 									.addPlayerMessage(l.subMsg("pay.reply", "Here you go!"))
 									.nextDialogue(builder.add("gratitude", new NodeBuilder(l.defaultKeyMsg("Oh, thank you! Now I won't freeze to death out here! Take this as a token of gratitude!")).animation(HAPPY_EMOTION))))
 							.addResponse(new ResponseBuilder(l.subMsg("ignore", "[Don't give them any of your hard-earned boondollars!]"))
@@ -661,9 +662,9 @@ public final class ConsortDialogue
 							.addResponse(new ResponseBuilder(l.subMsg("yes", "[Hand over some hair]")).visibleCondition(playerHasItem(MSItems.PONYTAIL.get(), 1))
 									.addPlayerMessage(l.subMsg("yes.reply", "Sure here you go"))
 									.nextDialogue(builder.add("happy", new NodeBuilder(l.defaultKeyMsg("Oh %s, thank you for the snack!", Argument.ENTITY_SOUND)).animation(HAPPY_EMOTION)))
-									.addTrigger(new Trigger.TakeItem(MSItems.PONYTAIL.get()))
-									.addTrigger(new Trigger.SetDialogue(genericThanks))
-									.addTrigger(new Trigger.SetFlag(helpingPlayer, true))))
+									.addTrigger(takeItem(MSItems.PONYTAIL.get()))
+									.addTrigger(setDialogue(genericThanks))
+									.addTrigger(setFlag(helpingPlayer, true))))
 			));
 			provider.addRandomlySelectable("music_invention", defaultWeight(isAnyEntityType(NAKAGATOR, SALAMANDER)),
 					new NodeBuilder(l.defaultKeyMsg("I invented music, y'kno! My favorite song goes like ba ba dum, dum ba dum.")));
@@ -741,7 +742,7 @@ public final class ConsortDialogue
 				);
 			}));
 			
-			provider.addRandomlySelectable("cult", defaultWeight(isAnyEntityType(TURTLE, SALAMANDER)), new FolderedDialogue(builder ->
+			provider.addRandomlySelectable("cult", weighted(7, isAnyEntityType(TURTLE, SALAMANDER)), new FolderedDialogue(builder ->
 			{
 				String hasSulfur = "has_sulfur";
 				
@@ -750,17 +751,18 @@ public final class ConsortDialogue
 				var exchange = builder.add("exchange", new NodeSelectorBuilder()
 						.node(new Condition.Flag(hasSulfur), new NodeBuilder(l.subMsg("exchange.proceed", "There is hope for you yet... bring me 10 sulfur and the horn of a goat and I shall have something to exchange with you."))
 								.addResponse(new ResponseBuilder(l.subMsg("give_items", "[Hand over items]"))
-										.visibleCondition(all(playerHasItem(MSItems.NATIVE_SULFUR.get(), 10), playerHasItem(Items.GOAT_HORN, 1)))
-										.addTrigger(new Trigger.TakeItem(MSItems.NATIVE_SULFUR.get(), 10)).addTrigger(new Trigger.TakeItem(Items.GOAT_HORN, 1))
-										.addTrigger(new Trigger.GiveItem(MSItems.LONG_FORGOTTEN_WARHORN.get()))
-										.addTrigger(new Trigger.SetDialogue(oneDay))
+										.visibleCondition(l.subText("condition", "Must have 1 goat horn and a stack with at least 10 sulfur"), all(playerHasItem(MSItems.NATIVE_SULFUR.get(), 10), playerHasItem(Items.GOAT_HORN, 1)))
+										.addTrigger(takeItem(MSItems.NATIVE_SULFUR.get(), 10)).addTrigger(takeItem(Items.GOAT_HORN, 1))
+										.addTrigger(giveItem(MSItems.LONG_FORGOTTEN_WARHORN.get()))
+										.addTrigger(setDialogue(oneDay))
 										.nextDialogue(builder.add("pleased", new NodeBuilder(l.defaultKeyMsg("May our influence grow ever stronger."))))))
 						.defaultNode(new NodeBuilder(l.subMsg("exchange.decline", "No, there is no helping you without any materials."))));
 				
 				var disappointment = builder.add("disappointment", new NodeBuilder(l.defaultKeyMsg("Hmm... perhaps you are not as ready for the arcane as we suspected. Pretend I said nothing."))
 						.addResponse(new ResponseBuilder(l.subMsg("argue", "Wait! Will this %s prove I am ready?", Argument.MATCHED_ITEM))
 								.condition(new Condition.ItemTagMatch(MSTags.Items.MAGIC_WEAPON))
-								.nextDialogue(exchange))
+								.nextDialogue(exchange)
+								.setNextAsEntrypoint())
 						.addClosingResponse(l.subMsg("resign", "Alright fine. Bye.")));
 				
 				var afterInvitation = builder.add("after_invitation", new NodeBuilder(l.defaultKeyMsg("Meet me by dawn with mercury, salt, and sulfur to begin the initiation."))
@@ -768,7 +770,7 @@ public final class ConsortDialogue
 								.nextDialogue(oneDay))
 						.addResponse(new ResponseBuilder(l.subMsg("start", "I only have some sulfur, is this enough?"))
 								.condition(playerHasItem(MSItems.NATIVE_SULFUR.get(), 1))
-								.addTrigger(new Trigger.SetFlag(hasSulfur, true))
+								.addTrigger(setFlag(hasSulfur, true))
 								.nextDialogue(disappointment))
 						.addResponse(new ResponseBuilder(l.subMsg("candy_question", "Will grist candy work?"))
 								.nextDialogue(disappointment)));
@@ -901,8 +903,8 @@ public final class ConsortDialogue
 								.condition(Condition.HasMatchedItem.INSTANCE)
 								.addTrigger(Trigger.TakeMatchedItem.INSTANCE)
 								.addTrigger(new Trigger.AddBoondollars(10))
-								.addTrigger(new Trigger.SetDialogue(satisfied))
-								.addTrigger(new Trigger.SetFlag(helpingPlayer, true))
+								.addTrigger(setDialogue(satisfied))
+								.addTrigger(setFlag(helpingPlayer, true))
 								.addPlayerMessage(l.subMsg("yes.reply", "Sure, I can agree to that."))
 								.addDescription(l.subMsg("yes.desc", "You are given 10 boondollars for the %s.", Argument.MATCHED_ITEM))
 								.nextDialogue(builder.add("finally", new NodeBuilder(l.defaultKeyMsg("Finally!")))))
@@ -923,19 +925,19 @@ public final class ConsortDialogue
 										.condition(Condition.HasMatchedItem.INSTANCE)
 										.addTrigger(Trigger.TakeMatchedItem.INSTANCE)
 										.addTrigger(new Trigger.AddConsortReputation(15))
-										.addTrigger(new Trigger.SetDialogue(satisfied))
-										.addTrigger(new Trigger.SetFlag(helpingPlayer, true))
+										.addTrigger(setDialogue(satisfied))
+										.addTrigger(setFlag(helpingPlayer, true))
 										.addPlayerMessage(l.subMsg("yes_reply", "Sure, here."))
 										.nextDialogue(builder.add("thanks", new NodeBuilder(l.defaultKeyMsg("Thank you! I will remember your kindness for the rest of my short life.")).animation(HAPPY_EMOTION))))
 								.addResponse(new ResponseBuilder(noMsg)
 										.condition(isAnyEntityType(NAKAGATOR))
-										.addTrigger(new Trigger.SetFlag(barterFlag, false))
+										.addTrigger(setFlag(barterFlag, false))
 										.addPlayerMessage(noReplyMsg)
 										.nextDialogue(firstNo)
 										.setNextAsEntrypoint())
 								.addResponse(new ResponseBuilder(noMsg)
 										.condition(isAnyEntityType(IGUANA))
-										.addTrigger(new Trigger.SetFlag(noBarterFlag, false))
+										.addTrigger(setFlag(noBarterFlag, false))
 										.addPlayerMessage(noReplyMsg)
 										.nextDialogue(firstNo)
 										.setNextAsEntrypoint())
@@ -959,9 +961,9 @@ public final class ConsortDialogue
 						.addResponse(new ResponseBuilder(l.subMsg("yes", "[Hand over the %s]", Argument.MATCHED_ITEM))
 								.visibleCondition(l.subText("give_item.condition", "Must have a music disc, excluding a broken disc"), new Condition.ItemTagMatchExclude(Tags.Items.MUSIC_DISCS, Items.MUSIC_DISC_11))
 								.addTrigger(Trigger.TakeMatchedItem.INSTANCE)
-								.addTrigger(new Trigger.GiveItem(Items.MUSIC_DISC_11))
-								.addTrigger(new Trigger.SetFlag(helpingPlayer, true))
-								.addTrigger(new Trigger.SetDialogue(done))
+								.addTrigger(giveItem(Items.MUSIC_DISC_11))
+								.addTrigger(setFlag(helpingPlayer, true))
+								.addTrigger(setDialogue(done))
 								.addDescription(l.subMsg("desc", "They take the disc and gently place it on the ground. Then they take out a hammer and break it to pieces before giving it back to you."))
 								.nextDialogue(done))
 						.addClosingResponse(noMsg));
@@ -1066,9 +1068,9 @@ public final class ConsortDialogue
 							.visibleCondition(faygoConditionText, faygoCondition)
 							.addPlayerMessage(l.subMsg("yes.reply", "Sure here you go"))
 							.nextDialogue(builder.add("happy", new NodeBuilder(l.defaultKeyMsg("Ohhhh yeah that's the stuff. Straight up ambrosia."))))
-							.addTrigger(new Trigger.TakeItem(drinkItem))
-							.addTrigger(new Trigger.GiveItem(scalemateItem.asItem()))
-							.addTrigger(new Trigger.SetDialogue(satisfied)))
+							.addTrigger(takeItem(drinkItem))
+							.addTrigger(giveItem(scalemateItem.asItem()))
+							.addTrigger(setDialogue(satisfied)))
 					.addClosingResponse(l.subMsg("no", "No")));
 			
 			builder.addStart(new NodeBuilder(l.defaultKeyMsg("Everyone knows that the best flavor of faygo is " + capitalizedDrinkName + ". There is literally nothing else that can top it."))

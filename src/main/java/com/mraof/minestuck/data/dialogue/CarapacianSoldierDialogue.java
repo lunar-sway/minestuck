@@ -6,10 +6,7 @@ import com.mraof.minestuck.data.dialogue.DialogueProvider.NodeBuilder;
 import com.mraof.minestuck.data.dialogue.DialogueProvider.NodeSelectorBuilder;
 import com.mraof.minestuck.data.dialogue.DialogueProvider.ResponseBuilder;
 import com.mraof.minestuck.entity.consort.EnumConsort;
-import com.mraof.minestuck.entity.dialogue.DialogueAnimationData;
-import com.mraof.minestuck.entity.dialogue.DialogueMessage;
-import com.mraof.minestuck.entity.dialogue.RandomlySelectableDialogue;
-import com.mraof.minestuck.entity.dialogue.Trigger;
+import com.mraof.minestuck.entity.dialogue.*;
 import com.mraof.minestuck.entity.dialogue.condition.Condition;
 import com.mraof.minestuck.item.MSItems;
 import com.mraof.minestuck.world.gen.structure.MSStructures;
@@ -26,6 +23,7 @@ import java.util.concurrent.CompletableFuture;
 
 import static com.mraof.minestuck.data.dialogue.SelectableDialogueProvider.defaultWeight;
 import static com.mraof.minestuck.data.dialogue.SelectableDialogueProvider.weighted;
+import static com.mraof.minestuck.entity.dialogue.Triggers.*;
 import static com.mraof.minestuck.entity.dialogue.condition.Conditions.*;
 import static com.mraof.minestuck.world.lands.LandTypes.TOWERS;
 
@@ -215,8 +213,8 @@ public final class CarapacianSoldierDialogue
 								.addPlayerMessage(l.subMsg("give_item.reply", "Here you go!"))
 								.visibleCondition(l.subText("give_item.condition", "Must have a sword, excluding a regisword"), new Condition.ItemTagMatchExclude(ItemTags.SWORDS, MSItems.REGISWORD.get()))
 								.addTrigger(new Trigger.SetNPCMatchedItem(EquipmentSlot.MAINHAND))
-								.addTrigger(new Trigger.GiveItem(MSItems.REGISWORD.get(), 1))
-								.addTrigger(new Trigger.SetDialogue(thanks))
+								.addTrigger(giveItem(MSItems.REGISWORD.get(), 1))
+								.addTrigger(setDialogue(thanks))
 								.nextDialogue(thanks))
 						.addClosingResponse(l.subMsg("not_yet", "Not yet.")));
 				

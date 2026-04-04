@@ -18,6 +18,6 @@
     "list_type": "any"
   },
   "dialogue": "minestuck:consort/cult/start",
-  "dialogue_weight": 10,
+  "dialogue_weight": 7,
   "keep_on_reset": false
 }

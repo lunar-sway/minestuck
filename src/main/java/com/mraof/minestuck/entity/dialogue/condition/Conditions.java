@@ -190,9 +190,12 @@ public final class Conditions
 		return new PlayerPredicateCondition(PlayerPredicate.Builder.player().checkAdvancementDone(Minestuck.id(name.replace(".", "/")), true).build());
 	}
 	
+	/**
+	 * Player needs to have an itemstack with the item, and an amount at least matching the count
+	 */
 	public static PlayerOnlyCondition playerHasItem(Item item, int count)
 	{
-		return new PlayerEntityPredicate(EntityPredicate.Builder.entity().slots(new SlotsPredicate(Map.of(SlotRanges.nameToIds("container.*"), ItemPredicate.Builder.item().of(item).withCount(MinMaxBounds.Ints.exactly(count)).build()))).build());
+		return new PlayerEntityPredicate(EntityPredicate.Builder.entity().slots(new SlotsPredicate(Map.of(SlotRanges.nameToIds("container.*"), ItemPredicate.Builder.item().of(item).withCount(MinMaxBounds.Ints.atLeast(count)).build()))).build());
 	}
 	
 	public static Condition isHolding(ItemLike... items)
