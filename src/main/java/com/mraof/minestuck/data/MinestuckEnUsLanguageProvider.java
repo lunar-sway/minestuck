@@ -46,6 +46,7 @@ import com.mraof.minestuck.item.weapon.OnHitEffect;
 import com.mraof.minestuck.network.ToggleAspectEffectsPacket;
 import com.mraof.minestuck.player.*;
 import com.mraof.minestuck.skaianet.*;
+import com.mraof.minestuck.util.MSTags;
 import com.mraof.minestuck.world.GateHandler;
 import com.mraof.minestuck.world.lands.GristLayerInfo;
 import com.mraof.minestuck.world.lands.LandTypePair;
@@ -2212,8 +2213,16 @@ public class MinestuckEnUsLanguageProvider extends MinestuckLanguageProvider
 		add(SburbHandler.CHAT_LAND_ENTRY, "Welcome to %s.");
 		
 		addEffect(MSEffects.CREATIVE_SHOCK, "Creative Shock");
+		addEffectDescription(MSEffects.CREATIVE_SHOCK, "Prevents various actions depending on the level:\n" +
+				"- Level I: Prevents placing and mining blocks\n" +
+				"- Level II: Prevents opening redstone machinery GUIs\n" +
+				"- Level III: Prevents usage of some mobility items\n" +
+				"- Levels IV, V, and VI apply level I, II, and III respectively to creative players"
+		);
 		addEffect(MSEffects.SUSPICION, "Suspicion");
+		addEffectDescription(MSEffects.SUSPICION, "Pushes entities away and prevents them from riding or being ridden.");
 		addEffect(MSEffects.SOPOR_SICKNESS, "Sopor Stupor");
+		addEffectDescription(MSEffects.SOPOR_SICKNESS, "Damages the player over time. Prevents the application of some effects, as long as their level is lower or equal");
 		
 		addStrife(KindAbstratusList.SWORD, "Bladekind");
 		addStrife(KindAbstratusList.BOW, "Bowkind");
@@ -2592,6 +2601,7 @@ public class MinestuckEnUsLanguageProvider extends MinestuckLanguageProvider
 		add(UNREADABLE, "Unreadable Captcha Codes");
 		add(LEGENDARY, "Legendary Weapons");
 		add(MAGIC_WEAPON, "Magic Weapons");
+		add(MSTags.Effects.SOPOR_SICKNESS_WHITELIST, "Prevent by Sopor Stupor");
 		
 		addPainting("candy_shop_sign", "Candy Shop Sign", "Cibernet83");
 		addPainting("candy_shop_small", "Small Candy Shop", "Cibernet83");
