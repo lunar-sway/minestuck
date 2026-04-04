@@ -10,7 +10,10 @@ import com.mraof.minestuck.entity.dialogue.*;
 import com.mraof.minestuck.entity.dialogue.condition.Condition;
 import com.mraof.minestuck.item.MSItems;
 import com.mraof.minestuck.world.gen.structure.MSStructures;
+import net.minecraft.advancements.critereon.LocationPredicate;
+import net.minecraft.advancements.critereon.MinMaxBounds;
 import net.minecraft.core.HolderLookup;
+import net.minecraft.core.HolderSet;
 import net.minecraft.core.registries.Registries;
 import net.minecraft.data.DataProvider;
 import net.minecraft.data.PackOutput;
@@ -45,7 +48,6 @@ public final class CarapacianSoldierDialogue
 		provider.getLookupProvider().thenCompose(providerIt ->
 		{
 			HolderLookup.RegistryLookup<Structure> structures = providerIt.lookupOrThrow(Registries.STRUCTURE);
-			Condition isInBunkers = isInStructure(structures.getOrThrow(MSStructures.DERSE_BUNKER), structures.getOrThrow(MSStructures.PROSPIT_BUNKER));
 			
 			provider.addRandomlySelectable("dread_waiting", defaultWeight(isInLand()),
 					descriptionNode(l.defaultKeyMsg("They explain that sometimes it's more exhausting to be posted on a Land since there isn't any fighting. If you aren't in combat you have time to think. That's when the dread sets in.")));
@@ -153,11 +155,14 @@ public final class CarapacianSoldierDialogue
 				);
 			}));
 			
-			provider.addRandomlySelectable("bunker_thieves", weighted(2, all(none(isAtOrAboveY(64)), isInBunkers)),
+			Condition isInBunkers = isInStructure(structures.getOrThrow(MSStructures.DERSE_BUNKER), structures.getOrThrow(MSStructures.PROSPIT_BUNKER));
+			Condition isInLowerBunkers = new Condition.NPCLocationPredicate(LocationPredicate.Builder.location().setStructures(HolderSet.direct(structures.getOrThrow(MSStructures.DERSE_BUNKER), structures.getOrThrow(MSStructures.PROSPIT_BUNKER))).setY(MinMaxBounds.Doubles.atMost(64)).build());
+			
+			provider.addRandomlySelectable("bunker_thieves", weighted(2, isInLowerBunkers),
 					descriptionNode(l.defaultKeyMsg("They are complaining about a consort that came through and stole food.")));
-			provider.addRandomlySelectable("bunker_sweep", defaultWeight(all(none(isAtOrAboveY(64)), isInBunkers)),
+			provider.addRandomlySelectable("bunker_sweep", defaultWeight(isInLowerBunkers),
 					descriptionNode(l.defaultKeyMsg("They are focused on sweeping the floors.")));
-			provider.addRandomlySelectable("bunker_restock", defaultWeight(all(none(isAtOrAboveY(64)), isInBunkers)),
+			provider.addRandomlySelectable("bunker_restock", defaultWeight(isInLowerBunkers),
 					descriptionNode(l.defaultKeyMsg("They are thinking about restocking the chests again.")));
 			provider.addRandomlySelectable("bunker_abandonment", defaultWeight(isInBunkers),
 					descriptionNode(l.defaultKeyMsg("They mention how they have had to abandoned bunkers before. When they came back to check on them, they were overrun with underlings.")));

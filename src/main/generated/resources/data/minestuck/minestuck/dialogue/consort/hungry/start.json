@@ -49,7 +49,7 @@
             "condition": {
               "type": "minestuck:npc_entity_predicate",
               "predicate": {
-                "type": "#minestuck:carapacians/dersite"
+                "type": "minestuck:nakagator"
               }
             },
             "hide_if_failed": true,
@@ -71,7 +71,7 @@
             "condition": {
               "type": "minestuck:npc_entity_predicate",
               "predicate": {
-                "type": "#minestuck:carapacians/dersite"
+                "type": "minestuck:iguana"
               }
             },
             "hide_if_failed": true,
@@ -93,7 +93,7 @@
             "condition": {
               "type": "minestuck:npc_entity_predicate",
               "predicate": {
-                "type": "#minestuck:carapacians/dersite"
+                "type": "minestuck:salamander"
               }
             },
             "hide_if_failed": true,

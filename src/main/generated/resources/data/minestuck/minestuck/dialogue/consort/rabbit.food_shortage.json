@@ -8,7 +8,7 @@
         "condition": {
           "type": "minestuck:npc_entity_predicate",
           "predicate": {
-            "type": "#minestuck:carapacians/dersite"
+            "type": "minestuck:nakagator"
           }
         },
         "hide_if_failed": true,

@@ -220,7 +220,7 @@ public final class Conditions
 	public static Condition isAnyEntityType(EntityType<?>... entityTypes)
 	{
 		if(entityTypes.length == 1)
-			return new NPCEntityPredicate(EntityPredicate.Builder.entity().of(MSTags.EntityTypes.DERSITE_CARAPACIANS).build());
+			return new NPCEntityPredicate(EntityPredicate.Builder.entity().of(entityTypes[0]).build());
 		else
 			return new ListCondition(Arrays.stream(entityTypes).<Condition>map(entityType -> new NPCEntityPredicate(EntityPredicate.Builder.entity().of(entityType).build())).toList(), ListCondition.ListType.ANY);
 	}
