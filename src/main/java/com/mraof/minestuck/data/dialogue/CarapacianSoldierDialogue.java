@@ -6,30 +6,35 @@ import com.mraof.minestuck.data.dialogue.DialogueProvider.NodeBuilder;
 import com.mraof.minestuck.data.dialogue.DialogueProvider.NodeSelectorBuilder;
 import com.mraof.minestuck.data.dialogue.DialogueProvider.ResponseBuilder;
 import com.mraof.minestuck.entity.consort.EnumConsort;
-import com.mraof.minestuck.entity.dialogue.DialogueAnimationData;
-import com.mraof.minestuck.entity.dialogue.DialogueMessage;
-import com.mraof.minestuck.entity.dialogue.RandomlySelectableDialogue;
-import com.mraof.minestuck.entity.dialogue.Trigger;
+import com.mraof.minestuck.entity.dialogue.*;
 import com.mraof.minestuck.entity.dialogue.condition.Condition;
 import com.mraof.minestuck.item.MSItems;
 import com.mraof.minestuck.world.gen.structure.MSStructures;
+import net.minecraft.advancements.critereon.LocationPredicate;
+import net.minecraft.advancements.critereon.MinMaxBounds;
+import net.minecraft.core.HolderLookup;
+import net.minecraft.core.HolderSet;
+import net.minecraft.core.registries.Registries;
 import net.minecraft.data.DataProvider;
 import net.minecraft.data.PackOutput;
-import net.minecraft.resources.ResourceLocation;
 import net.minecraft.tags.ItemTags;
 import net.minecraft.world.entity.EquipmentSlot;
+import net.minecraft.world.level.levelgen.structure.Structure;
 import net.neoforged.neoforge.common.data.LanguageProvider;
+
+import java.util.concurrent.CompletableFuture;
 
 import static com.mraof.minestuck.data.dialogue.SelectableDialogueProvider.defaultWeight;
 import static com.mraof.minestuck.data.dialogue.SelectableDialogueProvider.weighted;
+import static com.mraof.minestuck.entity.dialogue.Triggers.*;
 import static com.mraof.minestuck.entity.dialogue.condition.Conditions.*;
-import static com.mraof.minestuck.world.lands.LandTypes.*;
+import static com.mraof.minestuck.world.lands.LandTypes.TOWERS;
 
 public final class CarapacianSoldierDialogue
 {
-	public static DataProvider create(PackOutput output, LanguageProvider enUsLanguageProvider)
+	public static DataProvider create(PackOutput output, LanguageProvider enUsLanguageProvider, CompletableFuture<HolderLookup.Provider> lookup)
 	{
-		SelectableDialogueProvider provider = new SelectableDialogueProvider(Minestuck.MOD_ID, RandomlySelectableDialogue.DialogueCategory.CARAPACIAN_SOLDIER, output);
+		SelectableDialogueProvider provider = new SelectableDialogueProvider(Minestuck.MOD_ID, RandomlySelectableDialogue.DialogueCategory.CARAPACIAN_SOLDIER, lookup, output);
 		DialogueLangHelper l = new DialogueLangHelper(Minestuck.MOD_ID, enUsLanguageProvider);
 		
 		//Run dialogue creation early so that language stuff gets added before the language provider generates its file
@@ -40,180 +45,208 @@ public final class CarapacianSoldierDialogue
 	
 	private static void carapacianDialogues(SelectableDialogueProvider provider, DialogueLangHelper l)
 	{
-		provider.addRandomlySelectable("dread_waiting", defaultWeight(isInLand()),
-				descriptionNode(l.defaultKeyMsg("They explain that sometimes it's more exhausting to be posted on a Land since there isn't any fighting. If you aren't in combat you have time to think. That's when the dread sets in.")));
-		
-		provider.addRandomlySelectable("forlorn", defaultWeight(isInSkaia()),
-				descriptionNode(l.defaultKeyMsg("Sometimes they wish they could just all set their weapons down and be done with this war.")));
-		
-		provider.addRandomlySelectable("constant_nakking", defaultWeight(isInConsortLand(EnumConsort.NAKAGATOR)),
-				descriptionNode(l.defaultKeyMsg("They describe how they have a huge headache from the constant nakking.")));
-		
-		provider.addRandomlySelectable("too_quiet", defaultWeight(isInConsortLand(EnumConsort.TURTLE)),
-				descriptionNode(l.defaultKeyMsg("They look around paranoid, saying that while the turtles are a nice change of pace from the other consorts they've come across, they are so quiet its unnerving.")));
-		
-		provider.addRandomlySelectable("constant_thipping", defaultWeight(isInConsortLand(EnumConsort.IGUANA)),
-				descriptionNode(l.defaultKeyMsg("One of the nearby iguanas asked for some food and when they gave it to them the iguana complained for an hour about the \"lack of a comprehensive flavor profile\".")));
-		
-		provider.addRandomlySelectable("glub_glub", defaultWeight(isInConsortLand(EnumConsort.SALAMANDER)),
-				descriptionNode(l.defaultKeyMsg("They hear the local salamanders glub so often that it's started to become part of their own vocabulary. Glub glub.")));
-		
-		provider.addRandomlySelectable("rain_sleet_or_snow", defaultWeight(alwaysTrue()),
-				descriptionNode(l.defaultKeyMsg("They sigh and share that they would love to deliver mail one day. That has to be one of the most honorable professions out there.")));
-		
-		provider.addRandomlySelectable("dreamer", defaultWeight(alwaysTrue()), new FolderedDialogue(builder ->
+		provider.getLookupProvider().thenCompose(providerIt ->
 		{
-			var explainDreamers = builder.add("explain_dreamers", new ChainBuilder()
-					.node(descriptionNode(l.defaultKeyMsg("They explain that Dreamers are heroes who reside in towers on the moons of Prospit and Derse.")))
-					.node(descriptionNode(l.defaultKeyMsg("There is one for each Land that exists, although they don't know what the connection is there.")))
+			HolderLookup.RegistryLookup<Structure> structures = providerIt.lookupOrThrow(Registries.STRUCTURE);
+			
+			provider.addRandomlySelectable("dread_waiting", defaultWeight(isInLand()),
+					descriptionNode(l.defaultKeyMsg("They explain that sometimes it's more exhausting to be posted on a Land since there isn't any fighting. If you aren't in combat you have time to think. That's when the dread sets in.")));
+			
+			provider.addRandomlySelectable("forlorn", defaultWeight(isInSkaia()),
+					descriptionNode(l.defaultKeyMsg("Sometimes they wish they could just all set their weapons down and be done with this war.")));
+			
+			provider.addRandomlySelectable("constant_nakking", defaultWeight(isInConsortLand(EnumConsort.NAKAGATOR)),
+					descriptionNode(l.defaultKeyMsg("They describe how they have a huge headache from the constant nakking.")));
+			
+			provider.addRandomlySelectable("too_quiet", defaultWeight(isInConsortLand(EnumConsort.TURTLE)),
+					descriptionNode(l.defaultKeyMsg("They look around paranoid, saying that while the turtles are a nice change of pace from the other consorts they've come across, they are so quiet its unnerving.")));
+			
+			provider.addRandomlySelectable("constant_thipping", defaultWeight(isInConsortLand(EnumConsort.IGUANA)),
+					descriptionNode(l.defaultKeyMsg("One of the nearby iguanas asked for some food and when they gave it to them the iguana complained for an hour about the \"lack of a comprehensive flavor profile\".")));
+			
+			provider.addRandomlySelectable("glub_glub", defaultWeight(isInConsortLand(EnumConsort.SALAMANDER)),
+					descriptionNode(l.defaultKeyMsg("They hear the local salamanders glub so often that it's started to become part of their own vocabulary. Glub glub.")));
+			
+			provider.addRandomlySelectable("rain_sleet_or_snow", defaultWeight(alwaysTrue()),
+					descriptionNode(l.defaultKeyMsg("They sigh and share that they would love to deliver mail one day. That has to be one of the most honorable professions out there.")));
+			
+			provider.addRandomlySelectable("chess_desire", defaultWeight(alwaysTrue()),
+					descriptionNode(l.defaultKeyMsg("They are daydreaming about playing chess.")));
+			
+			provider.addRandomlySelectable("good_memory", defaultWeight(alwaysTrue()),
+					descriptionNode(l.defaultKeyMsg("They inform you about how good carapacian memory can be. Especially when it comes to when and where they have traveled.")));
+			
+			provider.addRandomlySelectable("oracle_clouds", defaultWeight(none(isInSkaia())),
+					descriptionNode(l.defaultKeyMsg("They say that the clouds of Skaia are capable of showing you events. Past, present, and future. Time is a more moldable construct than one might want to believe.")));
+			
+			provider.addRandomlySelectable("dreamer", defaultWeight(alwaysTrue()), new FolderedDialogue(builder ->
+			{
+				var explainDreamers = builder.add("explain_dreamers", new ChainBuilder()
+						.node(descriptionNode(l.defaultKeyMsg("They explain that Dreamers are heroes who reside in towers on the moons of Prospit and Derse.")))
+						.node(descriptionNode(l.defaultKeyMsg("There is one for each Land that exists, although they don't know what the connection is there.")))
+				);
+				
+				builder.addStart(new NodeSelectorBuilder()
+						.node(hasEntered(), descriptionNode(l.subMsg("familiar", "They look at you with surprise, saying you remind them of the Dreamers."))
+								.addResponse(new ResponseBuilder(l.subMsg("who", "Who are the Dreamers?"))
+										.nextDialogue(explainDreamers)))
+						.defaultNode(descriptionNode(l.subMsg("unfamiliar", "They are curious as to who you are and what you are doing here."))));
+			}));
+			
+			provider.addRandomlySelectable("not_so_bad", defaultWeight(isInSkaia()), new ChainBuilder()
+					.node(descriptionNode(l.defaultKeyMsg("They recount one time where they went out to an isolated part of the Battlefield. Unexpectedly, a member of the enemy scouting party came across them while sat on a hill side.")))
+					.node(descriptionNode(l.defaultKeyMsg("They went to draw their weapon only to realize they forgot it back at camp. The two soldiers stared at each other for what felt like ages.")))
+					.node(descriptionNode(l.defaultKeyMsg("To make things worse, the rest of the scouting party called out to see what was going on. But just when they thought their life was coming to an end, the other soldier pretended like they weren't there and announced that the area was clear.")))
+					.node(descriptionNode(l.defaultKeyMsg("They never ran so fast, trying to get back somewhere safe. And they certainly never leave anywhere without a weapon now.")))
 			);
 			
-			builder.addStart(new NodeSelectorBuilder()
-					.node(hasEntered(), descriptionNode(l.subMsg("familiar", "They look at you with surprise, saying you remind them of the Dreamers."))
-							.addResponse(new ResponseBuilder(l.subMsg("who", "Who are the Dreamers?"))
-									.nextDialogue(explainDreamers)))
-					.defaultNode(descriptionNode(l.subMsg("unfamiliar", "They are curious as to who you are and what you are doing here."))));
-		}));
-		
-		provider.addRandomlySelectable("not_so_bad", defaultWeight(isInSkaia()), new ChainBuilder()
-				.node(descriptionNode(l.defaultKeyMsg("They recount one time where they went out to an isolated part of the Battlefield. Unexpectedly, a member of enemy scouting party came across them while sat on a hill side.")))
-				.node(descriptionNode(l.defaultKeyMsg("They went to draw their weapon only to realize they forgot it back at camp. The two soldiers stared at each other for what felt like ages.")))
-				.node(descriptionNode(l.defaultKeyMsg("To make things worse, the rest of the scouting party called out to see what was going on. But just when they thought their life was coming to an end, the other soldier pretended like they weren't there and announced that the area was clear.")))
-				.node(descriptionNode(l.defaultKeyMsg("They never ran so fast, trying to get back somewhere safe. And they certainly never leave anywhere without a weapon now.")))
-		);
-		
-		provider.addRandomlySelectable("enemy", defaultWeight(all(isInSkaia(), isProspitian())),
-				descriptionNode(l.defaultKeyMsg("They are panicking about whether any Dersites are nearby.")));
-		
-		provider.addRandomlySelectable("propaganda", defaultWeight(all(isInSkaia(), isDersite())),
-				descriptionNode(l.defaultKeyMsg("They already knew that the propaganda surrounding Prospitians was fake but it was still surprising to see that they didn't have horns or cool fangs or blood red eyes. Kind of a bummer honestly.")));
-		
-		provider.addRandomlySelectable("teeth", defaultWeight(alwaysTrue()),
-				descriptionNode(l.defaultKeyMsg("They find it curious that certain carapacians have sharp jagged teeth when the vast majority have rounded ones.")));
-		
-		provider.addRandomlySelectable("foreign_land", defaultWeight(alwaysTrue()),
-				descriptionNode(l.defaultKeyMsg("They describe how rare it is for a Prospitian to visit Derse or a Dersite to visit Prospit. The presence of someone from the other kingdom can be unnerving.")));
-		
-		provider.addRandomlySelectable("poor_frogs", defaultWeight(isProspitian()),
-				descriptionNode(l.defaultKeyMsg("They lament how Dersites treat frogs and frog paraphernalia. Croaks and ribbits are in the top 5 best sounds to exist, why would you want to squish an animal that makes those sorts of sounds?")));
-		
-		provider.addRandomlySelectable("meditative_travel", defaultWeight(isDersite()),
-				descriptionNode(l.defaultKeyMsg("They say that not everyone enjoys how far the travel is from Derse to Skaia, but that they do. It can be nice to just close your eyes while in the shuttle or stare out into the inky blackness.")));
-		
-		provider.addRandomlySelectable("skaia_dense", defaultWeight(alwaysTrue()),
-				descriptionNode(l.defaultKeyMsg("They comment on how you can't really see the Battlefield from beyond Skaia. And when you are on the Battlefield you can't see much of the Medium.")));
-		
-		provider.addRandomlySelectable("remember_cloning", defaultWeight(alwaysTrue()), new FolderedDialogue(builder ->
-		{
-			var goodToKnow = l.subMsg("good_to_know", "Oh, good to know.");
+			provider.addRandomlySelectable("enemy", defaultWeight(all(isInSkaia(), isProspitian())),
+					descriptionNode(l.defaultKeyMsg("They are panicking about whether any Dersites are nearby.")));
 			
-			var made = builder.add("made", descriptionNode(l.defaultKeyMsg("Made."))
-					.animation(DialogueAnimationData.ANGRY_EMOTION)
-					.addDescription(l.subMsg("made.desc", "They clearly don't want to talk about this more.")));
+			provider.addRandomlySelectable("propaganda", defaultWeight(all(isInSkaia(), isDersite())),
+					descriptionNode(l.defaultKeyMsg("They already knew that the propaganda surrounding Prospitians was fake but it was still surprising to see that they didn't have horns or cool fangs or blood red eyes. Kind of a bummer honestly.")));
 			
-			var veil = builder.add("veil", new ChainBuilder()
-					.node(descriptionNode(l.defaultKeyMsg("They ask if you have seen the ring of asteroids orbiting Skaia. That is the Veil.")))
-					.node(descriptionNode(l.defaultKeyMsg("It is not uncommon for the asteroids in the Veil to have buildings on them, built onto the surface. Some even contain sprawling complexes under the surface.")))
-					.node(descriptionNode(l.defaultKeyMsg("Included amongst those facilities are laboratories where carapacians from both kingdoms get made."))
-							.addResponse(new ResponseBuilder(l.subMsg("huh", "\"Made\"?"))
-									.nextDialogue(made))
-							.addClosingResponse(goodToKnow)));
+			provider.addRandomlySelectable("lost_in_the_clouds", defaultWeight(isInSkaia()),
+					descriptionNode(l.defaultKeyMsg("They are getting lost looking at the clouds, wondering if they will bring visions of the future.")));
 			
-			builder.addStart(
-					descriptionNode(l.defaultKeyMsg("They shudder, remembering events from early in their life. They never want to go back."))
-							.animation(DialogueAnimationData.ANXIOUS_EMOTION)
-							.addResponse(new ResponseBuilder(l.subMsg("go_where", "Go back to where?"))
-									.nextDialogue(veil))
-							.addClosingResponse(l.subMsg("bye", "Goodbye."))
-			);
-		}));
-		
-		provider.addRandomlySelectable("bunker_thieves", weighted(2, all(none(new Condition.AtOrAboveY(64)), any(new Condition.NPCInStructure(MSStructures.DERSE_BUNKER.location()), new Condition.NPCInStructure(MSStructures.PROSPIT_BUNKER.location())))),
-				descriptionNode(l.defaultKeyMsg("They are complaining about a consort that came through and stolen food.")));
-		provider.addRandomlySelectable("bunker_sweep", defaultWeight(all(none(new Condition.AtOrAboveY(64)), any(new Condition.NPCInStructure(MSStructures.DERSE_BUNKER.location()), new Condition.NPCInStructure(MSStructures.PROSPIT_BUNKER.location())))),
-				descriptionNode(l.defaultKeyMsg("They are focused on sweeping the floors.")));
-		provider.addRandomlySelectable("bunker_restock", defaultWeight(all(none(new Condition.AtOrAboveY(64)), any(new Condition.NPCInStructure(MSStructures.DERSE_BUNKER.location()), new Condition.NPCInStructure(MSStructures.PROSPIT_BUNKER.location())))),
-				descriptionNode(l.defaultKeyMsg("They are thinking about restocking the chests again.")));
-		provider.addRandomlySelectable("bunker_abandonment", defaultWeight(any(new Condition.NPCInStructure(MSStructures.DERSE_BUNKER.location()), new Condition.NPCInStructure(MSStructures.PROSPIT_BUNKER.location()))),
-				descriptionNode(l.defaultKeyMsg("They mention how they have had to abandoned bunkers before. When they came back to check on them, they were overrun with underlings.")));
-		provider.addRandomlySelectable("bunker_camouflage", defaultWeight(all(isInTitleLand(TOWERS), any(new Condition.NPCInStructure(MSStructures.DERSE_BUNKER.location()), new Condition.NPCInStructure(MSStructures.PROSPIT_BUNKER.location())))),
-				descriptionNode(l.defaultKeyMsg("They comment how all the other towers here cause this one to blend in, kind of like camouflage.")));
-		
-		provider.addRandomlySelectable("bunker_greet", weighted(35, any(new Condition.NPCInStructure(MSStructures.DERSE_BUNKER.location()), new Condition.NPCInStructure(MSStructures.PROSPIT_BUNKER.location()))), new FolderedDialogue(builder ->
-		{
-			var explainPlaceKey = "explain_place";
-			var goodToKnow = l.subMsg("good_to_know", "Oh, good to know.");
+			provider.addRandomlySelectable("teeth", defaultWeight(alwaysTrue()),
+					descriptionNode(l.defaultKeyMsg("They find it curious that certain carapacians have sharp jagged teeth when the vast majority have rounded ones.")));
 			
-			var suspicion = builder.add("suspicion", descriptionNode(l.defaultKeyMsg("They eye you up before deciding you are probably not a threat."))
-					.animation(DialogueAnimationData.ANGRY_EMOTION));
+			provider.addRandomlySelectable("foreign_land", defaultWeight(alwaysTrue()),
+					descriptionNode(l.defaultKeyMsg("They describe how rare it is for a Prospitian to visit Derse or a Dersite to visit Prospit. The presence of someone from the other kingdom can be unnerving.")));
 			
-			var dontKnow = builder.add("dont_know", descriptionNode(l.defaultKeyMsg("They don't know how to answer that question succinctly.")));
+			provider.addRandomlySelectable("poor_frogs", defaultWeight(isProspitian()),
+					descriptionNode(l.defaultKeyMsg("They lament how Dersites treat frogs and frog paraphernalia. Croaks and ribbits are in the top 5 best sounds to exist, why would you want to squish an animal that makes those sorts of sounds?")));
 			
-			var access = builder.add("access", new ChainBuilder()
-					.node(descriptionNode(l.defaultKeyMsg("They exclaim it's simple! If there's anything underground, they hide a hatch under the rug."))
-							.animation(DialogueAnimationData.HAPPY_EMOTION))
-					.node(descriptionNode(l.defaultKeyMsg(".")))
-					.node(descriptionNode(l.defaultKeyMsg("They shouldn't have told you that."))
-							.animation(DialogueAnimationData.ANXIOUS_EMOTION)));
+			provider.addRandomlySelectable("temple_pilgrimage", defaultWeight(isProspitian()),
+					descriptionNode(l.defaultKeyMsg("They have heard rumors of a frog temple in The Veil and want to take a pilgrimage. It sounds like a beautiful sight to behold.")));
 			
-			var explainPlace = builder.add(explainPlaceKey, new ChainBuilder()
-					.node(descriptionNode(l.defaultKeyMsg("They say that this is a bunker, built by their kingdom as a way to protect their interests on this Land.")))
-					.node(descriptionNode(l.defaultKeyMsg("While Lands are considered neutral territory, that doesn't mean it always will be.")))
-					.node(descriptionNode(l.defaultKeyMsg("So a small portion of the military has set up post and created a sprawling section below ground in some of them."))
-							.addResponse(new ResponseBuilder(l.subMsg("access", "How do you access the section below ground?"))
-									.condition(new Condition.AtOrAboveY(64)) //otherwise assumed to be inside already
-									.nextDialogue(access))
-							.addResponse(new ResponseBuilder(l.subMsg("why_fight", "Why are you fighting?"))
-									.nextDialogue(dontKnow))
-							.addClosingResponse(goodToKnow)));
+			provider.addRandomlySelectable("temple_pillage", defaultWeight(isDersite()),
+					descriptionNode(l.defaultKeyMsg("They have heard rumors of a frog temple in The Veil and are wondering when the Queen will hear about it. When she does, it might be destroyed next day.")));
 			
-			builder.addStart(
-					descriptionNode(l.defaultKeyMsg("They ask you what your business is here."))
-							.addResponse(new ResponseBuilder(l.subMsg("what", "What is this place?"))
-									.nextDialogue(explainPlace))
-							.addResponse(new ResponseBuilder(l.subMsg("splorin", "Just exploring"))
-									.nextDialogue(suspicion))
-							.addClosingResponse(l.subMsg("bye", "Goodbye."))
-			);
-		}));
-		
-		provider.addRandomlySelectable("sword_barter", weighted(40, isHolding(MSItems.REGISWORD.get())), new FolderedDialogue(builder ->
-		{
-			var goodbye = l.subMsg("goodbye", "That's really strange. Good luck with that!");
+			provider.addRandomlySelectable("meditative_travel", defaultWeight(isDersite()),
+					descriptionNode(l.defaultKeyMsg("They say that not everyone enjoys how far the travel is from Derse to Skaia, but that they do. It can be nice to just close your eyes while in the shuttle or stare out into the inky blackness.")));
 			
-			var thanks = builder.add("thanks", descriptionNode(l.defaultKeyMsg("They thank you for helping them.")));
+			provider.addRandomlySelectable("skaia_dense", defaultWeight(alwaysTrue()),
+					descriptionNode(l.defaultKeyMsg("They comment on how you can't really see the Battlefield from beyond Skaia. And when you are on the Battlefield you can't see much of the Medium.")));
 			
-			var barter = builder.add("barter", descriptionNode(l.defaultKeyMsg("They ask if you have a new sword for them."))
-					.addResponse(new ResponseBuilder(l.subMsg("give_item", "[Give them the %s]", DialogueMessage.Argument.MATCHED_ITEM))
-							.addPlayerMessage(l.subMsg("give_item.reply", "Here you go!"))
-							.visibleCondition(l.subText("give_item.condition", "Must have a sword, excluding a regisword"), new Condition.ItemTagMatchExclude(ItemTags.SWORDS, MSItems.REGISWORD.get()))
-							.addTrigger(new Trigger.SetNPCMatchedItem(EquipmentSlot.MAINHAND))
-							.addTrigger(new Trigger.GiveItem(MSItems.REGISWORD.get(), 1))
-							.addTrigger(new Trigger.SetDialogue(thanks))
-							.nextDialogue(thanks))
-					.addClosingResponse(l.subMsg("not_yet", "Not yet.")));
+			provider.addRandomlySelectable("remember_cloning", defaultWeight(alwaysTrue()), new FolderedDialogue(builder ->
+			{
+				var goodToKnow = l.subMsg("good_to_know", "Oh, good to know.");
+				
+				var made = builder.add("made", descriptionNode(l.defaultKeyMsg("Made."))
+						.animation(DialogueAnimationData.ANGRY_EMOTION)
+						.addDescription(l.subMsg("made.desc", "They clearly don't want to talk about this more.")));
+				
+				var veil = builder.add("veil", new ChainBuilder()
+						.node(descriptionNode(l.defaultKeyMsg("They ask if you have seen the ring of asteroids orbiting Skaia. That is the Veil.")))
+						.node(descriptionNode(l.defaultKeyMsg("It is not uncommon for the asteroids in the Veil to have buildings on them, built onto the surface. Some even contain sprawling complexes under the surface.")))
+						.node(descriptionNode(l.defaultKeyMsg("Included amongst those facilities are laboratories where carapacians from both kingdoms get made."))
+								.addResponse(new ResponseBuilder(l.subMsg("huh", "\"Made\"?"))
+										.nextDialogue(made))
+								.addClosingResponse(goodToKnow)));
+				
+				builder.addStart(
+						descriptionNode(l.defaultKeyMsg("They shudder, remembering events from early in their life. They never want to go back."))
+								.animation(DialogueAnimationData.ANXIOUS_EMOTION)
+								.addResponse(new ResponseBuilder(l.subMsg("go_where", "Go back to where?"))
+										.nextDialogue(veil))
+								.addClosingResponse(l.subMsg("bye", "Goodbye."))
+				);
+			}));
 			
-			var badMood = builder.add("bad_mood", descriptionNode(l.defaultKeyMsg("They explain that the arch agent does not always get along with the Black Queen and when he gets in a bad mood he allegedly will order his minions to go and distribute a bunch of these swords around. Apparently the queen is even aware of it and finds it amusing.")));
+			Condition isInBunkers = isInStructure(structures.getOrThrow(MSStructures.DERSE_BUNKER), structures.getOrThrow(MSStructures.PROSPIT_BUNKER));
+			Condition isInLowerBunkers = new Condition.NPCLocationPredicate(LocationPredicate.Builder.location().setStructures(HolderSet.direct(structures.getOrThrow(MSStructures.DERSE_BUNKER), structures.getOrThrow(MSStructures.PROSPIT_BUNKER))).setY(MinMaxBounds.Doubles.atMost(64)).build());
 			
-			var frequently = builder.add("frequently", descriptionNode(l.defaultKeyMsg("They mention that the last few times they were outside the palace, there was a bin labelled \"Regicide weapon disposal\". It was always full.")));
+			provider.addRandomlySelectable("bunker_thieves", weighted(2, isInLowerBunkers),
+					descriptionNode(l.defaultKeyMsg("They are complaining about a consort that came through and stole food.")));
+			provider.addRandomlySelectable("bunker_sweep", defaultWeight(isInLowerBunkers),
+					descriptionNode(l.defaultKeyMsg("They are focused on sweeping the floors.")));
+			provider.addRandomlySelectable("bunker_restock", defaultWeight(isInLowerBunkers),
+					descriptionNode(l.defaultKeyMsg("They are thinking about restocking the chests again.")));
+			provider.addRandomlySelectable("bunker_abandonment", defaultWeight(isInBunkers),
+					descriptionNode(l.defaultKeyMsg("They mention how they have had to abandoned bunkers before. When they came back to check on them, they were overrun with underlings.")));
+			provider.addRandomlySelectable("bunker_camouflage", defaultWeight(all(isInTitleLand(TOWERS), isInBunkers)),
+					descriptionNode(l.defaultKeyMsg("They comment how all the other towers here cause this one to blend in, kind of like camouflage.")));
 			
-			builder.addStart(new ChainBuilder()
-					.node(descriptionNode(l.defaultKeyMsg("They mention that the weirdest thing happened earlier.")))
-					.node(descriptionNode(l.defaultKeyMsg("A Dersite agent wandered up to them and shoved this sword into their hands. He loudly exclaimed that it would be such a shame if a member of royalty was \"forcibly retired\" because anyone who would do such a thing \"might just become the wealthiest carapacian to ever live\".")))
-					.node(descriptionNode(l.defaultKeyMsg("Not having another sword they just kind of brought it into battle, but now they wish it would be gone."))
-							.addResponse(new ResponseBuilder(l.subMsg("suggestion", "Maybe I could find you something else to use?"))
-									.nextDialogue(barter)
-									.setNextAsEntrypoint())
-							.addResponse(new ResponseBuilder(l.subMsg("derse_loyalty", "Why would an agent of Derse want the Dersite royalty dead?"))
-									.condition(isDersite())
-									.nextDialogue(badMood))
-							.addResponse(new ResponseBuilder(l.subMsg("prospitian_loyalty", "Have the agents tried anything like this before?"))
-									.condition(isProspitian())
-									.nextDialogue(frequently))
-							.addClosingResponse(goodbye)
-					)
-			);
-		}));
+			provider.addRandomlySelectable("bunker_greet", weighted(35, isInBunkers), new FolderedDialogue(builder ->
+			{
+				var explainPlaceKey = "explain_place";
+				var goodToKnow = l.subMsg("good_to_know", "Oh, good to know.");
+				
+				var suspicion = builder.add("suspicion", descriptionNode(l.defaultKeyMsg("They eye you up before deciding you are probably not a threat."))
+						.animation(DialogueAnimationData.ANGRY_EMOTION));
+				
+				var dontKnow = builder.add("dont_know", descriptionNode(l.defaultKeyMsg("They don't know how to answer that question succinctly.")));
+				
+				var access = builder.add("access", new ChainBuilder()
+						.node(descriptionNode(l.defaultKeyMsg("They exclaim it's simple! If there's anything underground, they hide a hatch under the rug."))
+								.animation(DialogueAnimationData.HAPPY_EMOTION))
+						.node(descriptionNode(l.defaultKeyMsg(".")))
+						.node(descriptionNode(l.defaultKeyMsg("They shouldn't have told you that."))
+								.animation(DialogueAnimationData.ANXIOUS_EMOTION)));
+				
+				var explainPlace = builder.add(explainPlaceKey, new ChainBuilder()
+						.node(descriptionNode(l.defaultKeyMsg("They say that this is a bunker, built by their kingdom as a way to protect their interests on this Land.")))
+						.node(descriptionNode(l.defaultKeyMsg("While Lands are considered neutral territory, that doesn't mean it always will be.")))
+						.node(descriptionNode(l.defaultKeyMsg("So a small portion of the military has set up post and created a sprawling section below ground in some of them."))
+								.addResponse(new ResponseBuilder(l.subMsg("access", "How do you access the section below ground?"))
+										.condition(isAtOrAboveY(64)) //otherwise assumed to be inside already
+										.nextDialogue(access))
+								.addResponse(new ResponseBuilder(l.subMsg("why_fight", "Why are you fighting?"))
+										.nextDialogue(dontKnow))
+								.addClosingResponse(goodToKnow)));
+				
+				builder.addStart(
+						descriptionNode(l.defaultKeyMsg("They ask you what your business is here."))
+								.addResponse(new ResponseBuilder(l.subMsg("what", "What is this place?"))
+										.nextDialogue(explainPlace))
+								.addResponse(new ResponseBuilder(l.subMsg("splorin", "Just exploring"))
+										.nextDialogue(suspicion))
+								.addClosingResponse(l.subMsg("bye", "Goodbye."))
+				);
+			}));
+			
+			provider.addRandomlySelectable("sword_barter", weighted(40, isHolding(MSItems.REGISWORD.get())), new FolderedDialogue(builder ->
+			{
+				var goodbye = l.subMsg("goodbye", "That's really strange. Good luck with that!");
+				
+				var thanks = builder.add("thanks", descriptionNode(l.defaultKeyMsg("They thank you for helping them.")));
+				
+				var barter = builder.add("barter", descriptionNode(l.defaultKeyMsg("They ask if you have a new sword for them."))
+						.addResponse(new ResponseBuilder(l.subMsg("give_item", "[Give them the %s]", DialogueMessage.Argument.MATCHED_ITEM))
+								.addPlayerMessage(l.subMsg("give_item.reply", "Here you go!"))
+								.visibleCondition(l.subText("give_item.condition", "Must have a sword, excluding a regisword"), new Condition.ItemTagMatchExclude(ItemTags.SWORDS, MSItems.REGISWORD.get()))
+								.addTrigger(new Trigger.SetNPCMatchedItem(EquipmentSlot.MAINHAND))
+								.addTrigger(giveItem(MSItems.REGISWORD.get(), 1))
+								.addTrigger(setDialogue(thanks))
+								.nextDialogue(thanks))
+						.addClosingResponse(l.subMsg("not_yet", "Not yet.")));
+				
+				var badMood = builder.add("bad_mood", descriptionNode(l.defaultKeyMsg("They explain that the arch agent does not always get along with the Black Queen and when he gets in a bad mood he allegedly will order his minions to go and distribute a bunch of these swords around. Apparently the queen is even aware of it and finds it amusing.")));
+				
+				var frequently = builder.add("frequently", descriptionNode(l.defaultKeyMsg("They mention that the last few times they were outside the palace, there was a bin labelled \"Regicide weapon disposal\". It was always full.")));
+				
+				builder.addStart(new ChainBuilder()
+						.node(descriptionNode(l.defaultKeyMsg("They mention that the weirdest thing happened earlier.")))
+						.node(descriptionNode(l.defaultKeyMsg("A Dersite agent wandered up to them and shoved this sword into their hands. He loudly exclaimed that it would be such a shame if a member of royalty was \"forcibly retired\" because anyone who would do such a thing \"might just become the wealthiest carapacian to ever live\".")))
+						.node(descriptionNode(l.defaultKeyMsg("Not having another sword they just kind of brought it into battle, but now they wish it would be gone."))
+								.addResponse(new ResponseBuilder(l.subMsg("suggestion", "Maybe I could find you something else to use?"))
+										.nextDialogue(barter)
+										.setNextAsEntrypoint())
+								.addResponse(new ResponseBuilder(l.subMsg("derse_loyalty", "Why would an agent of Derse want the Dersite royalty dead?"))
+										.condition(isDersite())
+										.nextDialogue(badMood))
+								.addResponse(new ResponseBuilder(l.subMsg("prospitian_loyalty", "Have the agents tried anything like this before?"))
+										.condition(isProspitian())
+										.nextDialogue(frequently))
+								.addClosingResponse(goodbye)
+						)
+				);
+			}));
+			
+			return CompletableFuture.allOf();
+		});
 	}
 	
 	private static NodeBuilder descriptionNode(MessageProducer message)

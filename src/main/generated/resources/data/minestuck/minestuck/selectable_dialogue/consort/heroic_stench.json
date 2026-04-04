@@ -1,6 +1,6 @@
 {
   "condition": {
-    "type": "minestuck:is_is_land"
+    "type": "minestuck:is_in_land"
   },
   "dialogue": "minestuck:consort/heroic_stench",
   "dialogue_weight": 10,

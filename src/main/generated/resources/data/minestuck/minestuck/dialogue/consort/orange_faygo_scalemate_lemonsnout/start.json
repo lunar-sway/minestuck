@@ -32,9 +32,19 @@
       },
       {
         "condition": {
-          "type": "minestuck:player_item",
-          "item": "minestuck:orange_faygo"
+          "type": "minestuck:player_entity_predicate",
+          "predicate": {
+            "slots": {
+              "container.*": {
+                "count": {
+                  "min": 1
+                },
+                "items": "minestuck:orange_faygo"
+              }
+            }
+          }
         },
+        "fail_tooltip": "minestuck.dialogue.consort.orange_faygo_scalemate_lemonsnout.start.condition",
         "hide_if_failed": false,
         "message": "minestuck.dialogue.consort.orange_faygo_scalemate_lemonsnout.start.possess",
         "next_dialogue": "minestuck:consort/orange_faygo_scalemate_lemonsnout/ask_drink",
