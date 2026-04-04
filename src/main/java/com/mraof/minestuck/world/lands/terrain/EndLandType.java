@@ -11,6 +11,7 @@ import com.mraof.minestuck.world.gen.structure.village.NakagatorVillagePieces;
 import com.mraof.minestuck.world.lands.LandBiomeGenBuilder;
 import net.minecraft.core.Direction;
 import net.minecraft.core.HolderLookup;
+import net.minecraft.core.registries.Registries;
 import net.minecraft.data.worldgen.placement.EndPlacements;
 import net.minecraft.util.RandomSource;
 import net.minecraft.world.level.block.Blocks;
@@ -79,8 +80,10 @@ public class EndLandType extends TerrainLandType
 	}
 	
 	@Override
-	public void addExtensions(HolderLookup.RegistryLookup<PlacedFeature> features, StructureBlockRegistry blocks)
+	public void addExtensions(HolderLookup.Provider provider, StructureBlockRegistry blocks)
 	{
+		HolderLookup.RegistryLookup<PlacedFeature> features = provider.lookupOrThrow(Registries.PLACED_FEATURE);
+		
 		addFeatureExtension(features, GenerationStep.Decoration.VEGETAL_DECORATION, MSPlacedFeatures.END_TREE, LandBiomeType.anyExcept(LandBiomeType.OCEAN));
 		
 		addFeatureExtension(features, GenerationStep.Decoration.LOCAL_MODIFICATIONS, MSPlacedFeatures.END_GRASS_SURFACE_DISK, LandBiomeType.NORMAL);

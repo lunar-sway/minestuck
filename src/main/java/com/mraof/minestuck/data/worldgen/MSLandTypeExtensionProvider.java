@@ -7,12 +7,10 @@ import com.mraof.minestuck.world.lands.LandTypes;
 import com.mraof.minestuck.world.lands.terrain.TerrainLandType;
 import net.minecraft.MethodsReturnNonnullByDefault;
 import net.minecraft.core.HolderLookup;
-import net.minecraft.core.registries.Registries;
 import net.minecraft.data.CachedOutput;
 import net.minecraft.data.DataProvider;
 import net.minecraft.data.PackOutput;
 import net.minecraft.resources.ResourceLocation;
-import net.minecraft.world.level.levelgen.placement.PlacedFeature;
 
 import javax.annotation.ParametersAreNonnullByDefault;
 import java.nio.file.Path;
@@ -61,8 +59,7 @@ public class MSLandTypeExtensionProvider implements DataProvider
 					TerrainLandType landType = entry.getValue();
 					StructureBlockRegistry blockRegistry = new StructureBlockRegistry();
 					landType.registerBlocks(blockRegistry);
-					HolderLookup.RegistryLookup<PlacedFeature> features = provider.lookupOrThrow(Registries.PLACED_FEATURE);
-					extensionsMap.put(entry.getKey().location(), landType.getExtensions(features, blockRegistry));
+					extensionsMap.put(entry.getKey().location().withPrefix("terrain/"), landType.getExtensions(provider, blockRegistry));
 				}
 		);
 	}

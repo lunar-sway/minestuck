@@ -41,7 +41,6 @@ import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.Logger;
 
 import javax.annotation.ParametersAreNonnullByDefault;
-import java.io.IOException;
 import java.io.Reader;
 import java.util.*;
 
@@ -158,9 +157,6 @@ public final class LandTypeExtensions
 			{
 				JsonElement json = JsonParser.parseReader(reader);
 				return ICondition.getWithWithConditionsCodec(ParsedExtension.CONDITIONAL_CODEC, this.makeConditionalOps(), json);
-			} catch(IOException ignored)
-			{
-				return Optional.empty();
 			} catch(Exception exception)
 			{
 				LOGGER.error("Problem parsing land type extension for {} from {}, reason: {}", location, resource.sourcePackId(), exception.getMessage());

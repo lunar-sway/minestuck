@@ -24,6 +24,7 @@ import net.minecraft.world.entity.EntityType;
 import net.minecraft.world.level.biome.Biome;
 import net.minecraft.world.level.levelgen.GenerationStep;
 import net.minecraft.world.level.levelgen.SurfaceRules;
+import net.minecraft.world.level.levelgen.carver.ConfiguredWorldCarver;
 import net.minecraft.world.level.levelgen.placement.PlacedFeature;
 import net.minecraft.world.level.levelgen.structure.Structure;
 import net.minecraft.world.level.levelgen.structure.StructureSet;
@@ -56,8 +57,8 @@ public abstract class TerrainLandType implements ILandType
 	private final float skylightBase;
 	private final Vec3 fogColor, skyColor;
 	
-	private LandTypeExtensions.ParsedExtension extensions;
 	private final List<LandTypeExtensions.FeatureExtension> featureExtensions = new ArrayList<>();
+	private final List<LandTypeExtensions.CarverExtension> carverExtensions = new ArrayList<>();
 	
 	private final LandBiomeSetType biomeSet;
 	private final Supplier<SoundEvent> backgroundMusic;
@@ -131,7 +132,7 @@ public abstract class TerrainLandType implements ILandType
 	{
 	}
 	
-	public void addExtensions(HolderLookup.RegistryLookup<PlacedFeature> features, StructureBlockRegistry blocks)
+	public void addExtensions(HolderLookup.Provider provider, StructureBlockRegistry blocks)
 	{
 	}
 	
@@ -145,10 +146,15 @@ public abstract class TerrainLandType implements ILandType
 		featureExtensions.add(new LandTypeExtensions.FeatureExtension(step, Holder.direct(feature), Arrays.stream(biomeTypes).toList()));
 	}
 	
-	public LandTypeExtensions.ParsedExtension getExtensions(HolderLookup.RegistryLookup<PlacedFeature> features, StructureBlockRegistry blocks)
+	public void addCarverExtension(GenerationStep.Carving step, ConfiguredWorldCarver<?> carver, LandBiomeType... biomeTypes)
 	{
-		addExtensions(features, blocks);
-		return new LandTypeExtensions.ParsedExtension(featureExtensions, List.of(), List.of(), List.of());
+		carverExtensions.add(new LandTypeExtensions.CarverExtension(step, Holder.direct(carver), Arrays.stream(biomeTypes).toList()));
+	}
+	
+	public LandTypeExtensions.ParsedExtension getExtensions(HolderLookup.Provider provider, StructureBlockRegistry blocks)
+	{
+		addExtensions(provider, blocks);
+		return new LandTypeExtensions.ParsedExtension(featureExtensions, carverExtensions, List.of(), List.of());
 	}
 	
 	@Override

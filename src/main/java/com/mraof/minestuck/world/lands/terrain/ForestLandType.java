@@ -9,18 +9,20 @@ import com.mraof.minestuck.world.gen.structure.blocks.StructureBlockRegistry;
 import com.mraof.minestuck.world.gen.structure.village.IguanaVillagePieces;
 import com.mraof.minestuck.world.lands.LandBiomeGenBuilder;
 import com.mraof.minestuck.world.lands.LandProperties;
+import net.minecraft.core.HolderLookup;
+import net.minecraft.core.registries.Registries;
 import net.minecraft.data.worldgen.Carvers;
-import net.minecraft.data.worldgen.placement.*;
+import net.minecraft.data.worldgen.placement.CavePlacements;
+import net.minecraft.data.worldgen.placement.MiscOverworldPlacements;
+import net.minecraft.data.worldgen.placement.OrePlacements;
+import net.minecraft.data.worldgen.placement.VegetationPlacements;
 import net.minecraft.util.RandomSource;
 import net.minecraft.world.level.block.Blocks;
 import net.minecraft.world.level.levelgen.GenerationStep;
 import net.minecraft.world.level.levelgen.VerticalAnchor;
 import net.minecraft.world.level.levelgen.feature.Feature;
 import net.minecraft.world.level.levelgen.feature.configurations.OreConfiguration;
-import net.minecraft.world.level.levelgen.placement.BiomeFilter;
-import net.minecraft.world.level.levelgen.placement.CountPlacement;
-import net.minecraft.world.level.levelgen.placement.HeightRangePlacement;
-import net.minecraft.world.level.levelgen.placement.InSquarePlacement;
+import net.minecraft.world.level.levelgen.placement.*;
 
 import static com.mraof.minestuck.world.gen.structure.blocks.StructureBlockRegistry.*;
 
@@ -59,10 +61,12 @@ public class ForestLandType extends TerrainLandType
 	{
 		registry.setBlock(SURFACE, type == Variant.TAIGA ? Blocks.PODZOL : Blocks.GRASS_BLOCK);
 		registry.setBlock(UPPER, Blocks.DIRT);
-		if(type == Variant.TAIGA) {
+		if(type == Variant.TAIGA)
+		{
 			registry.setBlock(STRUCTURE_PRIMARY, Blocks.SPRUCE_WOOD);
 			registry.setBlock(STRUCTURE_PRIMARY_DECORATIVE, MSBlocks.FROST_WOOD);
-		} else {
+		} else
+		{
 			registry.setBlock(STRUCTURE_PRIMARY, MSBlocks.VINE_WOOD);
 			registry.setBlock(STRUCTURE_PRIMARY_DECORATIVE, MSBlocks.FLOWERY_VINE_WOOD);
 		}
@@ -76,9 +80,11 @@ public class ForestLandType extends TerrainLandType
 		registry.setBlock(VILLAGE_PATH, Blocks.DIRT_PATH);
 		registry.setBlock(BUSH, Blocks.FERN);
 		registry.setBlock(STRUCTURE_WOOL_1, Blocks.GREEN_WOOL);
-		if(type == Variant.TAIGA) {
+		if(type == Variant.TAIGA)
+		{
 			registry.setBlock(STRUCTURE_WOOL_3, Blocks.LIGHT_BLUE_WOOL);
-		} else {
+		} else
+		{
 			registry.setBlock(STRUCTURE_WOOL_3, Blocks.BROWN_WOOL);
 		}
 	}
@@ -90,54 +96,64 @@ public class ForestLandType extends TerrainLandType
 	}
 	
 	@Override
-	public void addBiomeGeneration(LandBiomeGenBuilder builder, StructureBlockRegistry blocks)
+	public void addExtensions(HolderLookup.Provider provider, StructureBlockRegistry blocks)
 	{
-		builder.addFeature(GenerationStep.Decoration.VEGETAL_DECORATION, VegetationPlacements.PATCH_GRASS_FOREST, LandBiomeType.NORMAL);
-		builder.addFeature(GenerationStep.Decoration.VEGETAL_DECORATION, MSPlacedFeatures.SPARSE_MOSS_CARPET_PATCH, LandBiomeType.NORMAL);
-		builder.addFeature(GenerationStep.Decoration.VEGETAL_DECORATION, MSPlacedFeatures.MOSS_CARPET_PATCH, LandBiomeType.ROUGH);
-		builder.addFeature(GenerationStep.Decoration.VEGETAL_DECORATION, VegetationPlacements.PATCH_BERRY_RARE, LandBiomeType.NORMAL);
+		HolderLookup.RegistryLookup<PlacedFeature> features = provider.lookupOrThrow(Registries.PLACED_FEATURE);
 		
-		builder.addFeature(GenerationStep.Decoration.LOCAL_MODIFICATIONS, MSPlacedFeatures.FOREST_ROCK, LandBiomeType.NORMAL);
+		addFeatureExtension(features, GenerationStep.Decoration.VEGETAL_DECORATION, VegetationPlacements.PATCH_GRASS_FOREST, LandBiomeType.NORMAL);
+		addFeatureExtension(features, GenerationStep.Decoration.VEGETAL_DECORATION, MSPlacedFeatures.SPARSE_MOSS_CARPET_PATCH, LandBiomeType.NORMAL);
+		addFeatureExtension(features, GenerationStep.Decoration.VEGETAL_DECORATION, MSPlacedFeatures.MOSS_CARPET_PATCH, LandBiomeType.ROUGH);
+		addFeatureExtension(features, GenerationStep.Decoration.VEGETAL_DECORATION, VegetationPlacements.PATCH_BERRY_RARE, LandBiomeType.NORMAL);
 		
-		builder.addFeature(GenerationStep.Decoration.UNDERGROUND_STRUCTURES, MSPlacedFeatures.SPARSE_LUSH_CAVES_CEILING_VEGETATION, LandBiomeType.any());
-		builder.addFeature(GenerationStep.Decoration.UNDERGROUND_STRUCTURES, CavePlacements.ROOTED_AZALEA_TREE, LandBiomeType.any());
+		addFeatureExtension(features, GenerationStep.Decoration.LOCAL_MODIFICATIONS, MSPlacedFeatures.FOREST_ROCK, LandBiomeType.NORMAL);
 		
-		builder.addFeature(GenerationStep.Decoration.UNDERGROUND_STRUCTURES, MSPlacedFeatures.CEILING_ROOTS, LandBiomeType.any());
+		addFeatureExtension(features, GenerationStep.Decoration.UNDERGROUND_STRUCTURES, MSPlacedFeatures.SPARSE_LUSH_CAVES_CEILING_VEGETATION, LandBiomeType.any());
+		addFeatureExtension(features, GenerationStep.Decoration.UNDERGROUND_STRUCTURES, CavePlacements.ROOTED_AZALEA_TREE, LandBiomeType.any());
 		
-		builder.addFeature(GenerationStep.Decoration.VEGETAL_DECORATION, MSPlacedFeatures.TREE_STUMP, LandBiomeType.NORMAL);
+		addFeatureExtension(features, GenerationStep.Decoration.UNDERGROUND_STRUCTURES, MSPlacedFeatures.CEILING_ROOTS, LandBiomeType.any());
 		
-		switch(this.type)
-		{
-			case FOREST -> builder.addFeature(GenerationStep.Decoration.VEGETAL_DECORATION, MSPlacedFeatures.FOREST_LAND_TREES, LandBiomeType.NORMAL);
-			case TAIGA -> builder.addFeature(GenerationStep.Decoration.VEGETAL_DECORATION, MSPlacedFeatures.TAIGA_LAND_TREES, LandBiomeType.NORMAL);
-		}
-		builder.addFeature(GenerationStep.Decoration.VEGETAL_DECORATION, MSPlacedFeatures.SPARSE_JUNGLE_GRASS_PATCH, LandBiomeType.ROUGH);
+		addFeatureExtension(features, GenerationStep.Decoration.VEGETAL_DECORATION, MSPlacedFeatures.TREE_STUMP, LandBiomeType.NORMAL);
 		
 		switch(this.type)
 		{
-			case FOREST -> builder.addFeature(GenerationStep.Decoration.VEGETAL_DECORATION, MSPlacedFeatures.DENSE_FOREST_LAND_TREES, LandBiomeType.ROUGH);
-			case TAIGA -> builder.addFeature(GenerationStep.Decoration.VEGETAL_DECORATION, MSPlacedFeatures.DENSE_TAIGA_LAND_TREES, LandBiomeType.ROUGH);
+			case FOREST ->
+					addFeatureExtension(features, GenerationStep.Decoration.VEGETAL_DECORATION, MSPlacedFeatures.FOREST_LAND_TREES, LandBiomeType.NORMAL);
+			case TAIGA ->
+					addFeatureExtension(features, GenerationStep.Decoration.VEGETAL_DECORATION, MSPlacedFeatures.TAIGA_LAND_TREES, LandBiomeType.NORMAL);
 		}
-		builder.addFeature(GenerationStep.Decoration.UNDERGROUND_ORES, MiscOverworldPlacements.DISK_CLAY, LandBiomeType.OCEAN);
+		addFeatureExtension(features, GenerationStep.Decoration.VEGETAL_DECORATION, MSPlacedFeatures.SPARSE_JUNGLE_GRASS_PATCH, LandBiomeType.ROUGH);
 		
-		builder.addFeature(GenerationStep.Decoration.UNDERGROUND_ORES, MSPlacedFeatures.inline(Feature.ORE,
-				new OreConfiguration(blocks.getGroundType(), Blocks.ROOTED_DIRT.defaultBlockState(), 80),
-				CountPlacement.of(24), InSquarePlacement.spread(), HeightRangePlacement.uniform(VerticalAnchor.bottom(), VerticalAnchor.absolute(256)), BiomeFilter.biome()),
+		switch(this.type)
+		{
+			case FOREST ->
+					addFeatureExtension(features, GenerationStep.Decoration.VEGETAL_DECORATION, MSPlacedFeatures.DENSE_FOREST_LAND_TREES, LandBiomeType.ROUGH);
+			case TAIGA ->
+					addFeatureExtension(features, GenerationStep.Decoration.VEGETAL_DECORATION, MSPlacedFeatures.DENSE_TAIGA_LAND_TREES, LandBiomeType.ROUGH);
+		}
+		addFeatureExtension(features, GenerationStep.Decoration.UNDERGROUND_ORES, MiscOverworldPlacements.DISK_CLAY, LandBiomeType.OCEAN);
+		
+		addFeatureExtension(GenerationStep.Decoration.UNDERGROUND_ORES, MSPlacedFeatures.inline(Feature.ORE,
+						new OreConfiguration(blocks.getGroundType(), Blocks.ROOTED_DIRT.defaultBlockState(), 64),
+						CountPlacement.of(24), InSquarePlacement.spread(), HeightRangePlacement.uniform(VerticalAnchor.bottom(), VerticalAnchor.absolute(256)), BiomeFilter.biome()),
 				LandBiomeType.any());
-		builder.addFeature(GenerationStep.Decoration.UNDERGROUND_ORES, MSPlacedFeatures.inline(Feature.ORE,
-				new OreConfiguration(blocks.getGroundType(), Blocks.DIRT.defaultBlockState(), 20),
-				CountPlacement.of(3), InSquarePlacement.spread(), HeightRangePlacement.uniform(VerticalAnchor.bottom(), VerticalAnchor.absolute(256)), BiomeFilter.biome()),
+		addFeatureExtension(GenerationStep.Decoration.UNDERGROUND_ORES, MSPlacedFeatures.inline(Feature.ORE,
+						new OreConfiguration(blocks.getGroundType(), Blocks.DIRT.defaultBlockState(), 20),
+						CountPlacement.of(3), InSquarePlacement.spread(), HeightRangePlacement.uniform(VerticalAnchor.bottom(), VerticalAnchor.absolute(256)), BiomeFilter.biome()),
 				LandBiomeType.any());
-		builder.addFeature(GenerationStep.Decoration.UNDERGROUND_ORES, MSPlacedFeatures.inline(Feature.ORE,
+		addFeatureExtension(GenerationStep.Decoration.UNDERGROUND_ORES, MSPlacedFeatures.inline(Feature.ORE,
 						new OreConfiguration(blocks.getGroundType(), Blocks.GRAVEL.defaultBlockState(), 33),
 						CountPlacement.of(10), InSquarePlacement.spread(), HeightRangePlacement.uniform(VerticalAnchor.bottom(), VerticalAnchor.absolute(256)), BiomeFilter.biome()),
 				LandBiomeType.any());
-		builder.addFeature(GenerationStep.Decoration.UNDERGROUND_ORES, MSPlacedFeatures.inline(Feature.ORE,
+		addFeatureExtension(GenerationStep.Decoration.UNDERGROUND_ORES, MSPlacedFeatures.inline(Feature.ORE,
 						new OreConfiguration(blocks.getGroundType(), Blocks.COAL_ORE.defaultBlockState(), 17),
 						CountPlacement.of(30), InSquarePlacement.spread(), HeightRangePlacement.uniform(VerticalAnchor.bottom(), VerticalAnchor.absolute(128)), BiomeFilter.biome()),
 				LandBiomeType.any());
-		builder.addFeature(GenerationStep.Decoration.UNDERGROUND_ORES, OrePlacements.ORE_EMERALD, LandBiomeType.any());
-		
+		addFeatureExtension(features, GenerationStep.Decoration.UNDERGROUND_ORES, OrePlacements.ORE_EMERALD, LandBiomeType.any());
+	}
+	
+	@Override
+	public void addBiomeGeneration(LandBiomeGenBuilder builder, StructureBlockRegistry blocks)
+	{
 		builder.addCarver(GenerationStep.Carving.AIR, Carvers.CAVE, LandBiomeType.any());
 	}
 	

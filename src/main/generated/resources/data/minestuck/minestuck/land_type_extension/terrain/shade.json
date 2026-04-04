@@ -6,19 +6,84 @@
         "rough",
         "ocean"
       ],
-      "feature":     {
-        "feature":   {
-          "type":   "minecraft:ore",
+      "feature": "minestuck:shade_stone_block_blob",
+      "step": "local_modifications"
+    },
+    {
+      "biome_types": [
+        "normal"
+      ],
+      "feature": "minestuck:sparse_glowing_mushroom_patch",
+      "step": "vegetal_decoration"
+    },
+    {
+      "biome_types": [
+        "normal"
+      ],
+      "feature": "minestuck:tree/glowing",
+      "step": "vegetal_decoration"
+    },
+    {
+      "biome_types": [
+        "rough"
+      ],
+      "feature": "minestuck:glowing_mushroom_patch",
+      "step": "vegetal_decoration"
+    },
+    {
+      "biome_types": [
+        "rough"
+      ],
+      "feature": "minestuck:tree/glowing",
+      "step": "vegetal_decoration"
+    },
+    {
+      "biome_types": [
+        "rough"
+      ],
+      "feature": "minestuck:tree/shadewood",
+      "step": "vegetal_decoration"
+    },
+    {
+      "biome_types": [
+        "rough"
+      ],
+      "feature": "minestuck:tree/scarred_shadewood",
+      "step": "vegetal_decoration"
+    },
+    {
+      "biome_types": [
+        "rough"
+      ],
+      "feature": "minestuck:tree/ornate_shadewood",
+      "step": "vegetal_decoration"
+    },
+    {
+      "biome_types": [
+        "rough"
+      ],
+      "feature": "minestuck:oil_pool",
+      "step": "vegetal_decoration"
+    },
+    {
+      "biome_types": [
+        "normal",
+        "rough",
+        "ocean"
+      ],
+      "feature": {
+        "feature": {
+          "type": "minecraft:ore",
           "config": {
-            "discard_chance_on_air_exposure": 0,
-            "size":                           25,
-            "targets":                        [
+            "discard_chance_on_air_exposure": 0.0,
+            "size": 25,
+            "targets": [
               {
-                "state":  {
+                "state": {
                   "Name": "minestuck:blue_dirt"
                 },
                 "target": {
-                  "block_state":    {
+                  "block_state": {
                     "Name": "minestuck:shade_stone"
                   },
                   "predicate_type": "minecraft:blockstate_match"
@@ -29,16 +94,16 @@
         },
         "placement": [
           {
-            "type":  "minecraft:count",
+            "type": "minecraft:count",
             "count": 10
           },
           {
             "type": "minecraft:in_square"
           },
           {
-            "type":   "minecraft:height_range",
+            "type": "minecraft:height_range",
             "height": {
-              "type":          "minecraft:uniform",
+              "type": "minecraft:uniform",
               "max_inclusive": {
                 "absolute": 256
               },
@@ -52,7 +117,7 @@
           }
         ]
       },
-      "step":        "underground_ores"
+      "step": "underground_ores"
     },
     {
       "biome_types": [
@@ -60,19 +125,19 @@
         "rough",
         "ocean"
       ],
-      "feature":     {
-        "feature":   {
-          "type":   "minecraft:ore",
+      "feature": {
+        "feature": {
+          "type": "minecraft:ore",
           "config": {
-            "discard_chance_on_air_exposure": 0,
-            "size":                           9,
-            "targets":                        [
+            "discard_chance_on_air_exposure": 0.0,
+            "size": 9,
+            "targets": [
               {
-                "state":  {
+                "state": {
                   "Name": "minestuck:shade_stone_coal_ore"
                 },
                 "target": {
-                  "block_state":    {
+                  "block_state": {
                     "Name": "minestuck:shade_stone"
                   },
                   "predicate_type": "minecraft:blockstate_match"
@@ -83,16 +148,16 @@
         },
         "placement": [
           {
-            "type":  "minecraft:count",
+            "type": "minecraft:count",
             "count": 48
           },
           {
             "type": "minecraft:in_square"
           },
           {
-            "type":   "minecraft:height_range",
+            "type": "minecraft:height_range",
             "height": {
-              "type":          "minecraft:uniform",
+              "type": "minecraft:uniform",
               "max_inclusive": {
                 "absolute": 64
               },
@@ -106,7 +171,7 @@
           }
         ]
       },
-      "step":        "underground_ores"
+      "step": "underground_ores"
     },
     {
       "biome_types": [
@@ -114,19 +179,19 @@
         "rough",
         "ocean"
       ],
-      "feature":     {
-        "feature":   {
-          "type":   "minecraft:ore",
+      "feature": {
+        "feature": {
+          "type": "minecraft:ore",
           "config": {
-            "discard_chance_on_air_exposure": 0,
-            "size":                           7,
-            "targets":                        [
+            "discard_chance_on_air_exposure": 0.0,
+            "size": 7,
+            "targets": [
               {
-                "state":  {
+                "state": {
                   "Name": "minestuck:shade_stone_gold_ore"
                 },
                 "target": {
-                  "block_state":    {
+                  "block_state": {
                     "Name": "minestuck:shade_stone"
                   },
                   "predicate_type": "minecraft:blockstate_match"
@@ -137,16 +202,16 @@
         },
         "placement": [
           {
-            "type":  "minecraft:count",
+            "type": "minecraft:count",
             "count": 18
           },
           {
             "type": "minecraft:in_square"
           },
           {
-            "type":   "minecraft:height_range",
+            "type": "minecraft:height_range",
             "height": {
-              "type":          "minecraft:uniform",
+              "type": "minecraft:uniform",
               "max_inclusive": {
                 "absolute": 32
               },
@@ -160,7 +225,7 @@
           }
         ]
       },
-      "step":        "underground_ores"
+      "step": "underground_ores"
     },
     {
       "biome_types": [
@@ -168,19 +233,19 @@
         "rough",
         "ocean"
       ],
-      "feature":     {
-        "feature":   {
-          "type":   "minecraft:ore",
+      "feature": {
+        "feature": {
+          "type": "minecraft:ore",
           "config": {
-            "discard_chance_on_air_exposure": 0,
-            "size":                           4,
-            "targets":                        [
+            "discard_chance_on_air_exposure": 0.0,
+            "size": 4,
+            "targets": [
               {
-                "state":  {
+                "state": {
                   "Name": "minestuck:shade_stone_cruxite_ore"
                 },
                 "target": {
-                  "block_state":    {
+                  "block_state": {
                     "Name": "minestuck:shade_stone"
                   },
                   "predicate_type": "minecraft:blockstate_match"
@@ -191,16 +256,16 @@
         },
         "placement": [
           {
-            "type":  "minecraft:count",
+            "type": "minecraft:count",
             "count": 24
           },
           {
             "type": "minecraft:in_square"
           },
           {
-            "type":   "minecraft:height_range",
+            "type": "minecraft:height_range",
             "height": {
-              "type":          "minecraft:uniform",
+              "type": "minecraft:uniform",
               "max_inclusive": {
                 "absolute": 64
               },
@@ -214,7 +279,7 @@
           }
         ]
       },
-      "step":        "underground_ores"
+      "step": "underground_ores"
     },
     {
       "biome_types": [
@@ -222,19 +287,19 @@
         "rough",
         "ocean"
       ],
-      "feature":     {
-        "feature":   {
-          "type":   "minecraft:ore",
+      "feature": {
+        "feature": {
+          "type": "minecraft:ore",
           "config": {
-            "discard_chance_on_air_exposure": 0,
-            "size":                           2,
-            "targets":                        [
+            "discard_chance_on_air_exposure": 0.0,
+            "size": 2,
+            "targets": [
               {
-                "state":  {
+                "state": {
                   "Name": "minestuck:shade_stone_uranium_ore"
                 },
                 "target": {
-                  "block_state":    {
+                  "block_state": {
                     "Name": "minestuck:shade_stone"
                   },
                   "predicate_type": "minecraft:blockstate_match"
@@ -245,16 +310,16 @@
         },
         "placement": [
           {
-            "type":  "minecraft:count",
+            "type": "minecraft:count",
             "count": 12
           },
           {
             "type": "minecraft:in_square"
           },
           {
-            "type":   "minecraft:height_range",
+            "type": "minecraft:height_range",
             "height": {
-              "type":          "minecraft:uniform",
+              "type": "minecraft:uniform",
               "max_inclusive": {
                 "absolute": 32
               },
@@ -268,7 +333,7 @@
           }
         ]
       },
-      "step":        "underground_ores"
+      "step": "underground_ores"
     }
   ]
 }
