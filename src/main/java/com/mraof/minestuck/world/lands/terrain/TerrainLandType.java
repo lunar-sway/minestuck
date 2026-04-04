@@ -34,11 +34,7 @@ import net.minecraft.world.phys.Vec3;
 import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.Logger;
 
-import java.util.ArrayList;
-import java.util.Arrays;
-import java.util.List;
-import java.util.Objects;
-import java.util.Optional;
+import java.util.*;
 import java.util.function.Consumer;
 import java.util.function.Supplier;
 
@@ -135,24 +131,13 @@ public abstract class TerrainLandType implements ILandType
 	{
 	}
 	
-	public void addExtensions(Registry<PlacedFeature> features, StructureBlockRegistry blocks)
+	public void addExtensions(HolderLookup.RegistryLookup<PlacedFeature> features, StructureBlockRegistry blocks)
 	{
 	}
 	
-	public void addFeatureExtension(Registry<PlacedFeature> features, GenerationStep.Decoration step, ResourceKey<PlacedFeature> feature, LandBiomeType... biomeTypes)
+	public void addFeatureExtension(HolderLookup.RegistryLookup<PlacedFeature> features, GenerationStep.Decoration step, ResourceKey<PlacedFeature> feature, LandBiomeType... biomeTypes)
 	{
-		//Holder<PlacedFeature> featureHolder = featureLookup.get(feature).orElseThrow().getDelegate();
-		//featureExtensions.add(new LandTypeExtensions.FeatureExtension(step, featureHolder, Arrays.stream(biomeTypes).toList()));
-		
-		//featureExtensions.add(new LandTypeExtensions.FeatureExtension(step, Holder.direct(featureLookup.get(feature).orElseThrow().getDelegate().value()), Arrays.stream(biomeTypes).toList()));
-		
-		//Holder<PlacedFeature> featureHolder = featureLookup.get(feature).orElseThrow().getDelegate();
-		//featureExtensions.add(new LandTypeExtensions.FeatureExtension(step, featureHolder, Arrays.stream(biomeTypes).toList()));
-		
-		//featureExtensions.add(new LandTypeExtensions.FeatureExtension(step, features.getOrThrow(feature), Arrays.stream(biomeTypes).toList()));
-		
-		featureExtensions.add(new LandTypeExtensions.FeatureExtension(step, features.wrapAsHolder(features.getOrThrow(feature)), Arrays.stream(biomeTypes).toList()));
-		//regard'ess of approach, error line 73 in provider, java.lang.IllegalStateException: Can't access registry ResourceKey[minecraft:root / minecraft:block];
+		featureExtensions.add(new LandTypeExtensions.FeatureExtension(step, features.getOrThrow(feature), Arrays.stream(biomeTypes).toList()));
 	}
 	
 	public void addFeatureExtension(GenerationStep.Decoration step, PlacedFeature feature, LandBiomeType... biomeTypes)
@@ -160,7 +145,7 @@ public abstract class TerrainLandType implements ILandType
 		featureExtensions.add(new LandTypeExtensions.FeatureExtension(step, Holder.direct(feature), Arrays.stream(biomeTypes).toList()));
 	}
 	
-	public LandTypeExtensions.ParsedExtension getExtensions(Registry<PlacedFeature> features, StructureBlockRegistry blocks)
+	public LandTypeExtensions.ParsedExtension getExtensions(HolderLookup.RegistryLookup<PlacedFeature> features, StructureBlockRegistry blocks)
 	{
 		addExtensions(features, blocks);
 		return new LandTypeExtensions.ParsedExtension(featureExtensions, List.of(), List.of(), List.of());

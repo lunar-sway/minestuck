@@ -32,6 +32,9 @@ import net.minecraft.world.level.levelgen.placement.PlacedFeature;
 import net.minecraft.world.level.levelgen.structure.StructureSet;
 import net.neoforged.bus.api.SubscribeEvent;
 import net.neoforged.fml.common.EventBusSubscriber;
+import net.neoforged.neoforge.common.conditions.ConditionalOps;
+import net.neoforged.neoforge.common.conditions.ICondition;
+import net.neoforged.neoforge.common.conditions.WithConditions;
 import net.neoforged.neoforge.event.AddReloadListenerEvent;
 import net.neoforged.neoforge.event.server.ServerStoppedEvent;
 import org.apache.logging.log4j.LogManager;
@@ -154,10 +157,13 @@ public final class LandTypeExtensions
 			try(Reader reader = resource.openAsReader())
 			{
 				JsonElement json = JsonParser.parseReader(reader);
-				return ParsedExtension.CODEC.parse(this.ops, json)
-						.resultOrPartial(message -> LOGGER.error("Problem parsing land type extension for {} from {}, reason: {}", location, resource.sourcePackId(), message));
+				return ICondition.getWithWithConditionsCodec(ParsedExtension.CONDITIONAL_CODEC, this.makeConditionalOps(), json);
 			} catch(IOException ignored)
 			{
+				return Optional.empty();
+			} catch(Exception exception)
+			{
+				LOGGER.error("Problem parsing land type extension for {} from {}, reason: {}", location, resource.sourcePackId(), exception.getMessage());
 				return Optional.empty();
 			}
 		}
@@ -260,6 +266,8 @@ public final class LandTypeExtensions
 						MobSpawnExtension.CODEC.listOf().optionalFieldOf("mob_spawns", Collections.emptyList()).forGetter(ParsedExtension::mobSpawns),
 						StructureSetExtension.CODEC.listOf().optionalFieldOf("structure_sets", Collections.emptyList()).forGetter(ParsedExtension::structureSets)
 				).apply(instance, ParsedExtension::new));
+		
+		public static final Codec<Optional<WithConditions<ParsedExtension>>> CONDITIONAL_CODEC = ConditionalOps.createConditionalCodecWithConditions(CODEC);
 		
 		void addAllTo(ImmutableList.Builder<Extension> builder)
 		{
