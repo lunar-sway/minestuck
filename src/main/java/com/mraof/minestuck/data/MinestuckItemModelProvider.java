@@ -435,6 +435,7 @@ public class MinestuckItemModelProvider extends ItemModelProvider
 		simpleItem(MSItems.CLIENT_DISK);
 		simpleItem(MSItems.SERVER_DISK);
 		
+		simpleItem(MSItems.ARRAY_MODUS_CARD);
 		simpleItem(MSItems.STACK_MODUS_CARD);
 		simpleItem(MSItems.QUEUE_MODUS_CARD);
 		simpleItem(MSItems.QUEUESTACK_MODUS_CARD);
@@ -510,7 +511,7 @@ public class MinestuckItemModelProvider extends ItemModelProvider
 		simpleItem(MSItems.CARVING_TOOL);
 		simpleItem(MSItems.CRUMPLY_HAT);
 		simpleItem(MSItems.STONE_EYEBALLS);
-		simpleItem(MSItems.SHOP_POSTER, "shop_poster1");
+		simpleItem(MSItems.SHOP_POSTER);
 		simpleItem(MSItems.GUTTER_THUMB_DRIVE);
 		simpleItem(MSItems.ANCIENT_THUMB_DRIVE);
 		simpleItem(MSItems.GUTTER_BALL);

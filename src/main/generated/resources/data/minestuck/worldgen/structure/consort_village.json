@@ -1,6 +1,11 @@
 {
   "type": "minestuck:consort_village",
   "biomes": "#minestuck:has_structure/consort_village",
-  "spawn_overrides": {},
+  "spawn_overrides": {
+    "minestuck:underling": {
+      "bounding_box": "full",
+      "spawns": [ ]
+    }
+  },
   "step": "surface_structures"
 }

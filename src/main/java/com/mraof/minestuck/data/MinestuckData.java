@@ -59,6 +59,7 @@ public final class MinestuckData
 		gen.addProvider(event.includeServer(), MinestuckLootTableProvider.create(output, event.getLookupProvider()));
 		gen.addProvider(event.includeServer(), new MSLootModifiers(output, event.getLookupProvider()));
 		gen.addProvider(event.includeServer(), MSAdvancementProvider.create(output, lookupProvider, fileHelper));
+		gen.addProvider(event.includeServer(), new DeployListProvider(output, Minestuck.MOD_ID));
 		
 		gen.addProvider(event.includeServer(), new StartingModusProvider(output, Minestuck.MOD_ID));
 		gen.addProvider(event.includeServer(), new EcheladderExpSourceProvider(output));
@@ -70,11 +71,11 @@ public final class MinestuckData
 		
 		gen.addProvider(event.includeServer(), new MSLandTypeExtensionProvider(output, lookupProvider));
 		
-		gen.addProvider(event.includeServer(), ConsortDialogue.create(output, enUsLanguageProvider));
-		gen.addProvider(event.includeServer(), ShadyConsortDialogue.create(output, enUsLanguageProvider));
-		gen.addProvider(event.includeServer(), ConsortFoodMerchantDialogue.create(output, enUsLanguageProvider));
-		gen.addProvider(event.includeServer(), ConsortGeneralMerchantDialogue.create(output, enUsLanguageProvider));
-		gen.addProvider(event.includeServer(), CarapacianSoldierDialogue.create(output, enUsLanguageProvider));
+		gen.addProvider(event.includeServer(), ConsortDialogue.create(output, enUsLanguageProvider, lookupProvider));
+		gen.addProvider(event.includeServer(), ShadyConsortDialogue.create(output, enUsLanguageProvider, lookupProvider));
+		gen.addProvider(event.includeServer(), ConsortFoodMerchantDialogue.create(output, enUsLanguageProvider, lookupProvider));
+		gen.addProvider(event.includeServer(), ConsortGeneralMerchantDialogue.create(output, enUsLanguageProvider, lookupProvider));
+		gen.addProvider(event.includeServer(), CarapacianSoldierDialogue.create(output, enUsLanguageProvider, lookupProvider));
 		
 		gen.addProvider(event.includeServer(), new BetterCombatProvider(output));
 	}

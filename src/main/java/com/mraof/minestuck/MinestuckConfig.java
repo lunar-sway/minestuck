@@ -89,6 +89,7 @@ public class MinestuckConfig
 		public final EnumValue<DropMode> sylladexDropMode;
 		public final EnumValue<AvailableOptions> treeModusSetting;
 		public final EnumValue<AvailableOptions> hashmapChatModusSetting;
+		public final EnumValue<AvailableOptions> arrayChatModusSetting;
 		
 		//Mechanics
 		public final BooleanValue hardMode;
@@ -132,7 +133,11 @@ public class MinestuckConfig
 					.defineInRange("dialogueRenewalSpeed", 2, 0, 1000);
 			lotusRestorationTime = builder.comment("Determines how many seconds it takes for the lotus blossom to regrow after the opening process has started.")
 					.defineInRange("lotusRestorationTime", 300, 30, Integer.MAX_VALUE);
-			hardMode = builder.define("hardMode", false);
+			hardMode = builder.comment("Makes Minestuck overall harder:",
+					"- Only the first Cruxtruder, Totem Lathe, and Alchemiter will be free",
+					"- Fireballs will rain around players entering the medium",
+					"- Medium dungeons spawners contain Liches instead of Imps",
+					"- Underlings have a 50% chance to have the artifact grist").define("hardMode", false);
 			builder.pop();
 			
 			builder.push("sylladex");
@@ -148,6 +153,8 @@ public class MinestuckConfig
 					.defineEnum("treeModusSetting", AvailableOptions.BOTH);
 			hashmapChatModusSetting = builder.comment("This determines if hashmap chat ejection should be forced. 'both' if the player should choose, 'on' if forced at on, and 'off' if forced at off.")
 					.defineEnum("hashmapModusSetting", AvailableOptions.BOTH);
+			arrayChatModusSetting = builder.comment("This determines if array chat ejection should be forced. 'both' if the player should choose, 'on' if forced at on, and 'off' if forced at off.")
+					.defineEnum("arrayModusSetting", AvailableOptions.BOTH);
 			builder.pop();
 			
 			builder.push("computer");
@@ -184,7 +191,7 @@ public class MinestuckConfig
 			puzzleBlockTickRate = builder.comment("How often puzzle/redstone related blocks such as the remote observer tick.")
 					.defineInRange("puzzleBlockTickRate",6,2,10);
 			cruxtruderIntake = builder.comment("If enabled, the regular cruxtruder will require raw cruxite to function, which is inserted through the pipe.")
-					.define("cruxtruderIntake",true);
+					.define("cruxtruderIntake", false);
 			forbiddenWorldsTpz = builder.comment("A list of worlds that you cannot travel to or from using transportalizers.")
 					.define("forbiddenWorldsTpz", new ArrayList<>());
 			forbiddenDimensionTypesTpz = builder.comment("A list of dimension types that you cannot travel to or from using transportalizers.")

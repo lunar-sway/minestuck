@@ -1,14 +1,13 @@
 package com.mraof.minestuck.data.dialogue;
 
-import com.google.gson.JsonElement;
 import com.mojang.datafixers.util.Pair;
-import com.mojang.serialization.JsonOps;
 import com.mraof.minestuck.entity.dialogue.Dialogue;
 import com.mraof.minestuck.entity.dialogue.DialogueAnimationData;
 import com.mraof.minestuck.entity.dialogue.DialogueMessage;
 import com.mraof.minestuck.entity.dialogue.Trigger;
 import com.mraof.minestuck.entity.dialogue.condition.Condition;
 import net.minecraft.MethodsReturnNonnullByDefault;
+import net.minecraft.core.HolderLookup;
 import net.minecraft.data.CachedOutput;
 import net.minecraft.data.DataProvider;
 import net.minecraft.data.PackOutput;
@@ -24,6 +23,7 @@ import java.util.function.Function;
 
 /**
  * A provider specifically for building dialogue nodes and generating json files for said dialogue nodes.
+ *
  * @see SelectableDialogueProvider
  * @see DialogueLangHelper
  */
@@ -35,12 +35,14 @@ public final class DialogueProvider implements DataProvider
 	
 	private final String modId;
 	private final String subFolder;
+	private final CompletableFuture<HolderLookup.Provider> lookupProvider;
 	private final PackOutput output;
 	
-	public DialogueProvider(String modId, String subFolder, PackOutput output)
+	public DialogueProvider(String modId, String subFolder, CompletableFuture<HolderLookup.Provider> lookup, PackOutput output)
 	{
 		this.modId = modId;
 		this.subFolder = subFolder;
+		this.lookupProvider = lookup;
 		this.output = output;
 	}
 	
@@ -331,25 +333,27 @@ public final class DialogueProvider implements DataProvider
 	@Override
 	public CompletableFuture<?> run(CachedOutput cache)
 	{
-		Set<ResourceLocation> missingDialogue = new HashSet<>();
-		dialogues.values().forEach(dialogue -> dialogue.visitConnectedDialogue(dialogueId -> {
-			if(!hasAddedDialogue(dialogueId))
-				missingDialogue.add(dialogueId);
-		}));
-		if(!missingDialogue.isEmpty())
-			throw new IllegalStateException("Some referenced dialogue is missing: " + missingDialogue);
-		
-		Path outputPath = output.getOutputFolder();
-		List<CompletableFuture<?>> futures = new ArrayList<>(dialogues.size());
-		
-		for(Map.Entry<ResourceLocation, Dialogue.NodeSelector> entry : dialogues.entrySet())
-		{
-			Path dialoguePath = getPath(outputPath, entry.getKey());
-			JsonElement dialogueJson = Dialogue.NodeSelector.CODEC.encodeStart(JsonOps.INSTANCE, entry.getValue()).getOrThrow();
-			futures.add(DataProvider.saveStable(cache, dialogueJson, dialoguePath));
-		}
-		
-		return CompletableFuture.allOf(futures.toArray(new CompletableFuture[0]));
+		return lookupProvider.thenCompose(provider -> {
+			Set<ResourceLocation> missingDialogue = new HashSet<>();
+			
+			dialogues.values().forEach(dialogue -> dialogue.visitConnectedDialogue(dialogueId -> {
+				if(!hasAddedDialogue(dialogueId))
+					missingDialogue.add(dialogueId);
+			}));
+			if(!missingDialogue.isEmpty())
+				throw new IllegalStateException("Some referenced dialogue is missing: " + missingDialogue);
+			
+			Path outputPath = output.getOutputFolder();
+			List<CompletableFuture<?>> futures = new ArrayList<>(dialogues.size());
+			
+			for(Map.Entry<ResourceLocation, Dialogue.NodeSelector> entry : dialogues.entrySet())
+			{
+				Path dialoguePath = getPath(outputPath, entry.getKey());
+				futures.add(DataProvider.saveStable(cache, provider, Dialogue.NodeSelector.CODEC, entry.getValue(), dialoguePath));
+			}
+			
+			return CompletableFuture.allOf(futures.toArray(new CompletableFuture[0]));
+		});
 	}
 	
 	private static Path getPath(Path outputPath, ResourceLocation id)

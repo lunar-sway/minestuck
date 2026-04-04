@@ -1,7 +1,9 @@
 {
   "condition": {
-    "type": "minestuck:is_from_kingdom",
-    "kingdom": "prospitian"
+    "type": "minestuck:npc_entity_predicate",
+    "predicate": {
+      "type": "#minestuck:carapacians/prospitian"
+    }
   },
   "dialogue": "minestuck:carapacian_soldier/poor_frogs",
   "dialogue_weight": 10,

@@ -16,6 +16,7 @@ import net.minecraft.core.Registry;
 import net.minecraft.data.worldgen.placement.EndPlacements;
 import net.minecraft.util.RandomSource;
 import net.minecraft.world.level.block.Blocks;
+import net.minecraft.world.level.block.LeavesBlock;
 import net.minecraft.world.level.block.RotatedPillarBlock;
 import net.minecraft.world.level.levelgen.GenerationStep;
 import net.minecraft.world.level.levelgen.VerticalAnchor;
@@ -53,6 +54,7 @@ public class EndLandType extends TerrainLandType
 		
 		registry.setBlock(STRUCTURE_PRIMARY, Blocks.END_STONE_BRICKS);
 		registry.setBlockState(STRUCTURE_PRIMARY_DECORATIVE, Blocks.PURPUR_PILLAR.defaultBlockState().setValue(RotatedPillarBlock.AXIS, Direction.Axis.Y));
+		registry.setBlockState(STRUCTURE_PRIMARY_COLUMN, Blocks.PURPUR_PILLAR.defaultBlockState().setValue(RotatedPillarBlock.AXIS, Direction.Axis.Y));
 		registry.setBlock(STRUCTURE_PRIMARY_STAIRS, Blocks.END_STONE_BRICK_STAIRS);
 		registry.setBlock(STRUCTURE_PRIMARY_SLAB, Blocks.END_STONE_BRICK_SLAB);
 		registry.setBlock(STRUCTURE_PRIMARY_WALL, Blocks.END_STONE_BRICK_WALL);
@@ -78,8 +80,7 @@ public class EndLandType extends TerrainLandType
 		registry.setBlock(STRUCTURE_WOOL_1, Blocks.GREEN_WOOL);
 		registry.setBlock(STRUCTURE_WOOL_3, Blocks.PURPLE_WOOL);
 		
-		registry.setBlock(STRUCTURE_GROUND_COVER, MSBlocks.TALL_END_GRASS);
-		registry.setBlock(STRUCTURE_ROOF_COVER, MSBlocks.END_LEAVES);
+		registry.setBlockState(STRUCTURE_ROOF_COVER, MSBlocks.END_LEAVES.get().defaultBlockState().setValue(LeavesBlock.PERSISTENT, true));
 	}
 	
 	@Override

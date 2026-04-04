@@ -2,19 +2,29 @@ package com.mraof.minestuck.entity.dialogue.condition;
 
 import com.mojang.serialization.MapCodec;
 import com.mraof.minestuck.Minestuck;
-import com.mraof.minestuck.entity.carapacian.EnumEntityKingdom;
 import com.mraof.minestuck.entity.consort.ConsortEntity;
 import com.mraof.minestuck.entity.consort.EnumConsort;
+import com.mraof.minestuck.util.MSTags;
+import com.mraof.minestuck.world.MSDimensions;
 import com.mraof.minestuck.world.lands.terrain.TerrainLandType;
 import com.mraof.minestuck.world.lands.title.TitleLandType;
+import net.minecraft.advancements.critereon.*;
+import net.minecraft.core.Holder;
+import net.minecraft.core.HolderSet;
 import net.minecraft.core.Registry;
+import net.minecraft.nbt.CompoundTag;
 import net.minecraft.tags.TagKey;
 import net.minecraft.world.entity.EntityType;
+import net.minecraft.world.inventory.SlotRanges;
 import net.minecraft.world.item.Item;
+import net.minecraft.world.level.ItemLike;
+import net.minecraft.world.level.block.Block;
+import net.minecraft.world.level.levelgen.structure.Structure;
 import net.neoforged.neoforge.registries.DeferredRegister;
 
 import java.util.Arrays;
 import java.util.List;
+import java.util.Map;
 import java.util.function.Supplier;
 
 import static com.mraof.minestuck.entity.dialogue.condition.Condition.*;
@@ -24,14 +34,12 @@ public final class Conditions
 	public static final DeferredRegister<MapCodec<? extends Condition>> REGISTER = DeferredRegister.create(Minestuck.id("dialogue_condition"), Minestuck.MOD_ID);
 	public static final Registry<MapCodec<? extends Condition>> REGISTRY = REGISTER.makeRegistry(builder -> {});
 	
-	static {
+	static
+	{
 		REGISTER.register("always_true", () -> AlwaysTrue.CODEC);
 		REGISTER.register("first_time_generating", () -> FirstTimeGenerating.CODEC);
 		REGISTER.register("list", () -> ListCondition.CODEC);
-		REGISTER.register("carapacian", () -> IsCarapacian.CODEC);
-		REGISTER.register("is_from_kingdom", () -> IsFromKingdom.CODEC);
-		REGISTER.register("entity_type", () -> IsEntityType.CODEC);
-		REGISTER.register("is_is_land", () -> IsInLand.CODEC);
+		REGISTER.register("is_in_land", () -> IsInLand.CODEC);
 		REGISTER.register("is_consort_from_land", () -> IsConsortFromLand.CODEC);
 		REGISTER.register("is_consort_in_home_land", () -> IsConsortInHomeLand.CODEC);
 		REGISTER.register("terrain_land_type", () -> InTerrainLandType.CODEC);
@@ -39,9 +47,13 @@ public final class Conditions
 		REGISTER.register("consort_terrain_land_type", () -> InConsortTerrainLandType.CODEC);
 		REGISTER.register("title_land_type", () -> InTitleLandType.CODEC);
 		REGISTER.register("title_land_type_tag", () -> InTitleLandTypeTag.CODEC);
-		REGISTER.register("at_or_above_y", () -> AtOrAboveY.CODEC);
-		REGISTER.register("npc_holding_item", () -> NPCIsHoldingItem.CODEC);
-		REGISTER.register("player_item", () -> PlayerHasItem.CODEC);
+		REGISTER.register("npc_near_block_predicate", () -> NPCNearBlockPredicate.CODEC);
+		REGISTER.register("npc_near_entity_predicate", () -> NPCNearEntityPredicate.CODEC);
+		REGISTER.register("npc_location_predicate", () -> NPCLocationPredicate.CODEC);
+		REGISTER.register("npc_entity_predicate", () -> NPCEntityPredicate.CODEC);
+		REGISTER.register("player_location_predicate", () -> PlayerLocationPredicate.CODEC);
+		REGISTER.register("player_entity_predicate", () -> PlayerEntityPredicate.CODEC);
+		REGISTER.register("player_predicate_condition", () -> PlayerPredicateCondition.CODEC);
 		REGISTER.register("item_tag_match", () -> ItemTagMatch.CODEC);
 		REGISTER.register("item_tag_match_exclude", () -> ItemTagMatchExclude.CODEC);
 		REGISTER.register("has_matched_item", () -> HasMatchedItem.CODEC);
@@ -50,15 +62,11 @@ public final class Conditions
 		REGISTER.register("player_reputation", () -> PlayerHasReputation.CODEC);
 		REGISTER.register("player_boondollars", () -> PlayerHasBoondollars.CODEC);
 		REGISTER.register("player_entered", () -> PlayerHasEntered.CODEC);
-		REGISTER.register("player_advancement", () -> PlayerHasAdvancement.CODEC);
 		REGISTER.register("custom_score", () -> CustomHasScore.CODEC);
-		REGISTER.register("custom_tag", () -> CustomHasTag.CODEC);
 		REGISTER.register("dialogue_exists", () -> DialogueExists.CODEC);
 		REGISTER.register("move_restriction", () -> HasMoveRestriction.CODEC);
 		REGISTER.register("flag", () -> Flag.CODEC);
 		REGISTER.register("near_spawn", () -> NearSpawn.CODEC);
-		REGISTER.register("is_in_skaia", () -> IsInSkaia.CODEC);
-		REGISTER.register("consort_visited_skaia", () -> ConsortVisitedSkaia.CODEC);
 	}
 	
 	public static Condition alwaysTrue()
@@ -126,33 +134,81 @@ public final class Conditions
 		return new InTitleLandTypeTag(tag);
 	}
 	
+	public static Condition isNearBlock(Block block, int radius, int count)
+	{
+		return new NPCNearBlockPredicate(BlockPredicate.Builder.block().of(block).build(), radius, count);
+	}
+	
+	public static Condition isNearBlockTag(TagKey<Block> blockTag, int radius, int count)
+	{
+		return new NPCNearBlockPredicate(BlockPredicate.Builder.block().of(blockTag).build(), radius, count);
+	}
+	
+	public static Condition isNearEntity(EntityType<?> entityType, int radius, int count)
+	{
+		return new NPCNearEntityPredicate(EntityPredicate.Builder.entity().of(entityType).build(), radius, count);
+	}
+	
+	public static Condition isNearEntityTag(TagKey<EntityType<?>> entityTypeTag, int radius, int count)
+	{
+		return new NPCNearEntityPredicate(EntityPredicate.Builder.entity().of(entityTypeTag).build(), radius, count);
+	}
+	
 	public static Condition isInSkaia()
 	{
-		return IsInSkaia.INSTANCE;
+		return new NPCLocationPredicate(LocationPredicate.Builder.location().setDimension(MSDimensions.SKAIA).build());
+	}
+	
+	@SafeVarargs
+	public static Condition isInStructure(Holder<Structure>... structureHolder)
+	{
+		return new NPCLocationPredicate(LocationPredicate.Builder.location().setStructures(HolderSet.direct(structureHolder)).build());
+	}
+	
+	public static Condition isAtOrAboveY(int minY)
+	{
+		return new NPCLocationPredicate(LocationPredicate.Builder.location().setY(MinMaxBounds.Doubles.atLeast(minY)).build());
 	}
 	
 	public static Condition isProspitian()
 	{
-		return new IsFromKingdom(EnumEntityKingdom.PROSPITIAN);
+		return new NPCEntityPredicate(EntityPredicate.Builder.entity().of(MSTags.EntityTypes.PROSPITIAN_CARAPACIANS).build());
 	}
 	
 	public static Condition isDersite()
 	{
-		return new IsFromKingdom(EnumEntityKingdom.DERSITE);
+		return new NPCEntityPredicate(EntityPredicate.Builder.entity().of(MSTags.EntityTypes.DERSITE_CARAPACIANS).build());
 	}
 	
 	public static PlayerOnlyCondition hasEntered()
 	{
 		return PlayerHasEntered.INSTANCE;
 	}
+	
 	public static PlayerOnlyCondition hasAdvancement(String name)
 	{
-		return new PlayerHasAdvancement(Minestuck.id(name.replace(".", "/")));
+		return new PlayerPredicateCondition(PlayerPredicate.Builder.player().checkAdvancementDone(Minestuck.id(name.replace(".", "/")), true).build());
 	}
 	
-	public static Condition isHolding(Item item)
+	/**
+	 * Player needs to have an itemstack with the item, and an amount at least matching the count
+	 */
+	public static PlayerOnlyCondition playerHasItem(Item item, int count)
 	{
-		return new NPCIsHoldingItem(item);
+		return new PlayerEntityPredicate(EntityPredicate.Builder.entity().slots(new SlotsPredicate(Map.of(SlotRanges.nameToIds("container.*"), ItemPredicate.Builder.item().of(item).withCount(MinMaxBounds.Ints.atLeast(count)).build()))).build());
+	}
+	
+	public static Condition isHolding(ItemLike... items)
+	{
+		return new NPCEntityPredicate(EntityPredicate.Builder.entity().slots(new SlotsPredicate(Map.of(SlotRanges.nameToIds("weapon.*"), ItemPredicate.Builder.item().of(items).build()))).build());
+	}
+	
+	public static Condition hasVisitedSkaia()
+	{
+		CompoundTag nbt = new CompoundTag();
+		nbt.putBoolean("Skaia", true);
+		
+		return new NPCEntityPredicate(new EntityPredicate.Builder().nbt(new NbtPredicate(nbt)).build());
 	}
 	
 	@SafeVarargs
@@ -164,8 +220,8 @@ public final class Conditions
 	public static Condition isAnyEntityType(EntityType<?>... entityTypes)
 	{
 		if(entityTypes.length == 1)
-			return new IsEntityType(entityTypes[0]);
+			return new NPCEntityPredicate(EntityPredicate.Builder.entity().of(entityTypes[0]).build());
 		else
-			return new ListCondition(Arrays.stream(entityTypes).<Condition>map(IsEntityType::new).toList(), ListCondition.ListType.ANY);
+			return new ListCondition(Arrays.stream(entityTypes).<Condition>map(entityType -> new NPCEntityPredicate(EntityPredicate.Builder.entity().of(entityType).build())).toList(), ListCondition.ListType.ANY);
 	}
 }

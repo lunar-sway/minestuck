@@ -140,7 +140,7 @@ public class TreeModus extends Modus
 			node = null;
 			markDirty();
 			for(ItemStack stack : list)
-				CaptchaDeckHandler.launchAnyItem(player, stack);
+				CaptchaDeckHandler.ejectAnyItem(player, stack);
 			return ItemStack.EMPTY;
 		}
 		
