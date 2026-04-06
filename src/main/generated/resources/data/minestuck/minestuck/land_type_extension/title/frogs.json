@@ -1,0 +1,27 @@
+{
+  "features": [
+    {
+      "biome_types": [
+        "ocean"
+      ],
+      "feature": "minestuck:waterlily_patch",
+      "step": "vegetal_decoration"
+    },
+    {
+      "biome_types": [
+        "normal",
+        "rough"
+      ],
+      "feature": "minestuck:frog_ruins",
+      "step": "surface_structures"
+    },
+    {
+      "biome_types": [
+        "normal",
+        "rough"
+      ],
+      "feature": "minestuck:tree/space",
+      "step": "vegetal_decoration"
+    }
+  ]
+}

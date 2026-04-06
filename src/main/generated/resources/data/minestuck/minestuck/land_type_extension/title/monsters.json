@@ -1,0 +1,21 @@
+{
+  "features": [
+    {
+      "biome_types": [
+        "normal",
+        "rough",
+        "ocean"
+      ],
+      "feature": "minecraft:monster_room",
+      "step": "underground_structures"
+    },
+    {
+      "biome_types": [
+        "normal",
+        "rough"
+      ],
+      "feature": "minestuck:tree/rage",
+      "step": "vegetal_decoration"
+    }
+  ]
+}

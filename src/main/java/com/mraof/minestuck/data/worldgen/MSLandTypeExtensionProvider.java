@@ -5,6 +5,7 @@ import com.mraof.minestuck.world.gen.structure.blocks.StructureBlockRegistry;
 import com.mraof.minestuck.world.lands.LandTypeExtensions;
 import com.mraof.minestuck.world.lands.LandTypes;
 import com.mraof.minestuck.world.lands.terrain.TerrainLandType;
+import com.mraof.minestuck.world.lands.title.TitleLandType;
 import net.minecraft.MethodsReturnNonnullByDefault;
 import net.minecraft.core.HolderLookup;
 import net.minecraft.data.CachedOutput;
@@ -60,6 +61,15 @@ public class MSLandTypeExtensionProvider implements DataProvider
 					StructureBlockRegistry blockRegistry = new StructureBlockRegistry();
 					landType.registerBlocks(blockRegistry);
 					extensionsMap.put(entry.getKey().location().withPrefix("terrain/"), landType.getExtensions(provider, blockRegistry));
+				}
+		);
+		
+		LandTypes.TITLE_REGISTRY.entrySet().forEach(entry ->
+				{
+					TitleLandType landType = entry.getValue();
+					StructureBlockRegistry blockRegistry = new StructureBlockRegistry();
+					landType.registerBlocks(blockRegistry);
+					extensionsMap.put(entry.getKey().location().withPrefix("title/"), landType.getExtensions(provider, blockRegistry));
 				}
 		);
 	}
