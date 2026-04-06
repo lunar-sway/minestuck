@@ -18,6 +18,7 @@ import net.minecraft.world.level.block.Blocks;
 import net.minecraft.world.level.levelgen.GenerationStep;
 import net.minecraft.world.level.levelgen.VerticalAnchor;
 import net.minecraft.world.level.levelgen.blockpredicates.BlockPredicate;
+import net.minecraft.world.level.levelgen.carver.ConfiguredWorldCarver;
 import net.minecraft.world.level.levelgen.feature.Feature;
 import net.minecraft.world.level.levelgen.feature.configurations.OreConfiguration;
 import net.minecraft.world.level.levelgen.placement.*;
@@ -93,6 +94,7 @@ public class HeatLandType extends TerrainLandType
 	public void addExtensions(HolderLookup.Provider provider, StructureBlockRegistry blocks)
 	{
 		HolderLookup.RegistryLookup<PlacedFeature> features = provider.lookupOrThrow(Registries.PLACED_FEATURE);
+		HolderLookup.RegistryLookup<ConfiguredWorldCarver<?>> carvers = provider.lookupOrThrow(Registries.CONFIGURED_CARVER);
 		
 		addFeatureExtension(features, GenerationStep.Decoration.VEGETAL_DECORATION, MSPlacedFeatures.CINDERED_TREE, LandBiomeType.anyExcept(LandBiomeType.OCEAN));
 		
@@ -126,6 +128,8 @@ public class HeatLandType extends TerrainLandType
 						new OreConfiguration(blocks.getGroundType(), MSBlocks.BLACK_STONE_QUARTZ_ORE.get().defaultBlockState(), 8),
 						CountPlacement.of(26), InSquarePlacement.spread(), HeightRangePlacement.uniform(VerticalAnchor.bottom(), VerticalAnchor.absolute(64)), BiomeFilter.biome()),
 				LandBiomeType.any());
+		
+		addCarverExtension(GenerationStep.Carving.AIR, carvers.getOrThrow(Carvers.NETHER_CAVE), LandBiomeType.any());
 	}
 	
 	@Override
@@ -137,8 +141,6 @@ public class HeatLandType extends TerrainLandType
 				FeatureModifier.withTargets(BlockPredicate.matchesBlocks(blocks.getBlockState(SURFACE).getBlock(), blocks.getBlockState(UPPER).getBlock())), LandBiomeType.any());
 		builder.addFeature(GenerationStep.Decoration.UNDERGROUND_ORES, MSPlacedFeatures.PUMICE_STONE_DISK,
 				FeatureModifier.withTargets(BlockPredicate.matchesBlocks(blocks.getBlockState(SURFACE).getBlock(), blocks.getBlockState(UPPER).getBlock())), LandBiomeType.any());
-		
-		builder.addCarver(GenerationStep.Carving.AIR, Carvers.NETHER_CAVE, LandBiomeType.any());
 	}
 	
 	@Override

@@ -19,6 +19,7 @@ import net.minecraft.util.RandomSource;
 import net.minecraft.world.level.block.Blocks;
 import net.minecraft.world.level.levelgen.GenerationStep;
 import net.minecraft.world.level.levelgen.VerticalAnchor;
+import net.minecraft.world.level.levelgen.carver.ConfiguredWorldCarver;
 import net.minecraft.world.level.levelgen.feature.Feature;
 import net.minecraft.world.level.levelgen.feature.configurations.OreConfiguration;
 import net.minecraft.world.level.levelgen.placement.*;
@@ -101,6 +102,7 @@ public class FrostLandType extends TerrainLandType
 	public void addExtensions(HolderLookup.Provider provider, StructureBlockRegistry blocks)
 	{
 		HolderLookup.RegistryLookup<PlacedFeature> features = provider.lookupOrThrow(Registries.PLACED_FEATURE);
+		HolderLookup.RegistryLookup<ConfiguredWorldCarver<?>> carvers = provider.lookupOrThrow(Registries.CONFIGURED_CARVER);
 		
 		addFeatureExtension(features, GenerationStep.Decoration.LOCAL_MODIFICATIONS, MiscOverworldPlacements.ICEBERG_PACKED, LandBiomeType.OCEAN);
 		addFeatureExtension(features, GenerationStep.Decoration.LOCAL_MODIFICATIONS, MiscOverworldPlacements.ICEBERG_BLUE, LandBiomeType.OCEAN);
@@ -140,12 +142,8 @@ public class FrostLandType extends TerrainLandType
 				LandBiomeType.any());
 		
 		addFeatureExtension(features, GenerationStep.Decoration.TOP_LAYER_MODIFICATION, MiscOverworldPlacements.FREEZE_TOP_LAYER, LandBiomeType.any());
-	}
-	
-	@Override
-	public void addBiomeGeneration(LandBiomeGenBuilder builder, StructureBlockRegistry blocks)
-	{
-		builder.addCarver(GenerationStep.Carving.AIR, Carvers.CAVE, LandBiomeType.any());
+		
+		addCarverExtension(GenerationStep.Carving.AIR, carvers.getOrThrow(Carvers.CAVE), LandBiomeType.any());
 	}
 	
 	@Override

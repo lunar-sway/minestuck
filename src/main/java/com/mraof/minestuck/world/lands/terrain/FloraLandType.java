@@ -7,7 +7,6 @@ import com.mraof.minestuck.world.biome.LandBiomeType;
 import com.mraof.minestuck.world.gen.feature.MSPlacedFeatures;
 import com.mraof.minestuck.world.gen.structure.blocks.StructureBlockRegistry;
 import com.mraof.minestuck.world.gen.structure.village.IguanaVillagePieces;
-import com.mraof.minestuck.world.lands.LandBiomeGenBuilder;
 import net.minecraft.core.HolderLookup;
 import net.minecraft.core.registries.Registries;
 import net.minecraft.data.worldgen.Carvers;
@@ -20,6 +19,7 @@ import net.minecraft.world.level.block.Blocks;
 import net.minecraft.world.level.levelgen.GenerationStep;
 import net.minecraft.world.level.levelgen.VerticalAnchor;
 import net.minecraft.world.level.levelgen.blockpredicates.BlockPredicate;
+import net.minecraft.world.level.levelgen.carver.ConfiguredWorldCarver;
 import net.minecraft.world.level.levelgen.feature.Feature;
 import net.minecraft.world.level.levelgen.feature.configurations.DiskConfiguration;
 import net.minecraft.world.level.levelgen.feature.configurations.OreConfiguration;
@@ -92,7 +92,7 @@ public class FloraLandType extends TerrainLandType
 	public void addExtensions(HolderLookup.Provider provider, StructureBlockRegistry blocks)
 	{
 		HolderLookup.RegistryLookup<PlacedFeature> features = provider.lookupOrThrow(Registries.PLACED_FEATURE);
-		//HolderLookup.RegistryLookup<ConfiguredWorldCarver<?>> carvers = provider.lookupOrThrow(Registries.CONFIGURED_CARVER);
+		HolderLookup.RegistryLookup<ConfiguredWorldCarver<?>> carvers = provider.lookupOrThrow(Registries.CONFIGURED_CARVER);
 		
 		addFeatureExtension(features, GenerationStep.Decoration.VEGETAL_DECORATION, VegetationPlacements.PATCH_GRASS_FOREST, LandBiomeType.NORMAL);
 		addFeatureExtension(features, GenerationStep.Decoration.VEGETAL_DECORATION, VegetationPlacements.FLOWER_FLOWER_FOREST, LandBiomeType.NORMAL);
@@ -145,13 +145,7 @@ public class FloraLandType extends TerrainLandType
 						CountPlacement.of(24), InSquarePlacement.spread(), HeightRangePlacement.uniform(VerticalAnchor.bottom(), VerticalAnchor.absolute(32)), BiomeFilter.biome()),
 				LandBiomeType.any());
 		
-		//addCarverExtension(GenerationStep.Carving.AIR, carvers.getOrThrow(Carvers.CAVE).value(), LandBiomeType.any());
-	}
-	
-	@Override
-	public void addBiomeGeneration(LandBiomeGenBuilder builder, StructureBlockRegistry blocks)
-	{
-		builder.addCarver(GenerationStep.Carving.AIR, Carvers.CAVE, LandBiomeType.any());
+		addCarverExtension(GenerationStep.Carving.AIR, carvers.getOrThrow(Carvers.CAVE), LandBiomeType.any());
 	}
 	
 	@Override

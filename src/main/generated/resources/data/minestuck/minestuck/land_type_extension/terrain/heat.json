@@ -1,4 +1,15 @@
 {
+  "carvers": [
+    {
+      "biome_types": [
+        "normal",
+        "rough",
+        "ocean"
+      ],
+      "carver": "minecraft:nether_cave",
+      "step": "air"
+    }
+  ],
   "features": [
     {
       "biome_types": [

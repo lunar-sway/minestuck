@@ -146,6 +146,11 @@ public abstract class TerrainLandType implements ILandType
 		featureExtensions.add(new LandTypeExtensions.FeatureExtension(step, Holder.direct(feature), Arrays.stream(biomeTypes).toList()));
 	}
 	
+	public void addCarverExtension(GenerationStep.Carving step, Holder.Reference<ConfiguredWorldCarver<?>> carver, LandBiomeType... biomeTypes)
+	{
+		carverExtensions.add(new LandTypeExtensions.CarverExtension(step, carver, Arrays.stream(biomeTypes).toList()));
+	}
+	
 	public void addCarverExtension(GenerationStep.Carving step, ConfiguredWorldCarver<?> carver, LandBiomeType... biomeTypes)
 	{
 		carverExtensions.add(new LandTypeExtensions.CarverExtension(step, Holder.direct(carver), Arrays.stream(biomeTypes).toList()));

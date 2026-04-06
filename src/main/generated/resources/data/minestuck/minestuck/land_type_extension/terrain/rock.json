@@ -1,4 +1,80 @@
 {
+  "carvers": [
+    {
+      "biome_types": [
+        "normal",
+        "rough",
+        "ocean"
+      ],
+      "carver": {
+        "type": "minecraft:cave",
+        "config": {
+          "floor_level": {
+            "type": "minecraft:uniform",
+            "max_exclusive": -0.4,
+            "min_inclusive": -1.0
+          },
+          "horizontal_radius_multiplier": {
+            "type": "minecraft:uniform",
+            "max_exclusive": 4.4,
+            "min_inclusive": 0.7
+          },
+          "lava_level": {
+            "above_bottom": 8
+          },
+          "probability": 0.08,
+          "replaceable": "#minecraft:overworld_carver_replaceables",
+          "vertical_radius_multiplier": {
+            "type": "minecraft:uniform",
+            "max_exclusive": 4.3,
+            "min_inclusive": 0.8
+          },
+          "y": {
+            "type": "minecraft:uniform",
+            "max_inclusive": {
+              "absolute": 180
+            },
+            "min_inclusive": {
+              "above_bottom": 8
+            }
+          },
+          "yScale": {
+            "type": "minecraft:uniform",
+            "max_exclusive": 0.9,
+            "min_inclusive": 0.1
+          }
+        }
+      },
+      "step": "air"
+    },
+    {
+      "biome_types": [
+        "normal",
+        "rough",
+        "ocean"
+      ],
+      "carver": "minecraft:cave",
+      "step": "air"
+    },
+    {
+      "biome_types": [
+        "normal",
+        "rough",
+        "ocean"
+      ],
+      "carver": "minecraft:cave_extra_underground",
+      "step": "air"
+    },
+    {
+      "biome_types": [
+        "normal",
+        "rough",
+        "ocean"
+      ],
+      "carver": "minecraft:canyon",
+      "step": "air"
+    }
+  ],
   "features": [
     {
       "biome_types": [

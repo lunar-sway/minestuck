@@ -20,6 +20,7 @@ import net.minecraft.util.RandomSource;
 import net.minecraft.world.level.block.Blocks;
 import net.minecraft.world.level.levelgen.GenerationStep;
 import net.minecraft.world.level.levelgen.VerticalAnchor;
+import net.minecraft.world.level.levelgen.carver.ConfiguredWorldCarver;
 import net.minecraft.world.level.levelgen.feature.Feature;
 import net.minecraft.world.level.levelgen.feature.configurations.OreConfiguration;
 import net.minecraft.world.level.levelgen.placement.*;
@@ -99,6 +100,7 @@ public class ForestLandType extends TerrainLandType
 	public void addExtensions(HolderLookup.Provider provider, StructureBlockRegistry blocks)
 	{
 		HolderLookup.RegistryLookup<PlacedFeature> features = provider.lookupOrThrow(Registries.PLACED_FEATURE);
+		HolderLookup.RegistryLookup<ConfiguredWorldCarver<?>> carvers = provider.lookupOrThrow(Registries.CONFIGURED_CARVER);
 		
 		addFeatureExtension(features, GenerationStep.Decoration.VEGETAL_DECORATION, VegetationPlacements.PATCH_GRASS_FOREST, LandBiomeType.NORMAL);
 		addFeatureExtension(features, GenerationStep.Decoration.VEGETAL_DECORATION, MSPlacedFeatures.SPARSE_MOSS_CARPET_PATCH, LandBiomeType.NORMAL);
@@ -149,12 +151,8 @@ public class ForestLandType extends TerrainLandType
 						CountPlacement.of(30), InSquarePlacement.spread(), HeightRangePlacement.uniform(VerticalAnchor.bottom(), VerticalAnchor.absolute(128)), BiomeFilter.biome()),
 				LandBiomeType.any());
 		addFeatureExtension(features, GenerationStep.Decoration.UNDERGROUND_ORES, OrePlacements.ORE_EMERALD, LandBiomeType.any());
-	}
-	
-	@Override
-	public void addBiomeGeneration(LandBiomeGenBuilder builder, StructureBlockRegistry blocks)
-	{
-		builder.addCarver(GenerationStep.Carving.AIR, Carvers.CAVE, LandBiomeType.any());
+		
+		addCarverExtension(GenerationStep.Carving.AIR, carvers.getOrThrow(Carvers.CAVE), LandBiomeType.any());
 	}
 	
 	@Override

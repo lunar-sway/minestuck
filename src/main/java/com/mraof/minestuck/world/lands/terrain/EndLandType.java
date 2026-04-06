@@ -8,7 +8,6 @@ import com.mraof.minestuck.world.biome.MSBiomes;
 import com.mraof.minestuck.world.gen.feature.MSPlacedFeatures;
 import com.mraof.minestuck.world.gen.structure.blocks.StructureBlockRegistry;
 import com.mraof.minestuck.world.gen.structure.village.NakagatorVillagePieces;
-import com.mraof.minestuck.world.lands.LandBiomeGenBuilder;
 import net.minecraft.core.Direction;
 import net.minecraft.core.HolderLookup;
 import net.minecraft.core.registries.Registries;
@@ -105,11 +104,6 @@ public class EndLandType extends TerrainLandType
 						new OreConfiguration(blocks.getGroundType(), Blocks.END_STONE.defaultBlockState(), 36),
 						CountPlacement.of(80), InSquarePlacement.spread(), HeightRangePlacement.uniform(VerticalAnchor.bottom(), VerticalAnchor.absolute(64)), BiomeFilter.biome()),
 				LandBiomeType.any());
-	}
-	
-	@Override
-	public void addBiomeGeneration(LandBiomeGenBuilder builder, StructureBlockRegistry blocks)
-	{
 	}
 	
 	@Override

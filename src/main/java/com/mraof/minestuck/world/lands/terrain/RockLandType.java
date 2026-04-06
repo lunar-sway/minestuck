@@ -9,7 +9,6 @@ import com.mraof.minestuck.world.gen.feature.MSPlacedFeatures;
 import com.mraof.minestuck.world.gen.structure.blocks.StructureBlockRegistry;
 import com.mraof.minestuck.world.gen.structure.village.ConsortVillageCenter;
 import com.mraof.minestuck.world.gen.structure.village.NakagatorVillagePieces;
-import com.mraof.minestuck.world.lands.LandBiomeGenBuilder;
 import net.minecraft.core.Direction;
 import net.minecraft.core.HolderLookup;
 import net.minecraft.core.registries.BuiltInRegistries;
@@ -29,6 +28,7 @@ import net.minecraft.world.level.levelgen.GenerationStep;
 import net.minecraft.world.level.levelgen.VerticalAnchor;
 import net.minecraft.world.level.levelgen.blockpredicates.BlockPredicate;
 import net.minecraft.world.level.levelgen.carver.CaveCarverConfiguration;
+import net.minecraft.world.level.levelgen.carver.ConfiguredWorldCarver;
 import net.minecraft.world.level.levelgen.carver.WorldCarver;
 import net.minecraft.world.level.levelgen.feature.Feature;
 import net.minecraft.world.level.levelgen.feature.configurations.DiskConfiguration;
@@ -114,6 +114,7 @@ public class RockLandType extends TerrainLandType
 	public void addExtensions(HolderLookup.Provider provider, StructureBlockRegistry blocks)
 	{
 		HolderLookup.RegistryLookup<PlacedFeature> features = provider.lookupOrThrow(Registries.PLACED_FEATURE);
+		HolderLookup.RegistryLookup<ConfiguredWorldCarver<?>> carvers = provider.lookupOrThrow(Registries.CONFIGURED_CARVER);
 		
 		addFeatureExtension(GenerationStep.Decoration.UNDERGROUND_ORES, MSPlacedFeatures.inline(Feature.DISK,
 				new DiskConfiguration(RuleBasedBlockStateProvider.simple(Blocks.CLAY), BlockPredicate.matchesBlocks(blocks.getBlockState(OCEAN_SURFACE).getBlock(), Blocks.CLAY), UniformInt.of(2, 5), 2),
@@ -194,20 +195,16 @@ public class RockLandType extends TerrainLandType
 						new OreConfiguration(blocks.getGroundType(), Blocks.DIAMOND_ORE.defaultBlockState(), 4),
 						CountPlacement.of(7), InSquarePlacement.spread(), HeightRangePlacement.uniform(VerticalAnchor.bottom(), VerticalAnchor.absolute(24)), BiomeFilter.biome()),
 				LandBiomeType.any());
-	}
-	
-	@Override
-	public void addBiomeGeneration(LandBiomeGenBuilder builder, StructureBlockRegistry blocks)
-	{
+		
 		//cave carver that creates more cavernous sections, may end up as just a placeholder for noise based cave generation
-		builder.addCarver(GenerationStep.Carving.AIR, WorldCarver.CAVE.configured(new CaveCarverConfiguration(0.08F,
+		addCarverExtension(GenerationStep.Carving.AIR, WorldCarver.CAVE.configured(new CaveCarverConfiguration(0.08F,
 						UniformHeight.of(VerticalAnchor.aboveBottom(8), VerticalAnchor.absolute(180)),
 						UniformFloat.of(0.1F, 0.9F), VerticalAnchor.aboveBottom(8), BuiltInRegistries.BLOCK.getOrCreateTag(BlockTags.OVERWORLD_CARVER_REPLACEABLES),
 						UniformFloat.of(0.7F, 4.4F), UniformFloat.of(0.8F, 4.3F), UniformFloat.of(-1.0F, -0.4F))),
 				LandBiomeType.any());
-		builder.addCarver(GenerationStep.Carving.AIR, Carvers.CAVE, LandBiomeType.any());
-		builder.addCarver(GenerationStep.Carving.AIR, Carvers.CAVE_EXTRA_UNDERGROUND, LandBiomeType.any());
-		builder.addCarver(GenerationStep.Carving.AIR, Carvers.CANYON, LandBiomeType.any());
+		addCarverExtension(GenerationStep.Carving.AIR, carvers.getOrThrow(Carvers.CAVE), LandBiomeType.any());
+		addCarverExtension(GenerationStep.Carving.AIR, carvers.getOrThrow(Carvers.CAVE_EXTRA_UNDERGROUND), LandBiomeType.any());
+		addCarverExtension(GenerationStep.Carving.AIR, carvers.getOrThrow(Carvers.CANYON), LandBiomeType.any());
 	}
 	
 	@Override
