@@ -1,0 +1,252 @@
+{
+  "features": [
+    {
+      "biome_types": [
+        "normal"
+      ],
+      "feature": "minestuck:tree/dead",
+      "step": "vegetal_decoration"
+    },
+    {
+      "biome_types": [
+        "rough"
+      ],
+      "feature": "minestuck:tree/dead_extra",
+      "step": "vegetal_decoration"
+    },
+    {
+      "biome_types": [
+        "normal",
+        "rough",
+        "ocean"
+      ],
+      "feature": {
+        "feature": {
+          "type": "minecraft:ore",
+          "config": {
+            "discard_chance_on_air_exposure": 0.0,
+            "size": 17,
+            "targets": [
+              {
+                "state": {
+                  "Name": "minestuck:pink_stone_coal_ore"
+                },
+                "target": {
+                  "block_state": {
+                    "Name": "minestuck:pink_stone"
+                  },
+                  "predicate_type": "minecraft:blockstate_match"
+                }
+              }
+            ]
+          }
+        },
+        "placement": [
+          {
+            "type": "minecraft:count",
+            "count": 26
+          },
+          {
+            "type": "minecraft:in_square"
+          },
+          {
+            "type": "minecraft:height_range",
+            "height": {
+              "type": "minecraft:uniform",
+              "max_inclusive": {
+                "absolute": 64
+              },
+              "min_inclusive": {
+                "above_bottom": 0
+              }
+            }
+          },
+          {
+            "type": "minecraft:biome"
+          }
+        ]
+      },
+      "step": "underground_ores"
+    },
+    {
+      "biome_types": [
+        "normal",
+        "rough",
+        "ocean"
+      ],
+      "feature": {
+        "feature": {
+          "type": "minecraft:ore",
+          "config": {
+            "discard_chance_on_air_exposure": 0.0,
+            "size": 7,
+            "targets": [
+              {
+                "state": {
+                  "Name": "minestuck:pink_stone_lapis_ore"
+                },
+                "target": {
+                  "block_state": {
+                    "Name": "minestuck:pink_stone"
+                  },
+                  "predicate_type": "minecraft:blockstate_match"
+                }
+              }
+            ]
+          }
+        },
+        "placement": [
+          {
+            "type": "minecraft:count",
+            "count": 15
+          },
+          {
+            "type": "minecraft:in_square"
+          },
+          {
+            "type": "minecraft:height_range",
+            "height": {
+              "type": "minecraft:uniform",
+              "max_inclusive": {
+                "absolute": 24
+              },
+              "min_inclusive": {
+                "above_bottom": 0
+              }
+            }
+          },
+          {
+            "type": "minecraft:biome"
+          }
+        ]
+      },
+      "step": "underground_ores"
+    },
+    {
+      "biome_types": [
+        "normal",
+        "rough",
+        "ocean"
+      ],
+      "feature": {
+        "feature": {
+          "type": "minecraft:ore",
+          "config": {
+            "discard_chance_on_air_exposure": 0.0,
+            "size": 9,
+            "targets": [
+              {
+                "state": {
+                  "Name": "minestuck:pink_stone_gold_ore"
+                },
+                "target": {
+                  "block_state": {
+                    "Name": "minestuck:pink_stone"
+                  },
+                  "predicate_type": "minecraft:blockstate_match"
+                }
+              }
+            ]
+          }
+        },
+        "placement": [
+          {
+            "type": "minecraft:count",
+            "count": 12
+          },
+          {
+            "type": "minecraft:in_square"
+          },
+          {
+            "type": "minecraft:height_range",
+            "height": {
+              "type": "minecraft:uniform",
+              "max_inclusive": {
+                "absolute": 32
+              },
+              "min_inclusive": {
+                "above_bottom": 0
+              }
+            }
+          },
+          {
+            "type": "minecraft:biome"
+          }
+        ]
+      },
+      "step": "underground_ores"
+    },
+    {
+      "biome_types": [
+        "normal",
+        "rough",
+        "ocean"
+      ],
+      "feature": {
+        "feature": {
+          "type": "minecraft:ore",
+          "config": {
+            "discard_chance_on_air_exposure": 0.0,
+            "size": 6,
+            "targets": [
+              {
+                "state": {
+                  "Name": "minestuck:pink_stone_diamond_ore"
+                },
+                "target": {
+                  "block_state": {
+                    "Name": "minestuck:pink_stone"
+                  },
+                  "predicate_type": "minecraft:blockstate_match"
+                }
+              }
+            ]
+          }
+        },
+        "placement": [
+          {
+            "type": "minecraft:count",
+            "count": 11
+          },
+          {
+            "type": "minecraft:in_square"
+          },
+          {
+            "type": "minecraft:height_range",
+            "height": {
+              "type": "minecraft:uniform",
+              "max_inclusive": {
+                "absolute": 24
+              },
+              "min_inclusive": {
+                "above_bottom": 0
+              }
+            }
+          },
+          {
+            "type": "minecraft:biome"
+          }
+        ]
+      },
+      "step": "underground_ores"
+    }
+  ],
+  "structure_sets": [
+    {
+      "structure_set": {
+        "placement": {
+          "type": "minecraft:random_spread",
+          "salt": 90543602,
+          "separation": 10,
+          "spacing": 35
+        },
+        "structures": [
+          {
+            "structure": "minestuck:pink_tower",
+            "weight": 1
+          }
+        ]
+      }
+    }
+  ]
+}

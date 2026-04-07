@@ -69,6 +69,8 @@ public final class MinestuckData
 		gen.addProvider(event.includeClient(), new MinestuckItemModelProvider(output, fileHelper));
 		var enUsLanguageProvider = gen.addProvider(event.includeClient(), new MinestuckEnUsLanguageProvider(output));
 		
+		gen.addProvider(event.includeServer(), new MSLandTypeExtensionProvider(output, lookupProvider));
+		
 		gen.addProvider(event.includeServer(), ConsortDialogue.create(output, enUsLanguageProvider, lookupProvider));
 		gen.addProvider(event.includeServer(), ShadyConsortDialogue.create(output, enUsLanguageProvider, lookupProvider));
 		gen.addProvider(event.includeServer(), ConsortFoodMerchantDialogue.create(output, enUsLanguageProvider, lookupProvider));
