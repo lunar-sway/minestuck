@@ -15,17 +15,35 @@
               "type": "minestuck:list",
               "conditions": [
                 {
-                  "type": "minestuck:player_item",
-                  "amount": 10,
-                  "item": "minestuck:native_sulfur"
+                  "type": "minestuck:player_entity_predicate",
+                  "predicate": {
+                    "slots": {
+                      "container.*": {
+                        "count": {
+                          "min": 10
+                        },
+                        "items": "minestuck:native_sulfur"
+                      }
+                    }
+                  }
                 },
                 {
-                  "type": "minestuck:player_item",
-                  "item": "minecraft:goat_horn"
+                  "type": "minestuck:player_entity_predicate",
+                  "predicate": {
+                    "slots": {
+                      "container.*": {
+                        "count": {
+                          "min": 1
+                        },
+                        "items": "minecraft:goat_horn"
+                      }
+                    }
+                  }
                 }
               ],
               "list_type": "all"
             },
+            "fail_tooltip": "minestuck.dialogue.consort.cult.exchange.condition",
             "hide_if_failed": false,
             "message": "minestuck.dialogue.consort.cult.exchange.give_items",
             "next_dialogue": "minestuck:consort/cult/pleased",

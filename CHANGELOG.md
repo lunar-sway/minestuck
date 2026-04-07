@@ -16,6 +16,7 @@ The format is based on [Keep a Changelog](https://keepachangelog.com/en/1.1.0/).
 - Added 3 bunker structures to Lands
 - Increased block diversity in structures
 - Array modus
+- Added new dialogue
 - Most Minestuck fluids are now bottomless in the context of Create
 
 ### Changed
@@ -54,7 +55,7 @@ The format is based on [Keep a Changelog](https://keepachangelog.com/en/1.1.0/).
 
 ### Contributors for this release
 
-- medsal15, heartsremedy, caldw3ll, v_sabitron, Dweblenod, TangleKat, Pancake, Fl1s
+- medsal15, heartsremedy, caldw3ll, v_sabitron, Dweblenod, TangleKat, Pancake, Fl1s, kirderf1
 
 ## [1.21.1-1.13.1.1] - 2025-09-14
 

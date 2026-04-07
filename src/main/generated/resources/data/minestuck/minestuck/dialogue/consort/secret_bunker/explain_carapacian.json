@@ -1,13 +1,13 @@
 {
   "node": {
-    "animation": { },
-    "gui":       "minestuck:textures/gui/dialogue/dialogue.png",
-    "message":   {
+    "animation": {},
+    "gui": "minestuck:textures/gui/dialogue/dialogue.png",
+    "message": {
       "arguments": [
         "entity_sound"
       ],
-      "key":       "minestuck.dialogue.consort.secret_bunker.explain_carapacian"
+      "key": "minestuck.dialogue.consort.secret_bunker.explain_carapacian"
     },
-    "responses": [ ]
+    "responses": []
   }
 }

@@ -1,44 +1,50 @@
 {
   "node": {
-    "animation": { },
-    "gui":       "minestuck:textures/gui/dialogue/dialogue.png",
-    "messages":  [
+    "animation": {},
+    "gui": "minestuck:textures/gui/dialogue/dialogue.png",
+    "messages": [
       {
-        "type":    "entity",
+        "type": "entity",
         "message": "minestuck.dots"
       },
       {
-        "type":    "description",
+        "type": "description",
         "message": "minestuck.dialogue.carapacian_soldier.bunker_greet.explain_place.3"
       }
     ],
     "responses": [
       {
-        "condition":      {
-          "type": "minestuck:at_or_above_y",
-          "y":    64.0
+        "condition": {
+          "type": "minestuck:npc_location_predicate",
+          "predicate": {
+            "position": {
+              "y": {
+                "min": 64.0
+              }
+            }
+          }
         },
         "hide_if_failed": true,
-        "message":        "minestuck.dialogue.carapacian_soldier.bunker_greet.explain_place.3.access",
-        "next_dialogue":  "minestuck:carapacian_soldier/bunker_greet/access.1",
-        "triggers":       [ ]
+        "message": "minestuck.dialogue.carapacian_soldier.bunker_greet.explain_place.3.access",
+        "next_dialogue": "minestuck:carapacian_soldier/bunker_greet/access.1",
+        "triggers": []
       },
       {
-        "condition":      {
+        "condition": {
           "type": "minestuck:always_true"
         },
         "hide_if_failed": true,
-        "message":        "minestuck.dialogue.carapacian_soldier.bunker_greet.explain_place.3.why_fight",
-        "next_dialogue":  "minestuck:carapacian_soldier/bunker_greet/dont_know",
-        "triggers":       [ ]
+        "message": "minestuck.dialogue.carapacian_soldier.bunker_greet.explain_place.3.why_fight",
+        "next_dialogue": "minestuck:carapacian_soldier/bunker_greet/dont_know",
+        "triggers": []
       },
       {
-        "condition":      {
+        "condition": {
           "type": "minestuck:always_true"
         },
         "hide_if_failed": true,
-        "message":        "minestuck.dialogue.carapacian_soldier.bunker_greet.explain_place.3.good_to_know",
-        "triggers":       [ ]
+        "message": "minestuck.dialogue.carapacian_soldier.bunker_greet.explain_place.3.good_to_know",
+        "triggers": []
       }
     ]
   }

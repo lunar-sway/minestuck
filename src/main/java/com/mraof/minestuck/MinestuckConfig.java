@@ -134,7 +134,11 @@ public class MinestuckConfig
 					.defineInRange("dialogueRenewalSpeed", 2, 0, 1000);
 			lotusRestorationTime = builder.comment("Determines how many seconds it takes for the lotus blossom to regrow after the opening process has started.")
 					.defineInRange("lotusRestorationTime", 300, 30, Integer.MAX_VALUE);
-			hardMode = builder.define("hardMode", false);
+			hardMode = builder.comment("Makes Minestuck overall harder:",
+					"- Only the first Cruxtruder, Totem Lathe, and Alchemiter will be free",
+					"- Fireballs will rain around players entering the medium",
+					"- Medium dungeons spawners contain Liches instead of Imps",
+					"- Underlings have a 50% chance to have the artifact grist").define("hardMode", false);
 			builder.pop();
 			
 			builder.push("sylladex");
