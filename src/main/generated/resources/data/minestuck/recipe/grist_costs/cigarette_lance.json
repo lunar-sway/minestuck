@@ -1,10 +1,10 @@
 {
   "type": "minestuck:grist_cost",
   "grist_cost": {
-    "minestuck:build":   6484,
+    "minestuck:build": 6484,
     "minestuck:diamond": 8600,
-    "minestuck:shale":   3242,
-    "minestuck:tar":     3242
+    "minestuck:shale": 3242,
+    "minestuck:tar": 3242
   },
   "ingredient": {
     "item": "minestuck:cigarette_lance"

@@ -193,21 +193,21 @@
           "weight": 10
         },
         {
-          "type":      "minecraft:item",
+          "type": "minecraft:item",
           "functions": [
             {
-              "add":      false,
-              "count":    {
+              "add": false,
+              "count": {
                 "type": "minecraft:uniform",
-                "max":  8.0,
-                "min":  2.0
+                "max": 8.0,
+                "min": 2.0
               },
               "function": "minecraft:set_count"
             }
           ],
-          "name":      "minecraft:rooted_dirt",
-          "quality":   -1,
-          "weight":    15
+          "name": "minecraft:rooted_dirt",
+          "quality": -1,
+          "weight": 15
         }
       ],
       "name": "item",

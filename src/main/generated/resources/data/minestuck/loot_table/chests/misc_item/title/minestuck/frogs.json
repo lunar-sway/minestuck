@@ -34,52 +34,52 @@
           "weight": 4
         },
         {
-          "type":      "minecraft:item",
+          "type": "minecraft:item",
           "functions": [
             {
-              "add":      false,
-              "count":    {
+              "add": false,
+              "count": {
                 "type": "minecraft:uniform",
-                "max":  4.0,
-                "min":  1.0
+                "max": 4.0,
+                "min": 1.0
               },
               "function": "minecraft:set_count"
             }
           ],
-          "name":      "minecraft:ochre_froglight",
-          "quality":   4
+          "name": "minecraft:ochre_froglight",
+          "quality": 4
         },
         {
-          "type":      "minecraft:item",
+          "type": "minecraft:item",
           "functions": [
             {
-              "add":      false,
-              "count":    {
+              "add": false,
+              "count": {
                 "type": "minecraft:uniform",
-                "max":  4.0,
-                "min":  1.0
+                "max": 4.0,
+                "min": 1.0
               },
               "function": "minecraft:set_count"
             }
           ],
-          "name":      "minecraft:pearlescent_froglight",
-          "quality":   4
+          "name": "minecraft:pearlescent_froglight",
+          "quality": 4
         },
         {
-          "type":      "minecraft:item",
+          "type": "minecraft:item",
           "functions": [
             {
-              "add":      false,
-              "count":    {
+              "add": false,
+              "count": {
                 "type": "minecraft:uniform",
-                "max":  4.0,
-                "min":  1.0
+                "max": 4.0,
+                "min": 1.0
               },
               "function": "minecraft:set_count"
             }
           ],
-          "name":      "minecraft:pearlescent_froglight",
-          "quality":   4
+          "name": "minecraft:pearlescent_froglight",
+          "quality": 4
         }
       ],
       "name": "item",

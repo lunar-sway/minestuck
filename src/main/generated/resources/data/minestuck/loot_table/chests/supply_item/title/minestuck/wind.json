@@ -5,21 +5,21 @@
       "bonus_rolls": 0.0,
       "entries": [
         {
-          "type":      "minecraft:item",
+          "type": "minecraft:item",
           "functions": [
             {
-              "add":      false,
-              "count":    {
+              "add": false,
+              "count": {
                 "type": "minecraft:uniform",
-                "max":  4.0,
-                "min":  1.0
+                "max": 4.0,
+                "min": 1.0
               },
               "function": "minecraft:set_count"
             }
           ],
-          "name":      "minecraft:wind_charge",
-          "quality":   4,
-          "weight":    2
+          "name": "minecraft:wind_charge",
+          "quality": 4,
+          "weight": 2
         }
       ],
       "name": "item",

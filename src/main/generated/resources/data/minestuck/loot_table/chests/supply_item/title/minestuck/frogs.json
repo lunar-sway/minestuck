@@ -44,21 +44,21 @@
           "quality": 2
         },
         {
-          "type":      "minecraft:item",
+          "type": "minecraft:item",
           "functions": [
             {
-              "add":      false,
-              "count":    {
+              "add": false,
+              "count": {
                 "type": "minecraft:uniform",
-                "max":  5.0,
-                "min":  2.0
+                "max": 5.0,
+                "min": 2.0
               },
               "function": "minecraft:set_count"
             }
           ],
-          "name":      "minecraft:slime_ball",
-          "quality":   2,
-          "weight":    3
+          "name": "minecraft:slime_ball",
+          "quality": 2,
+          "weight": 3
         }
       ],
       "name": "item",

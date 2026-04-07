@@ -93,17 +93,17 @@
           "type": "minecraft:item",
           "functions": [
             {
-              "add":      false,
-              "count":    {
+              "add": false,
+              "count": {
                 "type": "minecraft:uniform",
-                "max":  3.0,
-                "min":  1.0
+                "max": 3.0,
+                "min": 1.0
               },
               "function": "minecraft:set_count"
             }
           ],
-          "name":      "minecraft:baked_potato",
-          "weight":    10
+          "name": "minecraft:baked_potato",
+          "weight": 10
         },
         {
           "type": "minecraft:item",

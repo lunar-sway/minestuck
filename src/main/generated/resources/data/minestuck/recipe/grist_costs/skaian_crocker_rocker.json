@@ -1,7 +1,7 @@
 {
   "type": "minestuck:grist_cost",
   "grist_cost": {
-    "minestuck:build":  30000,
+    "minestuck:build": 30000,
     "minestuck:chalk": 2732,
     "minestuck:iodine": 2732,
     "minestuck:quartz": 50000,

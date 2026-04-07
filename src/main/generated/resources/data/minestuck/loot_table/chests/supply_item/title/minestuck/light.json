@@ -11,8 +11,8 @@
           "weight": 10
         },
         {
-          "type":   "minecraft:item",
-          "name":   "minecraft:lantern",
+          "type": "minecraft:item",
+          "name": "minecraft:lantern",
           "weight": 6
         },
         {
@@ -20,21 +20,21 @@
           "name": "minecraft:daylight_detector"
         },
         {
-          "type":      "minecraft:item",
+          "type": "minecraft:item",
           "functions": [
             {
-              "add":      false,
-              "count":    {
+              "add": false,
+              "count": {
                 "type": "minecraft:uniform",
-                "max":  8.0,
-                "min":  1.0
+                "max": 8.0,
+                "min": 1.0
               },
               "function": "minecraft:set_count"
             }
           ],
-          "name":      "minecraft:tinted_glass",
-          "quality":   1,
-          "weight":    2
+          "name": "minecraft:tinted_glass",
+          "quality": 1,
+          "weight": 2
         }
       ],
       "name": "item",

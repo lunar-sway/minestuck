@@ -18,7 +18,7 @@
             }
           ],
           "name": "minecraft:clock",
-          "weight":    7
+          "weight": 7
         },
         {
           "type": "minecraft:item",
@@ -26,19 +26,19 @@
           "weight": 3
         },
         {
-          "type":      "minecraft:item",
+          "type": "minecraft:item",
           "functions": [
             {
-              "add":      false,
-              "count":    {
+              "add": false,
+              "count": {
                 "type": "minecraft:uniform",
-                "max":  9.0,
-                "min":  3.0
+                "max": 9.0,
+                "min": 3.0
               },
               "function": "minecraft:set_count"
             }
           ],
-          "name":      "minecraft:oxidized_copper_grate",
+          "name": "minecraft:oxidized_copper_grate",
           "weight": 5
         }
       ],

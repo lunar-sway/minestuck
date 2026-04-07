@@ -157,7 +157,7 @@
               "function": "minecraft:set_damage"
             }
           ],
-          "name":   "minestuck:silver_spoon",
+          "name": "minestuck:silver_spoon",
           "weight": 3
         },
         {
@@ -294,10 +294,10 @@
           "weight": 4
         },
         {
-          "type":    "minecraft:item",
-          "name":    "minestuck:shuriken",
+          "type": "minecraft:item",
+          "name": "minestuck:shuriken",
           "quality": -2,
-          "weight":  8
+          "weight": 8
         }
       ],
       "name": "item",
