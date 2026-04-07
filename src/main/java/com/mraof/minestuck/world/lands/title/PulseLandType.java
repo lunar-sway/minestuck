@@ -12,10 +12,13 @@ import com.mraof.minestuck.world.gen.structure.blocks.StructureBlockRegistry;
 import com.mraof.minestuck.world.lands.LandBiomeGenBuilder;
 import com.mraof.minestuck.world.lands.LandProperties;
 import com.mraof.minestuck.world.lands.terrain.TerrainLandType;
+import net.minecraft.core.HolderLookup;
+import net.minecraft.core.registries.Registries;
 import net.minecraft.sounds.SoundEvent;
 import net.minecraft.world.level.block.Blocks;
 import net.minecraft.world.level.levelgen.GenerationStep;
 import net.minecraft.world.level.levelgen.blockpredicates.BlockPredicate;
+import net.minecraft.world.level.levelgen.placement.PlacedFeature;
 import net.minecraft.world.phys.Vec3;
 
 public class PulseLandType extends TitleLandType
@@ -57,12 +60,18 @@ public class PulseLandType extends TitleLandType
 	}
 	
 	@Override
+	public void addExtensions(HolderLookup.Provider provider, StructureBlockRegistry blocks)
+	{
+		HolderLookup.RegistryLookup<PlacedFeature> features = provider.lookupOrThrow(Registries.PLACED_FEATURE);
+		
+		addFeatureExtension(features, GenerationStep.Decoration.VEGETAL_DECORATION, MSPlacedFeatures.BLOOD_TREE, LandBiomeType.anyExcept(LandBiomeType.OCEAN));
+	}
+	
+	@Override
 	public void addBiomeGeneration(LandBiomeGenBuilder builder, StructureBlockRegistry blocks, LandBiomeSetType biomeSet)
 	{
 		builder.addFeature(GenerationStep.Decoration.UNDERGROUND_ORES, MSPlacedFeatures.COAGULATED_BLOOD_DISK,
 				FeatureModifier.withTargets(BlockPredicate.matchesBlocks(blocks.getBlockState(StructureBlockRegistry.SURFACE).getBlock(), blocks.getBlockState(StructureBlockRegistry.UPPER).getBlock())), LandBiomeType.ROUGH);
-		builder.addFeature(GenerationStep.Decoration.VEGETAL_DECORATION, MSPlacedFeatures.BLOOD_TREE, LandBiomeType.anyExcept(LandBiomeType.OCEAN));
-		
 	}
 	
 	@Override

@@ -1,0 +1,499 @@
+{
+  "features": [
+    {
+      "biome_types": [
+        "normal"
+      ],
+      "feature": "minestuck:wooden_grass_patch",
+      "step": "vegetal_decoration"
+    },
+    {
+      "biome_types": [
+        "normal",
+        "rough"
+      ],
+      "feature": "minestuck:treated_wooden_grass_patch",
+      "step": "vegetal_decoration"
+    },
+    {
+      "biome_types": [
+        "normal",
+        "rough"
+      ],
+      "feature": "minestuck:carved_bush_patch",
+      "step": "vegetal_decoration"
+    },
+    {
+      "biome_types": [
+        "normal",
+        "rough"
+      ],
+      "feature": "minestuck:carved_cherry_tree",
+      "step": "surface_structures"
+    },
+    {
+      "biome_types": [
+        "normal"
+      ],
+      "feature": "minestuck:carved_house",
+      "step": "surface_structures"
+    },
+    {
+      "biome_types": [
+        "normal",
+        "rough"
+      ],
+      "feature": "minestuck:carved_log",
+      "step": "surface_structures"
+    },
+    {
+      "biome_types": [
+        "normal"
+      ],
+      "feature": "minestuck:large_carved_log",
+      "step": "surface_structures"
+    },
+    {
+      "biome_types": [
+        "normal",
+        "rough"
+      ],
+      "feature": "minestuck:sparse_treated_chair",
+      "step": "surface_structures"
+    },
+    {
+      "biome_types": [
+        "normal",
+        "rough"
+      ],
+      "feature": "minestuck:sparse_treated_table",
+      "step": "surface_structures"
+    },
+    {
+      "biome_types": [
+        "normal",
+        "rough"
+      ],
+      "feature": "minestuck:unfinished_carved_bookshelf",
+      "step": "surface_structures"
+    },
+    {
+      "biome_types": [
+        "normal",
+        "rough"
+      ],
+      "feature": "minestuck:sparse_unfinished_carved_chair",
+      "step": "surface_structures"
+    },
+    {
+      "biome_types": [
+        "normal",
+        "rough"
+      ],
+      "feature": "minestuck:unfinished_carved_creeper",
+      "step": "surface_structures"
+    },
+    {
+      "biome_types": [
+        "normal"
+      ],
+      "feature": "minestuck:sparse_unfinished_carved_drawer",
+      "step": "surface_structures"
+    },
+    {
+      "biome_types": [
+        "normal",
+        "rough"
+      ],
+      "feature": "minestuck:unfinished_carved_salamander",
+      "step": "surface_structures"
+    },
+    {
+      "biome_types": [
+        "normal",
+        "rough"
+      ],
+      "feature": "minestuck:sparse_unfinished_carved_table",
+      "step": "surface_structures"
+    },
+    {
+      "biome_types": [
+        "normal",
+        "rough"
+      ],
+      "feature": "minestuck:unfinished_carved_tree",
+      "step": "surface_structures"
+    },
+    {
+      "biome_types": [
+        "normal",
+        "rough"
+      ],
+      "feature": "minestuck:unfinished_carved_tunnel",
+      "step": "surface_structures"
+    },
+    {
+      "biome_types": [
+        "normal",
+        "rough"
+      ],
+      "feature": "minestuck:wood_shavings_pile",
+      "step": "surface_structures"
+    },
+    {
+      "biome_types": [
+        "normal",
+        "rough"
+      ],
+      "feature": "minestuck:wooden_cactus_pair",
+      "step": "surface_structures"
+    },
+    {
+      "biome_types": [
+        "rough"
+      ],
+      "feature": "minestuck:lacquered_wooden_mushroom",
+      "step": "vegetal_decoration"
+    },
+    {
+      "biome_types": [
+        "rough"
+      ],
+      "feature": "minestuck:treated_chair",
+      "step": "surface_structures"
+    },
+    {
+      "biome_types": [
+        "rough"
+      ],
+      "feature": "minestuck:treated_table",
+      "step": "surface_structures"
+    },
+    {
+      "biome_types": [
+        "rough"
+      ],
+      "feature": "minestuck:unfinished_carved_chair",
+      "step": "surface_structures"
+    },
+    {
+      "biome_types": [
+        "rough"
+      ],
+      "feature": "minestuck:unfinished_carved_drawer",
+      "step": "surface_structures"
+    },
+    {
+      "biome_types": [
+        "rough"
+      ],
+      "feature": "minestuck:unfinished_carved_table",
+      "step": "surface_structures"
+    },
+    {
+      "biome_types": [
+        "rough"
+      ],
+      "feature": "minestuck:massive_chair",
+      "step": "surface_structures"
+    },
+    {
+      "biome_types": [
+        "rough"
+      ],
+      "feature": "minestuck:massive_stool",
+      "step": "surface_structures"
+    },
+    {
+      "biome_types": [
+        "normal",
+        "rough",
+        "ocean"
+      ],
+      "feature": {
+        "feature": {
+          "type": "minecraft:ore",
+          "config": {
+            "discard_chance_on_air_exposure": 0.0,
+            "size": 33,
+            "targets": [
+              {
+                "state": {
+                  "Name": "minestuck:wood_shavings"
+                },
+                "target": {
+                  "block_state": {
+                    "Name": "minestuck:uncarved_wood"
+                  },
+                  "predicate_type": "minecraft:blockstate_match"
+                }
+              }
+            ]
+          }
+        },
+        "placement": [
+          {
+            "type": "minecraft:count",
+            "count": 10
+          },
+          {
+            "type": "minecraft:in_square"
+          },
+          {
+            "type": "minecraft:height_range",
+            "height": {
+              "type": "minecraft:uniform",
+              "max_inclusive": {
+                "absolute": 256
+              },
+              "min_inclusive": {
+                "above_bottom": 0
+              }
+            }
+          },
+          {
+            "type": "minecraft:biome"
+          }
+        ]
+      },
+      "step": "underground_ores"
+    },
+    {
+      "biome_types": [
+        "normal",
+        "rough",
+        "ocean"
+      ],
+      "feature": {
+        "feature": {
+          "type": "minecraft:ore",
+          "config": {
+            "discard_chance_on_air_exposure": 0.0,
+            "size": 17,
+            "targets": [
+              {
+                "state": {
+                  "Name": "minestuck:chipboard"
+                },
+                "target": {
+                  "block_state": {
+                    "Name": "minestuck:uncarved_wood"
+                  },
+                  "predicate_type": "minecraft:blockstate_match"
+                }
+              }
+            ]
+          }
+        },
+        "placement": [
+          {
+            "type": "minecraft:count",
+            "count": 27
+          },
+          {
+            "type": "minecraft:in_square"
+          },
+          {
+            "type": "minecraft:height_range",
+            "height": {
+              "type": "minecraft:uniform",
+              "max_inclusive": {
+                "absolute": 128
+              },
+              "min_inclusive": {
+                "above_bottom": 0
+              }
+            }
+          },
+          {
+            "type": "minecraft:biome"
+          }
+        ]
+      },
+      "step": "underground_ores"
+    },
+    {
+      "biome_types": [
+        "normal",
+        "rough",
+        "ocean"
+      ],
+      "feature": {
+        "feature": {
+          "type": "minecraft:ore",
+          "config": {
+            "discard_chance_on_air_exposure": 0.0,
+            "size": 7,
+            "targets": [
+              {
+                "state": {
+                  "Name": "minestuck:uncarved_wood_redstone_ore",
+                  "Properties": {
+                    "lit": "false"
+                  }
+                },
+                "target": {
+                  "block_state": {
+                    "Name": "minestuck:uncarved_wood"
+                  },
+                  "predicate_type": "minecraft:blockstate_match"
+                }
+              }
+            ]
+          }
+        },
+        "placement": [
+          {
+            "type": "minecraft:count",
+            "count": 24
+          },
+          {
+            "type": "minecraft:in_square"
+          },
+          {
+            "type": "minecraft:height_range",
+            "height": {
+              "type": "minecraft:uniform",
+              "max_inclusive": {
+                "absolute": 32
+              },
+              "min_inclusive": {
+                "above_bottom": 0
+              }
+            }
+          },
+          {
+            "type": "minecraft:biome"
+          }
+        ]
+      },
+      "step": "underground_ores"
+    },
+    {
+      "biome_types": [
+        "normal",
+        "rough",
+        "ocean"
+      ],
+      "feature": {
+        "feature": {
+          "type": "minecraft:ore",
+          "config": {
+            "discard_chance_on_air_exposure": 0.0,
+            "size": 9,
+            "targets": [
+              {
+                "state": {
+                  "Name": "minestuck:uncarved_wood_iron_ore"
+                },
+                "target": {
+                  "block_state": {
+                    "Name": "minestuck:uncarved_wood"
+                  },
+                  "predicate_type": "minecraft:blockstate_match"
+                }
+              }
+            ]
+          }
+        },
+        "placement": [
+          {
+            "type": "minecraft:count",
+            "count": 48
+          },
+          {
+            "type": "minecraft:in_square"
+          },
+          {
+            "type": "minecraft:height_range",
+            "height": {
+              "type": "minecraft:uniform",
+              "max_inclusive": {
+                "absolute": 64
+              },
+              "min_inclusive": {
+                "above_bottom": 0
+              }
+            }
+          },
+          {
+            "type": "minecraft:biome"
+          }
+        ]
+      },
+      "step": "underground_ores"
+    },
+    {
+      "biome_types": [
+        "normal",
+        "rough",
+        "ocean"
+      ],
+      "feature": {
+        "feature": {
+          "type": "minecraft:ore",
+          "config": {
+            "discard_chance_on_air_exposure": 0.0,
+            "size": 3,
+            "targets": [
+              {
+                "state": {
+                  "Name": "minestuck:uncarved_wood_emerald_ore"
+                },
+                "target": {
+                  "block_state": {
+                    "Name": "minestuck:uncarved_wood"
+                  },
+                  "predicate_type": "minecraft:blockstate_match"
+                }
+              }
+            ]
+          }
+        },
+        "placement": [
+          {
+            "type": "minecraft:count",
+            "count": 29
+          },
+          {
+            "type": "minecraft:in_square"
+          },
+          {
+            "type": "minecraft:height_range",
+            "height": {
+              "type": "minecraft:uniform",
+              "max_inclusive": {
+                "absolute": 24
+              },
+              "min_inclusive": {
+                "above_bottom": 0
+              }
+            }
+          },
+          {
+            "type": "minecraft:biome"
+          }
+        ]
+      },
+      "step": "underground_ores"
+    }
+  ],
+  "structure_sets": [
+    {
+      "structure_set": {
+        "placement": {
+          "type": "minecraft:random_spread",
+          "salt": 17524013,
+          "separation": 3,
+          "spacing": 5
+        },
+        "structures": [
+          {
+            "structure": "minestuck:large_wood_object",
+            "weight": 1
+          }
+        ]
+      }
+    }
+  ]
+}

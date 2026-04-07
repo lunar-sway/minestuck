@@ -190,7 +190,7 @@ public sealed interface Trigger
 			if(player == null)
 				return;
 			
-			ItemStack stack = Condition.PlayerHasItem.findPlayerItem(this.item, player, this.amount);
+			ItemStack stack = Condition.PlayerEntityPredicate.findPlayerItem(this.item, player, this.amount);
 			if(stack != null)
 				stack.shrink(this.amount);
 		}
@@ -216,7 +216,7 @@ public sealed interface Trigger
 			DialogueComponent component = ((DialogueEntity) entity).getDialogueComponent();
 			Optional<Item> matchedItem = component.getMatchedItem(player);
 			matchedItem.ifPresent(item -> {
-				ItemStack matchedStack = Condition.PlayerHasItem.findPlayerItem(item, player, 1);
+				ItemStack matchedStack = Condition.PlayerEntityPredicate.findPlayerItem(item, player, 1);
 				if(matchedStack != null)
 					matchedStack.shrink(1);
 			});
@@ -280,7 +280,7 @@ public sealed interface Trigger
 			DialogueComponent component = ((DialogueEntity) entity).getDialogueComponent();
 			Optional<Item> matchedItem = component.getMatchedItem(player);
 			matchedItem.ifPresent(item -> {
-				ItemStack matchedStack = Condition.PlayerHasItem.findPlayerItem(item, player, 1);
+				ItemStack matchedStack = Condition.PlayerEntityPredicate.findPlayerItem(item, player, 1);
 				if(matchedStack != null)
 				{
 					entity.setItemSlot(slot, new ItemStack(item));

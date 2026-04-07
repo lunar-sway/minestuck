@@ -57,6 +57,7 @@ public class MSTags
 		public static final TagKey<Block> WOOD_TERRAIN_BLOCKS = tag("terrain/wood_terrain_blocks");
 		public static final TagKey<Block> HEAT_TERRAIN_BLOCKS = tag("terrain/heat_terrain_blocks");
 		public static final TagKey<Block> ASPECT_TREE_PLACEABLE = tag("terrain/aspect_tree_placeable");
+		public static final TagKey<Block> LAND_OCEAN_FLUIDS = tag("land_ocean_fluids");
 		public static final TagKey<Block> CRUXITE_ORES = tag("ores/cruxite");
 		public static final TagKey<Block> URANIUM_ORES = tag("ores/uranium");
 		public static final TagKey<Block> COAL_ORES = tag("ores/coal");

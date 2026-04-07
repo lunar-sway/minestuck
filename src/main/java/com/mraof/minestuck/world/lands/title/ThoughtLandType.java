@@ -3,17 +3,18 @@ package com.mraof.minestuck.world.lands.title;
 import com.mraof.minestuck.block.MSBlocks;
 import com.mraof.minestuck.util.MSSoundEvents;
 import com.mraof.minestuck.util.MSTags;
-import com.mraof.minestuck.world.biome.LandBiomeSetType;
 import com.mraof.minestuck.world.biome.LandBiomeType;
 import com.mraof.minestuck.world.gen.LandGenSettings;
 import com.mraof.minestuck.world.gen.feature.MSPlacedFeatures;
 import com.mraof.minestuck.world.gen.structure.blocks.StructureBlockRegistry;
-import com.mraof.minestuck.world.lands.LandBiomeGenBuilder;
 import com.mraof.minestuck.world.lands.LandProperties;
 import com.mraof.minestuck.world.lands.terrain.TerrainLandType;
+import net.minecraft.core.HolderLookup;
+import net.minecraft.core.registries.Registries;
 import net.minecraft.sounds.SoundEvent;
 import net.minecraft.world.level.block.Blocks;
 import net.minecraft.world.level.levelgen.GenerationStep;
+import net.minecraft.world.level.levelgen.placement.PlacedFeature;
 import net.minecraft.world.phys.Vec3;
 
 public class ThoughtLandType extends TitleLandType
@@ -52,11 +53,12 @@ public class ThoughtLandType extends TitleLandType
 	}
 	
 	@Override
-	public void addBiomeGeneration(LandBiomeGenBuilder builder, StructureBlockRegistry blocks, LandBiomeSetType biomeSet)
+	public void addExtensions(HolderLookup.Provider provider, StructureBlockRegistry blocks)
 	{
-		builder.addFeature(GenerationStep.Decoration.SURFACE_STRUCTURES, MSPlacedFeatures.SMALL_LIBRARY, LandBiomeType.NORMAL);
-		builder.addFeature(GenerationStep.Decoration.VEGETAL_DECORATION, MSPlacedFeatures.MIND_TREE, LandBiomeType.anyExcept(LandBiomeType.OCEAN));
+		HolderLookup.RegistryLookup<PlacedFeature> features = provider.lookupOrThrow(Registries.PLACED_FEATURE);
 		
+		addFeatureExtension(features, GenerationStep.Decoration.SURFACE_STRUCTURES, MSPlacedFeatures.SMALL_LIBRARY, LandBiomeType.NORMAL);
+		addFeatureExtension(features, GenerationStep.Decoration.VEGETAL_DECORATION, MSPlacedFeatures.MIND_TREE, LandBiomeType.anyExcept(LandBiomeType.OCEAN));
 	}
 	
 	@Override
