@@ -10,7 +10,6 @@ import com.mraof.minestuck.world.gen.structure.MSStructures;
 import com.mraof.minestuck.world.gen.structure.blocks.StructureBlockRegistry;
 import com.mraof.minestuck.world.gen.structure.village.SalamanderVillagePieces;
 import com.mraof.minestuck.world.lands.LandBiomeGenBuilder;
-import net.minecraft.core.HolderGetter;
 import net.minecraft.core.HolderLookup;
 import net.minecraft.core.registries.Registries;
 import net.minecraft.util.RandomSource;
@@ -25,8 +24,6 @@ import net.minecraft.world.level.levelgen.structure.Structure;
 import net.minecraft.world.level.levelgen.structure.StructureSet;
 import net.minecraft.world.level.levelgen.structure.placement.RandomSpreadStructurePlacement;
 import net.minecraft.world.level.levelgen.structure.placement.RandomSpreadType;
-
-import java.util.function.Consumer;
 
 import static com.mraof.minestuck.world.gen.structure.blocks.StructureBlockRegistry.*;
 
@@ -96,16 +93,10 @@ public class WoodLandType extends TerrainLandType
 	}
 	
 	@Override
-	public void addStructureSets(Consumer<StructureSet> consumer, HolderGetter<Structure> structureLookup)
-	{
-		super.addStructureSets(consumer, structureLookup);
-		consumer.accept(new StructureSet(structureLookup.getOrThrow(MSStructures.LARGE_WOOD_OBJECT), new RandomSpreadStructurePlacement(5, 3, RandomSpreadType.LINEAR, 17524013)));
-	}
-	
-	@Override
 	public void addExtensions(HolderLookup.Provider provider, StructureBlockRegistry blocks)
 	{
 		HolderLookup.RegistryLookup<PlacedFeature> features = provider.lookupOrThrow(Registries.PLACED_FEATURE);
+		HolderLookup.RegistryLookup<Structure> structures = provider.lookupOrThrow(Registries.STRUCTURE);
 		
 		addFeatureExtension(features, GenerationStep.Decoration.VEGETAL_DECORATION, MSPlacedFeatures.WOODEN_GRASS_PATCH, LandBiomeType.NORMAL);
 		addFeatureExtension(features, GenerationStep.Decoration.VEGETAL_DECORATION, MSPlacedFeatures.TREATED_WOODEN_GRASS_PATCH, LandBiomeType.NORMAL, LandBiomeType.ROUGH);
@@ -156,6 +147,8 @@ public class WoodLandType extends TerrainLandType
 						new OreConfiguration(blocks.getGroundType(), MSBlocks.UNCARVED_WOOD_EMERALD_ORE.get().defaultBlockState(), 3),
 						CountPlacement.of(29), InSquarePlacement.spread(), HeightRangePlacement.uniform(VerticalAnchor.bottom(), VerticalAnchor.absolute(24)), BiomeFilter.biome()),
 				LandBiomeType.any());
+		
+		addStructureExtension(new StructureSet(structures.getOrThrow(MSStructures.LARGE_WOOD_OBJECT), new RandomSpreadStructurePlacement(5, 3, RandomSpreadType.LINEAR, 17524013)));
 	}
 	
 	@Override

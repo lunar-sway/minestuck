@@ -17,5 +17,35 @@
       "feature": "minestuck:tree/rage",
       "step": "vegetal_decoration"
     }
+  ],
+  "mob_spawns": [
+    {
+      "biome_types": [
+        "normal",
+        "rough",
+        "ocean"
+      ],
+      "category": "monster",
+      "spawner_data": {
+        "type": "minecraft:zombie",
+        "maxCount": 3,
+        "minCount": 1,
+        "weight": 2
+      }
+    },
+    {
+      "biome_types": [
+        "normal",
+        "rough",
+        "ocean"
+      ],
+      "category": "monster",
+      "spawner_data": {
+        "type": "minecraft:skeleton",
+        "maxCount": 2,
+        "minCount": 1,
+        "weight": 1
+      }
+    }
   ]
 }

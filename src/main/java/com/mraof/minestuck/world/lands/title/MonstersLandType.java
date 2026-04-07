@@ -74,6 +74,17 @@ public class MonstersLandType extends TitleLandType
 		
 		addFeatureExtension(features, GenerationStep.Decoration.UNDERGROUND_STRUCTURES, CavePlacements.MONSTER_ROOM, LandBiomeType.any());
 		addFeatureExtension(features, GenerationStep.Decoration.VEGETAL_DECORATION, MSPlacedFeatures.RAGE_TREE, LandBiomeType.anyExcept(LandBiomeType.OCEAN));
+		
+		if(this.type == Variant.MONSTERS)
+		{
+			addMobSpawnExtension(MobCategory.MONSTER, new MobSpawnSettings.SpawnerData(EntityType.CREEPER, 1, 1, 1), LandBiomeType.any());
+			addMobSpawnExtension(MobCategory.MONSTER, new MobSpawnSettings.SpawnerData(EntityType.SPIDER, 1, 1, 2), LandBiomeType.any());
+			addMobSpawnExtension(MobCategory.MONSTER, new MobSpawnSettings.SpawnerData(EntityType.ZOMBIE, 1, 1, 2), LandBiomeType.any());
+		} else if(this.type == Variant.UNDEAD)
+		{
+			addMobSpawnExtension(MobCategory.MONSTER, new MobSpawnSettings.SpawnerData(EntityType.ZOMBIE, 2, 1, 3), LandBiomeType.any());
+			addMobSpawnExtension(MobCategory.MONSTER, new MobSpawnSettings.SpawnerData(EntityType.SKELETON, 1, 1, 2), LandBiomeType.any());
+		}
 	}
 	
 	@Override

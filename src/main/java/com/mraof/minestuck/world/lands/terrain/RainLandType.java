@@ -10,7 +10,6 @@ import com.mraof.minestuck.world.gen.feature.MSPlacedFeatures;
 import com.mraof.minestuck.world.gen.structure.MSStructures;
 import com.mraof.minestuck.world.gen.structure.blocks.StructureBlockRegistry;
 import com.mraof.minestuck.world.gen.structure.village.TurtleVillagePieces;
-import net.minecraft.core.HolderGetter;
 import net.minecraft.core.HolderLookup;
 import net.minecraft.core.registries.Registries;
 import net.minecraft.util.RandomSource;
@@ -24,8 +23,6 @@ import net.minecraft.world.level.levelgen.structure.Structure;
 import net.minecraft.world.level.levelgen.structure.StructureSet;
 import net.minecraft.world.level.levelgen.structure.placement.RandomSpreadStructurePlacement;
 import net.minecraft.world.level.levelgen.structure.placement.RandomSpreadType;
-
-import java.util.function.Consumer;
 
 import static com.mraof.minestuck.world.gen.structure.blocks.StructureBlockRegistry.*;
 
@@ -88,6 +85,7 @@ public class RainLandType extends TerrainLandType
 	public void addExtensions(HolderLookup.Provider provider, StructureBlockRegistry blocks)
 	{
 		HolderLookup.RegistryLookup<PlacedFeature> features = provider.lookupOrThrow(Registries.PLACED_FEATURE);
+		HolderLookup.RegistryLookup<Structure> structures = provider.lookupOrThrow(Registries.STRUCTURE);
 		
 		addFeatureExtension(features, GenerationStep.Decoration.VEGETAL_DECORATION, MSPlacedFeatures.DEAD_TREE, LandBiomeType.NORMAL);
 		addFeatureExtension(features, GenerationStep.Decoration.VEGETAL_DECORATION, MSPlacedFeatures.EXTRA_DEAD_TREE, LandBiomeType.ROUGH);
@@ -108,13 +106,8 @@ public class RainLandType extends TerrainLandType
 						new OreConfiguration(blocks.getGroundType(), MSBlocks.PINK_STONE_DIAMOND_ORE.get().defaultBlockState(), 6),
 						CountPlacement.of(11), InSquarePlacement.spread(), HeightRangePlacement.uniform(VerticalAnchor.bottom(), VerticalAnchor.absolute(24)), BiomeFilter.biome()),
 				LandBiomeType.any());
-	}
-	
-	@Override
-	public void addStructureSets(Consumer<StructureSet> consumer, HolderGetter<Structure> structureLookup)
-	{
-		super.addStructureSets(consumer, structureLookup);
-		consumer.accept(new StructureSet(structureLookup.getOrThrow(MSStructures.PINK_TOWER), new RandomSpreadStructurePlacement(35, 10, RandomSpreadType.LINEAR, 90543602)));
+		
+		addStructureExtension(new StructureSet(structures.getOrThrow(MSStructures.PINK_TOWER), new RandomSpreadStructurePlacement(35, 10, RandomSpreadType.LINEAR, 90543602)));
 	}
 	
 	@Override

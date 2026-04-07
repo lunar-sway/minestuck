@@ -390,5 +390,19 @@
       },
       "step": "underground_ores"
     }
+  ],
+  "mob_spawns": [
+    {
+      "biome_types": [
+        "ocean"
+      ],
+      "category": "water_creature",
+      "spawner_data": {
+        "type": "minecraft:squid",
+        "maxCount": 5,
+        "minCount": 3,
+        "weight": 2
+      }
+    }
   ]
 }

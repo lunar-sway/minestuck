@@ -86,12 +86,6 @@ public class RainbowLandType extends TerrainLandType
 	}
 	
 	@Override
-	public void setSpawnInfo(MobSpawnSettings.Builder builder, LandBiomeType type)
-	{
-		builder.addSpawn(MobCategory.WATER_CREATURE, new MobSpawnSettings.SpawnerData(EntityType.SQUID, 2, 3, 5));
-	}
-	
-	@Override
 	public SurfaceRules.RuleSource getSurfaceRule(StructureBlockRegistry blocks)
 	{
 		SurfaceRules.RuleSource wool = new MSSurfaceRules.CheckeredRuleSource(1,
@@ -148,6 +142,8 @@ public class RainbowLandType extends TerrainLandType
 						new OreConfiguration(blocks.getGroundType(), Blocks.DIORITE.defaultBlockState(), 8),
 						CountPlacement.of(30), InSquarePlacement.spread(), HeightRangePlacement.uniform(VerticalAnchor.bottom(), VerticalAnchor.absolute(32)), BiomeFilter.biome()),
 				LandBiomeType.any());
+		
+		addMobSpawnExtension(MobCategory.WATER_CREATURE, new MobSpawnSettings.SpawnerData(EntityType.SQUID, 2, 3, 5), LandBiomeType.OCEAN);
 	}
 	
 	@Override

@@ -38,20 +38,6 @@ public class FrogsLandType extends TitleLandType
 	}
 	
 	@Override
-	public void setSpawnInfo(MobSpawnSettings.Builder builder, LandBiomeType type)
-	{
-		if(type == LandBiomeType.NORMAL)
-		{
-			builder.addSpawn(MobCategory.CREATURE, new MobSpawnSettings.SpawnerData(MSEntityTypes.FROG.get(), 3, 0, 2));
-		}
-		
-		if(type == LandBiomeType.ROUGH)
-		{
-			builder.addSpawn(MobCategory.CREATURE, new MobSpawnSettings.SpawnerData(MSEntityTypes.FROG.get(), 15, 1, 6));
-		}
-	}
-	
-	@Override
 	public void addExtensions(HolderLookup.Provider provider, StructureBlockRegistry blocks)
 	{
 		HolderLookup.RegistryLookup<PlacedFeature> features = provider.lookupOrThrow(Registries.PLACED_FEATURE);
@@ -61,6 +47,9 @@ public class FrogsLandType extends TitleLandType
 		addFeatureExtension(features, GenerationStep.Decoration.SURFACE_STRUCTURES, MSPlacedFeatures.FROG_RUINS, LandBiomeType.anyExcept(LandBiomeType.OCEAN));
 		
 		addFeatureExtension(features, GenerationStep.Decoration.VEGETAL_DECORATION, MSPlacedFeatures.SPACE_TREE, LandBiomeType.anyExcept(LandBiomeType.OCEAN));
+		
+		addMobSpawnExtension(MobCategory.CREATURE, new MobSpawnSettings.SpawnerData(MSEntityTypes.FROG.get(), 3, 1, 2), LandBiomeType.NORMAL);
+		addMobSpawnExtension(MobCategory.CREATURE, new MobSpawnSettings.SpawnerData(MSEntityTypes.FROG.get(), 15, 1, 6), LandBiomeType.ROUGH);
 	}
 	
 	@Override

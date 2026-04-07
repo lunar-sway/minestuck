@@ -23,5 +23,31 @@
       "feature": "minestuck:tree/space",
       "step": "vegetal_decoration"
     }
+  ],
+  "mob_spawns": [
+    {
+      "biome_types": [
+        "normal"
+      ],
+      "category": "creature",
+      "spawner_data": {
+        "type": "minestuck:frog",
+        "maxCount": 2,
+        "minCount": 1,
+        "weight": 3
+      }
+    },
+    {
+      "biome_types": [
+        "rough"
+      ],
+      "category": "creature",
+      "spawner_data": {
+        "type": "minestuck:frog",
+        "maxCount": 6,
+        "minCount": 1,
+        "weight": 15
+      }
+    }
   ]
 }

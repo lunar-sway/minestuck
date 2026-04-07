@@ -477,5 +477,23 @@
       },
       "step": "underground_ores"
     }
+  ],
+  "structure_sets": [
+    {
+      "structure_set": {
+        "placement": {
+          "type": "minecraft:random_spread",
+          "salt": 17524013,
+          "separation": 3,
+          "spacing": 5
+        },
+        "structures": [
+          {
+            "structure": "minestuck:large_wood_object",
+            "weight": 1
+          }
+        ]
+      }
+    }
   ]
 }

@@ -21,7 +21,9 @@ import net.minecraft.resources.ResourceKey;
 import net.minecraft.sounds.SoundEvent;
 import net.minecraft.tags.TagKey;
 import net.minecraft.world.entity.EntityType;
+import net.minecraft.world.entity.MobCategory;
 import net.minecraft.world.level.biome.Biome;
+import net.minecraft.world.level.biome.MobSpawnSettings;
 import net.minecraft.world.level.levelgen.GenerationStep;
 import net.minecraft.world.level.levelgen.SurfaceRules;
 import net.minecraft.world.level.levelgen.carver.ConfiguredWorldCarver;
@@ -59,6 +61,8 @@ public abstract class TerrainLandType implements ILandType
 	
 	private final List<LandTypeExtensions.FeatureExtension> featureExtensions = new ArrayList<>();
 	private final List<LandTypeExtensions.CarverExtension> carverExtensions = new ArrayList<>();
+	private final List<LandTypeExtensions.MobSpawnExtension> spawnExtensions = new ArrayList<>();
+	private final List<LandTypeExtensions.StructureSetExtension> structureExtensions = new ArrayList<>();
 	
 	private final LandBiomeSetType biomeSet;
 	private final Supplier<SoundEvent> backgroundMusic;
@@ -156,10 +160,20 @@ public abstract class TerrainLandType implements ILandType
 		carverExtensions.add(new LandTypeExtensions.CarverExtension(step, Holder.direct(carver), Arrays.stream(biomeTypes).toList()));
 	}
 	
+	public void addMobSpawnExtension(MobCategory category, MobSpawnSettings.SpawnerData spawnerData, LandBiomeType... biomeTypes)
+	{
+		spawnExtensions.add(new LandTypeExtensions.MobSpawnExtension(category, spawnerData, Arrays.stream(biomeTypes).toList()));
+	}
+	
+	public void addStructureExtension(StructureSet structureSet)
+	{
+		structureExtensions.add(new LandTypeExtensions.StructureSetExtension(structureSet));
+	}
+	
 	public LandTypeExtensions.ParsedExtension getExtensions(HolderLookup.Provider provider, StructureBlockRegistry blocks)
 	{
 		addExtensions(provider, blocks);
-		return new LandTypeExtensions.ParsedExtension(featureExtensions, carverExtensions, List.of(), List.of());
+		return new LandTypeExtensions.ParsedExtension(featureExtensions, carverExtensions, spawnExtensions, structureExtensions);
 	}
 	
 	@Override

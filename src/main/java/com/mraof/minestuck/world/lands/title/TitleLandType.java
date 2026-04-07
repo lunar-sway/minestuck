@@ -19,6 +19,8 @@ import net.minecraft.network.codec.ByteBufCodecs;
 import net.minecraft.network.codec.StreamCodec;
 import net.minecraft.resources.ResourceKey;
 import net.minecraft.tags.TagKey;
+import net.minecraft.world.entity.MobCategory;
+import net.minecraft.world.level.biome.MobSpawnSettings;
 import net.minecraft.world.level.levelgen.GenerationStep;
 import net.minecraft.world.level.levelgen.carver.ConfiguredWorldCarver;
 import net.minecraft.world.level.levelgen.placement.PlacedFeature;
@@ -41,6 +43,8 @@ public abstract class TitleLandType implements ILandType
 	
 	private final List<LandTypeExtensions.FeatureExtension> featureExtensions = new ArrayList<>();
 	private final List<LandTypeExtensions.CarverExtension> carverExtensions = new ArrayList<>();
+	private final List<LandTypeExtensions.MobSpawnExtension> spawnExtensions = new ArrayList<>();
+	private final List<LandTypeExtensions.StructureSetExtension> structureExtensions = new ArrayList<>();
 	
 	/**
 	 * Returns true if the given land type may be randomly chosen together with this land type.
@@ -73,10 +77,20 @@ public abstract class TitleLandType implements ILandType
 		carverExtensions.add(new LandTypeExtensions.CarverExtension(step, Holder.direct(carver), Arrays.stream(biomeTypes).toList()));
 	}
 	
+	public void addMobSpawnExtension(MobCategory category, MobSpawnSettings.SpawnerData spawnerData, LandBiomeType... biomeTypes)
+	{
+		spawnExtensions.add(new LandTypeExtensions.MobSpawnExtension(category, spawnerData, Arrays.stream(biomeTypes).toList()));
+	}
+	
+	public void addStructureExtension(StructureSet structureSet)
+	{
+		structureExtensions.add(new LandTypeExtensions.StructureSetExtension(structureSet));
+	}
+	
 	public LandTypeExtensions.ParsedExtension getExtensions(HolderLookup.Provider provider, StructureBlockRegistry blocks)
 	{
 		addExtensions(provider, blocks);
-		return new LandTypeExtensions.ParsedExtension(featureExtensions, carverExtensions, List.of(), List.of());
+		return new LandTypeExtensions.ParsedExtension(featureExtensions, carverExtensions, spawnExtensions, structureExtensions);
 	}
 	
 	@Override
