@@ -76,7 +76,7 @@ public final class MinestuckData
 		gen.addProvider(event.includeServer(), ConsortFoodMerchantDialogue.create(output, enUsLanguageProvider, lookupProvider));
 		gen.addProvider(event.includeServer(), ConsortGeneralMerchantDialogue.create(output, enUsLanguageProvider, lookupProvider));
 		gen.addProvider(event.includeServer(), CarapacianSoldierDialogue.create(output, enUsLanguageProvider, lookupProvider));
-		gen.addProvider(event.includeServer(), IndividualizedDialogue.create(output, enUsLanguageProvider));
+		gen.addProvider(event.includeServer(), IndividualizedDialogue.create(output, enUsLanguageProvider, lookupProvider));
 		
 		gen.addProvider(event.includeServer(), new BetterCombatProvider(output));
 	}

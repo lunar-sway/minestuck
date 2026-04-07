@@ -1,35 +1,35 @@
 {
   "node": {
-    "animation": { },
-    "gui":       "minestuck:textures/gui/dialogue/dialogue.png",
-    "messages":  [
+    "animation": {},
+    "gui": "minestuck:textures/gui/dialogue/dialogue.png",
+    "messages": [
       {
-        "type":    "entity",
+        "type": "entity",
         "message": "minestuck.dialogue.individual.kernelsprite.start"
       },
       {
-        "type":    "description",
+        "type": "description",
         "message": "minestuck.dialogue.individual.kernelsprite.start.desc"
       }
     ],
     "responses": [
       {
-        "condition":      {
+        "condition": {
           "type": "minestuck:always_true"
         },
         "hide_if_failed": true,
-        "message":        "minestuck.dialogue.individual.kernelsprite.start.what_kernel",
-        "next_dialogue":  "minestuck:individual/kernelsprite/what_kernel",
-        "triggers":       [ ]
+        "message": "minestuck.dialogue.individual.kernelsprite.start.what_kernel",
+        "next_dialogue": "minestuck:individual/kernelsprite/what_kernel",
+        "triggers": []
       },
       {
-        "condition":      {
+        "condition": {
           "type": "minestuck:always_true"
         },
         "hide_if_failed": true,
-        "message":        "minestuck.dialogue.individual.kernelsprite.start.what_say",
-        "next_dialogue":  "minestuck:individual/kernelsprite/what_say",
-        "triggers":       [ ]
+        "message": "minestuck.dialogue.individual.kernelsprite.start.what_say",
+        "next_dialogue": "minestuck:individual/kernelsprite/what_say",
+        "triggers": []
       }
     ]
   }
