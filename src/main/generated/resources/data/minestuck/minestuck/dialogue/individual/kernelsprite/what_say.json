@@ -1,15 +1,73 @@
 {
-  "node": {
+  "conditioned_nodes": [
+    {
+      "condition": {
+        "type": "minestuck:npc_near_block_predicate",
+        "predicate": {
+          "blocks": "minestuck:cruxtruder_tube"
+        },
+        "radius": 24
+      },
+      "node": {
+        "animation": {},
+        "gui": "minestuck:textures/gui/dialogue/dialogue.png",
+        "messages": [
+          {
+            "type": "entity",
+            "message": "minestuck.dialogue.individual.kernelsprite.what_say.near_block"
+          },
+          {
+            "type": "description",
+            "message": "minestuck.dialogue.individual.kernelsprite.what_say.near_block.desc"
+          }
+        ],
+        "responses": [
+          {
+            "condition": {
+              "type": "minestuck:always_true"
+            },
+            "hide_if_failed": true,
+            "message": "minestuck.dialogue.individual.kernelsprite.what_say.help_entering",
+            "next_dialogue": {
+              "id": "minestuck:individual/kernelsprite/help_entering",
+              "reply_messages": [],
+              "set_as_entrypoint": true
+            },
+            "triggers": [
+              {
+                "type": "minestuck:go_to_block",
+                "duration": 240,
+                "predicate": {
+                  "blocks": "minestuck:cruxtruder_tube"
+                },
+                "radius": 24
+              }
+            ]
+          },
+          {
+            "condition": {
+              "type": "minestuck:always_true"
+            },
+            "hide_if_failed": true,
+            "message": "minestuck.dialogue.individual.kernelsprite.return",
+            "next_dialogue": "minestuck:individual/kernelsprite/start",
+            "triggers": []
+          }
+        ]
+      }
+    }
+  ],
+  "default_node": {
     "animation": {},
     "gui": "minestuck:textures/gui/dialogue/dialogue.png",
     "messages": [
       {
         "type": "entity",
-        "message": "minestuck.dialogue.individual.kernelsprite.what_say"
+        "message": "minestuck.dialogue.individual.kernelsprite.what_say.default"
       },
       {
         "type": "description",
-        "message": "minestuck.dialogue.individual.kernelsprite.what_say.desc"
+        "message": "minestuck.dialogue.individual.kernelsprite.what_say.default.desc"
       }
     ],
     "responses": [
@@ -18,11 +76,11 @@
           "type": "minestuck:always_true"
         },
         "hide_if_failed": true,
-        "message": "minestuck.dialogue.individual.kernelsprite.what_say.help_entering",
+        "message": "minestuck.dialogue.individual.kernelsprite.what_say.need_cruxtruder",
         "next_dialogue": {
-          "id": "minestuck:individual/kernelsprite/help_entering",
-          "reply_messages": [],
-          "set_as_entrypoint": true
+          "id": "minestuck:individual/kernelsprite/need_cruxtruder",
+          "player_message": "minestuck.dialogue.individual.kernelsprite.what_say.need_cruxtruder_player",
+          "set_as_entrypoint": false
         },
         "triggers": []
       },

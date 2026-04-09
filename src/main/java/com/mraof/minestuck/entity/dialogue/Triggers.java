@@ -30,6 +30,7 @@ public final class Triggers
 		REGISTER.register("add_consort_reputation", () -> AddConsortReputation.CODEC);
 		REGISTER.register("add_boondollars", () -> AddBoondollars.CODEC);
 		REGISTER.register("add_echeladder", () -> AddEcheladderExperience.CODEC);
+		REGISTER.register("go_to_block", () -> GoToBlock.CODEC);
 		REGISTER.register("explode", () -> Explode.CODEC);
 		REGISTER.register("set_flag", () -> SetFlag.CODEC);
 		REGISTER.register("set_random_flag", () -> SetRandomFlag.CODEC);

@@ -85,15 +85,16 @@ public class KernelspriteEntity extends PathfinderMob implements DialogueEntity
 	public void addAdditionalSaveData(CompoundTag compound)
 	{
 		super.addAdditionalSaveData(compound);
-		compound.putInt("Color", this.getColor());
+		compound.putInt("color", this.getColor());
+		compound.put("dialogue", dialogueComponent.write());
 	}
 	
 	@Override
 	public void readAdditionalSaveData(CompoundTag compound)
 	{
 		super.readAdditionalSaveData(compound);
-		
-		this.setColor(compound.getInt("Color"));
+		this.setColor(compound.getInt("color"));
+		dialogueComponent.read(compound.getCompound("dialogue"));
 	}
 	
 	public void setColor(int i)
