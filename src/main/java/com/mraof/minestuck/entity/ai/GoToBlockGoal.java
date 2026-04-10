@@ -14,9 +14,10 @@ public class GoToBlockGoal extends MoveToBlockGoal
 {
 	private final BlockPredicate blockPredicate;
 	private final DialogueEntity dialogueMob;
+	private final double acceptedDistance;
 	private int duration;
 	
-	public GoToBlockGoal(PathfinderMob mob, BlockPredicate blockPredicate, double speedModifier, int duration, int searchRange)
+	public GoToBlockGoal(PathfinderMob mob, BlockPredicate blockPredicate, double speedModifier, int duration, int searchRange, double acceptedDistance)
 	{
 		super(mob, speedModifier, searchRange, searchRange);
 		
@@ -26,6 +27,7 @@ public class GoToBlockGoal extends MoveToBlockGoal
 			this.dialogueMob = null;
 		this.blockPredicate = blockPredicate;
 		this.duration = duration;
+		this.acceptedDistance = acceptedDistance;
 		this.setFlags(EnumSet.of(Flag.JUMP, Flag.MOVE));
 	}
 	
@@ -58,6 +60,12 @@ public class GoToBlockGoal extends MoveToBlockGoal
 			dialogueMob.getDialogueComponent().setHasReachedTarget(true);
 		
 		return reachedTarget;
+	}
+	
+	@Override
+	public double acceptedDistance()
+	{
+		return acceptedDistance;
 	}
 	
 	@Override

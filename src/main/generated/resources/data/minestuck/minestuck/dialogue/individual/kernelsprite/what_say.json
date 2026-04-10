@@ -36,7 +36,6 @@
             "triggers": [
               {
                 "type": "minestuck:go_to_block",
-                "duration": 240,
                 "predicate": {
                   "blocks": "minestuck:cruxtruder_tube"
                 },

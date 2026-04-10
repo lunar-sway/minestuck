@@ -429,14 +429,15 @@ public sealed interface Trigger
 		}
 	}
 	
-	record GoToBlock(BlockPredicate predicate, int radius, double speedModifier, int duration, int priority) implements Trigger
+	record GoToBlock(BlockPredicate predicate, int radius, double speedModifier, int duration, int priority, double acceptedDistance) implements Trigger
 	{
 		static final MapCodec<GoToBlock> CODEC = RecordCodecBuilder.mapCodec(instance -> instance.group(
 				BlockPredicate.CODEC.fieldOf("predicate").forGetter(GoToBlock::predicate),
 				Codec.INT.optionalFieldOf("radius", 8).forGetter(GoToBlock::radius),
 				Codec.DOUBLE.optionalFieldOf("speed_modifier", 1.0).forGetter(GoToBlock::speedModifier),
 				Codec.INT.optionalFieldOf("duration", 240).forGetter(GoToBlock::duration),
-				Codec.INT.optionalFieldOf("priority", 1).forGetter(GoToBlock::priority)
+				Codec.INT.optionalFieldOf("priority", 1).forGetter(GoToBlock::priority),
+				Codec.DOUBLE.optionalFieldOf("accepted_distance", 3.0D).forGetter(GoToBlock::acceptedDistance)
 		).apply(instance, GoToBlock::new));
 		
 		@Override
@@ -450,7 +451,7 @@ public sealed interface Trigger
 		{
 			if(entity instanceof PathfinderMob mob)
 			{
-				mob.goalSelector.addGoal(priority, new GoToBlockGoal(mob, predicate, speedModifier, duration, radius));
+				mob.goalSelector.addGoal(priority, new GoToBlockGoal(mob, predicate, speedModifier, duration, radius, acceptedDistance));
 			}
 		}
 	}

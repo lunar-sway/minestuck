@@ -55,7 +55,7 @@ public final class IndividualizedDialogue
 						.node(isNearBlock(MSBlocks.CRUXTRUDER.TUBE.get(), 24, 1), kernelspriteNode(l, "near_block",
 								"help command queried. Do you wish to learn about Entry?", "The static continues, but you get the sense that it is gesturing at the Cruxtruder.")
 								.addResponse(new ResponseBuilder(l.subMsg("help_entering", "Can you help me use that machine?"))
-										.addTrigger(new Trigger.GoToBlock(BlockPredicate.Builder.block().of(MSBlocks.CRUXTRUDER.TUBE.get()).build(), 24, 1, 240, 1))
+										.addTrigger(new Trigger.GoToBlock(BlockPredicate.Builder.block().of(MSBlocks.CRUXTRUDER.TUBE.get()).build(), 24, 1, 240, 1, 3))
 										.nextDialogue(helpEntering)
 										.setNextAsEntrypoint())
 								.addResponse(returnDialogue))

@@ -54,7 +54,7 @@ public final class MSEntityTypes
 	public static final Supplier<EntityType<DecoyEntity>> PLAYER_DECOY = REGISTER.register("player_decoy", () -> EntityType.Builder.<DecoyEntity>of(DecoyEntity::new, MobCategory.MISC).noSave().noSummon().build(Minestuck.id("player_decoy").toString()));
 	public static final Supplier<EntityType<ServerCursorEntity>> SERVER_CURSOR = REGISTER.register("server_cursor", () -> EntityType.Builder.of(ServerCursorEntity::new, MobCategory.MISC).noSave().noSummon().sized(0.1F, 0.1F).setShouldReceiveVelocityUpdates(false).setTrackingRange(4).fireImmune().build(Minestuck.id("server_cursor").toString()));
 	
-	public static final Supplier<EntityType<KernelspriteEntity>> KERNELSPRITE = REGISTER.register("kernelsprite", () -> EntityType.Builder.of(KernelspriteEntity::new, MobCategory.MISC).build(Minestuck.id("kernelsprite").toString()));
+	public static final Supplier<EntityType<KernelspriteEntity>> KERNELSPRITE = REGISTER.register("kernelsprite", () -> EntityType.Builder.of(KernelspriteEntity::new, MobCategory.MISC).fireImmune().build(Minestuck.id("kernelsprite").toString()));
 	
 	public static final Supplier<EntityType<MetalBoatEntity>> METAL_BOAT = REGISTER.register("metal_boat", () -> EntityType.Builder.<MetalBoatEntity>of(MetalBoatEntity::new, MobCategory.MISC).sized(1.375F, 0.5625F).build(Minestuck.id("metal_boat").toString()));
 	public static final Supplier<EntityType<BarbasolBombEntity>> BARBASOL_BOMB = REGISTER.register("barbasol_bomb", () -> EntityType.Builder.<BarbasolBombEntity>of(BarbasolBombEntity::new, MobCategory.MISC).sized(0.25F, 0.25F).setTrackingRange(4).setUpdateInterval(10).fireImmune().build(Minestuck.id("barbasol_bomb").toString()));
@@ -113,6 +113,6 @@ public final class MSEntityTypes
 		
 		event.put(PLAYER_DECOY.get(), Mob.createMobAttributes().build());
 		
-		event.put(KERNELSPRITE.get(), Mob.createMobAttributes().build());
+		event.put(KERNELSPRITE.get(), KernelspriteEntity.kernelspriteAttributes().build());
 	}
 }
