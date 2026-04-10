@@ -981,6 +981,7 @@ public class MinestuckEnUsLanguageProvider extends MinestuckLanguageProvider
 		addBlock(MSBlocks.CHOCOLATEY_CAKE, "Chocolatey Cake");
 		addBlockStoreTooltip(MSBlocks.CHOCOLATEY_CAKE, "The most scrumptious cake in the entire world!");
 		addBlock(MSBlocks.MOON_CAKE, "Moon Cake");
+		addBlock(MSBlocks.PAN_CAKE, "PANCake");
 		addBlock(MSBlocks.PRIMED_TNT, "Primed TNT");
 		addBlock(MSBlocks.UNSTABLE_TNT, "Unstable TNT");
 		addBlock(MSBlocks.INSTANT_TNT, "Instant TNT");
@@ -2122,6 +2123,7 @@ public class MinestuckEnUsLanguageProvider extends MinestuckLanguageProvider
 		addAdvancement(MSAdvancementProvider.LONG_TIME_COMING, "Long Time Coming", "Collect SBURB code! You get the sense that you need to find a computer to record its information to");
 		addAdvancement(MSAdvancementProvider.CONNECT, "Connect", "Create a connection with someone");
 		addAdvancement(MSAdvancementProvider.ENTRY, "A New World", "Create, and use the Cruxite Artifact");
+		addAdvancement(MSAdvancementProvider.SPEEDRUN, "Look At The Sky, Numbnuts!", "You GOTTA pay attention to this shit!");
 		addAdvancement(MSAdvancementProvider.ALCHEMY, "Step Towards Alchemy", "Getting a punch designix is the first step to alchemizing something else!");
 		addAdvancement(MSAdvancementProvider.NEW_MODUS, "A New Type of Frustrating", "Equip a new modus");
 		addAdvancement(MSAdvancementProvider.ALL_MODI, "A Full Set", "Try every modus type");
@@ -2143,6 +2145,7 @@ public class MinestuckEnUsLanguageProvider extends MinestuckLanguageProvider
 		addAdvancement(MSAdvancementProvider.LEGENDARY_WEAPON, "Legendary Weapon", "Obtain a Zilly, Welsh, or Denizen tier weapon");
 		addAdvancement(MSAdvancementProvider.BUY_OUT_SHOP, "Beware the Buyer", "Purchase every item available from a consort merchant");
 		addAdvancement(MSAdvancementProvider.BRICK_COMPUTER, "Brick Your Computer", "Did you try turning it on and off again?");
+		addAdvancement(MSAdvancementProvider.HAMMERGUY, "I Fucking Love Hammers", "Hahahah, hammer guy for life!");
 		
 		addLand(FungiLandType.FUNGI, "Fungi");
 		addLand(FungiLandType.DANK, "Dank");
