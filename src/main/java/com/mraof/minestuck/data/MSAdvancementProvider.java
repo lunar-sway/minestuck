@@ -46,6 +46,7 @@ public class MSAdvancementProvider implements AdvancementProvider.AdvancementGen
 	public static final String SEARCHING = "minestuck.searching";
 	public static final String LONG_TIME_COMING = "minestuck.long_time_coming";
 	public static final String CONNECT = "minestuck.connect";
+	public static final String SPEEDRUN = "minestuck.speedrun";
 	public static final String ENTRY = "minestuck.entry";
 	public static final String ALCHEMY = "minestuck.alchemy";
 	public static final String NEW_MODUS = "minestuck.new_modus";
@@ -68,6 +69,8 @@ public class MSAdvancementProvider implements AdvancementProvider.AdvancementGen
 	public static final String LEGENDARY_WEAPON = "minestuck.legendary_weapon";
 	public static final String BUY_OUT_SHOP = "minestuck.buy_out_shop";
 	public static final String BRICK_COMPUTER = "minestuck.brick_computer";
+	
+	public static final String HAMMERGUY = "minestuck.hammerguy";
 	
 	public static DataProvider create(PackOutput output, CompletableFuture<HolderLookup.Provider> registries, ExistingFileHelper existingFileHelper)
 	{
@@ -94,6 +97,13 @@ public class MSAdvancementProvider implements AdvancementProvider.AdvancementGen
 		AdvancementHolder entry = Advancement.Builder.advancement().parent(connect)
 				.display(ColorHandler.setDefaultColor(new ItemStack(MSItems.CRUXITE_APPLE.get())), Component.translatable(title(ENTRY)), Component.translatable(desc(ENTRY)), null, AdvancementType.TASK, true, true, false)
 				.addCriterion("use_artifact", EventTrigger.Instance.cruxiteArtifact()).save(saver, save_loc(ENTRY));
+		
+		AdvancementHolder speedrun = Advancement.Builder.advancement().parent(entry)
+				.display(MSItems.APPLE_JUICE.get(),Component.translatable(title(SPEEDRUN)), Component.translatable(desc(SPEEDRUN)), null, AdvancementType.CHALLENGE, true, true, true)
+				.requirements(AdvancementRequirements.Strategy.AND)
+				.addCriterion("playtime", EventTrigger.Instance.speedRun())
+				.addCriterion("use_artifact", EventTrigger.Instance.cruxiteArtifact()).save(saver, save_loc(SPEEDRUN));
+		
 		AdvancementHolder alchemy = Advancement.Builder.advancement().parent(entry)
 				.display(MSItems.CAPTCHA_CARD.get(), Component.translatable(title(ALCHEMY)), Component.translatable(desc(ALCHEMY)), null, AdvancementType.TASK, true, true, false)
 				.addCriterion("use_punch_designix", PunchDesignixTrigger.Instance.any()).save(saver, save_loc(ALCHEMY));
@@ -159,6 +169,16 @@ public class MSAdvancementProvider implements AdvancementProvider.AdvancementGen
 		AdvancementHolder brickComputer = Advancement.Builder.advancement().parent(connect)
 				.display(MSItems.OLD_COMPUTER.get(), Component.translatable(title(BRICK_COMPUTER)), Component.translatable(desc(BRICK_COMPUTER)), null, AdvancementType.CHALLENGE, true, true, true)
 				.addCriterion("brick_computer", EventTrigger.Instance.brickComputer()).save(saver, save_loc(BRICK_COMPUTER));
+		/**
+		AdvancementHolder hammerguy = Advancement.Builder.advancement().parent(connect)
+				.display(MSItems.CLAW_HAMMER.get(), Component.translatable(title(HAMMERGUY)), Component.translatable(desc(HAMMERGUY)), Minestuck.id("textures/gui/advancement_bg.png"), AdvancementType.TASK, false, false, true)
+				.addCriterion("claw_hammer", InventoryChangeTrigger.TriggerInstance.hasItems(MSItems.CLAW_HAMMER.get())).save(saver, save_loc(HAMMERGUY));
+		**/
+		
+		AdvancementHolder hammerguy = Advancement.Builder.advancement().parent(root)
+				.display(MSItems.CLAW_HAMMER.get(), Component.translatable(title(HAMMERGUY)), Component.translatable(desc(HAMMERGUY)), null, AdvancementType.TASK, true, true, true)
+				.addCriterion("possess_hammer", InventoryChangeTrigger.TriggerInstance.hasItems(MSItems.CLAW_HAMMER.get())).save(saver, save_loc(HAMMERGUY));
+		
 	}
 	
 	private static Advancement.Builder changeModusCriteria(Advancement.Builder builder)
