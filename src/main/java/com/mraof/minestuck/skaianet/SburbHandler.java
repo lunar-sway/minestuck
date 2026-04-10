@@ -21,6 +21,7 @@ import net.minecraft.network.protocol.game.ClientboundSetTitlesAnimationPacket;
 import net.minecraft.resources.ResourceKey;
 import net.minecraft.server.MinecraftServer;
 import net.minecraft.server.level.ServerPlayer;
+import net.minecraft.stats.Stats;
 import net.minecraft.world.item.ItemStack;
 import net.minecraft.world.level.Level;
 import net.neoforged.neoforge.common.NeoForge;
@@ -168,6 +169,10 @@ public final class SburbHandler
 		return landDimension;
 	}
 	
+	public static int getPlayerPlayedTime(ServerPlayer player) {
+		return player.getStats().getValue(Stats.CUSTOM.get(Stats.PLAY_TIME));
+	}
+	
 	public static void onEntry(MinecraftServer server, ServerPlayer player)
 	{
 		PlayerIdentifier playerId = Objects.requireNonNull(IdentifierHandler.encode(player));
@@ -180,6 +185,8 @@ public final class SburbHandler
 		SessionHandler.get(server).getOrCreateSession(playerData.playerId()).checkIfCompleted();
 		
 		MSCriteriaTriggers.CRUXITE_ARTIFACT.get().trigger(player);
+		// 12000 ticks = 10 minutes
+		if(getPlayerPlayedTime(player) > 12000) { MSCriteriaTriggers.SPEEDRUN.get().trigger(player); }
 		
 		EditmodeLocations.onEntry(server, playerData.playerId());
 		
