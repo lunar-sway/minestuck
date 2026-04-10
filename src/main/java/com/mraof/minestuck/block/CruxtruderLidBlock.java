@@ -1,7 +1,16 @@
 package com.mraof.minestuck.block;
 
+import com.mraof.minestuck.block.machine.CruxtruderBlock;
+import com.mraof.minestuck.blockentity.machine.CruxtruderBlockEntity;
+import com.mraof.minestuck.entity.KernelspriteEntity;
+import com.mraof.minestuck.entity.MSEntityTypes;
+import com.mraof.minestuck.player.PlayerData;
+import com.mraof.minestuck.player.PlayerIdentifier;
+import com.mraof.minestuck.util.MSAttachments;
 import net.minecraft.core.BlockPos;
+import net.minecraft.server.level.ServerLevel;
 import net.minecraft.world.level.BlockGetter;
+import net.minecraft.world.level.Level;
 import net.minecraft.world.level.block.Block;
 import net.minecraft.world.level.block.state.BlockState;
 import net.minecraft.world.level.material.PushReaction;
@@ -27,5 +36,39 @@ public class CruxtruderLidBlock extends Block
 	protected VoxelShape getShape(BlockState state, BlockGetter worldIn, BlockPos pos, CollisionContext context)
 	{
 		return SHAPE;
+	}
+	
+	@Override
+	protected void onRemove(BlockState state, Level level, BlockPos pos, BlockState newState, boolean movedByPiston)
+	{
+		super.onRemove(state, level, pos, newState, movedByPiston);
+		
+		if(level instanceof ServerLevel serverLevel)
+		{
+			BlockState cruxState = level.getBlockState(pos.below());
+			if(cruxState.getBlock() instanceof CruxtruderBlock cruxtruderBlock &&
+					level.getBlockEntity(cruxtruderBlock.getMainPos(cruxState, pos.below())) instanceof CruxtruderBlockEntity cruxtruder)
+			{
+				PlayerIdentifier playerIdentifier = cruxtruder.getOwner();
+				
+				if(playerIdentifier == null)
+					return;
+				
+				PlayerData data = PlayerData.get(playerIdentifier, serverLevel.getServer());
+				
+				if(data.getData(MSAttachments.HAS_KERNELSPRITE))
+					return;
+				
+				KernelspriteEntity kernelsprite = new KernelspriteEntity(MSEntityTypes.KERNELSPRITE.get(), level);
+				kernelsprite.setColor(cruxtruder.getColor());
+				kernelsprite.setOwner(playerIdentifier);
+				kernelsprite.setBoundOrigin(pos);
+				kernelsprite.setPos(pos.getCenter());
+				
+				level.addFreshEntity(kernelsprite);
+				
+				data.setData(MSAttachments.HAS_KERNELSPRITE, true);
+			}
+		}
 	}
 }

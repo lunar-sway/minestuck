@@ -6,6 +6,8 @@ import com.mraof.minestuck.block.MSBlocks;
 import com.mraof.minestuck.blockentity.ItemStackBlockEntity;
 import com.mraof.minestuck.blockentity.MSBlockEntityTypes;
 import com.mraof.minestuck.item.MSItems;
+import com.mraof.minestuck.player.IdentifierHandler;
+import com.mraof.minestuck.player.PlayerIdentifier;
 import com.mraof.minestuck.util.ColorHandler;
 import com.mraof.minestuck.util.MSSoundEvents;
 import net.minecraft.core.BlockPos;
@@ -37,6 +39,7 @@ public class CruxtruderBlockEntity extends BlockEntity
 	
 	private static final int CRUXITE_CAPACITY = 64;
 	
+	private PlayerIdentifier owner;
 	private int color = -1;
 	private boolean isBroken = false;
 	private int material = 1;
@@ -44,6 +47,16 @@ public class CruxtruderBlockEntity extends BlockEntity
 	public CruxtruderBlockEntity(BlockPos pos, BlockState state)
 	{
 		super(MSBlockEntityTypes.CRUXTRUDER.get(), pos, state);
+	}
+	
+	public PlayerIdentifier getOwner()
+	{
+		return owner;
+	}
+	
+	public void setOwner(PlayerIdentifier owner)
+	{
+		this.owner = owner;
 	}
 	
 	public int getColor()
@@ -160,6 +173,8 @@ public class CruxtruderBlockEntity extends BlockEntity
 	{
 		super.loadAdditional(nbt, pRegistries);
 		
+		if(nbt.contains("owner"))
+			owner = IdentifierHandler.load(nbt, "owner").result().orElse(null);
 		if(nbt.contains("color"))
 			color = nbt.getInt("color");
 		this.isBroken = nbt.getBoolean("broken");
@@ -170,6 +185,8 @@ public class CruxtruderBlockEntity extends BlockEntity
 	public void saveAdditional(CompoundTag compound, HolderLookup.Provider provider)
 	{
 		super.saveAdditional(compound, provider);
+		if(owner != null)
+			owner.saveToNBT(compound, "owner");
 		compound.putInt("color", color);
 		compound.putBoolean("broken", this.isBroken);
 		compound.putInt("material", material);

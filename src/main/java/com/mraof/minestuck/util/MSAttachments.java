@@ -30,6 +30,8 @@ public final class MSAttachments
 	
 	public static final Supplier<AttachmentType<CaptchaDeckHandler.ModusHolder>> MODUS_HOLDER = REGISTER.register("modus_holder",
 			() -> AttachmentType.serializable(restricted(CaptchaDeckHandler.ModusHolder::new, PlayerData.class)).build());
+	public static final Supplier<AttachmentType<Boolean>> HAS_KERNELSPRITE = REGISTER.register("has_kernelsprite",
+			() -> AttachmentType.builder(restricted(() -> false, PlayerData.class)).serialize(Codec.BOOL).build());
 	public static final Supplier<AttachmentType<Integer>> PLAYER_COLOR = REGISTER.register("player_color",
 			() -> AttachmentType.builder(restricted(() -> ColorHandler.BuiltinColors.DEFAULT_COLOR, PlayerData.class)).serialize(Codec.INT).build());
 	public static final Supplier<AttachmentType<Long>> BOONDOLLARS = REGISTER.register("boondollars",

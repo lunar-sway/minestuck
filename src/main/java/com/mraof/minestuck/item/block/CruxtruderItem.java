@@ -1,10 +1,14 @@
 package com.mraof.minestuck.item.block;
 
 import com.mraof.minestuck.block.machine.CruxtruderMultiblock;
+import com.mraof.minestuck.blockentity.machine.CruxtruderBlockEntity;
 import com.mraof.minestuck.computer.editmode.EditData;
 import com.mraof.minestuck.computer.editmode.ServerEditHandler;
-import com.mraof.minestuck.blockentity.machine.CruxtruderBlockEntity;
+import com.mraof.minestuck.player.IdentifierHandler;
+import com.mraof.minestuck.player.PlayerData;
+import com.mraof.minestuck.player.PlayerIdentifier;
 import com.mraof.minestuck.util.ColorHandler;
+import com.mraof.minestuck.util.MSAttachments;
 import com.mraof.minestuck.util.MSRotationUtil;
 import net.minecraft.core.BlockPos;
 import net.minecraft.server.level.ServerPlayer;
@@ -38,15 +42,23 @@ public class CruxtruderItem extends MultiblockItem
 		if(player == null || level.isClientSide)
 			return false;
 		BlockEntity be = level.getBlockEntity(multiblock.getBEPos(pos, MSRotationUtil.fromDirection(player.getDirection().getOpposite())));
-		if(be instanceof CruxtruderBlockEntity)
+		if(be instanceof CruxtruderBlockEntity cruxtruder)
 		{
-			int color;
 			EditData editData = ServerEditHandler.getData(player);
 			if(editData != null)
-				color = ColorHandler.getColorForPlayer(editData.getTarget(), level);
-			else color =  ColorHandler.getColorForPlayer((ServerPlayer) player);
+			{
+				cruxtruder.setColor(ColorHandler.getColorForPlayer(editData.getTarget(), level));
+				cruxtruder.setOwner(editData.getTarget());
+			} else
+			{
+				PlayerIdentifier identifier = IdentifierHandler.encode(player);
+				cruxtruder.setColor(ColorHandler.getColorForPlayer(identifier, level));
+				cruxtruder.setOwner(identifier);
+			}
 			
-			((CruxtruderBlockEntity) be).setColor(color);
+			//TODO remove this
+			PlayerData.get((ServerPlayer) player).get().setData(MSAttachments.HAS_KERNELSPRITE, false);
+			
 			return true;
 		} else LOGGER.warn("Placed cruxtruder, but can't find block entity. Instead found {}.", be);
 		return false;
