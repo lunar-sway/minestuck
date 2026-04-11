@@ -14,8 +14,6 @@ import net.minecraft.resources.ResourceLocation;
 import org.joml.Matrix4f;
 import software.bernie.geckolib.cache.texture.AnimatableTexture;
 
-import java.awt.*;
-
 public class KernelspriteRenderer extends EntityRenderer<KernelspriteEntity>
 {
 	public static final ResourceLocation BASE = Minestuck.id("textures/entity/kernelsprite/base.png");
@@ -42,7 +40,6 @@ public class KernelspriteRenderer extends EntityRenderer<KernelspriteEntity>
 		super.render(kernelsprite, entityYaw, partialTick, poseStack, bufferSource, packedLight);
 		
 		poseStack.pushPose();
-		poseStack.translate(0.0f, 0.75f, 0.0f);
 		poseStack.mulPose(this.entityRenderDispatcher.cameraOrientation());
 		
 		int color = kernelsprite.getColor();

@@ -22,8 +22,6 @@ import net.minecraft.world.entity.ai.attributes.AttributeSupplier;
 import net.minecraft.world.entity.ai.attributes.Attributes;
 import net.minecraft.world.entity.ai.control.MoveControl;
 import net.minecraft.world.entity.ai.goal.*;
-import net.minecraft.world.entity.animal.FlyingAnimal;
-import net.minecraft.world.entity.monster.Vex;
 import net.minecraft.world.entity.player.Player;
 import net.minecraft.world.level.Level;
 import net.minecraft.world.phys.Vec3;
@@ -35,12 +33,13 @@ import javax.annotation.Nullable;
 import java.util.EnumSet;
 
 @EventBusSubscriber(modid = Minestuck.MOD_ID, bus = EventBusSubscriber.Bus.GAME)
-public class KernelspriteEntity extends PathfinderMob implements DialogueEntity, FlyingAnimal
+public class KernelspriteEntity extends PathfinderMob implements DialogueEntity
 {
 	private static final EntityDataAccessor<Integer> COLOR = SynchedEntityData.defineId(KernelspriteEntity.class, EntityDataSerializers.INT);
 	
 	private final DialogueComponent dialogueComponent = new DialogueComponent(this);
 	private final RandomMoveGoal randomMoveGoal = new RandomMoveGoal(this);
+	private final StayPutGoal stayPutGoal = new StayPutGoal();
 	
 	@Nullable
 	private BlockPos boundOrigin;
@@ -51,9 +50,9 @@ public class KernelspriteEntity extends PathfinderMob implements DialogueEntity,
 		super(entityType, level);
 		setInvulnerable(true);
 		setPersistenceRequired();
-		this.goalSelector.addGoal(8, this.randomMoveGoal);
 		
 		this.moveControl = new KernelspriteMoveControl(this);
+		setStayPutGoal(true);
 		
 		dialogueComponent.setDialogue(Minestuck.id("individual/kernelsprite/start"), true);
 	}
@@ -115,7 +114,7 @@ public class KernelspriteEntity extends PathfinderMob implements DialogueEntity,
 			return InteractionResult.FAIL;
 		
 		this.dialogueComponent.tryStartDialogue(serverPlayer);
-		this.goalSelector.addGoal(7, new StayPutGoal());
+		setStayPutGoal(true);
 		
 		return InteractionResult.SUCCESS;
 	}
@@ -126,6 +125,25 @@ public class KernelspriteEntity extends PathfinderMob implements DialogueEntity,
 		super.registerGoals();
 		this.goalSelector.addGoal(0, new FloatGoal(this));
 		this.goalSelector.addGoal(7, new RandomLookAroundGoal(this));
+	}
+	
+	public void setRandomMoveGoal(boolean add)
+	{
+		if(add)
+			this.goalSelector.addGoal(8, this.randomMoveGoal);
+		else
+			this.goalSelector.removeGoal(this.randomMoveGoal);
+	}
+	
+	/**
+	 * Handle stay put. Adding the goal will temporarily disable the random move goal
+	 */
+	public void setStayPutGoal(boolean add)
+	{
+		if(add)
+			this.goalSelector.addGoal(7, stayPutGoal);
+		else
+			this.goalSelector.removeGoal(this.stayPutGoal);
 	}
 	
 	@Override
@@ -214,38 +232,41 @@ public class KernelspriteEntity extends PathfinderMob implements DialogueEntity,
 		return this.getType().builtInRegistryHolder().getKey().location().getPath();
 	}
 	
-	@Override
-	public boolean isFlying()
+	/**
+	 * Based on {@link net.minecraft.world.entity.monster.Vex.VexMoveControl}
+	 */
+	static class KernelspriteMoveControl extends MoveControl
 	{
-		return true;
-	}
-	
-	class KernelspriteMoveControl extends MoveControl
-	{
-		public KernelspriteMoveControl(KernelspriteEntity kernelsprite) {
+		public KernelspriteMoveControl(KernelspriteEntity kernelsprite)
+		{
 			super(kernelsprite);
 		}
 		
 		@Override
-		public void tick() {
-			if (this.operation == MoveControl.Operation.MOVE_TO) {
-				Vec3 vec3 = new Vec3(this.wantedX - KernelspriteEntity.this.getX(), this.wantedY - KernelspriteEntity.this.getY(), this.wantedZ - KernelspriteEntity.this.getZ());
+		public void tick()
+		{
+			if(this.operation == MoveControl.Operation.MOVE_TO)
+			{
+				Vec3 vec3 = new Vec3(wantedX - mob.getX(), this.wantedY - mob.getY(), this.wantedZ - mob.getZ());
 				double d0 = vec3.length();
-				if (d0 < KernelspriteEntity.this.getBoundingBox().getSize()) {
+				if(d0 < mob.getBoundingBox().getSize())
+				{
 					this.operation = MoveControl.Operation.WAIT;
-					KernelspriteEntity.this.setDeltaMovement(KernelspriteEntity.this.getDeltaMovement().scale(0.5));
-				} else {
-					KernelspriteEntity.this.setDeltaMovement(KernelspriteEntity.this.getDeltaMovement().add(vec3.scale(this.speedModifier * 0.05 / d0)));
-					if (KernelspriteEntity.this.getTarget() == null) {
-						Vec3 vec31 = KernelspriteEntity.this.getDeltaMovement();
-						KernelspriteEntity.this.setYRot(-((float) Mth.atan2(vec31.x, vec31.z)) * (180.0F / (float)Math.PI));
-						KernelspriteEntity.this.yBodyRot = KernelspriteEntity.this.getYRot();
-					} else {
-						double d2 = KernelspriteEntity.this.getTarget().getX() - KernelspriteEntity.this.getX();
-						double d1 = KernelspriteEntity.this.getTarget().getZ() - KernelspriteEntity.this.getZ();
-						KernelspriteEntity.this.setYRot(-((float)Mth.atan2(d2, d1)) * (180.0F / (float)Math.PI));
-						KernelspriteEntity.this.yBodyRot = KernelspriteEntity.this.getYRot();
+					mob.setDeltaMovement(mob.getDeltaMovement().scale(0.5));
+				} else
+				{
+					mob.setDeltaMovement(mob.getDeltaMovement().add(vec3.scale(this.speedModifier * 0.05 / d0)));
+					if(mob.getTarget() == null)
+					{
+						Vec3 vec31 = mob.getDeltaMovement();
+						mob.setYRot(-((float) Mth.atan2(vec31.x, vec31.z)) * (180.0F / (float) Math.PI));
+					} else
+					{
+						double d2 = mob.getTarget().getX() - mob.getX();
+						double d1 = mob.getTarget().getZ() - mob.getZ();
+						mob.setYRot(-((float) Mth.atan2(d2, d1)) * (180.0F / (float) Math.PI));
 					}
+					mob.yBodyRot = mob.getYRot();
 				}
 			}
 		}
@@ -266,7 +287,7 @@ public class KernelspriteEntity extends PathfinderMob implements DialogueEntity,
 		{
 			super.start();
 			timer = 600;
-			KernelspriteEntity.this.goalSelector.removeGoal(randomMoveGoal);
+			KernelspriteEntity.this.setRandomMoveGoal(false);
 		}
 		
 		@Override
@@ -274,9 +295,8 @@ public class KernelspriteEntity extends PathfinderMob implements DialogueEntity,
 		{
 			super.stop();
 			timer = -1;
-			KernelspriteEntity.this.goalSelector.removeGoal(this);
-			KernelspriteEntity.this.goalSelector.addGoal(8, randomMoveGoal);
-			this.setFlags(EnumSet.of(Goal.Flag.MOVE));
+			KernelspriteEntity.this.setStayPutGoal(false);
+			KernelspriteEntity.this.setRandomMoveGoal(true);
 		}
 		
 		@Override
@@ -290,7 +310,7 @@ public class KernelspriteEntity extends PathfinderMob implements DialogueEntity,
 	/**
 	 * Built directly off {@link net.minecraft.world.entity.monster.Vex.VexRandomMoveGoal}
 	 */
-	class RandomMoveGoal extends Goal
+	static class RandomMoveGoal extends Goal
 	{
 		private final KernelspriteEntity entity;
 		
@@ -304,6 +324,13 @@ public class KernelspriteEntity extends PathfinderMob implements DialogueEntity,
 		public boolean canUse()
 		{
 			return !entity.getMoveControl().hasWanted() && entity.random.nextInt(reducedTickDelay(7)) == 0;
+		}
+		
+		@Override
+		public boolean canContinueToUse()
+		{
+			return super.canContinueToUse() &&
+					entity.goalSelector.getAvailableGoals().stream().filter(WrappedGoal::isRunning).noneMatch(goal -> goal.getGoal() instanceof MoveToBlockGoal);
 		}
 		
 		@Override

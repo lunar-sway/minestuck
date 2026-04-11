@@ -450,9 +450,7 @@ public sealed interface Trigger
 		public void triggerEffect(LivingEntity entity, ServerPlayer player)
 		{
 			if(entity instanceof PathfinderMob mob)
-			{
 				mob.goalSelector.addGoal(priority, new GoToBlockGoal(mob, predicate, speedModifier, duration, radius, acceptedDistance));
-			}
 		}
 	}
 	

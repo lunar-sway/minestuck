@@ -8,7 +8,10 @@ import com.mraof.minestuck.player.PlayerData;
 import com.mraof.minestuck.player.PlayerIdentifier;
 import com.mraof.minestuck.util.MSAttachments;
 import net.minecraft.core.BlockPos;
+import net.minecraft.core.particles.ParticleTypes;
 import net.minecraft.server.level.ServerLevel;
+import net.minecraft.sounds.SoundEvents;
+import net.minecraft.sounds.SoundSource;
 import net.minecraft.world.level.BlockGetter;
 import net.minecraft.world.level.Level;
 import net.minecraft.world.level.block.Block;
@@ -66,6 +69,9 @@ public class CruxtruderLidBlock extends Block
 				kernelsprite.setPos(pos.getCenter());
 				
 				level.addFreshEntity(kernelsprite);
+				
+				serverLevel.sendParticles(ParticleTypes.FLASH, pos.getX(), pos.getY() + 0.5D, pos.getZ(), 1, 0.0D, 0.0D, 0.0D, 0.0D);
+				serverLevel.playSound(null, pos, SoundEvents.BEEHIVE_EXIT, SoundSource.NEUTRAL, 1.0F, 1.0F);
 				
 				data.setData(MSAttachments.HAS_KERNELSPRITE, true);
 			}

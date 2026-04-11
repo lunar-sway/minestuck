@@ -1,5 +1,6 @@
 package com.mraof.minestuck.entity.ai;
 
+import com.mraof.minestuck.entity.KernelspriteEntity;
 import com.mraof.minestuck.entity.dialogue.DialogueEntity;
 import net.minecraft.advancements.critereon.BlockPredicate;
 import net.minecraft.core.BlockPos;
@@ -38,10 +39,19 @@ public class GoToBlockGoal extends MoveToBlockGoal
 	}
 	
 	@Override
+	public boolean canContinueToUse()
+	{
+		return super.canContinueToUse() && duration > 0;
+	}
+	
+	@Override
 	public void start()
 	{
 		super.start();
 		dialogueMob.getDialogueComponent().setHasReachedTarget(false);
+		
+		if(mob instanceof KernelspriteEntity kernelsprite)
+			kernelsprite.setRandomMoveGoal(false);
 	}
 	
 	@Override
@@ -49,6 +59,9 @@ public class GoToBlockGoal extends MoveToBlockGoal
 	{
 		super.stop();
 		mob.goalSelector.removeGoal(this);
+		
+		if(mob instanceof KernelspriteEntity kernelsprite)
+			kernelsprite.setStayPutGoal(true);
 	}
 	
 	@Override
@@ -69,9 +82,12 @@ public class GoToBlockGoal extends MoveToBlockGoal
 	}
 	
 	@Override
-	public boolean canContinueToUse()
+	protected void moveMobToBlock()
 	{
-		return super.canContinueToUse() && duration > 0;
+		super.moveMobToBlock();
+		
+		if(mob instanceof KernelspriteEntity kernelsprite)
+			kernelsprite.getMoveControl().setWantedPosition(blockPos.getX() + 0.5, blockPos.getY() + 2, blockPos.getZ() + 0.5, 1);
 	}
 	
 	@Override

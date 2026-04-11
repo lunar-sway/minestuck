@@ -36,6 +36,7 @@
             "triggers": [
               {
                 "type": "minestuck:go_to_block",
+                "accepted_distance": 6.0,
                 "predicate": {
                   "blocks": "minestuck:cruxtruder_tube"
                 },
