@@ -160,6 +160,7 @@ public class MSTags
 		public static final TagKey<Item> CREATIVE_SHOCK_RIGHT_CLICK_LIMIT = tag("creative_shock_right_click_limit");
 		public static final TagKey<Item> UNREADABLE = tag("unreadable");
 		public static final TagKey<Item> LEGENDARY = tag("legendary");
+		public static final TagKey<Item> CRUXITE_ARTIFACTS = tag("cruxite_artifacts");
 
 		private static TagKey<Item> tag(String name)
 		{

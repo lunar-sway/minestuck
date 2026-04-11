@@ -198,6 +198,11 @@ public final class Conditions
 		return new PlayerEntityPredicate(EntityPredicate.Builder.entity().slots(new SlotsPredicate(Map.of(SlotRanges.nameToIds("container.*"), ItemPredicate.Builder.item().of(item).withCount(MinMaxBounds.Ints.atLeast(count)).build()))).build());
 	}
 	
+	public static PlayerOnlyCondition playerHasItemTag(TagKey<Item> itemTag, int count)
+	{
+		return new PlayerEntityPredicate(EntityPredicate.Builder.entity().slots(new SlotsPredicate(Map.of(SlotRanges.nameToIds("container.*"), ItemPredicate.Builder.item().of(itemTag).withCount(MinMaxBounds.Ints.atLeast(count)).build()))).build());
+	}
+	
 	public static Condition isHolding(ItemLike... items)
 	{
 		return new NPCEntityPredicate(EntityPredicate.Builder.entity().slots(new SlotsPredicate(Map.of(SlotRanges.nameToIds("weapon.*"), ItemPredicate.Builder.item().of(items).build()))).build());

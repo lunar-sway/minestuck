@@ -1,0 +1,78 @@
+{
+  "conditioned_nodes": [
+    {
+      "condition": {
+        "type": "minestuck:player_entity_predicate",
+        "predicate": {
+          "slots": {
+            "container.*": {
+              "count": {
+                "min": 1
+              },
+              "items": "#minestuck:cruxite_artifacts"
+            }
+          }
+        }
+      },
+      "node": {
+        "animation": {},
+        "gui": "minestuck:textures/gui/dialogue/dialogue.png",
+        "messages": [
+          {
+            "type": "entity",
+            "message": "minestuck.dialogue.individual.kernelsprite.help_entering.7"
+          },
+          {
+            "type": "description",
+            "message": "minestuck.dialogue.individual.kernelsprite.help_entering.7.desc"
+          }
+        ],
+        "responses": [
+          {
+            "condition": {
+              "type": "minestuck:always_true"
+            },
+            "hide_if_failed": true,
+            "message": "minestuck.dialogue.individual.kernelsprite.help_entering.7.thanks_for_help",
+            "next_dialogue": "minestuck:individual/kernelsprite/thanks",
+            "triggers": []
+          },
+          {
+            "condition": {
+              "type": "minestuck:always_true"
+            },
+            "hide_if_failed": true,
+            "message": "minestuck.dialogue.individual.kernelsprite.return",
+            "next_dialogue": "minestuck:individual/kernelsprite/start",
+            "triggers": []
+          }
+        ]
+      }
+    }
+  ],
+  "default_node": {
+    "animation": {},
+    "gui": "minestuck:textures/gui/dialogue/dialogue.png",
+    "messages": [
+      {
+        "type": "entity",
+        "message": "minestuck.dialogue.individual.kernelsprite.help_entering.7.default"
+      },
+      {
+        "type": "description",
+        "message": "minestuck.dialogue.individual.kernelsprite.help_entering.7.default.desc"
+      }
+    ],
+    "responses": [
+      {
+        "condition": {
+          "type": "minestuck:always_true"
+        },
+        "hide_if_failed": true,
+        "message": "minestuck.dialogue.individual.kernelsprite.return",
+        "next_dialogue": "minestuck:individual/kernelsprite/start",
+        "triggers": []
+      }
+    ]
+  }
+}

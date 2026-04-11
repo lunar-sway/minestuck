@@ -1,0 +1,40 @@
+{
+  "node": {
+    "animation": {},
+    "gui": "minestuck:textures/gui/dialogue/dialogue.png",
+    "messages": [
+      {
+        "type": "entity",
+        "message": "minestuck.dialogue.individual.kernelsprite.help_entering.1"
+      },
+      {
+        "type": "description",
+        "message": "minestuck.dialogue.individual.kernelsprite.help_entering.1.desc"
+      }
+    ],
+    "responses": [
+      {
+        "condition": {
+          "type": "minestuck:always_true"
+        },
+        "hide_if_failed": true,
+        "message": "minestuck.dialogue.individual.kernelsprite.help_entering.1.next",
+        "next_dialogue": {
+          "id": "minestuck:individual/kernelsprite/help_entering.2",
+          "player_message": "minestuck.dialogue.individual.kernelsprite.help_entering.1.next_player",
+          "set_as_entrypoint": true
+        },
+        "triggers": []
+      },
+      {
+        "condition": {
+          "type": "minestuck:always_true"
+        },
+        "hide_if_failed": true,
+        "message": "minestuck.dialogue.individual.kernelsprite.return",
+        "next_dialogue": "minestuck:individual/kernelsprite/start",
+        "triggers": []
+      }
+    ]
+  }
+}

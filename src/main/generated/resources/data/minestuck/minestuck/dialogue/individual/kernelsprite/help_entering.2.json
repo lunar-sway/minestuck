@@ -4,7 +4,7 @@
       "condition": {
         "type": "minestuck:npc_near_block_predicate",
         "predicate": {
-          "blocks": "minestuck:cruxtruder_tube"
+          "blocks": "minestuck:totem_lathe_top"
         },
         "radius": 24
       },
@@ -14,11 +14,11 @@
         "messages": [
           {
             "type": "entity",
-            "message": "minestuck.dialogue.individual.kernelsprite.what_say.near_block"
+            "message": "minestuck.dialogue.individual.kernelsprite.help_entering.2"
           },
           {
             "type": "description",
-            "message": "minestuck.dialogue.individual.kernelsprite.what_say.near_block.desc"
+            "message": "minestuck.dialogue.individual.kernelsprite.help_entering.2.desc"
           }
         ],
         "responses": [
@@ -27,10 +27,10 @@
               "type": "minestuck:always_true"
             },
             "hide_if_failed": true,
-            "message": "minestuck.dialogue.individual.kernelsprite.what_say.help_entering",
+            "message": "minestuck.dialogue.individual.kernelsprite.help_entering.2.next",
             "next_dialogue": {
-              "id": "minestuck:individual/kernelsprite/help_entering.1",
-              "player_message": "minestuck.dialogue.individual.kernelsprite.what_say.help_entering_player",
+              "id": "minestuck:individual/kernelsprite/help_entering.3",
+              "player_message": "minestuck.dialogue.individual.kernelsprite.help_entering.2.next_player",
               "set_as_entrypoint": true
             },
             "triggers": [
@@ -38,7 +38,7 @@
                 "type": "minestuck:go_to_block",
                 "accepted_distance": 6.0,
                 "predicate": {
-                  "blocks": "minestuck:cruxtruder_tube"
+                  "blocks": "minestuck:totem_lathe_top"
                 },
                 "radius": 24
               }
@@ -63,11 +63,11 @@
     "messages": [
       {
         "type": "entity",
-        "message": "minestuck.dialogue.individual.kernelsprite.what_say.default"
+        "message": "minestuck.dialogue.individual.kernelsprite.help_entering.2.default"
       },
       {
         "type": "description",
-        "message": "minestuck.dialogue.individual.kernelsprite.what_say.default.desc"
+        "message": "minestuck.dialogue.individual.kernelsprite.help_entering.2.default.desc"
       }
     ],
     "responses": [
@@ -76,10 +76,10 @@
           "type": "minestuck:always_true"
         },
         "hide_if_failed": true,
-        "message": "minestuck.dialogue.individual.kernelsprite.what_say.need_cruxtruder",
+        "message": "minestuck.dialogue.individual.kernelsprite.help_entering.2.need_lathe",
         "next_dialogue": {
-          "id": "minestuck:individual/kernelsprite/need_cruxtruder",
-          "player_message": "minestuck.dialogue.individual.kernelsprite.what_say.need_cruxtruder_player",
+          "id": "minestuck:individual/kernelsprite/need_lathe",
+          "player_message": "minestuck.dialogue.individual.kernelsprite.help_entering.2.need_lathe_player",
           "set_as_entrypoint": false
         },
         "triggers": []

@@ -5,11 +5,11 @@
     "messages": [
       {
         "type": "entity",
-        "message": "minestuck.dialogue.individual.kernelsprite.help_entering"
+        "message": "minestuck.dialogue.individual.kernelsprite.need_lathe"
       },
       {
         "type": "description",
-        "message": "minestuck.dialogue.individual.kernelsprite.help_entering.desc"
+        "message": "minestuck.dialogue.individual.kernelsprite.need_lathe.desc"
       }
     ],
     "responses": [

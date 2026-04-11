@@ -2602,6 +2602,7 @@ public class MinestuckEnUsLanguageProvider extends MinestuckLanguageProvider
 		add(UNREADABLE, "Unreadable Captcha Codes");
 		add(LEGENDARY, "Legendary Weapons");
 		add(MAGIC_WEAPON, "Magic Weapons");
+		add(CRUXITE_ARTIFACTS, "Cruxite Artifacts");
 		add(MSTags.Effects.SOPOR_SICKNESS_WHITELIST, "Prevent by Sopor Stupor");
 		
 		addPainting("candy_shop_sign", "Candy Shop Sign", "Cibernet83");

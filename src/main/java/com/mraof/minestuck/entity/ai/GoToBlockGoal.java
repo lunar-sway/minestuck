@@ -16,9 +16,10 @@ public class GoToBlockGoal extends MoveToBlockGoal
 	private final BlockPredicate blockPredicate;
 	private final DialogueEntity dialogueMob;
 	private final double acceptedDistance;
+	private final boolean waitPermanently;
 	private int duration;
 	
-	public GoToBlockGoal(PathfinderMob mob, BlockPredicate blockPredicate, double speedModifier, int duration, int searchRange, double acceptedDistance)
+	public GoToBlockGoal(PathfinderMob mob, BlockPredicate blockPredicate, double speedModifier, int duration, int searchRange, double acceptedDistance, boolean waitPermanently)
 	{
 		super(mob, speedModifier, searchRange, searchRange);
 		
@@ -29,6 +30,7 @@ public class GoToBlockGoal extends MoveToBlockGoal
 		this.blockPredicate = blockPredicate;
 		this.duration = duration;
 		this.acceptedDistance = acceptedDistance;
+		this.waitPermanently = waitPermanently;
 		this.setFlags(EnumSet.of(Flag.JUMP, Flag.MOVE));
 	}
 	
@@ -49,6 +51,7 @@ public class GoToBlockGoal extends MoveToBlockGoal
 	{
 		super.start();
 		dialogueMob.getDialogueComponent().setHasReachedTarget(false);
+		mob.clearRestriction();
 		
 		if(mob instanceof KernelspriteEntity kernelsprite)
 			kernelsprite.setRandomMoveGoal(false);
@@ -62,6 +65,9 @@ public class GoToBlockGoal extends MoveToBlockGoal
 		
 		if(mob instanceof KernelspriteEntity kernelsprite)
 			kernelsprite.setStayPutGoal(true);
+		
+		if(waitPermanently)
+			mob.restrictTo(mob.blockPosition(), (int) acceptedDistance);
 	}
 	
 	@Override
