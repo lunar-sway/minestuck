@@ -186,7 +186,7 @@ public final class SburbHandler
 		
 		MSCriteriaTriggers.CRUXITE_ARTIFACT.get().trigger(player);
 		// 12000 ticks = 10 minutes
-		if(getPlayerPlayedTime(player) > 12000) { MSCriteriaTriggers.SPEEDRUN.get().trigger(player); }
+		if(getPlayerPlayedTime(player) < 12000) { MSCriteriaTriggers.SPEEDRUN.get().trigger(player); }
 		
 		EditmodeLocations.onEntry(server, playerData.playerId());
 		
