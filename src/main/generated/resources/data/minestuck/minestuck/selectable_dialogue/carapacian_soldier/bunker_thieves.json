@@ -1,33 +1,17 @@
 {
   "condition": {
-    "type": "minestuck:list",
-    "conditions": [
-      {
-        "type": "minestuck:list",
-        "conditions": [
-          {
-            "type": "minestuck:at_or_above_y",
-            "y": 64.0
-          }
-        ],
-        "list_type": "none"
+    "type": "minestuck:npc_location_predicate",
+    "predicate": {
+      "position": {
+        "y": {
+          "max": 64.0
+        }
       },
-      {
-        "type": "minestuck:list",
-        "conditions": [
-          {
-            "type": "minestuck:npc_in_structure",
-            "structure": "minestuck:derse_bunker"
-          },
-          {
-            "type": "minestuck:npc_in_structure",
-            "structure": "minestuck:prospit_bunker"
-          }
-        ],
-        "list_type": "any"
-      }
-    ],
-    "list_type": "all"
+      "structures": [
+        "minestuck:derse_bunker",
+        "minestuck:prospit_bunker"
+      ]
+    }
   },
   "dialogue": "minestuck:carapacian_soldier/bunker_thieves",
   "dialogue_weight": 2,

@@ -1,12 +1,12 @@
 package com.mraof.minestuck.world.lands.title;
 
 import com.mraof.minestuck.util.MSSoundEvents;
-import com.mraof.minestuck.world.biome.LandBiomeSetType;
 import com.mraof.minestuck.world.biome.LandBiomeType;
 import com.mraof.minestuck.world.gen.feature.MSPlacedFeatures;
 import com.mraof.minestuck.world.gen.structure.blocks.StructureBlockRegistry;
-import com.mraof.minestuck.world.lands.LandBiomeGenBuilder;
 import com.mraof.minestuck.world.lands.LandProperties;
+import net.minecraft.core.HolderLookup;
+import net.minecraft.core.registries.Registries;
 import net.minecraft.data.worldgen.placement.CavePlacements;
 import net.minecraft.sounds.SoundEvent;
 import net.minecraft.world.entity.EntityType;
@@ -14,6 +14,7 @@ import net.minecraft.world.entity.MobCategory;
 import net.minecraft.world.level.biome.MobSpawnSettings;
 import net.minecraft.world.level.block.Blocks;
 import net.minecraft.world.level.levelgen.GenerationStep;
+import net.minecraft.world.level.levelgen.placement.PlacedFeature;
 import net.minecraft.world.phys.Vec3;
 
 public class MonstersLandType extends TitleLandType
@@ -30,7 +31,7 @@ public class MonstersLandType extends TitleLandType
 	@Override
 	public String[] getNames()
 	{
-		return new String[] {MONSTERS};
+		return new String[]{MONSTERS};
 	}
 	
 	@Override
@@ -47,7 +48,7 @@ public class MonstersLandType extends TitleLandType
 	@Override
 	public void setProperties(LandProperties properties)
 	{
-		properties.skylightBase = Math.min(1/4F, properties.skylightBase);
+		properties.skylightBase = Math.min(1 / 4F, properties.skylightBase);
 		properties.mergeFogColor(new Vec3(0.1, 0, 0), 0.5F);
 	}
 	
@@ -59,8 +60,7 @@ public class MonstersLandType extends TitleLandType
 			builder.addSpawn(MobCategory.MONSTER, new MobSpawnSettings.SpawnerData(EntityType.CREEPER, 1, 1, 1));
 			builder.addSpawn(MobCategory.MONSTER, new MobSpawnSettings.SpawnerData(EntityType.SPIDER, 1, 1, 2));
 			builder.addSpawn(MobCategory.MONSTER, new MobSpawnSettings.SpawnerData(EntityType.ZOMBIE, 1, 1, 2));
-		}
-		else if(this.type == Variant.UNDEAD)
+		} else if(this.type == Variant.UNDEAD)
 		{
 			builder.addSpawn(MobCategory.MONSTER, new MobSpawnSettings.SpawnerData(EntityType.ZOMBIE, 2, 1, 3));
 			builder.addSpawn(MobCategory.MONSTER, new MobSpawnSettings.SpawnerData(EntityType.SKELETON, 1, 1, 2));
@@ -68,11 +68,23 @@ public class MonstersLandType extends TitleLandType
 	}
 	
 	@Override
-	public void addBiomeGeneration(LandBiomeGenBuilder builder, StructureBlockRegistry blocks, LandBiomeSetType biomeSet)
+	public void addExtensions(HolderLookup.Provider provider, StructureBlockRegistry blocks)
 	{
-		builder.addFeature(GenerationStep.Decoration.UNDERGROUND_STRUCTURES, CavePlacements.MONSTER_ROOM, LandBiomeType.any());
-		builder.addFeature(GenerationStep.Decoration.VEGETAL_DECORATION, MSPlacedFeatures.RAGE_TREE, LandBiomeType.anyExcept(LandBiomeType.OCEAN));
+		HolderLookup.RegistryLookup<PlacedFeature> features = provider.lookupOrThrow(Registries.PLACED_FEATURE);
 		
+		addFeatureExtension(features, GenerationStep.Decoration.UNDERGROUND_STRUCTURES, CavePlacements.MONSTER_ROOM, LandBiomeType.any());
+		addFeatureExtension(features, GenerationStep.Decoration.VEGETAL_DECORATION, MSPlacedFeatures.RAGE_TREE, LandBiomeType.anyExcept(LandBiomeType.OCEAN));
+		
+		if(this.type == Variant.MONSTERS)
+		{
+			addMobSpawnExtension(MobCategory.MONSTER, new MobSpawnSettings.SpawnerData(EntityType.CREEPER, 1, 1, 1), LandBiomeType.any());
+			addMobSpawnExtension(MobCategory.MONSTER, new MobSpawnSettings.SpawnerData(EntityType.SPIDER, 1, 1, 2), LandBiomeType.any());
+			addMobSpawnExtension(MobCategory.MONSTER, new MobSpawnSettings.SpawnerData(EntityType.ZOMBIE, 1, 1, 2), LandBiomeType.any());
+		} else if(this.type == Variant.UNDEAD)
+		{
+			addMobSpawnExtension(MobCategory.MONSTER, new MobSpawnSettings.SpawnerData(EntityType.ZOMBIE, 2, 1, 3), LandBiomeType.any());
+			addMobSpawnExtension(MobCategory.MONSTER, new MobSpawnSettings.SpawnerData(EntityType.SKELETON, 1, 1, 2), LandBiomeType.any());
+		}
 	}
 	
 	@Override

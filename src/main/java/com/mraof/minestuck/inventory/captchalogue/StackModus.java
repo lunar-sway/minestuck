@@ -93,13 +93,13 @@ public class StackModus extends Modus
 		else if(list.size() < size)
 		{
 			list.addFirst(item);
-			markDirty();
 		} else
 		{
 			list.addFirst(item);
-			markDirty();
 			CaptchaDeckHandler.launchItem(player, list.removeLast());
 		}
+		
+		markDirty();
 		
 		return true;
 	}

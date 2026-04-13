@@ -1,8 +1,8 @@
 {
   "node": {
-    "animation": {},
-    "gui": "minestuck:textures/gui/dialogue/dialogue.png",
-    "messages": [
+    "animation": { },
+    "gui":       "minestuck:textures/gui/dialogue/dialogue.png",
+    "messages":  [
       {
         "type": "entity",
         "message": "minestuck.dots"
@@ -14,13 +14,13 @@
     ],
     "responses": [
       {
-        "condition": {
+        "condition":     {
           "type": "minestuck:always_true"
         },
         "hide_if_failed": true,
-        "message": "minestuck.arrow",
+        "message":       "minestuck.arrow",
         "next_dialogue": "minestuck:carapacian_soldier/bunker_greet/explain_place.3",
-        "triggers": []
+        "triggers":      [ ]
       }
     ]
   }
