@@ -41,6 +41,8 @@ The format is based on [Keep a Changelog](https://keepachangelog.com/en/1.1.0/).
 - More weapons qualify for the legendary achievement
 - More items qualify for the captcha Unreadable tag
 - Tweaked Land loot tables
+- New talksprites for consorts
+- Picked new colors for consort text that improve contrast
 
 ### Fixed
 
@@ -56,7 +58,7 @@ The format is based on [Keep a Changelog](https://keepachangelog.com/en/1.1.0/).
 
 ### Contributors for this release
 
-- medsal15, heartsremedy, caldw3ll, v_sabitron, Dweblenod, TangleKat, Pancake, Fl1s, kirderf1, ThalliumSulfate
+- medsal15, heartsremedy, caldw3ll, v_sabitron, Dweblenod, TangleKat, Pancake, Fl1s, kirderf1, ThalliumSulfate, Emma "Dilemma"
 
 ## [1.21.1-1.13.1.1] - 2025-09-14
 
