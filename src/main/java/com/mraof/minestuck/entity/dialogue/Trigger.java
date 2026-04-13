@@ -451,7 +451,14 @@ public sealed interface Trigger
 		public void triggerEffect(LivingEntity entity, ServerPlayer player)
 		{
 			if(entity instanceof PathfinderMob mob)
+			{
+				mob.goalSelector.getAvailableGoals().iterator().forEachRemaining(wrappedGoal ->
+				{
+					if(wrappedGoal != null && wrappedGoal.getGoal() instanceof GoToBlockGoal goToBlockGoal)
+						mob.goalSelector.removeGoal(goToBlockGoal);
+				});
 				mob.goalSelector.addGoal(priority, new GoToBlockGoal(mob, predicate, speedModifier, duration, radius, acceptedDistance, waitPermanently));
+			}
 		}
 	}
 	

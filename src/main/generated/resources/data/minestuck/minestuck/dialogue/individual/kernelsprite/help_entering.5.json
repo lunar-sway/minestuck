@@ -6,7 +6,7 @@
         "predicate": {
           "blocks": "minestuck:alchemiter_totem_pad"
         },
-        "radius": 24
+        "radius": 22
       },
       "node": {
         "animation": {},
@@ -40,7 +40,7 @@
                 "predicate": {
                   "blocks": "minestuck:alchemiter_center"
                 },
-                "radius": 24,
+                "radius": 22,
                 "wait_permanently": true
               }
             ]

@@ -21,7 +21,7 @@ public class GoToBlockGoal extends MoveToBlockGoal
 	
 	public GoToBlockGoal(PathfinderMob mob, BlockPredicate blockPredicate, double speedModifier, int duration, int searchRange, double acceptedDistance, boolean waitPermanently)
 	{
-		super(mob, speedModifier, searchRange, (int) (searchRange * 0.8F));
+		super(mob, speedModifier, searchRange, (int) (searchRange * 0.5F));
 		
 		if(mob instanceof DialogueEntity dialogueMob)
 			this.dialogueMob = dialogueMob;

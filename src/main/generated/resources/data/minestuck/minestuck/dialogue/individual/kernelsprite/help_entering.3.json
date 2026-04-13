@@ -31,7 +31,7 @@
             "predicate": {
               "blocks": "minestuck:totem_lathe_top"
             },
-            "radius": 24,
+            "radius": 22,
             "wait_permanently": true
           }
         ]

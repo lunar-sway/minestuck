@@ -34,7 +34,11 @@
             },
             "hide_if_failed": true,
             "message": "minestuck.dialogue.individual.kernelsprite.help_entering.7.thanks_for_help",
-            "next_dialogue": "minestuck:individual/kernelsprite/blank",
+            "next_dialogue": {
+              "id": "minestuck:individual/kernelsprite/blank",
+              "reply_messages": [],
+              "set_as_entrypoint": true
+            },
             "triggers": [
               {
                 "type": "minestuck:go_to_block",
@@ -42,7 +46,7 @@
                 "predicate": {
                   "blocks": "minestuck:cruxtruder_tube"
                 },
-                "radius": 24,
+                "radius": 22,
                 "wait_permanently": true
               }
             ]
@@ -53,7 +57,11 @@
             },
             "hide_if_failed": true,
             "message": "minestuck.dialogue.individual.kernelsprite.help_entering.7.anything_else",
-            "next_dialogue": "minestuck:individual/kernelsprite/blank",
+            "next_dialogue": {
+              "id": "minestuck:individual/kernelsprite/blank",
+              "reply_messages": [],
+              "set_as_entrypoint": true
+            },
             "triggers": [
               {
                 "type": "minestuck:go_to_block",
@@ -61,7 +69,7 @@
                 "predicate": {
                   "blocks": "minestuck:cruxtruder_tube"
                 },
-                "radius": 24,
+                "radius": 22,
                 "wait_permanently": true
               }
             ]
