@@ -172,16 +172,18 @@ public class MinestuckItemTagsProvider extends ItemTagsProvider
 		
 		tag(GRIST_CANDY).add(BUILD_GUSHERS.get(), AMBER_GUMMY_WORM.get(), CAULK_PRETZEL.get(), CHALK_CANDY_CIGARETTE.get(), IODINE_LICORICE.get(), SHALE_PEEP.get(), TAR_LICORICE.get(), COBALT_GUM.get(), MARBLE_JAWBREAKER.get(), MERCURY_SIXLETS.get(), QUARTZ_JELLY_BEAN.get(), SULFUR_CANDY_APPLE.get(), AMETHYST_HARD_CANDY.get(), GARNET_TWIX.get(), RUBY_LOLLIPOP.get(), RUST_GUMMY_EYE.get(), DIAMOND_MINT.get(), GOLD_CANDY_RIBBON.get(), URANIUM_GUMMY_BEAR.get(), ARTIFACT_WARHEAD.get(), ZILLIUM_SKITTLES.get());
 		tag(MSTags.Items.FAYGO).add(MSItems.ORANGE_FAYGO.get(), CANDY_APPLE_FAYGO.get(), FAYGO_COLA.get(), COTTON_CANDY_FAYGO.get(), CREME_SODA_FAYGO.get(), GRAPE_FAYGO.get(), MOON_MIST_FAYGO.get(), PEACH_FAYGO.get(), REDPOP_FAYGO.get());
-		tag(MODUS_CARD).add(STACK_MODUS_CARD.get(), QUEUE_MODUS_CARD.get(), QUEUESTACK_MODUS_CARD.get(), TREE_MODUS_CARD.get(), HASHMAP_MODUS_CARD.get(), SET_MODUS_CARD.get());
+		tag(MODUS_CARD).add(ARRAY_MODUS_CARD.get(), STACK_MODUS_CARD.get(), QUEUE_MODUS_CARD.get(), QUEUESTACK_MODUS_CARD.get(), TREE_MODUS_CARD.get(), HASHMAP_MODUS_CARD.get(), SET_MODUS_CARD.get());
 		tag(CASSETTES).add(MSItems.CASSETTE_MELLOHI.get(), CASSETTE_13.get(), CASSETTE_BLOCKS.get(), CASSETTE_CAT.get(), CASSETTE_CHIRP.get(), CASSETTE_FAR.get(), CASSETTE_MALL.get(), CASSETTE_DANCE_STAB.get(), CASSETTE_RETRO_BATTLE.get(), CASSETTE_EMISSARY.get(), CASSETTE_11.get(), CASSETTE_PIGSTEP.get(), CASSETTE_STAL.get(), CASSETTE_STRAD.get(), CASSETTE_WAIT.get(), CASSETTE_WARD.get(), CASSETTE_OTHERSIDE.get(), CASSETTE_5.get(), CASSETTE_RELIC.get(), CASSETTE_PRECIPICE.get(), CASSETTE_CREATOR.get(), CASSETTE_CREATOR_MUSIC_BOX.get());
 		tag(BUGS).add(BUG_ON_A_STICK.get(), CHOCOLATE_BEETLE.get(), CONE_OF_FLIES.get(), GRASSHOPPER.get(), CICADA.get(), JAR_OF_BUGS.get());
 		tag(CONSORT_SNACKS).add(Items.COOKIE).addTag(BUGS);
 		tag(MAGIC_WEAPON).add(relevantWeapons(item ->
 				item instanceof WeaponItem weapon && (weapon.getItemRightClickEffect() instanceof MagicRangedRightClickEffect || weapon.getItemRightClickEffect() instanceof MagicAOERightClickEffect)));
 		tag(CREATIVE_SHOCK_RIGHT_CLICK_LIMIT).add(Items.CHORUS_FRUIT);
-		tag(UNREADABLE).add(CRUEL_FATE_CRUCIBLE.get(), ROYAL_DERINGER.get(), TRANSPORTALIZER.get(), TRANS_PORTALIZER.get(), FEAR_NO_ANVIL.get(), TYPHONIC_TRIVIALIZER.get(), QUILL_OF_ECHIDNA.get(), UMBRAL_INFILTRATOR.get(), FLUORITE_OCTET.get(), CLIENT_DISK.get(), SERVER_DISK.get(), GUTTER_THUMB_DRIVE.get(), GUTTER_BALL.get(), CAPTCHA_CARD.get(), CUEBALL.get(), BLACK_QUEENS_RING.get(), WHITE_QUEENS_RING.get(), BLACK_KINGS_SCEPTER.get(), WHITE_KINGS_SCEPTER.get()).add(Items.DRAGON_EGG).add(Items.DRAGON_HEAD).add(Items.DRAGON_BREATH).add(Items.NETHER_STAR).add(Items.COMMAND_BLOCK).add(Items.COMMAND_BLOCK_MINECART).add(Items.CHAIN_COMMAND_BLOCK).add(Items.REPEATING_COMMAND_BLOCK).add(Items.END_CRYSTAL).add(Items.EXPERIENCE_BOTTLE).add(Items.ELYTRA).add(Items.TOTEM_OF_UNDYING).add(Items.BEACON).add(Items.BEDROCK).add(Items.PUMPKIN);
-		tag(LEGENDARY).add(relevantWeapons(item ->
-				item instanceof WeaponItem weapon && (weapon.getTier() == DENIZEN_TIER || weapon.getTier() == ZILLY_TIER || weapon.getTier() == WELSH_TIER)));
+		tag(UNREADABLE).add(TRANSPORTALIZER.get(), TRANS_PORTALIZER.get(), CLIENT_DISK.get(), SERVER_DISK.get(), GUTTER_THUMB_DRIVE.get(), GUTTER_BALL.get(), CAPTCHA_CARD.get(), CUEBALL.get(), BLACK_QUEENS_RING.get(), WHITE_QUEENS_RING.get())
+				.add(Items.DRAGON_EGG, Items.DRAGON_HEAD, Items.DRAGON_BREATH, Items.NETHER_STAR, Items.COMMAND_BLOCK, Items.COMMAND_BLOCK_MINECART, Items.CHAIN_COMMAND_BLOCK, Items.REPEATING_COMMAND_BLOCK, Items.END_CRYSTAL, Items.EXPERIENCE_BOTTLE, Items.ELYTRA, Items.TOTEM_OF_UNDYING, Items.BEACON, Items.ENDER_PEARL, Items.BEDROCK)
+				.addTag(LEGENDARY).addTag(SHULKER_BOXES).add(Items.PUMPKIN);
+		tag(LEGENDARY).add(relevantWeapons(item -> item instanceof WeaponItem weapon && (weapon.getTier() == DENIZEN_TIER || weapon.getTier() == ZILLY_TIER || weapon.getTier() == WELSH_TIER)))
+				.add(FLUORITE_OCTET.get(), UMBRAL_INFILTRATOR.get(), WHITE_KINGS_SCEPTER.get(), BLACK_KINGS_SCEPTER.get());
 	}
 	
 	private static Item[] relevantWeapons(Predicate<Item> predicate)

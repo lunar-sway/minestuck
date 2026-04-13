@@ -69,9 +69,10 @@ public class MinestuckConfig
 		public final BooleanValue cruxtruderIntake;
 		public final ConfigValue<List<String>> forbiddenWorldsTpz;
 		public final ConfigValue<List<String>> forbiddenDimensionTypesTpz;
-		public final BooleanValue disableGristWidget;
+		public final DoubleValue gristWidgetPercentage;
 		public final IntValue alchemiterMaxStacks;
 		public final IntValue puzzleBlockTickRate;
+		public final IntValue statStorerRadius;
 		
 		//Medium
 		public final BooleanValue canBreakGates;
@@ -85,10 +86,11 @@ public class MinestuckConfig
 		//Sylladex
 		public final BooleanValue dropItemsInCards;
 		public final IntValue initialModusSize;
-		public final IntValue modusMaxSize;
+		public final IntValue captchaComponentSize;
 		public final EnumValue<DropMode> sylladexDropMode;
 		public final EnumValue<AvailableOptions> treeModusSetting;
 		public final EnumValue<AvailableOptions> hashmapChatModusSetting;
+		public final EnumValue<AvailableOptions> arrayChatModusSetting;
 		
 		//Mechanics
 		public final BooleanValue hardMode;
@@ -132,22 +134,28 @@ public class MinestuckConfig
 					.defineInRange("dialogueRenewalSpeed", 2, 0, 1000);
 			lotusRestorationTime = builder.comment("Determines how many seconds it takes for the lotus blossom to regrow after the opening process has started.")
 					.defineInRange("lotusRestorationTime", 300, 30, Integer.MAX_VALUE);
-			hardMode = builder.define("hardMode", false);
+			hardMode = builder.comment("Makes Minestuck overall harder:",
+					"- Only the first Cruxtruder, Totem Lathe, and Alchemiter will be free",
+					"- Fireballs will rain around players entering the medium",
+					"- Medium dungeons spawners contain Liches instead of Imps",
+					"- Underlings have a 50% chance to have the artifact grist").define("hardMode", false);
 			builder.pop();
 			
 			builder.push("sylladex");
 			dropItemsInCards = builder.comment("When sylladices may drop items and cards at the same time, this option determines if items should be dropped inside of cards or items and cards as different stacks.")
 					.define("dropItemsInCards", true);
-			initialModusSize = builder.comment("The initial amount of captchalogue cards in your sylladex.")
+			initialModusSize = builder.comment("The initial amount of captchalogue cards in your sylladex. The value is capped by the captchalogue_capacity Attribute")
 					.defineInRange("initialModusSize", 5, 0, Integer.MAX_VALUE);
-			modusMaxSize = builder.comment("The max size on a modus. Ignored if the value is 0.")
-					.defineInRange("modusMaxSize", 0, 0, Integer.MAX_VALUE);
+			captchaComponentSize = builder.comment("The max size of the data in NBT/Components allowed on a card being stored. Captchaloguing items with lots of data can cause crashes.")
+					.defineInRange("captchaComponentSize", 500000, 0, Integer.MAX_VALUE);
 			sylladexDropMode = builder.comment("Determines which items from the modus that are dropped on death. \"items\": Only the items are dropped. \"cards_and_items\": Both items and cards are dropped. (So that you have at most initial_modus_size amount of cards) \"all\": Everything is dropped, even the modus.")
 					.defineEnum("dropMode", DropMode.CARDS_AND_ITEMS);
 			treeModusSetting = builder.comment("This determines if auto-balance should be forced. 'both' if the player should choose, 'on' if forced at on, and 'off' if forced at off.")
 					.defineEnum("treeModusSetting", AvailableOptions.BOTH);
 			hashmapChatModusSetting = builder.comment("This determines if hashmap chat ejection should be forced. 'both' if the player should choose, 'on' if forced at on, and 'off' if forced at off.")
 					.defineEnum("hashmapModusSetting", AvailableOptions.BOTH);
+			arrayChatModusSetting = builder.comment("This determines if array chat ejection should be forced. 'both' if the player should choose, 'on' if forced at on, and 'off' if forced at off.")
+					.defineEnum("arrayModusSetting", AvailableOptions.BOTH);
 			builder.pop();
 			
 			builder.push("computer");
@@ -177,12 +185,14 @@ public class MinestuckConfig
 			builder.pop();
 			
 			builder.push("machines");
-			disableGristWidget = builder.comment("Disable Grist Widget")
-					.define("disableGristWidget",false);
+			gristWidgetPercentage = builder.comment("The percentage of grist loss the widget incurs. 1.0 will have no loss.")
+					.defineInRange("gristWidgetPercentage", 0.75D, 0.0D, 1.0D);
 			alchemiterMaxStacks = builder.comment("The number of stacks that can be alchemized at the same time with the alchemiter.")
 					.defineInRange("alchemiterMaxStacks",16,0,999);
 			puzzleBlockTickRate = builder.comment("How often puzzle/redstone related blocks such as the remote observer tick.")
 					.defineInRange("puzzleBlockTickRate",6,2,10);
+			statStorerRadius = builder.comment("The radius in blocks that the stat storer should capture data for")
+					.defineInRange("statStorerRadius", 10, 1, 32);
 			cruxtruderIntake = builder.comment("If enabled, the regular cruxtruder will require raw cruxite to function, which is inserted through the pipe.")
 					.define("cruxtruderIntake", false);
 			forbiddenWorldsTpz = builder.comment("A list of worlds that you cannot travel to or from using transportalizers.")

@@ -1,0 +1,42 @@
+{
+  "features": [
+    {
+      "biome_types": [
+        "rough"
+      ],
+      "feature": "minestuck:cog/regular",
+      "step": "surface_structures"
+    },
+    {
+      "biome_types": [
+        "normal",
+        "ocean"
+      ],
+      "feature": "minestuck:cog/sparse",
+      "step": "surface_structures"
+    },
+    {
+      "biome_types": [
+        "ocean"
+      ],
+      "feature": "minestuck:cog/floor_regular",
+      "step": "surface_structures"
+    },
+    {
+      "biome_types": [
+        "normal",
+        "rough"
+      ],
+      "feature": "minestuck:cog/floor_sparse",
+      "step": "surface_structures"
+    },
+    {
+      "biome_types": [
+        "normal",
+        "rough"
+      ],
+      "feature": "minestuck:tree/time",
+      "step": "vegetal_decoration"
+    }
+  ]
+}

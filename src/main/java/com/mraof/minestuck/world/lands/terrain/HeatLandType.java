@@ -10,18 +10,18 @@ import com.mraof.minestuck.world.gen.feature.MSPlacedFeatures;
 import com.mraof.minestuck.world.gen.structure.blocks.StructureBlockRegistry;
 import com.mraof.minestuck.world.gen.structure.village.NakagatorVillagePieces;
 import com.mraof.minestuck.world.lands.LandBiomeGenBuilder;
+import net.minecraft.core.HolderLookup;
+import net.minecraft.core.registries.Registries;
 import net.minecraft.data.worldgen.Carvers;
 import net.minecraft.util.RandomSource;
 import net.minecraft.world.level.block.Blocks;
 import net.minecraft.world.level.levelgen.GenerationStep;
 import net.minecraft.world.level.levelgen.VerticalAnchor;
 import net.minecraft.world.level.levelgen.blockpredicates.BlockPredicate;
+import net.minecraft.world.level.levelgen.carver.ConfiguredWorldCarver;
 import net.minecraft.world.level.levelgen.feature.Feature;
 import net.minecraft.world.level.levelgen.feature.configurations.OreConfiguration;
-import net.minecraft.world.level.levelgen.placement.BiomeFilter;
-import net.minecraft.world.level.levelgen.placement.CountPlacement;
-import net.minecraft.world.level.levelgen.placement.HeightRangePlacement;
-import net.minecraft.world.level.levelgen.placement.InSquarePlacement;
+import net.minecraft.world.level.levelgen.placement.*;
 
 import static com.mraof.minestuck.world.gen.structure.blocks.StructureBlockRegistry.*;
 
@@ -34,7 +34,7 @@ public class HeatLandType extends TerrainLandType
 	public HeatLandType()
 	{
 		super(new Builder(MSEntityTypes.NAKAGATOR).names(HEAT, FLAME, FIRE)
-				.skylight(1/2F).fogColor(0.4, 0.0, 0.0)
+				.skylight(1 / 2F).fogColor(0.4, 0.0, 0.0)
 				.biomeSet(MSBiomes.NO_RAIN_LAND).music(MSSoundEvents.MUSIC_HEAT));
 	}
 	
@@ -91,49 +91,56 @@ public class HeatLandType extends TerrainLandType
 	}
 	
 	@Override
+	public void addExtensions(HolderLookup.Provider provider, StructureBlockRegistry blocks)
+	{
+		HolderLookup.RegistryLookup<PlacedFeature> features = provider.lookupOrThrow(Registries.PLACED_FEATURE);
+		HolderLookup.RegistryLookup<ConfiguredWorldCarver<?>> carvers = provider.lookupOrThrow(Registries.CONFIGURED_CARVER);
+		
+		addFeatureExtension(features, GenerationStep.Decoration.VEGETAL_DECORATION, MSPlacedFeatures.CINDERED_TREE, LandBiomeType.anyExcept(LandBiomeType.OCEAN));
+		
+		addFeatureExtension(features, GenerationStep.Decoration.VEGETAL_DECORATION, MSPlacedFeatures.SINGED_GRASS_PATCH, LandBiomeType.anyExcept(LandBiomeType.OCEAN));
+		addFeatureExtension(features, GenerationStep.Decoration.VEGETAL_DECORATION, MSPlacedFeatures.SINGED_FOLIAGE_PATCH, LandBiomeType.anyExcept(LandBiomeType.OCEAN));
+		addFeatureExtension(features, GenerationStep.Decoration.VEGETAL_DECORATION, MSPlacedFeatures.IGNEOUS_SPIKE_PATCH, LandBiomeType.anyExcept(LandBiomeType.OCEAN));
+		addFeatureExtension(features, GenerationStep.Decoration.VEGETAL_DECORATION, MSPlacedFeatures.SULFUR_BUBBLE_PATCH, LandBiomeType.ROUGH);
+		
+		addFeatureExtension(features, GenerationStep.Decoration.SURFACE_STRUCTURES, MSPlacedFeatures.SULFUR_POOL, LandBiomeType.ROUGH);
+		addFeatureExtension(features, GenerationStep.Decoration.SURFACE_STRUCTURES, MSPlacedFeatures.CAST_IRON_BUILDING, LandBiomeType.anyExcept(LandBiomeType.OCEAN));
+		addFeatureExtension(features, GenerationStep.Decoration.SURFACE_STRUCTURES, MSPlacedFeatures.CAST_IRON_PLATFORM, LandBiomeType.anyExcept(LandBiomeType.OCEAN));
+		
+		addFeatureExtension(features, GenerationStep.Decoration.FLUID_SPRINGS, MSPlacedFeatures.OCEAN_RUNDOWN, LandBiomeType.anyExcept(LandBiomeType.OCEAN));
+		
+		addFeatureExtension(features, GenerationStep.Decoration.LOCAL_MODIFICATIONS, MSPlacedFeatures.FIRE_FIELD, LandBiomeType.NORMAL);
+		addFeatureExtension(features, GenerationStep.Decoration.LOCAL_MODIFICATIONS, MSPlacedFeatures.EXTRA_FIRE_FIELD, LandBiomeType.ROUGH);
+		
+		addFeatureExtension(GenerationStep.Decoration.UNDERGROUND_ORES, MSPlacedFeatures.inline(Feature.ORE,
+						new OreConfiguration(blocks.getGroundType(), MSBlocks.BLACK_STONE.get().defaultBlockState(), 64),
+						CountPlacement.of(6), InSquarePlacement.spread(), HeightRangePlacement.uniform(VerticalAnchor.bottom(), VerticalAnchor.absolute(256)), BiomeFilter.biome()),
+				LandBiomeType.any());
+		addFeatureExtension(GenerationStep.Decoration.UNDERGROUND_ORES, MSPlacedFeatures.inline(Feature.ORE,
+						new OreConfiguration(blocks.getGroundType(), MSBlocks.BLACK_STONE_GOLD_ORE.get().defaultBlockState(), 9),
+						CountPlacement.of(18), InSquarePlacement.spread(), HeightRangePlacement.uniform(VerticalAnchor.bottom(), VerticalAnchor.absolute(32)), BiomeFilter.biome()),
+				LandBiomeType.any());
+		addFeatureExtension(GenerationStep.Decoration.UNDERGROUND_ORES, MSPlacedFeatures.inline(Feature.ORE,
+						new OreConfiguration(blocks.getGroundType(), MSBlocks.BLACK_STONE_REDSTONE_ORE.get().defaultBlockState(), 7),
+						CountPlacement.of(24), InSquarePlacement.spread(), HeightRangePlacement.uniform(VerticalAnchor.bottom(), VerticalAnchor.absolute(32)), BiomeFilter.biome()),
+				LandBiomeType.any());
+		addFeatureExtension(GenerationStep.Decoration.UNDERGROUND_ORES, MSPlacedFeatures.inline(Feature.ORE,
+						new OreConfiguration(blocks.getGroundType(), MSBlocks.BLACK_STONE_QUARTZ_ORE.get().defaultBlockState(), 8),
+						CountPlacement.of(26), InSquarePlacement.spread(), HeightRangePlacement.uniform(VerticalAnchor.bottom(), VerticalAnchor.absolute(64)), BiomeFilter.biome()),
+				LandBiomeType.any());
+		
+		addCarverExtension(GenerationStep.Carving.AIR, carvers.getOrThrow(Carvers.NETHER_CAVE), LandBiomeType.any());
+	}
+	
+	@Override
 	public void addBiomeGeneration(LandBiomeGenBuilder builder, StructureBlockRegistry blocks)
 	{
-		builder.addFeature(GenerationStep.Decoration.VEGETAL_DECORATION, MSPlacedFeatures.CINDERED_TREE, LandBiomeType.anyExcept(LandBiomeType.OCEAN));
-		
-		builder.addFeature(GenerationStep.Decoration.VEGETAL_DECORATION, MSPlacedFeatures.SINGED_GRASS_PATCH, LandBiomeType.anyExcept(LandBiomeType.OCEAN));
-		builder.addFeature(GenerationStep.Decoration.VEGETAL_DECORATION, MSPlacedFeatures.SINGED_FOLIAGE_PATCH, LandBiomeType.anyExcept(LandBiomeType.OCEAN));
-		builder.addFeature(GenerationStep.Decoration.VEGETAL_DECORATION, MSPlacedFeatures.IGNEOUS_SPIKE_PATCH, LandBiomeType.anyExcept(LandBiomeType.OCEAN));
-		builder.addFeature(GenerationStep.Decoration.VEGETAL_DECORATION, MSPlacedFeatures.SULFUR_BUBBLE_PATCH, LandBiomeType.ROUGH);
-		
-		builder.addFeature(GenerationStep.Decoration.SURFACE_STRUCTURES, MSPlacedFeatures.SULFUR_POOL, LandBiomeType.ROUGH);
-		builder.addFeature(GenerationStep.Decoration.SURFACE_STRUCTURES, MSPlacedFeatures.CAST_IRON_BUILDING, LandBiomeType.anyExcept(LandBiomeType.OCEAN));
-		builder.addFeature(GenerationStep.Decoration.SURFACE_STRUCTURES, MSPlacedFeatures.CAST_IRON_PLATFORM, LandBiomeType.anyExcept(LandBiomeType.OCEAN));
-		
-		builder.addFeature(GenerationStep.Decoration.FLUID_SPRINGS, MSPlacedFeatures.OCEAN_RUNDOWN, LandBiomeType.anyExcept(LandBiomeType.OCEAN));
-		
 		builder.addFeature(GenerationStep.Decoration.UNDERGROUND_ORES, MSPlacedFeatures.MAGMATIC_IGNEOUS_DISK,
 				FeatureModifier.withTargets(BlockPredicate.matchesBlocks(blocks.getBlockState(SURFACE).getBlock(), blocks.getBlockState(UPPER).getBlock())), LandBiomeType.any());
 		builder.addFeature(GenerationStep.Decoration.UNDERGROUND_ORES, MSPlacedFeatures.BLACK_SAND_DISK,
 				FeatureModifier.withTargets(BlockPredicate.matchesBlocks(blocks.getBlockState(SURFACE).getBlock(), blocks.getBlockState(UPPER).getBlock())), LandBiomeType.any());
 		builder.addFeature(GenerationStep.Decoration.UNDERGROUND_ORES, MSPlacedFeatures.PUMICE_STONE_DISK,
 				FeatureModifier.withTargets(BlockPredicate.matchesBlocks(blocks.getBlockState(SURFACE).getBlock(), blocks.getBlockState(UPPER).getBlock())), LandBiomeType.any());
-		
-		builder.addFeature(GenerationStep.Decoration.LOCAL_MODIFICATIONS, MSPlacedFeatures.FIRE_FIELD, LandBiomeType.NORMAL);
-		builder.addFeature(GenerationStep.Decoration.LOCAL_MODIFICATIONS, MSPlacedFeatures.EXTRA_FIRE_FIELD, LandBiomeType.ROUGH);
-		
-		builder.addFeature(GenerationStep.Decoration.UNDERGROUND_ORES, MSPlacedFeatures.inline(Feature.ORE,
-						new OreConfiguration(blocks.getGroundType(), MSBlocks.BLACK_STONE.get().defaultBlockState(), 80),
-						CountPlacement.of(6), InSquarePlacement.spread(), HeightRangePlacement.uniform(VerticalAnchor.bottom(), VerticalAnchor.absolute(256)), BiomeFilter.biome()),
-				LandBiomeType.any());
-		builder.addFeature(GenerationStep.Decoration.UNDERGROUND_ORES, MSPlacedFeatures.inline(Feature.ORE,
-						new OreConfiguration(blocks.getGroundType(), MSBlocks.BLACK_STONE_GOLD_ORE.get().defaultBlockState(), 9),
-						CountPlacement.of(18), InSquarePlacement.spread(), HeightRangePlacement.uniform(VerticalAnchor.bottom(), VerticalAnchor.absolute(32)), BiomeFilter.biome()),
-				LandBiomeType.any());
-		builder.addFeature(GenerationStep.Decoration.UNDERGROUND_ORES, MSPlacedFeatures.inline(Feature.ORE,
-						new OreConfiguration(blocks.getGroundType(), MSBlocks.BLACK_STONE_REDSTONE_ORE.get().defaultBlockState(), 7),
-						CountPlacement.of(24), InSquarePlacement.spread(), HeightRangePlacement.uniform(VerticalAnchor.bottom(), VerticalAnchor.absolute(32)), BiomeFilter.biome()),
-				LandBiomeType.any());
-		builder.addFeature(GenerationStep.Decoration.UNDERGROUND_ORES, MSPlacedFeatures.inline(Feature.ORE,
-						new OreConfiguration(blocks.getGroundType(), MSBlocks.BLACK_STONE_QUARTZ_ORE.get().defaultBlockState(), 8),
-						CountPlacement.of(26), InSquarePlacement.spread(), HeightRangePlacement.uniform(VerticalAnchor.bottom(), VerticalAnchor.absolute(64)), BiomeFilter.biome()),
-				LandBiomeType.any());
-		
-		builder.addCarver(GenerationStep.Carving.AIR, Carvers.NETHER_CAVE, LandBiomeType.any());
 	}
 	
 	@Override

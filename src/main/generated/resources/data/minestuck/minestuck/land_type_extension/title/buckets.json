@@ -1,0 +1,20 @@
+{
+  "features": [
+    {
+      "biome_types": [
+        "normal",
+        "rough"
+      ],
+      "feature": "minestuck:bucket",
+      "step": "surface_structures"
+    },
+    {
+      "biome_types": [
+        "normal",
+        "rough"
+      ],
+      "feature": "minestuck:tree/space",
+      "step": "vegetal_decoration"
+    }
+  ]
+}

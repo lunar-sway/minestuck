@@ -2,14 +2,18 @@ package com.mraof.minestuck.inventory.captchalogue;
 
 import com.mraof.minestuck.MinestuckConfig;
 import com.mraof.minestuck.advancements.MSCriteriaTriggers;
+import com.mraof.minestuck.entity.MSAttributes;
 import com.mraof.minestuck.item.CaptchaCardItem;
 import com.mraof.minestuck.item.MSItems;
+import com.mraof.minestuck.util.MSSoundEvents;
 import net.minecraft.core.HolderLookup;
 import net.minecraft.core.NonNullList;
 import net.minecraft.core.registries.BuiltInRegistries;
 import net.minecraft.nbt.CompoundTag;
+import net.minecraft.network.chat.Component;
 import net.minecraft.resources.ResourceLocation;
 import net.minecraft.server.level.ServerPlayer;
+import net.minecraft.sounds.SoundSource;
 import net.minecraft.world.item.ItemStack;
 import net.neoforged.fml.LogicalSide;
 
@@ -47,10 +51,10 @@ public class TreeModus extends Modus
 	
 	private static TreeNode readNode(CompoundTag nbt, int currentIndex, int level, HolderLookup.Provider provider)
 	{
-		if(nbt.contains("node"+currentIndex))
+		if(nbt.contains("node" + currentIndex))
 		{
-			ItemStack stack = ItemStack.parse(provider, nbt.getCompound("node"+currentIndex)).orElseThrow();
-			if(stack.isEmpty()) return null;	//Should not happen
+			ItemStack stack = ItemStack.parse(provider, nbt.getCompound("node" + currentIndex)).orElseThrow();
+			if(stack.isEmpty()) return null;    //Should not happen
 			TreeNode node = new TreeNode(stack);
 			node.node1 = readNode(nbt, currentIndex + (int) Math.pow(2, level), level + 1, provider);
 			node.node2 = readNode(nbt, currentIndex + (int) Math.pow(2, level + 1), level + 1, provider);
@@ -61,7 +65,7 @@ public class TreeModus extends Modus
 	
 	private static void saveNode(CompoundTag nbt, TreeNode node, int currentIndex, int level, HolderLookup.Provider provider)
 	{
-		nbt.put("node"+currentIndex, node.stack.save(provider));
+		nbt.put("node" + currentIndex, node.stack.save(provider));
 		if(node.node1 != null)
 			saveNode(nbt, node.node1, currentIndex + (int) Math.pow(2, level), level + 1, provider);
 		if(node.node2 != null)
@@ -113,8 +117,11 @@ public class TreeModus extends Modus
 	@Override
 	public boolean increaseSize(ServerPlayer player)
 	{
-		if(MinestuckConfig.SERVER.modusMaxSize.get() > 0 && size >= MinestuckConfig.SERVER.modusMaxSize.get())
+		if(hasHitMaxCards(player, size))
+		{
+			player.displayClientMessage(Component.translatable(CAPTCHA_LIMIT), true);
 			return false;
+		}
 		
 		size++;
 		markDirty();
@@ -136,11 +143,12 @@ public class TreeModus extends Modus
 			return ItemStack.EMPTY;
 		if(id == CaptchaDeckHandler.EMPTY_SYLLADEX)
 		{
+			player.level().playSound(null, player.getX(), player.getY(), player.getZ(), MSSoundEvents.EVENT_CAPTCHALOGUE_SHUFFLE.get(), SoundSource.AMBIENT, 1F, 1F);
 			ArrayList<ItemStack> list = node.removeItems(0);
 			node = null;
 			markDirty();
 			for(ItemStack stack : list)
-				CaptchaDeckHandler.launchAnyItem(player, stack);
+				CaptchaDeckHandler.ejectAnyItem(player, stack);
 			return ItemStack.EMPTY;
 		}
 		
@@ -207,14 +215,14 @@ public class TreeModus extends Modus
 		}
 	}
 	
-	protected TreeNode createNode(List<ItemStack> list)	//Used only by auto balance
+	protected TreeNode createNode(List<ItemStack> list)    //Used only by auto balance
 	{
 		if(list.isEmpty())
 			return null;
-		int i = list.size()/2;
+		int i = list.size() / 2;
 		TreeNode node = new TreeNode(list.get(i));
 		node.node1 = createNode(list.subList(0, i));
-		node.node2 = createNode(list.subList(i+1, list.size()));
+		node.node2 = createNode(list.subList(i + 1, list.size()));
 		return node;
 	}
 	
@@ -251,11 +259,10 @@ public class TreeModus extends Modus
 		public void addNode(TreeNode node)
 		{
 			if(ItemStack.isSameItemSameComponents(this.stack, node.stack)
-				&& this.stack.getCount() + node.stack.getCount() <= this.stack.getMaxStackSize())
+					&& this.stack.getCount() + node.stack.getCount() <= this.stack.getMaxStackSize())
 			{
 				this.stack.grow(node.stack.getCount());
-			}
-			else
+			} else
 			{
 				int compare = this.itemToString().compareTo(node.itemToString());
 				if(compare >= 0)
@@ -263,8 +270,7 @@ public class TreeModus extends Modus
 					if(node1 != null)
 						node1.addNode(node);
 					else node1 = node;
-				}
-				else
+				} else
 				{
 					if(node2 != null)
 						node2.addNode(node);
@@ -277,8 +283,8 @@ public class TreeModus extends Modus
 		{
 			ResourceLocation name = BuiltInRegistries.ITEM.getKey(stack.getItem());
 			if(name == null)
-				throw new IllegalStateException("Item "+stack.getItem()+" does not have a registry name, but ended up in a tree modus!");
-			return name.getPath()+":"+name.getNamespace();	//Don't want the items to be sorted mod-wise.
+				throw new IllegalStateException("Item " + stack.getItem() + " does not have a registry name, but ended up in a tree modus!");
+			return name.getPath() + ":" + name.getNamespace();    //Don't want the items to be sorted mod-wise.
 		}
 		
 		public ArrayList<ItemStack> removeItems(int index)
@@ -298,18 +304,17 @@ public class TreeModus extends Modus
 			{
 				if(node1 != null)
 				{
-					ArrayList<ItemStack> list = node1.removeItems(index/2);
-					if(index/2 == 0)
+					ArrayList<ItemStack> list = node1.removeItems(index / 2);
+					if(index / 2 == 0)
 						node1 = null;
 					return list;
 				} else return new ArrayList<>();
-			}
-			else
+			} else
 			{
 				if(node2 != null)
 				{
-					ArrayList<ItemStack> list = node2.removeItems(index/2);
-					if(index/2 == 0)
+					ArrayList<ItemStack> list = node2.removeItems(index / 2);
+					if(index / 2 == 0)
 						node2 = null;
 					return list;
 				} else return new ArrayList<>();
@@ -317,7 +322,7 @@ public class TreeModus extends Modus
 		}
 		
 		public NonNullList<ItemStack> getItems()
-		{	//TODO Maybe something more efficient than repeatedly creating and discarding lists?
+		{    //TODO Maybe something more efficient than repeatedly creating and discarding lists?
 			NonNullList<ItemStack> list = NonNullList.create();
 			if(node1 != null)
 				list.addAll(node1.getItems());

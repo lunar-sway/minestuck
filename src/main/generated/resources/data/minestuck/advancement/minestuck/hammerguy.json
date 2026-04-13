@@ -1,0 +1,34 @@
+{
+  "parent": "minestuck:minestuck/root",
+  "criteria": {
+    "possess_hammer": {
+      "conditions": {
+        "items": [
+          {
+            "items": "minestuck:claw_hammer"
+          }
+        ]
+      },
+      "trigger": "minecraft:inventory_changed"
+    }
+  },
+  "display": {
+    "description": {
+      "translate": "advancements.minestuck.hammerguy.description"
+    },
+    "hidden": true,
+    "icon": {
+      "count": 1,
+      "id": "minestuck:claw_hammer"
+    },
+    "title": {
+      "translate": "advancements.minestuck.hammerguy.title"
+    }
+  },
+  "requirements": [
+    [
+      "possess_hammer"
+    ]
+  ],
+  "sends_telemetry_event": true
+}

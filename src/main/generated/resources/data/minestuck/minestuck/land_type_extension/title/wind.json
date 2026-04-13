@@ -1,0 +1,20 @@
+{
+  "features": [
+    {
+      "biome_types": [
+        "normal",
+        "rough"
+      ],
+      "feature": "minestuck:parcel_pyxis",
+      "step": "local_modifications"
+    },
+    {
+      "biome_types": [
+        "normal",
+        "rough"
+      ],
+      "feature": "minestuck:tree/breath",
+      "step": "vegetal_decoration"
+    }
+  ]
+}

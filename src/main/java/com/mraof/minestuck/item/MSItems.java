@@ -490,6 +490,7 @@ public class MSItems
 	public static final DeferredItem<Item> SERVER_DISK = REGISTER.register("server_disk", () -> new Item(new Item.Properties().stacksTo(1).component(MSItemComponents.PROGRAM_TYPE, ProgramTypes.SBURB_SERVER)));
 	
 	public static final DeferredItem<Item> CAPTCHA_CARD = REGISTER.register("captcha_card", () -> new CaptchaCardItem(new Item.Properties()));
+	public static final DeferredItem<Item> ARRAY_MODUS_CARD = REGISTER.register("array_modus_card", () -> new Item(new Item.Properties().stacksTo(1)));
 	public static final DeferredItem<Item> STACK_MODUS_CARD = REGISTER.register("stack_modus_card", () -> new Item(new Item.Properties().stacksTo(1)));
 	public static final DeferredItem<Item> QUEUE_MODUS_CARD = REGISTER.register("queue_modus_card", () -> new Item(new Item.Properties().stacksTo(1)));
 	public static final DeferredItem<Item> QUEUESTACK_MODUS_CARD = REGISTER.register("queuestack_modus_card", () -> new Item(new Item.Properties().stacksTo(1)));
@@ -1613,6 +1614,7 @@ public class MSItems
 	public static final DeferredItem<BlockItem> PINK_FROSTED_TOP_LARGE_CAKE = registerBlockItem(MSBlocks.PINK_FROSTED_TOP_LARGE_CAKE);
 	public static final DeferredItem<BlockItem> CHOCOLATEY_CAKE = registerBlockItem(MSBlocks.CHOCOLATEY_CAKE, new Item.Properties().stacksTo(1));
 	public static final DeferredItem<BlockItem> MOON_CAKE = registerBlockItem(MSBlocks.MOON_CAKE, new Item.Properties().stacksTo(1));
+	public static final DeferredItem<BlockItem> PAN_CAKE = registerBlockItem(MSBlocks.PAN_CAKE, new Item.Properties().stacksTo(1));
 	
 	//Explosives
 	public static final DeferredItem<BlockItem> PRIMED_TNT = registerBlockItem(MSBlocks.PRIMED_TNT);

@@ -5,11 +5,16 @@
         "type": "minestuck:list",
         "conditions": [
           {
-            "type": "minestuck:is_in_skaia"
+            "type": "minestuck:npc_location_predicate",
+            "predicate": {
+              "dimension": "minestuck:skaia"
+            }
           },
           {
-            "type": "minestuck:entity_type",
-            "entity_type": "minestuck:turtle"
+            "type": "minestuck:npc_entity_predicate",
+            "predicate": {
+              "type": "minestuck:turtle"
+            }
           }
         ],
         "list_type": "all"
@@ -23,7 +28,10 @@
     },
     {
       "condition": {
-        "type": "minestuck:is_in_skaia"
+        "type": "minestuck:npc_location_predicate",
+        "predicate": {
+          "dimension": "minestuck:skaia"
+        }
       },
       "node": {
         "animation": {
@@ -41,7 +49,10 @@
     },
     {
       "condition": {
-        "type": "minestuck:consort_visited_skaia"
+        "type": "minestuck:npc_entity_predicate",
+        "predicate": {
+          "nbt": "{Skaia:1b}"
+        }
       },
       "node": {
         "animation": {},

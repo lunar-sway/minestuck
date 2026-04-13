@@ -1,6 +1,7 @@
 package com.mraof.minestuck.block.redstone;
 
 import com.mraof.minestuck.block.BlockUtil;
+import com.mraof.minestuck.blockentity.MSBlockEntityTypes;
 import com.mraof.minestuck.blockentity.redstone.StatStorerBlockEntity;
 import com.mraof.minestuck.client.gui.MSScreenFactories;
 import com.mraof.minestuck.effects.CreativeShockEffect;
@@ -15,6 +16,8 @@ import net.minecraft.world.level.Level;
 import net.minecraft.world.level.block.Block;
 import net.minecraft.world.level.block.EntityBlock;
 import net.minecraft.world.level.block.entity.BlockEntity;
+import net.minecraft.world.level.block.entity.BlockEntityTicker;
+import net.minecraft.world.level.block.entity.BlockEntityType;
 import net.minecraft.world.level.block.state.BlockState;
 import net.minecraft.world.level.block.state.StateDefinition;
 import net.minecraft.world.level.block.state.properties.BlockStateProperties;
@@ -80,6 +83,13 @@ public class StatStorerBlock extends Block implements EntityBlock
 	public BlockEntity newBlockEntity(BlockPos pos, BlockState state)
 	{
 		return new StatStorerBlockEntity(pos, state);
+	}
+	
+	@Nullable
+	@Override
+	public <T extends BlockEntity> BlockEntityTicker<T> getTicker(Level level, BlockState state, BlockEntityType<T> placedType)
+	{
+		return BlockUtil.checkTypeForTicker(placedType, MSBlockEntityTypes.STAT_STORER.get(), StatStorerBlockEntity::serverTick);
 	}
 	
 	@Override

@@ -1581,6 +1581,8 @@ public class MSBlockStateProvider extends BlockStateProvider
 		flatItem(MSItems.CHOCOLATEY_CAKE, MSBlockStateProvider::itemTexture);
 		cakeAlt(MSBlocks.MOON_CAKE);
 		flatItem(MSItems.MOON_CAKE, MSBlockStateProvider::itemTexture);
+		cakeAlt(MSBlocks.PAN_CAKE);
+		flatItem(MSItems.PAN_CAKE, MSBlockStateProvider::itemTexture);
 		
 		//Explosives
 		{

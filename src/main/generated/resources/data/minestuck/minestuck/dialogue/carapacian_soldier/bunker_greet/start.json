@@ -1,8 +1,8 @@
 {
   "node": {
-    "animation": {},
-    "gui": "minestuck:textures/gui/dialogue/dialogue.png",
-    "messages": [
+    "animation": { },
+    "gui":       "minestuck:textures/gui/dialogue/dialogue.png",
+    "messages":  [
       {
         "type": "entity",
         "message": "minestuck.dots"
@@ -14,30 +14,30 @@
     ],
     "responses": [
       {
-        "condition": {
+        "condition":     {
           "type": "minestuck:always_true"
         },
         "hide_if_failed": true,
-        "message": "minestuck.dialogue.carapacian_soldier.bunker_greet.start.what",
+        "message":       "minestuck.dialogue.carapacian_soldier.bunker_greet.start.what",
         "next_dialogue": "minestuck:carapacian_soldier/bunker_greet/explain_place.1",
-        "triggers": []
+        "triggers":      [ ]
       },
       {
-        "condition": {
+        "condition":     {
           "type": "minestuck:always_true"
         },
         "hide_if_failed": true,
-        "message": "minestuck.dialogue.carapacian_soldier.bunker_greet.start.splorin",
+        "message":       "minestuck.dialogue.carapacian_soldier.bunker_greet.start.splorin",
         "next_dialogue": "minestuck:carapacian_soldier/bunker_greet/suspicion",
-        "triggers": []
+        "triggers":      [ ]
       },
       {
         "condition": {
           "type": "minestuck:always_true"
         },
         "hide_if_failed": true,
-        "message": "minestuck.dialogue.carapacian_soldier.bunker_greet.start.bye",
-        "triggers": []
+        "message":   "minestuck.dialogue.carapacian_soldier.bunker_greet.start.bye",
+        "triggers":  [ ]
       }
     ]
   }

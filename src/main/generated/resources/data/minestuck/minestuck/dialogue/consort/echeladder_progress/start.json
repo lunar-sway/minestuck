@@ -2,8 +2,12 @@
   "conditioned_nodes": [
     {
       "condition": {
-        "type": "minestuck:player_advancement",
-        "advancement_id": "minestuck:minestuck/big_one_mil"
+        "type": "minestuck:player_predicate_condition",
+        "predicate": {
+          "advancements": {
+            "minestuck:minestuck/big_one_mil": true
+          }
+        }
       },
       "node": {
         "animation": {},
@@ -24,8 +28,12 @@
     },
     {
       "condition": {
-        "type": "minestuck:player_advancement",
-        "advancement_id": "minestuck:minestuck/halfway_point"
+        "type": "minestuck:player_predicate_condition",
+        "predicate": {
+          "advancements": {
+            "minestuck:minestuck/halfway_point": true
+          }
+        }
       },
       "node": {
         "animation": {},
@@ -46,8 +54,12 @@
     },
     {
       "condition": {
-        "type": "minestuck:player_advancement",
-        "advancement_id": "minestuck:minestuck/double_digits"
+        "type": "minestuck:player_predicate_condition",
+        "predicate": {
+          "advancements": {
+            "minestuck:minestuck/double_digits": true
+          }
+        }
       },
       "node": {
         "animation": {},

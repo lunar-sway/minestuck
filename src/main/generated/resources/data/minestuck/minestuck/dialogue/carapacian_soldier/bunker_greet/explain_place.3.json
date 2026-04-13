@@ -15,8 +15,14 @@
     "responses": [
       {
         "condition": {
-          "type": "minestuck:at_or_above_y",
-          "y": 64.0
+          "type": "minestuck:npc_location_predicate",
+          "predicate": {
+            "position": {
+              "y": {
+                "min": 64.0
+              }
+            }
+          }
         },
         "hide_if_failed": true,
         "message": "minestuck.dialogue.carapacian_soldier.bunker_greet.explain_place.3.access",

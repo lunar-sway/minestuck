@@ -3,11 +3,16 @@
     "type": "minestuck:list",
     "conditions": [
       {
-        "type": "minestuck:is_in_skaia"
+        "type": "minestuck:npc_location_predicate",
+        "predicate": {
+          "dimension": "minestuck:skaia"
+        }
       },
       {
-        "type": "minestuck:is_from_kingdom",
-        "kingdom": "dersite"
+        "type": "minestuck:npc_entity_predicate",
+        "predicate": {
+          "type": "#minestuck:carapacians/dersite"
+        }
       }
     ],
     "list_type": "all"

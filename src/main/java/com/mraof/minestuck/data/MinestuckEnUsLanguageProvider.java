@@ -1,7 +1,5 @@
 package com.mraof.minestuck.data;
 
-import static com.mraof.minestuck.util.MSTags.Items.*;
-
 import com.mraof.minestuck.Minestuck;
 import com.mraof.minestuck.api.alchemy.GristAmount;
 import com.mraof.minestuck.api.alchemy.GristSet;
@@ -37,7 +35,11 @@ import com.mraof.minestuck.entity.MSEntityTypes;
 import com.mraof.minestuck.entity.dialogue.Dialogue;
 import com.mraof.minestuck.entry.EntryProcess;
 import com.mraof.minestuck.inventory.ConsortMerchantInventory;
+import com.mraof.minestuck.inventory.captchalogue.ArrayModus;
+import com.mraof.minestuck.inventory.captchalogue.CaptchaDeckHandler;
 import com.mraof.minestuck.inventory.captchalogue.HashMapModus;
+import com.mraof.minestuck.inventory.captchalogue.Modus;
+import com.mraof.minestuck.item.CaptchaCardItem;
 import com.mraof.minestuck.item.MSCreativeTabs;
 import com.mraof.minestuck.item.MSItems;
 import com.mraof.minestuck.item.StructureScannerItem;
@@ -47,6 +49,7 @@ import com.mraof.minestuck.item.weapon.OnHitEffect;
 import com.mraof.minestuck.network.ToggleAspectEffectsPacket;
 import com.mraof.minestuck.player.*;
 import com.mraof.minestuck.skaianet.*;
+import com.mraof.minestuck.util.MSTags;
 import com.mraof.minestuck.world.GateHandler;
 import com.mraof.minestuck.world.lands.GristLayerInfo;
 import com.mraof.minestuck.world.lands.LandTypePair;
@@ -57,6 +60,8 @@ import net.minecraft.data.PackOutput;
 import net.minecraft.world.item.Items;
 import net.minecraft.world.item.alchemy.PotionContents;
 import net.minecraft.world.item.alchemy.Potions;
+
+import static com.mraof.minestuck.util.MSTags.Items.*;
 
 public class MinestuckEnUsLanguageProvider extends MinestuckLanguageProvider
 {
@@ -838,7 +843,7 @@ public class MinestuckEnUsLanguageProvider extends MinestuckLanguageProvider
 		addBlock(MSBlocks.RAINBOW_SLAB, "Rainbow Planks Slab");
 		addBlock(MSBlocks.END_SLAB, "End Planks Slab");
 		addBlock(MSBlocks.DEAD_SLAB, "Dead Planks Slab");
-	
+		
 		addBlock(MSBlocks.MYCELIUM_SLAB, "Mycelium Slab");
 		addBlock(MSBlocks.MYCELIUM_BRICK_SLAB, "Mycelium Brick Slab");
 		addBlock(MSBlocks.FROST_TILE_SLAB, "Frost Tile Slab");
@@ -981,6 +986,7 @@ public class MinestuckEnUsLanguageProvider extends MinestuckLanguageProvider
 		addBlock(MSBlocks.CHOCOLATEY_CAKE, "Chocolatey Cake");
 		addBlockStoreTooltip(MSBlocks.CHOCOLATEY_CAKE, "The most scrumptious cake in the entire world!");
 		addBlock(MSBlocks.MOON_CAKE, "Moon Cake");
+		addBlock(MSBlocks.PAN_CAKE, "PANCake");
 		addBlock(MSBlocks.PRIMED_TNT, "Primed TNT");
 		addBlock(MSBlocks.UNSTABLE_TNT, "Unstable TNT");
 		addBlock(MSBlocks.INSTANT_TNT, "Instant TNT");
@@ -1566,11 +1572,14 @@ public class MinestuckEnUsLanguageProvider extends MinestuckLanguageProvider
 		addItemExtra(MSItems.CAPTCHA_CARD, "invalid", "Invalid Data");
 		addItemExtra(MSItems.CAPTCHA_CARD, "punched", "Punched");
 		addItemExtra(MSItems.CAPTCHA_CARD, "ghost", "Ghost");
+		add(CaptchaCardItem.USE_KEYS, "Store your held item to an empty card in your Sylladex by pressing [%s]");
 		addItem(MSItems.STACK_MODUS_CARD, "Stack Modus");
 		addItem(MSItems.QUEUE_MODUS_CARD, "Queue Modus");
 		addItem(MSItems.QUEUESTACK_MODUS_CARD, "Queue-Stack Modus");
 		addItem(MSItems.TREE_MODUS_CARD, "Tree Modus");
 		addItem(MSItems.HASHMAP_MODUS_CARD, "Hashmap Modus");
+		addItem(MSItems.ARRAY_MODUS_CARD, "Array Modus");
+		addItemTooltip(MSItems.ARRAY_MODUS_CARD, "This modus allows you to store and retrieve any item from any card at any time... BOOOOOOOORING!");
 		addItem(MSItems.SET_MODUS_CARD, "Set Modus");
 		addItemTooltip(MSItems.SET_MODUS_CARD, "This modus is quite similar to the array modus. Surely this is what you were looking for?");
 		addItem(MSItems.SHUNT, "Punch Card Shunt");
@@ -2122,6 +2131,7 @@ public class MinestuckEnUsLanguageProvider extends MinestuckLanguageProvider
 		addAdvancement(MSAdvancementProvider.LONG_TIME_COMING, "Long Time Coming", "Collect SBURB code! You get the sense that you need to find a computer to record its information to");
 		addAdvancement(MSAdvancementProvider.CONNECT, "Connect", "Create a connection with someone");
 		addAdvancement(MSAdvancementProvider.ENTRY, "A New World", "Create, and use the Cruxite Artifact");
+		addAdvancement(MSAdvancementProvider.SPEEDRUN, "Look At The Sky, Numbnuts!", "You GOTTA pay attention to this shit!");
 		addAdvancement(MSAdvancementProvider.ALCHEMY, "Step Towards Alchemy", "Getting a punch designix is the first step to alchemizing something else!");
 		addAdvancement(MSAdvancementProvider.NEW_MODUS, "A New Type of Frustrating", "Equip a new modus");
 		addAdvancement(MSAdvancementProvider.ALL_MODI, "A Full Set", "Try every modus type");
@@ -2143,6 +2153,7 @@ public class MinestuckEnUsLanguageProvider extends MinestuckLanguageProvider
 		addAdvancement(MSAdvancementProvider.LEGENDARY_WEAPON, "Legendary Weapon", "Obtain a Zilly, Welsh, or Denizen tier weapon");
 		addAdvancement(MSAdvancementProvider.BUY_OUT_SHOP, "Beware the Buyer", "Purchase every item available from a consort merchant");
 		addAdvancement(MSAdvancementProvider.BRICK_COMPUTER, "Brick Your Computer", "Did you try turning it on and off again?");
+		addAdvancement(MSAdvancementProvider.HAMMERGUY, "I Fucking Love Hammers", "Hahahah, hammer guy for life!");
 		
 		addLand(FungiLandType.FUNGI, "Fungi");
 		addLand(FungiLandType.DANK, "Dank");
@@ -2209,8 +2220,16 @@ public class MinestuckEnUsLanguageProvider extends MinestuckLanguageProvider
 		add(SburbHandler.CHAT_LAND_ENTRY, "Welcome to %s.");
 		
 		addEffect(MSEffects.CREATIVE_SHOCK, "Creative Shock");
+		addEffectDescription(MSEffects.CREATIVE_SHOCK, "Prevents various actions depending on the level:\n" +
+				"- Level I: Prevents placing and mining blocks\n" +
+				"- Level II: Prevents opening redstone machinery GUIs\n" +
+				"- Level III: Prevents usage of some mobility items\n" +
+				"- Levels IV, V, and VI apply level I, II, and III respectively to creative players"
+		);
 		addEffect(MSEffects.SUSPICION, "Suspicion");
+		addEffectDescription(MSEffects.SUSPICION, "Pushes entities away and prevents them from riding or being ridden.");
 		addEffect(MSEffects.SOPOR_SICKNESS, "Sopor Stupor");
+		addEffectDescription(MSEffects.SOPOR_SICKNESS, "Damages the player over time. Prevents the application of some effects, as long as their level is lower or equal");
 		
 		addStrife(KindAbstratusList.SWORD, "Bladekind");
 		addStrife(KindAbstratusList.BOW, "Bowkind");
@@ -2226,19 +2245,21 @@ public class MinestuckEnUsLanguageProvider extends MinestuckLanguageProvider
 		
 		add(MusicPlayerWeapon.TITLE, "Music Player");
 		add(MusicPlayerWeapon.HINT_INACTIVE, "Crouch and use to start playing");
+		add(CaptchaDeckHandler.TOO_LARGE, "Cannot captchalogue card, too much data stored");
 		add(GristCacheScreen.TITLE, "Grist Cache");
 		add(StrifeSpecibusScreen.TITLE, "Strife Specibus");
 		add(StrifeSpecibusScreen.KIND_ABSTRATUS, "Kind Abstratus");
-		add(CaptchaDeckScreen.TITLE, "Captchalogue Deck");
-		add(CaptchaDeckScreen.USE_ITEM, "Use Item");
+		add(SylladexScreen.USE_ITEM, "Use Item");
 		add(EcheladderScreen.TITLE, "Echeladder");
 		add(EcheladderScreen.ATTACK, "Attack");
 		add(EcheladderScreen.HEALTH, "Health");
 		add(EcheladderScreen.CACHE, "Cache Limit");
+		add(EcheladderScreen.CAPTCHA, "Max Cards");
 		add(EcheladderScreen.DAMAGE_UNDERLING, "Damage boost against underlings:");
 		add(EcheladderScreen.DAMAGE_UNDERLING_INCREASE, "Damage against underlings: +%d%%");
 		add(EcheladderScreen.PROTECTION_UNDERLING, "Underling damage decreased to:");
 		add(EcheladderScreen.PROTECTION_UNDERLING_INCREASE, "Underling damage: -%.1f%%");
+		add(Modus.CAPTCHA_LIMIT, "Reached max modi capacity for this rung");
 		add(InventoryEditmodeScreen.TITLE, "Deploy List");
 		add(EditmodeSettingsScreen.TITLE, "Editmode Settings");
 		add(EditmodeSettingsScreen.EDITMODE_LOCATIONS, "Teleport Locus");
@@ -2363,7 +2384,10 @@ public class MinestuckEnUsLanguageProvider extends MinestuckLanguageProvider
 		add(SummonerScreen.UNTRIGGERABLE_MESSAGE, "UNTRIGGERABLE");
 		add(SummonerScreen.TRIGGERABLE_MESSAGE, "TRIGGERABLE");
 		add(SummonerBlock.SUMMON_TYPE_CHANGE, "Summoned entity type changed to %s.");
+		add(ArrayModus.MESSAGE, "[ARRAY] %s - %s");
+		add(ArrayModus.MESSAGE_EJECTED, "[ARRAY] %s (%s / %s)");
 		add(HashMapModus.MESSAGE, "[HASHMAP] %s %% %s -> %s");
+		add(HashMapModus.MESSAGE_EJECTED, "[HASHMAP] %s (%s / %s)");
 		
 		add(ButtonListHelper.CLEAR_BUTTON, "Clear message");
 		add(SburbClientGui.NAME, "SBURB Client");
@@ -2520,6 +2544,8 @@ public class MinestuckEnUsLanguageProvider extends MinestuckLanguageProvider
 		addSubtitles("horn", "Horn honks");
 		addSubtitles("screech", "Estrogen-empowered screech");
 		addSubtitles("upcheladder", "Echeladder levels up");
+		addSubtitles("captchalogue_item", "Updated card in Sylladex");
+		addSubtitles("captchalogue_shuffle", "Updated whole Sylladex");
 		addSubtitles("boondollar_get", "Received Boondollars");
 		addSubtitles("electric_shock", "Electric Shock");
 		addSubtitles("electric_autoharp_stroke", "Chord plays on electric autoharp");
@@ -2587,6 +2613,7 @@ public class MinestuckEnUsLanguageProvider extends MinestuckLanguageProvider
 		add(UNREADABLE, "Unreadable Captcha Codes");
 		add(LEGENDARY, "Legendary Weapons");
 		add(MAGIC_WEAPON, "Magic Weapons");
+		add(MSTags.Effects.SOPOR_SICKNESS_WHITELIST, "Prevent by Sopor Stupor");
 		
 		addPainting("candy_shop_sign", "Candy Shop Sign", "Cibernet83");
 		addPainting("candy_shop_small", "Small Candy Shop", "Cibernet83");

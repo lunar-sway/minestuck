@@ -54,6 +54,8 @@ public final class MSStructures
 	public static final ResourceKey<Structure> SMALL_RUIN = key("small_ruin");
 	public static final Supplier<StructurePieceType> SMALL_RUIN_PIECE =
 			PIECE_REGISTER.register("small_ruin", () -> contextless(SmallRuinPiece::new));
+	public static final ResourceKey<Structure> ARENA = key("arena");
+	public static final ResourceKey<StructureTemplatePool> ARENA_START_POOL = templateKey("arena/entry");
 	
 	public static final ResourceKey<Structure> PROSPIT_BUNKER = key("prospit_bunker");
 	public static final ResourceKey<StructureTemplatePool> PROSPIT_BUNKER_START_POOL = templateKey("prospit_bunker/entry");
@@ -63,9 +65,6 @@ public final class MSStructures
 	
 	public static final ResourceKey<Structure> IMP_BUNKER = key("imp_bunker");
 	public static final ResourceKey<StructureTemplatePool> IMP_BUNKER_START_POOL = templateKey("imp_bunker/entry");
-	
-	public static final ResourceKey<Structure> ARENA = key("arena");
-	public static final ResourceKey<StructureTemplatePool> ARENA_START_POOL = templateKey("arena/entry");
 	
 	public static final class ImpDungeon
 	{

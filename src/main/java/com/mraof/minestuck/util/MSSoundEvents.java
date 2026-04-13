@@ -108,6 +108,8 @@ public final class MSSoundEvents
 	public static final Supplier<SoundEvent> ITEM_BATON_ORCHESTRA = register("item.baton.orchestra");
 	public static final Supplier<SoundEvent> ITEM_JETPACK_FLIGHT = register("item.jetpack.flight");
 	public static final Supplier<SoundEvent> ITEM_BOONDOLLARS_USE = register("item.boondollars.use");
+	public static final Supplier<SoundEvent> EVENT_CAPTCHALOGUE_ITEM = register("event.captchalogue.item");
+	public static final Supplier<SoundEvent> EVENT_CAPTCHALOGUE_SHUFFLE = register("event.captchalogue.shuffle");
 	public static final Supplier<SoundEvent> EVENT_ECHELADDER_INCREASE = register("event.echeladder.increase");
 	public static final Supplier<SoundEvent> EVENT_ELECTRIC_SHOCK = register("event.electric_shock");
 	public static final Supplier<SoundEvent> EVENT_LOTUS_FLOWER_LOOT_SPAWN = register("event.lotus_flower.loot_spawn"); //based on boat paddle land and item pop

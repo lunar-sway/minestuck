@@ -21,6 +21,7 @@ import net.minecraft.network.protocol.game.ClientboundSetTitlesAnimationPacket;
 import net.minecraft.resources.ResourceKey;
 import net.minecraft.server.MinecraftServer;
 import net.minecraft.server.level.ServerPlayer;
+import net.minecraft.stats.Stats;
 import net.minecraft.world.item.ItemStack;
 import net.minecraft.world.level.Level;
 import net.neoforged.neoforge.common.NeoForge;
@@ -35,6 +36,7 @@ import java.util.Random;
 /**
  * A class for managing sburb-related stuff from outside this package that is dependent on connections and sessions.
  * For example: Titles, land aspects, entry items etc.
+ *
  * @author kirderf1
  */
 public final class SburbHandler
@@ -73,7 +75,7 @@ public final class SburbHandler
 	
 	public static ItemStack getEntryItem(Level level, SburbPlayerData playerData)
 	{
-		int color =  ColorHandler.getColorForPlayer(playerData.playerId(), level);
+		int color = ColorHandler.getColorForPlayer(playerData.playerId(), level);
 		
 		return ColorHandler.setColor(playerData.artifactType.createItemStack(), color);
 	}
@@ -168,6 +170,11 @@ public final class SburbHandler
 		return landDimension;
 	}
 	
+	public static int getPlayerPlayedTime(ServerPlayer player)
+	{
+		return player.getStats().getValue(Stats.CUSTOM.get(Stats.PLAY_TIME));
+	}
+	
 	public static void onEntry(MinecraftServer server, ServerPlayer player)
 	{
 		PlayerIdentifier playerId = Objects.requireNonNull(IdentifierHandler.encode(player));
@@ -180,6 +187,10 @@ public final class SburbHandler
 		SessionHandler.get(server).getOrCreateSession(playerData.playerId()).checkIfCompleted();
 		
 		MSCriteriaTriggers.CRUXITE_ARTIFACT.get().trigger(player);
+		if(getPlayerPlayedTime(player) < 36000)
+		{
+			MSCriteriaTriggers.SPEEDRUN.get().trigger(player);
+		}
 		
 		EditmodeLocations.onEntry(server, playerData.playerId());
 		
@@ -204,7 +215,7 @@ public final class SburbHandler
 	
 	static void initNewData(SburbPlayerData playerData)
 	{
-		Random rand = new Random();	//TODO seed?
+		Random rand = new Random();    //TODO seed?
 		playerData.artifactType = SburbPlayerData.ArtifactType.values()[rand.nextInt(SburbPlayerData.ArtifactType.values().length)];
 		playerData.setBaseGrist(generateGristType(rand));
 	}

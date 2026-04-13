@@ -3,8 +3,8 @@
     "animation": {
       "emotion": "happy"
     },
-    "gui": "minestuck:textures/gui/dialogue/dialogue.png",
-    "messages": [
+    "gui":       "minestuck:textures/gui/dialogue/dialogue.png",
+    "messages":  [
       {
         "type": "entity",
         "message": "minestuck.dots"
@@ -16,13 +16,13 @@
     ],
     "responses": [
       {
-        "condition": {
+        "condition":     {
           "type": "minestuck:always_true"
         },
         "hide_if_failed": true,
-        "message": "minestuck.arrow",
+        "message":       "minestuck.arrow",
         "next_dialogue": "minestuck:carapacian_soldier/bunker_greet/access.2",
-        "triggers": []
+        "triggers":      [ ]
       }
     ]
   }

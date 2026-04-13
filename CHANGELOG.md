@@ -10,9 +10,17 @@ The format is based on [Keep a Changelog](https://keepachangelog.com/en/1.1.0/).
 
 - DeployList can be expanded with datapacks
 - Newer music discs have associated cassettes
-- Sound effect for boondollar item and porkhollow command.
+- Added sound effects related to captchaloguing/boondollars
 - Captchaloguing multiple cards that contain items will store as many of both as possible
 - Added music tracks made by heartsremedy to all non-Land dimensions in the Medium
+- Added two new advancements: _"I Fucking Love Hammers"_ and _"Look At The Sky, Numbnuts!"_
+- Added new cake: PANcake
+- Added 3 bunker structures to Lands
+- Increased block diversity in structures
+- Array modus
+- Added new dialogue
+- Most Minestuck fluids are now bottomless in the context of Create
+- Added a limit to captchaloguing cards with large amounts of stored data
 - Added 3 bunker structures to Lands
 - Increased block diversity in structures
 
@@ -22,8 +30,25 @@ The format is based on [Keep a Changelog](https://keepachangelog.com/en/1.1.0/).
 - Boondollars can be split/stacked together like normal items
 - Updated all grist and vitality gel sprites
 - Tweaked some Rung names
-- New rung-up jingle.
+- New rung-up jingle
+- The sylladex GUIs have been unified
+  - Addons that add moduses will need to be updated (see [related PR](https://github.com/lunar-sway/minestuck/pull/721))
 - cruxtruderIntake config for cruxtruders now false by default, and now start with a value of one if set to true
+- Reduced imp dungeon generation frequency to accommodate new bunkers
+- Imp dungeons will not spawn near villages
+- Underlings no longer spawn naturally in consort villages and consorts no longer spawn in dungeons
+- Inventory item discharge is now divided into separate eject and launch mechanics
+- HashmapModus now can handle with localized names, tags, anvil names
+- Grist widget now only rewards 75% of the grist the item was worth by default (can be controlled by config)
+- Stat storer radius now controlled by config
+- Reverse cake now uses mirror in combination recipe instead of glass
+- Increased costs of multiple weapons and transportalizers
+- More weapons qualify for the legendary achievement
+- More items qualify for the captcha Unreadable tag
+- Tweaked Land loot tables
+- New talksprites for consorts
+- Picked new colors for consort text that improve contrast
+- The max amount of cards held in the modus is now handled by an Attribute, which is tied to the Echeladder
 - Reduced imp dungeon generation frequency to accommodate new bunkers
 - Imp dungeons will not spawn near villages
 - Underlings no longer spawn naturally in consort villages and consorts no longer spawn in dungeons
@@ -37,10 +62,14 @@ The format is based on [Keep a Changelog](https://keepachangelog.com/en/1.1.0/).
 - Fix Glowing Mushroom Vines requiring itself for alchemizing
 - Fix missing Bucket of Glimmering Water and Magmatic Igneous Stone grist cost
 - Fix crash when captchaloguing multiple cards that contain items
+- Fix visual updating issue with stack/queue modi
+- Fix stat storer not updating its redstone signal
+- Fix being able to steal from consort merchants
+- Fix Moon Cake textures
 
 ### Contributors for this release
 
-- medsal15, heartsremedy, caldw3ll, v_sabitron, Dweblenod, TangleKat, Pancake
+- medsal15, heartsremedy, caldw3ll, v_sabitron, Dweblenod, TangleKat, Pancake, Fl1s, kirderf1, ThalliumSulfate, Emma "Dilemma", glubtier
 
 ## [1.21.1-1.13.1.1] - 2025-09-14
 
