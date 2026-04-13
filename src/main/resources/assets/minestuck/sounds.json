@@ -849,6 +849,22 @@
       "minestuck:random/boondollar_get"
     ]
   },
+  "event.captchalogue.item":    {
+    "category": "ambient",
+    "subtitle": "subtitles.minestuck.captchalogue_item",
+    "sounds":   [
+      "minestuck:random/card_pop_1",
+      "minestuck:random/card_pop_2",
+      "minestuck:random/card_pop_3"
+    ]
+  },
+  "event.captchalogue.shuffle": {
+    "category": "ambient",
+    "subtitle": "subtitles.minestuck.captchalogue_shuffle",
+    "sounds":   [
+      "minestuck:random/card_shuffle"
+    ]
+  },
   "event.echeladder.increase": {
     "category": "ambient",
     "subtitle": "subtitles.minestuck.upcheladder",

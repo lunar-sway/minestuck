@@ -397,9 +397,9 @@ public sealed interface Trigger
 			if(data.isPresent() && boondollars != 0)
 			{
 				if(boondollars > 0)
-					PlayerBoondollars.addBoondollars(data.get(), boondollars);
+					PlayerBoondollars.addBoondollars(data.get(), boondollars, true);
 				else
-					PlayerBoondollars.takeBoondollars(data.get(), -boondollars);
+					PlayerBoondollars.takeBoondollars(data.get(), -boondollars, true);
 			}
 		}
 	}

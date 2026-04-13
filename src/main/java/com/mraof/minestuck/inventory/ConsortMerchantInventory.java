@@ -72,7 +72,7 @@ public class ConsortMerchantInventory implements Container
 				player.sendSystemMessage(Component.translatable(CANT_AFFORD));
 			} else
 			{
-				PlayerBoondollars.takeBoondollars(playerData, amountPurchased * prices[index]);
+				PlayerBoondollars.takeBoondollars(playerData, amountPurchased * prices[index], true);
 				ConsortReputation.get(playerData).addConsortReputation(5, consort.getHomeDimension());
 				ItemStack items = stack.split(amountPurchased);
 				if(stack.isEmpty())

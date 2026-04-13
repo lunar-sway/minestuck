@@ -121,7 +121,7 @@ public class GristWidgetBlockEntity extends MachineProcessBlockEntity implements
 		if(gristSet == null)
 			return;
 		
-		if(!PlayerBoondollars.tryTakeBoondollars(PlayerData.get(owner, level), getGristWidgetBoondollarValue(getGristWidgetResult(itemHandler.getStackInSlot(0), level, true))))
+		if(!PlayerBoondollars.tryTakeBoondollars(PlayerData.get(owner, level), getGristWidgetBoondollarValue(getGristWidgetResult(itemHandler.getStackInSlot(0), level, true)), true))
 		{
 			LOGGER.warn("Failed to remove boondollars for a grist widget from {}'s porkhollow", owner.getUsername());
 			return;
