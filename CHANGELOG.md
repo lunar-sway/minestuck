@@ -43,10 +43,11 @@ The format is based on [Keep a Changelog](https://keepachangelog.com/en/1.1.0/).
 - Fix Glowing Mushroom Vines requiring itself for alchemizing
 - Fix missing Bucket of Glimmering Water and Magmatic Igneous Stone grist cost
 - Fix crash when captchaloguing multiple cards that contain items
+- Fix visual updating issue with stack/queue modi
 
 ### Contributors for this release
 
-- medsal15, heartsremedy, caldw3ll, v_sabitron, Dweblenod, TangleKat, Pancake, Fl1s, kirderf1
+- medsal15, heartsremedy, caldw3ll, v_sabitron, Dweblenod, TangleKat, Pancake, Fl1s, kirderf1, ThalliumSulfate
 
 ## [1.21.1-1.13.1.1] - 2025-09-14
 
