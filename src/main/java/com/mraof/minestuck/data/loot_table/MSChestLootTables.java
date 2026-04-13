@@ -866,6 +866,7 @@ public final class MSChestLootTables implements LootTableSubProvider
 						.add(NestedLootTable.lootTableReference(SUPPLY_TRIAL_TABLE))
 				).withPool(LootPool.lootPool().name("trial").setRolls(ConstantValue.exactly(1))
 						.add(LootItem.lootTableItem(Items.TRIAL_KEY))
+						
 				));
 		
 		lootProcessor.accept(MSLootTables.MEDIUM_VAULT, LootTable.lootTable()
@@ -873,7 +874,8 @@ public final class MSChestLootTables implements LootTableSubProvider
 						.add(NestedLootTable.lootTableReference(MEDIUM_VAULT_TABLE))
 				).withPool(LootPool.lootPool().name("boondollars").setRolls(ConstantValue.exactly(1))
 						.add(LootItem.lootTableItem(MSItems.BOONDOLLARS).setWeight(10).setQuality(-1).apply(SetBoondollarCount.builder(UniformGenerator.between(500, 2500))))
-				));
+				).withPool(LootPool.lootPool().name("rare").setRolls(UniformGenerator.between(0, 1))
+						.add(NestedLootTable.lootTableReference(RARE_ITEM_TABLE))));
 	}
 	
 	public static ResourceKey<LootTable> locationForTerrain(Supplier<TerrainLandType> landType, ResourceKey<LootTable> baseLoot)
