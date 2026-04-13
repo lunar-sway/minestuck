@@ -1,6 +1,5 @@
 package com.mraof.minestuck.item.loot;
 
-import com.mojang.serialization.Codec;
 import com.mojang.serialization.MapCodec;
 import com.mraof.minestuck.Minestuck;
 import com.mraof.minestuck.item.loot.conditions.ConsortLootCondition;
@@ -26,6 +25,7 @@ public class MSLootTables
 	public static final ResourceKey<LootTable> SBURB_CODE_LIBRARY_LOOT_INJECT = resourceKey("chests/injections/sburb_code_library_inject");
 	public static final ResourceKey<LootTable> FROG_TEMPLE_CHEST = resourceKey("chests/frog_temple");
 	public static final ResourceKey<LootTable> BASIC_MEDIUM_CHEST = resourceKey("chests/medium_basic");
+	public static final ResourceKey<LootTable> MEDIUM_SUPPLY_CHEST = resourceKey("chests/medium_supply");
 	public static final ResourceKey<LootTable> CONSORT_JUNK_REWARD = resourceKey("gameplay/consort_junk");
 	public static final ResourceKey<LootTable> CONSORT_FOOD_STOCK = resourceKey("gameplay/consort_food");
 	public static final ResourceKey<LootTable> CONSORT_GENERAL_STOCK = resourceKey("gameplay/consort_general");

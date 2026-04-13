@@ -9,7 +9,6 @@ import com.mraof.minestuck.Minestuck;
 import com.mraof.minestuck.entity.dialogue.condition.Condition;
 import net.minecraft.ChatFormatting;
 import net.minecraft.MethodsReturnNonnullByDefault;
-import net.minecraft.network.FriendlyByteBuf;
 import net.minecraft.network.RegistryFriendlyByteBuf;
 import net.minecraft.network.chat.Component;
 import net.minecraft.network.chat.ComponentSerialization;
@@ -18,10 +17,10 @@ import net.minecraft.network.codec.ByteBufCodecs;
 import net.minecraft.network.codec.StreamCodec;
 import net.minecraft.resources.ResourceLocation;
 import net.minecraft.server.level.ServerPlayer;
-import net.minecraft.util.ExtraCodecs;
 import net.minecraft.util.StringRepresentable;
 import net.minecraft.world.entity.LivingEntity;
-import net.neoforged.neoforge.network.codec.NeoForgeStreamCodecs;
+import net.neoforged.neoforge.common.conditions.ConditionalOps;
+import net.neoforged.neoforge.common.conditions.WithConditions;
 
 import javax.annotation.Nullable;
 import java.util.Collections;
@@ -54,6 +53,7 @@ public final class Dialogue
 		public static final Codec<NodeSelector> CODEC = Codec.either(NodeSelector.DIRECT_CODEC, Node.CODEC.fieldOf("node").codec())
 				.xmap(either -> either.map(Function.identity(), node -> new NodeSelector(List.of(), node)),
 						nodeSelector -> nodeSelector.conditionedNodes.isEmpty() ? Either.right(nodeSelector.defaultNode) : Either.left(nodeSelector));
+		public static final Codec<Optional<WithConditions<NodeSelector>>> CONDITIONAL_CODEC = ConditionalOps.createConditionalCodecWithConditions(CODEC);
 		
 		
 		public Pair<Node, Integer> pickNode(LivingEntity entity, ServerPlayer player)
@@ -90,12 +90,13 @@ public final class Dialogue
 	{
 	}
 	
-	public record Node(List<Pair<MessageType, DialogueMessage>> messages, DialogueAnimationData animation, ResourceLocation guiPath, List<Response> responses)
+	public record Node(List<Pair<MessageType, DialogueMessage>> messages, DialogueAnimationData animation,
+					   ResourceLocation guiPath, List<Response> responses)
 	{
 		private static final Codec<Pair<MessageType, DialogueMessage>> MESSAGE_CODEC = Codec.mapPair(MessageType.CODEC.fieldOf("type"), DialogueMessage.CODEC.fieldOf("message")).codec();
 		private static final MapCodec<List<Pair<MessageType, DialogueMessage>>> MESSAGES_MAP_CODEC = Codec.mapEither(DialogueMessage.CODEC.fieldOf("message"), MESSAGE_CODEC.listOf().fieldOf("messages"))
 				.xmap(either -> either.map(message -> List.of(Pair.of(MessageType.ENTITY, message)), Function.identity()),
-						messages -> messages.size() == 1 && messages.get(0).getFirst() == MessageType.ENTITY ? Either.left(messages.get(0).getSecond()): Either.right(messages));
+						messages -> messages.size() == 1 && messages.get(0).getFirst() == MessageType.ENTITY ? Either.left(messages.get(0).getSecond()) : Either.right(messages));
 		public static final Codec<Node> CODEC = RecordCodecBuilder.create(instance -> instance.group(
 				MESSAGES_MAP_CODEC.forGetter(Node::messages),
 				DialogueAnimationData.CODEC.fieldOf("animation").orElse(DialogueAnimationData.DEFAULT_ANIMATION).forGetter(Node::animation),
@@ -133,8 +134,7 @@ public final class Dialogue
 					yield component;
 				}
 				case PLAYER -> Component.translatable(DIALOGUE_FORMAT, player.getDisplayName(), messageComponent);
-				case DESCRIPTION ->
-						messageComponent.withStyle(ChatFormatting.GRAY, ChatFormatting.ITALIC);
+				case DESCRIPTION -> messageComponent.withStyle(ChatFormatting.GRAY, ChatFormatting.ITALIC);
 			};
 		}
 		
@@ -216,11 +216,12 @@ public final class Dialogue
 		}
 	}
 	
-	public record NextDialogue(ResourceLocation id, boolean setAsEntrypoint, List<Pair<MessageType, DialogueMessage>> replyMessages)
+	public record NextDialogue(ResourceLocation id, boolean setAsEntrypoint,
+							   List<Pair<MessageType, DialogueMessage>> replyMessages)
 	{
 		private static final MapCodec<List<Pair<MessageType, DialogueMessage>>> MESSAGES_MAP_CODEC = Codec.mapEither(DialogueMessage.CODEC.fieldOf("player_message"), Node.MESSAGE_CODEC.listOf().fieldOf("reply_messages"))
 				.xmap(either -> either.map(message -> List.of(Pair.of(MessageType.PLAYER, message)), Function.identity()),
-						messages -> messages.size() == 1 && messages.get(0).getFirst() == MessageType.PLAYER ? Either.left(messages.get(0).getSecond()): Either.right(messages));
+						messages -> messages.size() == 1 && messages.get(0).getFirst() == MessageType.PLAYER ? Either.left(messages.get(0).getSecond()) : Either.right(messages));
 		public static final Codec<NextDialogue> DIRECT_CODEC = RecordCodecBuilder.create(instance -> instance.group(
 				ResourceLocation.CODEC.fieldOf("id").forGetter(NextDialogue::id),
 				Codec.BOOL.fieldOf("set_as_entrypoint").forGetter(NextDialogue::setAsEntrypoint),
@@ -247,9 +248,11 @@ public final class Dialogue
 				Codec.INT.fieldOf("dialogue_weight").orElse(DEFAULT_WEIGHT).forGetter(SelectableDialogue::weight),
 				Codec.BOOL.fieldOf("keep_on_reset").orElse(false).forGetter(SelectableDialogue::keepOnReset)
 		).apply(instance, SelectableDialogue::new));
+		public static final Codec<Optional<WithConditions<SelectableDialogue>>> CONDITIONAL_CODEC = ConditionalOps.createConditionalCodecWithConditions(CODEC);
 	}
 	
-	public record DialogueData(List<Component> messages, ResourceLocation guiBackground, List<ResponseData> responses, DialogueAnimationData animationData, String spriteType)
+	public record DialogueData(List<Component> messages, ResourceLocation guiBackground, List<ResponseData> responses,
+							   DialogueAnimationData animationData, String spriteType)
 	{
 		public static StreamCodec<RegistryFriendlyByteBuf, DialogueData> STREAM_CODEC = StreamCodec.composite(
 				ComponentSerialization.STREAM_CODEC.apply(ByteBufCodecs.list()),
@@ -266,18 +269,19 @@ public final class Dialogue
 		);
 	}
 	
-	public record ResponseData(Component message, boolean shouldClose, int index, Optional<ConditionFailure> conditionFailure)
+	public record ResponseData(Component message, boolean shouldClose, int index,
+							   Optional<ConditionFailure> conditionFailure)
 	{
 		public static final StreamCodec<RegistryFriendlyByteBuf, ResponseData> STREAM_CODEC = StreamCodec.composite(
-			ComponentSerialization.STREAM_CODEC,
-			ResponseData::message,
-			ByteBufCodecs.BOOL,
-			ResponseData::shouldClose,
-			ByteBufCodecs.INT,
-			ResponseData::index,
-			ByteBufCodecs.optional(ConditionFailure.STREAM_CODEC),
-			ResponseData::conditionFailure,
-			ResponseData::new
+				ComponentSerialization.STREAM_CODEC,
+				ResponseData::message,
+				ByteBufCodecs.BOOL,
+				ResponseData::shouldClose,
+				ByteBufCodecs.INT,
+				ResponseData::index,
+				ByteBufCodecs.optional(ConditionFailure.STREAM_CODEC),
+				ResponseData::conditionFailure,
+				ResponseData::new
 		);
 		
 	}
@@ -285,9 +289,9 @@ public final class Dialogue
 	public record ConditionFailure(Component causes)
 	{
 		public static final StreamCodec<RegistryFriendlyByteBuf, ConditionFailure> STREAM_CODEC = StreamCodec.composite(
-			ComponentSerialization.STREAM_CODEC,
-			ConditionFailure::causes,
-			ConditionFailure::new
+				ComponentSerialization.STREAM_CODEC,
+				ConditionFailure::causes,
+				ConditionFailure::new
 		);
 	}
 }

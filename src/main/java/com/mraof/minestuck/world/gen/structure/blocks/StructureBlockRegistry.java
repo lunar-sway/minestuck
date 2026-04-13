@@ -172,6 +172,8 @@ public final class StructureBlockRegistry
 		registerBlock(UPPER, GROUND, Blocks.DIRT);
 		registerBlock(SURFACE, UPPER, Blocks.GRASS_BLOCK);
 		registerBlock(SURFACE_ROUGH, SURFACE, Blocks.PODZOL);
+		//use light blue stained glass if it needs to remain water
+		//blue stained glass is used for bucket features
 		registerBlock(OCEAN, Blocks.WATER.defaultBlockState());
 		registerBlock(OCEAN_SURFACE, UPPER, Blocks.GRAVEL);
 		registerBlock(RIVER, OCEAN, Blocks.BLUE_WOOL);
@@ -180,7 +182,7 @@ public final class StructureBlockRegistry
 		registerBlock(STRUCTURE_PRIMARY, Blocks.STONE_BRICKS.defaultBlockState());
 		registerBlock(STRUCTURE_PRIMARY_DECORATIVE, STRUCTURE_PRIMARY, Blocks.CHISELED_STONE_BRICKS);
 		registerBlock(STRUCTURE_PRIMARY_CRACKED, STRUCTURE_PRIMARY, Blocks.CRACKED_STONE_BRICKS);
-		registerBlock(STRUCTURE_PRIMARY_COLUMN, STRUCTURE_PRIMARY, MSBlocks.COARSE_STONE_COLUMN.get()); //TODO change to quartz column, determine if used anywhere currently
+		registerBlock(STRUCTURE_PRIMARY_COLUMN, STRUCTURE_PRIMARY_DECORATIVE, MSBlocks.COARSE_STONE_COLUMN.get());
 		registerBlock(STRUCTURE_PRIMARY_STAIRS, STRUCTURE_PRIMARY, Blocks.STONE_BRICK_STAIRS);
 		registerBlock(STRUCTURE_PRIMARY_SLAB, STRUCTURE_PRIMARY, Blocks.STONE_BRICK_SLAB);
 		registerBlock(STRUCTURE_PRIMARY_WALL, STRUCTURE_PRIMARY, Blocks.STONE_BRICK_WALL);
@@ -216,8 +218,8 @@ public final class StructureBlockRegistry
 		registerBlock(STRUCTURE_WOOL_3, Blocks.GRAY_WOOL.defaultBlockState());
 		registerBlock(CARPET, Blocks.WHITE_CARPET.defaultBlockState());
 		
-		registerBlock(STRUCTURE_GROUND_COVER, Blocks.MOSS_CARPET.defaultBlockState());
-		registerBlock(STRUCTURE_ROOF_COVER, Blocks.HANGING_ROOTS.defaultBlockState());
+		registerEmptyFallbackBlock(STRUCTURE_GROUND_COVER, Blocks.MOSS_CARPET);
+		registerEmptyFallbackBlock(STRUCTURE_ROOF_COVER, Blocks.HANGING_ROOTS);
 		
 		registerBlock(VILLAGE_DOOR, STRUCTURE_PLANKS_DOOR, Blocks.DARK_OAK_DOOR, DoorBlock.class);
 		registerBlock(VILLAGE_PATH, STRUCTURE_SECONDARY, Blocks.COBBLESTONE);

@@ -4,12 +4,14 @@ import com.mraof.minestuck.MinestuckConfig;
 import com.mraof.minestuck.advancements.MSCriteriaTriggers;
 import com.mraof.minestuck.item.CaptchaCardItem;
 import com.mraof.minestuck.item.MSItems;
+import com.mraof.minestuck.util.MSSoundEvents;
 import net.minecraft.core.HolderLookup;
 import net.minecraft.core.NonNullList;
 import net.minecraft.core.registries.BuiltInRegistries;
 import net.minecraft.nbt.CompoundTag;
 import net.minecraft.resources.ResourceLocation;
 import net.minecraft.server.level.ServerPlayer;
+import net.minecraft.sounds.SoundSource;
 import net.minecraft.world.item.ItemStack;
 import net.neoforged.fml.LogicalSide;
 
@@ -136,11 +138,12 @@ public class TreeModus extends Modus
 			return ItemStack.EMPTY;
 		if(id == CaptchaDeckHandler.EMPTY_SYLLADEX)
 		{
+			player.level().playSound(null, player.getX(), player.getY(), player.getZ(), MSSoundEvents.EVENT_CAPTCHALOGUE_SHUFFLE.get(), SoundSource.AMBIENT, 1F, 1F);
 			ArrayList<ItemStack> list = node.removeItems(0);
 			node = null;
 			markDirty();
 			for(ItemStack stack : list)
-				CaptchaDeckHandler.launchAnyItem(player, stack);
+				CaptchaDeckHandler.ejectAnyItem(player, stack);
 			return ItemStack.EMPTY;
 		}
 		

@@ -1,13 +1,13 @@
 package com.mraof.minestuck.client.gui.captchalouge;
 
 import com.mraof.minestuck.inventory.captchalogue.Modus;
+import net.minecraft.world.entity.player.Inventory;
 
 public class QueuestackSylladexScreen extends StackSylladexScreen
 {
-	
-	public QueuestackSylladexScreen(Modus modus)
+	public QueuestackSylladexScreen(int windowId, Inventory inventory, Modus modus)
 	{
-		super(modus);
+		super(windowId, inventory, modus);
 		textureIndex = 2;
 	}
 	
