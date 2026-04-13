@@ -1,7 +1,13 @@
 {
   "condition": {
-    "type": "minestuck:npc_holding_item",
-    "item": "minestuck:regisword"
+    "type": "minestuck:npc_entity_predicate",
+    "predicate": {
+      "slots": {
+        "weapon.*": {
+          "items": "minestuck:regisword"
+        }
+      }
+    }
   },
   "dialogue": "minestuck:carapacian_soldier/sword_barter/start.1",
   "dialogue_weight": 40,

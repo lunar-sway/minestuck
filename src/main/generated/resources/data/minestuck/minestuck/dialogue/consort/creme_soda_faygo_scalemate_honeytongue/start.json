@@ -32,9 +32,19 @@
       },
       {
         "condition": {
-          "type": "minestuck:player_item",
-          "item": "minestuck:creme_soda_faygo"
+          "type": "minestuck:player_entity_predicate",
+          "predicate": {
+            "slots": {
+              "container.*": {
+                "count": {
+                  "min": 1
+                },
+                "items": "minestuck:creme_soda_faygo"
+              }
+            }
+          }
         },
+        "fail_tooltip": "minestuck.dialogue.consort.creme_soda_faygo_scalemate_honeytongue.start.condition",
         "hide_if_failed": false,
         "message": "minestuck.dialogue.consort.creme_soda_faygo_scalemate_honeytongue.start.possess",
         "next_dialogue": "minestuck:consort/creme_soda_faygo_scalemate_honeytongue/ask_drink",

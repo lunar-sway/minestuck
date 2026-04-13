@@ -1,0 +1,19 @@
+{
+  "features": [
+    {
+      "biome_types": [
+        "normal"
+      ],
+      "feature": "minestuck:small_library",
+      "step": "surface_structures"
+    },
+    {
+      "biome_types": [
+        "normal",
+        "rough"
+      ],
+      "feature": "minestuck:tree/mind",
+      "step": "vegetal_decoration"
+    }
+  ]
+}
