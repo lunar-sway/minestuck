@@ -41,6 +41,11 @@ public class EventTrigger extends SimpleCriterionTrigger<EventTrigger.Instance>
 			return MSCriteriaTriggers.CRUXITE_ARTIFACT.get().createCriterion(new Instance(Optional.empty()));
 		}
 		
+		public static Criterion<Instance> speedRun()
+		{
+			return MSCriteriaTriggers.SPEEDRUN.get().createCriterion(new Instance(Optional.empty()));
+		}
+		
 		public static Criterion<Instance> returnNode()
 		{
 			return MSCriteriaTriggers.RETURN_NODE.get().createCriterion(new Instance(Optional.empty()));

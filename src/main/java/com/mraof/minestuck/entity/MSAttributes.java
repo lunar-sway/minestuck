@@ -19,6 +19,7 @@ public final class MSAttributes
 	
 	public static final Holder<Attribute> UNDERLING_DAMAGE_MODIFIER = REGISTER.register("player.underling_damage_modifier", () -> new RangedAttribute("attribute.name.player.underling_damage_modifier", 1.0, -2048.0, 2048.0).setSyncable(true).setSentiment(Attribute.Sentiment.POSITIVE));
 	public static final Holder<Attribute> UNDERLING_PROTECTION_MODIFIER = REGISTER.register("player.underling_protection_modifier", () -> new PercentageAttribute("attribute.name.player.underling_protection_modifier", 1.0, 0.0, 1.0).setSyncable(true).setSentiment(Attribute.Sentiment.POSITIVE));
+	public static final Holder<Attribute> CAPTCHALOGUE_CAPACITY = REGISTER.register("player.captchalogue_capacity", () -> new RangedAttribute("attribute.name.player.captchalogue_capacity", 0, 0, Integer.MAX_VALUE).setSyncable(true).setSentiment(Attribute.Sentiment.POSITIVE));
 	
 	@SubscribeEvent
 	public static void modifyEntityAttributes(EntityAttributeModificationEvent event)

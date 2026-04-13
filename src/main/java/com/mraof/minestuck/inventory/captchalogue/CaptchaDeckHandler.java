@@ -4,6 +4,7 @@ import com.mraof.minestuck.Minestuck;
 import com.mraof.minestuck.MinestuckConfig;
 import com.mraof.minestuck.advancements.MSCriteriaTriggers;
 import com.mraof.minestuck.computer.editmode.ServerEditHandler;
+import com.mraof.minestuck.entity.MSAttributes;
 import com.mraof.minestuck.item.BoondollarsItem;
 import com.mraof.minestuck.item.CaptchaCardItem;
 import com.mraof.minestuck.item.MSItems;
@@ -14,12 +15,14 @@ import com.mraof.minestuck.player.ClientPlayerData;
 import com.mraof.minestuck.player.PlayerBoondollars;
 import com.mraof.minestuck.player.PlayerData;
 import com.mraof.minestuck.util.MSAttachments;
+import com.mraof.minestuck.util.MSSoundEvents;
 import net.minecraft.core.HolderLookup;
 import net.minecraft.core.NonNullList;
 import net.minecraft.nbt.CompoundTag;
+import net.minecraft.network.chat.Component;
 import net.minecraft.resources.ResourceLocation;
 import net.minecraft.server.level.ServerPlayer;
-import net.minecraft.world.InteractionHand;
+import net.minecraft.sounds.SoundSource;
 import net.minecraft.world.entity.item.ItemEntity;
 import net.minecraft.world.entity.player.Player;
 import net.minecraft.world.inventory.AbstractContainerMenu;
@@ -28,7 +31,6 @@ import net.minecraft.world.item.ItemStack;
 import net.minecraft.world.item.enchantment.EnchantmentEffectComponents;
 import net.minecraft.world.item.enchantment.EnchantmentHelper;
 import net.minecraft.world.level.GameRules;
-import net.minecraft.world.phys.Vec3;
 import net.neoforged.bus.api.EventPriority;
 import net.neoforged.bus.api.SubscribeEvent;
 import net.neoforged.fml.LogicalSide;
@@ -42,12 +44,15 @@ import org.apache.logging.log4j.Logger;
 import javax.annotation.Nullable;
 import java.util.List;
 import java.util.Optional;
+import java.util.concurrent.atomic.AtomicLong;
 
 //todo this class could use some spring cleaning
 @EventBusSubscriber(modid = Minestuck.MOD_ID, bus = EventBusSubscriber.Bus.GAME)
 public final class CaptchaDeckHandler
 {
 	private static final Logger LOGGER = LogManager.getLogger();
+	
+	public static final String TOO_LARGE = "minestuck.captcha_too_large";
 	
 	public static final int EMPTY_SYLLADEX = -1;
 	public static final int EMPTY_CARD = -2;
@@ -156,7 +161,7 @@ public final class CaptchaDeckHandler
 			ModusHolder modusHolder = getHolder(player);
 			newModus.initModus(modusItem, player, null, modusHolder.givenModus
 					? 0
-					: MinestuckConfig.SERVER.initialModusSize.get());
+					: getInitialModusSize(player));
 		} else
 		{
 			ModusType<?> oldType = oldModus.getType();
@@ -172,6 +177,8 @@ public final class CaptchaDeckHandler
 				newModus.initModus(modusItem, player, null, oldModus.getSize());
 			}
 		}
+		
+		player.level().playSound(null, player.getX(), player.getY(), player.getZ(), MSSoundEvents.EVENT_CAPTCHALOGUE_SHUFFLE.get(), SoundSource.AMBIENT, 1F, 1F);
 		
 		setModus(getHolder(player), player, newModus);
 		
@@ -204,10 +211,20 @@ public final class CaptchaDeckHandler
 	
 	public static void captchalogueItem(ServerPlayer player)
 	{
+		ItemStack stack = player.getMainHandItem();
 		if(canPlayerUseModus(player) && hasModus(player))
 		{
-			captchalogueItem(player, player.getMainHandItem());
+			captchalogueItem(player, stack);
 		}
+	}
+	
+	public static boolean meetsComponentSizeLimit(ItemStack stack)
+	{
+		AtomicLong componentDataSize = new AtomicLong(0);
+		
+		stack.getComponents().forEach(component -> componentDataSize.addAndGet(component.value().toString().chars().sum()));
+		
+		return MinestuckConfig.SERVER.captchaComponentSize.get() >= (int) componentDataSize.get();
 	}
 	
 	public static void captchalogueItemInSlot(ServerPlayer player, int slotIndex, int windowId)
@@ -235,7 +252,7 @@ public final class CaptchaDeckHandler
 	public static void captchalogueItemCarried(ServerPlayer player)
 	{
 		AbstractContainerMenu containerMenu = player.containerMenu;
-		if(canPlayerUseModus(player) && hasModus(player) && containerMenu != null)
+		if(canPlayerUseModus(player) && hasModus(player))
 		{
 			captchalogueItem(player, containerMenu.getCarried());
 		}
@@ -243,11 +260,17 @@ public final class CaptchaDeckHandler
 	
 	private static void captchalogueItem(ServerPlayer player, ItemStack stack)
 	{
+		if(!meetsComponentSizeLimit(stack))
+		{
+			player.displayClientMessage(Component.translatable(TOO_LARGE), false);
+			return;
+		}
+		
 		Modus modus = getModus(player);
 		
 		if(stack.is(MSItems.BOONDOLLARS))
 		{
-			PlayerBoondollars.addBoondollars(PlayerData.get(player).orElseThrow(), BoondollarsItem.getCount(stack));
+			PlayerBoondollars.addBoondollars(PlayerData.get(player).orElseThrow(), BoondollarsItem.getCount(stack), true);
 			stack.shrink(1);
 			return;
 		}
@@ -303,6 +326,7 @@ public final class CaptchaDeckHandler
 		boolean result = modus.putItemStack(player, stack.copy());
 		if(result)
 		{
+			player.level().playSound(null, player.getX(), player.getY(), player.getZ(), MSSoundEvents.EVENT_CAPTCHALOGUE_ITEM.get(), SoundSource.PLAYERS, 1F, 1F);
 			MSCriteriaTriggers.CAPTCHALOGUE.get().trigger(player, modus, stack);
 			stack.setCount(0);
 		}
@@ -319,14 +343,13 @@ public final class CaptchaDeckHandler
 		ItemStack stack = modus.getItem(player, index, asCard);
 		if(!stack.isEmpty())
 		{
+			player.level().playSound(null, player.getX(), player.getY(), player.getZ(), MSSoundEvents.EVENT_CAPTCHALOGUE_ITEM.get(), SoundSource.PLAYERS, 1F, 0.75F);
+			
 			AbstractContainerMenu containerMenu = player.containerMenu;
-			ItemStack otherStack = containerMenu != null ? containerMenu.getCarried() : player.getMainHandItem();
+			ItemStack otherStack = containerMenu.getCarried();
 			if(otherStack.isEmpty())
 			{
-				if(containerMenu != null)
-					containerMenu.setCarried(stack);
-				else
-					player.setItemInHand(InteractionHand.MAIN_HAND, stack);
+				containerMenu.setCarried(stack);
 			} else if(canMergeItemStacks(stack, otherStack))
 			{
 				otherStack.grow(stack.getCount());
@@ -368,7 +391,7 @@ public final class CaptchaDeckHandler
 		int cardsToKeep = switch(MinestuckConfig.SERVER.sylladexDropMode.get())
 		{
 			case ITEMS -> size;
-			case CARDS_AND_ITEMS -> MinestuckConfig.SERVER.initialModusSize.get();
+			case CARDS_AND_ITEMS -> getInitialModusSize(player);
 			case ALL -> 0;
 		};
 		
@@ -446,9 +469,7 @@ public final class CaptchaDeckHandler
 	public static Modus getModus(ServerPlayer player)
 	{
 		Optional<PlayerData> playerData = PlayerData.get(player);
-		if(playerData.isEmpty())
-			return null;
-		return playerData.get().getData(MSAttachments.MODUS_HOLDER).modus;
+		return playerData.map(data -> data.getData(MSAttachments.MODUS_HOLDER).modus).orElse(null);
 	}
 	
 	private static boolean canMergeItemStacks(ItemStack stack1, ItemStack stack2)
@@ -494,7 +515,7 @@ public final class CaptchaDeckHandler
 			return;
 		}
 		
-		modus.initModus(null, player, null, MinestuckConfig.SERVER.initialModusSize.get());
+		modus.initModus(null, player, null, getInitialModusSize(player));
 		setModus(modusHolder, player, modus);
 	}
 	
@@ -502,6 +523,11 @@ public final class CaptchaDeckHandler
 	{
 		PlayerData data = PlayerData.get(player).orElseThrow();
 		return data.getData(MSAttachments.MODUS_HOLDER);
+	}
+	
+	private static int getInitialModusSize(ServerPlayer player)
+	{
+		return (int) Math.min(MinestuckConfig.SERVER.initialModusSize.get(), player.getAttributeValue(MSAttributes.CAPTCHALOGUE_CAPACITY));
 	}
 	
 	public static class ModusHolder implements INBTSerializable<CompoundTag>

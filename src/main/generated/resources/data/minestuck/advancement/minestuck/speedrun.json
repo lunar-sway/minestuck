@@ -1,0 +1,34 @@
+{
+  "parent": "minestuck:minestuck/entry",
+  "criteria": {
+    "playtime": {
+      "trigger": "minestuck:speedrun"
+    },
+    "use_artifact": {
+      "trigger": "minestuck:cruxite_artifact"
+    }
+  },
+  "display": {
+    "description": {
+      "translate": "advancements.minestuck.speedrun.description"
+    },
+    "frame": "challenge",
+    "hidden": true,
+    "icon": {
+      "count": 1,
+      "id": "minestuck:apple_juice"
+    },
+    "title": {
+      "translate": "advancements.minestuck.speedrun.title"
+    }
+  },
+  "requirements": [
+    [
+      "playtime"
+    ],
+    [
+      "use_artifact"
+    ]
+  ],
+  "sends_telemetry_event": true
+}

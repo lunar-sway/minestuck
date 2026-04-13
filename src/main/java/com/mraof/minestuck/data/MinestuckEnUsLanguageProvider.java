@@ -36,7 +36,10 @@ import com.mraof.minestuck.entity.dialogue.Dialogue;
 import com.mraof.minestuck.entry.EntryProcess;
 import com.mraof.minestuck.inventory.ConsortMerchantInventory;
 import com.mraof.minestuck.inventory.captchalogue.ArrayModus;
+import com.mraof.minestuck.inventory.captchalogue.CaptchaDeckHandler;
 import com.mraof.minestuck.inventory.captchalogue.HashMapModus;
+import com.mraof.minestuck.inventory.captchalogue.Modus;
+import com.mraof.minestuck.item.CaptchaCardItem;
 import com.mraof.minestuck.item.MSCreativeTabs;
 import com.mraof.minestuck.item.MSItems;
 import com.mraof.minestuck.item.StructureScannerItem;
@@ -983,6 +986,7 @@ public class MinestuckEnUsLanguageProvider extends MinestuckLanguageProvider
 		addBlock(MSBlocks.CHOCOLATEY_CAKE, "Chocolatey Cake");
 		addBlockStoreTooltip(MSBlocks.CHOCOLATEY_CAKE, "The most scrumptious cake in the entire world!");
 		addBlock(MSBlocks.MOON_CAKE, "Moon Cake");
+		addBlock(MSBlocks.PAN_CAKE, "PANCake");
 		addBlock(MSBlocks.PRIMED_TNT, "Primed TNT");
 		addBlock(MSBlocks.UNSTABLE_TNT, "Unstable TNT");
 		addBlock(MSBlocks.INSTANT_TNT, "Instant TNT");
@@ -1568,6 +1572,7 @@ public class MinestuckEnUsLanguageProvider extends MinestuckLanguageProvider
 		addItemExtra(MSItems.CAPTCHA_CARD, "invalid", "Invalid Data");
 		addItemExtra(MSItems.CAPTCHA_CARD, "punched", "Punched");
 		addItemExtra(MSItems.CAPTCHA_CARD, "ghost", "Ghost");
+		add(CaptchaCardItem.USE_KEYS, "Store your held item to an empty card in your Sylladex by pressing [%s]");
 		addItem(MSItems.STACK_MODUS_CARD, "Stack Modus");
 		addItem(MSItems.QUEUE_MODUS_CARD, "Queue Modus");
 		addItem(MSItems.QUEUESTACK_MODUS_CARD, "Queue-Stack Modus");
@@ -2127,6 +2132,7 @@ public class MinestuckEnUsLanguageProvider extends MinestuckLanguageProvider
 		addAdvancement(MSAdvancementProvider.LONG_TIME_COMING, "Long Time Coming", "Collect SBURB code! You get the sense that you need to find a computer to record its information to");
 		addAdvancement(MSAdvancementProvider.CONNECT, "Connect", "Create a connection with someone");
 		addAdvancement(MSAdvancementProvider.ENTRY, "A New World", "Create, and use the Cruxite Artifact");
+		addAdvancement(MSAdvancementProvider.SPEEDRUN, "Look At The Sky, Numbnuts!", "You GOTTA pay attention to this shit!");
 		addAdvancement(MSAdvancementProvider.ALCHEMY, "Step Towards Alchemy", "Getting a punch designix is the first step to alchemizing something else!");
 		addAdvancement(MSAdvancementProvider.NEW_MODUS, "A New Type of Frustrating", "Equip a new modus");
 		addAdvancement(MSAdvancementProvider.ALL_MODI, "A Full Set", "Try every modus type");
@@ -2148,6 +2154,7 @@ public class MinestuckEnUsLanguageProvider extends MinestuckLanguageProvider
 		addAdvancement(MSAdvancementProvider.LEGENDARY_WEAPON, "Legendary Weapon", "Obtain a Zilly, Welsh, or Denizen tier weapon");
 		addAdvancement(MSAdvancementProvider.BUY_OUT_SHOP, "Beware the Buyer", "Purchase every item available from a consort merchant");
 		addAdvancement(MSAdvancementProvider.BRICK_COMPUTER, "Brick Your Computer", "Did you try turning it on and off again?");
+		addAdvancement(MSAdvancementProvider.HAMMERGUY, "I Fucking Love Hammers", "Hahahah, hammer guy for life!");
 		
 		addLand(FungiLandType.FUNGI, "Fungi");
 		addLand(FungiLandType.DANK, "Dank");
@@ -2239,6 +2246,7 @@ public class MinestuckEnUsLanguageProvider extends MinestuckLanguageProvider
 		
 		add(MusicPlayerWeapon.TITLE, "Music Player");
 		add(MusicPlayerWeapon.HINT_INACTIVE, "Crouch and use to start playing");
+		add(CaptchaDeckHandler.TOO_LARGE, "Cannot captchalogue card, too much data stored");
 		add(GristCacheScreen.TITLE, "Grist Cache");
 		add(StrifeSpecibusScreen.TITLE, "Strife Specibus");
 		add(StrifeSpecibusScreen.KIND_ABSTRATUS, "Kind Abstratus");
@@ -2247,10 +2255,12 @@ public class MinestuckEnUsLanguageProvider extends MinestuckLanguageProvider
 		add(EcheladderScreen.ATTACK, "Attack");
 		add(EcheladderScreen.HEALTH, "Health");
 		add(EcheladderScreen.CACHE, "Cache Limit");
+		add(EcheladderScreen.CAPTCHA, "Max Cards");
 		add(EcheladderScreen.DAMAGE_UNDERLING, "Damage boost against underlings:");
 		add(EcheladderScreen.DAMAGE_UNDERLING_INCREASE, "Damage against underlings: +%d%%");
 		add(EcheladderScreen.PROTECTION_UNDERLING, "Underling damage decreased to:");
 		add(EcheladderScreen.PROTECTION_UNDERLING_INCREASE, "Underling damage: -%.1f%%");
+		add(Modus.CAPTCHA_LIMIT, "Reached max modi capacity for this rung");
 		add(InventoryEditmodeScreen.TITLE, "Deploy List");
 		add(EditmodeSettingsScreen.TITLE, "Editmode Settings");
 		add(EditmodeSettingsScreen.EDITMODE_LOCATIONS, "Teleport Locus");
@@ -2535,6 +2545,8 @@ public class MinestuckEnUsLanguageProvider extends MinestuckLanguageProvider
 		addSubtitles("horn", "Horn honks");
 		addSubtitles("screech", "Estrogen-empowered screech");
 		addSubtitles("upcheladder", "Echeladder levels up");
+		addSubtitles("captchalogue_item", "Updated card in Sylladex");
+		addSubtitles("captchalogue_shuffle", "Updated whole Sylladex");
 		addSubtitles("boondollar_get", "Received Boondollars");
 		addSubtitles("electric_shock", "Electric Shock");
 		addSubtitles("electric_autoharp_stroke", "Chord plays on electric autoharp");

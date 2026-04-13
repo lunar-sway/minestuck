@@ -1,6 +1,7 @@
 package com.mraof.minestuck.data.tag;
 
 import com.mraof.minestuck.Minestuck;
+import com.mraof.minestuck.util.ExtraModTags;
 import com.mraof.minestuck.util.MSTags.Fluids;
 import net.minecraft.core.HolderLookup;
 import net.minecraft.data.PackOutput;
@@ -28,6 +29,7 @@ public class MinestuckFluidTagsProvider extends FluidTagsProvider
 		tag(Fluids.WATER_COLORS).add(WATER_COLORS.get(), FLOWING_WATER_COLORS.get());
 		tag(Fluids.ENDER).add(ENDER.get(), FLOWING_ENDER.get());
 		tag(Fluids.LIGHT_WATER).add(LIGHT_WATER.get(), FLOWING_LIGHT_WATER.get());
+		tag(ExtraModTags.Fluids.BOTTOMLESS).add(OIL.get(), MOLTEN_AMBER.get(), CAULK.get(), LIGHT_WATER.get(), WATER_COLORS.get(), BRAIN_JUICE.get(), BLOOD.get());
 	}
 	
 	@Override

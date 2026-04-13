@@ -180,9 +180,11 @@ public class MinestuckItemTagsProvider extends ItemTagsProvider
 		tag(MAGIC_WEAPON).add(relevantItems(item ->
 				item instanceof WeaponItem weapon && (weapon.getItemRightClickEffect() instanceof MagicRangedRightClickEffect || weapon.getItemRightClickEffect() instanceof MagicAOERightClickEffect)));
 		tag(CREATIVE_SHOCK_RIGHT_CLICK_LIMIT).add(Items.CHORUS_FRUIT);
-		tag(UNREADABLE).add(CRUEL_FATE_CRUCIBLE.get(), ROYAL_DERINGER.get(), TRANSPORTALIZER.get(), TRANS_PORTALIZER.get(), FEAR_NO_ANVIL.get(), TYPHONIC_TRIVIALIZER.get(), QUILL_OF_ECHIDNA.get(), UMBRAL_INFILTRATOR.get(), FLUORITE_OCTET.get(), CLIENT_DISK.get(), SERVER_DISK.get(), GUTTER_THUMB_DRIVE.get(), GUTTER_BALL.get(), CAPTCHA_CARD.get(), CUEBALL.get(), BLACK_QUEENS_RING.get(), WHITE_QUEENS_RING.get(), BLACK_KINGS_SCEPTER.get(), WHITE_KINGS_SCEPTER.get()).add(Items.DRAGON_EGG).add(Items.DRAGON_HEAD).add(Items.DRAGON_BREATH).add(Items.NETHER_STAR).add(Items.COMMAND_BLOCK).add(Items.COMMAND_BLOCK_MINECART).add(Items.CHAIN_COMMAND_BLOCK).add(Items.REPEATING_COMMAND_BLOCK).add(Items.END_CRYSTAL).add(Items.EXPERIENCE_BOTTLE).add(Items.ELYTRA).add(Items.TOTEM_OF_UNDYING).add(Items.BEACON).add(Items.BEDROCK).add(Items.PUMPKIN);
-		tag(LEGENDARY).add(relevantItems(item ->
-				item instanceof WeaponItem weapon && (weapon.getTier() == DENIZEN_TIER || weapon.getTier() == ZILLY_TIER || weapon.getTier() == WELSH_TIER)));
+		tag(UNREADABLE).add(TRANSPORTALIZER.get(), TRANS_PORTALIZER.get(), CLIENT_DISK.get(), SERVER_DISK.get(), GUTTER_THUMB_DRIVE.get(), GUTTER_BALL.get(), CAPTCHA_CARD.get(), CUEBALL.get(), BLACK_QUEENS_RING.get(), WHITE_QUEENS_RING.get())
+				.add(Items.DRAGON_EGG, Items.DRAGON_HEAD, Items.DRAGON_BREATH, Items.NETHER_STAR, Items.COMMAND_BLOCK, Items.COMMAND_BLOCK_MINECART, Items.CHAIN_COMMAND_BLOCK, Items.REPEATING_COMMAND_BLOCK, Items.END_CRYSTAL, Items.EXPERIENCE_BOTTLE, Items.ELYTRA, Items.TOTEM_OF_UNDYING, Items.BEACON, Items.ENDER_PEARL, Items.BEDROCK)
+				.addTag(LEGENDARY).addTag(SHULKER_BOXES).add(Items.PUMPKIN);
+		tag(LEGENDARY).add(relevantItems(item -> item instanceof WeaponItem weapon && (weapon.getTier() == DENIZEN_TIER || weapon.getTier() == ZILLY_TIER || weapon.getTier() == WELSH_TIER)))
+				.add(FLUORITE_OCTET.get(), UMBRAL_INFILTRATOR.get(), WHITE_KINGS_SCEPTER.get(), BLACK_KINGS_SCEPTER.get());
 		tag(CRUXITE_ARTIFACTS).add(relevantItems(item -> item instanceof CruxiteArtifactItem));
 	}
 	

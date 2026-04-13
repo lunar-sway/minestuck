@@ -1,8 +1,10 @@
 package com.mraof.minestuck.inventory.captchalogue;
 
 import com.mraof.minestuck.MinestuckConfig;
+import com.mraof.minestuck.entity.MSAttributes;
 import com.mraof.minestuck.item.CaptchaCardItem;
 import com.mraof.minestuck.item.MSItems;
+import com.mraof.minestuck.util.MSSoundEvents;
 import net.minecraft.core.HolderLookup;
 import net.minecraft.core.NonNullList;
 import net.minecraft.core.component.DataComponents;
@@ -11,6 +13,7 @@ import net.minecraft.nbt.CompoundTag;
 import net.minecraft.nbt.Tag;
 import net.minecraft.network.chat.Component;
 import net.minecraft.server.level.ServerPlayer;
+import net.minecraft.sounds.SoundSource;
 import net.minecraft.world.item.ItemStack;
 import net.neoforged.fml.LogicalSide;
 
@@ -140,8 +143,11 @@ public class HashMapModus extends Modus
 	@Override
 	public boolean increaseSize(ServerPlayer player)
 	{
-		if(MinestuckConfig.SERVER.modusMaxSize.get() > 0 && list.size() >= MinestuckConfig.SERVER.modusMaxSize.get())
+		if(hasHitMaxCards(player, list.size()))
+		{
+			player.displayClientMessage(Component.translatable(CAPTCHA_LIMIT), true);
 			return false;
+		}
 		
 		list.add(ItemStack.EMPTY);
 		markDirty();
@@ -160,6 +166,7 @@ public class HashMapModus extends Modus
 		
 		if(id == CaptchaDeckHandler.EMPTY_SYLLADEX)
 		{
+			player.level().playSound(null, player.getX(), player.getY(), player.getZ(), MSSoundEvents.EVENT_CAPTCHALOGUE_SHUFFLE.get(), SoundSource.AMBIENT, 1F, 1F);
 			for(int i = 0; i < list.size(); i++)
 				if(!list.get(i).isEmpty())
 				{
@@ -234,6 +241,8 @@ public class HashMapModus extends Modus
 				if(player.getInventory().getSelected().isEmpty())
 					player.getInventory().setItem(player.getInventory().selected, stack);
 				else CaptchaDeckHandler.launchAnyItem(player, stack);
+				
+				player.level().playSound(null, player.getX(), player.getY(), player.getZ(), MSSoundEvents.EVENT_CAPTCHALOGUE_ITEM.get(), SoundSource.PLAYERS, 1F, 0.75F);
 				
 				player.sendSystemMessage(Component.translatable(MESSAGE_EJECTED, stack.getDisplayName(), i, getSize()));
 				list.set(i, ItemStack.EMPTY);
