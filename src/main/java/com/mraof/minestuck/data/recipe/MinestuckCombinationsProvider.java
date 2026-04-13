@@ -1057,8 +1057,7 @@ public final class MinestuckCombinationsProvider
 		CombinationRecipeBuilder.of(MSBlocks.HOT_CAKE).input(Items.CAKE).or().namedInput(Items.LAVA_BUCKET).build(consumer);
 		CombinationRecipeBuilder.of(MSBlocks.HOT_CAKE).input(Items.CAKE).or().namedInput(Items.BLAZE_POWDER).build(consumer);
 		CombinationRecipeBuilder.of(MSBlocks.HOT_CAKE).input(Items.CAKE).or().namedInput(Items.MAGMA_BLOCK).build(consumer);
-		CombinationRecipeBuilder.of(MSBlocks.REVERSE_CAKE).input(Items.CAKE).or().namedInput(Items.GLASS).build(consumer);
-		CombinationRecipeBuilder.of(MSBlocks.REVERSE_CAKE).input(Items.CAKE).or().namedInput(Items.GLASS_PANE).build(consumer);
+		CombinationRecipeBuilder.of(MSBlocks.REVERSE_CAKE).input(Items.CAKE).or().namedInput(MSItems.MIRROR).build(consumer);
 		CombinationRecipeBuilder.of(MSBlocks.NEGATIVE_CAKE).input(MSBlocks.REVERSE_CAKE).and().input(MSBlocks.FUCHSIA_CAKE).build(consumer);	//Had a drop in creativity, but I guess its fine
 		CombinationRecipeBuilder.of(MSBlocks.CARROT_CAKE).input(Items.CAKE).or().input(Items.CARROT).build(consumer);
 		CombinationRecipeBuilder.of(MSBlocks.LARGE_CAKE).input(Items.CAKE).or().input(Items.BONE_MEAL).build(consumer);

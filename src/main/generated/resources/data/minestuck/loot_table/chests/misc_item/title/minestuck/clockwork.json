@@ -14,6 +14,42 @@
           "name": "minestuck:sbahj_poster",
           "quality": 2,
           "weight": 4
+        },
+        {
+          "type": "minecraft:item",
+          "functions": [
+            {
+              "add": false,
+              "count": {
+                "type": "minecraft:uniform",
+                "max": 9.0,
+                "min": 3.0
+              },
+              "function": "minecraft:set_count"
+            }
+          ],
+          "name": "minestuck:cast_iron",
+          "weight": 5
+        },
+        {
+          "type": "minecraft:item",
+          "functions": [
+            {
+              "add": false,
+              "count": {
+                "type": "minecraft:uniform",
+                "max": 5.0,
+                "min": 1.0
+              },
+              "function": "minecraft:set_count"
+            }
+          ],
+          "name": "minestuck:cast_iron_frame",
+          "weight": 5
+        },
+        {
+          "type": "minecraft:item",
+          "name": "minestuck:redstone_clock"
         }
       ],
       "name": "item",

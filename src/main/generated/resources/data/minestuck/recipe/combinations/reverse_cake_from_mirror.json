@@ -4,7 +4,7 @@
     "item": "minecraft:cake"
   },
   "input2": {
-    "item": "minecraft:glass"
+    "item": "minestuck:mirror"
   },
   "mode": "or",
   "output": "minestuck:reverse_cake"

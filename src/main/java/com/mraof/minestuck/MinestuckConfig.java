@@ -69,9 +69,10 @@ public class MinestuckConfig
 		public final BooleanValue cruxtruderIntake;
 		public final ConfigValue<List<String>> forbiddenWorldsTpz;
 		public final ConfigValue<List<String>> forbiddenDimensionTypesTpz;
-		public final BooleanValue disableGristWidget;
+		public final DoubleValue gristWidgetPercentage;
 		public final IntValue alchemiterMaxStacks;
 		public final IntValue puzzleBlockTickRate;
+		public final IntValue statStorerRadius;
 		
 		//Medium
 		public final BooleanValue canBreakGates;
@@ -133,7 +134,11 @@ public class MinestuckConfig
 					.defineInRange("dialogueRenewalSpeed", 2, 0, 1000);
 			lotusRestorationTime = builder.comment("Determines how many seconds it takes for the lotus blossom to regrow after the opening process has started.")
 					.defineInRange("lotusRestorationTime", 300, 30, Integer.MAX_VALUE);
-			hardMode = builder.define("hardMode", false);
+			hardMode = builder.comment("Makes Minestuck overall harder:",
+					"- Only the first Cruxtruder, Totem Lathe, and Alchemiter will be free",
+					"- Fireballs will rain around players entering the medium",
+					"- Medium dungeons spawners contain Liches instead of Imps",
+					"- Underlings have a 50% chance to have the artifact grist").define("hardMode", false);
 			builder.pop();
 			
 			builder.push("sylladex");
@@ -180,12 +185,14 @@ public class MinestuckConfig
 			builder.pop();
 			
 			builder.push("machines");
-			disableGristWidget = builder.comment("Disable Grist Widget")
-					.define("disableGristWidget",false);
+			gristWidgetPercentage = builder.comment("The percentage of grist loss the widget incurs. 1.0 will have no loss.")
+					.defineInRange("gristWidgetPercentage", 0.75D, 0.0D, 1.0D);
 			alchemiterMaxStacks = builder.comment("The number of stacks that can be alchemized at the same time with the alchemiter.")
 					.defineInRange("alchemiterMaxStacks",16,0,999);
 			puzzleBlockTickRate = builder.comment("How often puzzle/redstone related blocks such as the remote observer tick.")
 					.defineInRange("puzzleBlockTickRate",6,2,10);
+			statStorerRadius = builder.comment("The radius in blocks that the stat storer should capture data for")
+					.defineInRange("statStorerRadius", 10, 1, 32);
 			cruxtruderIntake = builder.comment("If enabled, the regular cruxtruder will require raw cruxite to function, which is inserted through the pipe.")
 					.define("cruxtruderIntake", false);
 			forbiddenWorldsTpz = builder.comment("A list of worlds that you cannot travel to or from using transportalizers.")
