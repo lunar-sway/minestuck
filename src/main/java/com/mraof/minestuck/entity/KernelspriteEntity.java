@@ -7,6 +7,7 @@ import com.mraof.minestuck.player.IdentifierHandler;
 import com.mraof.minestuck.player.PlayerData;
 import com.mraof.minestuck.player.PlayerIdentifier;
 import com.mraof.minestuck.util.MSAttachments;
+import com.mraof.minestuck.util.MSSoundEvents;
 import net.minecraft.ChatFormatting;
 import net.minecraft.core.BlockPos;
 import net.minecraft.nbt.CompoundTag;
@@ -14,6 +15,7 @@ import net.minecraft.network.syncher.EntityDataAccessor;
 import net.minecraft.network.syncher.EntityDataSerializers;
 import net.minecraft.network.syncher.SynchedEntityData;
 import net.minecraft.server.level.ServerPlayer;
+import net.minecraft.sounds.SoundEvent;
 import net.minecraft.util.Mth;
 import net.minecraft.world.InteractionHand;
 import net.minecraft.world.InteractionResult;
@@ -144,6 +146,12 @@ public class KernelspriteEntity extends PathfinderMob implements DialogueEntity
 			this.goalSelector.addGoal(7, stayPutGoal);
 		else
 			this.goalSelector.removeGoal(this.stayPutGoal);
+	}
+	
+	@Override
+	protected SoundEvent getAmbientSound()
+	{
+		return MSSoundEvents.ENTITY_KERNELSPRITE_AMBIENT.get();
 	}
 	
 	@Override

@@ -2604,6 +2604,7 @@ public class MinestuckEnUsLanguageProvider extends MinestuckLanguageProvider
 		addEntitySubtitles(MSEntityTypes.GICLOPS, "ambient", "Giclops wants to eat'cha");
 		addEntitySubtitles(MSEntityTypes.GICLOPS, "hurt", "Giclops hurts");
 		addEntitySubtitles(MSEntityTypes.GICLOPS, "death", "Giclops dies");
+		addEntitySubtitles(MSEntityTypes.KERNELSPRITE, "ambient", "Kernelsprite makes some noise");
 		
 		add(GRIST_CANDY, "Grist Candies");
 		add(FAYGO, "Faygo Flavors");

@@ -737,6 +737,17 @@
       "minestuck:mob/giclops/death"
     ]
   },
+  "entity.kernelsprite.ambient": {
+    "category": "friendly",
+    "subtitle": "subtitles.entity.minestuck.kernelsprite.ambient",
+    "sounds": [
+      "minestuck:mob/kernelsprite/ambient_1",
+      "minestuck:mob/kernelsprite/ambient_2",
+      "minestuck:mob/kernelsprite/ambient_3",
+      "minestuck:mob/kernelsprite/ambient_4",
+      "minestuck:mob/kernelsprite/ambient_5"
+    ]
+  },
   "item.long_forgotten_warhorn.use": {
     "category": "ambient",
     "subtitle": "subtitles.minestuck.warhorn",
