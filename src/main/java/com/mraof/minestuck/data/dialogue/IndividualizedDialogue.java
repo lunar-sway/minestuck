@@ -10,8 +10,11 @@ import net.minecraft.advancements.critereon.BlockPredicate;
 import net.minecraft.core.HolderLookup;
 import net.minecraft.data.DataProvider;
 import net.minecraft.data.PackOutput;
+import net.minecraft.world.level.block.Block;
 import net.neoforged.neoforge.common.data.LanguageProvider;
 
+import java.util.HashSet;
+import java.util.Set;
 import java.util.concurrent.CompletableFuture;
 
 import static com.mraof.minestuck.entity.dialogue.Trigger.GoToBlock;
@@ -35,6 +38,13 @@ public final class IndividualizedDialogue
 		provider.getLookupProvider().thenCompose(providerIt ->
 		{
 			provider.add("kernelsprite", new FolderedDialogue(builder -> {
+				Set<Block> cruxtruderBlocks = new HashSet<>();
+				MSBlocks.CRUXTRUDER.forEachBlock(cruxtruderBlocks::add);
+				Set<Block> latheBlocks = new HashSet<>();
+				MSBlocks.TOTEM_LATHE.forEachBlock(latheBlocks::add);
+				Set<Block> alchemiterBlocks = new HashSet<>();
+				MSBlocks.ALCHEMITER.forEachBlock(alchemiterBlocks::add);
+				
 				ResponseBuilder returnDialogue = new ResponseBuilder(l.msg("individual.kernelsprite.return", "Lets talk about something else."))
 						.setNextAsEntrypoint()
 						.addTrigger(new GoToBlock(BlockPredicate.Builder.block().build(), 1, 1, 1, 1, 1, false))
@@ -48,12 +58,12 @@ public final class IndividualizedDialogue
 						.node(playerHasItemTag(MSTags.Items.CRUXITE_ARTIFACTS, 1), kernelspriteNode(l,
 								"Please consume Cruxite Artifact to complete Entry process.", "It seems to be waiting for you to consume the Cruxite Artifact. This feels like it's going to be big step.")
 								.addResponse(new ResponseBuilder(l.subMsg("thanks_for_help", "Thank you for helping me"))
-										.addTrigger(new GoToBlock(BlockPredicate.Builder.block().of(MSBlocks.CRUXTRUDER.TUBE.get()).build(), 20, 1, 240, 1, 6, true))
+										.addTrigger(new GoToBlock(BlockPredicate.Builder.block().of(cruxtruderBlocks).build(), 20, 1, 240, 1, 6, true))
 										.setNextAsEntrypoint()
 										.nextDialogue(blank)
 								)
 								.addResponse(new ResponseBuilder(l.subMsg("anything_else", "Is there anything else?"))
-										.addTrigger(new GoToBlock(BlockPredicate.Builder.block().of(MSBlocks.CRUXTRUDER.TUBE.get()).build(), 20, 1, 240, 1, 6, true))
+										.addTrigger(new GoToBlock(BlockPredicate.Builder.block().of(cruxtruderBlocks).build(), 20, 1, 240, 1, 6, true))
 										.setNextAsEntrypoint()
 										.nextDialogue(blank)
 								))
@@ -99,7 +109,7 @@ public final class IndividualizedDialogue
 						"Please pull handle.", "It moves towards the section of the Totem Lathe with a handle at the top.")
 						.addResponse(new ResponseBuilder(l.subMsg("next", "What's next?"))
 								.addPlayerMessage(l.subMsg("next_player", "What's next?"))
-								.addTrigger(new GoToBlock(BlockPredicate.Builder.block().of(MSBlocks.ALCHEMITER.TOTEM_PAD.get()).build(), 20, 1, 240, 1, 6, true))
+								.addTrigger(new GoToBlock(BlockPredicate.Builder.block().of(alchemiterBlocks).build(), 20, 1, 240, 1, 6, true))
 								.nextDialogue(helpEntering5)
 								.setNextAsEntrypoint())
 						.addResponse(returnDialogue)
@@ -140,7 +150,7 @@ public final class IndividualizedDialogue
 						"Help with Entry requested. Please turn handle to extract a new cruxite dowel.", "It is now gesturing specifically to the handle of the Cruxtruder.")
 						.addResponse(new ResponseBuilder(l.subMsg("next", "What's next?"))
 								.addPlayerMessage(l.subMsg("next_player", "What's next?"))
-								.addTrigger(new GoToBlock(BlockPredicate.Builder.block().of(MSBlocks.TOTEM_LATHE.WHEEL.get()).build(), 13, 1, 240, 1, 6, true))
+								.addTrigger(new GoToBlock(BlockPredicate.Builder.block().of(latheBlocks).build(), 13, 1, 240, 1, 6, true))
 								.nextDialogue(helpEntering2)
 								.setNextAsEntrypoint())
 						.addResponse(returnDialogue)
@@ -161,7 +171,7 @@ public final class IndividualizedDialogue
 								"help command queried. Do you wish to learn about Entry?", "The static continues, but you get the sense that it is gesturing at the Cruxtruder.")
 								.addResponse(new ResponseBuilder(l.subMsg("help_entering", "Can you help me use that machine?"))
 										.addPlayerMessage(l.subMsg("help_entering_player", "Can you help me use that machine?"))
-										.addTrigger(new GoToBlock(BlockPredicate.Builder.block().of(MSBlocks.CRUXTRUDER.TUBE.get()).build(), 20, 1, 240, 1, 6, true))
+										.addTrigger(new GoToBlock(BlockPredicate.Builder.block().of(cruxtruderBlocks).build(), 20, 1, 240, 1, 6, true))
 										.nextDialogue(helpEntering)
 										.setNextAsEntrypoint())
 								.addResponse(returnDialogue))
@@ -185,10 +195,10 @@ public final class IndividualizedDialogue
 										.addResponse(new ResponseBuilder(l.subMsg("what_kernel", "What are you?")).nextDialogue(whatKernel))
 										.addResponse(new ResponseBuilder(l.subMsg("go_home", "Can you please go somewhere else? [Stay at Cruxtruder]"))
 												.visibleCondition(l.subText("go_home_cond", "Is not close enough to a Cruxtruder or is already there."), all(isNearBlock(MSBlocks.CRUXTRUDER.TUBE.get(), 20, 1), none(isNearBlock(MSBlocks.CRUXTRUDER.TUBE.get(), 4, 1))))
-												.addTrigger(new GoToBlock(BlockPredicate.Builder.block().of(MSBlocks.CRUXTRUDER.TUBE.get()).build(), 20, 0.5, 360, 1, 4, true)))
+												.addTrigger(new GoToBlock(BlockPredicate.Builder.block().of(cruxtruderBlocks).build(), 20, 0.5, 360, 1, 4, true)))
 										.addResponse(new ResponseBuilder(l.subMsg("go_free", "You don't have to stay here anymore [Roam free]"))
 												.condition(isNearBlock(MSBlocks.CRUXTRUDER.TUBE.get(), 4, 1))
-												.addTrigger(new GoToBlock(BlockPredicate.Builder.block().of(MSBlocks.CRUXTRUDER.TUBE.get()).build(), 6, 0.05, 1, 1, 6, false)))
+												.addTrigger(new GoToBlock(BlockPredicate.Builder.block().of(cruxtruderBlocks).build(), 6, 0.05, 1, 1, 6, false)))
 										.addResponse(new ResponseBuilder(l.subMsg("prototype", "[Prototype]"))
 												.visibleCondition(l.subText("prototype_implementation", "Prototyping is not implemented yet!"), none(alwaysTrue())))
 								)

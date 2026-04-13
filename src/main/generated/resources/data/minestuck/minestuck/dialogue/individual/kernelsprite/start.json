@@ -123,7 +123,15 @@
             "accepted_distance": 4.0,
             "duration": 360,
             "predicate": {
-              "blocks": "minestuck:cruxtruder_tube"
+              "blocks": [
+                "minestuck:cruxtruder_corner",
+                "minestuck:cruxtruder_center",
+                "minestuck:cruxtruder_top_center",
+                "minestuck:cruxtruder_top_corner",
+                "minestuck:cruxtruder_top_side",
+                "minestuck:cruxtruder_tube",
+                "minestuck:cruxtruder_side"
+              ]
             },
             "radius": 20,
             "speed_modifier": 0.5,
@@ -147,7 +155,15 @@
             "accepted_distance": 6.0,
             "duration": 1,
             "predicate": {
-              "blocks": "minestuck:cruxtruder_tube"
+              "blocks": [
+                "minestuck:cruxtruder_corner",
+                "minestuck:cruxtruder_center",
+                "minestuck:cruxtruder_top_center",
+                "minestuck:cruxtruder_top_corner",
+                "minestuck:cruxtruder_top_side",
+                "minestuck:cruxtruder_tube",
+                "minestuck:cruxtruder_side"
+              ]
             },
             "radius": 6,
             "speed_modifier": 0.05

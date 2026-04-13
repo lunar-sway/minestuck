@@ -29,7 +29,14 @@
             "type": "minestuck:go_to_block",
             "accepted_distance": 6.0,
             "predicate": {
-              "blocks": "minestuck:alchemiter_totem_pad"
+              "blocks": [
+                "minestuck:alchemiter_totem_corner",
+                "minestuck:alchemiter_totem_pad",
+                "minestuck:alchemiter_right_side",
+                "minestuck:alchemiter_center",
+                "minestuck:alchemiter_left_side",
+                "minestuck:alchemiter_corner"
+              ]
             },
             "radius": 20,
             "wait_permanently": true

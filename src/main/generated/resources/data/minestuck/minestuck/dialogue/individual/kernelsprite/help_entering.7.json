@@ -44,7 +44,15 @@
                 "type": "minestuck:go_to_block",
                 "accepted_distance": 6.0,
                 "predicate": {
-                  "blocks": "minestuck:cruxtruder_tube"
+                  "blocks": [
+                    "minestuck:cruxtruder_corner",
+                    "minestuck:cruxtruder_center",
+                    "minestuck:cruxtruder_top_center",
+                    "minestuck:cruxtruder_top_corner",
+                    "minestuck:cruxtruder_top_side",
+                    "minestuck:cruxtruder_tube",
+                    "minestuck:cruxtruder_side"
+                  ]
                 },
                 "radius": 20,
                 "wait_permanently": true
@@ -67,7 +75,15 @@
                 "type": "minestuck:go_to_block",
                 "accepted_distance": 6.0,
                 "predicate": {
-                  "blocks": "minestuck:cruxtruder_tube"
+                  "blocks": [
+                    "minestuck:cruxtruder_corner",
+                    "minestuck:cruxtruder_center",
+                    "minestuck:cruxtruder_top_center",
+                    "minestuck:cruxtruder_top_corner",
+                    "minestuck:cruxtruder_top_side",
+                    "minestuck:cruxtruder_tube",
+                    "minestuck:cruxtruder_side"
+                  ]
                 },
                 "radius": 20,
                 "wait_permanently": true

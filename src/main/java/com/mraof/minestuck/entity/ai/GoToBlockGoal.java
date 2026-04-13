@@ -108,6 +108,22 @@ public class GoToBlockGoal extends MoveToBlockGoal
 	}
 	
 	@Override
+	protected boolean findNearestBlock()
+	{
+		//first check immediate surroundings, important when there is a large number of blocks
+		BlockPos mobPos = mob.blockPosition();
+		for(BlockPos iteratePos : BlockPos.betweenClosed(mobPos.offset(4, 4, 4), mobPos.offset(-4, -4, -4)))
+		{
+			if (mob.isWithinRestriction(iteratePos) && isValidTarget(mob.level(), iteratePos)) {
+				this.blockPos = iteratePos;
+				return true;
+			}
+		}
+		
+		return super.findNearestBlock();
+	}
+	
+	@Override
 	protected boolean isValidTarget(LevelReader level, BlockPos pos)
 	{
 		return blockPredicate.matches(new BlockInWorld(level, pos, false));
