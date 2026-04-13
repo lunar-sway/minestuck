@@ -98,7 +98,7 @@ public class KernelspriteEntity extends PathfinderMob implements DialogueEntity
 	protected void defineSynchedData(SynchedEntityData.Builder builder)
 	{
 		super.defineSynchedData(builder);
-		builder.define(COLOR, ChatFormatting.BLUE.getColor());
+		builder.define(COLOR, ChatFormatting.BLACK.getColor());
 	}
 	
 	@Override

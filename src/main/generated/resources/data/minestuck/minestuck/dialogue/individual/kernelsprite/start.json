@@ -96,7 +96,7 @@
               "predicate": {
                 "blocks": "minestuck:cruxtruder_tube"
               },
-              "radius": 22
+              "radius": 20
             },
             {
               "type": "minestuck:list",
@@ -125,7 +125,7 @@
             "predicate": {
               "blocks": "minestuck:cruxtruder_tube"
             },
-            "radius": 32,
+            "radius": 20,
             "speed_modifier": 0.5,
             "wait_permanently": true
           }
