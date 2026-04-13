@@ -267,7 +267,7 @@ public class Rungs
 	{
 		List<Rung.DisplayData> rungList = RUNGS.stream().map(rung -> {
 			Rung.DisplayAttributes attributes = new Rung.DisplayAttributes(getAttributeAmount(rung.rung(), RungsProvider.DAMAGE_BOOST_ID), getAttributeAmount(rung.rung(), RungsProvider.HEALTH_BOOST_ID),
-					1D + getAttributeAmount(rung.rung(), RungsProvider.UNDERLING_DAMAGE_ID), 1D + getAttributeAmount(rung.rung(), RungsProvider.UNDERLING_PROTECTION_ID));
+					1D + getAttributeAmount(rung.rung(), RungsProvider.UNDERLING_DAMAGE_ID), 1D + getAttributeAmount(rung.rung(), RungsProvider.UNDERLING_PROTECTION_ID), getAttributeAmount(rung.rung(), RungsProvider.CAPTCHALOGUE_CAPACITY_ID));
 					return new Rung.DisplayData(rung.backgroundColor(), rung.textColor(), rung.gristCapacity(), rung.rungCondition().map(Rung.RungCondition::description), attributes);
 				}
 		).toList();
