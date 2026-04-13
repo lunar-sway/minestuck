@@ -16,13 +16,12 @@ The format is based on [Keep a Changelog](https://keepachangelog.com/en/1.1.0/).
 - Added two new advancements: _"I Fucking Love Hammers"_ and _"Look At The Sky, Numbnuts!"_
 - Added new cake: PANcake
 - Added 3 bunker structures to Lands
+- Added arena structure to Lands
 - Increased block diversity in structures
 - Array modus
 - Added new dialogue
 - Most Minestuck fluids are now bottomless in the context of Create
 - Added a limit to captchaloguing cards with large amounts of stored data
-- Added 3 bunker structures to Lands
-- Increased block diversity in structures
 
 ### Changed
 
@@ -49,9 +48,6 @@ The format is based on [Keep a Changelog](https://keepachangelog.com/en/1.1.0/).
 - New talksprites for consorts
 - Picked new colors for consort text that improve contrast
 - The max amount of cards held in the modus is now handled by an Attribute, which is tied to the Echeladder
-- Reduced imp dungeon generation frequency to accommodate new bunkers
-- Imp dungeons will not spawn near villages
-- Underlings no longer spawn naturally in consort villages and consorts no longer spawn in dungeons
 
 ### Fixed
 

@@ -59,7 +59,7 @@ public final class MSStructureProvider
 				Map.of(), GenerationStep.Decoration.SURFACE_STRUCTURES, TerrainAdjustment.NONE)));
 		context.register(SMALL_RUIN, new SmallRuinStructure(new Structure.StructureSettings(biomes.getOrThrow(MSTags.Biomes.HAS_SMALL_RUIN),
 				Map.of(), GenerationStep.Decoration.SURFACE_STRUCTURES, TerrainAdjustment.NONE)));
-		context.register(ARENA, jigsaw(biomes, pools, MSTags.Biomes.HAS_ARENA, TerrainAdjustment.BEARD_THIN, minestuckMobCategoriesSpawnOverride,ARENA_START_POOL));
+		context.register(ARENA, jigsaw(biomes, pools, MSTags.Biomes.HAS_ARENA, TerrainAdjustment.BEARD_THIN, minestuckMobCategoriesSpawnOverride, ARENA_START_POOL));
 		context.register(PROSPIT_BUNKER, jigsaw(biomes, pools, MSTags.Biomes.HAS_PROSPIT_BUNKER, TerrainAdjustment.NONE, minestuckMobCategoriesSpawnOverride, PROSPIT_BUNKER_START_POOL));
 		context.register(DERSE_BUNKER, jigsaw(biomes, pools, MSTags.Biomes.HAS_DERSE_BUNKER, TerrainAdjustment.NONE, minestuckMobCategoriesSpawnOverride, DERSE_BUNKER_START_POOL));
 		context.register(IMP_BUNKER, jigsaw(biomes, pools, MSTags.Biomes.HAS_IMP_BUNKER, TerrainAdjustment.NONE, consortSpawnOverride, IMP_BUNKER_START_POOL));

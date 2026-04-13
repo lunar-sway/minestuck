@@ -888,14 +888,8 @@ public final class MSChestLootTables implements LootTableSubProvider
 				).withPool(LootPool.lootPool().name("misc").setRolls(UniformGenerator.between(1, 2))
 						.add(NestedLootTable.lootTableReference(MISC_ITEM_TABLE))
 				));
-		lootProcessor.accept(MSLootTables.MEDIUM_SUPPLY_CHEST, LootTable.lootTable()
-				.withPool(LootPool.lootPool().name("supplies").setRolls(UniformGenerator.between(2, 4))
-						.add(NestedLootTable.lootTableReference(SUPPLY_ITEM_TABLE))
-				).withPool(LootPool.lootPool().name("misc").setRolls(UniformGenerator.between(1, 2))
-						.add(NestedLootTable.lootTableReference(MISC_ITEM_TABLE))
-				));
 		
-		lootProcessor.accept(MSLootTables.MEDIUM_SUPPLY_TRIAL, LootTable.lootTable()
+		lootProcessor.accept(MSLootTables.MEDIUM_TRIAL, LootTable.lootTable()
 				.withPool(LootPool.lootPool().name("supplies").setRolls(UniformGenerator.between(1, 3))
 						.add(NestedLootTable.lootTableReference(SUPPLY_ITEM_TABLE))
 				));
