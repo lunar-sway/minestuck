@@ -1,7 +1,8 @@
 {
   "type": "minestuck:grist_cost",
   "grist_cost": {
-    "minestuck:build": 8000,
+    "minestuck:build": 10000,
+    "minestuck:chalk": 5,
     "minestuck:cobalt": 512,
     "minestuck:diamond": 512,
     "minestuck:tar": 684

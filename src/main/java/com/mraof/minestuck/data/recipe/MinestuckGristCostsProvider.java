@@ -500,8 +500,8 @@ public final class MinestuckGristCostsProvider
 		GristCostRecipeBuilder.of(MSItems.KEY_TO_THE_CITY.get()).grist(BUILD, 20).grist(MARBLE, 6).grist(GOLD, 1).build(recipeSaver);
 		GristCostRecipeBuilder.of(MSItems.LATCHMELTER.get()).grist(BUILD, 45).grist(MARBLE, 13).grist(GOLD, 3).build(recipeSaver);
 		GristCostRecipeBuilder.of(MSItems.DRAGON_KEY.get()).grist(BUILD, 42).grist(RUBY, 38).build(recipeSaver);
-		GristCostRecipeBuilder.of(MSItems.TRUE_BLUE.get()).grist(BUILD, 8000).grist(TAR, 684).grist(COBALT, 512).grist(DIAMOND, 512).build(recipeSaver);
-		GristCostRecipeBuilder.of(MSItems.BLUE_BEAMS.get()).grist(BUILD, 10000).grist(COBALT, 6320).grist(DIAMOND, 1050).grist(URANIUM, 105).build(recipeSaver);
+		GristCostRecipeBuilder.of(MSItems.TRUE_BLUE.get()).grist(BUILD, 10000).grist(TAR, 684).grist(COBALT, 512).grist(DIAMOND, 512).grist(CHALK, 5).build(recipeSaver);
+		GristCostRecipeBuilder.of(MSItems.BLUE_BEAMS.get()).grist(BUILD, 12000).grist(COBALT, 6320).grist(DIAMOND, 1050).grist(URANIUM, 105).grist(MARBLE, 4).build(recipeSaver);
 		GristCostRecipeBuilder.of(MSItems.INKSPLOCKER_UNLOCKER.get()).grist(BUILD, 15).grist(TAR, 30).build(recipeSaver);
 		GristCostRecipeBuilder.of(MSItems.INKSQUIDDER_DEPTHKEY.get()).grist(TAR, 13).grist(COBALT, 43).grist(DIAMOND, 5).build(recipeSaver);
 		GristCostRecipeBuilder.of(MSItems.REGIKEY.get()).grist(TAR, 66).grist(AMETHYST, 26).grist(GOLD, 26).build(recipeSaver);
