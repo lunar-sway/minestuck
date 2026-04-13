@@ -53,6 +53,32 @@
           "name": "minecraft:iron_axe",
           "quality": 1,
           "weight": 3
+        },
+        {
+          "type": "minecraft:item",
+          "functions": [
+            {
+              "add": false,
+              "count": {
+                "type": "minecraft:uniform",
+                "max": 5.0,
+                "min": 1.0
+              },
+              "function": "minecraft:set_count"
+            }
+          ],
+          "name": "minecraft:charcoal",
+          "weight": 8
+        },
+        {
+          "type": "minecraft:item",
+          "name": "minestuck:carving_tool",
+          "weight": 4
+        },
+        {
+          "type": "minecraft:item",
+          "name": "minestuck:stone_tablet",
+          "weight": 2
         }
       ],
       "name": "item",

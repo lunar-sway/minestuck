@@ -17,6 +17,7 @@ The format is based on [Keep a Changelog](https://keepachangelog.com/en/1.1.0/).
 - Increased block diversity in structures
 - Array modus
 - Added new dialogue
+- Most Minestuck fluids are now bottomless in the context of Create
 
 ### Changed
 
@@ -33,6 +34,13 @@ The format is based on [Keep a Changelog](https://keepachangelog.com/en/1.1.0/).
 - Underlings no longer spawn naturally in consort villages and consorts no longer spawn in dungeons
 - Inventory item discharge is now divided into separate eject and launch mechanics
 - HashmapModus now can handle with localized names, tags, anvil names
+- Grist widget now only rewards 75% of the grist the item was worth by default (can be controlled by config)
+- Stat storer radius now controlled by config
+- Reverse cake now uses mirror in combination recipe instead of glass
+- Increased costs of multiple weapons and transportalizers
+- More weapons qualify for the legendary achievement
+- More items qualify for the captcha Unreadable tag
+- Tweaked Land loot tables
 
 ### Fixed
 
@@ -44,6 +52,7 @@ The format is based on [Keep a Changelog](https://keepachangelog.com/en/1.1.0/).
 - Fix missing Bucket of Glimmering Water and Magmatic Igneous Stone grist cost
 - Fix crash when captchaloguing multiple cards that contain items
 - Fix visual updating issue with stack/queue modi
+- Fix stat storer not updating its redstone signal
 
 ### Contributors for this release
 
