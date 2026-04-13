@@ -99,6 +99,7 @@ public class MinestuckConfig
 		public final BooleanValue rungHealthOnRespawn;
 		public final IntValue dialogueRenewalSpeed;
 		public final IntValue lotusRestorationTime;
+		public final BooleanValue kernelspriteSpawn;
 		
 		//Entry
 		public final BooleanValue entryCrater;
@@ -134,6 +135,8 @@ public class MinestuckConfig
 					.defineInRange("dialogueRenewalSpeed", 2, 0, 1000);
 			lotusRestorationTime = builder.comment("Determines how many seconds it takes for the lotus blossom to regrow after the opening process has started.")
 					.defineInRange("lotusRestorationTime", 300, 30, Integer.MAX_VALUE);
+			kernelspriteSpawn = builder.comment("Kernelsprite will spawn from breaking the lid of the Cruxtruder if set to true.")
+					.define("kernelspriteSpawn", true);
 			hardMode = builder.comment("Makes Minestuck overall harder:",
 					"- Only the first Cruxtruder, Totem Lathe, and Alchemiter will be free",
 					"- Fireballs will rain around players entering the medium",

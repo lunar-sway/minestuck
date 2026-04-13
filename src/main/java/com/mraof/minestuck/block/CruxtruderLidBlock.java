@@ -1,5 +1,6 @@
 package com.mraof.minestuck.block;
 
+import com.mraof.minestuck.MinestuckConfig;
 import com.mraof.minestuck.block.machine.CruxtruderBlock;
 import com.mraof.minestuck.blockentity.machine.CruxtruderBlockEntity;
 import com.mraof.minestuck.entity.KernelspriteEntity;
@@ -47,7 +48,7 @@ public class CruxtruderLidBlock extends Block
 	{
 		super.onRemove(state, level, pos, newState, movedByPiston);
 		
-		if(level instanceof ServerLevel serverLevel)
+		if(level instanceof ServerLevel serverLevel && MinestuckConfig.SERVER.kernelspriteSpawn.get())
 		{
 			BlockState cruxState = level.getBlockState(pos.below());
 			if(cruxState.getBlock() instanceof CruxtruderBlock cruxtruderBlock &&
