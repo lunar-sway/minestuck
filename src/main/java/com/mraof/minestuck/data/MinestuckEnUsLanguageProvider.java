@@ -36,7 +36,10 @@ import com.mraof.minestuck.entity.dialogue.Dialogue;
 import com.mraof.minestuck.entry.EntryProcess;
 import com.mraof.minestuck.inventory.ConsortMerchantInventory;
 import com.mraof.minestuck.inventory.captchalogue.ArrayModus;
+import com.mraof.minestuck.inventory.captchalogue.CaptchaDeckHandler;
 import com.mraof.minestuck.inventory.captchalogue.HashMapModus;
+import com.mraof.minestuck.inventory.captchalogue.Modus;
+import com.mraof.minestuck.item.CaptchaCardItem;
 import com.mraof.minestuck.item.MSCreativeTabs;
 import com.mraof.minestuck.item.MSItems;
 import com.mraof.minestuck.item.StructureScannerItem;
@@ -1569,6 +1572,7 @@ public class MinestuckEnUsLanguageProvider extends MinestuckLanguageProvider
 		addItemExtra(MSItems.CAPTCHA_CARD, "invalid", "Invalid Data");
 		addItemExtra(MSItems.CAPTCHA_CARD, "punched", "Punched");
 		addItemExtra(MSItems.CAPTCHA_CARD, "ghost", "Ghost");
+		add(CaptchaCardItem.USE_KEYS, "Store your held item to an empty card in your Sylladex by pressing [%s]");
 		addItem(MSItems.STACK_MODUS_CARD, "Stack Modus");
 		addItem(MSItems.QUEUE_MODUS_CARD, "Queue Modus");
 		addItem(MSItems.QUEUESTACK_MODUS_CARD, "Queue-Stack Modus");
@@ -2241,6 +2245,7 @@ public class MinestuckEnUsLanguageProvider extends MinestuckLanguageProvider
 		
 		add(MusicPlayerWeapon.TITLE, "Music Player");
 		add(MusicPlayerWeapon.HINT_INACTIVE, "Crouch and use to start playing");
+		add(CaptchaDeckHandler.TOO_LARGE, "Cannot captchalogue card, too much data stored");
 		add(GristCacheScreen.TITLE, "Grist Cache");
 		add(StrifeSpecibusScreen.TITLE, "Strife Specibus");
 		add(StrifeSpecibusScreen.KIND_ABSTRATUS, "Kind Abstratus");
@@ -2249,10 +2254,12 @@ public class MinestuckEnUsLanguageProvider extends MinestuckLanguageProvider
 		add(EcheladderScreen.ATTACK, "Attack");
 		add(EcheladderScreen.HEALTH, "Health");
 		add(EcheladderScreen.CACHE, "Cache Limit");
+		add(EcheladderScreen.CAPTCHA, "Max Cards");
 		add(EcheladderScreen.DAMAGE_UNDERLING, "Damage boost against underlings:");
 		add(EcheladderScreen.DAMAGE_UNDERLING_INCREASE, "Damage against underlings: +%d%%");
 		add(EcheladderScreen.PROTECTION_UNDERLING, "Underling damage decreased to:");
 		add(EcheladderScreen.PROTECTION_UNDERLING_INCREASE, "Underling damage: -%.1f%%");
+		add(Modus.CAPTCHA_LIMIT, "Reached max modi capacity for this rung");
 		add(InventoryEditmodeScreen.TITLE, "Deploy List");
 		add(EditmodeSettingsScreen.TITLE, "Editmode Settings");
 		add(EditmodeSettingsScreen.EDITMODE_LOCATIONS, "Teleport Locus");

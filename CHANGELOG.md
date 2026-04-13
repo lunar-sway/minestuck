@@ -20,6 +20,7 @@ The format is based on [Keep a Changelog](https://keepachangelog.com/en/1.1.0/).
 - Array modus
 - Added new dialogue
 - Most Minestuck fluids are now bottomless in the context of Create
+- Added a limit to captchaloguing cards with large amounts of stored data
 
 ### Changed
 
@@ -45,6 +46,7 @@ The format is based on [Keep a Changelog](https://keepachangelog.com/en/1.1.0/).
 - Tweaked Land loot tables
 - New talksprites for consorts
 - Picked new colors for consort text that improve contrast
+- The max amount of cards held in the modus is now handled by an Attribute, which is tied to the Echeladder
 
 ### Fixed
 
@@ -57,6 +59,7 @@ The format is based on [Keep a Changelog](https://keepachangelog.com/en/1.1.0/).
 - Fix crash when captchaloguing multiple cards that contain items
 - Fix visual updating issue with stack/queue modi
 - Fix stat storer not updating its redstone signal
+- Fix being able to steal from consort merchants
 - Fix Moon Cake textures
 
 ### Contributors for this release
