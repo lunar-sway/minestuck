@@ -39,7 +39,6 @@ public final class MSChestLootTables implements LootTableSubProvider
 	public static final ResourceKey<LootTable> SUPPLY_ITEM_TABLE = ResourceKey.create(Registries.LOOT_TABLE, Minestuck.id("chests/supply_item"));
 	public static final ResourceKey<LootTable> MISC_ITEM_TABLE = ResourceKey.create(Registries.LOOT_TABLE, Minestuck.id("chests/misc_item"));
 	public static final ResourceKey<LootTable> RARE_ITEM_TABLE = ResourceKey.create(Registries.LOOT_TABLE, Minestuck.id("chests/rare_item"));
-	public static final ResourceKey<LootTable> MEDIUM_VAULT_TABLE = ResourceKey.create(Registries.LOOT_TABLE, Minestuck.id("chests/medium_vault_item"));
 	
 	@Override
 	public void generate(BiConsumer<ResourceKey<LootTable>, LootTable.Builder> lootProcessor)
