@@ -6,7 +6,7 @@
       "element": {
         "element_type": "minecraft:single_pool_element",
         "projection": "rigid",
-        "location": "minestuck:arena/entry",
+        "location": "minestuck:arena/arena",
         "processors": "minestuck:structure_block_registry"
       }
     }
