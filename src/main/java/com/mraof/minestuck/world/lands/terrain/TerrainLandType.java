@@ -180,8 +180,8 @@ public abstract class TerrainLandType implements ILandType
 	public void addStructureSets(Consumer<StructureSet> consumer, HolderGetter<Structure> structureLookup)
 	{
 		consumer.accept(new StructureSet(List.of(
-				StructureSet.entry(structureLookup.getOrThrow(MSStructures.SMALL_RUIN)),
-				StructureSet.entry(structureLookup.getOrThrow(MSStructures.ARENA), 6)),
+				StructureSet.entry(structureLookup.getOrThrow(MSStructures.SMALL_RUIN), 5),
+				StructureSet.entry(structureLookup.getOrThrow(MSStructures.ARENA))),
 				SMALL_RUIN_PLACEMENT));
 		
 		StructureSet villageSet = new StructureSet(structureLookup.getOrThrow(MSStructures.ConsortVillage.KEY), CONSORT_VILLAGE_PLACEMENT);
