@@ -11,6 +11,8 @@ The format is based on [Keep a Changelog](https://keepachangelog.com/en/1.1.0/).
 - Newer music discs have associated cassettes
 - Sound effect for boondollar item and porkhollow command.
 - Added music tracks made by heartsremedy to all non-Land dimensions in the Medium
+- Added two new advancements: _"I Fucking Love Hammers"_ and _"Look At The Sky, Numbnuts!"_
+- Added new cake: PANcake
 
 ### Changed
 
@@ -28,10 +30,11 @@ The format is based on [Keep a Changelog](https://keepachangelog.com/en/1.1.0/).
 - Fix JEI not loading grist (and by extension, alchemy recipes) on newer versions
 - Fix Glowing Mushroom Vines requiring itself for alchemizing
 - Fix missing Bucket of Glimmering Water and Magmatic Igneous Stone grist cost
+- Fix Moon Cake textures
 
 ### Contributors for this release
 
-- medsal15, heartsremedy, caldw3ll, v_sabitron, Dweblenod
+- medsal15, heartsremedy, caldw3ll, v_sabitron, Dweblenod, glubtier
 
 ## [1.21.1-1.13.1.1] - 2025-09-14
 
