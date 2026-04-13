@@ -41,6 +41,11 @@ public class EcheladderScreen extends PlayerStatsScreen
 	
 	private static final int RUNG_Y = 14;
 	private static final int VISIBLE_RUNG_COUNT = 12;
+	private static final int BOONDOLLAR_Y = 12;
+	private static final int ATTACK_Y = 30;
+	private static final int HEALTH_Y = 78;
+	private static final int CACHE_Y = 126;
+	private static final int CAPTCHA_Y = 174;
 	
 	private static final int GREY = 0x404040;
 	private static final int BLUE = 0x0094FF;
@@ -184,18 +189,12 @@ public class EcheladderScreen extends PlayerStatsScreen
 		
 		int textOffset = xOffset + 24;
 		
-		int boondollarY = 12;
-		int attackY = 30;
-		int healthY = 65;
-		int cacheY = 100;
-		int captchaY = 135;
-		
 		RenderSystem.setShaderColor(1, 1, 1, 1);
-		guiGraphics.blit(PlayerStatsScreen.icons, xOffset + 5, yOffset + boondollarY - 5, 238, 16, 18, 18);
-		guiGraphics.blit(xOffset + 5, yOffset + attackY, 0, 18, 18, effectSprites.get(MobEffects.DAMAGE_BOOST));
-		guiGraphics.blit(xOffset + 5, yOffset + healthY, 0, 18, 18, effectSprites.get(MobEffects.HEALTH_BOOST));
-		guiGraphics.blit(PlayerStatsScreen.icons, xOffset + 6, yOffset + cacheY + 1, 48, 64, 16, 16);
-		guiGraphics.renderItem(MSItems.CAPTCHA_CARD.toStack(), xOffset + 5, yOffset + captchaY);
+		guiGraphics.blit(PlayerStatsScreen.icons, xOffset + 5, yOffset + BOONDOLLAR_Y - 5, 238, 16, 18, 18);
+		guiGraphics.blit(xOffset + 5, yOffset + ATTACK_Y, 0, 18, 18, effectSprites.get(MobEffects.DAMAGE_BOOST));
+		guiGraphics.blit(xOffset + 5, yOffset + HEALTH_Y, 0, 18, 18, effectSprites.get(MobEffects.HEALTH_BOOST));
+		guiGraphics.blit(PlayerStatsScreen.icons, xOffset + 6, yOffset + CACHE_Y + 1, 48, 64, 16, 16);
+		guiGraphics.renderItem(MSItems.CAPTCHA_CARD.toStack(), xOffset + 5, yOffset + CAPTCHA_Y);
 		
 		
 		String msg = title.getString();
@@ -203,30 +202,30 @@ public class EcheladderScreen extends PlayerStatsScreen
 		
 		Rung.DisplayData rungData = ClientRungData.getData(currentRung);
 		
-		guiGraphics.drawString(font, "=", textOffset + 1, yOffset + boondollarY, GREY, false);    //Should this be black, or the same blue as the numbers?
-		guiGraphics.drawString(font, String.valueOf(ClientPlayerData.getBoondollars()), textOffset + 3 + mc.font.width("="), yOffset + boondollarY, BLUE, false);
+		guiGraphics.drawString(font, "=", textOffset + 1, yOffset + BOONDOLLAR_Y, GREY, false);    //Should this be black, or the same blue as the numbers?
+		guiGraphics.drawString(font, String.valueOf(ClientPlayerData.getBoondollars()), textOffset + 3 + mc.font.width("="), yOffset + BOONDOLLAR_Y, BLUE, false);
 		//guiGraphics.drawString("Rep: " + ClientPlayerData.getConsortReputation(), xOffset + 75 + mc.fontRenderer.getCharWidth('='), yOffset + 12, BLUE);
 		
 		int attack = (int) Math.round(100 * (1 + rungData.attributes().attackBonus()));
-		guiGraphics.drawString(font, I18n.get(ATTACK), textOffset, yOffset + attackY, GREY, false);
+		guiGraphics.drawString(font, I18n.get(ATTACK), textOffset, yOffset + ATTACK_Y, GREY, false);
 		String attackValueText = attack + "%";
-		guiGraphics.drawString(font, attackValueText, textOffset + 2, yOffset + attackY + 9, BLUE, false);
+		guiGraphics.drawString(font, attackValueText, textOffset + 2, yOffset + ATTACK_Y + 9, BLUE, false);
 		
 		double health = rungData.attributes().healthBoost() / 2D;
-		guiGraphics.drawString(font, I18n.get(HEALTH), textOffset, yOffset + healthY, GREY, false);
+		guiGraphics.drawString(font, I18n.get(HEALTH), textOffset, yOffset + HEALTH_Y, GREY, false);
 		String healthValueText = "+" + String.format(Locale.ROOT, "%.1f", health);
-		guiGraphics.drawString(font, healthValueText, textOffset + 2, yOffset + healthY + 9, BLUE, false);
+		guiGraphics.drawString(font, healthValueText, textOffset + 2, yOffset + HEALTH_Y + 9, BLUE, false);
 		
-		guiGraphics.drawString(font, I18n.get(CACHE), textOffset, yOffset + cacheY, GREY, false);
-		guiGraphics.drawString(font, String.valueOf(rungData.gristCapacity()), textOffset + 2, yOffset + cacheY + 9, BLUE, false);
+		guiGraphics.drawString(font, I18n.get(CACHE), textOffset, yOffset + CACHE_Y, GREY, false);
+		guiGraphics.drawString(font, String.valueOf(rungData.gristCapacity()), textOffset + 2, yOffset + CACHE_Y + 9, BLUE, false);
 		
-		guiGraphics.drawString(font, I18n.get(CAPTCHA), textOffset, yOffset + captchaY, GREY, false);
+		guiGraphics.drawString(font, I18n.get(CAPTCHA), textOffset, yOffset + CAPTCHA_Y, GREY, false);
 		String captchaValueText = String.format(Locale.ROOT, "%d", (int) rungData.attributes().captchalogueCapacity());
-		guiGraphics.drawString(font, captchaValueText, textOffset + 2, yOffset + captchaY + 9, BLUE, false);
+		guiGraphics.drawString(font, captchaValueText, textOffset + 2, yOffset + CAPTCHA_Y + 9, BLUE, false);
 		
-		if(mouseInBounds(mouseY, yOffset + attackY + 9, mouseX, textOffset + 2, mc.font.width(attackValueText)))
+		if(mouseInBounds(mouseY, yOffset + ATTACK_Y + 9, mouseX, textOffset + 2, mc.font.width(attackValueText)))
 			return ImmutableList.of(Component.translatable(DAMAGE_UNDERLING), Component.literal(Math.round(attack * rungData.attributes().underlingDamageMod()) + "%"));
-		if(mouseInBounds(mouseY, yOffset + healthY + 9, mouseX, textOffset + 2, mc.font.width(healthValueText)))
+		if(mouseInBounds(mouseY, yOffset + HEALTH_Y + 9, mouseX, textOffset + 2, mc.font.width(healthValueText)))
 			return ImmutableList.of(Component.translatable(PROTECTION_UNDERLING), Component.literal(String.format(Locale.ROOT, "%.1f", 100 * rungData.attributes().underlingProtectionMod()) + "%"));
 		return null;
 	}
@@ -247,8 +246,9 @@ public class EcheladderScreen extends PlayerStatsScreen
 		int maxX = xOffset + 35 + xMod;
 		
 		String str = "+" + (Math.round(100 * rungData.attributes().attackBonus()) - Math.round(100 * prevRungData.attributes().attackBonus())) + "%!";
-		guiGraphics.fill(minX, yOffset + 50 + yMod, maxX, yOffset + 62 + yMod, bg);
-		int strX = xOffset + 20 + xMod - mc.font.width(str) / 2, strY = yOffset + 52 + yMod;
+		guiGraphics.fill(minX, yOffset + ATTACK_Y + 18 + yMod, maxX, yOffset + ATTACK_Y + 30 + yMod, bg);
+		int strX = xOffset + 20 + xMod - mc.font.width(str) / 2;
+		int strY = yOffset + ATTACK_Y + 20 + yMod;
 		guiGraphics.drawString(font, str, strX, strY, textColor, false);
 		
 		if(mouseInBounds(mouseY, strY, mouseX, strX, mc.font.width(str)))
@@ -260,9 +260,9 @@ public class EcheladderScreen extends PlayerStatsScreen
 		
 		double d = (rungData.attributes().healthBoost() - prevRungData.attributes().healthBoost()) / 2D;
 		str = String.format(Locale.ROOT, "+%.1f!", d);
-		guiGraphics.fill(minX, yOffset + 104 + yMod, maxX, yOffset + 116 + yMod, bg);
+		guiGraphics.fill(minX, yOffset + HEALTH_Y + 18 + yMod, maxX, yOffset + HEALTH_Y + 30 + yMod, bg);
 		strX = xOffset + 20 + xMod - mc.font.width(str) / 2;
-		strY = yOffset + 106 + yMod;
+		strY = yOffset + HEALTH_Y + 20 + yMod;
 		guiGraphics.drawString(font, str, strX, strY, textColor, false);
 		
 		if(mouseInBounds(mouseY, strY, mouseX, strX, mc.font.width(str)))
