@@ -13,6 +13,8 @@ The format is based on [Keep a Changelog](https://keepachangelog.com/en/1.1.0/).
 - Added sound effects related to captchaloguing/boondollars
 - Captchaloguing multiple cards that contain items will store as many of both as possible
 - Added music tracks made by heartsremedy to all non-Land dimensions in the Medium
+- Added two new advancements: _"I Fucking Love Hammers"_ and _"Look At The Sky, Numbnuts!"_
+- Added new cake: PANcake
 - Added 3 bunker structures to Lands
 - Increased block diversity in structures
 - Array modus
@@ -58,10 +60,11 @@ The format is based on [Keep a Changelog](https://keepachangelog.com/en/1.1.0/).
 - Fix visual updating issue with stack/queue modi
 - Fix stat storer not updating its redstone signal
 - Fix being able to steal from consort merchants
+- Fix Moon Cake textures
 
 ### Contributors for this release
 
-- medsal15, heartsremedy, caldw3ll, v_sabitron, Dweblenod, TangleKat, Pancake, Fl1s, kirderf1, ThalliumSulfate, Emma "Dilemma"
+- medsal15, heartsremedy, caldw3ll, v_sabitron, Dweblenod, TangleKat, Pancake, Fl1s, kirderf1, ThalliumSulfate, Emma "Dilemma", glubtier
 
 ## [1.21.1-1.13.1.1] - 2025-09-14
 
