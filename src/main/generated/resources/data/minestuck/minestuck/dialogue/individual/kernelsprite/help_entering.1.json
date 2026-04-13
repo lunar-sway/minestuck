@@ -24,7 +24,16 @@
           "player_message": "minestuck.dialogue.individual.kernelsprite.help_entering.1.next_player",
           "set_as_entrypoint": true
         },
-        "triggers": []
+        "triggers": [
+          {
+            "type": "minestuck:go_to_block",
+            "accepted_distance": 6.0,
+            "predicate": {
+              "blocks": "minestuck:totem_lathe_wheel"
+            },
+            "radius": 32
+          }
+        ]
       },
       {
         "condition": {

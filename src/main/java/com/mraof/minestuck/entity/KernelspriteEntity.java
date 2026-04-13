@@ -231,7 +231,6 @@ public class KernelspriteEntity extends PathfinderMob implements DialogueEntity
 	public ChatFormatting getChatColor()
 	{
 		return ChatFormatting.BLACK;
-		//return getColor();
 	}
 	
 	@Override
@@ -260,7 +259,7 @@ public class KernelspriteEntity extends PathfinderMob implements DialogueEntity
 				if(d0 < mob.getBoundingBox().getSize())
 				{
 					this.operation = MoveControl.Operation.WAIT;
-					mob.setDeltaMovement(mob.getDeltaMovement().scale(0.5));
+					mob.setDeltaMovement(mob.getDeltaMovement().scale(0.09)); //slows down much faster than Vex
 				} else
 				{
 					mob.setDeltaMovement(mob.getDeltaMovement().add(vec3.scale(this.speedModifier * 0.05 / d0)));

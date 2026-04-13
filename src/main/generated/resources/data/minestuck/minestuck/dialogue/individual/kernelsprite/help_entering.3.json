@@ -29,9 +29,9 @@
             "type": "minestuck:go_to_block",
             "accepted_distance": 6.0,
             "predicate": {
-              "blocks": "minestuck:totem_lathe_card_slot"
+              "blocks": "minestuck:totem_lathe_top"
             },
-            "radius": 24
+            "radius": 32
           }
         ]
       },

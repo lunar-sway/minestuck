@@ -34,17 +34,37 @@
             },
             "hide_if_failed": true,
             "message": "minestuck.dialogue.individual.kernelsprite.help_entering.7.thanks_for_help",
-            "next_dialogue": "minestuck:individual/kernelsprite/thanks",
-            "triggers": []
+            "next_dialogue": "minestuck:individual/kernelsprite/blank",
+            "triggers": [
+              {
+                "type": "minestuck:go_to_block",
+                "accepted_distance": 6.0,
+                "predicate": {
+                  "blocks": "minestuck:cruxtruder_tube"
+                },
+                "radius": 32,
+                "wait_permanently": true
+              }
+            ]
           },
           {
             "condition": {
               "type": "minestuck:always_true"
             },
             "hide_if_failed": true,
-            "message": "minestuck.dialogue.individual.kernelsprite.return",
-            "next_dialogue": "minestuck:individual/kernelsprite/start",
-            "triggers": []
+            "message": "minestuck.dialogue.individual.kernelsprite.help_entering.7.anything_else",
+            "next_dialogue": "minestuck:individual/kernelsprite/blank",
+            "triggers": [
+              {
+                "type": "minestuck:go_to_block",
+                "accepted_distance": 6.0,
+                "predicate": {
+                  "blocks": "minestuck:cruxtruder_tube"
+                },
+                "radius": 32,
+                "wait_permanently": true
+              }
+            ]
           }
         ]
       }

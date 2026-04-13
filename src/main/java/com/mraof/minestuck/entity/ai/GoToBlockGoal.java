@@ -43,7 +43,7 @@ public class GoToBlockGoal extends MoveToBlockGoal
 	@Override
 	public boolean canContinueToUse()
 	{
-		return super.canContinueToUse() && duration > 0;
+		return super.canContinueToUse() && duration > 0 && !isReachedTarget();
 	}
 	
 	@Override
@@ -68,6 +68,12 @@ public class GoToBlockGoal extends MoveToBlockGoal
 		
 		if(waitPermanently)
 			mob.restrictTo(mob.blockPosition(), (int) acceptedDistance);
+	}
+	
+	@Override
+	protected int nextStartTick(PathfinderMob creature)
+	{
+		return reducedTickDelay(20);
 	}
 	
 	@Override

@@ -1,0 +1,63 @@
+{
+  "conditioned_nodes": [
+    {
+      "condition": {
+        "type": "minestuck:npc_near_block_predicate",
+        "predicate": {
+          "blocks": "minestuck:cruxtruder_tube"
+        },
+        "radius": 32
+      },
+      "node": {
+        "animation": {},
+        "gui": "minestuck:textures/gui/dialogue/dialogue.png",
+        "messages": [
+          {
+            "type": "entity",
+            "message": "minestuck.dialogue.individual.kernelsprite.blank"
+          },
+          {
+            "type": "description",
+            "message": "minestuck.dialogue.individual.kernelsprite.blank.desc"
+          }
+        ],
+        "responses": [
+          {
+            "condition": {
+              "type": "minestuck:always_true"
+            },
+            "hide_if_failed": true,
+            "message": "minestuck.dialogue.individual.kernelsprite.return",
+            "next_dialogue": "minestuck:individual/kernelsprite/start",
+            "triggers": []
+          }
+        ]
+      }
+    }
+  ],
+  "default_node": {
+    "animation": {},
+    "gui": "minestuck:textures/gui/dialogue/dialogue.png",
+    "messages": [
+      {
+        "type": "entity",
+        "message": "minestuck.dialogue.individual.kernelsprite.blank.default"
+      },
+      {
+        "type": "description",
+        "message": "minestuck.dialogue.individual.kernelsprite.blank.default.desc"
+      }
+    ],
+    "responses": [
+      {
+        "condition": {
+          "type": "minestuck:always_true"
+        },
+        "hide_if_failed": true,
+        "message": "minestuck.dialogue.individual.kernelsprite.return",
+        "next_dialogue": "minestuck:individual/kernelsprite/start",
+        "triggers": []
+      }
+    ]
+  }
+}

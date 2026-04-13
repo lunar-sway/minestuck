@@ -125,7 +125,7 @@
             "predicate": {
               "blocks": "minestuck:cruxtruder_tube"
             },
-            "radius": 24,
+            "radius": 32,
             "speed_modifier": 0.5,
             "wait_permanently": true
           }

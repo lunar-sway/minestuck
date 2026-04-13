@@ -17,6 +17,7 @@ import net.minecraft.world.level.Level;
 import net.minecraft.world.level.block.Block;
 import net.minecraft.world.level.block.state.BlockState;
 import net.minecraft.world.level.material.PushReaction;
+import net.minecraft.world.phys.Vec3;
 import net.minecraft.world.phys.shapes.CollisionContext;
 import net.minecraft.world.phys.shapes.VoxelShape;
 
@@ -67,6 +68,7 @@ public class CruxtruderLidBlock extends Block
 				kernelsprite.setOwner(playerIdentifier);
 				kernelsprite.setBoundOrigin(pos);
 				kernelsprite.setPos(pos.getCenter());
+				kernelsprite.addDeltaMovement(new Vec3(0D, 0.08D, 0D)); //has a tendency to immediately sink into cruxtruder
 				
 				level.addFreshEntity(kernelsprite);
 				
