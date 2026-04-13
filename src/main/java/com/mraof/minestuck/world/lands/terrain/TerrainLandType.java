@@ -50,7 +50,6 @@ public abstract class TerrainLandType implements ILandType
 	public static final StreamCodec<RegistryFriendlyByteBuf, TerrainLandType> STREAM_CODEC = ByteBufCodecs.registry(LandTypes.TERRAIN_KEY);
 	private static final Logger LOGGER = LogManager.getLogger();
 	
-	protected static final RandomSpreadStructurePlacement SMALL_RUIN_PLACEMENT = new RandomSpreadStructurePlacement(16, 4, RandomSpreadType.LINEAR, 59273643);
 	protected static final RandomSpreadStructurePlacement CONSORT_VILLAGE_PLACEMENT = new RandomSpreadStructurePlacement(24, 5, RandomSpreadType.LINEAR, 10387312);
 	
 	private final String[] names;
@@ -179,20 +178,35 @@ public abstract class TerrainLandType implements ILandType
 	@Override
 	public void addStructureSets(Consumer<StructureSet> consumer, HolderGetter<Structure> structureLookup)
 	{
+		
+		StructureSet villageSet = new StructureSet(structureLookup.getOrThrow(MSStructures.ConsortVillage.KEY), CONSORT_VILLAGE_PLACEMENT);
+		Optional<StructurePlacement.ExclusionZone> villageExclusionZone = Optional.of(new StructurePlacement.ExclusionZone(Holder.direct(villageSet), 8));
+		consumer.accept(villageSet);
+		
+		RandomSpreadStructurePlacement smallRuinPlacement = new RandomSpreadStructurePlacement(
+				Vec3i.ZERO,
+				StructurePlacement.FrequencyReductionMethod.DEFAULT,
+				1.0F,
+				59273643,
+				villageExclusionZone,
+				16,
+				4,
+				RandomSpreadType.LINEAR
+				
+		);
 		consumer.accept(new StructureSet(List.of(
 				StructureSet.entry(structureLookup.getOrThrow(MSStructures.SMALL_RUIN), 5),
 				StructureSet.entry(structureLookup.getOrThrow(MSStructures.ARENA))),
-				SMALL_RUIN_PLACEMENT));
+				smallRuinPlacement));
 		
-		StructureSet villageSet = new StructureSet(structureLookup.getOrThrow(MSStructures.ConsortVillage.KEY), CONSORT_VILLAGE_PLACEMENT);
-		consumer.accept(villageSet);
+		
 		
 		RandomSpreadStructurePlacement standardDungeonPlacement = new RandomSpreadStructurePlacement(
 				Vec3i.ZERO,
 				StructurePlacement.FrequencyReductionMethod.DEFAULT,
 				1.0F,
 				34527185,
-				Optional.of(new StructurePlacement.ExclusionZone(Holder.direct(villageSet), 8)),
+				villageExclusionZone,
 				16,
 				5,
 				RandomSpreadType.LINEAR

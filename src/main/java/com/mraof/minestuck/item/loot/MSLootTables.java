@@ -26,8 +26,8 @@ public class MSLootTables
 	public static final ResourceKey<LootTable> FROG_TEMPLE_CHEST = resourceKey("chests/frog_temple");
 	public static final ResourceKey<LootTable> BASIC_MEDIUM_CHEST = resourceKey("chests/medium_basic");
 	public static final ResourceKey<LootTable> MEDIUM_SUPPLY_CHEST = resourceKey("chests/medium_supply");
-	public static final ResourceKey<LootTable> MEDIUM_TRIAL = resourceKey("chests/medium_trial.json");
-	public static final ResourceKey<LootTable> MEDIUM_TRIAL_KEY = resourceKey("chests/medium_trial_key.json");
+	public static final ResourceKey<LootTable> MEDIUM_TRIAL = resourceKey("chests/medium_trial");
+	public static final ResourceKey<LootTable> MEDIUM_TRIAL_KEY = resourceKey("chests/medium_trial_key");
 	public static final ResourceKey<LootTable> MEDIUM_VAULT = resourceKey("chests/medium_vault");
 	public static final ResourceKey<LootTable> MEDIUM_OMINOUS_VAULT = resourceKey("chests/medium_ominous_vault");
 	public static final ResourceKey<LootTable> REGIWEAPONS = resourceKey("chests/regiweapons");
