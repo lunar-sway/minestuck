@@ -1,35 +1,35 @@
 {
-  "condition":       {
-    "type":       "minestuck:list",
+  "condition": {
+    "type": "minestuck:list",
     "conditions": [
       {
-        "type":       "minestuck:list",
+        "type": "minestuck:list",
         "conditions": [
           {
             "type": "minestuck:at_or_above_y",
-            "y":    64.0
+            "y": 64.0
           }
         ],
-        "list_type":  "none"
+        "list_type": "none"
       },
       {
-        "type":       "minestuck:list",
+        "type": "minestuck:list",
         "conditions": [
           {
-            "type":      "minestuck:npc_in_structure",
+            "type": "minestuck:npc_in_structure",
             "structure": "minestuck:derse_bunker"
           },
           {
-            "type":      "minestuck:npc_in_structure",
+            "type": "minestuck:npc_in_structure",
             "structure": "minestuck:prospit_bunker"
           }
         ],
-        "list_type":  "any"
+        "list_type": "any"
       }
     ],
-    "list_type":  "all"
+    "list_type": "all"
   },
-  "dialogue":        "minestuck:carapacian_soldier/bunker_sweep",
+  "dialogue": "minestuck:carapacian_soldier/bunker_sweep",
   "dialogue_weight": 10,
-  "keep_on_reset":   false
+  "keep_on_reset": false
 }

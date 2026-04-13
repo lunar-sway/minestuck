@@ -64,6 +64,9 @@ public final class MSStructures
 	public static final ResourceKey<Structure> IMP_BUNKER = key("imp_bunker");
 	public static final ResourceKey<StructureTemplatePool> IMP_BUNKER_START_POOL = templateKey("imp_bunker/entry");
 	
+	public static final ResourceKey<Structure> ARENA = key("arena");
+	public static final ResourceKey<StructureTemplatePool> ARENA_START_POOL = templateKey("arena/entry");
+	
 	public static final class ImpDungeon
 	{
 		public static final Supplier<StructureType<ImpDungeonStructure>> TYPE =

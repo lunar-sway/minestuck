@@ -133,7 +133,11 @@ public abstract class TerrainLandType implements ILandType
 	@Override
 	public void addStructureSets(Consumer<StructureSet> consumer, HolderGetter<Structure> structureLookup)
 	{
-		consumer.accept(new StructureSet(structureLookup.getOrThrow(MSStructures.SMALL_RUIN), SMALL_RUIN_PLACEMENT));
+		consumer.accept(new StructureSet(List.of(
+				StructureSet.entry(structureLookup.getOrThrow(MSStructures.SMALL_RUIN)),
+				StructureSet.entry(structureLookup.getOrThrow(MSStructures.ARENA), 6)),
+				SMALL_RUIN_PLACEMENT));
+		
 		StructureSet villageSet = new StructureSet(structureLookup.getOrThrow(MSStructures.ConsortVillage.KEY), CONSORT_VILLAGE_PLACEMENT);
 		consumer.accept(villageSet);
 		

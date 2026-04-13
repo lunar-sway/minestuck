@@ -1,8 +1,8 @@
 {
   "node": {
-    "animation": { },
-    "gui":       "minestuck:textures/gui/dialogue/dialogue.png",
-    "message":   "minestuck.dialogue.consort.secret_bunker.access",
-    "responses": [ ]
+    "animation": {},
+    "gui": "minestuck:textures/gui/dialogue/dialogue.png",
+    "message": "minestuck.dialogue.consort.secret_bunker.access",
+    "responses": []
   }
 }
