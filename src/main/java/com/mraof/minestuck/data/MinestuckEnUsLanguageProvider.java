@@ -36,6 +36,7 @@ import com.mraof.minestuck.entity.dialogue.Dialogue;
 import com.mraof.minestuck.entry.EntryProcess;
 import com.mraof.minestuck.inventory.ConsortMerchantInventory;
 import com.mraof.minestuck.inventory.captchalogue.ArrayModus;
+import com.mraof.minestuck.inventory.captchalogue.CaptchaDeckHandler;
 import com.mraof.minestuck.inventory.captchalogue.HashMapModus;
 import com.mraof.minestuck.inventory.captchalogue.Modus;
 import com.mraof.minestuck.item.CaptchaCardItem;
@@ -2241,6 +2242,7 @@ public class MinestuckEnUsLanguageProvider extends MinestuckLanguageProvider
 		
 		add(MusicPlayerWeapon.TITLE, "Music Player");
 		add(MusicPlayerWeapon.HINT_INACTIVE, "Crouch and use to start playing");
+		add(CaptchaDeckHandler.TOO_LARGE, "Cannot captchalogue card, too much data stored");
 		add(GristCacheScreen.TITLE, "Grist Cache");
 		add(StrifeSpecibusScreen.TITLE, "Strife Specibus");
 		add(StrifeSpecibusScreen.KIND_ABSTRATUS, "Kind Abstratus");

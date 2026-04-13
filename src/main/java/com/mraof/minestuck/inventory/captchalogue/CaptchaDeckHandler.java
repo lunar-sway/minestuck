@@ -19,6 +19,7 @@ import com.mraof.minestuck.util.MSSoundEvents;
 import net.minecraft.core.HolderLookup;
 import net.minecraft.core.NonNullList;
 import net.minecraft.nbt.CompoundTag;
+import net.minecraft.network.chat.Component;
 import net.minecraft.resources.ResourceLocation;
 import net.minecraft.server.level.ServerPlayer;
 import net.minecraft.sounds.SoundSource;
@@ -50,6 +51,8 @@ import java.util.concurrent.atomic.AtomicLong;
 public final class CaptchaDeckHandler
 {
 	private static final Logger LOGGER = LogManager.getLogger();
+	
+	public static final String TOO_LARGE = "minestuck.captcha_too_large";
 	
 	public static final int EMPTY_SYLLADEX = -1;
 	public static final int EMPTY_CARD = -2;
@@ -209,7 +212,7 @@ public final class CaptchaDeckHandler
 	public static void captchalogueItem(ServerPlayer player)
 	{
 		ItemStack stack = player.getMainHandItem();
-		if(canPlayerUseModus(player) && hasModus(player) && meetsComponentSizeLimit(stack))
+		if(canPlayerUseModus(player) && hasModus(player))
 		{
 			captchalogueItem(player, stack);
 		}
@@ -257,6 +260,12 @@ public final class CaptchaDeckHandler
 	
 	private static void captchalogueItem(ServerPlayer player, ItemStack stack)
 	{
+		if(!meetsComponentSizeLimit(stack))
+		{
+			player.displayClientMessage(Component.translatable(TOO_LARGE), false);
+			return;
+		}
+		
 		Modus modus = getModus(player);
 		
 		if(stack.is(MSItems.BOONDOLLARS))

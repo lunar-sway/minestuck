@@ -2461,6 +2461,7 @@
   "minestuck.button.stop": "STOP",
   "minestuck.captcha_card.use_keys": "Store your held item to an empty card in your Sylladex by pressing [%s]",
   "minestuck.captcha_deck.use_item": "Use Item",
+  "minestuck.captcha_too_large": "Cannot captchalogue card, too much data stored",
   "minestuck.chat_land_entry": "Welcome to %s.",
   "minestuck.clear_button": "Clear message",
   "minestuck.closed_message": "Connection closed",
