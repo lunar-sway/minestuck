@@ -6,7 +6,7 @@
         "predicate": {
           "blocks": "minestuck:cruxtruder_tube"
         },
-        "radius": 32
+        "radius": 24
       },
       "node": {
         "animation": {},

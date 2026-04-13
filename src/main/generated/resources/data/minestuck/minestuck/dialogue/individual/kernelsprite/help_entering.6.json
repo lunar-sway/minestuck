@@ -31,7 +31,7 @@
             "predicate": {
               "blocks": "minestuck:alchemiter_center"
             },
-            "radius": 32,
+            "radius": 24,
             "wait_permanently": true
           }
         ]

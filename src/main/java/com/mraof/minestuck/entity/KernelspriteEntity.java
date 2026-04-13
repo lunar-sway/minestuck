@@ -104,7 +104,7 @@ public class KernelspriteEntity extends PathfinderMob implements DialogueEntity
 	@Override
 	protected InteractionResult mobInteract(Player player, InteractionHand hand)
 	{
-		boolean isBusy = this.goalSelector.getAvailableGoals().stream().filter(WrappedGoal::isRunning)
+		boolean isBusy = this.goalSelector.getAvailableGoals().stream().filter(wrappedGoal -> wrappedGoal != null && wrappedGoal.isRunning())
 				.anyMatch(goal -> goal.getGoal() instanceof MoveToBlockGoal);
 		
 		if(!this.isAlive() || player.isShiftKeyDown() || isBusy)

@@ -21,7 +21,7 @@ public class GoToBlockGoal extends MoveToBlockGoal
 	
 	public GoToBlockGoal(PathfinderMob mob, BlockPredicate blockPredicate, double speedModifier, int duration, int searchRange, double acceptedDistance, boolean waitPermanently)
 	{
-		super(mob, speedModifier, searchRange, searchRange);
+		super(mob, speedModifier, searchRange, (int) (searchRange * 0.8F));
 		
 		if(mob instanceof DialogueEntity dialogueMob)
 			this.dialogueMob = dialogueMob;
@@ -37,7 +37,7 @@ public class GoToBlockGoal extends MoveToBlockGoal
 	@Override
 	public boolean canUse()
 	{
-		return dialogueMob != null && super.canUse();
+		return dialogueMob != null && findNearestBlock();
 	}
 	
 	@Override
@@ -71,12 +71,6 @@ public class GoToBlockGoal extends MoveToBlockGoal
 		
 		if(waitPermanently)
 			mob.restrictTo(mob.blockPosition(), (int) acceptedDistance);
-	}
-	
-	@Override
-	protected int nextStartTick(PathfinderMob creature)
-	{
-		return reducedTickDelay(20);
 	}
 	
 	@Override

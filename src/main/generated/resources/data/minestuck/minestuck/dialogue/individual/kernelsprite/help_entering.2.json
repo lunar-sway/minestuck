@@ -6,7 +6,7 @@
         "predicate": {
           "blocks": "minestuck:totem_lathe_wheel"
         },
-        "radius": 32
+        "radius": 24
       },
       "node": {
         "animation": {},
@@ -40,7 +40,7 @@
                 "predicate": {
                   "blocks": "minestuck:totem_lathe_top_corner"
                 },
-                "radius": 32,
+                "radius": 24,
                 "wait_permanently": true
               }
             ]
