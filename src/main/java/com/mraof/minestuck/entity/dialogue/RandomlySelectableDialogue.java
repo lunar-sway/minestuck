@@ -4,7 +4,6 @@ import com.google.common.collect.ImmutableList;
 import com.google.gson.Gson;
 import com.google.gson.GsonBuilder;
 import com.google.gson.JsonElement;
-import com.mojang.serialization.JsonOps;
 import net.minecraft.resources.ResourceLocation;
 import net.minecraft.server.packs.resources.ResourceManager;
 import net.minecraft.server.packs.resources.SimpleJsonResourceReloadListener;
@@ -14,6 +13,7 @@ import net.minecraft.util.random.WeightedRandom;
 import net.minecraft.world.entity.LivingEntity;
 import net.neoforged.bus.api.SubscribeEvent;
 import net.neoforged.fml.common.EventBusSubscriber;
+import net.neoforged.neoforge.common.conditions.ICondition;
 import net.neoforged.neoforge.event.AddReloadListenerEvent;
 import net.neoforged.neoforge.event.server.ServerStoppedEvent;
 import org.apache.logging.log4j.LogManager;
@@ -45,7 +45,7 @@ public final class RandomlySelectableDialogue
 		List<WeightedEntry.Wrapper<Dialogue.SelectableDialogue>> weightedFilteredDialogue = new ArrayList<>();
 		selectableDialogueList.forEach(selectable -> {
 			if(selectable.condition().test(entity, null))
-					weightedFilteredDialogue.add(WeightedEntry.wrap(selectable, selectable.weight()));
+				weightedFilteredDialogue.add(WeightedEntry.wrap(selectable, selectable.weight()));
 		});
 		
 		return WeightedRandom.getRandomItem(entity.getRandom(), weightedFilteredDialogue)
@@ -116,9 +116,13 @@ public final class RandomlySelectableDialogue
 			
 			for(Map.Entry<ResourceLocation, JsonElement> entry : jsonElements.entrySet())
 			{
-				Dialogue.SelectableDialogue.CODEC.parse(JsonOps.INSTANCE, entry.getValue())
-						.resultOrPartial(message -> LOGGER.error("Problem loading {} selectable dialogue {}: {}", this.category.folderName(), entry.getKey(), message))
-						.ifPresent(listBuilder::add);
+				try
+				{
+					listBuilder.add(ICondition.getWithWithConditionsCodec(Dialogue.SelectableDialogue.CONDITIONAL_CODEC, this.makeConditionalOps(), entry.getValue()).orElseThrow());
+				} catch(Exception exception)
+				{
+					LOGGER.error("Problem loading {} selectable dialogue {}: {}", this.category.folderName(), entry.getKey(), exception.getMessage());
+				}
 			}
 			
 			INSTANCE_MAP.put(this.category, new RandomlySelectableDialogue(listBuilder.build()));

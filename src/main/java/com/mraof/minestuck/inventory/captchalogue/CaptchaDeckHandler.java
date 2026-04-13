@@ -14,12 +14,13 @@ import com.mraof.minestuck.player.ClientPlayerData;
 import com.mraof.minestuck.player.PlayerBoondollars;
 import com.mraof.minestuck.player.PlayerData;
 import com.mraof.minestuck.util.MSAttachments;
+import com.mraof.minestuck.util.MSSoundEvents;
 import net.minecraft.core.HolderLookup;
 import net.minecraft.core.NonNullList;
 import net.minecraft.nbt.CompoundTag;
 import net.minecraft.resources.ResourceLocation;
 import net.minecraft.server.level.ServerPlayer;
-import net.minecraft.world.InteractionHand;
+import net.minecraft.sounds.SoundSource;
 import net.minecraft.world.entity.item.ItemEntity;
 import net.minecraft.world.entity.player.Player;
 import net.minecraft.world.inventory.AbstractContainerMenu;
@@ -28,7 +29,6 @@ import net.minecraft.world.item.ItemStack;
 import net.minecraft.world.item.enchantment.EnchantmentEffectComponents;
 import net.minecraft.world.item.enchantment.EnchantmentHelper;
 import net.minecraft.world.level.GameRules;
-import net.minecraft.world.phys.Vec3;
 import net.neoforged.bus.api.EventPriority;
 import net.neoforged.bus.api.SubscribeEvent;
 import net.neoforged.fml.LogicalSide;
@@ -173,6 +173,8 @@ public final class CaptchaDeckHandler
 			}
 		}
 		
+		player.level().playSound(null, player.getX(), player.getY(), player.getZ(), MSSoundEvents.EVENT_CAPTCHALOGUE_SHUFFLE.get(), SoundSource.AMBIENT, 1F, 1F);
+		
 		setModus(getHolder(player), player, newModus);
 		
 		MSCriteriaTriggers.CHANGE_MODUS.get().trigger(player, newModus);
@@ -235,7 +237,7 @@ public final class CaptchaDeckHandler
 	public static void captchalogueItemCarried(ServerPlayer player)
 	{
 		AbstractContainerMenu containerMenu = player.containerMenu;
-		if(canPlayerUseModus(player) && hasModus(player) && containerMenu != null)
+		if(canPlayerUseModus(player) && hasModus(player))
 		{
 			captchalogueItem(player, containerMenu.getCarried());
 		}
@@ -247,7 +249,7 @@ public final class CaptchaDeckHandler
 		
 		if(stack.is(MSItems.BOONDOLLARS))
 		{
-			PlayerBoondollars.addBoondollars(PlayerData.get(player).orElseThrow(), BoondollarsItem.getCount(stack));
+			PlayerBoondollars.addBoondollars(PlayerData.get(player).orElseThrow(), BoondollarsItem.getCount(stack), true);
 			stack.shrink(1);
 			return;
 		}
@@ -303,6 +305,7 @@ public final class CaptchaDeckHandler
 		boolean result = modus.putItemStack(player, stack.copy());
 		if(result)
 		{
+			player.level().playSound(null, player.getX(), player.getY(), player.getZ(), MSSoundEvents.EVENT_CAPTCHALOGUE_ITEM.get(), SoundSource.PLAYERS, 1F, 1F);
 			MSCriteriaTriggers.CAPTCHALOGUE.get().trigger(player, modus, stack);
 			stack.setCount(0);
 		}
@@ -319,14 +322,13 @@ public final class CaptchaDeckHandler
 		ItemStack stack = modus.getItem(player, index, asCard);
 		if(!stack.isEmpty())
 		{
+			player.level().playSound(null, player.getX(), player.getY(), player.getZ(), MSSoundEvents.EVENT_CAPTCHALOGUE_ITEM.get(), SoundSource.PLAYERS, 1F, 0.75F);
+			
 			AbstractContainerMenu containerMenu = player.containerMenu;
-			ItemStack otherStack = containerMenu != null ? containerMenu.getCarried() : player.getMainHandItem();
+			ItemStack otherStack = containerMenu.getCarried();
 			if(otherStack.isEmpty())
 			{
-				if(containerMenu != null)
-					containerMenu.setCarried(stack);
-				else
-					player.setItemInHand(InteractionHand.MAIN_HAND, stack);
+				containerMenu.setCarried(stack);
 			} else if(canMergeItemStacks(stack, otherStack))
 			{
 				otherStack.grow(stack.getCount());

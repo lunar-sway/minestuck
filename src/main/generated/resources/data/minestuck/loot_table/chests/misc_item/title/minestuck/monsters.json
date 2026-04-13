@@ -19,7 +19,7 @@
           ],
           "name": "minecraft:rotten_flesh",
           "quality": -2,
-          "weight": 15
+          "weight": 10
         },
         {
           "type": "minecraft:item",
@@ -36,7 +36,7 @@
           ],
           "name": "minecraft:bone",
           "quality": -1,
-          "weight": 12
+          "weight": 8
         },
         {
           "type": "minecraft:item",

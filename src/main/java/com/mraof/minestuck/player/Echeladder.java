@@ -137,7 +137,7 @@ public final class Echeladder implements INBTSerializable<CompoundTag>
 			}
 		}
 		
-		PlayerBoondollars.addBoondollars(PlayerData.get(identifier, mcServer), boondollarsGained);
+		PlayerBoondollars.addBoondollars(PlayerData.get(identifier, mcServer), boondollarsGained, false);
 		
 		LOGGER.debug("Finished echeladder climbing for {} at {} with progress {}", identifier.getUsername(), rung, progress);
 		

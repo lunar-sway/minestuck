@@ -17,8 +17,10 @@
         "list_type": "any"
       },
       {
-        "type": "minestuck:entity_type",
-        "entity_type": "minestuck:iguana"
+        "type": "minestuck:npc_entity_predicate",
+        "predicate": {
+          "type": "minestuck:iguana"
+        }
       }
     ],
     "list_type": "all"
