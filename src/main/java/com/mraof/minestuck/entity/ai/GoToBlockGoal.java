@@ -64,7 +64,10 @@ public class GoToBlockGoal extends MoveToBlockGoal
 		mob.goalSelector.removeGoal(this);
 		
 		if(mob instanceof KernelspriteEntity kernelsprite)
+		{
 			kernelsprite.setStayPutGoal(true);
+			kernelsprite.setWanderRadius(!waitPermanently);
+		}
 		
 		if(waitPermanently)
 			mob.restrictTo(mob.blockPosition(), (int) acceptedDistance);

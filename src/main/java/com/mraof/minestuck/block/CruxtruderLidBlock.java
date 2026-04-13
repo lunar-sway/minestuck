@@ -68,6 +68,7 @@ public class CruxtruderLidBlock extends Block
 				kernelsprite.setOwner(playerIdentifier);
 				kernelsprite.setBoundOrigin(pos);
 				kernelsprite.setPos(pos.getCenter());
+				kernelsprite.setWanderRadius(false);
 				kernelsprite.addDeltaMovement(new Vec3(0D, 0.08D, 0D)); //has a tendency to immediately sink into cruxtruder
 				
 				level.addFreshEntity(kernelsprite);

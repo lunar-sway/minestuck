@@ -35,7 +35,10 @@ public final class IndividualizedDialogue
 		provider.getLookupProvider().thenCompose(providerIt ->
 		{
 			provider.add("kernelsprite", new FolderedDialogue(builder -> {
-				ResponseBuilder returnDialogue = new ResponseBuilder(l.msg("individual.kernelsprite.return", "Lets talk about something else.")).setNextAsEntrypoint().nextDialogue(Minestuck.id("individual/kernelsprite/start"));
+				ResponseBuilder returnDialogue = new ResponseBuilder(l.msg("individual.kernelsprite.return", "Lets talk about something else."))
+						.setNextAsEntrypoint()
+						.addTrigger(new GoToBlock(BlockPredicate.Builder.block().build(), 1, 1, 1, 1, 1, false))
+						.nextDialogue(Minestuck.id("individual/kernelsprite/start"));
 				
 				var blank = builder.add("blank", new NodeSelectorBuilder()
 						.node(isNearBlock(MSBlocks.CRUXTRUDER.TUBE.get(), 32, 1), kernelspriteNode(l,
@@ -67,7 +70,7 @@ public final class IndividualizedDialogue
 						"Please alchemize artifact.", "It moves towards the middle section of the Alchemiter.")
 						.addResponse(new ResponseBuilder(l.subMsg("next", "What's next?"))
 								.addPlayerMessage(l.subMsg("next_player", "What's next?"))
-								.addTrigger(new GoToBlock(BlockPredicate.Builder.block().of(MSBlocks.ALCHEMITER.CENTER.get()).build(), 32, 1, 240, 1, 6, false))
+								.addTrigger(new GoToBlock(BlockPredicate.Builder.block().of(MSBlocks.ALCHEMITER.CENTER.get()).build(), 32, 1, 240, 1, 6, true))
 								.nextDialogue(helpEntering7)
 								.setNextAsEntrypoint()
 						)
@@ -84,7 +87,7 @@ public final class IndividualizedDialogue
 								"Identified Alchemiter. Please insert carved dowel.", "It is now gesturing specifically to the portion of the Alchemiter with a small pedestal.")
 								.addResponse(new ResponseBuilder(l.subMsg("next", "What's next?"))
 										.addPlayerMessage(l.subMsg("next_player", "What's next?"))
-										.addTrigger(new GoToBlock(BlockPredicate.Builder.block().of(MSBlocks.ALCHEMITER.CENTER.get()).build(), 32, 1, 240, 1, 6, false))
+										.addTrigger(new GoToBlock(BlockPredicate.Builder.block().of(MSBlocks.ALCHEMITER.CENTER.get()).build(), 32, 1, 240, 1, 6, true))
 										.nextDialogue(helpEntering6)
 										.setNextAsEntrypoint())
 								.addResponse(returnDialogue))
@@ -99,7 +102,7 @@ public final class IndividualizedDialogue
 						"Please pull handle.", "It moves towards the section of the Totem Lathe with a handle at the top.")
 						.addResponse(new ResponseBuilder(l.subMsg("next", "What's next?"))
 								.addPlayerMessage(l.subMsg("next_player", "What's next?"))
-								.addTrigger(new GoToBlock(BlockPredicate.Builder.block().of(MSBlocks.ALCHEMITER.TOTEM_PAD.get()).build(), 32, 1, 240, 1, 6, false))
+								.addTrigger(new GoToBlock(BlockPredicate.Builder.block().of(MSBlocks.ALCHEMITER.TOTEM_PAD.get()).build(), 32, 1, 240, 1, 6, true))
 								.nextDialogue(helpEntering5)
 								.setNextAsEntrypoint())
 						.addResponse(returnDialogue)
@@ -109,7 +112,7 @@ public final class IndividualizedDialogue
 						"Please insert punched card.", "It moves towards the section of the Totem Lathe with a slot for captchalogue cards. Maybe it needs a specific captchalogue card?")
 						.addResponse(new ResponseBuilder(l.subMsg("next", "What's next?"))
 								.addPlayerMessage(l.subMsg("next_player", "What's next?"))
-								.addTrigger(new GoToBlock(BlockPredicate.Builder.block().of(MSBlocks.TOTEM_LATHE.TOP.get()).build(), 32, 1, 240, 1, 6, false))
+								.addTrigger(new GoToBlock(BlockPredicate.Builder.block().of(MSBlocks.TOTEM_LATHE.TOP.get()).build(), 32, 1, 240, 1, 6, true))
 								.nextDialogue(helpEntering4)
 								.setNextAsEntrypoint())
 						.addResponse(returnDialogue)
@@ -125,7 +128,7 @@ public final class IndividualizedDialogue
 								"Identified Totem Lathe. Please insert uncarved dowel.", "It is now gesturing specifically to the middle section of the Totem Lathe.")
 								.addResponse(new ResponseBuilder(l.subMsg("next", "What's next?"))
 										.addPlayerMessage(l.subMsg("next_player", "What's next?"))
-										.addTrigger(new GoToBlock(BlockPredicate.Builder.block().of(MSBlocks.TOTEM_LATHE.TOP_CORNER.get()).build(), 32, 1, 240, 1, 6, false))
+										.addTrigger(new GoToBlock(BlockPredicate.Builder.block().of(MSBlocks.TOTEM_LATHE.TOP_CORNER.get()).build(), 32, 1, 240, 1, 6, true))
 										.nextDialogue(helpEntering3)
 										.setNextAsEntrypoint())
 								.addResponse(returnDialogue))
@@ -140,7 +143,7 @@ public final class IndividualizedDialogue
 						"Help with Entry requested. Please turn handle to extract a new cruxite dowel.", "It is now gesturing specifically to the handle of the Cruxtruder.")
 						.addResponse(new ResponseBuilder(l.subMsg("next", "What's next?"))
 								.addPlayerMessage(l.subMsg("next_player", "What's next?"))
-								.addTrigger(new GoToBlock(BlockPredicate.Builder.block().of(MSBlocks.TOTEM_LATHE.WHEEL.get()).build(), 32, 1, 240, 1, 6, false))
+								.addTrigger(new GoToBlock(BlockPredicate.Builder.block().of(MSBlocks.TOTEM_LATHE.WHEEL.get()).build(), 32, 1, 240, 1, 6, true))
 								.nextDialogue(helpEntering2)
 								.setNextAsEntrypoint())
 						.addResponse(returnDialogue)
@@ -161,7 +164,7 @@ public final class IndividualizedDialogue
 								"help command queried. Do you wish to learn about Entry?", "The static continues, but you get the sense that it is gesturing at the Cruxtruder.")
 								.addResponse(new ResponseBuilder(l.subMsg("help_entering", "Can you help me use that machine?"))
 										.addPlayerMessage(l.subMsg("help_entering_player", "Can you help me use that machine?"))
-										.addTrigger(new GoToBlock(BlockPredicate.Builder.block().of(MSBlocks.CRUXTRUDER.TUBE.get()).build(), 32, 1, 240, 1, 6, false))
+										.addTrigger(new GoToBlock(BlockPredicate.Builder.block().of(MSBlocks.CRUXTRUDER.TUBE.get()).build(), 32, 1, 240, 1, 6, true))
 										.nextDialogue(helpEntering)
 										.setNextAsEntrypoint())
 								.addResponse(returnDialogue))

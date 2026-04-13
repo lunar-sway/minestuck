@@ -31,7 +31,8 @@
             "predicate": {
               "blocks": "minestuck:totem_lathe_wheel"
             },
-            "radius": 32
+            "radius": 32,
+            "wait_permanently": true
           }
         ]
       },
@@ -41,8 +42,20 @@
         },
         "hide_if_failed": true,
         "message": "minestuck.dialogue.individual.kernelsprite.return",
-        "next_dialogue": "minestuck:individual/kernelsprite/start",
-        "triggers": []
+        "next_dialogue": {
+          "id": "minestuck:individual/kernelsprite/start",
+          "reply_messages": [],
+          "set_as_entrypoint": true
+        },
+        "triggers": [
+          {
+            "type": "minestuck:go_to_block",
+            "accepted_distance": 1.0,
+            "duration": 1,
+            "predicate": {},
+            "radius": 1
+          }
+        ]
       }
     ]
   }

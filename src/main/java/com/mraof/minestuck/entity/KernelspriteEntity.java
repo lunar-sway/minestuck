@@ -45,6 +45,7 @@ public class KernelspriteEntity extends PathfinderMob implements DialogueEntity
 	
 	@Nullable
 	private BlockPos boundOrigin;
+	private int wanderRadius = 20;
 	private PlayerIdentifier owner;
 	
 	public KernelspriteEntity(EntityType<? extends PathfinderMob> entityType, Level level)
@@ -174,6 +175,7 @@ public class KernelspriteEntity extends PathfinderMob implements DialogueEntity
 			compound.putInt("BoundY", this.boundOrigin.getY());
 			compound.putInt("BoundZ", this.boundOrigin.getZ());
 		}
+		compound.putInt("wander_radius", this.getWanderRadius());
 	}
 	
 	@Override
@@ -188,6 +190,7 @@ public class KernelspriteEntity extends PathfinderMob implements DialogueEntity
 		{
 			this.boundOrigin = new BlockPos(compound.getInt("BoundX"), compound.getInt("BoundY"), compound.getInt("BoundZ"));
 		}
+		this.wanderRadius = compound.getInt("wander_radius");
 	}
 	
 	@Nullable
@@ -199,6 +202,16 @@ public class KernelspriteEntity extends PathfinderMob implements DialogueEntity
 	public void setBoundOrigin(@Nullable BlockPos boundOrigin)
 	{
 		this.boundOrigin = boundOrigin;
+	}
+	
+	public int getWanderRadius()
+	{
+		return this.wanderRadius;
+	}
+	
+	public void setWanderRadius(boolean longLeash)
+	{
+		this.wanderRadius = longLeash ? 20 : 5;
 	}
 	
 	public PlayerIdentifier getOwner()
@@ -330,7 +343,7 @@ public class KernelspriteEntity extends PathfinderMob implements DialogueEntity
 		@Override
 		public boolean canUse()
 		{
-			return !entity.getMoveControl().hasWanted() && entity.random.nextInt(reducedTickDelay(7)) == 0;
+			return !entity.getMoveControl().hasWanted() && entity.random.nextInt(reducedTickDelay(30)) == 0;
 		}
 		
 		@Override
@@ -351,7 +364,12 @@ public class KernelspriteEntity extends PathfinderMob implements DialogueEntity
 			
 			for(int i = 0; i < 3; i++)
 			{
-				BlockPos blockpos1 = blockpos.offset(entity.random.nextInt(15) - 7, entity.random.nextInt(11) - 5, entity.random.nextInt(15) - 7);
+				int radius = entity.getWanderRadius();
+				int radiusOffset = radius - (radius / 2);
+				BlockPos blockpos1 = blockpos.offset(
+						entity.random.nextInt(radius) - radiusOffset,
+						(int) (entity.random.nextInt((int) (radius * 0.6)) - (radiusOffset * 0.6)),
+						entity.random.nextInt(radius) - radiusOffset);
 				if(entity.level().isEmptyBlock(blockpos1))
 				{
 					entity.moveControl
