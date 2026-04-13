@@ -14,7 +14,7 @@ import net.neoforged.neoforge.common.data.LanguageProvider;
 
 import java.util.concurrent.CompletableFuture;
 
-import static com.mraof.minestuck.entity.dialogue.Trigger.*;
+import static com.mraof.minestuck.entity.dialogue.Trigger.GoToBlock;
 import static com.mraof.minestuck.entity.dialogue.condition.Conditions.*;
 
 public final class IndividualizedDialogue
@@ -179,24 +179,24 @@ public final class IndividualizedDialogue
 				
 				builder.addStart(
 						new NodeSelectorBuilder()
-						.node(none(hasEntered(), isInLand()), kernelspriteNode(l,
-								"Kernelsprite initialized. Please prepare for Entry immediately.", "All you hear is static, but you think it's trying to tell you something.")
-								.addResponse(new ResponseBuilder(l.subMsg("what_kernel_alt", "What are you?")).nextDialogue(whatKernel))
-								.addResponse(new ResponseBuilder(l.subMsg("what_say", "What are you trying to say?")).nextDialogue(whatSay))
-								.addResponse(new ResponseBuilder(l.subMsg("prototype_alt", "[Prototype]"))
-										.visibleCondition(l.subText("prototype_implementation_alt", "Prototyping is not implemented yet!"), none(alwaysTrue()))))
-						.defaultNode(kernelspriteNode(l, "default",
-								"Kernelsprite initialized. Please input command.", "All you hear is static, but you think it is talking.")
-								.addResponse(new ResponseBuilder(l.subMsg("what_kernel", "What are you?")).nextDialogue(whatKernel))
-								.addResponse(new ResponseBuilder(l.subMsg("go_home", "Can you please go somewhere else? [Stay at Cruxtruder]"))
-										.visibleCondition(l.subText("go_home_cond", "Is not close enough to a Cruxtruder or is already there."), all(isNearBlock(MSBlocks.CRUXTRUDER.TUBE.get(), 22, 1), none(isNearBlock(MSBlocks.CRUXTRUDER.TUBE.get(), 4, 1))))
-										.addTrigger(new GoToBlock(BlockPredicate.Builder.block().of(MSBlocks.CRUXTRUDER.TUBE.get()).build(), 32, 0.5, 360, 1, 4, true)))
-								.addResponse(new ResponseBuilder(l.subMsg("go_free", "You don't have to stay here anymore [Roam free]"))
-										.condition(isNearBlock(MSBlocks.CRUXTRUDER.TUBE.get(), 4, 1))
-										.addTrigger(new GoToBlock(BlockPredicate.Builder.block().of(MSBlocks.CRUXTRUDER.TUBE.get()).build(), 6, 0.05, 1, 1, 6, false)))
-								.addResponse(new ResponseBuilder(l.subMsg("prototype", "[Prototype]"))
-										.visibleCondition(l.subText("prototype_implementation", "Prototyping is not implemented yet!"), none(alwaysTrue())))
-						)
+								.node(none(hasEntered(), isInLand()), kernelspriteNode(l,
+										"Kernelsprite initialized. Please prepare for Entry immediately.", "All you hear is static, but you think it's trying to tell you something.")
+										.addResponse(new ResponseBuilder(l.subMsg("what_kernel_alt", "What are you?")).nextDialogue(whatKernel))
+										.addResponse(new ResponseBuilder(l.subMsg("what_say", "What are you trying to say?")).nextDialogue(whatSay))
+										.addResponse(new ResponseBuilder(l.subMsg("prototype_alt", "[Prototype]"))
+												.visibleCondition(l.subText("prototype_implementation_alt", "Prototyping is not implemented yet!"), none(alwaysTrue()))))
+								.defaultNode(kernelspriteNode(l, "default",
+										"Kernelsprite initialized. Please input command.", "All you hear is static, but you think it is talking.")
+										.addResponse(new ResponseBuilder(l.subMsg("what_kernel", "What are you?")).nextDialogue(whatKernel))
+										.addResponse(new ResponseBuilder(l.subMsg("go_home", "Can you please go somewhere else? [Stay at Cruxtruder]"))
+												.visibleCondition(l.subText("go_home_cond", "Is not close enough to a Cruxtruder or is already there."), all(isNearBlock(MSBlocks.CRUXTRUDER.TUBE.get(), 22, 1), none(isNearBlock(MSBlocks.CRUXTRUDER.TUBE.get(), 4, 1))))
+												.addTrigger(new GoToBlock(BlockPredicate.Builder.block().of(MSBlocks.CRUXTRUDER.TUBE.get()).build(), 32, 0.5, 360, 1, 4, true)))
+										.addResponse(new ResponseBuilder(l.subMsg("go_free", "You don't have to stay here anymore [Roam free]"))
+												.condition(isNearBlock(MSBlocks.CRUXTRUDER.TUBE.get(), 4, 1))
+												.addTrigger(new GoToBlock(BlockPredicate.Builder.block().of(MSBlocks.CRUXTRUDER.TUBE.get()).build(), 6, 0.05, 1, 1, 6, false)))
+										.addResponse(new ResponseBuilder(l.subMsg("prototype", "[Prototype]"))
+												.visibleCondition(l.subText("prototype_implementation", "Prototyping is not implemented yet!"), none(alwaysTrue())))
+								)
 				);
 			}));
 			

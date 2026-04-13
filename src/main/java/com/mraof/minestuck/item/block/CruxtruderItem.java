@@ -5,13 +5,10 @@ import com.mraof.minestuck.blockentity.machine.CruxtruderBlockEntity;
 import com.mraof.minestuck.computer.editmode.EditData;
 import com.mraof.minestuck.computer.editmode.ServerEditHandler;
 import com.mraof.minestuck.player.IdentifierHandler;
-import com.mraof.minestuck.player.PlayerData;
 import com.mraof.minestuck.player.PlayerIdentifier;
 import com.mraof.minestuck.util.ColorHandler;
-import com.mraof.minestuck.util.MSAttachments;
 import com.mraof.minestuck.util.MSRotationUtil;
 import net.minecraft.core.BlockPos;
-import net.minecraft.server.level.ServerPlayer;
 import net.minecraft.world.entity.player.Player;
 import net.minecraft.world.item.ItemStack;
 import net.minecraft.world.level.Level;
@@ -55,9 +52,6 @@ public class CruxtruderItem extends MultiblockItem
 				cruxtruder.setColor(ColorHandler.getColorForPlayer(identifier, level));
 				cruxtruder.setOwner(identifier);
 			}
-			
-			//TODO remove this
-			PlayerData.get((ServerPlayer) player).get().setData(MSAttachments.HAS_KERNELSPRITE, false);
 			
 			return true;
 		} else LOGGER.warn("Placed cruxtruder, but can't find block entity. Instead found {}.", be);
