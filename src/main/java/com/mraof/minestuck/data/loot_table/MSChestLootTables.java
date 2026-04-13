@@ -37,8 +37,10 @@ public final class MSChestLootTables implements LootTableSubProvider
 	public static final String ITEM_POOL = "item";
 	public static final ResourceKey<LootTable> WEAPON_ITEM_TABLE = ResourceKey.create(Registries.LOOT_TABLE, Minestuck.id("chests/weapon_item"));
 	public static final ResourceKey<LootTable> SUPPLY_ITEM_TABLE = ResourceKey.create(Registries.LOOT_TABLE, Minestuck.id("chests/supply_item"));
+	public static final ResourceKey<LootTable> SUPPLY_TRIAL_TABLE = ResourceKey.create(Registries.LOOT_TABLE, Minestuck.id("chests/trial_item"));
 	public static final ResourceKey<LootTable> MISC_ITEM_TABLE = ResourceKey.create(Registries.LOOT_TABLE, Minestuck.id("chests/misc_item"));
 	public static final ResourceKey<LootTable> RARE_ITEM_TABLE = ResourceKey.create(Registries.LOOT_TABLE, Minestuck.id("chests/rare_item"));
+	public static final ResourceKey<LootTable> MEDIUM_VAULT_TABLE = ResourceKey.create(Registries.LOOT_TABLE, Minestuck.id("chests/medium_vault_item"));
 	
 	@Override
 	public void generate(BiConsumer<ResourceKey<LootTable>, LootTable.Builder> lootProcessor)
@@ -857,6 +859,20 @@ public final class MSChestLootTables implements LootTableSubProvider
 						.add(NestedLootTable.lootTableReference(SUPPLY_ITEM_TABLE))
 				).withPool(LootPool.lootPool().name("misc").setRolls(UniformGenerator.between(1, 2))
 						.add(NestedLootTable.lootTableReference(MISC_ITEM_TABLE))
+				));
+		
+		lootProcessor.accept(MSLootTables.MEDIUM_SUPPLY_TRIAL, LootTable.lootTable()
+				.withPool(LootPool.lootPool().name("supplies").setRolls(UniformGenerator.between(0, 1))
+						.add(NestedLootTable.lootTableReference(SUPPLY_TRIAL_TABLE))
+				).withPool(LootPool.lootPool().name("trial").setRolls(ConstantValue.exactly(1))
+						.add(LootItem.lootTableItem(Items.TRIAL_KEY))
+				));
+		
+		lootProcessor.accept(MSLootTables.MEDIUM_VAULT, LootTable.lootTable()
+				.withPool(LootPool.lootPool().name("vault").setRolls(UniformGenerator.between(2, 5))
+						.add(NestedLootTable.lootTableReference(MEDIUM_VAULT_TABLE))
+				).withPool(LootPool.lootPool().name("boondollars").setRolls(ConstantValue.exactly(1))
+						.add(LootItem.lootTableItem(MSItems.BOONDOLLARS).setWeight(10).setQuality(-1).apply(SetBoondollarCount.builder(UniformGenerator.between(500, 2500))))
 				));
 	}
 	
