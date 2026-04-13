@@ -3,8 +3,8 @@
     "animation": {
       "emotion": "anxious"
     },
-    "gui": "minestuck:textures/gui/dialogue/dialogue.png",
-    "messages": [
+    "gui":       "minestuck:textures/gui/dialogue/dialogue.png",
+    "messages":  [
       {
         "type": "entity",
         "message": "minestuck.dots"
@@ -14,6 +14,6 @@
         "message": "minestuck.dialogue.carapacian_soldier.bunker_greet.access.3"
       }
     ],
-    "responses": []
+    "responses": [ ]
   }
 }

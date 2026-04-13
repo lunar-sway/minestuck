@@ -6,13 +6,13 @@
   "project_start_to_heightmap": "WORLD_SURFACE_WG",
   "size": 20,
   "spawn_overrides": {
-    "minestuck:consort": {
+    "minestuck:consort":   {
       "bounding_box": "full",
-      "spawns": []
+      "spawns": [ ]
     },
     "minestuck:underling": {
       "bounding_box": "full",
-      "spawns": []
+      "spawns": [ ]
     }
   },
   "start_height": {
