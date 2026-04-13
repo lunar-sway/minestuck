@@ -57,6 +57,7 @@ The format is based on [Keep a Changelog](https://keepachangelog.com/en/1.1.0/).
 - Fix crash when captchaloguing multiple cards that contain items
 - Fix visual updating issue with stack/queue modi
 - Fix stat storer not updating its redstone signal
+- Fix being able to steal from consort merchants
 
 ### Contributors for this release
 
