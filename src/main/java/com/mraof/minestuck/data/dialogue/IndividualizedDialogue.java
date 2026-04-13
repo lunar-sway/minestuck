@@ -40,14 +40,9 @@ public final class IndividualizedDialogue
 						.addTrigger(new GoToBlock(BlockPredicate.Builder.block().build(), 1, 1, 1, 1, 1, false))
 						.nextDialogue(Minestuck.id("individual/kernelsprite/start"));
 				
-				var blank = builder.add("blank", new NodeSelectorBuilder()
-						.node(isNearBlock(MSBlocks.CRUXTRUDER.TUBE.get(), 20, 1), kernelspriteNode(l,
-								"Unknown command.", "It doesn't give a response you can understand.. instead it just floats back over to the Cruxtruder")
-								.addResponse(returnDialogue))
-						.defaultNode(kernelspriteNode(l, "default",
-								"Unknown command.", "It doesn't give a response you can understand..")
-								.addResponse(returnDialogue))
-				);
+				var blank = builder.add("blank", kernelspriteNode(l,
+						"Unknown command.", "It doesn't give a response you can understand.. instead it just floats back over to the Cruxtruder")
+						.addResponse(returnDialogue));
 				
 				var helpEntering7 = builder.add("help_entering.7", new NodeSelectorBuilder()
 						.node(playerHasItemTag(MSTags.Items.CRUXITE_ARTIFACTS, 1), kernelspriteNode(l,
@@ -145,7 +140,7 @@ public final class IndividualizedDialogue
 						"Help with Entry requested. Please turn handle to extract a new cruxite dowel.", "It is now gesturing specifically to the handle of the Cruxtruder.")
 						.addResponse(new ResponseBuilder(l.subMsg("next", "What's next?"))
 								.addPlayerMessage(l.subMsg("next_player", "What's next?"))
-								.addTrigger(new GoToBlock(BlockPredicate.Builder.block().of(MSBlocks.TOTEM_LATHE.WHEEL.get()).build(), 20, 1, 240, 1, 6, true))
+								.addTrigger(new GoToBlock(BlockPredicate.Builder.block().of(MSBlocks.TOTEM_LATHE.WHEEL.get()).build(), 13, 1, 240, 1, 6, true))
 								.nextDialogue(helpEntering2)
 								.setNextAsEntrypoint())
 						.addResponse(returnDialogue)

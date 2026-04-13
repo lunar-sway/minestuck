@@ -3255,8 +3255,6 @@
   "minestuck.dialogue.format": "%s: %s",
   "minestuck.dialogue.goodbye": "Oh good to know, bye.",
   "minestuck.dialogue.individual.kernelsprite.blank": "§kUnknown command.",
-  "minestuck.dialogue.individual.kernelsprite.blank.default": "§kUnknown command.",
-  "minestuck.dialogue.individual.kernelsprite.blank.default.desc": "It doesn't give a response you can understand..",
   "minestuck.dialogue.individual.kernelsprite.blank.desc": "It doesn't give a response you can understand.. instead it just floats back over to the Cruxtruder",
   "minestuck.dialogue.individual.kernelsprite.help_entering.1": "§kHelp with Entry requested. Please turn handle to extract a new cruxite dowel.",
   "minestuck.dialogue.individual.kernelsprite.help_entering.1.desc": "It is now gesturing specifically to the handle of the Cruxtruder.",
