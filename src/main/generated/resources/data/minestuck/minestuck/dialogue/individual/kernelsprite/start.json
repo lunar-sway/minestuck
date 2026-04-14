@@ -94,7 +94,10 @@
             {
               "type": "minestuck:npc_near_block_predicate",
               "predicate": {
-                "blocks": "minestuck:cruxtruder_tube"
+                "blocks": [
+                  "minestuck:gate",
+                  "minestuck:gate_main"
+                ]
               },
               "radius": 20
             },
@@ -104,7 +107,10 @@
                 {
                   "type": "minestuck:npc_near_block_predicate",
                   "predicate": {
-                    "blocks": "minestuck:cruxtruder_tube"
+                    "blocks": [
+                      "minestuck:gate",
+                      "minestuck:gate_main"
+                    ]
                   },
                   "radius": 4
                 }
@@ -124,13 +130,8 @@
             "duration": 360,
             "predicate": {
               "blocks": [
-                "minestuck:cruxtruder_corner",
-                "minestuck:cruxtruder_center",
-                "minestuck:cruxtruder_top_center",
-                "minestuck:cruxtruder_top_corner",
-                "minestuck:cruxtruder_top_side",
-                "minestuck:cruxtruder_tube",
-                "minestuck:cruxtruder_side"
+                "minestuck:gate",
+                "minestuck:gate_main"
               ]
             },
             "radius": 20,
@@ -143,7 +144,10 @@
         "condition": {
           "type": "minestuck:npc_near_block_predicate",
           "predicate": {
-            "blocks": "minestuck:cruxtruder_tube"
+            "blocks": [
+              "minestuck:gate",
+              "minestuck:gate_main"
+            ]
           },
           "radius": 4
         },
@@ -156,13 +160,8 @@
             "duration": 1,
             "predicate": {
               "blocks": [
-                "minestuck:cruxtruder_corner",
-                "minestuck:cruxtruder_center",
-                "minestuck:cruxtruder_top_center",
-                "minestuck:cruxtruder_top_corner",
-                "minestuck:cruxtruder_top_side",
-                "minestuck:cruxtruder_tube",
-                "minestuck:cruxtruder_side"
+                "minestuck:gate",
+                "minestuck:gate_main"
               ]
             },
             "radius": 6,

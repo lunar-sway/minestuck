@@ -325,6 +325,28 @@ public class KernelspriteEntity extends PathfinderMob implements DialogueEntity
 		{
 			super.tick();
 			timer--;
+			
+			if(timer == 0 || timer % 100 != 0)
+				return;
+			
+			lookForNonSuffocating();
+		}
+		
+		private void lookForNonSuffocating()
+		{
+			Level level = KernelspriteEntity.this.level();
+			BlockPos mobPos = KernelspriteEntity.this.blockPosition();
+ 			if(!level.getBlockState(mobPos).blocksMotion())
+				return;
+			
+			for(BlockPos iteratePos : BlockPos.betweenClosed(mobPos.offset(1, 1, 1), mobPos.offset(-1, -1, -1)))
+			{
+				if(KernelspriteEntity.this.isWithinRestriction(iteratePos) && !level.getBlockState(iteratePos).blocksMotion())
+				{
+					KernelspriteEntity.this.moveControl.setWantedPosition((double) iteratePos.getX() + 0.5, (double) iteratePos.getY() + 0.5, (double) iteratePos.getZ() + 0.5, 0.25);
+					break;
+				}
+			}
 		}
 	}
 	
@@ -373,13 +395,9 @@ public class KernelspriteEntity extends PathfinderMob implements DialogueEntity
 						entity.random.nextInt(radius) - radiusOffset);
 				if(entity.level().isEmptyBlock(blockpos1))
 				{
-					entity.moveControl
-							.setWantedPosition((double) blockpos1.getX() + 0.5, (double) blockpos1.getY() + 0.5, (double) blockpos1.getZ() + 0.5, 0.25);
+					entity.moveControl.setWantedPosition((double) blockpos1.getX() + 0.5, (double) blockpos1.getY() + 0.5, (double) blockpos1.getZ() + 0.5, 0.25);
 					if(entity.getTarget() == null)
-					{
-						entity.getLookControl()
-								.setLookAt((double) blockpos1.getX() + 0.5, (double) blockpos1.getY() + 0.5, (double) blockpos1.getZ() + 0.5, 180.0F, 20.0F);
-					}
+						entity.getLookControl().setLookAt((double) blockpos1.getX() + 0.5, (double) blockpos1.getY() + 0.5, (double) blockpos1.getZ() + 0.5, 180.0F, 20.0F);
 					break;
 				}
 			}

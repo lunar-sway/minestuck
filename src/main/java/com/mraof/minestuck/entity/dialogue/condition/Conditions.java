@@ -23,6 +23,7 @@ import net.minecraft.world.level.levelgen.structure.Structure;
 import net.neoforged.neoforge.registries.DeferredRegister;
 
 import java.util.Arrays;
+import java.util.Collection;
 import java.util.List;
 import java.util.Map;
 import java.util.function.Supplier;
@@ -137,6 +138,11 @@ public final class Conditions
 	public static Condition isNearBlock(Block block, int radius, int count)
 	{
 		return new NPCNearBlockPredicate(BlockPredicate.Builder.block().of(block).build(), radius, count);
+	}
+	
+	public static Condition isNearBlocks(Collection<Block> blocks, int radius, int count)
+	{
+		return new NPCNearBlockPredicate(BlockPredicate.Builder.block().of(blocks).build(), radius, count);
 	}
 	
 	public static Condition isNearBlockTag(TagKey<Block> blockTag, int radius, int count)

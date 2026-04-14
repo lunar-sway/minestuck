@@ -30,14 +30,14 @@
             "accepted_distance": 6.0,
             "predicate": {
               "blocks": [
-                "minestuck:totem_lathe_top",
-                "minestuck:totem_lathe_dowel_rod",
+                "minestuck:totem_lathe_card_slot",
                 "minestuck:totem_lathe_bottom_left",
                 "minestuck:totem_lathe_bottom_right",
-                "minestuck:totem_lathe_card_slot",
-                "minestuck:totem_lathe_top_corner",
                 "minestuck:totem_lathe_middle",
-                "minestuck:totem_lathe_wheel"
+                "minestuck:totem_lathe_wheel",
+                "minestuck:totem_lathe_dowel_rod",
+                "minestuck:totem_lathe_top",
+                "minestuck:totem_lathe_top_corner"
               ]
             },
             "radius": 13,

@@ -13,8 +13,8 @@ import net.minecraft.data.PackOutput;
 import net.minecraft.world.level.block.Block;
 import net.neoforged.neoforge.common.data.LanguageProvider;
 
-import java.util.HashSet;
-import java.util.Set;
+import java.util.ArrayList;
+import java.util.List;
 import java.util.concurrent.CompletableFuture;
 
 import static com.mraof.minestuck.entity.dialogue.Trigger.GoToBlock;
@@ -38,12 +38,13 @@ public final class IndividualizedDialogue
 		provider.getLookupProvider().thenCompose(providerIt ->
 		{
 			provider.add("kernelsprite", new FolderedDialogue(builder -> {
-				Set<Block> cruxtruderBlocks = new HashSet<>();
+				List<Block> cruxtruderBlocks = new ArrayList<>();
 				MSBlocks.CRUXTRUDER.forEachBlock(cruxtruderBlocks::add);
-				Set<Block> latheBlocks = new HashSet<>();
+				List<Block> latheBlocks = new ArrayList<>();
 				MSBlocks.TOTEM_LATHE.forEachBlock(latheBlocks::add);
-				Set<Block> alchemiterBlocks = new HashSet<>();
+				List<Block> alchemiterBlocks = new ArrayList<>();
 				MSBlocks.ALCHEMITER.forEachBlock(alchemiterBlocks::add);
+				List<Block> gateBlocks = new ArrayList<>(List.of(MSBlocks.GATE.get(), MSBlocks.GATE_MAIN.get()));
 				
 				ResponseBuilder returnDialogue = new ResponseBuilder(l.msg("individual.kernelsprite.return", "Lets talk about something else."))
 						.setNextAsEntrypoint()
@@ -193,12 +194,12 @@ public final class IndividualizedDialogue
 								.defaultNode(kernelspriteNode(l, "default",
 										"Kernelsprite initialized. Please input command.", "All you hear is static, but you think it is talking.")
 										.addResponse(new ResponseBuilder(l.subMsg("what_kernel", "What are you?")).nextDialogue(whatKernel))
-										.addResponse(new ResponseBuilder(l.subMsg("go_home", "Can you please go somewhere else? [Stay at Cruxtruder]"))
-												.visibleCondition(l.subText("go_home_cond", "Is not close enough to a Cruxtruder or is already there."), all(isNearBlock(MSBlocks.CRUXTRUDER.TUBE.get(), 20, 1), none(isNearBlock(MSBlocks.CRUXTRUDER.TUBE.get(), 4, 1))))
-												.addTrigger(new GoToBlock(BlockPredicate.Builder.block().of(cruxtruderBlocks).build(), 20, 0.5, 360, 1, 4, true)))
+										.addResponse(new ResponseBuilder(l.subMsg("go_home", "Can you please go somewhere else? [Stay near Gate]"))
+												.visibleCondition(l.subText("go_home_cond", "Is not close enough to a Gate or is already there."), all(isNearBlocks(gateBlocks, 20, 1), none(isNearBlocks(gateBlocks, 4, 1))))
+												.addTrigger(new GoToBlock(BlockPredicate.Builder.block().of(gateBlocks).build(), 20, 0.5, 360, 1, 4, true)))
 										.addResponse(new ResponseBuilder(l.subMsg("go_free", "You don't have to stay here anymore [Roam free]"))
-												.condition(isNearBlock(MSBlocks.CRUXTRUDER.TUBE.get(), 4, 1))
-												.addTrigger(new GoToBlock(BlockPredicate.Builder.block().of(cruxtruderBlocks).build(), 6, 0.05, 1, 1, 6, false)))
+												.condition(isNearBlocks(gateBlocks, 4, 1))
+												.addTrigger(new GoToBlock(BlockPredicate.Builder.block().of(gateBlocks).build(), 6, 0.05, 1, 1, 6, false)))
 										.addResponse(new ResponseBuilder(l.subMsg("prototype", "[Prototype]"))
 												.visibleCondition(l.subText("prototype_implementation", "Prototyping is not implemented yet!"), none(alwaysTrue())))
 								)

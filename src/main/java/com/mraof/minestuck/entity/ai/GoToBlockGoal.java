@@ -6,6 +6,7 @@ import net.minecraft.advancements.critereon.BlockPredicate;
 import net.minecraft.core.BlockPos;
 import net.minecraft.world.entity.PathfinderMob;
 import net.minecraft.world.entity.ai.goal.MoveToBlockGoal;
+import net.minecraft.world.level.Level;
 import net.minecraft.world.level.LevelReader;
 import net.minecraft.world.level.block.state.pattern.BlockInWorld;
 
@@ -50,6 +51,20 @@ public class GoToBlockGoal extends MoveToBlockGoal
 	public void start()
 	{
 		super.start();
+		
+		//try to prioritize air block next to target
+		Level level = mob.level();
+		if(level.getBlockState(blockPos).blocksMotion())
+		{
+			for(BlockPos iteratePos : BlockPos.betweenClosed(blockPos.offset(1, 1, 1), blockPos.offset(-1, -1, -1)))
+			{
+				if (mob.isWithinRestriction(iteratePos) && !level.getBlockState(iteratePos).blocksMotion()) {
+					blockPos = iteratePos;
+					break;
+				}
+			}
+		}
+		
 		dialogueMob.getDialogueComponent().setHasReachedTarget(false);
 		mob.clearRestriction();
 		
