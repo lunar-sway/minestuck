@@ -16,6 +16,7 @@ The format is based on [Keep a Changelog](https://keepachangelog.com/en/1.1.0/).
 - Added two new advancements: _"I Fucking Love Hammers"_ and _"Look At The Sky, Numbnuts!"_
 - Added new cake: PANcake
 - Added 3 bunker structures to Lands
+- Added arena structure to Lands
 - Increased block diversity in structures
 - Array modus
 - Added new dialogue
