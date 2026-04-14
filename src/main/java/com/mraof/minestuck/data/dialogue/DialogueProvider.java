@@ -46,6 +46,11 @@ public final class DialogueProvider implements DataProvider
 		this.output = output;
 	}
 	
+	public CompletableFuture<HolderLookup.Provider> getLookupProvider()
+	{
+		return lookupProvider;
+	}
+	
 	public ResourceLocation dialogueId(String path)
 	{
 		return ResourceLocation.fromNamespaceAndPath(this.modId, this.subFolder + "/" + path);

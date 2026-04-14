@@ -2005,6 +2005,7 @@ public class MinestuckEnUsLanguageProvider extends MinestuckLanguageProvider
 		addEntityType(MSEntityTypes.METAL_BOAT, "Metal Boat");
 		addEntityType(MSEntityTypes.POSTER, "Poster");
 		addEntityType(MSEntityTypes.LOTUS_FLOWER, "Lotus Flower");
+		addEntityType(MSEntityTypes.KERNELSPRITE, "Kernelsprite");
 		
 		addGristType(GristTypes.BUILD, "Build");
 		addGristType(GristTypes.AMBER, "Amber");
@@ -2603,6 +2604,7 @@ public class MinestuckEnUsLanguageProvider extends MinestuckLanguageProvider
 		addEntitySubtitles(MSEntityTypes.GICLOPS, "ambient", "Giclops wants to eat'cha");
 		addEntitySubtitles(MSEntityTypes.GICLOPS, "hurt", "Giclops hurts");
 		addEntitySubtitles(MSEntityTypes.GICLOPS, "death", "Giclops dies");
+		addEntitySubtitles(MSEntityTypes.KERNELSPRITE, "ambient", "Kernelsprite makes some noise");
 		
 		add(GRIST_CANDY, "Grist Candies");
 		add(FAYGO, "Faygo Flavors");
@@ -2613,6 +2615,7 @@ public class MinestuckEnUsLanguageProvider extends MinestuckLanguageProvider
 		add(UNREADABLE, "Unreadable Captcha Codes");
 		add(LEGENDARY, "Legendary Weapons");
 		add(MAGIC_WEAPON, "Magic Weapons");
+		add(CRUXITE_ARTIFACTS, "Cruxite Artifacts");
 		add(MSTags.Effects.SOPOR_SICKNESS_WHITELIST, "Prevent by Sopor Stupor");
 		
 		addPainting("candy_shop_sign", "Candy Shop Sign", "Cibernet83");
