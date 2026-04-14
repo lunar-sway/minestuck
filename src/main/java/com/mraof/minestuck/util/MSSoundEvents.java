@@ -96,6 +96,7 @@ public final class MSSoundEvents
 	public static final Supplier<SoundEvent> ENTITY_GICLOPS_AMBIENT = register("entity.giclops.ambient");
 	public static final Supplier<SoundEvent> ENTITY_GICLOPS_HURT = register("entity.giclops.hurt");
 	public static final Supplier<SoundEvent> ENTITY_GICLOPS_DEATH = register("entity.giclops.death");
+	public static final Supplier<SoundEvent> ENTITY_KERNELSPRITE_AMBIENT = register("entity.kernelsprite.ambient");
 	public static final Supplier<SoundEvent> ITEM_LONG_FORGOTTEN_WARHORN_USE = register("item.long_forgotten_warhorn.use");
 	public static final Supplier<SoundEvent> ITEM_GRIMOIRE_USE = register("item.grimoire.use");
 	public static final Supplier<SoundEvent> ITEM_HORN_USE = register("item.horn.use");

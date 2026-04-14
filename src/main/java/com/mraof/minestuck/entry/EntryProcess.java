@@ -9,6 +9,7 @@ import com.mraof.minestuck.blockentity.TransportalizerBlockEntity;
 import com.mraof.minestuck.computer.SburbClientData;
 import com.mraof.minestuck.computer.SburbServerData;
 import com.mraof.minestuck.computer.editmode.ServerEditHandler;
+import com.mraof.minestuck.entity.KernelspriteEntity;
 import com.mraof.minestuck.network.EntryEffectPackets;
 import com.mraof.minestuck.player.IdentifierHandler;
 import com.mraof.minestuck.player.PlayerIdentifier;
@@ -372,6 +373,9 @@ public class EntryProcess
 			Entity entity = iterator.next();
 			if(origin.distToCenterSqr(entity.getX(), entity.getY(), entity.getZ()) <= artifactRange * artifactRange)
 			{
+				if(entity instanceof KernelspriteEntity kernelsprite)
+					kernelsprite.setBoundOrigin(new BlockPos(0, GateHandler.GATE_HEIGHT_1, 0));
+				
 				if(MinestuckConfig.SERVER.entryCrater.get() || entity instanceof Player || !creative && entity instanceof ItemEntity)
 				{
 					try

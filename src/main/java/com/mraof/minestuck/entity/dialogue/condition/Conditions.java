@@ -23,6 +23,7 @@ import net.minecraft.world.level.levelgen.structure.Structure;
 import net.neoforged.neoforge.registries.DeferredRegister;
 
 import java.util.Arrays;
+import java.util.Collection;
 import java.util.List;
 import java.util.Map;
 import java.util.function.Supplier;
@@ -139,6 +140,11 @@ public final class Conditions
 		return new NPCNearBlockPredicate(BlockPredicate.Builder.block().of(block).build(), radius, count);
 	}
 	
+	public static Condition isNearBlocks(Collection<Block> blocks, int radius, int count)
+	{
+		return new NPCNearBlockPredicate(BlockPredicate.Builder.block().of(blocks).build(), radius, count);
+	}
+	
 	public static Condition isNearBlockTag(TagKey<Block> blockTag, int radius, int count)
 	{
 		return new NPCNearBlockPredicate(BlockPredicate.Builder.block().of(blockTag).build(), radius, count);
@@ -196,6 +202,11 @@ public final class Conditions
 	public static PlayerOnlyCondition playerHasItem(Item item, int count)
 	{
 		return new PlayerEntityPredicate(EntityPredicate.Builder.entity().slots(new SlotsPredicate(Map.of(SlotRanges.nameToIds("container.*"), ItemPredicate.Builder.item().of(item).withCount(MinMaxBounds.Ints.atLeast(count)).build()))).build());
+	}
+	
+	public static PlayerOnlyCondition playerHasItemTag(TagKey<Item> itemTag, int count)
+	{
+		return new PlayerEntityPredicate(EntityPredicate.Builder.entity().slots(new SlotsPredicate(Map.of(SlotRanges.nameToIds("container.*"), ItemPredicate.Builder.item().of(itemTag).withCount(MinMaxBounds.Ints.atLeast(count)).build()))).build());
 	}
 	
 	public static Condition isHolding(ItemLike... items)

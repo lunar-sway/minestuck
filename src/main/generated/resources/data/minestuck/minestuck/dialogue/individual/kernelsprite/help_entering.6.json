@@ -1,0 +1,62 @@
+{
+  "node": {
+    "animation": {},
+    "gui": "minestuck:textures/gui/dialogue/dialogue.png",
+    "messages": [
+      {
+        "type": "entity",
+        "message": "minestuck.dialogue.individual.kernelsprite.help_entering.6"
+      },
+      {
+        "type": "description",
+        "message": "minestuck.dialogue.individual.kernelsprite.help_entering.6.desc"
+      }
+    ],
+    "responses": [
+      {
+        "condition": {
+          "type": "minestuck:always_true"
+        },
+        "hide_if_failed": true,
+        "message": "minestuck.dialogue.individual.kernelsprite.help_entering.6.next",
+        "next_dialogue": {
+          "id": "minestuck:individual/kernelsprite/help_entering.7",
+          "player_message": "minestuck.dialogue.individual.kernelsprite.help_entering.6.next_player",
+          "set_as_entrypoint": true
+        },
+        "triggers": [
+          {
+            "type": "minestuck:go_to_block",
+            "accepted_distance": 6.0,
+            "predicate": {
+              "blocks": "minestuck:alchemiter_center"
+            },
+            "radius": 20,
+            "wait_permanently": true
+          }
+        ]
+      },
+      {
+        "condition": {
+          "type": "minestuck:always_true"
+        },
+        "hide_if_failed": true,
+        "message": "minestuck.dialogue.individual.kernelsprite.return",
+        "next_dialogue": {
+          "id": "minestuck:individual/kernelsprite/start",
+          "reply_messages": [],
+          "set_as_entrypoint": true
+        },
+        "triggers": [
+          {
+            "type": "minestuck:go_to_block",
+            "accepted_distance": 1.0,
+            "duration": 1,
+            "predicate": {},
+            "radius": 1
+          }
+        ]
+      }
+    ]
+  }
+}

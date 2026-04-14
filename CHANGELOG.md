@@ -22,6 +22,7 @@ The format is based on [Keep a Changelog](https://keepachangelog.com/en/1.1.0/).
 - Added new dialogue
 - Most Minestuck fluids are now bottomless in the context of Create
 - Added a limit to captchaloguing cards with large amounts of stored data
+- Kernelsprite entity (no prototyping yet!)
 
 ### Changed
 
@@ -65,7 +66,7 @@ The format is based on [Keep a Changelog](https://keepachangelog.com/en/1.1.0/).
 
 ### Contributors for this release
 
-- medsal15, heartsremedy, caldw3ll, v_sabitron, Dweblenod, TangleKat, Pancake, Fl1s, kirderf1, ThalliumSulfate, Emma "Dilemma", glubtier
+- medsal15, heartsremedy, caldw3ll, v_sabitron, Dweblenod, TangleKat, Pancake, Fl1s, kirderf1, ThalliumSulfate, Emma "Dilemma", glubtier, sipherNil
 
 ## [1.21.1-1.13.1.1] - 2025-09-14
 

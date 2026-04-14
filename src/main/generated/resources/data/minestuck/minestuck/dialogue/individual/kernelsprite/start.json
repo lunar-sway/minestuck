@@ -1,0 +1,189 @@
+{
+  "conditioned_nodes": [
+    {
+      "condition": {
+        "type": "minestuck:list",
+        "conditions": [
+          {
+            "type": "minestuck:player_entered"
+          },
+          {
+            "type": "minestuck:is_in_land"
+          }
+        ],
+        "list_type": "none"
+      },
+      "node": {
+        "animation": {},
+        "gui": "minestuck:textures/gui/dialogue/dialogue.png",
+        "messages": [
+          {
+            "type": "entity",
+            "message": "minestuck.dialogue.individual.kernelsprite.start"
+          },
+          {
+            "type": "description",
+            "message": "minestuck.dialogue.individual.kernelsprite.start.desc"
+          }
+        ],
+        "responses": [
+          {
+            "condition": {
+              "type": "minestuck:always_true"
+            },
+            "hide_if_failed": true,
+            "message": "minestuck.dialogue.individual.kernelsprite.start.what_kernel_alt",
+            "next_dialogue": "minestuck:individual/kernelsprite/what_kernel",
+            "triggers": []
+          },
+          {
+            "condition": {
+              "type": "minestuck:always_true"
+            },
+            "hide_if_failed": true,
+            "message": "minestuck.dialogue.individual.kernelsprite.start.what_say",
+            "next_dialogue": "minestuck:individual/kernelsprite/what_say",
+            "triggers": []
+          },
+          {
+            "condition": {
+              "type": "minestuck:list",
+              "conditions": [
+                {
+                  "type": "minestuck:always_true"
+                }
+              ],
+              "list_type": "none"
+            },
+            "fail_tooltip": "minestuck.dialogue.individual.kernelsprite.start.prototype_implementation_alt",
+            "hide_if_failed": false,
+            "message": "minestuck.dialogue.individual.kernelsprite.start.prototype_alt",
+            "triggers": []
+          }
+        ]
+      }
+    }
+  ],
+  "default_node": {
+    "animation": {},
+    "gui": "minestuck:textures/gui/dialogue/dialogue.png",
+    "messages": [
+      {
+        "type": "entity",
+        "message": "minestuck.dialogue.individual.kernelsprite.start.default"
+      },
+      {
+        "type": "description",
+        "message": "minestuck.dialogue.individual.kernelsprite.start.default.desc"
+      }
+    ],
+    "responses": [
+      {
+        "condition": {
+          "type": "minestuck:always_true"
+        },
+        "hide_if_failed": true,
+        "message": "minestuck.dialogue.individual.kernelsprite.start.what_kernel",
+        "next_dialogue": "minestuck:individual/kernelsprite/what_kernel",
+        "triggers": []
+      },
+      {
+        "condition": {
+          "type": "minestuck:list",
+          "conditions": [
+            {
+              "type": "minestuck:npc_near_block_predicate",
+              "predicate": {
+                "blocks": [
+                  "minestuck:gate",
+                  "minestuck:gate_main"
+                ]
+              },
+              "radius": 20
+            },
+            {
+              "type": "minestuck:list",
+              "conditions": [
+                {
+                  "type": "minestuck:npc_near_block_predicate",
+                  "predicate": {
+                    "blocks": [
+                      "minestuck:gate",
+                      "minestuck:gate_main"
+                    ]
+                  },
+                  "radius": 4
+                }
+              ],
+              "list_type": "none"
+            }
+          ],
+          "list_type": "all"
+        },
+        "fail_tooltip": "minestuck.dialogue.individual.kernelsprite.start.go_home_cond",
+        "hide_if_failed": false,
+        "message": "minestuck.dialogue.individual.kernelsprite.start.go_home",
+        "triggers": [
+          {
+            "type": "minestuck:go_to_block",
+            "accepted_distance": 4.0,
+            "duration": 360,
+            "predicate": {
+              "blocks": [
+                "minestuck:gate",
+                "minestuck:gate_main"
+              ]
+            },
+            "radius": 20,
+            "speed_modifier": 0.5,
+            "wait_permanently": true
+          }
+        ]
+      },
+      {
+        "condition": {
+          "type": "minestuck:npc_near_block_predicate",
+          "predicate": {
+            "blocks": [
+              "minestuck:gate",
+              "minestuck:gate_main"
+            ]
+          },
+          "radius": 4
+        },
+        "hide_if_failed": true,
+        "message": "minestuck.dialogue.individual.kernelsprite.start.go_free",
+        "triggers": [
+          {
+            "type": "minestuck:go_to_block",
+            "accepted_distance": 6.0,
+            "duration": 1,
+            "predicate": {
+              "blocks": [
+                "minestuck:gate",
+                "minestuck:gate_main"
+              ]
+            },
+            "radius": 6,
+            "speed_modifier": 0.05
+          }
+        ]
+      },
+      {
+        "condition": {
+          "type": "minestuck:list",
+          "conditions": [
+            {
+              "type": "minestuck:always_true"
+            }
+          ],
+          "list_type": "none"
+        },
+        "fail_tooltip": "minestuck.dialogue.individual.kernelsprite.start.prototype_implementation",
+        "hide_if_failed": false,
+        "message": "minestuck.dialogue.individual.kernelsprite.start.prototype",
+        "triggers": []
+      }
+    ]
+  }
+}
