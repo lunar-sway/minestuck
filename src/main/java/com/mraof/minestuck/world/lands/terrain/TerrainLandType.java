@@ -178,12 +178,11 @@ public abstract class TerrainLandType implements ILandType
 	@Override
 	public void addStructureSets(Consumer<StructureSet> consumer, HolderGetter<Structure> structureLookup)
 	{
-		
 		StructureSet villageSet = new StructureSet(structureLookup.getOrThrow(MSStructures.ConsortVillage.KEY), CONSORT_VILLAGE_PLACEMENT);
 		Optional<StructurePlacement.ExclusionZone> villageExclusionZone = Optional.of(new StructurePlacement.ExclusionZone(Holder.direct(villageSet), 8));
 		consumer.accept(villageSet);
 		
-		RandomSpreadStructurePlacement smallRuinPlacement = new RandomSpreadStructurePlacement(
+		RandomSpreadStructurePlacement smallSurfaceStructurePlacement = new RandomSpreadStructurePlacement(
 				Vec3i.ZERO,
 				StructurePlacement.FrequencyReductionMethod.DEFAULT,
 				1.0F,
@@ -192,14 +191,12 @@ public abstract class TerrainLandType implements ILandType
 				16,
 				4,
 				RandomSpreadType.LINEAR
-				
+		
 		);
 		consumer.accept(new StructureSet(List.of(
 				StructureSet.entry(structureLookup.getOrThrow(MSStructures.SMALL_RUIN), 5),
 				StructureSet.entry(structureLookup.getOrThrow(MSStructures.ARENA))),
-				smallRuinPlacement));
-		
-		
+				smallSurfaceStructurePlacement));
 		
 		RandomSpreadStructurePlacement standardDungeonPlacement = new RandomSpreadStructurePlacement(
 				Vec3i.ZERO,
