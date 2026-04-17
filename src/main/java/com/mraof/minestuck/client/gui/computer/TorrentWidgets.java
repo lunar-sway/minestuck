@@ -26,6 +26,7 @@ import net.neoforged.neoforge.network.PacketDistributor;
 import java.util.ArrayList;
 import java.util.Collections;
 import java.util.List;
+import java.util.Map;
 import java.util.concurrent.atomic.AtomicInteger;
 
 public class TorrentWidgets
@@ -173,7 +174,7 @@ public class TorrentWidgets
 		}
 	}
 	
-	protected static class TorrentContainer extends ScrollingWidget<GristEntry>
+	protected static class TorrentContainer extends ScrollingYWidget<GristEntry>
 	{
 		public static final int WIDTH = GristEntry.WIDTH + 2;
 		public static final int HEIGHT = (GristEntry.HEIGHT + 1) * 6;
@@ -236,7 +237,7 @@ public class TorrentWidgets
 		@Override
 		public int visibleEntryCount()
 		{
-			return 5;
+			return 4;
 		}
 		
 		@Override
@@ -373,7 +374,7 @@ public class TorrentWidgets
 		}
 	}
 	
-	protected static class StatsContainer extends ScrollingWidget<GristStat>
+	protected static class StatsContainer extends ScrollingYWidget<GristStat>
 	{
 		public static final int WIDTH = GristStat.WIDTH;
 		public static final int HEIGHT = (GristStat.HEIGHT + 1) * 3;
@@ -511,12 +512,12 @@ public class TorrentWidgets
 		}
 	}
 	
-	public abstract static class ScrollingWidget<T extends AbstractWidget> extends AbstractContainerWidget
+	public abstract static class ScrollingYWidget<T extends AbstractWidget> extends AbstractContainerWidget
 	{
 		private int scroll = 0;
 		private final List<T> widgets = new ArrayList<>();
 		
-		public ScrollingWidget(int pX, int pY, int pWidth, int pHeight)
+		public ScrollingYWidget(int pX, int pY, int pWidth, int pHeight)
 		{
 			super(pX, pY, pWidth, pHeight, Component.empty());
 		}
@@ -530,7 +531,7 @@ public class TorrentWidgets
 		@Override
 		protected void renderWidget(GuiGraphics guiGraphics, int mouseX, int mouseY, float partialTick)
 		{
-			for (T widget : this.widgets)
+			for(T widget : this.widgets)
 				widget.render(guiGraphics, mouseX, mouseY, partialTick);
 		}
 		
@@ -570,6 +571,75 @@ public class TorrentWidgets
 		public abstract int visibleEntryCount();
 		
 		public abstract int subWidgetHeight();
+		
+		public abstract int getMaxScroll();
+		
+		@Override
+		protected boolean isValidClickButton(int pButton)
+		{
+			return false;
+		}
+	}
+	// Soon be used to scroll torrentContainers on x coordinate
+	public abstract static class ScrollingXWidget<T extends AbstractWidget> extends AbstractContainerWidget
+	{
+		private int scroll = 0;
+		private final List<T> widgets = new ArrayList<>();
+		
+		public ScrollingXWidget(int pX, int pY, int pWidth, int pHeight)
+		{
+			super(pX, pY, pWidth, pHeight, Component.empty());
+		}
+		
+		@Override
+		public List<T> children()
+		{
+			return widgets;
+		}
+		
+		@Override
+		protected void renderWidget(GuiGraphics guiGraphics, int mouseX, int mouseY, float partialTick)
+		{
+			for(T widget : this.widgets)
+				widget.render(guiGraphics, mouseX, mouseY, partialTick);
+		}
+		
+		@Override
+		public boolean mouseScrolled(double mouseX, double mouseY, double scrollX, double scrollY)
+		{
+			//TODO consider inverting scroll direction
+			
+			if(scrollX > 0)
+				scroll = Math.min(getMaxScroll(), scroll + 1);
+			else if(scrollX < 0)
+				scroll = Math.max(0, scroll - 1);
+			
+			updateVisibilityAndPosition();
+			
+			return super.mouseScrolled(mouseX, mouseY, scrollX, scrollY);
+		}
+		
+		public void updateVisibilityAndPosition()
+		{
+			for(int i = 0; i < widgets.size(); i++)
+			{
+				T widget = widgets.get(i);
+				
+				// Adjust position relative to the visible area
+				adjustXValue(widget, i);
+				
+				widget.visible = i >= scroll && i < scroll + visibleEntryCount();
+			}
+		}
+		
+		private void adjustXValue(T widget, int i)
+		{
+			widget.setX(getX() + (i + 1 - scroll) * (subWidgetWidth() + 1));
+		}
+		
+		public abstract int visibleEntryCount();
+		
+		public abstract int subWidgetWidth();
 		
 		public abstract int getMaxScroll();
 		

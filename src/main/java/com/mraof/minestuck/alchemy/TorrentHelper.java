@@ -50,38 +50,39 @@ public final class TorrentHelper
 	
 	public static void debugStuff(MinecraftServer server, MSExtraData data)
 	{
-		//for(ServerPlayer player : server.getPlayerList().getPlayers())
-		//	if(player.isHolding(MSItems.ALLWEDDOL.get()))
-		//		data.removesSessions();
-		/*for(ServerPlayer player : server.getPlayerList().getPlayers())
+		for(ServerPlayer player : server.getPlayerList().getPlayers())
+			if(player.isHolding(MSItems.ALLWEDDOL.get()))
+				data.removesSessions();
+		for(ServerPlayer player : server.getPlayerList().getPlayers())
 			if(player.isHolding(MSItems.MWRTHWL.get()))
 			{
 				TorrentSession playerSession = createPlayerTorrentSession(player, server);
 				List<PlayerIdentifier> testIDs = new ArrayList<>();
-				
+
 				if(data.getTorrentSessions().stream().anyMatch(session -> session.getSeeder().getId() == 99))
 					return;
-				
+
 				for(int i = 99; i < 102; i++)
 				{
 					TorrentSession iterateSession = createTestTorrentSession(i, true);
 					data.tryAddTorrentSession(iterateSession);
-					
+
 					PlayerIdentifier testID = iterateSession.getSeeder();
 					testIDs.add(testID);
-					
+
 					List<GristAmount> gristAmounts = new ArrayList<>();
-					gristAmounts.add(new GristAmount(GristTypes.SHALE, 100));
-					
+					gristAmounts.add(new GristAmount(GristTypes.BUILD, 500));
+					gristAmounts.add(new GristAmount(GristTypes.CHALK, 500));
+					gristAmounts.add(new GristAmount(GristTypes.SHALE, 1));
+
 					GristCache.get(server, testID).set(new NonNegativeGristSet(gristAmounts));
 				}
-				
+
 				List<GristType> leechGrist = new ArrayList<>();
 				leechGrist.add(GristTypes.BUILD.get());
 				playerSession.addLeech(new TorrentSession.Leech(testIDs.get(0), leechGrist));
 				MSExtraData.get(server).tryAddTorrentSession(playerSession);
 			}
-		 */
 	}
 	
 	public static void handleTorrent(TorrentSession torrentSession, List<TorrentSession> sessions, MinecraftServer server)
@@ -104,45 +105,46 @@ public final class TorrentHelper
 		{
 			handleGristSeed(grist, leeching, seedRateMod, seederCache, server);
 		}
-		
-		sendOutUpdates(sessions, server, seeder);
 	}
 	
-	public static void sendOutUpdates(List<TorrentSession> sessions, MinecraftServer server, PlayerIdentifier seeder)
+	public static void sendOutUpdates(List<TorrentSession> sessions, MinecraftServer server)
 	{
-		//TODO consider holding on to torrent data that may be sent to multiple players
-		ServerPlayer seederPlayer = seeder.getPlayer(server);
-		if(seederPlayer != null)
-		{
-			MinestuckConfig.TorrentVisibility visibilityConfig = MinestuckConfig.SERVER.gristTorrentVisibility.get();
-			boolean sessionOnly = visibilityConfig.equals(MinestuckConfig.TorrentVisibility.SESSION);
-			boolean globalVisibility = visibilityConfig.equals(MinestuckConfig.TorrentVisibility.GLOBAL);
-			
-			Map<Integer, TorrentSession.TorrentClientData> visibleTorrentData = new HashMap<>();
-			sessions.forEach(session -> {
-				PlayerIdentifier sessionPlayerID = session.getSeeder();
+		for (TorrentSession torrentSession : sessions){
+			var seeder =  torrentSession.getSeeder();
+			//TODO consider holding on to torrent data that may be sent to multiple players
+			ServerPlayer seederPlayer = seeder.getPlayer(server);
+			if(seederPlayer != null)
+			{
+				MinestuckConfig.TorrentVisibility visibilityConfig = MinestuckConfig.SERVER.gristTorrentVisibility.get();
+				boolean sessionOnly = visibilityConfig.equals(MinestuckConfig.TorrentVisibility.SESSION);
+				boolean globalVisibility = visibilityConfig.equals(MinestuckConfig.TorrentVisibility.GLOBAL);
 				
-				//TODO add Land config option functionality
-				//SkaianetData.get(server).getOrCreatePredefineData(sessionPlayerID);
-				
-				boolean inSameSession = SessionHandler.get(server).isInSameSession(seeder, sessionPlayerID);
-				boolean isVisible = globalVisibility || (sessionOnly && inSameSession);
-				
-				//TODO remove this, temp testing
-				//isVisible = true;
-				
-				if(isVisible)
-				{
-					PlayerData leechData = PlayerData.get(sessionPlayerID, server);
-					GristCache leechCache = GristCache.get(leechData);
-					TorrentSession.LimitedCache leechLimitedCache = new TorrentSession.LimitedCache(leechCache.getGristSet(), Echeladder.get(leechData).getGristCapacity());
+				Map<Integer, TorrentSession.TorrentClientData> visibleTorrentData = new HashMap<>();
+				sessions.forEach(session -> {
+					PlayerIdentifier sessionPlayerID = session.getSeeder();
 					
-					visibleTorrentData.put(sessionPlayerID.getId(), new TorrentSession.TorrentClientData(sessionPlayerID.getUsername(), session.getSeeding(),
-							session.getLeeching().stream().collect(Collectors.toMap(leech -> leech.id().getId(), TorrentSession.Leech::gristTypes)), leechLimitedCache));
-				}
-			});
-			
-			PacketDistributor.sendToPlayer(seederPlayer, new TorrentPackets.UpdateClient(visibleTorrentData));
+					//TODO add Land config option functionality
+					//SkaianetData.get(server).getOrCreatePredefineData(sessionPlayerID);
+					
+					boolean inSameSession = SessionHandler.get(server).isInSameSession(seeder, sessionPlayerID);
+					boolean isVisible = globalVisibility || (sessionOnly && inSameSession);
+					
+					//TODO remove this, temp testing
+					isVisible = true;
+					
+					if(isVisible)
+					{
+						PlayerData leechData = PlayerData.get(sessionPlayerID, server);
+						GristCache leechCache = GristCache.get(leechData);
+						TorrentSession.LimitedCache leechLimitedCache = new TorrentSession.LimitedCache(leechCache.getGristSet(), Echeladder.get(leechData).getGristCapacity());
+						
+						visibleTorrentData.put(sessionPlayerID.getId(), new TorrentSession.TorrentClientData(sessionPlayerID.getUsername(), session.getSeeding(),
+								session.getLeeching().stream().collect(Collectors.toMap(leech -> leech.id().getId(), TorrentSession.Leech::gristTypes)), leechLimitedCache));
+					}
+				});
+				
+				PacketDistributor.sendToPlayer(seederPlayer, new TorrentPackets.UpdateClient(visibleTorrentData));
+			}
 		}
 	}
 	

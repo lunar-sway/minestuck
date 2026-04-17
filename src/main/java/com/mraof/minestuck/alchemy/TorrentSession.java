@@ -28,6 +28,7 @@ import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
+import static com.mraof.minestuck.alchemy.TorrentHelper.sendOutUpdates;
 
 @EventBusSubscriber(modid = Minestuck.MOD_ID, bus = EventBusSubscriber.Bus.GAME)
 public class TorrentSession
@@ -136,6 +137,7 @@ public class TorrentSession
 			{
 				TorrentHelper.handleTorrent(torrentSession, sessions, server);
 			}
+			sendOutUpdates(sessions, server);
 			
 			//TODO placeholders to remove, including createTestTorrentSession()
 			TorrentHelper.debugStuff(server, data);
