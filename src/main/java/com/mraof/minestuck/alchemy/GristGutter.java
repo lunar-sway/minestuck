@@ -16,6 +16,7 @@ import net.minecraft.server.level.ServerPlayer;
 import net.minecraft.util.RandomSource;
 import net.neoforged.bus.api.SubscribeEvent;
 import net.neoforged.fml.common.EventBusSubscriber;
+import net.neoforged.neoforge.event.entity.player.PlayerEvent;
 import net.neoforged.neoforge.event.tick.ServerTickEvent;
 import net.neoforged.neoforge.network.PacketDistributor;
 import org.apache.logging.log4j.LogManager;
@@ -172,6 +173,14 @@ public class GristGutter
 			for(Session session : SessionHandler.get(event.getServer()).getSessions())
 				session.getGristGutter().distributeToPlayers();
 		}
+	}
+	
+	@SubscribeEvent
+	public static void playerLoggedInEvent(PlayerEvent.PlayerLoggedInEvent event)
+	{
+		ServerPlayer player = (ServerPlayer) event.getEntity();
+		GristGutter gutter = GristGutter.get(IdentifierHandler.encode(player), player.server);
+		PacketDistributor.sendToPlayer(player, new GutterUpdatePacket(gutter.gristSet.asImmutable(), gutter.getRemainingCapacity()));
 	}
 	
 	private void distributeToPlayers()

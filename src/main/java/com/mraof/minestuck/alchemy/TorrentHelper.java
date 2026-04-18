@@ -71,8 +71,14 @@ public final class TorrentHelper
 					testIDs.add(testID);
 
 					List<GristAmount> gristAmounts = new ArrayList<>();
-					gristAmounts.add(new GristAmount(GristTypes.BUILD, 500));
-					gristAmounts.add(new GristAmount(GristTypes.CHALK, 500));
+					gristAmounts.add(new GristAmount(GristTypes.BUILD, 1000));
+					gristAmounts.add(new GristAmount(GristTypes.CHALK, 1000));
+					gristAmounts.add(new GristAmount(GristTypes.AMBER, 1000));
+					gristAmounts.add(new GristAmount(GristTypes.DIAMOND, 1000));
+					gristAmounts.add(new GristAmount(GristTypes.GOLD, 1000));
+					gristAmounts.add(new GristAmount(GristTypes.AMETHYST, 1000));
+					gristAmounts.add(new GristAmount(GristTypes.QUARTZ, 1000));
+					gristAmounts.add(new GristAmount(GristTypes.ZILLIUM, 1000));
 					gristAmounts.add(new GristAmount(GristTypes.SHALE, 1));
 
 					GristCache.get(server, testID).set(new NonNegativeGristSet(gristAmounts));

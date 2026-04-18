@@ -21,6 +21,7 @@ import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
+import java.util.logging.Filter;
 
 @ParametersAreNonnullByDefault
 public final class GristTorrentGui extends Screen implements ProgramGui<ProgramType.EmptyData>
@@ -49,8 +50,24 @@ public final class GristTorrentGui extends Screen implements ProgramGui<ProgramT
 	private final List<TorrentContainer> torrentContainers = new ArrayList<>();
 	private final List<GutterBar> gutterBars = new ArrayList<>();
 	private StatsContainer statsContainer;
+	private FilterContainer filterContainer;
 	
 	private int updateTick = 0;
+	
+	public enum TorrentFilter {
+		ALL,
+		DOWNLOADING,
+		COMPLETED,
+		ACTIVE,
+		INACTIVE;
+		
+		@Override
+		public String toString() {
+			String title = this.name();
+			return title.charAt(0) + title.substring(1).toLowerCase();
+		}
+	}
+	protected TorrentFilter activeFilter = TorrentFilter.ALL;
 	
 	public GristTorrentGui()
 	{
@@ -76,6 +93,13 @@ public final class GristTorrentGui extends Screen implements ProgramGui<ProgramT
 		
 		statsContainer = new StatsContainer(xOffset + GristStat.X_OFFSET_FROM_EDGE, yOffset + GristStat.Y_OFFSET_FROM_EDGE, font);
 		addRenderableWidget(statsContainer);
+		
+		filterContainer = new FilterContainer(xOffset + FilterContainer.X_OFFSET_FROM_EDGE, yOffset + FilterContainer.Y_OFFSET_FROM_EDGE, font, this);
+		addRenderableWidget(filterContainer);
+	}
+	
+	public void setFilter (TorrentFilter filter){
+		activeFilter = filter;
 	}
 	
 	@Override
@@ -90,7 +114,8 @@ public final class GristTorrentGui extends Screen implements ProgramGui<ProgramT
 	public void render(GuiGraphics guiGraphics, int mouseX, int mouseY, float partialTicks)
 	{
 		clientDataUpdates();
-		statsContainer.updateStats();
+		statsContainer.updateStats(activeFilter);
+		filterContainer.updateCounts();
 		
 		super.render(guiGraphics, mouseX, mouseY, partialTicks);
 		
