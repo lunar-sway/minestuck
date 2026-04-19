@@ -654,8 +654,8 @@ public class TorrentWidgets
 		{
 			//TODO consider inverting scroll direction
 			
-			if(scrollY > 0) scroll = Math.min(getMaxScroll(), scroll + 1);
-			else if(scrollY < 0) scroll = Math.max(0, scroll - 1);
+			if(scrollY > 0) scroll = Math.min(getMaxScroll(), scroll - 1);
+			else if(scrollY < 0) scroll = Math.max(0, scroll + 1);
 			
 			updateVisibilityAndPosition();
 			
