@@ -209,11 +209,13 @@ public class TorrentSession
 		);
 	}
 	
-	public record TorrentClientData(String username, List<GristType> seededTypes, Map<Integer, List<GristType>> leeches, LimitedCache cache)
+	public record TorrentClientData(String username,int playerColor, List<GristType> seededTypes, Map<Integer, List<GristType>> leeches, LimitedCache cache)
 	{
 		public static final StreamCodec<RegistryFriendlyByteBuf, TorrentClientData> STREAM_CODEC = StreamCodec.composite(
 				ByteBufCodecs.STRING_UTF8,
 				TorrentClientData::username,
+				ByteBufCodecs.INT,
+				TorrentClientData::playerColor,
 				GristType.STREAM_CODEC.apply(ByteBufCodecs.list()),
 				TorrentClientData::seededTypes,
 				ByteBufCodecs.map(HashMap::new, ByteBufCodecs.INT, GristType.STREAM_CODEC.apply(ByteBufCodecs.list())),

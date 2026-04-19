@@ -173,6 +173,7 @@ public class TorrentWidgets
 	
 	protected static class TorrentContainer extends ScrollingYWidget<GristEntry>
 	{
+		private TorrentSession.TorrentClientData torrentData;
 		public static final int WIDTH = GristEntry.WIDTH + 2;
 		public static final int HEIGHT = (GristEntry.HEIGHT + 1) * 6;
 		
@@ -206,6 +207,7 @@ public class TorrentWidgets
 		
 		public void refreshEntries(TorrentSession.TorrentClientData torrentData)
 		{
+			this.torrentData = torrentData;
 			for(GristEntry gristEntry : this.children())
 			{
 				GristType entryGristType = gristEntry.gristType;
@@ -225,6 +227,29 @@ public class TorrentWidgets
 		{
 			super.renderWidget(guiGraphics, mouseX, mouseY, partialTick);
 			
+			
+			if (torrentData != null)
+			{
+				ResourceLocation colorTex = ResourceLocation.fromNamespaceAndPath("minestuck", "textures/gui/color_selector.png"
+				);
+				float r = ((torrentData.playerColor() >> 16) & 0xFF) / 255F;
+				float g = ((torrentData.playerColor() >> 8) & 0xFF) / 255F;
+				float b = (torrentData.playerColor() & 0xFF) / 255F;
+				
+				guiGraphics.pose().pushPose();
+				
+				guiGraphics.pose().translate(getX(), getY() - 5, 0);
+				guiGraphics.pose().scale(0.27F, 0.27F, 1.0F);
+				
+				RenderSystem.setShaderColor(r, g, b, 1.0F);
+				
+				guiGraphics.blit(colorTex, 0, 0, 47, 47, 181, 24, 54, 56, 256, 256);
+				
+				RenderSystem.setShaderColor(1, 1, 1, 1);
+				
+				guiGraphics.pose().popPose();
+			}
+			
 			guiGraphics.enableScissor(getX(), getY(), getX() + WIDTH, getY() + HEIGHT);
 			guiGraphics.pose().pushPose();
 			guiGraphics.pose().scale(0.5F, 0.5F, 0.5F);
@@ -235,7 +260,7 @@ public class TorrentWidgets
 			if(!displayName.equals(username))
 				displayName = displayName + "...";
 			
-			guiGraphics.drawString(font, displayName, scale(getX() + 1), scale(getY() + 4), 0xFF000000, false);
+			guiGraphics.drawString(font, displayName, scale(getX() + 1), scale(getY() + 10), 0xFF000000, false);
 			
 			guiGraphics.pose().popPose();
 			guiGraphics.disableScissor();
@@ -244,7 +269,7 @@ public class TorrentWidgets
 		@Override
 		public int visibleEntryCount()
 		{
-			return 4;
+			return 5;
 		}
 		
 		@Override

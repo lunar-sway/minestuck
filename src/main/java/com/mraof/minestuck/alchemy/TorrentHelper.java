@@ -6,6 +6,7 @@ import com.mraof.minestuck.item.MSItems;
 import com.mraof.minestuck.network.TorrentPackets;
 import com.mraof.minestuck.player.*;
 import com.mraof.minestuck.skaianet.SessionHandler;
+import com.mraof.minestuck.util.MSAttachments;
 import com.mraof.minestuck.world.storage.MSExtraData;
 import net.minecraft.server.MinecraftServer;
 import net.minecraft.server.level.ServerPlayer;
@@ -144,7 +145,7 @@ public final class TorrentHelper
 						GristCache leechCache = GristCache.get(leechData);
 						TorrentSession.LimitedCache leechLimitedCache = new TorrentSession.LimitedCache(leechCache.getGristSet(), Echeladder.get(leechData).getGristCapacity());
 						
-						visibleTorrentData.put(sessionPlayerID.getId(), new TorrentSession.TorrentClientData(sessionPlayerID.getUsername(), session.getSeeding(),
+						visibleTorrentData.put(sessionPlayerID.getId(), new TorrentSession.TorrentClientData(sessionPlayerID.getUsername(), leechData.getData(MSAttachments.PLAYER_COLOR), session.getSeeding(),
 								session.getLeeching().stream().collect(Collectors.toMap(leech -> leech.id().getId(), TorrentSession.Leech::gristTypes)), leechLimitedCache));
 					}
 				});
