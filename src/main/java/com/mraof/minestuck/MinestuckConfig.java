@@ -86,7 +86,7 @@ public class MinestuckConfig
 		//Sylladex
 		public final BooleanValue dropItemsInCards;
 		public final IntValue initialModusSize;
-		public final IntValue captchaComponentSize;
+		public final ConfigValue<List<? extends String>> captchaComponentBlacklist;
 		public final EnumValue<DropMode> sylladexDropMode;
 		public final EnumValue<AvailableOptions> treeModusSetting;
 		public final EnumValue<AvailableOptions> hashmapChatModusSetting;
@@ -149,8 +149,8 @@ public class MinestuckConfig
 					.define("dropItemsInCards", true);
 			initialModusSize = builder.comment("The initial amount of captchalogue cards in your sylladex. The value is capped by the captchalogue_capacity Attribute")
 					.defineInRange("initialModusSize", 5, 0, Integer.MAX_VALUE);
-			captchaComponentSize = builder.comment("The max size of the data in NBT/Components allowed on a card being stored. Captchaloguing items with lots of data can cause crashes.")
-					.defineInRange("captchaComponentSize", 500000, 0, Integer.MAX_VALUE);
+			captchaComponentBlacklist = builder.comment("Items will fail to be captchalogued if they contain any of these item components. Captchaloguing items with lots of data can cause crashes.")
+					.define("captchaComponentBlacklist", new ArrayList<>(List.of("minecraft:container", "minecraft:block_entity_data", "create:minecart_contraption_data")));
 			sylladexDropMode = builder.comment("Determines which items from the modus that are dropped on death. \"items\": Only the items are dropped. \"cards_and_items\": Both items and cards are dropped. (So that you have at most initial_modus_size amount of cards) \"all\": Everything is dropped, even the modus.")
 					.defineEnum("dropMode", DropMode.CARDS_AND_ITEMS);
 			treeModusSetting = builder.comment("This determines if auto-balance should be forced. 'both' if the player should choose, 'on' if forced at on, and 'off' if forced at off.")

@@ -18,6 +18,7 @@ import com.mraof.minestuck.util.MSAttachments;
 import com.mraof.minestuck.util.MSSoundEvents;
 import net.minecraft.core.HolderLookup;
 import net.minecraft.core.NonNullList;
+import net.minecraft.core.component.TypedDataComponent;
 import net.minecraft.nbt.CompoundTag;
 import net.minecraft.network.chat.Component;
 import net.minecraft.resources.ResourceLocation;
@@ -28,6 +29,8 @@ import net.minecraft.world.entity.player.Player;
 import net.minecraft.world.inventory.AbstractContainerMenu;
 import net.minecraft.world.inventory.Slot;
 import net.minecraft.world.item.ItemStack;
+import net.minecraft.world.item.component.BundleContents;
+import net.minecraft.world.item.component.ItemContainerContents;
 import net.minecraft.world.item.enchantment.EnchantmentEffectComponents;
 import net.minecraft.world.item.enchantment.EnchantmentHelper;
 import net.minecraft.world.level.GameRules;
@@ -44,7 +47,6 @@ import org.apache.logging.log4j.Logger;
 import javax.annotation.Nullable;
 import java.util.List;
 import java.util.Optional;
-import java.util.concurrent.atomic.AtomicLong;
 
 //todo this class could use some spring cleaning
 @EventBusSubscriber(modid = Minestuck.MOD_ID, bus = EventBusSubscriber.Bus.GAME)
@@ -103,9 +105,11 @@ public final class CaptchaDeckHandler
 		if(item.getCount() > 0)
 			launchAnyItem(player, item);
 	}
+	
 	/**
 	 * Spontaneously launches items from the inventory in different directions
-	 * */
+	 *
+	 */
 	public static void launchAnyItem(Player player, ItemStack item)
 	{
 		ItemEntity entity = new ItemEntity(player.level(), player.getX(), player.getY() + 1, player.getZ(), item);
@@ -116,10 +120,11 @@ public final class CaptchaDeckHandler
 	
 	/**
 	 * Ejects all items from the inventory into a pile in front of the player
-	 * */
+	 *
+	 */
 	public static void ejectAnyItem(Player player, ItemStack item)
 	{
-		ItemEntity entity = new ItemEntity(player.level(), player.getX(), player.getY()+1, player.getZ(), item);
+		ItemEntity entity = new ItemEntity(player.level(), player.getX(), player.getY() + 1, player.getZ(), item);
 		entity.setDeltaMovement(
 				player.getViewVector(1.0F).x * 0.25 + (player.level().random.nextDouble() - 0.5) * 0.05,
 				player.getViewVector(1.0F).y * 0.25 + 0.1,
@@ -218,13 +223,46 @@ public final class CaptchaDeckHandler
 		}
 	}
 	
-	public static boolean meetsComponentSizeLimit(ItemStack stack)
+	public static boolean nestedComponentsInBlacklist(ItemStack stack)
 	{
-		AtomicLong componentDataSize = new AtomicLong(0);
+		List<? extends String> blacklist = MinestuckConfig.SERVER.captchaComponentBlacklist.get();
 		
-		stack.getComponents().forEach(component -> componentDataSize.addAndGet(component.value().toString().chars().sum()));
+		for(TypedDataComponent<?> component : stack.getComponents())
+		{
+			boolean blacklistHasComponent = blacklist.contains(component.type().toString());
+			
+			if(component.value() instanceof CardStoredItemComponent(ItemStack storedStack, boolean isGhostItem))
+			{
+				if(blacklistHasComponent && !isGhostItem && nestedComponentsInBlacklist(storedStack))
+					return true;
+			} else if(component.value() instanceof BundleContents bundle)
+			{
+				Iterable<ItemStack> items = bundle.items();
+				
+				if(items.iterator().hasNext() && blacklistHasComponent)
+					return true;
+				
+				for(ItemStack nestedItem : items)
+					if(nestedComponentsInBlacklist(nestedItem))
+						return true;
+			} else if(component.value() instanceof ItemContainerContents container)
+			{
+				Iterable<ItemStack> items = container.nonEmptyItems();
+				
+				if(items.iterator().hasNext() && blacklistHasComponent)
+					return true;
+				
+				for(ItemStack nestedItem : items)
+					if(nestedComponentsInBlacklist(nestedItem))
+						return true;
+			} else if(blacklistHasComponent)
+			{
+				return true; //else if because we want to allow the above components to pass if their storage is empty
+			}
+			
+		}
 		
-		return MinestuckConfig.SERVER.captchaComponentSize.get() >= (int) componentDataSize.get();
+		return false;
 	}
 	
 	public static void captchalogueItemInSlot(ServerPlayer player, int slotIndex, int windowId)
@@ -260,7 +298,7 @@ public final class CaptchaDeckHandler
 	
 	private static void captchalogueItem(ServerPlayer player, ItemStack stack)
 	{
-		if(!meetsComponentSizeLimit(stack))
+		if(nestedComponentsInBlacklist(stack))
 		{
 			player.displayClientMessage(Component.translatable(TOO_LARGE), false);
 			return;
