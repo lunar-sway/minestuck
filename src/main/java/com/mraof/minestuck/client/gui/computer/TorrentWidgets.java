@@ -62,11 +62,11 @@ public class TorrentWidgets
 	
 	protected static class GristEntry extends AbstractWidget
 	{
-		public static final int WIDTH = 40;
+		public static final int WIDTH = 42;
 		public static final int HEIGHT = 14;
 		public static final int GRIST_ICON_X = 2, GRIST_ICON_Y = 2;
 		public static final int GRIST_COUNT_X = GRIST_ICON_X + 13;
-		public static final float BAR_WIDTH = 20F;
+		public static final float BAR_WIDTH = 22F;
 		
 		private TorrentSession.TorrentClientData torrentData;
 		public final GristType gristType;
@@ -174,7 +174,7 @@ public class TorrentWidgets
 	protected static class TorrentContainer extends ScrollingYWidget<GristEntry>
 	{
 		private TorrentSession.TorrentClientData torrentData;
-		public static final int WIDTH = GristEntry.WIDTH + 2;
+		public static final int WIDTH = GristEntry.WIDTH + 5;
 		public static final int HEIGHT = (GristEntry.HEIGHT + 1) * 6;
 		
 		public final Integer playerId;
@@ -220,6 +220,10 @@ public class TorrentWidgets
 				
 				gristEntry.setTooltip();
 			}
+			if(!torrentData.hasEntered() && playerId != SkaiaClient.playerId)
+				this.children().forEach(entry -> entry.visible = false);
+			
+			updateVisibilityAndPosition();
 		}
 		
 		@Override
@@ -232,9 +236,15 @@ public class TorrentWidgets
 			{
 				ResourceLocation colorTex = ResourceLocation.fromNamespaceAndPath("minestuck", "textures/gui/color_selector.png"
 				);
-				float r = ((torrentData.playerColor() >> 16) & 0xFF) / 255F;
-				float g = ((torrentData.playerColor() >> 8) & 0xFF) / 255F;
-				float b = (torrentData.playerColor() & 0xFF) / 255F;
+				float r, g, b;
+				
+				if(torrentData.status() == 2) {
+					r = ((torrentData.playerColor() >> 16) & 0xFF) / 255F;
+					g = ((torrentData.playerColor() >> 8) & 0xFF) / 255F;
+					b = (torrentData.playerColor() & 0xFF) / 255F;
+				} else {
+					r = 0.5F; g = 0.5F; b = 0.5F;
+				}
 				
 				guiGraphics.pose().pushPose();
 				
@@ -270,6 +280,16 @@ public class TorrentWidgets
 		public int visibleEntryCount()
 		{
 			return 5;
+		}
+		@Override
+		public void updateVisibilityAndPosition()
+		{
+			if(torrentData != null && !torrentData.hasEntered() && playerId != SkaiaClient.playerId)
+			{
+				this.children().forEach(entry -> entry.visible = false);
+				return;
+			}
+			super.updateVisibilityAndPosition();
 		}
 		
 		@Override
@@ -508,6 +528,8 @@ public class TorrentWidgets
 	{
 		public static final int WIDTH = GristStat.WIDTH;
 		public static final int HEIGHT = (GristStat.HEIGHT + 1) * 3;
+		private final Map<GristType, Long> downloadedAmounts = new HashMap<>();
+		private final Map<GristType, Long> previousGristAmounts = new HashMap<>();
 		
 		private final Font font;
 		

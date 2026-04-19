@@ -5,6 +5,7 @@ import com.mraof.minestuck.api.alchemy.*;
 import com.mraof.minestuck.item.MSItems;
 import com.mraof.minestuck.network.TorrentPackets;
 import com.mraof.minestuck.player.*;
+import com.mraof.minestuck.skaianet.SburbPlayerData;
 import com.mraof.minestuck.skaianet.SessionHandler;
 import com.mraof.minestuck.util.MSAttachments;
 import com.mraof.minestuck.world.storage.MSExtraData;
@@ -145,7 +146,12 @@ public final class TorrentHelper
 						GristCache leechCache = GristCache.get(leechData);
 						TorrentSession.LimitedCache leechLimitedCache = new TorrentSession.LimitedCache(leechCache.getGristSet(), Echeladder.get(leechData).getGristCapacity());
 						
-						visibleTorrentData.put(sessionPlayerID.getId(), new TorrentSession.TorrentClientData(sessionPlayerID.getUsername(), leechData.getData(MSAttachments.PLAYER_COLOR), session.getSeeding(),
+						boolean entered = SburbPlayerData.get(sessionPlayerID, server).hasEntered();
+						boolean online = sessionPlayerID.getPlayer(server) != null;
+						int status = !entered ? 0 : (!online ? 1 : 2);
+						
+						
+						visibleTorrentData.put(sessionPlayerID.getId(), new TorrentSession.TorrentClientData(sessionPlayerID.getUsername(), leechData.getData(MSAttachments.PLAYER_COLOR), status, session.getSeeding(),
 								session.getLeeching().stream().collect(Collectors.toMap(leech -> leech.id().getId(), TorrentSession.Leech::gristTypes)), leechLimitedCache));
 					}
 				});

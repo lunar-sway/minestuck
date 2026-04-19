@@ -83,7 +83,7 @@ public final class GristTorrentGui extends Screen implements ProgramGui<ProgramT
 	{
 		yOffset = (this.height / 2) - (GUI_HEIGHT / 2);
 		xOffset = (this.width / 2) - (GUI_WIDTH / 2);
-		gristWidgetsYOffset = yOffset + 36;
+		gristWidgetsYOffset = yOffset + 39;
 		
 		gutterGrist = ClientPlayerData.getGutterSet();
 		visibleTorrentData.clear();

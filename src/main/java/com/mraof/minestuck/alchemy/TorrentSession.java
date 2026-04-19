@@ -209,13 +209,15 @@ public class TorrentSession
 		);
 	}
 	
-	public record TorrentClientData(String username,int playerColor, List<GristType> seededTypes, Map<Integer, List<GristType>> leeches, LimitedCache cache)
+	public record TorrentClientData(String username,int playerColor, int status, List<GristType> seededTypes, Map<Integer, List<GristType>> leeches, LimitedCache cache)
 	{
 		public static final StreamCodec<RegistryFriendlyByteBuf, TorrentClientData> STREAM_CODEC = StreamCodec.composite(
 				ByteBufCodecs.STRING_UTF8,
 				TorrentClientData::username,
 				ByteBufCodecs.INT,
 				TorrentClientData::playerColor,
+				ByteBufCodecs.INT,
+				TorrentClientData::status,
 				GristType.STREAM_CODEC.apply(ByteBufCodecs.list()),
 				TorrentClientData::seededTypes,
 				ByteBufCodecs.map(HashMap::new, ByteBufCodecs.INT, GristType.STREAM_CODEC.apply(ByteBufCodecs.list())),
@@ -224,6 +226,8 @@ public class TorrentSession
 				TorrentClientData::cache,
 				TorrentClientData::new);
 		
+		public boolean isOnline() { return status == 2; }
+		public boolean hasEntered() { return status >= 1; }
 		public List<GristType> getViableSeeding()
 		{
 			return this.seededTypes.stream().filter(this.cache.set::hasType).toList();
