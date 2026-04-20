@@ -140,7 +140,7 @@ public class TorrentSession
 			sendOutUpdates(sessions, server);
 			
 			//TODO placeholders to remove, including createTestTorrentSession()
-			TorrentHelper.debugStuff(server, data);
+//			TorrentHelper.debugStuff(server, data);
 		}
 	}
 	

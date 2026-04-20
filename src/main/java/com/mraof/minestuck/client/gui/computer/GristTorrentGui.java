@@ -28,6 +28,11 @@ public final class GristTorrentGui extends Screen implements ProgramGui<ProgramT
 	public static final String NAME = "minestuck.program.grist_torrent";
 	public static final String TITLE = "minestuck.program.grist_torrent.title";
 	
+	public static final String TOOLTIP_SEEDING_ON = "minestuck.seeding.on";
+	public static final String TOOLTIP_SEEDING_OFF = "minestuck.seeding.off";
+	public static final String TOOLTIP_LEECHING_ON = "minestuck.leeching.on";
+	public static final String TOOLTIP_LEECHING_OFF = "minestuck.leeching.off";
+	
 	public static final ResourceLocation GUI_MAIN = Minestuck.id("textures/gui/torrent.png");
 	
 	static final int GUI_WIDTH = 190;

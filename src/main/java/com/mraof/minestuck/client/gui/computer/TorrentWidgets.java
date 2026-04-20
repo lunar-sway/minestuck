@@ -92,12 +92,19 @@ public class TorrentWidgets
 		{
 			MutableComponent tooltip = gristType.getDisplayName();
 			
-			if(torrentData != null && torrentData.seededTypes().contains(gristType))
+			if(isOwner)
 			{
-				if(gristAmount > 0)
-					tooltip.append("\n(Is being seeded)");
+				if(torrentData != null && torrentData.seededTypes().contains(gristType))
+					tooltip.append(Component.translatable(GristTorrentGui.TOOLTIP_SEEDING_ON));
 				else
-					tooltip.append("\n(Will be seeded)");
+					tooltip.append(Component.translatable(GristTorrentGui.TOOLTIP_SEEDING_OFF));
+			}
+			else
+			{
+				if(isActive)
+					tooltip.append(Component.translatable(GristTorrentGui.TOOLTIP_LEECHING_ON));
+				else
+					tooltip.append(Component.translatable(GristTorrentGui.TOOLTIP_LEECHING_OFF));
 			}
 			
 			setTooltip(Tooltip.create(tooltip));
@@ -321,7 +328,6 @@ public class TorrentWidgets
 		private TorrentSession.TorrentClientData userData;
 		private final Font font;
 		private final GristType gristType;
-		
 		private Pair<Integer, Integer> seedsData = Pair.of(0, 0); //first is seeds being utilized and second is total seeds available
 		private Pair<Integer, Integer> typeDownSpeedRange = Pair.of(0, 0); //first is minimum speed and second is maximum
 		private int typeUpSpeed = 0;
@@ -416,13 +422,14 @@ public class TorrentWidgets
 		
 		public boolean matchesFilter(GristTorrentGui.TorrentFilter filter)
 		{
+			boolean isCompleted = userIsLeeching && (seedsData.getSecond() == 0 || userData.cache().set().getGrist(gristType) >= userData.cache().limit());
 			return switch(filter)
 			{
 				case ALL -> true;
-				case DOWNLOADING -> typeDownSpeedRange.getSecond() > 0;
+				case DOWNLOADING -> typeDownSpeedRange.getSecond() > 0 && !isCompleted;
 				case ACTIVE -> typeUpSpeed > 0;
 				case INACTIVE -> !typeIsActive();
-				case COMPLETED -> userIsLeeching && (seedsData.getSecond() == 0 || userData.cache().set().getGrist(gristType) >= userData.cache().limit());
+				case COMPLETED -> isCompleted;
 			};
 		}
 		
@@ -543,6 +550,27 @@ public class TorrentWidgets
 		public void updateStats(GristTorrentGui.TorrentFilter filter)
 		{
 			this.children().clear();
+			
+			TorrentSession.TorrentClientData userData = GristTorrentGui.visibleTorrentData.get(SkaiaClient.playerId);
+			if(userData != null)
+			{
+				for(GristType gristType : GristTypes.REGISTRY)
+				{
+					long current = userData.cache().set().getGrist(gristType);
+					long previous = previousGristAmounts.getOrDefault(gristType, current);
+					long delta = current - previous;
+					
+					boolean isLeeching = userData.leeches().values().stream()
+							.anyMatch(list -> list.contains(gristType));
+					
+					if(isLeeching && delta > 0)
+						downloadedAmounts.merge(gristType, delta, Long::sum);
+					else if(!isLeeching)
+						downloadedAmounts.remove(gristType);
+					
+					previousGristAmounts.put(gristType, current);
+				}
+			}
 			
 			int i = 0;
 			for(GristType gristType : GristTypes.REGISTRY)
@@ -701,8 +729,8 @@ public class TorrentWidgets
 		{
 			//TODO consider inverting scroll direction
 			
-			if(scrollY > 0) scroll = Math.min(getMaxScroll(), scroll - 1);
-			else if(scrollY < 0) scroll = Math.max(0, scroll + 1);
+			if(scrollY > 0) scroll = Math.min(getMaxScroll(), scroll + 1);
+			else if(scrollY < 0) scroll = Math.max(0, scroll - 1);
 			
 			updateVisibilityAndPosition();
 			

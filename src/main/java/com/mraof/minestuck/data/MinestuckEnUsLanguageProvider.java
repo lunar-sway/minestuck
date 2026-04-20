@@ -2396,6 +2396,10 @@ public class MinestuckEnUsLanguageProvider extends MinestuckLanguageProvider
 		add(SettingsAppGui.TITLE, "Sburb Settings");
 		add(GristTorrentGui.NAME, "Grist Torrent");
 		add(GristTorrentGui.TITLE, "Grist Torrent");
+		add(GristTorrentGui.TOOLTIP_SEEDING_ON, "\nIs being seeded");
+		add(GristTorrentGui.TOOLTIP_SEEDING_OFF, "\nWill be seeded");
+		add(GristTorrentGui.TOOLTIP_LEECHING_ON, "\nIs being leeched");
+		add(GristTorrentGui.TOOLTIP_LEECHING_OFF, "\nWill be leeched");
 		
 		add(EntryProcess.WRONG_DIMENSION, "Entry not permitted from this dimension");
 		add(EntryProcess.BUSY, "Someone else is already entering");

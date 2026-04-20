@@ -40,7 +40,7 @@ public final class TorrentHelper
 		return torrentSession;
 	}
 	
-	public static TorrentSession createTestTorrentSession(int id, boolean seedAll)
+/*	public static TorrentSession createTestTorrentSession(int id, boolean seedAll)
 	{
 		List<GristType> seeding = new ArrayList<>();
 		
@@ -48,9 +48,9 @@ public final class TorrentHelper
 			seeding.addAll(GristTypes.REGISTRY.stream().toList());
 		
 		return new TorrentSession(IdentifierHandler.createNewFakeIdentifier(), seeding, new ArrayList<>());
-	}
+	}*/
 	
-	public static void debugStuff(MinecraftServer server, MSExtraData data)
+/*	public static void debugStuff(MinecraftServer server, MSExtraData data)
 	{
 		for(ServerPlayer player : server.getPlayerList().getPlayers())
 			if(player.isHolding(MSItems.ALLWEDDOL.get()))
@@ -91,7 +91,7 @@ public final class TorrentHelper
 				playerSession.addLeech(new TorrentSession.Leech(testIDs.get(0), leechGrist));
 				MSExtraData.get(server).tryAddTorrentSession(playerSession);
 			}
-	}
+	}*/
 	
 	public static void handleTorrent(TorrentSession torrentSession, List<TorrentSession> sessions, MinecraftServer server)
 	{
@@ -165,15 +165,15 @@ public final class TorrentHelper
 	{
 		List<TorrentSession.Leech> eligibleLeeches = leeching.stream().filter(leech -> leech.gristTypes().contains(grist)).toList();
 		int leechCount = eligibleLeeches.size();
-		
+		long available = seederCache.getGristSet().getGrist(grist);
 		int combinedRate = Math.max(1, leechCount * seedRateMod);
-		GristAmount gristAmount = new GristAmount(grist, combinedRate);
+		
+		int finalRate = Math.min(combinedRate, (int) available);
+		GristAmount gristAmount = new GristAmount(grist, finalRate);
+		
 		
 		//TODO ensure that grist cannot enter the leeches gutter
 		eligibleLeeches.forEach(leech -> {
-			if(!seederCache.canAfford(gristAmount))
-				return;
-			
 			PlayerData leechData = PlayerData.get(leech.id(), server);
 			GristCache leechCache = GristCache.get(leechData);
 			
