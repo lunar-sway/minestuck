@@ -324,6 +324,7 @@ public class TorrentWidgets
 		public static final int WIDTH = GristTorrentGui.GUI_WIDTH - X_OFFSET_FROM_EDGE;
 		public static final int HEIGHT = 12;
 		public static final int TEXT_Y_OFFSET = 5;
+		public long sessionDownloaded = 0;
 		private boolean userIsLeeching = false;
 		private TorrentSession.TorrentClientData userData;
 		private final Font font;
@@ -406,13 +407,16 @@ public class TorrentWidgets
 			MutableComponent downText = speedAppend(typeDownSpeedRange.getFirst());
 //			.append(" - ").append(speedAppend(typeDownSpeedRange.getSecond()))
 			
-			guiGraphics.drawString(font, downText, scale(getX() + 20), scale(getY() + TEXT_Y_OFFSET), GristTorrentGui.LIGHT_BLUE, false);
+			guiGraphics.drawString(font, downText, scale(getX() + 21), scale(getY() + TEXT_Y_OFFSET), GristTorrentGui.LIGHT_BLUE, false);
 			
 			//up
-			guiGraphics.drawString(font, speedAppend(typeUpSpeed), scale(getX() + 70), scale(getY() + TEXT_Y_OFFSET), GristTorrentGui.LIGHT_BLUE, false);
+			guiGraphics.drawString(font, speedAppend(typeUpSpeed), scale(getX() + 56), scale(getY() + TEXT_Y_OFFSET), GristTorrentGui.LIGHT_BLUE, false);
 			
 			//seeds
-			guiGraphics.drawString(font, Component.literal(seedsData.getFirst() + "(" + seedsData.getSecond() + ")"), scale(getX() + 110), scale(getY() + TEXT_Y_OFFSET), GristTorrentGui.LIGHT_BLUE, false);
+			guiGraphics.drawString(font, Component.literal(seedsData.getFirst() + "(" + seedsData.getSecond() + ")"), scale(getX() + 86), scale(getY() + TEXT_Y_OFFSET), GristTorrentGui.LIGHT_BLUE, false);
+			
+			//downloaded
+			guiGraphics.drawString(font, Component.literal(GuiUtil.addSuffix(sessionDownloaded)), scale(getX() + 108), scale(getY() + TEXT_Y_OFFSET), GristTorrentGui.LIGHT_BLUE, false);
 			
 			guiGraphics.pose().popPose();
 		}
@@ -537,8 +541,8 @@ public class TorrentWidgets
 	{
 		public static final int WIDTH = GristStat.WIDTH;
 		public static final int HEIGHT = (GristStat.HEIGHT + 1) * 3;
-		private final Map<GristType, Long> downloadedAmounts = new HashMap<>();
-		private final Map<GristType, Long> previousGristAmounts = new HashMap<>();
+		private static final Map<GristType, Long> downloadedAmounts = new HashMap<>();
+		private static final Map<GristType, Long> previousGristAmounts = new HashMap<>();
 		
 		private final Font font;
 		
@@ -553,31 +557,11 @@ public class TorrentWidgets
 		{
 			this.children().clear();
 			
-			TorrentSession.TorrentClientData userData = GristTorrentGui.visibleTorrentData.get(SkaiaClient.playerId);
-			if(userData != null)
-			{
-				for(GristType gristType : GristTypes.REGISTRY)
-				{
-					long current = userData.cache().set().getGrist(gristType);
-					long previous = previousGristAmounts.getOrDefault(gristType, current);
-					long delta = current - previous;
-					
-					boolean isLeeching = userData.leeches().values().stream()
-							.anyMatch(list -> list.contains(gristType));
-					
-					if(isLeeching && delta > 0)
-						downloadedAmounts.merge(gristType, delta, Long::sum);
-					else if(!isLeeching)
-						downloadedAmounts.remove(gristType);
-					
-					previousGristAmounts.put(gristType, current);
-				}
-			}
-			
 			int i = 0;
 			for(GristType gristType : GristTypes.REGISTRY)
 			{
 				GristStat gristStat = new GristStat(this.getX(), this.getY() + 6 + ((GristStat.HEIGHT + 1) * i), font, gristType);
+				gristStat.sessionDownloaded = downloadedAmounts.getOrDefault(gristType, 0L);
 				
 				if(gristStat.matchesFilter(filter))
 				{
@@ -587,6 +571,31 @@ public class TorrentWidgets
 			}
 			
 			this.updateVisibilityAndPosition();
+		}
+		public void trackDownloads()
+		{
+			TorrentSession.TorrentClientData userData = GristTorrentGui.visibleTorrentData.get(SkaiaClient.playerId);
+			if(userData == null) return;
+			
+			for(GristType gristType : GristTypes.REGISTRY)
+			{
+				long current = userData.cache().set().getGrist(gristType);
+				long previous = previousGristAmounts.getOrDefault(gristType, current);
+				long delta = current - previous;
+				
+				boolean isLeeching = GristTorrentGui.visibleTorrentData.entrySet().stream()
+						.filter(e -> e.getKey() != SkaiaClient.playerId)
+						.anyMatch(e -> e.getValue().leeches()
+								.getOrDefault(SkaiaClient.playerId, Collections.emptyList())
+								.contains(gristType));
+				
+				if(isLeeching && delta > 0)
+					downloadedAmounts.merge(gristType, delta, Long::sum);
+				else if(!isLeeching)
+					downloadedAmounts.remove(gristType);
+				
+				previousGristAmounts.put(gristType, current);
+			}
 		}
 		
 		@Override
@@ -598,13 +607,16 @@ public class TorrentWidgets
 			guiGraphics.drawString(font, Component.literal("Grist"), scale(getX() + 2), scale(getY() + 2), GristTorrentGui.LIGHT_BLUE, false);
 			
 			//down
-			guiGraphics.drawString(font, Component.literal("Down Speed"), scale(getX() + 26), scale(getY() + 2), GristTorrentGui.LIGHT_BLUE, false);
+			guiGraphics.drawString(font, Component.literal("Down Speed"), scale(getX() + 20), scale(getY() + 2), GristTorrentGui.LIGHT_BLUE, false);
 			
 			//up
-			guiGraphics.drawString(font, Component.literal("Up Speed"), scale(getX() + 50), scale(getY() + 2), GristTorrentGui.LIGHT_BLUE, false);
+			guiGraphics.drawString(font, Component.literal("Up Speed"), scale(getX() + 55), scale(getY() + 2), GristTorrentGui.LIGHT_BLUE, false);
 			
 			//seeds
-			guiGraphics.drawString(font, Component.literal("Seeds"), scale(getX() + 74), scale(getY() + 2), GristTorrentGui.LIGHT_BLUE, false);
+			guiGraphics.drawString(font, Component.literal("Seeds"), scale(getX() + 85), scale(getY() + 2), GristTorrentGui.LIGHT_BLUE, false);
+			
+			//downloaded
+			guiGraphics.drawString(font, Component.literal("Downloaded"), scale(getX() + 107), scale(getY() + 2), GristTorrentGui.LIGHT_BLUE, false);
 			
 			guiGraphics.pose().popPose();
 			

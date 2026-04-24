@@ -141,6 +141,7 @@ public final class GristTorrentGui extends Screen implements ProgramGui<ProgramT
 			gutterRemainingCapacity = ClientPlayerData.getGutterRemainingCapacity();
 			visibleTorrentData.clear();
 			visibleTorrentData.putAll(ClientPlayerData.getVisibleTorrentData());
+			statsContainer.trackDownloads();
 			
 			//TODO update gutter bar data
 			if(!gutterGrist.equals(previousGutterGrist)) {
