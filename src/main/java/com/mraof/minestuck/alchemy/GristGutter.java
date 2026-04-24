@@ -215,7 +215,7 @@ public class GristGutter
 	
 	private double getDistributionRateModifier()
 	{
-		return 1D/20D;
+		return 1D/10D;
 	}
 	
 	private MutableGristSet takeWithinCapacity(long amount, NonNegativeGristSet capacity, RandomSource rand)

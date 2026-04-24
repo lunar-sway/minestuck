@@ -2,7 +2,6 @@ package com.mraof.minestuck.alchemy;
 
 import com.mraof.minestuck.MinestuckConfig;
 import com.mraof.minestuck.api.alchemy.*;
-import com.mraof.minestuck.item.MSItems;
 import com.mraof.minestuck.network.TorrentPackets;
 import com.mraof.minestuck.player.*;
 import com.mraof.minestuck.skaianet.SburbPlayerData;
@@ -40,58 +39,6 @@ public final class TorrentHelper
 		return torrentSession;
 	}
 	
-/*	public static TorrentSession createTestTorrentSession(int id, boolean seedAll)
-	{
-		List<GristType> seeding = new ArrayList<>();
-		
-		if(seedAll)
-			seeding.addAll(GristTypes.REGISTRY.stream().toList());
-		
-		return new TorrentSession(IdentifierHandler.createNewFakeIdentifier(), seeding, new ArrayList<>());
-	}*/
-	
-/*	public static void debugStuff(MinecraftServer server, MSExtraData data)
-	{
-		for(ServerPlayer player : server.getPlayerList().getPlayers())
-			if(player.isHolding(MSItems.ALLWEDDOL.get()))
-				data.removesSessions();
-		for(ServerPlayer player : server.getPlayerList().getPlayers())
-			if(player.isHolding(MSItems.MWRTHWL.get()))
-			{
-				TorrentSession playerSession = createPlayerTorrentSession(player, server);
-				List<PlayerIdentifier> testIDs = new ArrayList<>();
-
-				if(data.getTorrentSessions().stream().anyMatch(session -> session.getSeeder().getId() == 99))
-					return;
-
-				for(int i = 99; i < 102; i++)
-				{
-					TorrentSession iterateSession = createTestTorrentSession(i, true);
-					data.tryAddTorrentSession(iterateSession);
-
-					PlayerIdentifier testID = iterateSession.getSeeder();
-					testIDs.add(testID);
-
-					List<GristAmount> gristAmounts = new ArrayList<>();
-					gristAmounts.add(new GristAmount(GristTypes.BUILD, 1000));
-					gristAmounts.add(new GristAmount(GristTypes.CHALK, 1000));
-					gristAmounts.add(new GristAmount(GristTypes.AMBER, 1000));
-					gristAmounts.add(new GristAmount(GristTypes.DIAMOND, 1000));
-					gristAmounts.add(new GristAmount(GristTypes.GOLD, 1000));
-					gristAmounts.add(new GristAmount(GristTypes.AMETHYST, 1000));
-					gristAmounts.add(new GristAmount(GristTypes.QUARTZ, 1000));
-					gristAmounts.add(new GristAmount(GristTypes.ZILLIUM, 1000));
-					gristAmounts.add(new GristAmount(GristTypes.SHALE, 1));
-
-					GristCache.get(server, testID).set(new NonNegativeGristSet(gristAmounts));
-				}
-
-				List<GristType> leechGrist = new ArrayList<>();
-				leechGrist.add(GristTypes.BUILD.get());
-				playerSession.addLeech(new TorrentSession.Leech(testIDs.get(0), leechGrist));
-				MSExtraData.get(server).tryAddTorrentSession(playerSession);
-			}
-	}*/
 	
 	public static void handleTorrent(TorrentSession torrentSession, List<TorrentSession> sessions, MinecraftServer server)
 	{

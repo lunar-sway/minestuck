@@ -403,8 +403,10 @@ public class TorrentWidgets
 			drawIcon(getX() + 3, getY() + 1, gristType.getIcon());
 			
 			//down
-			MutableComponent downText = speedAppend(typeDownSpeedRange.getFirst()).append(" - ").append(speedAppend(typeDownSpeedRange.getSecond()));
-			guiGraphics.drawString(font, downText, scale(getX() + 25), scale(getY() + TEXT_Y_OFFSET), GristTorrentGui.LIGHT_BLUE, false);
+			MutableComponent downText = speedAppend(typeDownSpeedRange.getFirst());
+//			.append(" - ").append(speedAppend(typeDownSpeedRange.getSecond()))
+			
+			guiGraphics.drawString(font, downText, scale(getX() + 20), scale(getY() + TEXT_Y_OFFSET), GristTorrentGui.LIGHT_BLUE, false);
 			
 			//up
 			guiGraphics.drawString(font, speedAppend(typeUpSpeed), scale(getX() + 70), scale(getY() + TEXT_Y_OFFSET), GristTorrentGui.LIGHT_BLUE, false);
@@ -596,13 +598,13 @@ public class TorrentWidgets
 			guiGraphics.drawString(font, Component.literal("Grist"), scale(getX() + 2), scale(getY() + 2), GristTorrentGui.LIGHT_BLUE, false);
 			
 			//down
-			guiGraphics.drawString(font, Component.literal("Down Speed"), scale(getX() + 25), scale(getY() + 2), GristTorrentGui.LIGHT_BLUE, false);
+			guiGraphics.drawString(font, Component.literal("Down Speed"), scale(getX() + 26), scale(getY() + 2), GristTorrentGui.LIGHT_BLUE, false);
 			
 			//up
-			guiGraphics.drawString(font, Component.literal("Up Speed"), scale(getX() + 70), scale(getY() + 2), GristTorrentGui.LIGHT_BLUE, false);
+			guiGraphics.drawString(font, Component.literal("Up Speed"), scale(getX() + 50), scale(getY() + 2), GristTorrentGui.LIGHT_BLUE, false);
 			
 			//seeds
-			guiGraphics.drawString(font, Component.literal("Seeds"), scale(getX() + 110), scale(getY() + 2), GristTorrentGui.LIGHT_BLUE, false);
+			guiGraphics.drawString(font, Component.literal("Seeds"), scale(getX() + 74), scale(getY() + 2), GristTorrentGui.LIGHT_BLUE, false);
 			
 			guiGraphics.pose().popPose();
 			
