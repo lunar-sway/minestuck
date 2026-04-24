@@ -1,0 +1,13 @@
+{
+  "type": "minestuck:source_grist_cost",
+  "grist_cost": {
+  	"minestuck:build": 5
+  },
+  "ingredient": {
+    "item": "create:brass_casing"
+  },
+  "sources": [
+    "create:brass_ingot",
+    "#minecraft:logs"
+  ]
+}

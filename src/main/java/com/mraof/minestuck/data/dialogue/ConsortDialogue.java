@@ -16,6 +16,7 @@ import net.minecraft.data.DataProvider;
 import net.minecraft.data.PackOutput;
 import net.minecraft.world.item.Item;
 import net.minecraft.world.item.Items;
+import net.neoforged.neoforge.common.Tags;
 import net.neoforged.neoforge.common.data.LanguageProvider;
 import net.neoforged.neoforge.registries.DeferredItem;
 
@@ -896,6 +897,31 @@ public final class ConsortDialogue
 									.nextDialogue(firstNo)
 									.setNextAsEntrypoint()))
 					.defaultNode(new NodeBuilder(l.defaultKeyMsg("I'm hungry. Have any bugs? Maybe a chocolate chip cookie? Mmm."))));
+		}));
+		
+		provider.addRandomlySelectable("computer_expert", defaultWeight(alwaysTrue()), new FolderedDialogue(builder ->
+		{
+			var done = builder.add("done", new NodeSelectorBuilder()
+					.node(all(new Condition.Flag(helpingPlayer), hasAdvancement(MSAdvancementProvider.BRICK_COMPUTER)), new NodeBuilder(l.subMsg("player_specific_advancement", "Hey by the look on your face you've installed one of my custom programs! Glad to be of service.")))
+					.node(new Condition.Flag(helpingPlayer), new NodeBuilder(l.subMsg("player_specific", "That should fit nicely in your computer. You won't regret it!")))
+					.defaultNode(new NodeBuilder(l.defaultKeyMsg("I love helping people. You should have seen the face of this other person I helped earlier. Priceless."))));
+			
+			var sure = builder.add("sure", new NodeBuilder(l.defaultKeyMsg("Alright, all I need is a music disc. One that's in good condition. Got one?"))
+					.addResponse(new ResponseBuilder(l.subMsg("yes", "[Hand over the %s]", Argument.MATCHED_ITEM))
+							.visibleCondition(l.subText("give_item.condition", "Must have a music disc, excluding a broken disc"), new Condition.ItemTagMatchExclude(Tags.Items.MUSIC_DISCS, Items.MUSIC_DISC_11))
+							.addTrigger(Trigger.TakeMatchedItem.INSTANCE)
+							.addTrigger(new Trigger.GiveItem(Items.MUSIC_DISC_11))
+							.addTrigger(new Trigger.SetFlag(helpingPlayer, true))
+							.addTrigger(new Trigger.SetDialogue(done))
+							.addDescription(l.subMsg("desc", "They take the disc and gently place it on the ground. Then they take out a hammer and break it to pieces before giving it back to you."))
+							.nextDialogue(done))
+					.addClosingResponse(noMsg));
+			
+			builder.addStart(new NodeBuilder(l.defaultKeyMsg("Me? I'm a computer expert. In fact I can slip you the latest software if you are interested."))
+					.addResponse(new ResponseBuilder(l.subMsg("accept", "Sure, what is it."))
+							.nextDialogue(sure)
+							.setNextAsEntrypoint())
+					.addClosingResponse(noMsg));
 		}));
 		
 		provider.addRandomlySelectable("rap_battle", defaultWeight(isAnyEntityType(NAKAGATOR, IGUANA)), new FolderedDialogue(builder ->

@@ -3,6 +3,7 @@ package com.mraof.minestuck.data.recipe;
 import com.mraof.minestuck.Minestuck;
 import com.mraof.minestuck.block.MSBlocks;
 import com.mraof.minestuck.data.AspectTreeBlocksData;
+import com.mraof.minestuck.data.DreamerMoonBlocksData;
 import com.mraof.minestuck.data.SkaiaBlocksData;
 import com.mraof.minestuck.item.MSItems;
 import com.mraof.minestuck.util.ExtraModTags;
@@ -40,6 +41,7 @@ public class MinestuckRecipeProvider extends RecipeProvider
 	{
 		SkaiaBlocksData.addRecipes(recipeBuilder);
 		AspectTreeBlocksData.addRecipes(recipeBuilder);
+		DreamerMoonBlocksData.addRecipes(recipeBuilder);
 		
 		ShapelessRecipeBuilder.shapeless(RecipeCategory.MISC, MSItems.RAW_CRUXITE.get(), 9).requires(MSBlocks.CRUXITE_BLOCK.get()).unlockedBy("has_raw_cruxite", has(MSItems.RAW_CRUXITE.get())).unlockedBy("has_cruxite_block", has(MSBlocks.CRUXITE_BLOCK.get())).save(recipeBuilder, ResourceLocation.fromNamespaceAndPath(Minestuck.MOD_ID, "raw_cruxite_from_block"));
 		ShapedRecipeBuilder.shaped(RecipeCategory.BUILDING_BLOCKS, MSBlocks.CRUXITE_BLOCK.get()).define('#', MSItems.RAW_CRUXITE.get()).pattern("###").pattern("###").pattern("###").unlockedBy("has_raw_cruxite", has(MSItems.RAW_CRUXITE.get())).save(recipeBuilder);
@@ -223,8 +225,8 @@ public class MinestuckRecipeProvider extends RecipeProvider
 		ShapedRecipeBuilder.shaped(RecipeCategory.MISC, MSItems.MAILBOX.get()).define('c', Ingredient.of(Tags.Items.CHESTS)).define('r', Ingredient.of(Tags.Items.RODS)).define('i', Items.IRON_INGOT).pattern("ici").pattern(" r ").pattern(" r ").unlockedBy("has_chest", has(Tags.Items.CHESTS)).save(recipeBuilder);
 		ShapedRecipeBuilder.shaped(RecipeCategory.MISC, MSItems.CAPTCHA_CARD.get()).define('p', Items.PAPER).define('c', MSItems.RAW_CRUXITE.get()).pattern("ppp").pattern("pcp").pattern("ppp").unlockedBy("has_raw_cruxite", has(MSItems.RAW_CRUXITE.get())).save(recipeBuilder);
 		//TODO custom ingredient type to disallow punched cards or cards with items to be used here
-		NonMirroredRecipeBuilder.nonMirroredRecipe(RecipeCategory.MISC, MSItems.STACK_MODUS_CARD.get()).define('a', Ingredient.of(MSItems.CAPTCHA_CARD.get())).define('c', MSItems.RAW_CRUXITE.get()).define('C', MSBlocks.CRUXITE_BLOCK.get()).pattern("Cac").unlockedBy("has_card", has(MSItems.CAPTCHA_CARD.get())).save(recipeBuilder);
-		NonMirroredRecipeBuilder.nonMirroredRecipe(RecipeCategory.MISC, MSItems.QUEUE_MODUS_CARD.get()).define('a', Ingredient.of(MSItems.CAPTCHA_CARD.get())).define('c', MSItems.RAW_CRUXITE.get()).define('C', MSBlocks.CRUXITE_BLOCK.get()).pattern("caC").unlockedBy("has_card", has(MSItems.CAPTCHA_CARD.get())).save(recipeBuilder);
+		ShapedRecipeBuilder.shaped(RecipeCategory.MISC, MSItems.STACK_MODUS_CARD.get()).define('a', Ingredient.of(MSItems.CAPTCHA_CARD.get())).define('c', MSItems.RAW_CRUXITE.get()).define('C', MSBlocks.CRUXITE_BLOCK.get()).pattern("Cac").unlockedBy("has_card", has(MSItems.CAPTCHA_CARD.get())).save(recipeBuilder);
+		ShapedRecipeBuilder.shaped(RecipeCategory.MISC, MSItems.QUEUE_MODUS_CARD.get()).define('a', Ingredient.of(MSItems.CAPTCHA_CARD.get())).define('c', MSItems.RAW_CRUXITE.get()).define('C', MSBlocks.CRUXITE_BLOCK.get()).pattern("C").pattern("a").pattern("c").unlockedBy("has_card", has(MSItems.CAPTCHA_CARD.get())).save(recipeBuilder);
 		
 		ShapelessRecipeBuilder.shapeless(RecipeCategory.FOOD, MSItems.BUG_ON_A_STICK.get(), 3).requires(Ingredient.of(Tags.Items.RODS_WOODEN), 3).requires(MSItems.JAR_OF_BUGS.get()).unlockedBy("has_jag_of_bugs", has(MSItems.JAR_OF_BUGS.get())).save(recipeBuilder);
 		ShapedRecipeBuilder.shaped(RecipeCategory.FOOD, MSItems.GRUB_SAUCE.get(), 3).define('p', Items.PAPER).define('b', MSTags.Items.BUGS).pattern("bbb").pattern("p p").pattern(" p ").unlockedBy("has_bugs", has(MSTags.Items.BUGS)).save(recipeBuilder);
@@ -271,8 +273,7 @@ public class MinestuckRecipeProvider extends RecipeProvider
 				.unlockedBy("has_raw_cruxite", has(MSItems.RAW_CRUXITE.get())).save(recipeBuilder);
 		CommonRecipes.wallRecipe(MSBlocks.CRUXITE_WALL, MSBlocks.CRUXITE_BLOCK).group("cruxite_blocks")
 				.unlockedBy("has_raw_cruxite", has(MSItems.RAW_CRUXITE.get())).save(recipeBuilder);
-		CommonRecipes.buttonRecipe(MSBlocks.CRUXITE_BUTTON, MSItems.RAW_CRUXITE)
-				.unlockedBy("has_raw_cruxite", has(MSItems.RAW_CRUXITE.get())).save(recipeBuilder);
+		CommonRecipes.buttonRecipe(MSBlocks.CRUXITE_BUTTON, MSItems.RAW_CRUXITE).save(recipeBuilder);
 		CommonRecipes.pressurePlateRecipe(MSBlocks.CRUXITE_PRESSURE_PLATE, MSBlocks.CRUXITE_BLOCK).group("cruxite_blocks")
 				.unlockedBy("has_raw_cruxite", has(MSItems.RAW_CRUXITE.get())).save(recipeBuilder);
 		ShapedRecipeBuilder.shaped(RecipeCategory.BUILDING_BLOCKS, MSBlocks.CRUXITE_DOOR.get(), 3).define('#', MSBlocks.SMOOTH_CRUXITE_BLOCK.get()).pattern("## ").pattern("## ").pattern("## ").group("cruxite_blocks").unlockedBy("has_raw_cruxite", has(MSItems.RAW_CRUXITE.get())).save(recipeBuilder);

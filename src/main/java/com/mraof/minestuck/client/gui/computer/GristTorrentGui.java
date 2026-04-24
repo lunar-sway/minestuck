@@ -28,6 +28,11 @@ public final class GristTorrentGui extends Screen implements ProgramGui<ProgramT
 	public static final String NAME = "minestuck.program.grist_torrent";
 	public static final String TITLE = "minestuck.program.grist_torrent.title";
 	
+	public static final String TOOLTIP_SEEDING_ON = "minestuck.seeding.on";
+	public static final String TOOLTIP_SEEDING_OFF = "minestuck.seeding.off";
+	public static final String TOOLTIP_LEECHING_ON = "minestuck.leeching.on";
+	public static final String TOOLTIP_LEECHING_OFF = "minestuck.leeching.off";
+	
 	public static final ResourceLocation GUI_MAIN = Minestuck.id("textures/gui/torrent.png");
 	
 	static final int GUI_WIDTH = 190;
@@ -43,14 +48,35 @@ public final class GristTorrentGui extends Screen implements ProgramGui<ProgramT
 	private int gristWidgetsYOffset;
 	
 	private GristSet gutterGrist;
+	private long filledVolume = 0;
+	private GristSet previousGutterGrist = null;
 	private long gutterRemainingCapacity;
 	static final Map<Integer, TorrentSession.TorrentClientData> visibleTorrentData = new HashMap<>();
 	
 	private final List<TorrentContainer> torrentContainers = new ArrayList<>();
 	private final List<GutterBar> gutterBars = new ArrayList<>();
 	private StatsContainer statsContainer;
+	private FilterContainer filterContainer;
 	
 	private int updateTick = 0;
+	
+	public enum TorrentFilter
+	{
+		ALL,
+		DOWNLOADING,
+		COMPLETED,
+		ACTIVE,
+		INACTIVE;
+		
+		@Override
+		public String toString()
+		{
+			String title = this.name();
+			return title.charAt(0) + title.substring(1).toLowerCase();
+		}
+	}
+	
+	protected TorrentFilter activeFilter = TorrentFilter.ALL;
 	
 	public GristTorrentGui()
 	{
@@ -62,7 +88,7 @@ public final class GristTorrentGui extends Screen implements ProgramGui<ProgramT
 	{
 		yOffset = (this.height / 2) - (GUI_HEIGHT / 2);
 		xOffset = (this.width / 2) - (GUI_WIDTH / 2);
-		gristWidgetsYOffset = yOffset + 36;
+		gristWidgetsYOffset = yOffset + 39;
 		
 		gutterGrist = ClientPlayerData.getGutterSet();
 		visibleTorrentData.clear();
@@ -76,6 +102,16 @@ public final class GristTorrentGui extends Screen implements ProgramGui<ProgramT
 		
 		statsContainer = new StatsContainer(xOffset + GristStat.X_OFFSET_FROM_EDGE, yOffset + GristStat.Y_OFFSET_FROM_EDGE, font);
 		addRenderableWidget(statsContainer);
+		
+		filterContainer = new FilterContainer(xOffset + FilterContainer.X_OFFSET_FROM_EDGE, yOffset + FilterContainer.Y_OFFSET_FROM_EDGE, font, this);
+		addRenderableWidget(filterContainer);
+		
+		updateGutterBars();
+	}
+	
+	public void setFilter(TorrentFilter filter)
+	{
+		activeFilter = filter;
 	}
 	
 	@Override
@@ -90,11 +126,11 @@ public final class GristTorrentGui extends Screen implements ProgramGui<ProgramT
 	public void render(GuiGraphics guiGraphics, int mouseX, int mouseY, float partialTicks)
 	{
 		clientDataUpdates();
-		statsContainer.updateStats();
+		statsContainer.updateStats(activeFilter);
+		filterContainer.updateCounts();
 		
 		super.render(guiGraphics, mouseX, mouseY, partialTicks);
-		
-		renderGutter(guiGraphics);
+		guiGraphics.drawString(font, String.valueOf(filledVolume), (xOffset + 105) - font.width(String.valueOf(filledVolume)) / 2, yOffset + 181 + 5, LIGHT_BLUE, false);
 	}
 	
 	private void clientDataUpdates()
@@ -105,8 +141,13 @@ public final class GristTorrentGui extends Screen implements ProgramGui<ProgramT
 			gutterRemainingCapacity = ClientPlayerData.getGutterRemainingCapacity();
 			visibleTorrentData.clear();
 			visibleTorrentData.putAll(ClientPlayerData.getVisibleTorrentData());
+			statsContainer.trackDownloads();
 			
 			//TODO update gutter bar data
+			if(!gutterGrist.equals(previousGutterGrist)) {
+				updateGutterBars();
+				previousGutterGrist = gutterGrist;
+			}
 			renderTorrentSessions();
 		}
 		
@@ -128,7 +169,7 @@ public final class GristTorrentGui extends Screen implements ProgramGui<ProgramT
 		}
 	}
 	
-	private void renderGutter(GuiGraphics guiGraphics)
+	private void updateGutterBars()
 	{
 		if(gutterGrist == null)
 			return; //TODO consider adding text that says "loading" if this early return is triggered
@@ -137,12 +178,13 @@ public final class GristTorrentGui extends Screen implements ProgramGui<ProgramT
 		gutterBars.clear();
 		
 		double totalVolume = gutterRemainingCapacity;
-		long filledVolume = 0;
+		filledVolume = 0;
 		
 		for(GristAmount amount : gutterGrist.asAmounts())
 			filledVolume += amount.amount();
 		
 		totalVolume += filledVolume;
+		if(totalVolume == 0) return;
 		
 		int initialX = xOffset + 55;
 		int y = yOffset + 181;
@@ -150,6 +192,7 @@ public final class GristTorrentGui extends Screen implements ProgramGui<ProgramT
 		for(GristAmount gristAmount : gutterGrist.asAmounts())
 		{
 			int length = (int) ((gristAmount.amount() / totalVolume) * 100);
+			if(length == 0) continue;
 			GutterBar bar = new GutterBar(initialX, y, length, gristAmount);
 			gutterBars.add(bar);
 			addRenderableWidget(bar);
@@ -158,12 +201,14 @@ public final class GristTorrentGui extends Screen implements ProgramGui<ProgramT
 		
 		int remainingVolume = (int) ((gutterRemainingCapacity / totalVolume) * 100);
 		
-		GutterBar remainingBar = new GutterBar(initialX, y, remainingVolume, gutterRemainingCapacity);
-		gutterBars.add(remainingBar);
-		addRenderableWidget(remainingBar);
-		
-		String remainingText = String.valueOf(filledVolume);
-		guiGraphics.drawString(font, remainingText, (xOffset + 105) - font.width(remainingText) / 2, y + 5, LIGHT_BLUE, false);
+		if(remainingVolume > 0)
+		{
+			GutterBar remainingBar = new GutterBar(initialX, y, remainingVolume, gutterRemainingCapacity);
+			gutterBars.add(remainingBar);
+			addRenderableWidget(remainingBar);
+		}
+//		String remainingText = String.valueOf(filledVolume);
+//		guiGraphics.drawString(font, remainingText, (xOffset + 105) - font.width(remainingText) / 2, y + 5, LIGHT_BLUE, false);
 	}
 	
 	private void addTorrentSessions()
@@ -225,15 +270,15 @@ public final class GristTorrentGui extends Screen implements ProgramGui<ProgramT
 	}
 	
 	@Override
-	public void onInit(ComputerScreen screen)
+	public void onInit(ThemedScreen screen)
 	{
 		GristTorrentGui gui = new GristTorrentGui();
-		gui.computer = screen.be;
+		gui.computer = screen.computer;
 		screen.getMinecraft().setScreen(gui);
 	}
 	
 	@Override
-	public void render(GuiGraphics guiGraphics, ComputerScreen screen)
+	public void render(GuiGraphics guiGraphics, ThemedScreen screen)
 	{
 		//handled by the screen render method
 	}

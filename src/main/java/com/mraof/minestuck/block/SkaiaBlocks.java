@@ -36,7 +36,7 @@ public final class SkaiaBlocks
 	public static final ItemBlockPair<PressurePlateBlock, BlockItem> BLACK_CHESS_BRICK_SMOOTH_PRESSURE_PLATE = ItemBlockPair.register("black_chess_brick_smooth_pressure_plate",
 			() -> new PressurePlateBlock(MSBlockSetType.BLACK_CHESS, ofFullCopy(BLACK_CHESS_BRICK_SMOOTH.asBlock())));
 	public static final ItemBlockPair<ButtonBlock, BlockItem> BLACK_CHESS_BRICK_SMOOTH_BUTTON = ItemBlockPair.register("black_chess_brick_smooth_button",
-			() -> new ButtonBlock(MSBlockSetType.BLACK_CHESS, 10, ofFullCopy(BLACK_CHESS_BRICK_SMOOTH.asBlock())));
+			() -> new ButtonBlock(MSBlockSetType.BLACK_CHESS, 10, ofFullCopy(BLACK_CHESS_BRICK_SMOOTH.asBlock()).noCollission()));
 	
 	
 	public static final ItemBlockPair<Block, BlockItem> WHITE_CHESS_BRICKS = ItemBlockPair.register("white_chess_bricks", () -> new Block(Block.Properties.of().mapColor(MapColor.TERRACOTTA_WHITE).instrument(NoteBlockInstrument.BASEDRUM).requiresCorrectToolForDrops().strength(1.5F, 6.0F)));
@@ -52,7 +52,7 @@ public final class SkaiaBlocks
 	public static final ItemBlockPair<PressurePlateBlock, BlockItem> WHITE_CHESS_BRICK_SMOOTH_PRESSURE_PLATE = ItemBlockPair.register("white_chess_brick_smooth_pressure_plate",
 			() -> new PressurePlateBlock(MSBlockSetType.WHITE_CHESS, ofFullCopy(WHITE_CHESS_BRICK_SMOOTH.asBlock())));
 	public static final ItemBlockPair<ButtonBlock, BlockItem> WHITE_CHESS_BRICK_SMOOTH_BUTTON = ItemBlockPair.register("white_chess_brick_smooth_button",
-			() -> new ButtonBlock(MSBlockSetType.WHITE_CHESS, 10, ofFullCopy(WHITE_CHESS_BRICK_SMOOTH.asBlock())));
+			() -> new ButtonBlock(MSBlockSetType.WHITE_CHESS, 10, ofFullCopy(WHITE_CHESS_BRICK_SMOOTH.asBlock()).noCollission()));
 	
 	
 	public static final ItemBlockPair<Block, BlockItem> DARK_GRAY_CHESS_BRICKS = ItemBlockPair.register("dark_gray_chess_bricks", () -> new Block(Block.Properties.of().mapColor(MapColor.TERRACOTTA_GRAY).instrument(NoteBlockInstrument.BASEDRUM).requiresCorrectToolForDrops().strength(1.5F, 6.0F)));
@@ -68,7 +68,7 @@ public final class SkaiaBlocks
 	public static final ItemBlockPair<PressurePlateBlock, BlockItem> DARK_GRAY_CHESS_BRICK_SMOOTH_PRESSURE_PLATE = ItemBlockPair.register("dark_gray_chess_brick_smooth_pressure_plate",
 			() -> new PressurePlateBlock(MSBlockSetType.DARK_GRAY_CHESS, ofFullCopy(DARK_GRAY_CHESS_BRICKS.asBlock())));
 	public static final ItemBlockPair<ButtonBlock, BlockItem> DARK_GRAY_CHESS_BRICK_SMOOTH_BUTTON = ItemBlockPair.register("dark_gray_chess_brick_smooth_button",
-			() -> new ButtonBlock(MSBlockSetType.DARK_GRAY_CHESS, 10, ofFullCopy(DARK_GRAY_CHESS_BRICK_SMOOTH.asBlock())));
+			() -> new ButtonBlock(MSBlockSetType.DARK_GRAY_CHESS, 10, ofFullCopy(DARK_GRAY_CHESS_BRICK_SMOOTH.asBlock()).noCollission()));
 	
 	
 	public static final ItemBlockPair<Block, BlockItem> LIGHT_GRAY_CHESS_BRICKS = ItemBlockPair.register("light_gray_chess_bricks", () -> new Block(Block.Properties.of().mapColor(MapColor.TERRACOTTA_LIGHT_GRAY).instrument(NoteBlockInstrument.BASEDRUM).requiresCorrectToolForDrops().strength(1.5F, 6.0F)));
@@ -84,7 +84,7 @@ public final class SkaiaBlocks
 	public static final ItemBlockPair<PressurePlateBlock, BlockItem> LIGHT_GRAY_CHESS_BRICK_SMOOTH_PRESSURE_PLATE = ItemBlockPair.register("light_gray_chess_brick_smooth_pressure_plate",
 			() -> new PressurePlateBlock(MSBlockSetType.LIGHT_GRAY_CHESS, ofFullCopy(LIGHT_GRAY_CHESS_BRICK_SMOOTH.asBlock())));
 	public static final ItemBlockPair<ButtonBlock, BlockItem> LIGHT_GRAY_CHESS_BRICK_SMOOTH_BUTTON = ItemBlockPair.register("light_gray_chess_brick_smooth_button",
-			() -> new ButtonBlock(MSBlockSetType.LIGHT_GRAY_CHESS, 10, ofFullCopy(LIGHT_GRAY_CHESS_BRICK_SMOOTH.asBlock())));
+			() -> new ButtonBlock(MSBlockSetType.LIGHT_GRAY_CHESS, 10, ofFullCopy(LIGHT_GRAY_CHESS_BRICK_SMOOTH.asBlock()).noCollission()));
 	
 	
 	public static final ItemBlockPair<Block, BlockItem> CHECKERED_STAINED_GLASS = ItemBlockPair.register("checkered_stained_glass",

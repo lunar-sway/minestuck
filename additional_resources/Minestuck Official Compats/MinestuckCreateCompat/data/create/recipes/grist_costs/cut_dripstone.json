@@ -1,0 +1,10 @@
+{
+  "type": "minestuck:source_grist_cost",
+  "grist_cost": {},
+  "ingredient": {
+    "item": "create:cut_dripstone"
+  },
+  "sources": [
+    "minecraft:dripstone"
+  ]
+}

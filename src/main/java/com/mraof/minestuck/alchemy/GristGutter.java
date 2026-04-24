@@ -16,6 +16,7 @@ import net.minecraft.server.level.ServerPlayer;
 import net.minecraft.util.RandomSource;
 import net.neoforged.bus.api.SubscribeEvent;
 import net.neoforged.fml.common.EventBusSubscriber;
+import net.neoforged.neoforge.event.entity.player.PlayerEvent;
 import net.neoforged.neoforge.event.tick.ServerTickEvent;
 import net.neoforged.neoforge.network.PacketDistributor;
 import org.apache.logging.log4j.LogManager;
@@ -167,11 +168,19 @@ public class GristGutter
 	public static void onServerTickEvent(ServerTickEvent.Pre event)
 	{
 		//noinspection resource
-		if(event.getServer().overworld().getGameTime() % 200 == 0)
+		if(event.getServer().overworld().getGameTime() % 100 == 0)
 		{
 			for(Session session : SessionHandler.get(event.getServer()).getSessions())
 				session.getGristGutter().distributeToPlayers();
 		}
+	}
+	
+	@SubscribeEvent
+	public static void playerLoggedInEvent(PlayerEvent.PlayerLoggedInEvent event)
+	{
+		ServerPlayer player = (ServerPlayer) event.getEntity();
+		GristGutter gutter = GristGutter.get(IdentifierHandler.encode(player), player.server);
+		PacketDistributor.sendToPlayer(player, new GutterUpdatePacket(gutter.gristSet.asImmutable(), gutter.getRemainingCapacity()));
 	}
 	
 	private void distributeToPlayers()
@@ -206,7 +215,7 @@ public class GristGutter
 	
 	private double getDistributionRateModifier()
 	{
-		return 1D/20D;
+		return 1D/5D;
 	}
 	
 	private MutableGristSet takeWithinCapacity(long amount, NonNegativeGristSet capacity, RandomSource rand)

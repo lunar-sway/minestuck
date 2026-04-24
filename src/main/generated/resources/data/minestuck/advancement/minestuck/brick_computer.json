@@ -1,0 +1,28 @@
+{
+  "parent": "minestuck:minestuck/connect",
+  "criteria": {
+    "brick_computer": {
+      "trigger": "minestuck:brick_computer"
+    }
+  },
+  "display": {
+    "description": {
+      "translate": "advancements.minestuck.brick_computer.description"
+    },
+    "frame": "challenge",
+    "hidden": true,
+    "icon": {
+      "count": 1,
+      "id": "minestuck:old_computer"
+    },
+    "title": {
+      "translate": "advancements.minestuck.brick_computer.title"
+    }
+  },
+  "requirements": [
+    [
+      "brick_computer"
+    ]
+  ],
+  "sends_telemetry_event": true
+}

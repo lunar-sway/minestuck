@@ -1,7 +1,10 @@
 package com.mraof.minestuck.item.armor;
 
+import com.mraof.minestuck.client.model.armor.IronLassArmorModel;
 import com.mraof.minestuck.util.MSParticleType;
 import com.mraof.minestuck.util.MSSoundEvents;
+
+import net.minecraft.client.model.HumanoidModel;
 import net.minecraft.core.Holder;
 import net.minecraft.sounds.SoundSource;
 import net.minecraft.world.entity.Entity;
@@ -14,16 +17,22 @@ import net.minecraft.world.item.ItemStack;
 import net.minecraft.world.phys.Vec3;
 import software.bernie.geckolib.animatable.GeoItem;
 import software.bernie.geckolib.animatable.SingletonGeoAnimatable;
+import software.bernie.geckolib.animatable.client.GeoRenderProvider;
 import software.bernie.geckolib.animatable.instance.AnimatableInstanceCache;
 import software.bernie.geckolib.animation.AnimatableManager;
 import software.bernie.geckolib.animation.AnimationController;
 import software.bernie.geckolib.constant.DataTickets;
+import software.bernie.geckolib.renderer.GeoArmorRenderer;
 import software.bernie.geckolib.util.GeckoLibUtil;
 
 import javax.annotation.ParametersAreNonnullByDefault;
 
+import org.jetbrains.annotations.Nullable;
+
 import static software.bernie.geckolib.constant.DefaultAnimations.FLY;
 import static software.bernie.geckolib.constant.DefaultAnimations.IDLE;
+
+import java.util.function.Consumer;
 
 @ParametersAreNonnullByDefault
 public class IronLassArmorItem extends ArmorItem implements GeoItem
@@ -97,5 +106,24 @@ public class IronLassArmorItem extends ArmorItem implements GeoItem
 	public AnimatableInstanceCache getAnimatableInstanceCache()
 	{
 		return cache;
+	}
+	
+	@Override
+	public void createGeoRenderer(Consumer<GeoRenderProvider> consumer)
+	{
+		consumer.accept(new GeoRenderProvider()
+		{
+			private GeoArmorRenderer<?> renderer;
+			
+			@Override
+			public <T extends LivingEntity> @Nullable HumanoidModel<?> getGeoArmorRenderer(@Nullable T livingEntity,
+																						   ItemStack itemStack, @Nullable EquipmentSlot equipmentSlot, @Nullable HumanoidModel<T> original)
+			{
+				if(this.renderer == null)
+					this.renderer = new GeoArmorRenderer<>(new IronLassArmorModel());
+				
+				return this.renderer;
+			}
+		});
 	}
 }

@@ -1,0 +1,15 @@
+{
+  "aspect": "life",
+  "effects": [
+    {
+      "effect": "minecraft:regeneration",
+      "amplifier": 0,
+      "rung": 20
+    },
+    {
+      "effect": "minecraft:regeneration",
+      "amplifier": 1,
+      "rung": 40
+    }
+  ]
+}

@@ -1,0 +1,17 @@
+{
+  "type": "minestuck:grist_cost",
+  "grist_cost": {
+    "minestuck:build": 259,
+    "minestuck:rust": 27,
+    "minestuck:gold": 10,
+    "minestuck:diamond": 5,
+    "minestuck:mercury": 8,
+    "minestuck:uranium": 13,
+    "minestuck:caulk": 8,
+    "minestuck:cobalt": 6,
+    "minestuck:tar": 16
+  },
+  "ingredient": {
+    "item": "create:wand_of_symmetry"
+  }
+}

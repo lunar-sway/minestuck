@@ -1,0 +1,18 @@
+{
+  "effect": {
+    "applying_chance": 1.0,
+    "effect": {
+      "amplifier": 2,
+      "duration": 100,
+      "id": "minecraft:haste",
+      "neoforge:cures": [
+        "milk",
+        "protected_by_totem"
+      ],
+      "show_icon": false,
+      "show_particles": false
+    },
+    "on_hit": false
+  },
+  "jukebox_song": "minestuck:retro_battle"
+}

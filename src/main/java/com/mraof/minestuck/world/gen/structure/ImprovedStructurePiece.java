@@ -33,9 +33,17 @@ public abstract class ImprovedStructurePiece extends StructurePiece
 	
 	protected void generateDoor(WorldGenLevel level, BoundingBox sbb, RandomSource rand, int x, int y, int z, Direction direction, Block door, DoorHingeSide hinge)
 	{
-		BlockState state = door.defaultBlockState().setValue(DoorBlock.FACING, direction).setValue(DoorBlock.HINGE, hinge);
+		BlockState state = door.defaultBlockState();
+		
+		if(state.hasProperty(DoorBlock.FACING) && state.hasProperty(DoorBlock.HINGE))
+			state = state.setValue(DoorBlock.FACING, direction).setValue(DoorBlock.HINGE, hinge);
+		
 		placeBlock(level, state, x, y, z, sbb);
-		placeBlock(level, state.setValue(DoorBlock.HALF, DoubleBlockHalf.UPPER), x, y + 1, z, sbb);
+		
+		if(state.hasProperty(DoorBlock.HALF))
+			placeBlock(level, state.setValue(DoorBlock.HALF, DoubleBlockHalf.UPPER), x, y + 1, z, sbb);
+		else
+			placeBlock(level, state, x, y + 1, z, sbb);
 	}
 	
 	protected void generateBed(WorldGenLevel level, BoundingBox sbb, RandomSource rand, int x, int y, int z, Direction direction, BlockState state)

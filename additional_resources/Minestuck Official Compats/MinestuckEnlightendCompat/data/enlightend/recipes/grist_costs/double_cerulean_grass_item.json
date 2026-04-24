@@ -1,0 +1,11 @@
+{
+  "type": "minestuck:grist_cost",
+  "grist_cost": {
+    "minestuck:shale": 2,
+    "minestuck:cobalt": 2,
+    "minestuck:marble": 1
+  },
+  "ingredient": {
+    "item": "enlightened_end:double_cerulean_grass_item"
+  }
+}

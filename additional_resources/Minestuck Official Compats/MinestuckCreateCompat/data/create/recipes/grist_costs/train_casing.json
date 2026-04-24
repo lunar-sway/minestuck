@@ -1,0 +1,13 @@
+{
+  "type": "minestuck:source_grist_cost",
+  "grist_cost": {
+    "minestuck:build": 5
+  },
+  "ingredient": {
+    "item": "create:railway_casing"
+  },
+  "sources": [
+    "create:sturdy_sheet",
+    "create:brass_casing"
+  ]
+}

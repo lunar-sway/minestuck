@@ -1,0 +1,32 @@
+{
+  "parent": "minecraft:recipes/root",
+  "criteria": {
+    "has_prospit_core": {
+      "conditions": {
+        "items": [
+          {
+            "items": "minestuck:prospit_core"
+          }
+        ]
+      },
+      "trigger": "minecraft:inventory_changed"
+    },
+    "has_the_recipe": {
+      "conditions": {
+        "recipe": "minestuck:prospit_core_slab"
+      },
+      "trigger": "minecraft:recipe_unlocked"
+    }
+  },
+  "requirements": [
+    [
+      "has_the_recipe",
+      "has_prospit_core"
+    ]
+  ],
+  "rewards": {
+    "recipes": [
+      "minestuck:prospit_core_slab"
+    ]
+  }
+}

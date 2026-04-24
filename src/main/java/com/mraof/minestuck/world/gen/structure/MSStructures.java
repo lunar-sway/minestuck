@@ -153,6 +153,8 @@ public final class MSStructures
 			PIECE_REGISTER.register("pink_tower", () -> template(PinkTowerPiece::new));
 	
 	// Skaia
+	public static final ResourceKey<Structure> SKAIAN_CATHEDRAL = key("skaian_cathedral");
+	
 	public static final class SkaiaCastle
 	{
 		public static final Supplier<StructureType<CastleStructure>> TYPE =
@@ -178,7 +180,7 @@ public final class MSStructures
 	}
 	
 	
-	private static <S extends Structure> StructureType<S> asType(MapCodec<S> codec)
+	public static <S extends Structure> StructureType<S> asType(MapCodec<S> codec)
 	{
 		return () -> codec;
 	}

@@ -1,0 +1,13 @@
+{
+  "variants": {
+    "type=bottom": {
+      "model": "minestuck:block/derse_refined_metallith_slab"
+    },
+    "type=double": {
+      "model": "minestuck:block/derse_refined_metallith"
+    },
+    "type=top": {
+      "model": "minestuck:block/derse_refined_metallith_slab_top"
+    }
+  }
+}

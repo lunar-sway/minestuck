@@ -1,0 +1,10 @@
+{
+  "type": "minestuck:grist_cost",
+  "grist_cost": {
+    "minestuck:iodine": 4,
+    "minestuck:chalk": 2
+  },
+  "ingredient": {
+    "item": "ecologics:coconut"
+  }
+}

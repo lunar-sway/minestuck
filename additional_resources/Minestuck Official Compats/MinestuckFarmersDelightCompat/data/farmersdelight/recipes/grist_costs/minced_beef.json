@@ -1,0 +1,9 @@
+{
+  "type": "minestuck:grist_cost",
+  "grist_cost": {
+    "minestuck:iodine": 6
+  },
+  "ingredient": {
+    "item": "farmersdelight:minced_beef"
+  }
+}

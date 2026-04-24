@@ -1,0 +1,10 @@
+{
+  "type": "minestuck:grist_cost",
+  "grist_cost": {
+    "minestuck:tar": 20,
+    "minestuck:iodine": 10
+  },
+  "ingredient": {
+    "item": "culturaldelights:squid"
+  }
+}

@@ -1,0 +1,12 @@
+{
+  "type": "minestuck:grist_cost",
+  "grist_cost": {
+    "minestuck:iodine": 100,
+    "minestuck:tar": 100,
+    "minestuck:uranium": 10,
+    "minestuck:diamond": 10
+  },
+  "ingredient": {
+    "item": "ends_delight:raw_dragon_meat_cuts"
+  }
+}

@@ -1,0 +1,10 @@
+{
+  "type": "minecraft:stonecutting",
+  "ingredient": {
+    "item": "minestuck:derse_tarnished_brick"
+  },
+  "result": {
+    "count": 2,
+    "id": "minestuck:derse_tarnished_brick_slab"
+  }
+}

@@ -1,0 +1,10 @@
+{
+  "type": "minestuck:grist_cost",
+  "grist_cost": {
+    "minestuck:shale": 5,
+    "minestuck:rust": 3
+  },
+  "ingredient": {
+    "item": "create:oxidized_copper_tiles"
+  }
+}

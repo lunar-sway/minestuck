@@ -1,0 +1,9 @@
+{
+  "type": "minestuck:grist_cost",
+  "grist_cost": {
+    "minestuck:marble": 36
+  },
+  "ingredient": {
+    "item": "enlightened_end:warm_bismuth_sheets"
+  }
+}

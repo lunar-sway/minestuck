@@ -73,7 +73,6 @@ import net.neoforged.neoforge.client.extensions.common.RegisterClientExtensionsE
 import net.neoforged.neoforge.registries.DeferredItem;
 import org.jetbrains.annotations.NotNull;
 import org.joml.Vector3f;
-import software.bernie.geckolib.renderer.GeoArmorRenderer;
 
 import javax.annotation.Nullable;
 import javax.annotation.ParametersAreNonnullByDefault;
@@ -170,6 +169,7 @@ public class ClientProxy
 		event.registerBlockEntityRenderer(MSBlockEntityTypes.TOTEM_LATHE_DOWEL.get(), TotemLatheRenderer::new);
 		event.registerBlockEntityRenderer(MSBlockEntityTypes.ALCHEMITER.get(), AlchemiterRenderer::new);
 		event.registerBlockEntityRenderer(MSBlockEntityTypes.HORSE_CLOCK.get(), HorseClockRenderer::new);
+		event.registerBlockEntityRenderer(MSBlockEntityTypes.CASSETTE_PLAYER.get(), CassettePlayerRenderer::new);
 		
 		event.registerBlockEntityRenderer(MSBlockEntityTypes.SIGN.get(), SignRenderer::new);
 		event.registerBlockEntityRenderer(MSBlockEntityTypes.HANGING_SIGN.get(), HangingSignRenderer::new);
@@ -179,6 +179,9 @@ public class ClientProxy
 	public static void registerDimensionEffects(RegisterDimensionSpecialEffectsEvent event)
 	{
 		event.register(MSDimensions.LAND_EFFECTS, new LandRenderInfo());
+		event.register(MSDimensions.PROSPIT_EFFECTS, new ProspitSpecialEffects());
+		event.register(MSDimensions.DERSE_EFFECTS, new DerseSpecialEffects());
+		event.register(MSDimensions.VEIL_EFFECTS, new VeilSpecialEffects());
 	}
 	
 	private static void registerArmorModels()
@@ -304,40 +307,6 @@ public class ClientProxy
 				}
 			}, armorItem);
 		}
-		
-		event.registerItem(new IClientItemExtensions()
-		{
-			private GeoArmorRenderer<?> renderer;
-			
-			@Override
-			public @NotNull HumanoidModel<?> getHumanoidArmorModel(LivingEntity livingEntity, ItemStack itemStack, EquipmentSlot equipmentSlot, HumanoidModel<?> original)
-			{
-				if(this.renderer == null)
-					this.renderer = new GeoArmorRenderer<>(new PrismarineArmorModel());
-				
-				Minecraft mc = Minecraft.getInstance();
-				this.renderer.prepForRender(livingEntity, itemStack, equipmentSlot, original, mc.renderBuffers().bufferSource(),
-						mc.getTimer().getGameTimeDeltaPartialTick(true), 0, 0, 0, 0);
-				return this.renderer;
-			}
-		}, MSItems.PRISMARINE_HELMET, MSItems.PRISMARINE_CHESTPLATE, MSItems.PRISMARINE_LEGGINGS, MSItems.PRISMARINE_BOOTS);
-		
-		event.registerItem(new IClientItemExtensions()
-		{
-			private GeoArmorRenderer<?> renderer;
-			
-			@Override
-			public @NotNull HumanoidModel<?> getHumanoidArmorModel(LivingEntity livingEntity, ItemStack itemStack, EquipmentSlot equipmentSlot, HumanoidModel<?> original)
-			{
-				if(this.renderer == null)
-					this.renderer = new GeoArmorRenderer<>(new IronLassArmorModel());
-				
-				Minecraft mc = Minecraft.getInstance();
-				this.renderer.prepForRender(livingEntity, itemStack, equipmentSlot, original, mc.renderBuffers().bufferSource(),
-						mc.getTimer().getGameTimeDeltaPartialTick(true), 0, 0, 0, 0);
-				return this.renderer;
-			}
-		}, MSItems.IRON_LASS_GLASSES, MSItems.IRON_LASS_CHESTPLATE, MSItems.IRON_LASS_SKIRT, MSItems.IRON_LASS_SHOES);
 	}
 	
 	private static IClientFluidTypeExtensions commonFluidExtension(ResourceLocation baseId, Vector3f fogColor, float fogDensity)

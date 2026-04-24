@@ -1,0 +1,32 @@
+{
+  "parent": "minecraft:recipes/root",
+  "criteria": {
+    "has_derse_cracked_brick": {
+      "conditions": {
+        "items": [
+          {
+            "items": "minestuck:derse_cracked_brick"
+          }
+        ]
+      },
+      "trigger": "minecraft:inventory_changed"
+    },
+    "has_the_recipe": {
+      "conditions": {
+        "recipe": "minestuck:derse_cracked_brick_slab"
+      },
+      "trigger": "minecraft:recipe_unlocked"
+    }
+  },
+  "requirements": [
+    [
+      "has_the_recipe",
+      "has_derse_cracked_brick"
+    ]
+  ],
+  "rewards": {
+    "recipes": [
+      "minestuck:derse_cracked_brick_slab"
+    ]
+  }
+}

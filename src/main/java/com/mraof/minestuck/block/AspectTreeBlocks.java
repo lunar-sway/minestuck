@@ -81,7 +81,7 @@ public final class AspectTreeBlocks
 			() -> new PressurePlateBlock(MSBlockSetType.BLOOD, ofFullCopy(BLOOD_ASPECT_PLANKS.asBlock())));
 	
 	public static final ItemBlockPair<ButtonBlock, BlockItem> BLOOD_ASPECT_BUTTON = ItemBlockPair.register("blood_aspect_button",
-			() -> new ButtonBlock(MSBlockSetType.BLOOD, 10, ofFullCopy(BLOOD_ASPECT_PLANKS.asBlock())));
+			() -> new ButtonBlock(MSBlockSetType.BLOOD, 10, ofFullCopy(BLOOD_ASPECT_PLANKS.asBlock()).noCollission()));
 	
 	public static final ItemBlockPair<Block, BlockItem> BLOOD_ASPECT_BOOKSHELF = ItemBlockPair.register("blood_aspect_bookshelf",
 			() -> new FlammableBlock(5, 20, Block.Properties.of().mapColor(MapColor.WOOD).ignitedByLava().instrument(NoteBlockInstrument.BASS).strength(2.0F, 3.0F).sound(SoundType.WOOD)));
@@ -158,7 +158,7 @@ public final class AspectTreeBlocks
 			() -> new PressurePlateBlock(MSBlockSetType.BREATH, ofFullCopy(BREATH_ASPECT_PLANKS.asBlock())));
 	
 	public static final ItemBlockPair<ButtonBlock, BlockItem> BREATH_ASPECT_BUTTON = ItemBlockPair.register("breath_aspect_button",
-			() -> new ButtonBlock(MSBlockSetType.BREATH, 10, ofFullCopy(BREATH_ASPECT_PLANKS.asBlock())));
+			() -> new ButtonBlock(MSBlockSetType.BREATH, 10, ofFullCopy(BREATH_ASPECT_PLANKS.asBlock()).noCollission()));
 	
 	public static final ItemBlockPair<Block, BlockItem> BREATH_ASPECT_BOOKSHELF = ItemBlockPair.register("breath_aspect_bookshelf",
 			() -> new FlammableBlock(5, 20, Block.Properties.of().mapColor(MapColor.WOOD).ignitedByLava().instrument(NoteBlockInstrument.BASS).strength(2.0F, 3.0F).sound(SoundType.WOOD)));
@@ -234,7 +234,7 @@ public final class AspectTreeBlocks
 			() -> new PressurePlateBlock(MSBlockSetType.DOOM, ofFullCopy(DOOM_ASPECT_PLANKS.asBlock())));
 	
 	public static final ItemBlockPair<ButtonBlock, BlockItem> DOOM_ASPECT_BUTTON = ItemBlockPair.register("doom_aspect_button",
-			() -> new ButtonBlock(MSBlockSetType.DOOM, 10, ofFullCopy(DOOM_ASPECT_PLANKS.asBlock())));
+			() -> new ButtonBlock(MSBlockSetType.DOOM, 10, ofFullCopy(DOOM_ASPECT_PLANKS.asBlock()).noCollission()));
 	
 	public static final ItemBlockPair<Block, BlockItem> DOOM_ASPECT_BOOKSHELF = ItemBlockPair.register("doom_aspect_bookshelf",
 			() -> new FlammableBlock(5, 20, Block.Properties.of().mapColor(MapColor.WOOD).ignitedByLava().instrument(NoteBlockInstrument.BASS).strength(2.0F, 3.0F).sound(SoundType.WOOD)));
@@ -310,7 +310,7 @@ public final class AspectTreeBlocks
 			() -> new PressurePlateBlock(MSBlockSetType.HEART, ofFullCopy(HEART_ASPECT_PLANKS.asBlock())));
 	
 	public static final ItemBlockPair<ButtonBlock, BlockItem> HEART_ASPECT_BUTTON = ItemBlockPair.register("heart_aspect_button",
-			() -> new ButtonBlock(MSBlockSetType.HEART, 10, ofFullCopy(HEART_ASPECT_PLANKS.asBlock())));
+			() -> new ButtonBlock(MSBlockSetType.HEART, 10, ofFullCopy(HEART_ASPECT_PLANKS.asBlock()).noCollission()));
 	
 	public static final ItemBlockPair<Block, BlockItem> HEART_ASPECT_BOOKSHELF = ItemBlockPair.register("heart_aspect_bookshelf",
 			() -> new FlammableBlock(5, 20, Block.Properties.of().mapColor(MapColor.WOOD).ignitedByLava().instrument(NoteBlockInstrument.BASS).strength(2.0F, 3.0F).sound(SoundType.WOOD)));
@@ -386,7 +386,7 @@ public final class AspectTreeBlocks
 			() -> new PressurePlateBlock(MSBlockSetType.HOPE, ofFullCopy(HOPE_ASPECT_PLANKS.asBlock())));
 	
 	public static final ItemBlockPair<ButtonBlock, BlockItem> HOPE_ASPECT_BUTTON = ItemBlockPair.register("hope_aspect_button",
-			() -> new ButtonBlock(MSBlockSetType.HOPE, 10, ofFullCopy(HOPE_ASPECT_PLANKS.asBlock())));
+			() -> new ButtonBlock(MSBlockSetType.HOPE, 10, ofFullCopy(HOPE_ASPECT_PLANKS.asBlock()).noCollission()));
 	
 	public static final ItemBlockPair<Block, BlockItem> HOPE_ASPECT_BOOKSHELF = ItemBlockPair.register("hope_aspect_bookshelf",
 			() -> new FlammableBlock(5, 20, Block.Properties.of().mapColor(MapColor.WOOD).ignitedByLava().instrument(NoteBlockInstrument.BASS).strength(2.0F, 3.0F).sound(SoundType.WOOD)));
@@ -462,7 +462,7 @@ public final class AspectTreeBlocks
 			() -> new PressurePlateBlock(MSBlockSetType.LIFE, ofFullCopy(LIFE_ASPECT_PLANKS.asBlock())));
 	
 	public static final ItemBlockPair<ButtonBlock, BlockItem> LIFE_ASPECT_BUTTON = ItemBlockPair.register("life_aspect_button",
-			() -> new ButtonBlock(MSBlockSetType.LIFE, 10, ofFullCopy(LIFE_ASPECT_PLANKS.asBlock())));
+			() -> new ButtonBlock(MSBlockSetType.LIFE, 10, ofFullCopy(LIFE_ASPECT_PLANKS.asBlock()).noCollission()));
 	
 	public static final ItemBlockPair<Block, BlockItem> LIFE_ASPECT_BOOKSHELF = ItemBlockPair.register("life_aspect_bookshelf",
 			() -> new FlammableBlock(5, 20, Block.Properties.of().mapColor(MapColor.WOOD).ignitedByLava().instrument(NoteBlockInstrument.BASS).strength(2.0F, 3.0F).sound(SoundType.WOOD)));
@@ -538,7 +538,7 @@ public final class AspectTreeBlocks
 			() -> new PressurePlateBlock(MSBlockSetType.LIGHT, ofFullCopy(LIGHT_ASPECT_PLANKS.asBlock())));
 	
 	public static final ItemBlockPair<ButtonBlock, BlockItem> LIGHT_ASPECT_BUTTON = ItemBlockPair.register("light_aspect_button",
-			() -> new ButtonBlock(MSBlockSetType.LIGHT, 10, ofFullCopy(LIGHT_ASPECT_PLANKS.asBlock())));
+			() -> new ButtonBlock(MSBlockSetType.LIGHT, 10, ofFullCopy(LIGHT_ASPECT_PLANKS.asBlock()).noCollission()));
 	
 	public static final ItemBlockPair<Block, BlockItem> LIGHT_ASPECT_BOOKSHELF = ItemBlockPair.register("light_aspect_bookshelf",
 			() -> new FlammableBlock(5, 20, Block.Properties.of().mapColor(MapColor.WOOD).ignitedByLava().instrument(NoteBlockInstrument.BASS).strength(2.0F, 3.0F).sound(SoundType.WOOD)));
@@ -614,7 +614,7 @@ public final class AspectTreeBlocks
 			() -> new PressurePlateBlock(MSBlockSetType.MIND, ofFullCopy(MIND_ASPECT_PLANKS.asBlock())));
 	
 	public static final ItemBlockPair<ButtonBlock, BlockItem> MIND_ASPECT_BUTTON = ItemBlockPair.register("mind_aspect_button",
-			() -> new ButtonBlock(MSBlockSetType.MIND, 10, ofFullCopy(MIND_ASPECT_PLANKS.asBlock())));
+			() -> new ButtonBlock(MSBlockSetType.MIND, 10, ofFullCopy(MIND_ASPECT_PLANKS.asBlock()).noCollission()));
 	
 	public static final ItemBlockPair<Block, BlockItem> MIND_ASPECT_BOOKSHELF = ItemBlockPair.register("mind_aspect_bookshelf",
 			() -> new FlammableBlock(5, 20, Block.Properties.of().mapColor(MapColor.WOOD).ignitedByLava().instrument(NoteBlockInstrument.BASS).strength(2.0F, 3.0F).sound(SoundType.WOOD)));
@@ -690,7 +690,7 @@ public final class AspectTreeBlocks
 			() -> new PressurePlateBlock(MSBlockSetType.RAGE, ofFullCopy(RAGE_ASPECT_PLANKS.asBlock())));
 	
 	public static final ItemBlockPair<ButtonBlock, BlockItem> RAGE_ASPECT_BUTTON = ItemBlockPair.register("rage_aspect_button",
-			() -> new ButtonBlock(MSBlockSetType.RAGE, 10, ofFullCopy(RAGE_ASPECT_PLANKS.asBlock())));
+			() -> new ButtonBlock(MSBlockSetType.RAGE, 10, ofFullCopy(RAGE_ASPECT_PLANKS.asBlock()).noCollission()));
 	
 	public static final ItemBlockPair<Block, BlockItem> RAGE_ASPECT_BOOKSHELF = ItemBlockPair.register("rage_aspect_bookshelf",
 			() -> new FlammableBlock(5, 20, Block.Properties.of().mapColor(MapColor.WOOD).ignitedByLava().instrument(NoteBlockInstrument.BASS).strength(2.0F, 3.0F).sound(SoundType.WOOD)));
@@ -766,7 +766,7 @@ public final class AspectTreeBlocks
 			() -> new PressurePlateBlock(MSBlockSetType.SPACE, ofFullCopy(SPACE_ASPECT_PLANKS.asBlock())));
 	
 	public static final ItemBlockPair<ButtonBlock, BlockItem> SPACE_ASPECT_BUTTON = ItemBlockPair.register("space_aspect_button",
-			() -> new ButtonBlock(MSBlockSetType.SPACE, 10, ofFullCopy(SPACE_ASPECT_PLANKS.asBlock())));
+			() -> new ButtonBlock(MSBlockSetType.SPACE, 10, ofFullCopy(SPACE_ASPECT_PLANKS.asBlock()).noCollission()));
 	
 	public static final ItemBlockPair<Block, BlockItem> SPACE_ASPECT_BOOKSHELF = ItemBlockPair.register("space_aspect_bookshelf",
 			() -> new FlammableBlock(5, 20, Block.Properties.of().mapColor(MapColor.WOOD).ignitedByLava().instrument(NoteBlockInstrument.BASS).strength(2.0F, 3.0F).sound(SoundType.WOOD)));
@@ -842,7 +842,7 @@ public final class AspectTreeBlocks
 			() -> new PressurePlateBlock(MSBlockSetType.TIME, ofFullCopy(TIME_ASPECT_PLANKS.asBlock())));
 	
 	public static final ItemBlockPair<ButtonBlock, BlockItem> TIME_ASPECT_BUTTON = ItemBlockPair.register("time_aspect_button",
-			() -> new ButtonBlock(MSBlockSetType.TIME, 10, ofFullCopy(TIME_ASPECT_PLANKS.asBlock())));
+			() -> new ButtonBlock(MSBlockSetType.TIME, 10, ofFullCopy(TIME_ASPECT_PLANKS.asBlock()).noCollission()));
 	
 	public static final ItemBlockPair<Block, BlockItem> TIME_ASPECT_BOOKSHELF = ItemBlockPair.register("time_aspect_bookshelf",
 			() -> new FlammableBlock(5, 20, Block.Properties.of().mapColor(MapColor.WOOD).ignitedByLava().instrument(NoteBlockInstrument.BASS).strength(2.0F, 3.0F).sound(SoundType.WOOD)));
@@ -918,7 +918,7 @@ public final class AspectTreeBlocks
 			() -> new PressurePlateBlock(MSBlockSetType.VOID, ofFullCopy(VOID_ASPECT_PLANKS.asBlock())));
 	
 	public static final ItemBlockPair<ButtonBlock, BlockItem> VOID_ASPECT_BUTTON = ItemBlockPair.register("void_aspect_button",
-			() -> new ButtonBlock(MSBlockSetType.VOID, 10, ofFullCopy(VOID_ASPECT_PLANKS.asBlock())));
+			() -> new ButtonBlock(MSBlockSetType.VOID, 10, ofFullCopy(VOID_ASPECT_PLANKS.asBlock()).noCollission()));
 	
 	public static final ItemBlockPair<Block, BlockItem> VOID_ASPECT_BOOKSHELF = ItemBlockPair.register("void_aspect_bookshelf",
 			() -> new FlammableBlock(5, 20, Block.Properties.of().mapColor(MapColor.WOOD).ignitedByLava().instrument(NoteBlockInstrument.BASS).strength(2.0F, 3.0F).sound(SoundType.WOOD)));

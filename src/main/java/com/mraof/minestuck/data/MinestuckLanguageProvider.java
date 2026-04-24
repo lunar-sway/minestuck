@@ -202,4 +202,10 @@ public abstract class MinestuckLanguageProvider extends LanguageProvider
 	{
 		add(ComputerTheme.translationKeyFromId(themeId), themeName);
 	}
+	
+	protected void addPainting(String key, String title, String author)
+	{
+		add("painting." + modid + "." + key + ".title", title);
+		add("painting." + modid + "." + key + ".author", author);
+	}
 }

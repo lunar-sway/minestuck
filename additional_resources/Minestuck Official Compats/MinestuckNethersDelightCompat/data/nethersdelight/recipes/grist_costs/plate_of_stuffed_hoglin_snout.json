@@ -1,0 +1,13 @@
+{
+  "type": "minestuck:grist_cost",
+  "grist_cost": {
+    "minestuck:chalk": 3,
+    "minestuck:iodine": 36,
+    "minestuck:shale": 3,
+    "minestuck:mercury": 7
+    
+  },
+  "ingredient": {
+    "item": "nethersdelight:plate_of_stuffed_hoglin_snout"
+  }
+}

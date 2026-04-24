@@ -56,6 +56,11 @@ public class EventTrigger extends SimpleCriterionTrigger<EventTrigger.Instance>
 			return MSCriteriaTriggers.BUY_OUT_SHOP.get().createCriterion(new Instance(Optional.empty()));
 		}
 		
+		public static Criterion<Instance> brickComputer()
+		{
+			return MSCriteriaTriggers.BRICK_COMPUTER.get().createCriterion(new Instance(Optional.empty()));
+		}
+		
 		public boolean test()
 		{
 			return true;

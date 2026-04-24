@@ -28,6 +28,7 @@ import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
+import static com.mraof.minestuck.alchemy.TorrentHelper.sendOutUpdates;
 
 @EventBusSubscriber(modid = Minestuck.MOD_ID, bus = EventBusSubscriber.Bus.GAME)
 public class TorrentSession
@@ -136,9 +137,8 @@ public class TorrentSession
 			{
 				TorrentHelper.handleTorrent(torrentSession, sessions, server);
 			}
+			sendOutUpdates(sessions, server);
 			
-			//TODO placeholders to remove, including createTestTorrentSession()
-			TorrentHelper.debugStuff(server, data);
 		}
 	}
 	
@@ -207,11 +207,15 @@ public class TorrentSession
 		);
 	}
 	
-	public record TorrentClientData(String username, List<GristType> seededTypes, Map<Integer, List<GristType>> leeches, LimitedCache cache)
+	public record TorrentClientData(String username,int playerColor, int status, List<GristType> seededTypes, Map<Integer, List<GristType>> leeches, LimitedCache cache)
 	{
 		public static final StreamCodec<RegistryFriendlyByteBuf, TorrentClientData> STREAM_CODEC = StreamCodec.composite(
 				ByteBufCodecs.STRING_UTF8,
 				TorrentClientData::username,
+				ByteBufCodecs.INT,
+				TorrentClientData::playerColor,
+				ByteBufCodecs.INT,
+				TorrentClientData::status,
 				GristType.STREAM_CODEC.apply(ByteBufCodecs.list()),
 				TorrentClientData::seededTypes,
 				ByteBufCodecs.map(HashMap::new, ByteBufCodecs.INT, GristType.STREAM_CODEC.apply(ByteBufCodecs.list())),
@@ -220,6 +224,8 @@ public class TorrentSession
 				TorrentClientData::cache,
 				TorrentClientData::new);
 		
+		public boolean isOnline() { return status == 2; }
+		public boolean hasEntered() { return status >= 1; }
 		public List<GristType> getViableSeeding()
 		{
 			return this.seededTypes.stream().filter(this.cache.set::hasType).toList();

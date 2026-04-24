@@ -23,9 +23,7 @@ import net.minecraft.network.chat.MutableComponent;
 import net.minecraft.resources.ResourceLocation;
 import net.neoforged.neoforge.network.PacketDistributor;
 
-import java.util.ArrayList;
-import java.util.Collections;
-import java.util.List;
+import java.util.*;
 import java.util.concurrent.atomic.AtomicInteger;
 
 public class TorrentWidgets
@@ -64,11 +62,11 @@ public class TorrentWidgets
 	
 	protected static class GristEntry extends AbstractWidget
 	{
-		public static final int WIDTH = 40;
+		public static final int WIDTH = 42;
 		public static final int HEIGHT = 14;
 		public static final int GRIST_ICON_X = 2, GRIST_ICON_Y = 2;
 		public static final int GRIST_COUNT_X = GRIST_ICON_X + 13;
-		public static final float BAR_WIDTH = 20F;
+		public static final float BAR_WIDTH = 22F;
 		
 		private TorrentSession.TorrentClientData torrentData;
 		public final GristType gristType;
@@ -94,12 +92,19 @@ public class TorrentWidgets
 		{
 			MutableComponent tooltip = gristType.getDisplayName();
 			
-			if(torrentData != null && torrentData.seededTypes().contains(gristType))
+			if(isOwner)
 			{
-				if(gristAmount > 0)
-					tooltip.append("\n(Is being seeded)");
+				if(torrentData != null && torrentData.seededTypes().contains(gristType))
+					tooltip.append(Component.translatable(GristTorrentGui.TOOLTIP_SEEDING_ON));
 				else
-					tooltip.append("\n(Will be seeded)");
+					tooltip.append(Component.translatable(GristTorrentGui.TOOLTIP_SEEDING_OFF));
+			}
+			else
+			{
+				if(isActive)
+					tooltip.append(Component.translatable(GristTorrentGui.TOOLTIP_LEECHING_ON));
+				else
+					tooltip.append(Component.translatable(GristTorrentGui.TOOLTIP_LEECHING_OFF));
 			}
 			
 			setTooltip(Tooltip.create(tooltip));
@@ -173,9 +178,10 @@ public class TorrentWidgets
 		}
 	}
 	
-	protected static class TorrentContainer extends ScrollingWidget<GristEntry>
+	protected static class TorrentContainer extends ScrollingYWidget<GristEntry>
 	{
-		public static final int WIDTH = GristEntry.WIDTH + 2;
+		private TorrentSession.TorrentClientData torrentData;
+		public static final int WIDTH = GristEntry.WIDTH + 5;
 		public static final int HEIGHT = (GristEntry.HEIGHT + 1) * 6;
 		
 		public final Integer playerId;
@@ -208,6 +214,7 @@ public class TorrentWidgets
 		
 		public void refreshEntries(TorrentSession.TorrentClientData torrentData)
 		{
+			this.torrentData = torrentData;
 			for(GristEntry gristEntry : this.children())
 			{
 				GristType entryGristType = gristEntry.gristType;
@@ -220,6 +227,10 @@ public class TorrentWidgets
 				
 				gristEntry.setTooltip();
 			}
+			if(!torrentData.hasEntered() && playerId != SkaiaClient.playerId)
+				this.children().forEach(entry -> entry.visible = false);
+			
+			updateVisibilityAndPosition();
 		}
 		
 		@Override
@@ -227,16 +238,65 @@ public class TorrentWidgets
 		{
 			super.renderWidget(guiGraphics, mouseX, mouseY, partialTick);
 			
+			
+			if (torrentData != null)
+			{
+				ResourceLocation colorTex = ResourceLocation.fromNamespaceAndPath("minestuck", "textures/gui/color_selector.png"
+				);
+				float r, g, b;
+				
+				if(torrentData.status() == 2) {
+					r = ((torrentData.playerColor() >> 16) & 0xFF) / 255F;
+					g = ((torrentData.playerColor() >> 8) & 0xFF) / 255F;
+					b = (torrentData.playerColor() & 0xFF) / 255F;
+				} else {
+					r = 0.5F; g = 0.5F; b = 0.5F;
+				}
+				
+				guiGraphics.pose().pushPose();
+				
+				guiGraphics.pose().translate(getX(), getY() - 5, 0);
+				guiGraphics.pose().scale(0.27F, 0.27F, 1.0F);
+				
+				RenderSystem.setShaderColor(r, g, b, 1.0F);
+				
+				guiGraphics.blit(colorTex, 0, 0, 47, 47, 181, 24, 54, 56, 256, 256);
+				
+				RenderSystem.setShaderColor(1, 1, 1, 1);
+				
+				guiGraphics.pose().popPose();
+			}
+			
+			guiGraphics.enableScissor(getX(), getY(), getX() + WIDTH, getY() + HEIGHT);
 			guiGraphics.pose().pushPose();
 			guiGraphics.pose().scale(0.5F, 0.5F, 0.5F);
-			guiGraphics.drawString(font, username, scale((getX() + WIDTH / 2)) - scale(font.width(username) / 2), scale(getY() + 4), 0xFF000000, false);
+			
+			String displayName = username;
+			while(font.width(displayName + "...") > WIDTH * 2 && displayName.length() > 0)
+				displayName = displayName.substring(0, displayName.length() - 1);
+			if(!displayName.equals(username))
+				displayName = displayName + "...";
+			
+			guiGraphics.drawString(font, displayName, scale(getX() + 1), scale(getY() + 10), 0xFF000000, false);
+			
 			guiGraphics.pose().popPose();
+			guiGraphics.disableScissor();
 		}
 		
 		@Override
 		public int visibleEntryCount()
 		{
 			return 5;
+		}
+		@Override
+		public void updateVisibilityAndPosition()
+		{
+			if(torrentData != null && !torrentData.hasEntered() && playerId != SkaiaClient.playerId)
+			{
+				this.children().forEach(entry -> entry.visible = false);
+				return;
+			}
+			super.updateVisibilityAndPosition();
 		}
 		
 		@Override
@@ -264,10 +324,11 @@ public class TorrentWidgets
 		public static final int WIDTH = GristTorrentGui.GUI_WIDTH - X_OFFSET_FROM_EDGE;
 		public static final int HEIGHT = 12;
 		public static final int TEXT_Y_OFFSET = 5;
-		
+		public long sessionDownloaded = 0;
+		private boolean userIsLeeching = false;
+		private TorrentSession.TorrentClientData userData;
 		private final Font font;
 		private final GristType gristType;
-		
 		private Pair<Integer, Integer> seedsData = Pair.of(0, 0); //first is seeds being utilized and second is total seeds available
 		private Pair<Integer, Integer> typeDownSpeedRange = Pair.of(0, 0); //first is minimum speed and second is maximum
 		private int typeUpSpeed = 0;
@@ -286,24 +347,28 @@ public class TorrentWidgets
 		
 		public void updateStats()
 		{
-			TorrentSession.TorrentClientData userData = GristTorrentGui.visibleTorrentData.get(SkaiaClient.playerId);
+			userData = GristTorrentGui.visibleTorrentData.get(SkaiaClient.playerId);
 			
 			int minDownSpeed = Integer.MAX_VALUE;
 			int maxDownSpeed = 1;
 			AtomicInteger totalSeeds = new AtomicInteger(); //TODO is this appropriate?
+			userIsLeeching = false;
 			
 			List<TorrentSession.TorrentClientData> filteredData = new ArrayList<>();
 			GristTorrentGui.visibleTorrentData.forEach((key, value) -> {
 				boolean couldSeed = value.cache().set().asAmounts().stream().anyMatch(gristAmount -> gristAmount.hasType(gristType) && !gristAmount.isEmpty());
 				boolean tryingToSeed = value.seededTypes().stream().anyMatch(iterateType -> iterateType.equals(gristType));
-				boolean userTryingToLeech = value.leeches().getOrDefault(SkaiaClient.playerId, Collections.emptyList()).contains(gristType);
+				if(!userIsLeeching)
+					userIsLeeching = value.leeches().getOrDefault(SkaiaClient.playerId, Collections.emptyList()).contains(gristType);
 				
 				if(tryingToSeed && key != SkaiaClient.playerId)
 				{
-					if(couldSeed)
-						totalSeeds.addAndGet(1);
-					
-					if(userTryingToLeech)
+					boolean currentLeech = value.leeches()
+							.getOrDefault(SkaiaClient.playerId, Collections.emptyList())
+							.contains(gristType);
+					if(currentLeech) userIsLeeching = true;
+					if(couldSeed) totalSeeds.addAndGet(1);
+					if(userIsLeeching)
 						filteredData.add(value);
 				}
 			}); //only include data if the user is trying to leech the grist
@@ -336,17 +401,22 @@ public class TorrentWidgets
 			guiGraphics.pose().pushPose();
 			guiGraphics.pose().scale(0.5F, 0.5F, 0.5F);
 			
-			drawIcon(getX() + 1, getY() + 1, gristType.getIcon());
+			drawIcon(getX() + 3, getY() + 1, gristType.getIcon());
 			
 			//down
-			MutableComponent downText = speedAppend(typeDownSpeedRange.getFirst()).append(" - ").append(speedAppend(typeDownSpeedRange.getSecond()));
-			guiGraphics.drawString(font, downText, scale(getX() + 25), scale(getY() + TEXT_Y_OFFSET), GristTorrentGui.LIGHT_BLUE, false);
+			MutableComponent downText = speedAppend(typeDownSpeedRange.getFirst());
+//			.append(" - ").append(speedAppend(typeDownSpeedRange.getSecond()))
+			
+			guiGraphics.drawString(font, downText, scale(getX() + 21), scale(getY() + TEXT_Y_OFFSET), GristTorrentGui.LIGHT_BLUE, false);
 			
 			//up
-			guiGraphics.drawString(font, speedAppend(typeUpSpeed), scale(getX() + 70), scale(getY() + TEXT_Y_OFFSET), GristTorrentGui.LIGHT_BLUE, false);
+			guiGraphics.drawString(font, speedAppend(typeUpSpeed), scale(getX() + 56), scale(getY() + TEXT_Y_OFFSET), GristTorrentGui.LIGHT_BLUE, false);
 			
 			//seeds
-			guiGraphics.drawString(font, Component.literal(seedsData.getFirst() + "(" + seedsData.getSecond() + ")"), scale(getX() + 110), scale(getY() + TEXT_Y_OFFSET), GristTorrentGui.LIGHT_BLUE, false);
+			guiGraphics.drawString(font, Component.literal(seedsData.getFirst() + "(" + seedsData.getSecond() + ")"), scale(getX() + 86), scale(getY() + TEXT_Y_OFFSET), GristTorrentGui.LIGHT_BLUE, false);
+			
+			//downloaded
+			guiGraphics.drawString(font, Component.literal(GuiUtil.addSuffix(sessionDownloaded)), scale(getX() + 108), scale(getY() + TEXT_Y_OFFSET), GristTorrentGui.LIGHT_BLUE, false);
 			
 			guiGraphics.pose().popPose();
 		}
@@ -354,6 +424,19 @@ public class TorrentWidgets
 		public boolean typeIsActive()
 		{
 			return typeDownSpeedRange.getSecond() > 0 || typeUpSpeed > 0;
+		}
+		
+		public boolean matchesFilter(GristTorrentGui.TorrentFilter filter)
+		{
+			boolean isCompleted = userIsLeeching && (seedsData.getSecond() == 0 || userData.cache().set().getGrist(gristType) >= userData.cache().limit());
+			return switch(filter)
+			{
+				case ALL -> true;
+				case DOWNLOADING -> typeDownSpeedRange.getSecond() > 0 && !isCompleted;
+				case ACTIVE -> typeUpSpeed > 0;
+				case INACTIVE -> !typeIsActive();
+				case COMPLETED -> isCompleted;
+			};
 		}
 		
 		public static MutableComponent speedAppend(int value)
@@ -373,10 +456,93 @@ public class TorrentWidgets
 		}
 	}
 	
-	protected static class StatsContainer extends ScrollingWidget<GristStat>
+	protected static class FilterContainer extends AbstractWidget
+	{
+		public static final int X_OFFSET_FROM_EDGE = 1;
+		public static final int Y_OFFSET_FROM_EDGE = 128;
+		public static final int WIDTH = GristStat.X_OFFSET_FROM_EDGE - 2;
+		public static final int ROW_HEIGHT = 6;
+		public static final int HEIGHT = ROW_HEIGHT * GristTorrentGui.TorrentFilter.values().length;
+		
+		private final Map<GristTorrentGui.TorrentFilter, Integer> filterCounts = new HashMap<>();
+		
+		public GristTorrentGui.TorrentFilter activeFilter = GristTorrentGui.TorrentFilter.ALL;
+		private final Font font;
+		private final GristTorrentGui gui;
+		
+		public FilterContainer(int pX, int pY, Font font, GristTorrentGui gui)
+		{
+			super(pX, pY, WIDTH, HEIGHT, Component.empty());
+			this.font = font;
+			this.gui = gui;
+			updateCounts();
+		}
+		
+		public void updateCounts()
+		{
+			for(int i = 0; i < GristTorrentGui.TorrentFilter.values().length; i++)
+			{
+				int count = 0;
+				GristTorrentGui.TorrentFilter filter = GristTorrentGui.TorrentFilter.values()[i];
+				for(GristType gristType : GristTypes.REGISTRY)
+				{
+					GristStat stat = new GristStat(0, 0, font, gristType);
+					if(stat.matchesFilter(filter)) count++;
+				}
+				filterCounts.put(filter, count);
+			}
+		}
+		
+		@Override
+		protected void renderWidget(GuiGraphics guiGraphics, int mouseX, int mouseY, float partialTick)
+		{
+			guiGraphics.pose().pushPose();
+			guiGraphics.pose().scale(0.5F, 0.5F, 0.5F);
+			
+			GristTorrentGui.TorrentFilter[] filters = GristTorrentGui.TorrentFilter.values();
+			for(int i = 0; i < filters.length; i++)
+			{
+				GristTorrentGui.TorrentFilter filter = filters[i];
+				int count = filterCounts.getOrDefault(filter, 0);
+				String label = filter.toString() + "(" + count + ")";
+				int color = filter == activeFilter ? GristTorrentGui.LIGHT_BLUE : GristTorrentGui.DARK_GREY;
+				guiGraphics.drawString(font, label, scale(getX() + 1), scale(getY() + i * ROW_HEIGHT + 5), color, false);
+			}
+			
+			guiGraphics.pose().popPose();
+		}
+		
+		@Override
+		public void onClick(double mouseX, double mouseY, int button)
+		{
+			int index = (int) (mouseY - getY() - 3) / ROW_HEIGHT;
+			GristTorrentGui.TorrentFilter[] filters = GristTorrentGui.TorrentFilter.values();
+			if(index >= 0 && index < filters.length)
+			{
+				activeFilter = filters[index];
+				gui.setFilter(activeFilter);
+			}
+			super.onClick(mouseX, mouseY, button);
+		}
+		
+		@Override
+		protected boolean isValidClickButton(int pButton)
+		{
+			return pButton == 0;
+		}
+		
+		@Override
+		protected void updateWidgetNarration(NarrationElementOutput narrationElementOutput)
+		{
+		}
+	}
+	
+	protected static class StatsContainer extends ScrollingYWidget<GristStat>
 	{
 		public static final int WIDTH = GristStat.WIDTH;
 		public static final int HEIGHT = (GristStat.HEIGHT + 1) * 3;
+		private static final Map<GristType, Long> downloadedAmounts = new HashMap<>();
+		private static final Map<GristType, Long> previousGristAmounts = new HashMap<>();
 		
 		private final Font font;
 		
@@ -387,7 +553,7 @@ public class TorrentWidgets
 			this.font = font;
 		}
 		
-		public void updateStats()
+		public void updateStats(GristTorrentGui.TorrentFilter filter)
 		{
 			this.children().clear();
 			
@@ -395,8 +561,9 @@ public class TorrentWidgets
 			for(GristType gristType : GristTypes.REGISTRY)
 			{
 				GristStat gristStat = new GristStat(this.getX(), this.getY() + 6 + ((GristStat.HEIGHT + 1) * i), font, gristType);
+				gristStat.sessionDownloaded = downloadedAmounts.getOrDefault(gristType, 0L);
 				
-				if(gristStat.typeIsActive())
+				if(gristStat.matchesFilter(filter))
 				{
 					this.children().add(gristStat);
 					i++;
@@ -404,6 +571,31 @@ public class TorrentWidgets
 			}
 			
 			this.updateVisibilityAndPosition();
+		}
+		public void trackDownloads()
+		{
+			TorrentSession.TorrentClientData userData = GristTorrentGui.visibleTorrentData.get(SkaiaClient.playerId);
+			if(userData == null) return;
+			
+			for(GristType gristType : GristTypes.REGISTRY)
+			{
+				long current = userData.cache().set().getGrist(gristType);
+				long previous = previousGristAmounts.getOrDefault(gristType, current);
+				long delta = current - previous;
+				
+				boolean isLeeching = GristTorrentGui.visibleTorrentData.entrySet().stream()
+						.filter(e -> e.getKey() != SkaiaClient.playerId)
+						.anyMatch(e -> e.getValue().leeches()
+								.getOrDefault(SkaiaClient.playerId, Collections.emptyList())
+								.contains(gristType));
+				
+				if(isLeeching && delta > 0)
+					downloadedAmounts.merge(gristType, delta, Long::sum);
+				else if(!isLeeching)
+					downloadedAmounts.remove(gristType);
+				
+				previousGristAmounts.put(gristType, current);
+			}
 		}
 		
 		@Override
@@ -415,17 +607,31 @@ public class TorrentWidgets
 			guiGraphics.drawString(font, Component.literal("Grist"), scale(getX() + 2), scale(getY() + 2), GristTorrentGui.LIGHT_BLUE, false);
 			
 			//down
-			guiGraphics.drawString(font, Component.literal("Down Speed"), scale(getX() + 25), scale(getY() + 2), GristTorrentGui.LIGHT_BLUE, false);
+			guiGraphics.drawString(font, Component.literal("Down Speed"), scale(getX() + 20), scale(getY() + 2), GristTorrentGui.LIGHT_BLUE, false);
 			
 			//up
-			guiGraphics.drawString(font, Component.literal("Up Speed"), scale(getX() + 70), scale(getY() + 2), GristTorrentGui.LIGHT_BLUE, false);
+			guiGraphics.drawString(font, Component.literal("Up Speed"), scale(getX() + 55), scale(getY() + 2), GristTorrentGui.LIGHT_BLUE, false);
 			
 			//seeds
-			guiGraphics.drawString(font, Component.literal("Seeds"), scale(getX() + 110), scale(getY() + 2), GristTorrentGui.LIGHT_BLUE, false);
+			guiGraphics.drawString(font, Component.literal("Seeds"), scale(getX() + 85), scale(getY() + 2), GristTorrentGui.LIGHT_BLUE, false);
+			
+			//downloaded
+			guiGraphics.drawString(font, Component.literal("Downloaded"), scale(getX() + 107), scale(getY() + 2), GristTorrentGui.LIGHT_BLUE, false);
 			
 			guiGraphics.pose().popPose();
 			
 			super.renderWidget(guiGraphics, mouseX, mouseY, partialTick);
+		}
+		
+		@Override
+		protected void adjustYValue(GristStat widget, int i)
+		{
+			widget.setY(getY() + getInitialYOffset() + (i - scroll) * (subWidgetHeight() + 1));
+		}
+		
+		public int getInitialYOffset()
+		{
+			return 7;
 		}
 		
 		@Override
@@ -468,10 +674,8 @@ public class TorrentWidgets
 			
 			if(gristType == GristTypes.BUILD.get() || gristType == GristTypes.DIAMOND.get())
 				color = GristTorrentGui.LIGHT_BLUE;
-			else if(gristType == GristTypes.MARBLE.get())
-				color = 0xFFFFC0CB; //pink
-			else
-				color = gristType.getUnderlingColor();
+			else if(gristType == GristTypes.MARBLE.get()) color = 0xFFFFC0CB; //pink
+			else color = gristType.getUnderlingColor();
 			
 			setTooltip(Tooltip.create(gristAmount.type().getDisplayName().append(Component.literal(": " + gristAmount.amount()))));
 		}
@@ -511,12 +715,12 @@ public class TorrentWidgets
 		}
 	}
 	
-	public abstract static class ScrollingWidget<T extends AbstractWidget> extends AbstractContainerWidget
+	public abstract static class ScrollingYWidget<T extends AbstractWidget> extends AbstractContainerWidget
 	{
-		private int scroll = 0;
+		protected int scroll = 0;
 		private final List<T> widgets = new ArrayList<>();
 		
-		public ScrollingWidget(int pX, int pY, int pWidth, int pHeight)
+		public ScrollingYWidget(int pX, int pY, int pWidth, int pHeight)
 		{
 			super(pX, pY, pWidth, pHeight, Component.empty());
 		}
@@ -530,7 +734,7 @@ public class TorrentWidgets
 		@Override
 		protected void renderWidget(GuiGraphics guiGraphics, int mouseX, int mouseY, float partialTick)
 		{
-			for (T widget : this.widgets)
+			for(T widget : this.widgets)
 				widget.render(guiGraphics, mouseX, mouseY, partialTick);
 		}
 		
@@ -539,10 +743,8 @@ public class TorrentWidgets
 		{
 			//TODO consider inverting scroll direction
 			
-			if(scrollY > 0)
-				scroll = Math.min(getMaxScroll(), scroll + 1);
-			else if(scrollY < 0)
-				scroll = Math.max(0, scroll - 1);
+			if(scrollY > 0) scroll = Math.min(getMaxScroll(), scroll + 1);
+			else if(scrollY < 0) scroll = Math.max(0, scroll - 1);
 			
 			updateVisibilityAndPosition();
 			
@@ -562,7 +764,7 @@ public class TorrentWidgets
 			}
 		}
 		
-		private void adjustYValue(T widget, int i)
+		protected void adjustYValue(T widget, int i)
 		{
 			widget.setY(getY() + (i + 1 - scroll) * (subWidgetHeight() + 1));
 		}
@@ -570,6 +772,73 @@ public class TorrentWidgets
 		public abstract int visibleEntryCount();
 		
 		public abstract int subWidgetHeight();
+		
+		public abstract int getMaxScroll();
+		
+		@Override
+		protected boolean isValidClickButton(int pButton)
+		{
+			return false;
+		}
+	}
+	// Soon be used to scroll torrentContainers on x coordinate
+	public abstract static class ScrollingXWidget<T extends AbstractWidget> extends AbstractContainerWidget
+	{
+		private int scroll = 0;
+		private final List<T> widgets = new ArrayList<>();
+		
+		public ScrollingXWidget(int pX, int pY, int pWidth, int pHeight)
+		{
+			super(pX, pY, pWidth, pHeight, Component.empty());
+		}
+		
+		@Override
+		public List<T> children()
+		{
+			return widgets;
+		}
+		
+		@Override
+		protected void renderWidget(GuiGraphics guiGraphics, int mouseX, int mouseY, float partialTick)
+		{
+			for(T widget : this.widgets)
+				widget.render(guiGraphics, mouseX, mouseY, partialTick);
+		}
+		
+		@Override
+		public boolean mouseScrolled(double mouseX, double mouseY, double scrollX, double scrollY)
+		{
+			//TODO consider inverting scroll direction
+			
+			if(scrollX > 0) scroll = Math.min(getMaxScroll(), scroll + 1);
+			else if(scrollX < 0) scroll = Math.max(0, scroll - 1);
+			
+			updateVisibilityAndPosition();
+			
+			return super.mouseScrolled(mouseX, mouseY, scrollX, scrollY);
+		}
+		
+		public void updateVisibilityAndPosition()
+		{
+			for(int i = 0; i < widgets.size(); i++)
+			{
+				T widget = widgets.get(i);
+				
+				// Adjust position relative to the visible area
+				adjustXValue(widget, i);
+				
+				widget.visible = i >= scroll && i < scroll + visibleEntryCount();
+			}
+		}
+		
+		private void adjustXValue(T widget, int i)
+		{
+			widget.setX(getX() + (i + 1 - scroll) * (subWidgetWidth() + 1));
+		}
+		
+		public abstract int visibleEntryCount();
+		
+		public abstract int subWidgetWidth();
 		
 		public abstract int getMaxScroll();
 		

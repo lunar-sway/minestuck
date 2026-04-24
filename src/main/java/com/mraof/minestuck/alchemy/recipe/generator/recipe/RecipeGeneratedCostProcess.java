@@ -3,7 +3,9 @@ package com.mraof.minestuck.alchemy.recipe.generator.recipe;
 import com.google.common.collect.ImmutableMap;
 import com.mraof.minestuck.MinestuckConfig;
 import com.mraof.minestuck.alchemy.recipe.generator.GenerationContext;
+import com.mraof.minestuck.api.alchemy.GristAmount;
 import com.mraof.minestuck.api.alchemy.GristSet;
+import com.mraof.minestuck.api.alchemy.MutableGristSet;
 import com.mraof.minestuck.api.alchemy.recipe.generator.GeneratorCallback;
 import com.mraof.minestuck.api.alchemy.recipe.generator.GristCostResult;
 import com.mraof.minestuck.api.alchemy.recipe.generator.LookupTracker;
@@ -58,8 +60,12 @@ class RecipeGeneratedCostProcess
 			return GristCostResult.ofOrNull(generatedCosts.get(item));
 		} else
 		{
-			GristSet result = costFromRecipes(item, callback);
-			//TODO Clean cost of entries with 0, set it to null if it is empty (no free cookies for you). Also log these events so that the costs of base ingredients can be modified accordingly
+			GristSet result = removeZeros(costFromRecipes(item, callback));
+			if (result != null && result.isEmpty())
+			{
+				result = null;
+				LOGGER.debug("Found item {} with valid recipe but no grist cost", item);
+			}
 			
 			if(callback.shouldSaveResult())
 				generatedCosts.put(item, result == null ? null : result.asImmutable());
@@ -118,5 +124,19 @@ class RecipeGeneratedCostProcess
 				else LOGGER.info("Found item {} with grist cost recipe that is also valid for grist cost generation. Recipe cost: {}, generated cost: {}", item, cost, generatedCost);
 			}
 		}
+	}
+
+	/**
+	 * Returns a new GristSet without the zeros
+	 */
+	private GristSet removeZeros(GristSet gristSet)
+	{
+		if (gristSet == null) return null;
+
+		MutableGristSet nonZeros = MutableGristSet.newDefault();
+		for (GristAmount amount : gristSet.asAmounts()) {
+			if (amount.amount() != 0) nonZeros.add(amount);
+		}
+		return nonZeros;
 	}
 }

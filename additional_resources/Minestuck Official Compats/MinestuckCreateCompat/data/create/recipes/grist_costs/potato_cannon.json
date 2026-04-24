@@ -1,0 +1,12 @@
+{
+  "type": "minestuck:grist_cost",
+  "grist_cost": {
+    "minestuck:build": 254,
+    "minestuck:shale": 45,
+    "minestuck:rust": 17,
+    "minestuck:gold": 10
+  },
+  "ingredient": {
+    "item": "create:potato_cannon"
+  }
+}

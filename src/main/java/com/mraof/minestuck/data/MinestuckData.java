@@ -55,11 +55,14 @@ public final class MinestuckData
 		gen.addProvider(event.includeServer(), new ComputerThemeProvider(output));
 		
 		gen.addProvider(event.includeServer(), new BoondollarPriceProvider(output, Minestuck.MOD_ID));
+		gen.addProvider(event.includeServer(), new CassetteSongsProvider(output, Minestuck.MOD_ID));
 		gen.addProvider(event.includeServer(), MinestuckLootTableProvider.create(output, event.getLookupProvider()));
 		gen.addProvider(event.includeServer(), new MSLootModifiers(output, event.getLookupProvider()));
 		gen.addProvider(event.includeServer(), MSAdvancementProvider.create(output, lookupProvider, fileHelper));
 		
 		gen.addProvider(event.includeServer(), new StartingModusProvider(output, Minestuck.MOD_ID));
+		gen.addProvider(event.includeServer(), new EcheladderExpSourceProvider(output));
+		gen.addProvider(event.includeServer(), new RungsProvider(output));
 		
 		gen.addProvider(event.includeClient(), new MSBlockStateProvider(output, fileHelper));
 		gen.addProvider(event.includeClient(), new MinestuckItemModelProvider(output, fileHelper));

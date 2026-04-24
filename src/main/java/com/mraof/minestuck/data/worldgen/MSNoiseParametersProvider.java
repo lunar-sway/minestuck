@@ -11,6 +11,8 @@ public final class MSNoiseParametersProvider
 	{
 		context.register(SKAIA_RIDGES, new NormalNoise.NoiseParameters(-8, 1, 1, 1, 1));
 		
+		context.register(VEIL_RIDGES, new NormalNoise.NoiseParameters(-8, 1, 1, 1, 1));
+		
 		context.register(LAND_CONTINENTS, new NormalNoise.NoiseParameters(-6, 1, 1, 1, 1));
 		context.register(LAND_EROSION, new NormalNoise.NoiseParameters(-5, 1, 1, 1));
 	}

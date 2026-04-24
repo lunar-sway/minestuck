@@ -1,0 +1,11 @@
+{
+  "type": "minestuck:grist_cost",
+  "grist_cost": {
+    "minestuck:iodine": 2,
+    "minestuck:amber": 2,
+    "minestuck:amethyst": 1
+  },
+  "ingredient": {
+    "item": "ecologics:prickly_pear"
+  }
+}
