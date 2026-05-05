@@ -660,15 +660,11 @@ public class TorrentWidgets
 	
 	protected static class GutterBar extends AbstractWidget
 	{
-		final int x;
-		final int y;
 		final int color;
 		
 		public GutterBar(int pX, int pY, int pWidth, GristAmount gristAmount)
 		{
 			super(pX, pY, pWidth, 3, Component.empty());
-			x = pX;
-			y = pY;
 			
 			GristType gristType = gristAmount.type();
 			
@@ -683,8 +679,6 @@ public class TorrentWidgets
 		public GutterBar(int pX, int pY, int pWidth, long remainingCapacity)
 		{
 			super(pX, pY, pWidth, 3, Component.empty());
-			x = pX;
-			y = pY;
 			color = 0xFFFFFFFF;
 			
 			//TODO no longer renders
@@ -694,12 +688,12 @@ public class TorrentWidgets
 		@Override
 		protected void renderWidget(GuiGraphics guiGraphics, int i, int i1, float v)
 		{
-			guiGraphics.fill(x, y, x + width, y + height, getColor());
+			guiGraphics.fill(getX(), getY(), getX() + width, getY() + height, getColor());
 		}
 		
 		private int getColor()
 		{
-			return 0xFF000000 | color; //OR operation converts RGB integer to ARGB with full opacity
+			return (color & 0xFF000000) != 0 ? color : (0xFF000000 | color);
 		}
 		
 		@Override
@@ -833,7 +827,7 @@ public class TorrentWidgets
 		
 		private void adjustXValue(T widget, int i)
 		{
-			widget.setX(getX() + (i + 1 - scroll) * (subWidgetWidth() + 1));
+			widget.setX(getX() + (i - scroll) * (subWidgetWidth() + 1));
 		}
 		
 		public abstract int visibleEntryCount();

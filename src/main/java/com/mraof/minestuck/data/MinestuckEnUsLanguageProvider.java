@@ -2400,6 +2400,7 @@ public class MinestuckEnUsLanguageProvider extends MinestuckLanguageProvider
 		add(GristTorrentGui.TOOLTIP_SEEDING_OFF, "\nWill be seeded");
 		add(GristTorrentGui.TOOLTIP_LEECHING_ON, "\nIs being leeched");
 		add(GristTorrentGui.TOOLTIP_LEECHING_OFF, "\nWill be leeched");
+		add(GristTorrentGui.GUTTER_LOADING, "Loading...");
 		
 		add(EntryProcess.WRONG_DIMENSION, "Entry not permitted from this dimension");
 		add(EntryProcess.BUSY, "Someone else is already entering");

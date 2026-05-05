@@ -21,6 +21,7 @@ import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
+import java.util.stream.IntStream;
 
 @ParametersAreNonnullByDefault
 public final class GristTorrentGui extends Screen implements ProgramGui<ProgramType.EmptyData>
@@ -32,6 +33,7 @@ public final class GristTorrentGui extends Screen implements ProgramGui<ProgramT
 	public static final String TOOLTIP_SEEDING_OFF = "minestuck.seeding.off";
 	public static final String TOOLTIP_LEECHING_ON = "minestuck.leeching.on";
 	public static final String TOOLTIP_LEECHING_OFF = "minestuck.leeching.off";
+	public static final String GUTTER_LOADING = "minestuck.gutter.loading";
 	
 	public static final ResourceLocation GUI_MAIN = Minestuck.id("textures/gui/torrent.png");
 	
@@ -56,6 +58,7 @@ public final class GristTorrentGui extends Screen implements ProgramGui<ProgramT
 	private final List<TorrentContainer> torrentContainers = new ArrayList<>();
 	private final List<GutterBar> gutterBars = new ArrayList<>();
 	private StatsContainer statsContainer;
+	private boolean gutterLoading = true;
 	private FilterContainer filterContainer;
 	
 	private int updateTick = 0;
@@ -130,7 +133,16 @@ public final class GristTorrentGui extends Screen implements ProgramGui<ProgramT
 		filterContainer.updateCounts();
 		
 		super.render(guiGraphics, mouseX, mouseY, partialTicks);
-		guiGraphics.drawString(font, String.valueOf(filledVolume), (xOffset + 105) - font.width(String.valueOf(filledVolume)) / 2, yOffset + 181 + 5, LIGHT_BLUE, false);
+		
+		if(gutterLoading)
+		{
+			Component loading = Component.translatable(GUTTER_LOADING);
+			guiGraphics.drawString(font, loading, (xOffset + 103) - font.width(loading) / 2, yOffset + 185 + 5, DARK_GREY, false);
+		}
+		else
+		{
+			guiGraphics.drawString(font, String.valueOf(filledVolume), (xOffset + 103) - font.width(String.valueOf(filledVolume)) / 2, yOffset + 185 + 5, LIGHT_BLUE, false);
+		}
 	}
 	
 	private void clientDataUpdates()
@@ -172,43 +184,80 @@ public final class GristTorrentGui extends Screen implements ProgramGui<ProgramT
 	private void updateGutterBars()
 	{
 		if(gutterGrist == null)
-			return; //TODO consider adding text that says "loading" if this early return is triggered
+		{
+			gutterLoading = true;
+			return;
+		}
+		gutterLoading = false;
+		
+		filledVolume = 0;
+		for(GristAmount amount : gutterGrist.asAmounts())
+			filledVolume += amount.amount();
+		
+		double totalVolume = filledVolume + gutterRemainingCapacity;
+		
+		record BarData(int width, Object payload) {}
+		List<BarData> newBars = new ArrayList<>();
+		
+		if(totalVolume > 0)
+		{
+			final int BAR_TOTAL_WIDTH = 103;
+			int allocatedWidth = 0;
+			
+			List<GristAmount> amounts = gutterGrist.asAmounts().stream()
+					.filter(a -> a.amount() > 0)
+					.toList();
+			
+			for(int i = 0; i < amounts.size(); i++)
+			{
+				GristAmount gristAmount = amounts.get(i);
+				boolean isLast = (i == amounts.size() - 1) && gutterRemainingCapacity <= 0;
+				int w = isLast
+						? BAR_TOTAL_WIDTH - allocatedWidth
+						: (int) Math.round((gristAmount.amount() / totalVolume) * BAR_TOTAL_WIDTH);
+				if(w <= 0) continue;
+				allocatedWidth += w;
+				newBars.add(new BarData(w, gristAmount));
+			}
+			
+			if(gutterRemainingCapacity > 0)
+			{
+				int remainingWidth = BAR_TOTAL_WIDTH - allocatedWidth;
+				if(remainingWidth > 0)
+					newBars.add(new BarData(remainingWidth, gutterRemainingCapacity));
+			}
+		}
+		
+		boolean changed = gutterBars.size() != newBars.size();
+		if(!changed)
+		{
+			changed = IntStream.range(0, gutterBars.size())
+					.anyMatch(i -> gutterBars.get(i).getWidth() != newBars.get(i).width());
+		}
+		
+		if(!changed) return;
 		
 		gutterBars.forEach(this::removeWidget);
 		gutterBars.clear();
 		
-		double totalVolume = gutterRemainingCapacity;
-		filledVolume = 0;
+		if(newBars.isEmpty()) return;
 		
-		for(GristAmount amount : gutterGrist.asAmounts())
-			filledVolume += amount.amount();
+		final int barStartX = xOffset + 53;
+		final int barY = yOffset + 185;
+		int currentX = barStartX;
 		
-		totalVolume += filledVolume;
-		if(totalVolume == 0) return;
-		
-		int initialX = xOffset + 55;
-		int y = yOffset + 181;
-		
-		for(GristAmount gristAmount : gutterGrist.asAmounts())
+		for(BarData bd : newBars)
 		{
-			int length = (int) ((gristAmount.amount() / totalVolume) * 100);
-			if(length == 0) continue;
-			GutterBar bar = new GutterBar(initialX, y, length, gristAmount);
+			GutterBar bar = switch(bd.payload())
+			{
+				case GristAmount ga -> new GutterBar(currentX, barY, bd.width(), ga);
+				case Long cap      -> new GutterBar(currentX, barY, bd.width(), cap);
+				default            -> throw new IllegalStateException();
+			};
 			gutterBars.add(bar);
 			addRenderableWidget(bar);
-			initialX += length;
+			currentX += bd.width();
 		}
-		
-		int remainingVolume = (int) ((gutterRemainingCapacity / totalVolume) * 100);
-		
-		if(remainingVolume > 0)
-		{
-			GutterBar remainingBar = new GutterBar(initialX, y, remainingVolume, gutterRemainingCapacity);
-			gutterBars.add(remainingBar);
-			addRenderableWidget(remainingBar);
-		}
-//		String remainingText = String.valueOf(filledVolume);
-//		guiGraphics.drawString(font, remainingText, (xOffset + 105) - font.width(remainingText) / 2, y + 5, LIGHT_BLUE, false);
 	}
 	
 	private void addTorrentSessions()
