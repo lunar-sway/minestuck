@@ -68,7 +68,10 @@ public final class CaptchaDeckHandler
 		}
 	}
 	
-	@SubscribeEvent
+	/**
+	 * Must occur after same event plays in {@link com.mraof.minestuck.player.Echeladder}
+	 */
+	@SubscribeEvent(priority = EventPriority.LOW)
 	private static void onPlayerLogin(PlayerEvent.PlayerLoggedInEvent event)
 	{
 		ServerPlayer player = (ServerPlayer) event.getEntity();
