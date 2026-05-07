@@ -1,5 +1,6 @@
 package com.mraof.minestuck.client.gui.computer;
 
+import com.mojang.blaze3d.systems.RenderSystem;
 import com.mraof.minestuck.Minestuck;
 import com.mraof.minestuck.alchemy.TorrentSession;
 import com.mraof.minestuck.api.alchemy.GristAmount;
@@ -39,6 +40,7 @@ public final class GristTorrentGui extends Screen implements ProgramGui<ProgramT
 	
 	static final int GUI_WIDTH = 190;
 	static final int GUI_HEIGHT = 200;
+	private PlayerGateRow playerGateRow;
 	
 	static final int LIGHT_BLUE = 0xFF19B3EF;
 	static final int DARK_GREY = 0xFF333333;
@@ -109,6 +111,12 @@ public final class GristTorrentGui extends Screen implements ProgramGui<ProgramT
 		filterContainer = new FilterContainer(xOffset + FilterContainer.X_OFFSET_FROM_EDGE, yOffset + FilterContainer.Y_OFFSET_FROM_EDGE, font, this);
 		addRenderableWidget(filterContainer);
 		
+		int gateX = xOffset + 122;
+		int gateY = yOffset + 184 - (int)(47 * 0.27F) - 2;
+		playerGateRow = new PlayerGateRow(gateX, gateY);
+		playerGateRow.setPlayers(visibleTorrentData);
+		addRenderableWidget(playerGateRow);
+		
 		updateGutterBars();
 	}
 	
@@ -137,11 +145,11 @@ public final class GristTorrentGui extends Screen implements ProgramGui<ProgramT
 		if(gutterLoading)
 		{
 			Component loading = Component.translatable(GUTTER_LOADING);
-			guiGraphics.drawString(font, loading, (xOffset + 103) - font.width(loading) / 2, yOffset + 185 + 5, DARK_GREY, false);
+			guiGraphics.drawString(font, loading, (xOffset + 118) - font.width(loading) / 2, yOffset + 185 + 5, DARK_GREY, false);
 		}
 		else
 		{
-			guiGraphics.drawString(font, String.valueOf(filledVolume), (xOffset + 103) - font.width(String.valueOf(filledVolume)) / 2, yOffset + 185 + 5, LIGHT_BLUE, false);
+			guiGraphics.drawString(font, String.valueOf(filledVolume), (xOffset + 118) - font.width(String.valueOf(filledVolume)) / 2, yOffset + 185 + 5, LIGHT_BLUE, false);
 		}
 	}
 	
@@ -153,6 +161,7 @@ public final class GristTorrentGui extends Screen implements ProgramGui<ProgramT
 			gutterRemainingCapacity = ClientPlayerData.getGutterRemainingCapacity();
 			visibleTorrentData.clear();
 			visibleTorrentData.putAll(ClientPlayerData.getVisibleTorrentData());
+			playerGateRow.setPlayers(visibleTorrentData);
 			statsContainer.trackDownloads();
 			
 			//TODO update gutter bar data
@@ -201,7 +210,7 @@ public final class GristTorrentGui extends Screen implements ProgramGui<ProgramT
 		
 		if(totalVolume > 0)
 		{
-			final int BAR_TOTAL_WIDTH = 103;
+			final int BAR_TOTAL_WIDTH = 118;
 			int allocatedWidth = 0;
 			
 			List<GristAmount> amounts = gutterGrist.asAmounts().stream()

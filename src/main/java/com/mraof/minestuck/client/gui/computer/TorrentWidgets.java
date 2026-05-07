@@ -317,6 +317,63 @@ public class TorrentWidgets
 		}
 	}
 	
+	protected static class PlayerGateRow extends AbstractWidget
+	{
+		private static final ResourceLocation COLOR_TEX = ResourceLocation.fromNamespaceAndPath("minestuck", "textures/gui/color_selector.png");
+		private static final int ICON_W = 47;
+		private static final int ICON_H = 47;
+		private static final float SCALE = 0.27F;
+		private static final int SPACING = 2;
+		
+		private List<Map.Entry<Integer, TorrentSession.TorrentClientData>> players = List.of();
+		
+		public PlayerGateRow(int pX, int pY)
+		{
+			super(pX, pY, 0, (int)(ICON_H * SCALE), Component.empty());
+		}
+		
+		public void setPlayers(Map<Integer, TorrentSession.TorrentClientData> data)
+		{
+			this.players = List.copyOf(data.entrySet());
+			this.width = (int)((ICON_W * SCALE) * players.size() + SPACING * (players.size() - 1));
+		}
+		
+		@Override
+		protected void renderWidget(GuiGraphics guiGraphics, int mouseX, int mouseY, float partialTick)
+		{
+			int x = getX();
+			int y = getY();
+			for (var entry : players)
+			{
+				TorrentSession.TorrentClientData data = entry.getValue();
+				float r, g, b;
+				if (data.status() == 2) {
+					int color = data.playerColor();
+					r = ((color >> 16) & 0xFF) / 255F;
+					g = ((color >> 8) & 0xFF) / 255F;
+					b = (color & 0xFF) / 255F;
+				} else {
+					r = g = b = 0.5F;
+				}
+				
+				guiGraphics.pose().pushPose();
+				guiGraphics.pose().translate(x, y, 0);
+				guiGraphics.pose().scale(SCALE, SCALE, 1.0F);
+				
+				RenderSystem.setShaderColor(r, g, b, 1.0F);
+				guiGraphics.blit(COLOR_TEX, 0, 0, 47, 47, 181, 24, 54, 56, 256, 256);
+				RenderSystem.setShaderColor(1, 1, 1, 1);
+				
+				guiGraphics.pose().popPose();
+				
+				x += (int)(ICON_W * SCALE) + SPACING;
+			}
+		}
+		
+		@Override
+		protected void updateWidgetNarration(NarrationElementOutput output) {}
+	}
+	
 	protected static class GristStat extends AbstractWidget
 	{
 		public static final int X_OFFSET_FROM_EDGE = 40;
