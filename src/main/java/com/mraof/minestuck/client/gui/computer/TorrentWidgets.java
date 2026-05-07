@@ -28,14 +28,14 @@ import java.util.concurrent.atomic.AtomicInteger;
 
 public class TorrentWidgets
 {
-	private static int scale(int input)
+	static int scale(int input)
 	{
 		return input * 2;
 	}
 	
 	protected static void drawIcon(int x, int y, ResourceLocation icon)
 	{
-		//TODO does not have the null checks present in MinestuckScreen
+		if(icon == null) return;
 		
 		RenderSystem.setShader(GameRenderer::getPositionTexShader);
 		RenderSystem.setShaderTexture(0, icon);
@@ -156,7 +156,6 @@ public class TorrentWidgets
 		@Override
 		public boolean mouseScrolled(double pMouseX, double pMouseY, double pScrollX, double pScrollY)
 		{
-			//TODO doesnt change things
 			return false; //when true this stops the TorrentContainer from scrolling
 		}
 		
@@ -317,6 +316,45 @@ public class TorrentWidgets
 		}
 	}
 	
+	protected static class TorrentContainerRow extends ScrollingXWidget<TorrentContainer>
+	{
+		private static final int SPACING = 1;
+		private static final int VISIBLE_COUNT = 4;
+		
+		public TorrentContainerRow(int pX, int pY)
+		{
+			super(pX, pY, (TorrentContainer.WIDTH + SPACING) * VISIBLE_COUNT - SPACING, TorrentContainer.HEIGHT);
+		}
+		
+		@Override
+		protected void adjustXValue(TorrentContainer widget, int i)
+		{
+			widget.setX(getX() + (i - getScroll()) * (TorrentContainer.WIDTH + SPACING));
+		}
+		
+		@Override public int visibleEntryCount() { return VISIBLE_COUNT; }
+		@Override public int subWidgetWidth()    { return TorrentContainer.WIDTH; }
+		
+		@Override
+		public boolean mouseScrolled(double mouseX, double mouseY, double scrollX, double scrollY)
+		{
+			for(TorrentContainer child : children())
+			{
+				if(child.isMouseOver(mouseX, mouseY))
+					return child.mouseScrolled(mouseX, mouseY, scrollX, scrollY);
+			}
+			return false;
+		}
+		@Override
+		public int getMaxScroll()
+		{
+			return Math.max(0, children().size() - VISIBLE_COUNT);
+		}
+		
+		@Override
+		protected void updateWidgetNarration(NarrationElementOutput output) {}
+	}
+	
 	protected static class GatesContainer extends ScrollingXWidget<GateIcon>
 	{
 		private static final int VISIBLE_COUNT = 4;
@@ -445,17 +483,19 @@ public class TorrentWidgets
 			
 			int minDownSpeed = Integer.MAX_VALUE;
 			int maxDownSpeed = 1;
-			AtomicInteger totalSeeds = new AtomicInteger(); //TODO is this appropriate?
+			AtomicInteger totalSeeds = new AtomicInteger();
 			userIsLeeching = false;
 			
 			List<TorrentSession.TorrentClientData> filteredData = new ArrayList<>();
 			GristTorrentGui.visibleTorrentData.forEach((key, value) -> {
+				if(key == SkaiaClient.playerId) return;
+				
 				boolean couldSeed = value.cache().set().asAmounts().stream().anyMatch(gristAmount -> gristAmount.hasType(gristType) && !gristAmount.isEmpty());
 				boolean tryingToSeed = value.seededTypes().stream().anyMatch(iterateType -> iterateType.equals(gristType));
 				if(!userIsLeeching)
 					userIsLeeching = value.leeches().getOrDefault(SkaiaClient.playerId, Collections.emptyList()).contains(gristType);
 				
-				if(tryingToSeed && key != SkaiaClient.playerId)
+				if(tryingToSeed)
 				{
 					boolean currentLeech = value.leeches()
 							.getOrDefault(SkaiaClient.playerId, Collections.emptyList())
@@ -465,27 +505,22 @@ public class TorrentWidgets
 					if(userIsLeeching)
 						filteredData.add(value);
 				}
-			}); //only include data if the user is trying to leech the grist
+			});
 			
 			if(filteredData.isEmpty())
-				return; //widget will render due to how min/max speeds are obtained without this early return
+				return;
 			
 			List<GristType> userSeeding = userData.getViableSeeding();
 			typeUpSpeed = TorrentHelper.getSeedRateMod(userSeeding);
 			
 			for(TorrentSession.TorrentClientData dataEntry : filteredData)
 			{
-				List<GristType> entrySeeding = dataEntry.getViableSeeding();
-				
-				int entrySeedRate = TorrentHelper.getSeedRateMod(entrySeeding);
-				
+				int entrySeedRate = TorrentHelper.getSeedRateMod(dataEntry.getViableSeeding());
 				minDownSpeed = Math.min(minDownSpeed, entrySeedRate);
 				maxDownSpeed = Math.max(maxDownSpeed, entrySeedRate);
 			}
 			
 			seedsData = Pair.of(filteredData.size(), totalSeeds.get());
-			
-			//TODO downSpeed includes userSession, making the GristStat visible even if the user is the only one capable of seeding
 			typeDownSpeedRange = Pair.of(minDownSpeed, maxDownSpeed);
 		}
 		
@@ -775,7 +810,6 @@ public class TorrentWidgets
 			super(pX, pY, pWidth, 3, Component.empty());
 			color = 0xFFFFFFFF;
 			
-			//TODO no longer renders
 			setTooltip(Tooltip.create(Component.literal("Remaining capacity: " + remainingCapacity)));
 		}
 		
@@ -879,6 +913,11 @@ public class TorrentWidgets
 			super(pX, pY, pWidth, 1, Component.empty());
 			this.target = target;
 		}
+		public HorizontalScrollBar(int pX, int pY, int pWidth, int pHeight, ScrollingXWidget<?> target)
+		{
+			super(pX, pY, pWidth, pHeight, Component.empty());
+			this.target = target;
+		}
 		
 		@Override
 		protected void renderWidget(GuiGraphics guiGraphics, int mouseX, int mouseY, float partialTick)
@@ -920,10 +959,10 @@ public class TorrentWidgets
 		@Override
 		protected void updateWidgetNarration(NarrationElementOutput output) {}
 	}
-	// Soon be used to scroll torrentContainers on x coordinate
+	
 	public abstract static class ScrollingXWidget<T extends AbstractWidget> extends AbstractContainerWidget
 	{
-		private int scroll = 0;
+		protected int scroll = 0;
 		private final List<T> widgets = new ArrayList<>();
 		
 		public ScrollingXWidget(int pX, int pY, int pWidth, int pHeight)

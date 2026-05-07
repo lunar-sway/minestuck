@@ -23,6 +23,8 @@ import java.util.List;
 import java.util.Map;
 import java.util.stream.IntStream;
 
+import static com.mraof.minestuck.client.gui.computer.TorrentWidgets.scale;
+
 @ParametersAreNonnullByDefault
 public final class GristTorrentGui extends Screen implements ProgramGui<ProgramType.EmptyData>
 {
@@ -56,7 +58,7 @@ public final class GristTorrentGui extends Screen implements ProgramGui<ProgramT
 	private long gutterRemainingCapacity;
 	static final Map<Integer, TorrentSession.TorrentClientData> visibleTorrentData = new HashMap<>();
 	
-	private final List<TorrentContainer> torrentContainers = new ArrayList<>();
+	private TorrentContainerRow torrentContainerRow;
 	private final List<GutterBar> gutterBars = new ArrayList<>();
 	private StatsContainer statsContainer;
 	private boolean gutterLoading = true;
@@ -102,7 +104,14 @@ public final class GristTorrentGui extends Screen implements ProgramGui<ProgramT
 			return;
 		TorrentSession.TorrentClientData userDataEntry = visibleTorrentData.get(SkaiaClient.playerId);
 		
+		torrentContainerRow = new TorrentContainerRow(xOffset + 2, gristWidgetsYOffset);
+		addRenderableWidget(torrentContainerRow);
 		addTorrentSessions();
+		
+		HorizontalScrollBar playersScrollBar = new HorizontalScrollBar(
+				xOffset, gristWidgetsYOffset - 8,
+				torrentContainerRow.getWidth() - 1, 2, torrentContainerRow);
+		addRenderableWidget(playersScrollBar);
 		
 		statsContainer = new StatsContainer(xOffset + GristStat.X_OFFSET_FROM_EDGE, yOffset + GristStat.Y_OFFSET_FROM_EDGE, font);
 		addRenderableWidget(statsContainer);
@@ -118,7 +127,7 @@ public final class GristTorrentGui extends Screen implements ProgramGui<ProgramT
 		
 		HorizontalScrollBar gatesScrollBar = new HorizontalScrollBar(
 				gateX, gateY - 2,
-				gatesContainer.getWidth(), gatesContainer);
+				gatesContainer.getWidth(), 1, gatesContainer);
 		addRenderableWidget(gatesScrollBar);
 		
 		updateGutterBars();
@@ -149,11 +158,15 @@ public final class GristTorrentGui extends Screen implements ProgramGui<ProgramT
 		if(gutterLoading)
 		{
 			Component loading = Component.translatable(GUTTER_LOADING);
-			guiGraphics.drawString(font, loading, (xOffset + 118) - font.width(loading) / 2, yOffset + 185 + 5, DARK_GREY, false);
+			guiGraphics.drawString(font, loading, xOffset + 92 - font.width(loading) / 2, yOffset + 185 + 5, DARK_GREY, false);
 		}
 		else
 		{
-			guiGraphics.drawString(font, String.valueOf(filledVolume), (xOffset + 118) - font.width(String.valueOf(filledVolume)) / 2, yOffset + 185 + 5, LIGHT_BLUE, false);
+			String volumeText = String.valueOf(filledVolume);
+			guiGraphics.pose().pushPose();
+			guiGraphics.pose().scale(0.5F, 0.5F, 0.5F);
+			guiGraphics.drawString(font, volumeText, scale(xOffset + 92) - font.width(volumeText) / 4, scale(yOffset + 185 + 5), LIGHT_BLUE, false);
+			guiGraphics.pose().popPose();
 		}
 	}
 	
@@ -181,16 +194,14 @@ public final class GristTorrentGui extends Screen implements ProgramGui<ProgramT
 	
 	private void renderTorrentSessions()
 	{
-		for(TorrentContainer torrentContainer : torrentContainers)
+		for(TorrentContainer container : torrentContainerRow.children())
 		{
-			if(!visibleTorrentData.containsKey(torrentContainer.playerId))
+			if(!visibleTorrentData.containsKey(container.playerId))
 			{
 				addTorrentSessions();
 				break;
 			}
-			
-			TorrentSession.TorrentClientData data = visibleTorrentData.get(torrentContainer.playerId);
-			torrentContainer.refreshEntries(data);
+			container.refreshEntries(visibleTorrentData.get(container.playerId));
 		}
 	}
 	
@@ -276,34 +287,27 @@ public final class GristTorrentGui extends Screen implements ProgramGui<ProgramT
 	private void addTorrentSessions()
 	{
 		TorrentSession.TorrentClientData userData = visibleTorrentData.get(SkaiaClient.playerId);
-		if(userData == null)
-			return; //if the users own session isnt visible, there is no point in looking at any
+		if(userData == null) return;
 		
-		torrentContainers.forEach(this::removeWidget);
+		torrentContainerRow.children().clear();
 		
-		int torrentXOffset = 0;
-		
-		createTorrentWidgets(SkaiaClient.playerId, userData, torrentXOffset);
-		torrentXOffset++;
+		createTorrentWidget(SkaiaClient.playerId, userData);
 		
 		for(Map.Entry<Integer, TorrentSession.TorrentClientData> entry : visibleTorrentData.entrySet())
 		{
-			if(entry.getKey() == SkaiaClient.playerId)
-				continue;
-			
-			createTorrentWidgets(entry.getKey(), entry.getValue(), torrentXOffset);
-			torrentXOffset++;
+			if(entry.getKey() == SkaiaClient.playerId) continue;
+			createTorrentWidget(entry.getKey(), entry.getValue());
 		}
+		
+		torrentContainerRow.updateVisibilityAndPosition();
 	}
 	
-	public void createTorrentWidgets(int playerId, TorrentSession.TorrentClientData torrentData, int torrentXOffset)
+	private void createTorrentWidget(int playerId, TorrentSession.TorrentClientData torrentData)
 	{
-		int combinedXOffset = xOffset + 5 + ((GristEntry.WIDTH + 2) * torrentXOffset);
-		
-		TorrentContainer torrentContainer = new TorrentContainer(combinedXOffset, gristWidgetsYOffset, font, playerId, torrentData.username());
-		torrentContainer.refreshEntries(torrentData);
-		torrentContainers.add(torrentContainer);
-		addRenderableWidget(torrentContainer);
+		TorrentContainer container = new TorrentContainer(
+				torrentContainerRow.getX(), gristWidgetsYOffset, font, playerId, torrentData.username());
+		container.refreshEntries(torrentData);
+		torrentContainerRow.children().add(container);
 	}
 	
 	@Override
