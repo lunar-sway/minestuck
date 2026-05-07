@@ -928,9 +928,14 @@ public class TorrentWidgets
 			int maxScroll = target.getMaxScroll();
 			if(total > 0 && maxScroll > 0)
 			{
+				int thumbColor = GristTorrentGui.LIGHT_BLUE;
+				TorrentSession.TorrentClientData userData = GristTorrentGui.visibleTorrentData.get(SkaiaClient.playerId);
+				if(userData != null && userData.status() == 2)
+					thumbColor = 0xFF000000 | userData.playerColor();
+				
 				int thumbWidth = Math.max(4, width * target.visibleEntryCount() / total);
 				int thumbX = getX() + (int)((width - thumbWidth) * (float)target.getScroll() / maxScroll);
-				guiGraphics.fill(thumbX, getY(), thumbX + thumbWidth, getY() + height, GristTorrentGui.LIGHT_BLUE);
+				guiGraphics.fill(thumbX, getY(), thumbX + thumbWidth, getY() + height, thumbColor);
 			}
 		}
 		
