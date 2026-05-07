@@ -210,7 +210,7 @@ public final class GristTorrentGui extends Screen implements ProgramGui<ProgramT
 		
 		if(totalVolume > 0)
 		{
-			final int BAR_TOTAL_WIDTH = 118;
+			final int BAR_TOTAL_WIDTH = 117;
 			int allocatedWidth = 0;
 			
 			List<GristAmount> amounts = gutterGrist.asAmounts().stream()
