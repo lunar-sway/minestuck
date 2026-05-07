@@ -1,6 +1,5 @@
 package com.mraof.minestuck.client.gui.computer;
 
-import com.mojang.blaze3d.systems.RenderSystem;
 import com.mraof.minestuck.Minestuck;
 import com.mraof.minestuck.alchemy.TorrentSession;
 import com.mraof.minestuck.api.alchemy.GristAmount;
@@ -40,7 +39,7 @@ public final class GristTorrentGui extends Screen implements ProgramGui<ProgramT
 	
 	static final int GUI_WIDTH = 190;
 	static final int GUI_HEIGHT = 200;
-	private PlayerGateRow playerGateRow;
+	private GatesContainer gatesContainer;
 	
 	static final int LIGHT_BLUE = 0xFF19B3EF;
 	static final int DARK_GREY = 0xFF333333;
@@ -113,9 +112,14 @@ public final class GristTorrentGui extends Screen implements ProgramGui<ProgramT
 		
 		int gateX = xOffset + 122;
 		int gateY = yOffset + 184 - (int)(47 * 0.27F) - 2;
-		playerGateRow = new PlayerGateRow(gateX, gateY);
-		playerGateRow.setPlayers(visibleTorrentData);
-		addRenderableWidget(playerGateRow);
+		gatesContainer = new GatesContainer(gateX, gateY);
+		gatesContainer.setPlayers(visibleTorrentData);
+		addRenderableWidget(gatesContainer);
+		
+		HorizontalScrollBar gatesScrollBar = new HorizontalScrollBar(
+				gateX, gateY - 2,
+				gatesContainer.getWidth(), gatesContainer);
+		addRenderableWidget(gatesScrollBar);
 		
 		updateGutterBars();
 	}
@@ -161,7 +165,7 @@ public final class GristTorrentGui extends Screen implements ProgramGui<ProgramT
 			gutterRemainingCapacity = ClientPlayerData.getGutterRemainingCapacity();
 			visibleTorrentData.clear();
 			visibleTorrentData.putAll(ClientPlayerData.getVisibleTorrentData());
-			playerGateRow.setPlayers(visibleTorrentData);
+			gatesContainer.setPlayers(visibleTorrentData);
 			statsContainer.trackDownloads();
 			
 			//TODO update gutter bar data

@@ -168,7 +168,7 @@ public class GristGutter
 	public static void onServerTickEvent(ServerTickEvent.Pre event)
 	{
 		//noinspection resource
-		if(event.getServer().overworld().getGameTime() % 100 == 0)
+		if(event.getServer().overworld().getGameTime() % 20 == 0)
 		{
 			for(Session session : SessionHandler.get(event.getServer()).getSessions())
 				session.getGristGutter().distributeToPlayers();
@@ -220,10 +220,17 @@ public class GristGutter
 	
 	private MutableGristSet takeWithinCapacity(long amount, NonNegativeGristSet capacity, RandomSource rand)
 	{
-		long remaining = amount;
 		MutableGristSet takenGrist = MutableGristSet.newDefault();
 		List<GristAmount> amounts = new ArrayList<>(capacity.asAmounts());
 		Collections.shuffle(amounts, new Random(rand.nextLong()));
+		
+		long eligibleCount = amounts.stream()
+				.filter(a -> this.gristSet.getGrist(a.type()) > 0)
+				.count();
+		if(eligibleCount == 0)
+			return takenGrist;
+		
+		long amountPerType = Math.max(1, amount / eligibleCount);
 		
 		for(GristAmount capacityAmount : amounts)
 		{
@@ -231,12 +238,9 @@ public class GristGutter
 			long amountInGutter = this.gristSet.getGrist(type);
 			if(amountInGutter > 0)
 			{
-				long takenAmount = Math.min(remaining, Math.min(capacityAmount.amount(), amountInGutter));
+				long takenAmount = Math.min(amountPerType, Math.min(capacityAmount.amount(), amountInGutter));
 				this.addGristInternal(type, -takenAmount);
 				takenGrist.add(type, takenAmount);
-				remaining -= takenAmount;
-				if(remaining <= 0)
-					break;
 			}
 		}
 		return takenGrist;

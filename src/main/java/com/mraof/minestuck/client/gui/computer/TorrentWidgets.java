@@ -317,35 +317,73 @@ public class TorrentWidgets
 		}
 	}
 	
-	protected static class PlayerGateRow extends AbstractWidget
+	protected static class GatesContainer extends ScrollingXWidget<GateIcon>
+	{
+		private static final int VISIBLE_COUNT = 4;
+		private static final int SPACING = 2;
+		
+		public GatesContainer(int pX, int pY)
+		{
+			super(pX, pY,
+					(GateIcon.RENDERED_W + SPACING) * VISIBLE_COUNT - SPACING,
+					GateIcon.RENDERED_H);
+		}
+		
+		public void setPlayers(Map<Integer, TorrentSession.TorrentClientData> data)
+		{
+			this.children().clear();
+			
+			for(var entry : data.entrySet())
+				this.children().add(new GateIcon(getX(), getY(), entry.getValue()));
+			
+			updateVisibilityAndPosition();
+		}
+		
+		@Override
+		protected void adjustXValue(GateIcon widget, int i)
+		{
+			widget.setX(getX() + (i - getScroll()) * (GateIcon.RENDERED_W + SPACING));
+		}
+		
+		@Override public int visibleEntryCount() { return VISIBLE_COUNT; }
+		@Override public int subWidgetWidth()    { return GateIcon.RENDERED_W; }
+		
+		@Override
+		public int getMaxScroll()
+		{
+			return Math.max(0, children().size() - VISIBLE_COUNT);
+		}
+		
+		@Override
+		protected void updateWidgetNarration(NarrationElementOutput output) {}
+	}
+	
+	protected static class GateIcon extends AbstractWidget
 	{
 		private static final ResourceLocation COLOR_TEX = ResourceLocation.fromNamespaceAndPath("minestuck", "textures/gui/color_selector.png");
 		private static final int ICON_W = 47;
 		private static final int ICON_H = 47;
 		private static final float SCALE = 0.27F;
 		private static final int SPACING = 2;
+		static final int RENDERED_W = (int)(ICON_W * SCALE);
+		static final int RENDERED_H = (int)(ICON_H * SCALE);
+		private TorrentSession.TorrentClientData data;
 		
-		private List<Map.Entry<Integer, TorrentSession.TorrentClientData>> players = List.of();
-		
-		public PlayerGateRow(int pX, int pY)
+		public GateIcon(int pX, int pY, TorrentSession.TorrentClientData data)
 		{
 			super(pX, pY, 0, (int)(ICON_H * SCALE), Component.empty());
+			this.data = data;
 		}
 		
-		public void setPlayers(Map<Integer, TorrentSession.TorrentClientData> data)
+		public void setData(TorrentSession.TorrentClientData data)
 		{
-			this.players = List.copyOf(data.entrySet());
-			this.width = (int)((ICON_W * SCALE) * players.size() + SPACING * (players.size() - 1));
+			this.data = data;
 		}
-		
 		@Override
 		protected void renderWidget(GuiGraphics guiGraphics, int mouseX, int mouseY, float partialTick)
 		{
 			int x = getX();
 			int y = getY();
-			for (var entry : players)
-			{
-				TorrentSession.TorrentClientData data = entry.getValue();
 				float r, g, b;
 				if (data.status() == 2) {
 					int color = data.playerColor();
@@ -367,7 +405,6 @@ public class TorrentWidgets
 				guiGraphics.pose().popPose();
 				
 				x += (int)(ICON_W * SCALE) + SPACING;
-			}
 		}
 		
 		@Override
@@ -832,6 +869,57 @@ public class TorrentWidgets
 			return false;
 		}
 	}
+	
+	protected static class HorizontalScrollBar extends AbstractWidget
+	{
+		private final ScrollingXWidget<?> target;
+		
+		public HorizontalScrollBar(int pX, int pY, int pWidth, ScrollingXWidget<?> target)
+		{
+			super(pX, pY, pWidth, 1, Component.empty());
+			this.target = target;
+		}
+		
+		@Override
+		protected void renderWidget(GuiGraphics guiGraphics, int mouseX, int mouseY, float partialTick)
+		{
+			guiGraphics.fill(getX(), getY(), getX() + width, getY() + height, GristTorrentGui.DARK_GREY);
+			
+			int total = target.children().size();
+			int maxScroll = target.getMaxScroll();
+			if(total > 0 && maxScroll > 0)
+			{
+				int thumbWidth = Math.max(4, width * target.visibleEntryCount() / total);
+				int thumbX = getX() + (int)((width - thumbWidth) * (float)target.getScroll() / maxScroll);
+				guiGraphics.fill(thumbX, getY(), thumbX + thumbWidth, getY() + height, GristTorrentGui.LIGHT_BLUE);
+			}
+		}
+		
+		@Override
+		public void onClick(double mouseX, double mouseY, int button)
+		{
+			updateScrollFromMouse(mouseX);
+		}
+		
+		@Override
+		public void onDrag(double mouseX, double mouseY, double dragX, double dragY)
+		{
+			updateScrollFromMouse(mouseX);
+		}
+		
+		private void updateScrollFromMouse(double mouseX)
+		{
+			int maxScroll = target.getMaxScroll();
+			if(maxScroll > 0)
+			{
+				double relative = (mouseX - getX()) / width;
+				target.setScroll((int)Math.round(relative * maxScroll));
+			}
+		}
+		
+		@Override
+		protected void updateWidgetNarration(NarrationElementOutput output) {}
+	}
 	// Soon be used to scroll torrentContainers on x coordinate
 	public abstract static class ScrollingXWidget<T extends AbstractWidget> extends AbstractContainerWidget
 	{
@@ -860,14 +948,21 @@ public class TorrentWidgets
 		public boolean mouseScrolled(double mouseX, double mouseY, double scrollX, double scrollY)
 		{
 			//TODO consider inverting scroll direction
-			
-			if(scrollX > 0) scroll = Math.min(getMaxScroll(), scroll + 1);
-			else if(scrollX < 0) scroll = Math.max(0, scroll - 1);
+			if(scrollY > 0) scroll = Math.min(getMaxScroll(), scroll + 1);
+			else if(scrollY < 0) scroll = Math.max(0, scroll - 1);
 			
 			updateVisibilityAndPosition();
 			
 			return super.mouseScrolled(mouseX, mouseY, scrollX, scrollY);
 		}
+		public void setScroll(int newScroll)
+		{
+			this.scroll = Math.max(0, Math.min(getMaxScroll(), newScroll));
+			updateVisibilityAndPosition();
+		}
+		
+		protected int getScroll() { return scroll; }
+		
 		
 		public void updateVisibilityAndPosition()
 		{
@@ -882,7 +977,7 @@ public class TorrentWidgets
 			}
 		}
 		
-		private void adjustXValue(T widget, int i)
+		protected void adjustXValue(T widget, int i)
 		{
 			widget.setX(getX() + (i - scroll) * (subWidgetWidth() + 1));
 		}
