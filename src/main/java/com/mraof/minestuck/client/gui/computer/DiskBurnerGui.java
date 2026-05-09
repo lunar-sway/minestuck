@@ -15,6 +15,7 @@ public final class DiskBurnerGui implements ProgramGui<DiskBurnerData>
 	public static final String NO_DISKS = "minestuck.program.disk_burner.needs_disks";
 	public static final String BURN_SERVER_DISK = "minestuck.program.disk_burner.burn_server_disk";
 	public static final String BURN_CLIENT_DISK = "minestuck.program.disk_burner.burn_client_disk";
+	public static final String BURN_TORRENT_DISK = "minestuck.program.disk_burner.burn_torrent_disk";
 	public static final String CHOOSE = "minestuck.program.disk_burner.choose";
 	
 	private final ButtonListHelper buttonListHelper = new ButtonListHelper();
@@ -42,9 +43,11 @@ public final class DiskBurnerGui implements ProgramGui<DiskBurnerData>
 			this.message = Component.translatable(CHOOSE);
 			this.buttonListHelper.updateButtons(List.of(
 					new ButtonListHelper.ButtonData(Component.translatable(BURN_SERVER_DISK),
-							() -> PacketDistributor.sendToServer(BurnDiskPacket.create(gui.computer, false))),
+							() -> PacketDistributor.sendToServer(BurnDiskPacket.create(gui.computer, 0))),
 					new ButtonListHelper.ButtonData(Component.translatable(BURN_CLIENT_DISK),
-							() -> PacketDistributor.sendToServer(BurnDiskPacket.create(gui.computer, true)))));
+							() -> PacketDistributor.sendToServer(BurnDiskPacket.create(gui.computer, 1))),
+					new ButtonListHelper.ButtonData(Component.translatable(BURN_TORRENT_DISK),
+							() -> PacketDistributor.sendToServer(BurnDiskPacket.create(gui.computer, 2)))));
 		}
 	}
 	
