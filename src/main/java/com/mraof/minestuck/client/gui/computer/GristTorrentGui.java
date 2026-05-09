@@ -44,6 +44,7 @@ public final class GristTorrentGui extends Screen implements ProgramGui<ProgramT
 	private GatesContainer gatesContainer;
 	
 	static final int LIGHT_BLUE = 0xFF19B3EF;
+	static final int LIGHT_GREY = 0xFFF5F5F5;
 	static final int DARK_GREY = 0xFF333333;
 	
 	private ComputerBlockEntity computer;
@@ -109,7 +110,7 @@ public final class GristTorrentGui extends Screen implements ProgramGui<ProgramT
 		addTorrentSessions();
 		
 		HorizontalScrollBar playersScrollBar = new HorizontalScrollBar(
-				xOffset, gristWidgetsYOffset - 8,
+				xOffset, gristWidgetsYOffset - 9,
 				torrentContainerRow.getWidth() - 1, 2, torrentContainerRow);
 		addRenderableWidget(playersScrollBar);
 		
@@ -126,8 +127,8 @@ public final class GristTorrentGui extends Screen implements ProgramGui<ProgramT
 		addRenderableWidget(gatesContainer);
 		
 		HorizontalScrollBar gatesScrollBar = new HorizontalScrollBar(
-				gateX, gateY - 2,
-				gatesContainer.getWidth(), 1, gatesContainer);
+				gateX, gateY - 3,
+				55, 1, gatesContainer);
 		addRenderableWidget(gatesScrollBar);
 		
 		updateGutterBars();

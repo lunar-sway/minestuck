@@ -945,7 +945,7 @@ public class TorrentWidgets
 		@Override
 		protected void renderWidget(GuiGraphics guiGraphics, int mouseX, int mouseY, float partialTick)
 		{
-			guiGraphics.fill(getX(), getY(), getX() + width, getY() + height, GristTorrentGui.DARK_GREY);
+			guiGraphics.fill(getX(), getY(), getX() + width, getY() + height, GristTorrentGui.LIGHT_GREY);
 			
 			int total = target.children().size();
 			int maxScroll = target.getMaxScroll();
@@ -1005,7 +1005,7 @@ public class TorrentWidgets
 		@Override
 		protected void renderWidget(GuiGraphics guiGraphics, int mouseX, int mouseY, float partialTick)
 		{
-			guiGraphics.enableScissor(getX(), getY(), getX() + width, getY() + height + 1);
+			guiGraphics.enableScissor(getX(), getY(), getX() + width + 1, getY() + height + 1);
 			for(T widget : this.widgets)
 				widget.render(guiGraphics, mouseX, mouseY, partialTick);
 			guiGraphics.disableScissor();
