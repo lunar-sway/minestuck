@@ -6,6 +6,10 @@ The format is based on [Keep a Changelog](https://keepachangelog.com/en/1.1.0/).
 
 ## [Unreleased]
 
+### Added
+
+- GristTorrent
+
 ### Changed
 
 - Players now cannot captchalogue items if they contain certain nested item components. This replaces the bugged maximum data system introduced in the last update
@@ -16,7 +20,7 @@ The format is based on [Keep a Changelog](https://keepachangelog.com/en/1.1.0/).
 
 ### Contributors for this release
 
-- Dweblenod
+- medsal15, Cibernet, Dweblenod, kirderf1, Riotmode, caldw3ll, Fl1s
 
 ## [1.21.1-1.14.0.0] - 2026-04-13
 
@@ -186,6 +190,8 @@ The format is based on [Keep a Changelog](https://keepachangelog.com/en/1.1.0/).
 - Computer interaction sound effects
 - New computer related advancement
 - Message when entering edit mode to remind players of the exit keybind
+- Added 2 tracks october and endless chasm by triagegremlin
+- Added 2 tracks the note desolation plays and desolate strife by Caldw3ll
 - Computer programs now have a tooltip when hovered over in computer gui
 - Data files for echeladder rungs and rung effects
 - Echeladder now provides fall damage resistance
@@ -864,7 +870,7 @@ The format is based on [Keep a Changelog](https://keepachangelog.com/en/1.1.0/).
 
 ### Contributors for this release
 
-- Riotmode, rose_bushes_, Dweblenod, kirderf1, DORO, Akisephila, blankMushroom
+- Riotmode, rose_bushes_, Dweblenod, kirderf1, Doro, Akisephila, blankMushroom
 
 ## [1.18.2-1.9.0.2] - 2023-01-09
 

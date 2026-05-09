@@ -16,20 +16,20 @@ import net.minecraft.world.item.Item;
 import net.minecraft.world.level.Level;
 import net.neoforged.neoforge.network.handling.IPayloadContext;
 
-public record BurnDiskPacket(BlockPos computerPos, boolean isClientDisk) implements MSPacket.PlayToServer
+public record BurnDiskPacket(BlockPos computerPos, int diskType) implements MSPacket.PlayToServer
 {
 	public static final Type<BurnDiskPacket> ID = new Type<>(Minestuck.id("burn_disk"));
 	public static final StreamCodec<FriendlyByteBuf, BurnDiskPacket> STREAM_CODEC = StreamCodec.composite(
 			BlockPos.STREAM_CODEC,
 			BurnDiskPacket::computerPos,
-			ByteBufCodecs.BOOL,
-			BurnDiskPacket::isClientDisk,
+			ByteBufCodecs.INT,
+			BurnDiskPacket::diskType,
 			BurnDiskPacket::new
 	);
 	
-	public static BurnDiskPacket create(ComputerBlockEntity be, boolean isClientDisk)
+	public static BurnDiskPacket create(ComputerBlockEntity be, int diskType)
 	{
-		return new BurnDiskPacket(be.getBlockPos(), isClientDisk);
+		return new BurnDiskPacket(be.getBlockPos(), diskType);
 	}
 	
 	@Override
@@ -47,7 +47,14 @@ public record BurnDiskPacket(BlockPos computerPos, boolean isClientDisk) impleme
 	
 	private void tryBurnDisk(ComputerBlockEntity computer)
 	{
-		Item disk = this.isClientDisk ? MSItems.CLIENT_DISK.get() : MSItems.SERVER_DISK.get();
+		Item disk;
+		if (this.diskType == 0){
+			disk = MSItems.CLIENT_DISK.get();
+		} else if  (this.diskType == 1){
+			disk = MSItems.SERVER_DISK.get();
+		} else {
+			disk = MSItems.TORRENT_DISK.get();
+		}
 		Level level = computer.getLevel();
 		if(level == null)
 			return;

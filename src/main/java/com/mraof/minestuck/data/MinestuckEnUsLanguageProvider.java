@@ -1567,6 +1567,7 @@ public class MinestuckEnUsLanguageProvider extends MinestuckLanguageProvider
 		addItemTooltip(MSItems.BLANK_DISK, "Can be put into a computer, has space to write a program on to it.");
 		addItem(MSItems.CLIENT_DISK, "SBURB Client Disk");
 		addItem(MSItems.SERVER_DISK, "SBURB Server Disk");
+		addItem(MSItems.TORRENT_DISK, "GristTorrent Disk");
 		addItem(MSItems.CAPTCHA_CARD, "Captchalogue Card");
 		addItemExtra(MSItems.CAPTCHA_CARD, "empty", "Empty");
 		addItemExtra(MSItems.CAPTCHA_CARD, "invalid", "Invalid Data");
@@ -2412,12 +2413,20 @@ public class MinestuckEnUsLanguageProvider extends MinestuckLanguageProvider
 		add(DiskBurnerGui.NO_DISKS, "Insert disk to burn");
 		add(DiskBurnerGui.BURN_CLIENT_DISK, "Burn Client Disk");
 		add(DiskBurnerGui.BURN_SERVER_DISK, "Burn Server Disk");
+		add(DiskBurnerGui.BURN_TORRENT_DISK, "Burn Torrent Disk");
 		add(DiskBurnerGui.CHOOSE, "Choose disk type to write");
 		add(ComputerInteractions.STOP_RESUME, "Stopped resuming");
 		add(SettingsAppGui.NAME, "Settings");
 		add(SettingsAppGui.THEME, "Choose Theme");
 		add(SettingsAppGui.DISK_MANAGER, "Disk Manager");
 		add(SettingsAppGui.TITLE, "Sburb Settings");
+		add(GristTorrentGui.NAME, "Grist Torrent");
+		add(GristTorrentGui.TITLE, "Grist Torrent");
+		add(GristTorrentGui.TOOLTIP_SEEDING_ON, "\nIs being seeded");
+		add(GristTorrentGui.TOOLTIP_SEEDING_OFF, "\nWill be seeded");
+		add(GristTorrentGui.TOOLTIP_LEECHING_ON, "\nIs being leeched");
+		add(GristTorrentGui.TOOLTIP_LEECHING_OFF, "\nWill be leeched");
+		add(GristTorrentGui.GUTTER_LOADING, "Loading...");
 		
 		add(EntryProcess.WRONG_DIMENSION, "Entry not permitted from this dimension");
 		add(EntryProcess.BUSY, "Someone else is already entering");
