@@ -444,7 +444,7 @@ public class TorrentWidgets
 			int y = getY();
 				float r, g, b;
 				if (data.status() == 2) {
-					int color = data.playerColor();
+					int color = getPlayerColor(data);
 					r = ((color >> 16) & 0xFF) / 255F;
 					g = ((color >> 8) & 0xFF) / 255F;
 					b = (color & 0xFF) / 255F;
