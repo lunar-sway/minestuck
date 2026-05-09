@@ -1,0 +1,113 @@
+{
+  "fallback": "minecraft:empty",
+  "elements": [
+    {
+      "weight": 1,
+      "element": {
+        "element_type": "minecraft:single_pool_element",
+        "projection": "rigid",
+        "location": "minestuck:arena/obstacle_1",
+        "processors": "minestuck:structure_block_registry"
+      }
+    },
+    {
+      "weight": 1,
+      "element": {
+        "element_type": "minecraft:single_pool_element",
+        "projection": "rigid",
+        "location": "minestuck:arena/obstacle_2",
+        "processors": "minestuck:structure_block_registry"
+      }
+    },
+    {
+      "weight": 1,
+      "element": {
+        "element_type": "minecraft:single_pool_element",
+        "projection": "rigid",
+        "location": "minestuck:arena/obstacle_3",
+        "processors": "minestuck:structure_block_registry"
+      }
+    },
+    {
+      "weight": 1,
+      "element": {
+        "element_type": "minecraft:single_pool_element",
+        "projection": "rigid",
+        "location": "minestuck:arena/obstacle_4",
+        "processors": "minestuck:structure_block_registry"
+      }
+    },
+    {
+      "weight": 1,
+      "element": {
+        "element_type": "minecraft:single_pool_element",
+        "projection": "rigid",
+        "location": "minestuck:arena/obstacle_5",
+        "processors": "minestuck:structure_block_registry"
+      }
+    },
+    {
+      "weight": 1,
+      "element": {
+        "element_type": "minecraft:single_pool_element",
+        "projection": "rigid",
+        "location": "minestuck:arena/obstacle_6",
+        "processors": "minestuck:structure_block_registry"
+      }
+    },
+    {
+      "weight": 1,
+      "element": {
+        "element_type": "minecraft:single_pool_element",
+        "projection": "rigid",
+        "location": "minestuck:arena/obstacle_7",
+        "processors": "minestuck:structure_block_registry"
+      }
+    },
+    {
+      "weight": 1,
+      "element": {
+        "element_type": "minecraft:single_pool_element",
+        "projection": "rigid",
+        "location": "minestuck:arena/obstacle_8",
+        "processors": "minestuck:structure_block_registry"
+      }
+    },
+    {
+      "weight": 1,
+      "element": {
+        "element_type": "minecraft:single_pool_element",
+        "projection": "rigid",
+        "location": "minestuck:arena/obstacle_9",
+        "processors": "minestuck:structure_block_registry"
+      }
+    },
+    {
+      "weight": 1,
+      "element": {
+        "element_type": "minecraft:single_pool_element",
+        "projection": "rigid",
+        "location": "minestuck:arena/obstacle_10",
+        "processors": "minestuck:structure_block_registry"
+      }
+    },
+    {
+      "weight": 1,
+      "element": {
+        "element_type": "minecraft:single_pool_element",
+        "projection": "rigid",
+        "location": "minestuck:arena/obstacle_11",
+        "processors": "minestuck:structure_block_registry"
+      }
+    },
+    {
+      "weight": 1,
+      "element": {
+        "element_type": "minecraft:single_pool_element",
+        "projection": "rigid",
+        "location": "minestuck:arena/obstacle_12",
+        "processors": "minestuck:structure_block_registry"
+      }
+    }
+  ]
+}

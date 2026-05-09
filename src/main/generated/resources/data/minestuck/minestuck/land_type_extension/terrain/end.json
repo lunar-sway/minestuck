@@ -1,0 +1,212 @@
+{
+  "features": [
+    {
+      "biome_types": [
+        "normal",
+        "rough"
+      ],
+      "feature": "minestuck:tree/end",
+      "step": "vegetal_decoration"
+    },
+    {
+      "biome_types": [
+        "normal"
+      ],
+      "feature": "minestuck:end_grass_surface_disk",
+      "step": "local_modifications"
+    },
+    {
+      "biome_types": [
+        "normal"
+      ],
+      "feature": "minestuck:tall_end_grass_patch",
+      "step": "vegetal_decoration"
+    },
+    {
+      "biome_types": [
+        "rough"
+      ],
+      "feature": "minestuck:end_stone_surface_disk",
+      "step": "local_modifications"
+    },
+    {
+      "biome_types": [
+        "rough"
+      ],
+      "feature": "minecraft:chorus_plant",
+      "step": "vegetal_decoration"
+    },
+    {
+      "biome_types": [
+        "rough"
+      ],
+      "feature": "minestuck:tall_end_grass_patch",
+      "step": "vegetal_decoration"
+    },
+    {
+      "biome_types": [
+        "normal",
+        "rough",
+        "ocean"
+      ],
+      "feature": {
+        "feature": {
+          "type": "minecraft:ore",
+          "config": {
+            "discard_chance_on_air_exposure": 0.0,
+            "size": 9,
+            "targets": [
+              {
+                "state": {
+                  "Name": "minestuck:end_stone_iron_ore"
+                },
+                "target": {
+                  "block_state": {
+                    "Name": "minestuck:coarse_end_stone"
+                  },
+                  "predicate_type": "minecraft:blockstate_match"
+                }
+              }
+            ]
+          }
+        },
+        "placement": [
+          {
+            "type": "minecraft:count",
+            "count": 40
+          },
+          {
+            "type": "minecraft:in_square"
+          },
+          {
+            "type": "minecraft:height_range",
+            "height": {
+              "type": "minecraft:uniform",
+              "max_inclusive": {
+                "absolute": 64
+              },
+              "min_inclusive": {
+                "above_bottom": 0
+              }
+            }
+          },
+          {
+            "type": "minecraft:biome"
+          }
+        ]
+      },
+      "step": "underground_ores"
+    },
+    {
+      "biome_types": [
+        "normal",
+        "rough",
+        "ocean"
+      ],
+      "feature": {
+        "feature": {
+          "type": "minecraft:ore",
+          "config": {
+            "discard_chance_on_air_exposure": 0.0,
+            "size": 8,
+            "targets": [
+              {
+                "state": {
+                  "Name": "minestuck:end_stone_redstone_ore",
+                  "Properties": {
+                    "lit": "false"
+                  }
+                },
+                "target": {
+                  "block_state": {
+                    "Name": "minestuck:coarse_end_stone"
+                  },
+                  "predicate_type": "minecraft:blockstate_match"
+                }
+              }
+            ]
+          }
+        },
+        "placement": [
+          {
+            "type": "minecraft:count",
+            "count": 30
+          },
+          {
+            "type": "minecraft:in_square"
+          },
+          {
+            "type": "minecraft:height_range",
+            "height": {
+              "type": "minecraft:uniform",
+              "max_inclusive": {
+                "absolute": 32
+              },
+              "min_inclusive": {
+                "above_bottom": 0
+              }
+            }
+          },
+          {
+            "type": "minecraft:biome"
+          }
+        ]
+      },
+      "step": "underground_ores"
+    },
+    {
+      "biome_types": [
+        "normal",
+        "rough",
+        "ocean"
+      ],
+      "feature": {
+        "feature": {
+          "type": "minecraft:ore",
+          "config": {
+            "discard_chance_on_air_exposure": 0.0,
+            "size": 36,
+            "targets": [
+              {
+                "state": {
+                  "Name": "minecraft:end_stone"
+                },
+                "target": {
+                  "block_state": {
+                    "Name": "minestuck:coarse_end_stone"
+                  },
+                  "predicate_type": "minecraft:blockstate_match"
+                }
+              }
+            ]
+          }
+        },
+        "placement": [
+          {
+            "type": "minecraft:count",
+            "count": 80
+          },
+          {
+            "type": "minecraft:in_square"
+          },
+          {
+            "type": "minecraft:height_range",
+            "height": {
+              "type": "minecraft:uniform",
+              "max_inclusive": {
+                "absolute": 64
+              },
+              "min_inclusive": {
+                "above_bottom": 0
+              }
+            }
+          },
+          {
+            "type": "minecraft:biome"
+          }
+        ]
+      },
+      "step": "underground_ores"
+    }
+  ]
+}

@@ -1,0 +1,243 @@
+{
+  "entries": [
+    {
+      "cost": [
+        {
+          "grist": {
+            "minestuck:build": 1
+          }
+        }
+      ],
+      "item": {
+        "count": 1,
+        "id": "minecraft:cobbled_deepslate"
+      },
+      "tier": 1
+    },
+    {
+      "cost": [
+        {
+          "grist": {
+            "minestuck:build": 2
+          }
+        }
+      ],
+      "item": {
+        "count": 1,
+        "id": "minecraft:cobbled_deepslate_stairs"
+      },
+      "tier": 1
+    },
+    {
+      "cost": [
+        {
+          "grist": {
+            "minestuck:build": 1
+          }
+        }
+      ],
+      "item": {
+        "count": 1,
+        "id": "minecraft:cobbled_deepslate_slab"
+      },
+      "tier": 1
+    },
+    {
+      "cost": [
+        {
+          "grist": {
+            "minestuck:build": 2
+          }
+        }
+      ],
+      "item": {
+        "count": 1,
+        "id": "minecraft:cobbled_deepslate_wall"
+      },
+      "tier": 1
+    },
+    {
+      "cost": [
+        {
+          "grist": {
+            "minestuck:build": 1
+          }
+        }
+      ],
+      "item": {
+        "count": 1,
+        "id": "minecraft:chiseled_deepslate"
+      },
+      "tier": 2
+    },
+    {
+      "cost": [
+        {
+          "grist": {
+            "minestuck:build": 1
+          }
+        }
+      ],
+      "item": {
+        "count": 1,
+        "id": "minecraft:polished_deepslate"
+      },
+      "tier": 1
+    },
+    {
+      "cost": [
+        {
+          "grist": {
+            "minestuck:build": 2
+          }
+        }
+      ],
+      "item": {
+        "count": 1,
+        "id": "minecraft:polished_deepslate_stairs"
+      },
+      "tier": 1
+    },
+    {
+      "cost": [
+        {
+          "grist": {
+            "minestuck:build": 1
+          }
+        }
+      ],
+      "item": {
+        "count": 1,
+        "id": "minecraft:polished_deepslate_slab"
+      },
+      "tier": 1
+    },
+    {
+      "cost": [
+        {
+          "grist": {
+            "minestuck:build": 2
+          }
+        }
+      ],
+      "item": {
+        "count": 1,
+        "id": "minecraft:polished_deepslate_wall"
+      },
+      "tier": 1
+    },
+    {
+      "cost": [
+        {
+          "grist": {
+            "minestuck:build": 1
+          }
+        }
+      ],
+      "item": {
+        "count": 1,
+        "id": "minecraft:deepslate_bricks"
+      },
+      "tier": 1
+    },
+    {
+      "cost": [
+        {
+          "grist": {
+            "minestuck:build": 2
+          }
+        }
+      ],
+      "item": {
+        "count": 1,
+        "id": "minecraft:deepslate_brick_stairs"
+      },
+      "tier": 1
+    },
+    {
+      "cost": [
+        {
+          "grist": {
+            "minestuck:build": 1
+          }
+        }
+      ],
+      "item": {
+        "count": 1,
+        "id": "minecraft:deepslate_brick_slab"
+      },
+      "tier": 1
+    },
+    {
+      "cost": [
+        {
+          "grist": {
+            "minestuck:build": 2
+          }
+        }
+      ],
+      "item": {
+        "count": 1,
+        "id": "minecraft:deepslate_brick_wall"
+      },
+      "tier": 1
+    },
+    {
+      "cost": [
+        {
+          "grist": {
+            "minestuck:build": 1
+          }
+        }
+      ],
+      "item": {
+        "count": 1,
+        "id": "minecraft:deepslate_tiles"
+      },
+      "tier": 1
+    },
+    {
+      "cost": [
+        {
+          "grist": {
+            "minestuck:build": 2
+          }
+        }
+      ],
+      "item": {
+        "count": 1,
+        "id": "minecraft:deepslate_tile_stairs"
+      },
+      "tier": 1
+    },
+    {
+      "cost": [
+        {
+          "grist": {
+            "minestuck:build": 1
+          }
+        }
+      ],
+      "item": {
+        "count": 1,
+        "id": "minecraft:deepslate_tile_slab"
+      },
+      "tier": 1
+    },
+    {
+      "cost": [
+        {
+          "grist": {
+            "minestuck:build": 2
+          }
+        }
+      ],
+      "item": {
+        "count": 1,
+        "id": "minecraft:deepslate_tile_wall"
+      },
+      "tier": 1
+    }
+  ],
+  "priority": 5.0
+}

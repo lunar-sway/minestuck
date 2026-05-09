@@ -157,9 +157,8 @@
               "function": "minecraft:set_damage"
             }
           ],
-          "name": "minestuck:wooden_spoon",
-          "quality": -2,
-          "weight": 5
+          "name": "minestuck:silver_spoon",
+          "weight": 3
         },
         {
           "type": "minecraft:item",
@@ -193,12 +192,6 @@
           "name": "minestuck:knitting_needle",
           "quality": -1,
           "weight": 4
-        },
-        {
-          "type": "minecraft:item",
-          "name": "minestuck:shuriken",
-          "quality": -2,
-          "weight": 8
         },
         {
           "type": "minecraft:item",
@@ -299,6 +292,12 @@
           "name": "minestuck:fork",
           "quality": -1,
           "weight": 4
+        },
+        {
+          "type": "minecraft:item",
+          "name": "minestuck:shuriken",
+          "quality": -2,
+          "weight": 8
         }
       ],
       "name": "item",

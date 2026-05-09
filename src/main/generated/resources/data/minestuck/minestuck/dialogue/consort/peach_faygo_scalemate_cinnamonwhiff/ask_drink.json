@@ -15,9 +15,19 @@
       },
       {
         "condition": {
-          "type": "minestuck:player_item",
-          "item": "minestuck:peach_faygo"
+          "type": "minestuck:player_entity_predicate",
+          "predicate": {
+            "slots": {
+              "container.*": {
+                "count": {
+                  "min": 1
+                },
+                "items": "minestuck:peach_faygo"
+              }
+            }
+          }
         },
+        "fail_tooltip": "minestuck.dialogue.consort.peach_faygo_scalemate_cinnamonwhiff.ask_drink.condition",
         "hide_if_failed": false,
         "message": "minestuck.dialogue.consort.peach_faygo_scalemate_cinnamonwhiff.ask_drink.exchange",
         "next_dialogue": {

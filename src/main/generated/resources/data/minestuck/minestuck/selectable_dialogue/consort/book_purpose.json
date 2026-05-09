@@ -7,8 +7,10 @@
         "land_type": "minestuck:thought"
       },
       {
-        "type": "minestuck:entity_type",
-        "entity_type": "minestuck:nakagator"
+        "type": "minestuck:npc_entity_predicate",
+        "predicate": {
+          "type": "minestuck:nakagator"
+        }
       }
     ],
     "list_type": "all"

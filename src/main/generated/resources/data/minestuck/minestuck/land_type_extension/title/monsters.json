@@ -1,0 +1,65 @@
+{
+  "features": [
+    {
+      "biome_types": [
+        "normal",
+        "rough",
+        "ocean"
+      ],
+      "feature": "minecraft:monster_room",
+      "step": "underground_structures"
+    },
+    {
+      "biome_types": [
+        "normal",
+        "rough"
+      ],
+      "feature": "minestuck:tree/rage",
+      "step": "vegetal_decoration"
+    }
+  ],
+  "mob_spawns": [
+    {
+      "biome_types": [
+        "normal",
+        "rough",
+        "ocean"
+      ],
+      "category": "monster",
+      "spawner_data": {
+        "type": "minecraft:creeper",
+        "maxCount": 1,
+        "minCount": 1,
+        "weight": 1
+      }
+    },
+    {
+      "biome_types": [
+        "normal",
+        "rough",
+        "ocean"
+      ],
+      "category": "monster",
+      "spawner_data": {
+        "type": "minecraft:spider",
+        "maxCount": 2,
+        "minCount": 1,
+        "weight": 1
+      }
+    },
+    {
+      "biome_types": [
+        "normal",
+        "rough",
+        "ocean"
+      ],
+      "category": "monster",
+      "spawner_data": {
+        "type": "minecraft:zombie",
+        "maxCount": 2,
+        "minCount": 1,
+        "weight": 1
+      }
+    }
+  ]
+}

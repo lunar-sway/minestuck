@@ -470,6 +470,42 @@
       }
     ]
   },
+  "music.prospit": {
+    "sounds": [
+      {
+        "name": "minestuck:music/medium/endless_light",
+        "stream": true
+      }
+    ]
+  },
+  "music.derse": {
+    "sounds": [
+      {
+        "name": "minestuck:music/medium/obsidian_oppugnants",
+        "stream": true
+      }
+    ]
+  },
+  "music.veil": {
+    "sounds": [
+      {
+        "name": "minestuck:music/medium/deep",
+        "stream": true
+      },
+      {
+        "name": "minestuck:music/medium/auxillary",
+        "stream": true
+      }
+    ]
+  },
+  "music.skaia": {
+    "sounds": [
+      {
+        "name": "minestuck:music/medium/skaia_perseveres",
+        "stream": true
+      }
+    ]
+  },
   "entity.swoosh": {
     "category": "hostile",
     "subtitle": "subtitles.minestuck.swoosh",
@@ -701,6 +737,17 @@
       "minestuck:mob/giclops/death"
     ]
   },
+  "entity.kernelsprite.ambient": {
+    "category": "friendly",
+    "subtitle": "subtitles.entity.minestuck.kernelsprite.ambient",
+    "sounds": [
+      "minestuck:mob/kernelsprite/ambient_1",
+      "minestuck:mob/kernelsprite/ambient_2",
+      "minestuck:mob/kernelsprite/ambient_3",
+      "minestuck:mob/kernelsprite/ambient_4",
+      "minestuck:mob/kernelsprite/ambient_5"
+    ]
+  },
   "item.long_forgotten_warhorn.use": {
     "category": "ambient",
     "subtitle": "subtitles.minestuck.warhorn",
@@ -811,6 +858,22 @@
     "subtitle": "subtitles.minestuck.boondollar_get",
     "sounds": [
       "minestuck:random/boondollar_get"
+    ]
+  },
+  "event.captchalogue.item":    {
+    "category": "ambient",
+    "subtitle": "subtitles.minestuck.captchalogue_item",
+    "sounds":   [
+      "minestuck:random/card_pop_1",
+      "minestuck:random/card_pop_2",
+      "minestuck:random/card_pop_3"
+    ]
+  },
+  "event.captchalogue.shuffle": {
+    "category": "ambient",
+    "subtitle": "subtitles.minestuck.captchalogue_shuffle",
+    "sounds":   [
+      "minestuck:random/card_shuffle"
     ]
   },
   "event.echeladder.increase": {
