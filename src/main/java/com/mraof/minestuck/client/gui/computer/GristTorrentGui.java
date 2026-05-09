@@ -165,7 +165,7 @@ public final class GristTorrentGui extends Screen implements ProgramGui<ProgramT
 			String volumeText = String.valueOf(filledVolume);
 			guiGraphics.pose().pushPose();
 			guiGraphics.pose().scale(0.5F, 0.5F, 0.5F);
-			guiGraphics.drawString(font, volumeText, scale(xOffset + 92) - font.width(volumeText) / 4, scale(yOffset + 185 + 5), LIGHT_BLUE, false);
+			guiGraphics.drawString(font, volumeText, scale(xOffset + 105), scale(yOffset + 185 + 5), LIGHT_BLUE, false);
 			guiGraphics.pose().popPose();
 		}
 	}
@@ -201,7 +201,8 @@ public final class GristTorrentGui extends Screen implements ProgramGui<ProgramT
 				addTorrentSessions();
 				break;
 			}
-			container.refreshEntries(visibleTorrentData.get(container.playerId));
+			TorrentSession.TorrentClientData data = visibleTorrentData.get(container.playerId);
+			container.refreshEntries(data);
 		}
 	}
 	
@@ -289,6 +290,7 @@ public final class GristTorrentGui extends Screen implements ProgramGui<ProgramT
 		TorrentSession.TorrentClientData userData = visibleTorrentData.get(SkaiaClient.playerId);
 		if(userData == null) return;
 		
+		torrentContainerRow.children().forEach(this::removeWidget);
 		torrentContainerRow.children().clear();
 		
 		createTorrentWidget(SkaiaClient.playerId, userData);

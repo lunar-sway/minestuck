@@ -148,7 +148,7 @@ public class TorrentWidgets
 			int color = GristTorrentGui.DARK_GREY;
 			
 			if(isActive)
-				color = isOwner ? 0xFFFF0000 : 0xFF00FF00;
+				color = isOwner ? 0xFF00FF00 : 0xFFFF0000;
 			
 			return color;
 		}
@@ -233,6 +233,19 @@ public class TorrentWidgets
 		}
 		
 		@Override
+		public void setX(int x)
+		{
+			int delta = x - getX();
+			
+			super.setX(x);
+			
+			for(GristEntry entry : children())
+			{
+				entry.setX(entry.getX() + delta);
+			}
+		}
+		
+		@Override
 		protected void renderWidget(GuiGraphics guiGraphics, int mouseX, int mouseY, float partialTick)
 		{
 			super.renderWidget(guiGraphics, mouseX, mouseY, partialTick);
@@ -245,9 +258,10 @@ public class TorrentWidgets
 				float r, g, b;
 				
 				if(torrentData.status() == 2) {
-					r = ((torrentData.playerColor() >> 16) & 0xFF) / 255F;
-					g = ((torrentData.playerColor() >> 8) & 0xFF) / 255F;
-					b = (torrentData.playerColor() & 0xFF) / 255F;
+					int color = getPlayerColor(torrentData);
+					r = ((color >> 16) & 0xFF) / 255F;
+					g = ((color >> 8)  & 0xFF) / 255F;
+					b = (color         & 0xFF) / 255F;
 				} else {
 					r = 0.5F; g = 0.5F; b = 0.5F;
 				}
@@ -345,6 +359,13 @@ public class TorrentWidgets
 			}
 			return false;
 		}
+		
+		@Override
+		protected void renderWidget(GuiGraphics guiGraphics, int mouseX, int mouseY, float partialTick)
+		{
+			for(TorrentContainer widget : super.widgets)
+				widget.render(guiGraphics, mouseX, mouseY, partialTick);
+		}
 		@Override
 		public int getMaxScroll()
 		{
@@ -382,7 +403,6 @@ public class TorrentWidgets
 		{
 			widget.setX(getX() + (i - getScroll()) * (GateIcon.RENDERED_W + SPACING));
 		}
-		
 		@Override public int visibleEntryCount() { return VISIBLE_COUNT; }
 		@Override public int subWidgetWidth()    { return GateIcon.RENDERED_W; }
 		
@@ -591,7 +611,7 @@ public class TorrentWidgets
 		public static final int Y_OFFSET_FROM_EDGE = 128;
 		public static final int WIDTH = GristStat.X_OFFSET_FROM_EDGE - 2;
 		public static final int ROW_HEIGHT = 6;
-		public static final int HEIGHT = ROW_HEIGHT * GristTorrentGui.TorrentFilter.values().length;
+		public static final int HEIGHT = ROW_HEIGHT * GristTorrentGui.TorrentFilter.values().length + 6;
 		
 		private final Map<GristTorrentGui.TorrentFilter, Integer> filterCounts = new HashMap<>();
 		
@@ -644,7 +664,10 @@ public class TorrentWidgets
 		@Override
 		public void onClick(double mouseX, double mouseY, int button)
 		{
-			int index = (int) (mouseY - getY() - 3) / ROW_HEIGHT;
+			double relativeY = mouseY - getY();
+			
+//			int index = (int) (mouseY - getY() - 5) / ROW_HEIGHT;
+			int index = (int) (relativeY - 5) / ROW_HEIGHT;
 			GristTorrentGui.TorrentFilter[] filters = GristTorrentGui.TorrentFilter.values();
 			if(index >= 0 && index < filters.length)
 			{
@@ -856,17 +879,17 @@ public class TorrentWidgets
 		@Override
 		protected void renderWidget(GuiGraphics guiGraphics, int mouseX, int mouseY, float partialTick)
 		{
+			guiGraphics.enableScissor(getX(), getY(), getX() + width, getY() + height);
 			for(T widget : this.widgets)
 				widget.render(guiGraphics, mouseX, mouseY, partialTick);
+			guiGraphics.disableScissor();
 		}
 		
 		@Override
 		public boolean mouseScrolled(double mouseX, double mouseY, double scrollX, double scrollY)
 		{
-			//TODO consider inverting scroll direction
-			
-			if(scrollY > 0) scroll = Math.min(getMaxScroll(), scroll + 1);
-			else if(scrollY < 0) scroll = Math.max(0, scroll - 1);
+			if(scrollY > 0) scroll = Math.max(0, scroll - 1);
+			else if(scrollY < 0) scroll = Math.min(getMaxScroll(), scroll + 1);
 			
 			updateVisibilityAndPosition();
 			
@@ -928,10 +951,8 @@ public class TorrentWidgets
 			int maxScroll = target.getMaxScroll();
 			if(total > 0 && maxScroll > 0)
 			{
-				int thumbColor = GristTorrentGui.LIGHT_BLUE;
 				TorrentSession.TorrentClientData userData = GristTorrentGui.visibleTorrentData.get(SkaiaClient.playerId);
-				if(userData != null && userData.status() == 2)
-					thumbColor = 0xFF000000 | userData.playerColor();
+				int thumbColor = getPlayerColor(userData);
 				
 				int thumbWidth = Math.max(4, width * target.visibleEntryCount() / total);
 				int thumbX = getX() + (int)((width - thumbWidth) * (float)target.getScroll() / maxScroll);
@@ -984,16 +1005,18 @@ public class TorrentWidgets
 		@Override
 		protected void renderWidget(GuiGraphics guiGraphics, int mouseX, int mouseY, float partialTick)
 		{
+			guiGraphics.enableScissor(getX(), getY(), getX() + width, getY() + height + 1);
 			for(T widget : this.widgets)
 				widget.render(guiGraphics, mouseX, mouseY, partialTick);
+			guiGraphics.disableScissor();
 		}
 		
 		@Override
 		public boolean mouseScrolled(double mouseX, double mouseY, double scrollX, double scrollY)
 		{
 			//TODO consider inverting scroll direction
-			if(scrollY > 0) scroll = Math.min(getMaxScroll(), scroll + 1);
-			else if(scrollY < 0) scroll = Math.max(0, scroll - 1);
+			if(scrollY > 0) scroll = Math.max(0, scroll - 1);
+			else if(scrollY < 0) scroll = Math.min(getMaxScroll(), scroll + 1);
 			
 			updateVisibilityAndPosition();
 			
@@ -1037,5 +1060,18 @@ public class TorrentWidgets
 		{
 			return false;
 		}
+	}
+	
+	static int getPlayerColor(TorrentSession.TorrentClientData data)
+	{
+		if(data != null && data.status() == 2)
+		{
+			int base = data.playerColor();
+			int r = Math.min(((base >> 16) & 0xFF) + 40, 255);
+			int g = Math.min(((base >> 8)  & 0xFF) + 40, 255);
+			int b = Math.min((base         & 0xFF) + 40, 255);
+			return 0xFF000000 | (r << 16) | (g << 8) | b;
+		}
+		return GristTorrentGui.LIGHT_BLUE;
 	}
 }
