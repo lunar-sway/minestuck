@@ -2413,7 +2413,7 @@ public class MinestuckEnUsLanguageProvider extends MinestuckLanguageProvider
 		add(DiskBurnerGui.NO_DISKS, "Insert disk to burn");
 		add(DiskBurnerGui.BURN_CLIENT_DISK, "Burn Client Disk");
 		add(DiskBurnerGui.BURN_SERVER_DISK, "Burn Server Disk");
-		add(DiskBurnerGui.BURN_TORRENT_DISK, "Burn GristTorrent Disk");
+		add(DiskBurnerGui.BURN_TORRENT_DISK, "Burn Torrent Disk");
 		add(DiskBurnerGui.CHOOSE, "Choose disk type to write");
 		add(ComputerInteractions.STOP_RESUME, "Stopped resuming");
 		add(SettingsAppGui.NAME, "Settings");

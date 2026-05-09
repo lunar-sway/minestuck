@@ -3428,7 +3428,7 @@
   "minestuck.program.disk_burner": "Disk Burner",
   "minestuck.program.disk_burner.burn_client_disk": "Burn Client Disk",
   "minestuck.program.disk_burner.burn_server_disk": "Burn Server Disk",
-  "minestuck.program.disk_burner.burn_torrent_disk": "Burn GristTorrent Disk",
+  "minestuck.program.disk_burner.burn_torrent_disk": "Burn Torrent Disk",
   "minestuck.program.disk_burner.choose": "Choose disk type to write",
   "minestuck.program.disk_burner.needs_code": "Requires code to burn disks",
   "minestuck.program.disk_burner.needs_disks": "Insert disk to burn",

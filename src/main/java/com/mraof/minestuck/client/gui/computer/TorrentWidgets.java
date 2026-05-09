@@ -1074,4 +1074,18 @@ public class TorrentWidgets
 		}
 		return GristTorrentGui.LIGHT_BLUE;
 	}
+	
+	// Want to add a stroke around the playerIcon & active scrollBar part for better visibility
+	static boolean isColorBright(int color)
+	{
+		int r = (color >> 16) & 0xFF;
+		int g = (color >> 8)  & 0xFF;
+		int b =  color        & 0xFF;
+		return (0.299 * r + 0.587 * g + 0.114 * b) > 128;
+	}
+	
+	static int getBackdropColor(int playerColor)
+	{
+		return isColorBright(playerColor) ? 0xFF1A1A1A : 0xFFE8E8E8;
+	}
 }
