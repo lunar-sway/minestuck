@@ -60,8 +60,9 @@ public class LaptopBlock extends ComputerBlock
 		if(!(level.getBlockEntity(pos) instanceof ComputerBlockEntity computer))
 			return;
 		
-		CompoundTag beTag = computer.saveWithoutMetadata(level.registryAccess());
+		computer.closeAll();
 		
+		CompoundTag beTag = computer.saveWithoutMetadata(level.registryAccess());
 		ItemStack pickupStack = new ItemStack(state.getBlock().asItem());
 		BlockItem.setBlockEntityData(pickupStack, computer.getType(), beTag);
 		
