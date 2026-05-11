@@ -1,7 +1,7 @@
 package com.mraof.minestuck.blockentity.machine;
 
 import com.mraof.minestuck.api.uranium.IUraniumHandler;
-import com.mraof.minestuck.api.uranium.SimpleUraniumHandlers;
+import com.mraof.minestuck.api.uranium.SimpleUraniumHandler;
 import com.mraof.minestuck.api.uranium.UraniumPower;
 import com.mraof.minestuck.blockentity.MSBlockEntityTypes;
 import com.mraof.minestuck.inventory.OptionalPosHolder;
@@ -35,7 +35,15 @@ public class SendificatorBlockEntity extends MachineProcessBlockEntity implement
 	public static final short MAX_FUEL = 128;
 	
 	private final ProgressTracker progressTracker = new ProgressTracker(ProgressTracker.RunType.ONCE_OR_LOOPING, 0, this::setChanged, this::contentsValid);
-	private final SimpleUraniumHandlers fuel = new SimpleUraniumHandlers.Insert(MAX_FUEL);
+	
+	private short fuel;
+	private final IUraniumHandler uraniumHandler = new SimpleUraniumHandler(() -> (int) MAX_FUEL, () -> (int) this.fuel, fuel -> this.fuel = (short) ((int) fuel))
+	{
+		public boolean canExtractUranium()
+		{
+			return false;
+		}
+	};
 	
 	@Nullable
 	private BlockPos destBlockPos;
@@ -45,13 +53,13 @@ public class SendificatorBlockEntity extends MachineProcessBlockEntity implement
 		@Override
 		public int get()
 		{
-			return fuel.getUraniumStored();
+			return fuel;
 		}
 		
 		@Override
 		public void set(int value)
 		{
-			fuel.setUraniumStored(value);
+			fuel = (short) value;
 		}
 	};
 	private final OptionalPosHolder destinationHolder = OptionalPosHolder.forPos(() -> Optional.ofNullable(this.getDestinationBlockPos()));
@@ -93,14 +101,7 @@ public class SendificatorBlockEntity extends MachineProcessBlockEntity implement
 			this.destBlockPos = new BlockPos(destX, destY, destZ);
 		}
 		
-		if(compound.contains("fuel", 99))
-		{
-			// Kept for backwards compatibility
-			fuel.setUraniumStored(compound.getShort("fuel"));
-		} else
-		{
-			fuel.load(compound.getCompound("fuel"));
-		}
+		fuel = compound.getShort("fuel");
 	}
 	
 	@Override
@@ -117,7 +118,7 @@ public class SendificatorBlockEntity extends MachineProcessBlockEntity implement
 			compound.putInt("destZ", destBlockPos.getZ());
 		}
 		
-		compound.put("fuel", fuel.save());
+		compound.putShort("fuel", fuel);
 	}
 	
 	@Override
@@ -177,7 +178,7 @@ public class SendificatorBlockEntity extends MachineProcessBlockEntity implement
 						ItemEntity itemEntity = new ItemEntity(level, destinationPos.getX(), destinationPos.getY(), destinationPos.getZ(), sentStack);
 						level.addFreshEntity(itemEntity);
 						
-						this.fuel.extractUranium(8, false);
+						this.fuel -= 8;
 					}
 				}
 			}
@@ -189,7 +190,7 @@ public class SendificatorBlockEntity extends MachineProcessBlockEntity implement
 	 */
 	private boolean canSend()
 	{
-		return fuel.getUraniumStored() > 0 && !itemHandler.getStackInSlot(0).isEmpty();
+		return fuel > 0 && !itemHandler.getStackInSlot(0).isEmpty();
 	}
 	
 	/**
@@ -198,13 +199,13 @@ public class SendificatorBlockEntity extends MachineProcessBlockEntity implement
 	public boolean canBeRefueled(ItemStack fuelStack)
 	{
 		int amount = UraniumPower.getUraniumPower(fuelStack);
-		return fuel.receiveUranium(amount, true) == amount;
+		return fuel + amount <= MAX_FUEL;
 	}
 	
 	public void addFuel(ItemStack fuelStack)
 	{
 		int amount = UraniumPower.getUraniumPower(fuelStack);
-		fuel.receiveUranium(amount, false);
+		fuel += amount;
 	}
 	
 	@Nullable
@@ -223,7 +224,7 @@ public class SendificatorBlockEntity extends MachineProcessBlockEntity implement
 	@Nullable
 	public IUraniumHandler getUraniumHandler(@Nullable Direction side)
 	{
-		return fuel;
+		return uraniumHandler;
 	}
 	
 	public void openMenu(ServerPlayer player)

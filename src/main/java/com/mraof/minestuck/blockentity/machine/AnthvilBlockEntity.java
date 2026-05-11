@@ -7,7 +7,7 @@ import com.mraof.minestuck.api.alchemy.GristType;
 import com.mraof.minestuck.api.alchemy.GristTypes;
 import com.mraof.minestuck.api.alchemy.recipe.GristCostRecipe;
 import com.mraof.minestuck.api.uranium.IUraniumHandler;
-import com.mraof.minestuck.api.uranium.SimpleUraniumHandlers;
+import com.mraof.minestuck.api.uranium.SimpleUraniumHandler;
 import com.mraof.minestuck.api.uranium.UraniumPower;
 import com.mraof.minestuck.blockentity.MSBlockEntityTypes;
 import com.mraof.minestuck.inventory.AnthvilMenu;
@@ -44,20 +44,27 @@ public class AnthvilBlockEntity extends MachineProcessBlockEntity implements Men
 	public static final short MAX_FUEL = 128;
 	public static final short MEND_FUEL_COST = 5;
 	
-	private final SimpleUraniumHandlers fuel = new SimpleUraniumHandlers.Insert(MAX_FUEL);
+	private short fuel;
+	private final IUraniumHandler uraniumHandler = new SimpleUraniumHandler(() -> (int) MAX_FUEL, () -> (int) this.fuel, fuel -> this.fuel = (short) ((int) fuel))
+	{
+		public boolean canExtractUranium()
+		{
+			return false;
+		}
+	};
 	
 	private final DataSlot fuelHolder = new DataSlot()
 	{
 		@Override
 		public int get()
 		{
-			return fuel.getUraniumStored();
+			return fuel;
 		}
 		
 		@Override
 		public void set(int value)
 		{
-			fuel.setUraniumStored(value);
+			fuel = (short) value;
 		}
 	};
 	
@@ -78,14 +85,7 @@ public class AnthvilBlockEntity extends MachineProcessBlockEntity implements Men
 	{
 		super.loadAdditional(compound, provider);
 		
-		if(compound.contains("fuel", 99))
-		{
-			// Kept for backwards compatibility
-			fuel.setUraniumStored(compound.getShort("fuel"));
-		} else
-		{
-			fuel.load(compound.getCompound("fuel"));
-		}
+		fuel = compound.getShort("fuel");
 	}
 	
 	@Override
@@ -93,7 +93,7 @@ public class AnthvilBlockEntity extends MachineProcessBlockEntity implements Men
 	{
 		super.saveAdditional(compound, provider);
 		
-		compound.put("fuel", fuel.save());
+		compound.putShort("fuel", fuel);
 	}
 	
 	@Override
@@ -136,7 +136,7 @@ public class AnthvilBlockEntity extends MachineProcessBlockEntity implements Men
 			slotStack.setDamageValue(slotStack.getDamageValue() - repairAmount);
 			
 			if(!player.isCreative())
-				anthvil.fuel.extractUranium(MEND_FUEL_COST, false);
+				anthvil.fuel -= MEND_FUEL_COST;
 		}
 	}
 	
@@ -147,7 +147,7 @@ public class AnthvilBlockEntity extends MachineProcessBlockEntity implements Men
 	
 	private static boolean hasEnoughFuel(AnthvilBlockEntity anthvil)
 	{
-		return anthvil.fuel.extractUranium(MEND_FUEL_COST, true) == MEND_FUEL_COST;
+		return anthvil.fuel >= MEND_FUEL_COST;
 	}
 	
 	/**
@@ -187,13 +187,13 @@ public class AnthvilBlockEntity extends MachineProcessBlockEntity implements Men
 	public boolean canBeRefueled(ItemStack fuelStack)
 	{
 		int amount = UraniumPower.getUraniumPower(fuelStack);
-		return fuel.receiveUranium(amount, true) == amount;
+		return fuel + amount <= MAX_FUEL;
 	}
 	
 	public void addFuel(ItemStack fuelStack)
 	{
 		int amount = UraniumPower.getUraniumPower(fuelStack);
-		fuel.receiveUranium(amount, false);
+		fuel += amount;
 	}
 	
 	@Nullable
@@ -213,7 +213,7 @@ public class AnthvilBlockEntity extends MachineProcessBlockEntity implements Men
 	@Nullable
 	public IUraniumHandler getUraniumHandler(@Nullable Direction side)
 	{
-		return fuel;
+		return uraniumHandler;
 	}
 	
 	@Nullable

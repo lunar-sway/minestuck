@@ -1,7 +1,7 @@
 package com.mraof.minestuck.blockentity.machine;
 
 import com.mraof.minestuck.api.uranium.IUraniumHandler;
-import com.mraof.minestuck.api.uranium.SimpleUraniumHandlers;
+import com.mraof.minestuck.api.uranium.SimpleUraniumHandler;
 import com.mraof.minestuck.api.uranium.UraniumPower;
 import com.mraof.minestuck.blockentity.MSBlockEntityTypes;
 import com.mraof.minestuck.inventory.UraniumCookerMenu;
@@ -44,17 +44,25 @@ public class UraniumCookerBlockEntity extends MachineProcessBlockEntity implemen
 		@Override
 		public int get()
 		{
-			return fuel.getUraniumStored();
+			return fuel;
 		}
 		
 		@Override
 		public void set(int value)
 		{
-			fuel.setUraniumStored(value);
+			fuel = (short) value;
 		}
 	};
 	
-	private final SimpleUraniumHandlers fuel = new SimpleUraniumHandlers.Insert(MAX_FUEL);
+	private short fuel;
+	private final IUraniumHandler uraniumHandler = new SimpleUraniumHandler(() -> (int) MAX_FUEL, () -> (int) this.fuel, fuel -> this.fuel = (short) ((int) fuel))
+	{
+		public boolean canExtractUranium()
+		{
+			return false;
+		}
+	};
+	
 	public static final short MAX_FUEL = 128;
 	
 	public UraniumCookerBlockEntity(BlockPos pos, BlockState state)
@@ -72,7 +80,8 @@ public class UraniumCookerBlockEntity extends MachineProcessBlockEntity implemen
 	public void saveAdditional(CompoundTag compound, HolderLookup.Provider provider)
 	{
 		super.saveAdditional(compound, provider);
-		compound.put("fuel", fuel.save());
+		
+		compound.putShort("fuel", fuel);
 	}
 	
 	@Override
@@ -80,14 +89,7 @@ public class UraniumCookerBlockEntity extends MachineProcessBlockEntity implemen
 	{
 		super.loadAdditional(nbt, pRegistries);
 		
-		if(nbt.contains("fuel", 99))
-		{
-			// Kept for backwards compatibility
-			fuel.setUraniumStored(nbt.getShort("fuel"));
-		} else
-		{
-			fuel.load(nbt.getCompound("fuel"));
-		}
+		fuel = nbt.getShort("fuel");
 	}
 	
 	@Override
@@ -138,7 +140,7 @@ public class UraniumCookerBlockEntity extends MachineProcessBlockEntity implemen
 		if(canIrradiate())
 		{
 			ItemStack output = irradiate();
-			if(itemHandler.getStackInSlot(2).isEmpty() && this.fuel.getUraniumStored() > 0)
+			if(itemHandler.getStackInSlot(2).isEmpty() && this.fuel > 0)
 			{
 				itemHandler.setStackInSlot(2, output);
 			} else
@@ -152,14 +154,14 @@ public class UraniumCookerBlockEntity extends MachineProcessBlockEntity implemen
 			{
 				itemHandler.extractItem(0, 1, false);
 			}
-			this.fuel.extractUranium(1, false);
+			this.fuel--;
 		}
 	}
 	
 	private boolean canIrradiate()
 	{
 		ItemStack output = irradiate();
-		if(fuel.getUraniumStored() > 0 && !itemHandler.getStackInSlot(0).isEmpty() && !output.isEmpty())
+		if(fuel > 0 && !itemHandler.getStackInSlot(0).isEmpty() && !output.isEmpty())
 		{
 			ItemStack out = itemHandler.getStackInSlot(2);
 			
@@ -183,7 +185,7 @@ public class UraniumCookerBlockEntity extends MachineProcessBlockEntity implemen
 	@Nullable
 	public IUraniumHandler getUraniumHandler(@Nullable Direction side)
 	{
-		return fuel;
+		return uraniumHandler;
 	}
 	
 	@Nullable
@@ -202,12 +204,12 @@ public class UraniumCookerBlockEntity extends MachineProcessBlockEntity implemen
 	public boolean canBeRefueled(ItemStack fuelStack)
 	{
 		int amount = UraniumPower.getUraniumPower(fuelStack);
-		return fuel.receiveUranium(amount, true) == amount;
+		return fuel + amount <= MAX_FUEL;
 	}
 	
 	public void addFuel(ItemStack fuelStack)
 	{
 		int amount = UraniumPower.getUraniumPower(fuelStack);
-		fuel.receiveUranium(amount, false);
+		fuel += amount;
 	}
 }
