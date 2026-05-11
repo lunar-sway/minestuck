@@ -6,6 +6,9 @@ import com.mraof.minestuck.api.alchemy.GristSet;
 import com.mraof.minestuck.api.alchemy.GristType;
 import com.mraof.minestuck.api.alchemy.GristTypes;
 import com.mraof.minestuck.api.alchemy.recipe.GristCostRecipe;
+import com.mraof.minestuck.api.uranium.IUraniumHandler;
+import com.mraof.minestuck.api.uranium.SimpleUraniumHandlers;
+import com.mraof.minestuck.api.uranium.UraniumPower;
 import com.mraof.minestuck.blockentity.MSBlockEntityTypes;
 import com.mraof.minestuck.inventory.AnthvilMenu;
 import com.mraof.minestuck.player.GristCache;
@@ -35,26 +38,26 @@ import java.util.Comparator;
 /**
  * Mends an item at the cost of uranium power and grist. The grist used is the one with the highest value impact (weighted against build grist)
  */
-public class AnthvilBlockEntity extends MachineProcessBlockEntity implements MenuProvider, UraniumPowered
+public class AnthvilBlockEntity extends MachineProcessBlockEntity implements MenuProvider
 {
 	public static final String TITLE = "container.minestuck.anthvil";
 	public static final short MAX_FUEL = 128;
 	public static final short MEND_FUEL_COST = 5;
 	
-	private short fuel = 0;
+	private final SimpleUraniumHandlers fuel = new SimpleUraniumHandlers.Insert(MAX_FUEL);
 	
 	private final DataSlot fuelHolder = new DataSlot()
 	{
 		@Override
 		public int get()
 		{
-			return fuel;
+			return fuel.getUraniumStored();
 		}
 		
 		@Override
 		public void set(int value)
 		{
-			fuel = (short) value;
+			fuel.setUraniumStored(value);
 		}
 	};
 	
@@ -75,7 +78,14 @@ public class AnthvilBlockEntity extends MachineProcessBlockEntity implements Men
 	{
 		super.loadAdditional(compound, provider);
 		
-		fuel = compound.getShort("fuel");
+		if(compound.contains("fuel", 99))
+		{
+			// Kept for backwards compatibility
+			fuel.setUraniumStored(compound.getShort("fuel"));
+		} else
+		{
+			fuel.load(compound.getCompound("fuel"));
+		}
 	}
 	
 	@Override
@@ -83,7 +93,7 @@ public class AnthvilBlockEntity extends MachineProcessBlockEntity implements Men
 	{
 		super.saveAdditional(compound, provider);
 		
-		compound.putShort("fuel", fuel);
+		compound.put("fuel", fuel.save());
 	}
 	
 	@Override
@@ -102,14 +112,15 @@ public class AnthvilBlockEntity extends MachineProcessBlockEntity implements Men
 		Level level = anthvil.level;
 		ItemStackHandler itemHandler = anthvil.itemHandler;
 		ItemStack slotStack = itemHandler.getStackInSlot(0);
+		ItemStack fuel = itemHandler.getStackInSlot(1);
 		GristCache playerCache = GristCache.get(player);
 		
 		if(level == null || !isMendableItem(slotStack))
 			return;
 		
-		if(anthvil.canBeRefueled() && itemHandler.getStackInSlot(1).is(ExtraModTags.Items.URANIUM_CHUNKS))
+		if(anthvil.canBeRefueled(fuel))
 		{
-			anthvil.addFuel((short) FUEL_INCREASE);
+			anthvil.addFuel(fuel);
 			itemHandler.extractItem(1, 1, false);
 		}
 		
@@ -125,7 +136,7 @@ public class AnthvilBlockEntity extends MachineProcessBlockEntity implements Men
 			slotStack.setDamageValue(slotStack.getDamageValue() - repairAmount);
 			
 			if(!player.isCreative())
-				anthvil.fuel -= MEND_FUEL_COST;
+				anthvil.fuel.extractUranium(MEND_FUEL_COST, false);
 		}
 	}
 	
@@ -136,7 +147,7 @@ public class AnthvilBlockEntity extends MachineProcessBlockEntity implements Men
 	
 	private static boolean hasEnoughFuel(AnthvilBlockEntity anthvil)
 	{
-		return anthvil.fuel >= MEND_FUEL_COST;
+		return anthvil.fuel.extractUranium(MEND_FUEL_COST, true) == MEND_FUEL_COST;
 	}
 	
 	/**
@@ -173,21 +184,16 @@ public class AnthvilBlockEntity extends MachineProcessBlockEntity implements Men
 	/**
 	 * Checks that fuel can be added without any excess/wasted points being attributed
 	 */
-	public boolean canBeRefueled()
+	public boolean canBeRefueled(ItemStack fuelStack)
 	{
-		return fuel <= MAX_FUEL - FUEL_INCREASE;
+		int amount = UraniumPower.getUraniumPower(fuelStack);
+		return fuel.receiveUranium(amount, true) == amount;
 	}
 	
-	@Override
-	public void addFuel(short fuelAmount)
+	public void addFuel(ItemStack fuelStack)
 	{
-		fuel += fuelAmount;
-	}
-	
-	@Override
-	public boolean atMaxFuel()
-	{
-		return fuel >= MAX_FUEL;
+		int amount = UraniumPower.getUraniumPower(fuelStack);
+		fuel.receiveUranium(amount, false);
 	}
 	
 	@Nullable
@@ -202,6 +208,12 @@ public class AnthvilBlockEntity extends MachineProcessBlockEntity implements Men
 			return null;
 		
 		return new RangedWrapper(itemHandler, 1, 2);
+	}
+	
+	@Nullable
+	public IUraniumHandler getUraniumHandler(@Nullable Direction side)
+	{
+		return fuel;
 	}
 	
 	@Nullable

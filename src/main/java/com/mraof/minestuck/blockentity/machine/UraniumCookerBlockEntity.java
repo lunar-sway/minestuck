@@ -1,5 +1,8 @@
 package com.mraof.minestuck.blockentity.machine;
 
+import com.mraof.minestuck.api.uranium.IUraniumHandler;
+import com.mraof.minestuck.api.uranium.SimpleUraniumHandlers;
+import com.mraof.minestuck.api.uranium.UraniumPower;
 import com.mraof.minestuck.blockentity.MSBlockEntityTypes;
 import com.mraof.minestuck.inventory.UraniumCookerMenu;
 import com.mraof.minestuck.item.crafting.IrradiatingRecipe;
@@ -30,7 +33,7 @@ import java.util.Comparator;
 import java.util.Optional;
 import java.util.stream.Stream;
 
-public class UraniumCookerBlockEntity extends MachineProcessBlockEntity implements MenuProvider, UraniumPowered
+public class UraniumCookerBlockEntity extends MachineProcessBlockEntity implements MenuProvider
 {
 	public static final String TITLE = "container.minestuck.uranium_cooker";
 	
@@ -41,17 +44,17 @@ public class UraniumCookerBlockEntity extends MachineProcessBlockEntity implemen
 		@Override
 		public int get()
 		{
-			return fuel;
+			return fuel.getUraniumStored();
 		}
 		
 		@Override
 		public void set(int value)
 		{
-			fuel = (short) value;
+			fuel.setUraniumStored(value);
 		}
 	};
 	
-	private short fuel = 0;
+	private final SimpleUraniumHandlers fuel = new SimpleUraniumHandlers.Insert(MAX_FUEL);
 	public static final short MAX_FUEL = 128;
 	
 	public UraniumCookerBlockEntity(BlockPos pos, BlockState state)
@@ -69,14 +72,22 @@ public class UraniumCookerBlockEntity extends MachineProcessBlockEntity implemen
 	public void saveAdditional(CompoundTag compound, HolderLookup.Provider provider)
 	{
 		super.saveAdditional(compound, provider);
-		compound.putShort("fuel", fuel);
+		compound.put("fuel", fuel.save());
 	}
 	
 	@Override
 	protected void loadAdditional(CompoundTag nbt, HolderLookup.Provider pRegistries)
 	{
 		super.loadAdditional(nbt, pRegistries);
-		fuel = nbt.getShort("fuel");
+		
+		if(nbt.contains("fuel", 99))
+		{
+			// Kept for backwards compatibility
+			fuel.setUraniumStored(nbt.getShort("fuel"));
+		} else
+		{
+			fuel.load(nbt.getCompound("fuel"));
+		}
 	}
 	
 	@Override
@@ -95,7 +106,7 @@ public class UraniumCookerBlockEntity extends MachineProcessBlockEntity implemen
 		ItemStack fuel = itemHandler.getStackInSlot(1);
 		ItemStack input = itemHandler.getStackInSlot(0);
 		ItemStack output = irradiate();
-		return canBeRefueled() && fuel.is(ExtraModTags.Items.URANIUM_CHUNKS) || !input.isEmpty() && !output.isEmpty();
+		return canBeRefueled(fuel) || !input.isEmpty() && !output.isEmpty();
 	}
 	
 	private ItemStack irradiate()    //TODO Handle the recipe and make sure to use its exp/cooking time
@@ -117,16 +128,17 @@ public class UraniumCookerBlockEntity extends MachineProcessBlockEntity implemen
 	
 	private void processContents()
 	{
-		if(canBeRefueled() && itemHandler.getStackInSlot(1).is(ExtraModTags.Items.URANIUM_CHUNKS))
+		ItemStack fuel = itemHandler.getStackInSlot(1);
+		if(canBeRefueled(fuel))
 		{
 			//Refill fuel
-			addFuel((short) FUEL_INCREASE);
+			addFuel(fuel);
 			itemHandler.extractItem(1, 1, false);
 		}
 		if(canIrradiate())
 		{
 			ItemStack output = irradiate();
-			if(itemHandler.getStackInSlot(2).isEmpty() && fuel > 0)
+			if(itemHandler.getStackInSlot(2).isEmpty() && this.fuel.getUraniumStored() > 0)
 			{
 				itemHandler.setStackInSlot(2, output);
 			} else
@@ -140,14 +152,14 @@ public class UraniumCookerBlockEntity extends MachineProcessBlockEntity implemen
 			{
 				itemHandler.extractItem(0, 1, false);
 			}
-			fuel--;
+			this.fuel.extractUranium(1, false);
 		}
 	}
 	
 	private boolean canIrradiate()
 	{
 		ItemStack output = irradiate();
-		if(fuel > 0 && !itemHandler.getStackInSlot(0).isEmpty() && !output.isEmpty())
+		if(fuel.getUraniumStored() > 0 && !itemHandler.getStackInSlot(0).isEmpty() && !output.isEmpty())
 		{
 			ItemStack out = itemHandler.getStackInSlot(2);
 			
@@ -169,6 +181,12 @@ public class UraniumCookerBlockEntity extends MachineProcessBlockEntity implemen
 	}
 	
 	@Nullable
+	public IUraniumHandler getUraniumHandler(@Nullable Direction side)
+	{
+		return fuel;
+	}
+	
+	@Nullable
 	@Override
 	public AbstractContainerMenu createMenu(int windowId, Inventory playerInventory, Player player)
 	{
@@ -181,20 +199,15 @@ public class UraniumCookerBlockEntity extends MachineProcessBlockEntity implemen
 		return Component.translatable(TITLE);
 	}
 	
-	public boolean canBeRefueled()
+	public boolean canBeRefueled(ItemStack fuelStack)
 	{
-		return fuel <= MAX_FUEL - FUEL_INCREASE;
+		int amount = UraniumPower.getUraniumPower(fuelStack);
+		return fuel.receiveUranium(amount, true) == amount;
 	}
 	
-	@Override
-	public void addFuel(short fuelAmount)
+	public void addFuel(ItemStack fuelStack)
 	{
-		fuel += fuelAmount;
-	}
-	
-	@Override
-	public boolean atMaxFuel()
-	{
-		return fuel >= MAX_FUEL;
+		int amount = UraniumPower.getUraniumPower(fuelStack);
+		fuel.receiveUranium(amount, false);
 	}
 }

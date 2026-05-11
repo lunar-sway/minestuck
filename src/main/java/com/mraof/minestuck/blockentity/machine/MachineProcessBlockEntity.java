@@ -17,6 +17,7 @@ public abstract class MachineProcessBlockEntity extends BlockEntity
 {
 	protected final ItemStackHandler itemHandler = createItemHandler();
 	
+	@Deprecated
 	public static final int FUEL_INCREASE = 32; //how many units of fuel a chunk of uranium adds to a machine powered by it, used by Sendificator and UraniumCooker
 	
 	protected MachineProcessBlockEntity(BlockEntityType<?> blockEntityType, BlockPos pos, BlockState state)
