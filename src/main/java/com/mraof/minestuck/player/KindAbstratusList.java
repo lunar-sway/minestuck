@@ -13,6 +13,7 @@ public class KindAbstratusList {
 	public static final String AXE = "minestuck.axe";
 	public static final String HOE = "minestuck.hoe";
 	public static final String SHOVEL = "minestuck.shovel";
+	public static final String SAW = "minestuck.saw";
 	public static final String HAMMER = "minestuck.hammer";
 	public static final String CANE = "minestuck.cane";
 	public static final String CLUB = "minestuck.club";
@@ -32,6 +33,7 @@ public class KindAbstratusList {
 		typeList.add(new KindAbstratusType(AXE).addItemClass(AxeItem.class));
 		typeList.add(new KindAbstratusType(HOE).addItemClass(HoeItem.class));
 		typeList.add(new KindAbstratusType(SHOVEL).addItemClass(ShovelItem.class));
+		typeList.add(new KindAbstratusType(SAW));
 		typeList.add(new KindAbstratusType(HAMMER));
 		typeList.add(new KindAbstratusType(CANE));
 		typeList.add(new KindAbstratusType(CLUB));

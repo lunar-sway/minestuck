@@ -2218,6 +2218,7 @@ public class MinestuckEnUsLanguageProvider extends MinestuckLanguageProvider
 		addStrife(KindAbstratusList.AXE, "Axekind");
 		addStrife(KindAbstratusList.HOE, "Hoekind");
 		addStrife(KindAbstratusList.SHOVEL, "Spadekind");
+		addStrife(KindAbstratusList.SAW, "Sawkind");
 		addStrife(KindAbstratusList.HAMMER, "Hammerkind");
 		addStrife(KindAbstratusList.CANE, "Canekind");
 		addStrife(KindAbstratusList.CLUB, "Clubkind");
@@ -2228,7 +2229,8 @@ public class MinestuckEnUsLanguageProvider extends MinestuckLanguageProvider
 		add(MusicPlayerWeapon.HINT_INACTIVE, "Crouch and use to start playing");
 		add(GristCacheScreen.TITLE, "Grist Cache");
 		add(StrifeSpecibusScreen.TITLE, "Strife Specibus");
-		add(StrifeSpecibusScreen.KIND_ABSTRATUS, "Kind Abstratus");
+		add(StrifeSpecibusScreen.KIND_ABSTRATUS_PROMPT, "Choose your Strife Specibus");
+		add(StrifeSpecibusScreen.KIND_ABSTRATUS_SELECTED, "Your Specibus");
 		add(CaptchaDeckScreen.TITLE, "Captchalogue Deck");
 		add(CaptchaDeckScreen.USE_ITEM, "Use Item");
 		add(EcheladderScreen.TITLE, "Echeladder");

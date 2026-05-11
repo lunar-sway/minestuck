@@ -60,7 +60,7 @@ public class KindAbstratusType
 		@Override
 		boolean partOf(ItemStack item)
 		{
-			return this.itemClass.isInstance(item.getItem().getClass());
+			return this.itemClass.isInstance(item.getItem());
 		}
 		
 	}
