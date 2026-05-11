@@ -16,7 +16,11 @@
           ],
           "key": "minestuck.dialogue.consort.cult.disappointment.argue"
         },
-        "next_dialogue": "minestuck:consort/cult/exchange",
+        "next_dialogue": {
+          "id": "minestuck:consort/cult/exchange",
+          "reply_messages": [],
+          "set_as_entrypoint": true
+        },
         "triggers": []
       },
       {

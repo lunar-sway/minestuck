@@ -1,0 +1,11 @@
+{
+  "condition": {
+    "type": "minestuck:npc_location_predicate",
+    "predicate": {
+      "dimension": "minestuck:skaia"
+    }
+  },
+  "dialogue": "minestuck:consort/checkerboard_hop",
+  "dialogue_weight": 10,
+  "keep_on_reset": false
+}

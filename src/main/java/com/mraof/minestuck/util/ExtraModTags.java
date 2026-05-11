@@ -2,10 +2,12 @@ package com.mraof.minestuck.util;
 
 import net.minecraft.resources.ResourceLocation;
 import net.minecraft.tags.BlockTags;
+import net.minecraft.tags.FluidTags;
 import net.minecraft.tags.ItemTags;
 import net.minecraft.tags.TagKey;
 import net.minecraft.world.item.Item;
 import net.minecraft.world.level.block.Block;
+import net.minecraft.world.level.material.Fluid;
 
 /**
  * A place to put tags that neoforge doesn't provide, but which are generally expected to be filled by other mods.
@@ -20,6 +22,16 @@ public final class ExtraModTags
 		private static TagKey<Block> tag(String name)
 		{
 			return BlockTags.create(ResourceLocation.fromNamespaceAndPath("c", name));
+		}
+	}
+	
+	public static final class Fluids
+	{
+		public static final TagKey<Fluid> BOTTOMLESS = tag("create", "bottomless/allow");
+		
+		private static TagKey<Fluid> tag(String namespace, String name)
+		{
+			return FluidTags.create(ResourceLocation.fromNamespaceAndPath(namespace, name));
 		}
 	}
 	

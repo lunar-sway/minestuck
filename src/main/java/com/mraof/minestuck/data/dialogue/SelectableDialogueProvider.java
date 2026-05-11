@@ -1,11 +1,10 @@
 package com.mraof.minestuck.data.dialogue;
 
-import com.google.gson.JsonElement;
-import com.mojang.serialization.JsonOps;
 import com.mraof.minestuck.entity.dialogue.Dialogue;
 import com.mraof.minestuck.entity.dialogue.RandomlySelectableDialogue;
 import com.mraof.minestuck.entity.dialogue.condition.Condition;
 import net.minecraft.MethodsReturnNonnullByDefault;
+import net.minecraft.core.HolderLookup;
 import net.minecraft.data.CachedOutput;
 import net.minecraft.data.DataProvider;
 import net.minecraft.data.PackOutput;
@@ -20,6 +19,7 @@ import java.util.stream.Collectors;
 /**
  * A provider for building dialogue nodes and generating the file making them selectable within a specific {@link RandomlySelectableDialogue.DialogueCategory}.
  * Includes a {@link DialogueProvider} accessible through {@link SelectableDialogueProvider#dialogue()}.
+ *
  * @see DialogueProvider
  * @see DialogueLangHelper
  */
@@ -32,14 +32,21 @@ public final class SelectableDialogueProvider implements DataProvider
 	
 	private final String modId;
 	private final RandomlySelectableDialogue.DialogueCategory category;
+	private final CompletableFuture<HolderLookup.Provider> lookupProvider;
 	private final PackOutput output;
 	
-	public SelectableDialogueProvider(String modId, RandomlySelectableDialogue.DialogueCategory category, PackOutput output)
+	public SelectableDialogueProvider(String modId, RandomlySelectableDialogue.DialogueCategory category, CompletableFuture<HolderLookup.Provider> lookup, PackOutput output)
 	{
-		this.dialogueProvider = new DialogueProvider(modId, category.folderName(), output);
+		this.dialogueProvider = new DialogueProvider(modId, category.folderName(), lookup, output);
 		this.modId = modId;
 		this.category = category;
+		this.lookupProvider = lookup;
 		this.output = output;
+	}
+	
+	public CompletableFuture<HolderLookup.Provider> getLookupProvider()
+	{
+		return lookupProvider;
 	}
 	
 	@SuppressWarnings("unused")
@@ -71,26 +78,28 @@ public final class SelectableDialogueProvider implements DataProvider
 	@Override
 	public CompletableFuture<?> run(CachedOutput cache)
 	{
-		List<CompletableFuture<?>> futures = new ArrayList<>(this.selectableDialogueMap.size() + 1);
-		futures.add(dialogueProvider.run(cache));
-		
-		Set<ResourceLocation> missingDialogue = this.selectableDialogueMap.values().stream().map(Dialogue.SelectableDialogue::dialogueId)
-				.filter(id -> !dialogueProvider.hasAddedDialogue(id)).collect(Collectors.toSet());
-		if(!missingDialogue.isEmpty())
-			throw new IllegalStateException("Some referenced dialogue is missing: " + missingDialogue);
-		
-		Path outputPath = output.getOutputFolder();
-		for(Map.Entry<ResourceLocation, Dialogue.SelectableDialogue> entry : this.selectableDialogueMap.entrySet())
-		{
-			Path selectablePath = outputPath.resolve("data/" + entry.getKey().getNamespace() + "/" + this.category.folderNameForSelectable() + "/" + entry.getKey().getPath() + ".json");
-			JsonElement selectableJson = Dialogue.SelectableDialogue.CODEC.encodeStart(JsonOps.INSTANCE, entry.getValue()).getOrThrow();
-			futures.add(DataProvider.saveStable(cache, selectableJson, selectablePath));
-		}
-		
-		return CompletableFuture.allOf(futures.toArray(new CompletableFuture[0]));
+		return lookupProvider.thenCompose(provider -> {
+			List<CompletableFuture<?>> futures = new ArrayList<>(this.selectableDialogueMap.size() + 1);
+			futures.add(dialogueProvider.run(cache));
+			
+			Set<ResourceLocation> missingDialogue = this.selectableDialogueMap.values().stream().map(Dialogue.SelectableDialogue::dialogueId)
+					.filter(id -> !dialogueProvider.hasAddedDialogue(id)).collect(Collectors.toSet());
+			if(!missingDialogue.isEmpty())
+				throw new IllegalStateException("Some referenced dialogue is missing: " + missingDialogue);
+			
+			Path outputPath = output.getOutputFolder();
+			for(Map.Entry<ResourceLocation, Dialogue.SelectableDialogue> entry : this.selectableDialogueMap.entrySet())
+			{
+				Path selectablePath = outputPath.resolve("data/" + entry.getKey().getNamespace() + "/" + this.category.folderNameForSelectable() + "/" + entry.getKey().getPath() + ".json");
+				futures.add(DataProvider.saveStable(cache, provider, Dialogue.SelectableDialogue.CODEC, entry.getValue(), selectablePath));
+			}
+			
+			return CompletableFuture.allOf(futures.toArray(new CompletableFuture[0]));
+		});
 	}
 	
-	public static final class SelectableBuilder {
+	public static final class SelectableBuilder
+	{
 		private final Condition condition;
 		private final int weight;
 		private boolean keepOnReset = false;

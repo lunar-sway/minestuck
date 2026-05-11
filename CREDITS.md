@@ -42,6 +42,8 @@ and [Carapacian rook](src/main/java/com/mraof/minestuck/client/model/entity/Rook
 
 - FrostyMac: [`rise_up.ogg`](src/main/resources/assets/minestuck/sounds/music/miscellaneous/rise_up.ogg)
 
+- heartsremedy
+
 - Mixmaw: [`skies.ogg`](src/main/resources/assets/minestuck/sounds/music/lands/skies.ogg)
 
 - SinFrog: [`retro_battle_theme.ogg`](src/main/resources/assets/minestuck/sounds/records/retro_battle_theme.ogg)

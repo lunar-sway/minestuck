@@ -1,0 +1,41 @@
+{
+  "type": "minecraft:chest",
+  "pools": [
+    {
+      "bonus_rolls": 0.0,
+      "entries": [
+        {
+          "type": "minecraft:item",
+          "name": "minestuck:regi_hammer"
+        },
+        {
+          "type": "minecraft:item",
+          "name": "minestuck:regisword"
+        },
+        {
+          "type": "minecraft:item",
+          "name": "minestuck:regikey"
+        },
+        {
+          "type": "minecraft:item",
+          "name": "minestuck:regiaxe"
+        },
+        {
+          "type": "minecraft:item",
+          "name": "minestuck:regilance"
+        },
+        {
+          "type": "minecraft:item",
+          "name": "minestuck:regisickle"
+        },
+        {
+          "type": "minecraft:item",
+          "name": "minestuck:regi_cane"
+        }
+      ],
+      "name": "regiweapons",
+      "rolls": 1.0
+    }
+  ],
+  "random_sequence": "minestuck:chests/regiweapons"
+}

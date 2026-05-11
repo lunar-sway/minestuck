@@ -15,9 +15,19 @@
       },
       {
         "condition": {
-          "type": "minestuck:player_item",
-          "item": "minestuck:grape_faygo"
+          "type": "minestuck:player_entity_predicate",
+          "predicate": {
+            "slots": {
+              "container.*": {
+                "count": {
+                  "min": 1
+                },
+                "items": "minestuck:grape_faygo"
+              }
+            }
+          }
         },
+        "fail_tooltip": "minestuck.dialogue.consort.grape_faygo_scalemate_pucefoot.ask_drink.condition",
         "hide_if_failed": false,
         "message": "minestuck.dialogue.consort.grape_faygo_scalemate_pucefoot.ask_drink.exchange",
         "next_dialogue": {

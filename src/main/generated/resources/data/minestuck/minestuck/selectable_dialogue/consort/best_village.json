@@ -1,0 +1,41 @@
+{
+  "condition": {
+    "type": "minestuck:list",
+    "conditions": [
+      {
+        "type": "minestuck:list",
+        "conditions": [
+          {
+            "type": "minestuck:npc_entity_predicate",
+            "predicate": {
+              "type": "minestuck:salamander"
+            }
+          },
+          {
+            "type": "minestuck:npc_entity_predicate",
+            "predicate": {
+              "type": "minestuck:iguana"
+            }
+          },
+          {
+            "type": "minestuck:npc_entity_predicate",
+            "predicate": {
+              "type": "minestuck:nakagator"
+            }
+          }
+        ],
+        "list_type": "any"
+      },
+      {
+        "type": "minestuck:npc_location_predicate",
+        "predicate": {
+          "structures": "minestuck:consort_village"
+        }
+      }
+    ],
+    "list_type": "all"
+  },
+  "dialogue": "minestuck:consort/best_village",
+  "dialogue_weight": 10,
+  "keep_on_reset": false
+}

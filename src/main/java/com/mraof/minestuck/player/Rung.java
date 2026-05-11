@@ -96,13 +96,15 @@ public record Rung(int rung, int backgroundColor, int textColor, long expRequire
 	}
 	
 	public record DisplayAttributes(double attackBonus, double healthBoost,
-									double underlingDamageMod, double underlingProtectionMod)
+									double underlingDamageMod, double underlingProtectionMod,
+									double captchalogueCapacity)
 	{
 		public static final StreamCodec<FriendlyByteBuf, DisplayAttributes> STREAM_CODEC = StreamCodec.composite(
 				ByteBufCodecs.DOUBLE, DisplayAttributes::attackBonus,
 				ByteBufCodecs.DOUBLE, DisplayAttributes::healthBoost,
 				ByteBufCodecs.DOUBLE, DisplayAttributes::underlingDamageMod,
 				ByteBufCodecs.DOUBLE, DisplayAttributes::underlingProtectionMod,
+				ByteBufCodecs.DOUBLE, DisplayAttributes::captchalogueCapacity,
 				DisplayAttributes::new);
 	}
 }

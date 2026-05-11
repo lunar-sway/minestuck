@@ -119,6 +119,8 @@ public class ClientProxy
 		EntityRenderers.register(MSEntityTypes.RETURNING_PROJECTILE.get(), ThrownItemRenderer::new);
 		EntityRenderers.register(MSEntityTypes.BOUNCING_PROJECTILE.get(), ThrownItemRenderer::new);
 		EntityRenderers.register(MSEntityTypes.POSTER.get(), PosterRenderer::new);
+		EntityRenderers.register(MSEntityTypes.KERNELSPRITE.get(), KernelspriteRenderer::new);
+		
 		
 		ProgramGui.Registry.register(ProgramTypes.SBURB_CLIENT, SburbClientGui::new);
 		ProgramGui.Registry.register(ProgramTypes.SBURB_SERVER, SburbServerGui::new);

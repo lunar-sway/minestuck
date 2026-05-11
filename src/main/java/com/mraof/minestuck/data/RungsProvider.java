@@ -28,6 +28,7 @@ public class RungsProvider implements DataProvider
 	public static final ResourceLocation UNDERLING_PROTECTION_ID = Minestuck.id("echeladder_underling_protection");
 	public static final ResourceLocation UNDERLING_DAMAGE_ID = Minestuck.id("echeladder_underling_damage");
 	public static final ResourceLocation FALL_DAMAGE_REDUCTION_ID = Minestuck.id("echeladder_fall_damage_reduction");
+	public static final ResourceLocation CAPTCHALOGUE_CAPACITY_ID = Minestuck.id("echeladder_captchalogue_capacity");
 	public static final String MUST_ENTER = "echeladder.must_enter";
 	
 	private final PackOutput output;

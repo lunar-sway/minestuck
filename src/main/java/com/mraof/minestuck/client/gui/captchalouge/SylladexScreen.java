@@ -2,39 +2,50 @@ package com.mraof.minestuck.client.gui.captchalouge;
 
 import com.mojang.blaze3d.platform.InputConstants;
 import com.mojang.blaze3d.systems.RenderSystem;
+import com.mraof.minestuck.client.gui.playerStats.PlayerStatsContainerScreen;
+import com.mraof.minestuck.client.gui.playerStats.PlayerStatsScreen;
 import com.mraof.minestuck.client.util.MSKeyHandler;
-import com.mraof.minestuck.inventory.captchalogue.CaptchaDeckHandler;
+import com.mraof.minestuck.inventory.captchalogue.*;
+import com.mraof.minestuck.item.CaptchaCardItem;
 import com.mraof.minestuck.network.CaptchaDeckPackets;
 import com.mraof.minestuck.player.ClientPlayerData;
+import net.minecraft.MethodsReturnNonnullByDefault;
 import net.minecraft.client.gui.GuiGraphics;
 import net.minecraft.client.gui.components.Button;
 import net.minecraft.client.gui.screens.ConfirmScreen;
-import net.minecraft.client.gui.screens.Screen;
 import net.minecraft.network.chat.Component;
 import net.minecraft.resources.ResourceLocation;
 import net.minecraft.util.Mth;
+import net.minecraft.world.entity.player.Inventory;
 import net.minecraft.world.item.ItemStack;
 import net.neoforged.neoforge.client.gui.widget.ExtendedButton;
 import net.neoforged.neoforge.network.PacketDistributor;
+
+import org.jetbrains.annotations.MustBeInvokedByOverriders;
 import org.joml.Matrix4fStack;
 
+import javax.annotation.Nullable;
 import javax.annotation.ParametersAreNonnullByDefault;
 import java.util.ArrayList;
+import java.util.List;
 
 @ParametersAreNonnullByDefault
-public abstract class SylladexScreen extends Screen
+@MethodsReturnNonnullByDefault
+public abstract class SylladexScreen extends PlayerStatsContainerScreen<CaptchaDeckMenu>
 {
 	public static final String TITLE = "minestuck.sylladex";
 	public static final String EMPTY_SYLLADEX_1 = "minestuck.empty_sylladex.1";
 	public static final String EMPTY_SYLLADEX_2 = "minestuck.empty_sylladex.2";
 	public static final String EMPTY_SYLLADEX_BUTTON = "minestuck.empty_sylladex.button";
+	public static final String USE_ITEM = "minestuck.captcha_deck.use_item";
 	
-	protected static final ResourceLocation sylladexFrame = ResourceLocation.fromNamespaceAndPath("minestuck", "textures/gui/sylladex_frame.png");
+	protected static final ResourceLocation sylladexFrame = ResourceLocation.fromNamespaceAndPath("minestuck", "textures/gui/sylladex_gui.png");
 	protected static final ResourceLocation cardTexture = ResourceLocation.fromNamespaceAndPath("minestuck", "textures/gui/icons.png");
-	protected static final int GUI_WIDTH = 256, GUI_HEIGHT= 202;
-	protected static final int MAP_WIDTH = 224, MAP_HEIGHT = 153;
+	protected static final int MAP_WIDTH = 279, MAP_HEIGHT = 124;
 	protected static final int X_OFFSET = 16, Y_OFFSET = 17;
 	protected static final int CARD_WIDTH = 21, CARD_HEIGHT = 26;
+	// Helps for button placements
+	protected static final int BUTTON_HEIGHT = 16, BUTTON_WIDTH = 120, BUTTON_Y_OFFSET = 155, BUTTON_X_OFFSET = 176;
 	
 	protected ArrayList<GuiCard> cards = new ArrayList<>();
 	protected int textureIndex;
@@ -53,30 +64,157 @@ public abstract class SylladexScreen extends Screen
 	protected int mousePosX, mousePosY;
 	protected boolean mousePressed;
 	
-	protected Button emptySylladex;
+	protected Button emptySylladex, modusButton;
 	
-	public SylladexScreen()
+	// Ugly fix for tooltip text being all the way off
+	private boolean shouldRenderTooltip = false;
+	protected final Modus modus;
+	
+	public SylladexScreen(int windowId, Inventory inventory, Modus modus)
 	{
-		super(Component.translatable(TITLE));
+		super(new CaptchaDeckMenu(windowId, inventory), inventory, Component.translatable(TITLE));
+		this.modus = modus;
+		
+		imageWidth = guiWidth = 311;
+		imageHeight = guiHeight = 238;
+		
+		titleLabelX = X_OFFSET;
+        inventoryLabelY = imageHeight - 94;
 	}
 	
 	@Override
 	public void init()
 	{
-		emptySylladex = new ExtendedButton((width - GUI_WIDTH)/2 + 140, (height - GUI_HEIGHT)/2 + 175, 100, 20, Component.translatable(EMPTY_SYLLADEX_BUTTON), button -> emptySylladex());
-		addRenderableWidget(emptySylladex);
+		super.init();
+		
+		emptySylladex = addRenderableWidget(new ExtendedButton(xOffset + BUTTON_X_OFFSET, yOffset + BUTTON_Y_OFFSET + BUTTON_HEIGHT + 4, BUTTON_WIDTH, BUTTON_HEIGHT, Component.translatable(EMPTY_SYLLADEX_BUTTON), button -> emptySylladex()));
+		modusButton = addRenderableWidget(new ExtendedButton(xOffset + BUTTON_X_OFFSET + 20, yOffset + BUTTON_Y_OFFSET, BUTTON_WIDTH - 20, 18, Component.translatable(USE_ITEM), button -> use()));
+		
 		updateContent();
 	}
 	
 	@Override
 	public void render(GuiGraphics guiGraphics, int xcor, int ycor, float f)
 	{
-		int xOffset = (width - GUI_WIDTH)/2;
-		int yOffset = (height - GUI_HEIGHT)/2;
+		handleDragging(xcor, ycor);
 		
-		emptySylladex.setX(xOffset + 140);
-		emptySylladex.setY(yOffset + 175);
+		// Tooltips are rendered afterwards, as the text is subject to move from the posestack
+		shouldRenderTooltip = false;
+		List<GuiCard> visibleCards = getVisibleCards();
+		super.render(guiGraphics, xcor, ycor, f);
 		
+		renderVisibleCards(guiGraphics, visibleCards, xcor, ycor);
+		
+		shouldRenderTooltip = true;
+		renderTooltip(guiGraphics, xcor, ycor);
+		
+		GuiCard hoveredCard = getCardAt(xcor, ycor, visibleCards);
+		if(hoveredCard != null)
+		{
+			hoveredCard.drawTooltip(guiGraphics, xcor, ycor);
+		}
+	}
+	
+	protected List<GuiCard> getVisibleCards()
+	{
+		ArrayList<GuiCard> visibleCards = new ArrayList<>();
+		for(GuiCard card : cards)
+			if(card.xPos + CARD_WIDTH > mapX && card.xPos < mapX + mapWidth
+					&& card.yPos + CARD_HEIGHT > mapY && card.yPos < mapY + mapHeight)
+				visibleCards.add(card);
+		return visibleCards;
+	}
+	
+	protected void renderVisibleCards(GuiGraphics guiGraphics, List<GuiCard> visibleCards, int xcor, int ycor)
+	{
+		guiGraphics.enableScissor(leftPos + X_OFFSET, topPos + Y_OFFSET, leftPos + X_OFFSET + Mth.ceil(mapWidth / scroll), topPos + Y_OFFSET + Mth.ceil(mapHeight / scroll));
+		Matrix4fStack modelPoseStack = RenderSystem.getModelViewStack();
+		modelPoseStack.pushMatrix();
+		modelPoseStack.translate(xOffset + X_OFFSET, yOffset + Y_OFFSET, 0);
+		modelPoseStack.scale(1 / this.scroll, 1 / this.scroll, 1);
+		RenderSystem.applyModelViewMatrix();
+		
+		drawGuiMap(guiGraphics, xcor, ycor);
+		
+		for(GuiCard card : visibleCards)
+			card.drawItemBackground(guiGraphics);
+		
+		for(GuiCard card : visibleCards)
+			card.drawItem(guiGraphics);
+		
+		modelPoseStack.popMatrix();
+		RenderSystem.applyModelViewMatrix();
+		RenderSystem.disableDepthTest();
+		guiGraphics.disableScissor();
+	}
+	
+	@Override
+	protected void renderLabels(GuiGraphics guiGraphics, int mouseX, int mouseY)
+	{
+		super.renderLabels(guiGraphics, mouseX, mouseY);
+		
+		String str = ClientPlayerData.getModus().getName().getString();
+		guiGraphics.drawString(font, str, guiWidth - font.width(str) - 16, 5, 0x404040, false);
+	}
+	
+	@Override
+	protected void renderTooltip(GuiGraphics guiGraphics, int x, int y)
+	{
+		if(shouldRenderTooltip)
+		{
+			super.renderTooltip(guiGraphics, x, y);
+			super.drawTabTooltip(guiGraphics, x, y);
+		}
+	}
+	
+	@Override
+	protected void drawTabTooltip(GuiGraphics guiGraphics, int mouseX, int mouseY)
+	{
+		// Manually called, as otherwise the text is off the tooltip
+	}
+	
+	/**
+	 *
+	 * @param xcor         X position of the (potential) card
+	 * @param ycor         Y position of the (potential) card
+	 * @param visibleCards
+	 * @return The card at a given location, if there is any
+	 */
+	@Nullable
+	protected GuiCard getCardAt(double xcor, double ycor, List<GuiCard> visibleCards)
+	{
+		if(isMouseInContainer(xcor, ycor))
+		{
+			int translX = (int) ((xcor - xOffset - X_OFFSET) * scroll);
+			int translY = (int) ((ycor - yOffset - Y_OFFSET) * scroll);
+			for(GuiCard card : visibleCards)
+				if(translX >= card.xPos + 2 - mapX && translX < card.xPos + 18 - mapX &&
+						translY >= card.yPos + 7 - mapY && translY < card.yPos + 23 - mapY)
+					return card;
+		}
+		
+		return null;
+	}
+	
+	@Override
+	protected void renderBg(GuiGraphics guiGraphics, float partialTick, int mouseX, int mouseY)
+	{
+		modusButton.active = !menu.getMenuItem().isEmpty();
+		
+		drawTabs(guiGraphics);
+		
+		RenderSystem.setShaderColor(1, 1, 1, 1);
+		// Required, as (by default) the image is cropped at 256x256
+		guiGraphics.blit(sylladexFrame, xOffset, yOffset, 0, 0, guiWidth, guiHeight, 311, 256);
+		
+		drawActiveTabAndIcons(guiGraphics);
+	}
+	
+	/**
+	 * Handles using the mouse to move
+	 */
+	protected void handleDragging(int xcor, int ycor)
+	{
 		if(mousePressed)
 		{
 			if(isMouseInContainer(xcor, ycor))
@@ -90,68 +228,11 @@ public abstract class SylladexScreen extends Screen
 				mousePosY = ycor;
 			}
 			
-		}
-		else
+		} else
 		{
 			mousePosX = -1;
 			mousePosY = -1;
 		}
-		
-		super.render(guiGraphics, xcor, ycor, f);
-		
-		Matrix4fStack modelPoseStack = RenderSystem.getModelViewStack();
-		modelPoseStack.pushMatrix();
-		modelPoseStack.translate(xOffset + X_OFFSET, yOffset + Y_OFFSET, 0);
-		modelPoseStack.scale(1 / this.scroll, 1 / this.scroll, 1);
-		RenderSystem.applyModelViewMatrix();
-		
-		drawGuiMap(guiGraphics, xcor, ycor);
-		
-		ArrayList<GuiCard> visibleCards = new ArrayList<>();
-		for(GuiCard card : cards)
-			if(card.xPos + CARD_WIDTH > mapX && card.xPos < mapX + mapWidth
-					&& card.yPos + CARD_HEIGHT > mapY && card.yPos < mapY + mapHeight)
-				visibleCards.add(card);
-		
-		for(GuiCard card : visibleCards)
-			card.drawItemBackground(guiGraphics);
-
-		for(GuiCard card : visibleCards)
-			card.drawItem(guiGraphics);
-		
-		modelPoseStack.popMatrix();
-		RenderSystem.applyModelViewMatrix();
-		RenderSystem.disableDepthTest();
-		
-		guiGraphics.drawString(font, getTitle().getString(), xOffset + 15, yOffset + 5, 0x404040, false);
-		
-		String str = ClientPlayerData.getModus().getName().getString();
-		guiGraphics.drawString(font, str, xOffset + GUI_WIDTH - font.width(str) - 16, yOffset + 5, 0x404040, false);
-		
-		if(isMouseInContainer(xcor, ycor))
-		{
-			int translX = (int) ((xcor - xOffset - X_OFFSET) * scroll);
-			int translY = (int) ((ycor - yOffset - Y_OFFSET) * scroll);
-			for(GuiCard card : visibleCards)
-				if(translX >= card.xPos + 2 - mapX && translX < card.xPos + 18 - mapX &&
-						translY >= card.yPos + 7 - mapY && translY < card.yPos + 23 - mapY)
-				{
-					card.drawTooltip(guiGraphics, xcor, ycor);
-					break;
-				}
-		}
-	}
-	
-	@Override
-	protected void renderMenuBackground(GuiGraphics guiGraphics)
-	{
-		super.renderMenuBackground(guiGraphics);
-		
-		int xOffset = (width - GUI_WIDTH)/2;
-		int yOffset = (height - GUI_HEIGHT)/2;
-		
-		RenderSystem.setShaderColor(1, 1, 1, 1);
-		guiGraphics.blit(sylladexFrame, xOffset, yOffset, 0, 0, GUI_WIDTH, GUI_HEIGHT);
 	}
 	
 	@Override
@@ -159,20 +240,20 @@ public abstract class SylladexScreen extends Screen
 	{
 		float prevScroll = this.scroll;
 		
-		if (scrollY < 0)
+		if(scrollY < 0)
 			this.scroll += 0.25F;
-		else if (scrollY > 0)
+		else if(scrollY > 0)
 			this.scroll -= 0.25F;
 		this.scroll = Mth.clamp(this.scroll, 1.0F, 2.0F);
 		
 		if(prevScroll != this.scroll)
 		{
-			double i1 = mapX + ((double)mapWidth)/2;
-			double i2 = mapY + ((double)mapHeight)/2;
-			mapWidth = Math.round(MAP_WIDTH* this.scroll);
-			mapHeight = Math.round(MAP_HEIGHT* this.scroll);
-			mapX = (int) (i1 - ((double)mapWidth)/2);
-			mapY = (int) (i2 - ((double)mapHeight)/2);
+			double i1 = mapX + ((double) mapWidth) / 2;
+			double i2 = mapY + ((double) mapHeight) / 2;
+			mapWidth = Math.round(MAP_WIDTH * this.scroll);
+			mapHeight = Math.round(MAP_HEIGHT * this.scroll);
+			mapX = (int) (i1 - ((double) mapWidth) / 2);
+			mapY = (int) (i2 - ((double) mapHeight) / 2);
 			updatePosition();
 			mapX = Math.max(0, Math.min(maxWidth - mapWidth, mapX));
 			mapY = Math.max(0, Math.min(maxHeight - mapHeight, mapY));
@@ -197,17 +278,17 @@ public abstract class SylladexScreen extends Screen
 	{
 		if(isMouseInContainer(mouseX, mouseY))
 		{
-			int xOffset = (width - GUI_WIDTH)/2;
-			int yOffset = (height - GUI_HEIGHT)/2;
-			int translX = (int) ((mouseX - xOffset - X_OFFSET) * scroll);
-			int translY = (int) ((mouseY - yOffset - Y_OFFSET) * scroll);
-			for(GuiCard card : this.cards)
-				if(translX >= card.xPos + 2 - mapX && translX < card.xPos + 18 - mapX &&
-						translY >= card.yPos + 7 - mapY && translY < card.yPos + 23 - mapY)
-				{
-					card.onClick(mouseButton);
-					return true;
-				}
+			GuiCard clickedCard = getCardAt(mouseX, mouseY, cards);
+			if(clickedCard != null)
+			{
+				clickedCard.onClick(mouseButton);
+				return true;
+			}
+			if(!menu.getCarried().isEmpty())
+			{
+				PacketDistributor.sendToServer(new CaptchaDeckPackets.CaptchalogueCarriedItem());
+				return true;
+			}
 			mousePressed = true;
 			return true;
 		}
@@ -228,35 +309,8 @@ public abstract class SylladexScreen extends Screen
 			minecraft.setScreen(null);
 			return true;
 		}
+		//TODO? add JEI support (like commented NEI support)
 		return super.keyPressed(keyCode, scanCode, i);
-		/*if(Loader.isModLoaded("NotEnoughItems"))
-		{
-			boolean usage = keyCode == NEIClientConfig.getKeyBinding("gui.usage") || (keyCode == NEIClientConfig.getKeyBinding("gui.recipe") && NEIClientUtils.shiftKey());
-			boolean recipe = keyCode == NEIClientConfig.getKeyBinding("gui.recipe");
-			
-			if(usage || recipe)
-			{
-				Point mousePos = GuiDraw.getMousePosition();
-				int xcor = mousePos.x;
-				int ycor = mousePos.y;
-				
-				if(isMouseInContainer(xcor, ycor))
-				{
-					int translX = (int) ((xcor - (width - GUI_WIDTH)/2 - X_OFFSET) * scroll);
-					int translY = (int) ((ycor - (height - GUI_HEIGHT)/2 - Y_OFFSET) * scroll);
-					for(GuiCard card : cards)
-						if(translX >= card.xPos + 2 - mapX && translX < card.xPos + 18 - mapX &&
-								translY >= card.yPos + 7 - mapY && translY < card.yPos + 23 - mapY)
-						{
-							if(card.item != null)
-								if(usage)
-									GuiUsageRecipe.openRecipeGui("item", card.item.copy());
-								else GuiCraftingRecipe.openRecipeGui("item", card.item.copy());
-							return;
-						}
-				}
-			}
-		}*/
 	}
 	
 	public void onEmptyConfirm(boolean result)
@@ -277,16 +331,39 @@ public abstract class SylladexScreen extends Screen
 		guiGraphics.fill(0, 0, mapWidth, mapHeight, 0xFF8B8B8B);
 	}
 	
-	private boolean isMouseInContainer(double xcor, double ycor)
+	/**
+	 * Checks if the position is in the card map
+	 *
+	 * @param xcor
+	 * @param ycor
+	 * @return
+	 */
+	protected boolean isMouseInContainer(double xcor, double ycor)
 	{
-		int xOffset = (width - GUI_WIDTH)/2;
-		int yOffset = (height - GUI_HEIGHT)/2;
 		return xcor >= xOffset + X_OFFSET && xcor < xOffset + X_OFFSET + MAP_WIDTH &&
 				ycor >= yOffset + Y_OFFSET && ycor < yOffset + Y_OFFSET + MAP_HEIGHT;
 	}
 	
+	/**
+	 * Checks if the modus is still valid
+	 * <p>
+	 * If not, reopens the sylladex gui (effectively rendering this instance useless)
+	 * @return True if the sylladex gui is reopened
+	 */
+	@MustBeInvokedByOverriders
+	protected boolean checkAndReopen() {
+		if(ClientPlayerData.getModus() != this.modus)
+		{
+			PlayerStatsScreen.openGui(true);
+			return true;
+		}
+		return false;
+	}
+	
 	public void updateContent()
 	{
+		if(checkAndReopen())
+			return;
 		mapX = Math.min(mapX, maxWidth - mapWidth);
 		mapY = Math.min(mapY, maxHeight - mapHeight);
 	}
@@ -303,7 +380,7 @@ public abstract class SylladexScreen extends Screen
 	
 	public int getCardTextureX(GuiCard card)
 	{
-		return textureIndex*CARD_WIDTH;
+		return textureIndex * CARD_WIDTH;
 	}
 	
 	public int getCardTextureY(GuiCard card)
@@ -311,9 +388,44 @@ public abstract class SylladexScreen extends Screen
 		return 96;
 	}
 	
+	private void use()
+	{
+		ItemStack stack = menu.getMenuItem();
+		if(!stack.isEmpty())
+		{
+			if(!(stack.getItem() instanceof CaptchaCardItem))
+			{
+				ModusType<?> type = ModusTypes.getTypeFromItem(stack.getItem());
+				Modus newModus = type.createClientSide();
+				Modus modus = ClientPlayerData.getModus();
+				if(newModus != null && modus != null && newModus.getClass() != modus.getClass() && !newModus.canSwitchFrom(modus))
+				{
+					minecraft.screen = new ConfirmScreen(this::onConfirm, Component.translatable(EMPTY_SYLLADEX_1), Component.translatable(EMPTY_SYLLADEX_2))
+					{
+						@Override
+						public void removed()
+						{
+							minecraft.screen = SylladexScreen.this;
+							minecraft.player.closeContainer();
+						}
+					};
+					minecraft.screen.init(minecraft, width, height);
+					return;
+				}
+			}
+			PacketDistributor.sendToServer(new CaptchaDeckPackets.TriggerModusButton());
+		}
+	}
+	
+	private void onConfirm(boolean result)
+	{
+		if(result && !menu.getMenuItem().isEmpty())
+			PacketDistributor.sendToServer(new CaptchaDeckPackets.TriggerModusButton());
+		minecraft.screen = this;
+	}
+	
 	public static class GuiCard
 	{
-		
 		protected SylladexScreen gui;
 		public ItemStack item;
 		public int index;
@@ -346,8 +458,8 @@ public abstract class SylladexScreen extends Screen
 				PacketDistributor.sendToServer(new CaptchaDeckPackets.GetItem(toSend, mouseButton != 0));
 			}
 		}
-
-		protected void drawItemBackground(GuiGraphics guiGraphics)
+		
+		public void drawItemBackground(GuiGraphics guiGraphics)
 		{
 			RenderSystem.setShaderColor(1, 1, 1, 1);
 			int minX = 0, maxX = CARD_WIDTH, minY = 0, maxY = CARD_HEIGHT;
@@ -359,18 +471,18 @@ public abstract class SylladexScreen extends Screen
 				minY += gui.mapY - (this.yPos + minY);
 			else if(this.yPos + maxY > gui.mapY + gui.mapHeight)
 				maxY -= (this.yPos + maxY) - (gui.mapY + gui.mapHeight);
-			guiGraphics.blit(gui.getCardTexture(this), this.xPos + minX - gui.mapX, this.yPos + minY - gui.mapY,	//Gui pos
-					gui.getCardTextureX(this) + minX, gui.getCardTextureY(this) + minY,	//Texture pos
-					maxX - minX, maxY - minY);	//Size
+			guiGraphics.blit(gui.getCardTexture(this), this.xPos + minX - gui.mapX, this.yPos + minY - gui.mapY,    //Gui pos
+					gui.getCardTextureX(this) + minX, gui.getCardTextureY(this) + minY,    //Texture pos
+					maxX - minX, maxY - minY);    //Size
 		}
 		
-		protected void drawItem(GuiGraphics guiGraphics)
+		public void drawItem(GuiGraphics guiGraphics)
 		{
 			RenderSystem.setShaderColor(1, 1, 1, 1);
 			if(!this.item.isEmpty())
 			{
-				int x = this.xPos +2 - gui.mapX;
-				int y = this.yPos +7 - gui.mapY;
+				int x = this.xPos + 2 - gui.mapX;
+				int y = this.yPos + 7 - gui.mapY;
 				if(x >= gui.mapWidth || y >= gui.mapHeight || x + 16 < 0 || y + 16 < 0)
 					return;
 				guiGraphics.renderItem(item, x, y);
@@ -378,12 +490,11 @@ public abstract class SylladexScreen extends Screen
 			}
 		}
 		
-		protected void drawTooltip(GuiGraphics guiGraphics, int mouseX, int mouseY)
+		public void drawTooltip(GuiGraphics guiGraphics, int mouseX, int mouseY)
 		{
 			if(!item.isEmpty())
 				guiGraphics.renderTooltip(gui.font, item, mouseX, mouseY);
 		}
-		
 	}
 	
 	public static class ModusSizeCard extends GuiCard
@@ -400,10 +511,12 @@ public abstract class SylladexScreen extends Screen
 		}
 		
 		@Override
-		protected void drawTooltip(GuiGraphics guiGraphics, int mouseX, int mouseY) {}
+		public void drawTooltip(GuiGraphics guiGraphics, int mouseX, int mouseY)
+		{
+		}
 		
 		@Override
-		protected void drawItem(GuiGraphics guiGraphics)
+		public void drawItem(GuiGraphics guiGraphics)
 		{
 			RenderSystem.setShaderColor(1, 1, 1, 1);
 			if(size > 1)
