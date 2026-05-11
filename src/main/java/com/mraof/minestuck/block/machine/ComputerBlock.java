@@ -160,6 +160,7 @@ public class ComputerBlock extends MachineBlock implements EntityBlock
 	{
 		if(level.getBlockEntity(pos) instanceof ComputerBlockEntity computer)
 		{
+			if(computer.isPickedUp()) return;
 			computer.closeAll();
 			computer.dropAllDisks();
 		}
