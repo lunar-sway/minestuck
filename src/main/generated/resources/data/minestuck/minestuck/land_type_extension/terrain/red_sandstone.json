@@ -1,0 +1,193 @@
+{
+  "features": [
+    {
+      "biome_types": [
+        "normal",
+        "rough"
+      ],
+      "feature": "minecraft:patch_dead_bush_2",
+      "step": "vegetal_decoration"
+    },
+    {
+      "biome_types": [
+        "normal",
+        "rough"
+      ],
+      "feature": "minestuck:red_sand_disk",
+      "step": "underground_ores"
+    },
+    {
+      "biome_types": [
+        "normal"
+      ],
+      "feature": "minestuck:red_sandstone_block_blob",
+      "step": "local_modifications"
+    },
+    {
+      "biome_types": [
+        "rough"
+      ],
+      "feature": "minestuck:extra_red_sandstone_block_blob",
+      "step": "local_modifications"
+    },
+    {
+      "biome_types": [
+        "normal",
+        "rough",
+        "ocean"
+      ],
+      "feature": {
+        "feature": {
+          "type": "minecraft:ore",
+          "config": {
+            "discard_chance_on_air_exposure": 0.0,
+            "size": 28,
+            "targets": [
+              {
+                "state": {
+                  "Name": "minecraft:red_sandstone"
+                },
+                "target": {
+                  "predicate_type": "minecraft:tag_match",
+                  "tag": "minecraft:base_stone_overworld"
+                }
+              }
+            ]
+          }
+        },
+        "placement": [
+          {
+            "type": "minecraft:count",
+            "count": 10
+          },
+          {
+            "type": "minecraft:in_square"
+          },
+          {
+            "type": "minecraft:height_range",
+            "height": {
+              "type": "minecraft:uniform",
+              "max_inclusive": {
+                "absolute": 256
+              },
+              "min_inclusive": {
+                "above_bottom": 0
+              }
+            }
+          },
+          {
+            "type": "minecraft:biome"
+          }
+        ]
+      },
+      "step": "local_modifications"
+    },
+    {
+      "biome_types": [
+        "normal",
+        "rough",
+        "ocean"
+      ],
+      "feature": {
+        "feature": {
+          "type": "minecraft:ore",
+          "config": {
+            "discard_chance_on_air_exposure": 0.0,
+            "size": 9,
+            "targets": [
+              {
+                "state": {
+                  "Name": "minecraft:iron_ore"
+                },
+                "target": {
+                  "predicate_type": "minecraft:tag_match",
+                  "tag": "minecraft:base_stone_overworld"
+                }
+              }
+            ]
+          }
+        },
+        "placement": [
+          {
+            "type": "minecraft:count",
+            "count": 48
+          },
+          {
+            "type": "minecraft:in_square"
+          },
+          {
+            "type": "minecraft:height_range",
+            "height": {
+              "type": "minecraft:uniform",
+              "max_inclusive": {
+                "absolute": 64
+              },
+              "min_inclusive": {
+                "above_bottom": 0
+              }
+            }
+          },
+          {
+            "type": "minecraft:biome"
+          }
+        ]
+      },
+      "step": "local_modifications"
+    },
+    {
+      "biome_types": [
+        "normal",
+        "rough",
+        "ocean"
+      ],
+      "feature": {
+        "feature": {
+          "type": "minecraft:ore",
+          "config": {
+            "discard_chance_on_air_exposure": 0.0,
+            "size": 8,
+            "targets": [
+              {
+                "state": {
+                  "Name": "minecraft:redstone_ore",
+                  "Properties": {
+                    "lit": "false"
+                  }
+                },
+                "target": {
+                  "predicate_type": "minecraft:tag_match",
+                  "tag": "minecraft:base_stone_overworld"
+                }
+              }
+            ]
+          }
+        },
+        "placement": [
+          {
+            "type": "minecraft:count",
+            "count": 36
+          },
+          {
+            "type": "minecraft:in_square"
+          },
+          {
+            "type": "minecraft:height_range",
+            "height": {
+              "type": "minecraft:uniform",
+              "max_inclusive": {
+                "absolute": 32
+              },
+              "min_inclusive": {
+                "above_bottom": 0
+              }
+            }
+          },
+          {
+            "type": "minecraft:biome"
+          }
+        ]
+      },
+      "step": "local_modifications"
+    }
+  ]
+}

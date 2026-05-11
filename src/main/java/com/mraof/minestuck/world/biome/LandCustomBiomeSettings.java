@@ -159,5 +159,6 @@ public final class LandCustomBiomeSettings
 	}
 	
 	public record BiomeProperties(BiomeGenerationSettings generationSettings, MobSpawnSettings mobSettings)
-	{}
+	{
+	}
 }

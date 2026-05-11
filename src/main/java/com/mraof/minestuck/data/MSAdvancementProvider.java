@@ -18,6 +18,7 @@ import net.minecraft.advancements.AdvancementRequirements;
 import net.minecraft.advancements.AdvancementType;
 import net.minecraft.advancements.critereon.*;
 import net.minecraft.core.HolderLookup;
+import net.minecraft.core.HolderSet;
 import net.minecraft.core.registries.BuiltInRegistries;
 import net.minecraft.core.registries.Registries;
 import net.minecraft.data.DataProvider;
@@ -46,6 +47,7 @@ public class MSAdvancementProvider implements AdvancementProvider.AdvancementGen
 	public static final String SEARCHING = "minestuck.searching";
 	public static final String LONG_TIME_COMING = "minestuck.long_time_coming";
 	public static final String CONNECT = "minestuck.connect";
+	public static final String SPEEDRUN = "minestuck.speedrun";
 	public static final String ENTRY = "minestuck.entry";
 	public static final String ALCHEMY = "minestuck.alchemy";
 	public static final String NEW_MODUS = "minestuck.new_modus";
@@ -68,6 +70,8 @@ public class MSAdvancementProvider implements AdvancementProvider.AdvancementGen
 	public static final String LEGENDARY_WEAPON = "minestuck.legendary_weapon";
 	public static final String BUY_OUT_SHOP = "minestuck.buy_out_shop";
 	public static final String BRICK_COMPUTER = "minestuck.brick_computer";
+	
+	public static final String HAMMERGUY = "minestuck.hammerguy";
 	
 	public static DataProvider create(PackOutput output, CompletableFuture<HolderLookup.Provider> registries, ExistingFileHelper existingFileHelper)
 	{
@@ -94,6 +98,11 @@ public class MSAdvancementProvider implements AdvancementProvider.AdvancementGen
 		AdvancementHolder entry = Advancement.Builder.advancement().parent(connect)
 				.display(ColorHandler.setDefaultColor(new ItemStack(MSItems.CRUXITE_APPLE.get())), Component.translatable(title(ENTRY)), Component.translatable(desc(ENTRY)), null, AdvancementType.TASK, true, true, false)
 				.addCriterion("use_artifact", EventTrigger.Instance.cruxiteArtifact()).save(saver, save_loc(ENTRY));
+		AdvancementHolder speedrun = Advancement.Builder.advancement().parent(entry)
+				.display(MSItems.APPLE_JUICE.get(),Component.translatable(title(SPEEDRUN)), Component.translatable(desc(SPEEDRUN)), null, AdvancementType.CHALLENGE, true, true, true)
+				.requirements(AdvancementRequirements.Strategy.AND)
+				.addCriterion("playtime", EventTrigger.Instance.speedRun())
+				.addCriterion("use_artifact", EventTrigger.Instance.cruxiteArtifact()).save(saver, save_loc(SPEEDRUN));
 		AdvancementHolder alchemy = Advancement.Builder.advancement().parent(entry)
 				.display(MSItems.CAPTCHA_CARD.get(), Component.translatable(title(ALCHEMY)), Component.translatable(desc(ALCHEMY)), null, AdvancementType.TASK, true, true, false)
 				.addCriterion("use_punch_designix", PunchDesignixTrigger.Instance.any()).save(saver, save_loc(ALCHEMY));
@@ -120,7 +129,11 @@ public class MSAdvancementProvider implements AdvancementProvider.AdvancementGen
 				.addCriterion("touch_return_node", EventTrigger.Instance.returnNode()).save(saver, save_loc(RETURN_NODE));
 		AdvancementHolder dungeon = Advancement.Builder.advancement().parent(returnNode)
 				.display(MSBlocks.FROST_BRICKS.get(), Component.translatable(title(DUNGEON)), Component.translatable(desc(DUNGEON)), null, AdvancementType.TASK, true, true, false)
-				.addCriterion("imp_dungeon", PlayerTrigger.TriggerInstance.located(LocationPredicate.Builder.inStructure(structures.getOrThrow(MSStructures.ImpDungeon.KEY)))).save(saver, save_loc(DUNGEON));
+				.addCriterion("imp_dungeon", PlayerTrigger.TriggerInstance.located(LocationPredicate.Builder.location().setStructures(HolderSet.direct(
+						structures.getOrThrow(MSStructures.ImpDungeon.KEY),
+						structures.getOrThrow(MSStructures.PROSPIT_BUNKER),
+						structures.getOrThrow(MSStructures.DERSE_BUNKER),
+						structures.getOrThrow(MSStructures.IMP_BUNKER))))).save(saver, save_loc(DUNGEON));
 		AdvancementHolder commune = Advancement.Builder.advancement().parent(entry)
 				.display(MSItems.STONE_TABLET.get(), Component.translatable(title(COMMUNE)), Component.translatable(desc(COMMUNE)), null, AdvancementType.TASK, true, true, false)
 				.requirements(AdvancementRequirements.Strategy.AND)
@@ -159,11 +172,15 @@ public class MSAdvancementProvider implements AdvancementProvider.AdvancementGen
 		AdvancementHolder brickComputer = Advancement.Builder.advancement().parent(connect)
 				.display(MSItems.OLD_COMPUTER.get(), Component.translatable(title(BRICK_COMPUTER)), Component.translatable(desc(BRICK_COMPUTER)), null, AdvancementType.CHALLENGE, true, true, true)
 				.addCriterion("brick_computer", EventTrigger.Instance.brickComputer()).save(saver, save_loc(BRICK_COMPUTER));
+		AdvancementHolder hammerguy = Advancement.Builder.advancement().parent(root)
+				.display(MSItems.CLAW_HAMMER.get(), Component.translatable(title(HAMMERGUY)), Component.translatable(desc(HAMMERGUY)), null, AdvancementType.TASK, true, true, true)
+				.addCriterion("possess_hammer", InventoryChangeTrigger.TriggerInstance.hasItems(MSItems.CLAW_HAMMER.get())).save(saver, save_loc(HAMMERGUY));
+		
 	}
 	
 	private static Advancement.Builder changeModusCriteria(Advancement.Builder builder)
 	{
-		for(Supplier<? extends ModusType<?>> type : Arrays.asList(ModusTypes.STACK, ModusTypes.QUEUE, ModusTypes.QUEUE_STACK, ModusTypes.TREE, ModusTypes.HASH_MAP, ModusTypes.SET))
+		for(Supplier<? extends ModusType<?>> type : Arrays.asList(ModusTypes.STACK, ModusTypes.QUEUE, ModusTypes.QUEUE_STACK, ModusTypes.TREE, ModusTypes.HASH_MAP, ModusTypes.ARRAY, ModusTypes.SET))
 		{
 			ResourceLocation id = Objects.requireNonNull(ModusTypes.REGISTRY.getKey(type.get()));
 			builder = builder.addCriterion(id.getPath(), InventoryChangeTrigger.TriggerInstance.hasItems(type.get().getItem()));

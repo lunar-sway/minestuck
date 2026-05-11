@@ -33,6 +33,7 @@ public final class DialogueComponent
 	private final Map<UUID, ResourceLocation> overriddenStartingDialogue = new HashMap<>();
 	
 	private final Set<String> flags = new HashSet<>();
+	private boolean reachedTarget;
 	private final Map<UUID, Set<String>> playerSpecificFlags = new HashMap<>();
 	private final Map<UUID, Item> matchedItem = new HashMap<>();
 	
@@ -69,6 +70,8 @@ public final class DialogueComponent
 				entryTag.getList("flags", Tag.TAG_STRING).stream().map(StringTag.class::cast)
 						.map(StringTag::getAsString).forEach(playerFlags::add);
 			});
+			
+			this.reachedTarget = tag.getBoolean("reached_target");
 			
 			tag.getList("matched_item", Tag.TAG_COMPOUND).stream().map(CompoundTag.class::cast).forEach(entryTag ->
 			{
@@ -117,6 +120,8 @@ public final class DialogueComponent
 				playerFlagsMapTag.add(entryTag);
 			});
 			tag.put("player_flags", playerFlagsMapTag);
+			
+			tag.putBoolean("reached_target", this.reachedTarget);
 			
 			ListTag matchedItemTag = new ListTag();
 			this.matchedItem.forEach((player, item) ->
@@ -196,6 +201,16 @@ public final class DialogueComponent
 		return this.playerSpecificFlags.computeIfAbsent(player, _player -> new HashSet<>());
 	}
 	
+	public boolean hasReachedTarget()
+	{
+		return this.reachedTarget;
+	}
+	
+	public void setHasReachedTarget(boolean reachedTarget)
+	{
+		this.reachedTarget = reachedTarget;
+	}
+	
 	public Optional<Item> getMatchedItem(ServerPlayer player)
 	{
 		return Optional.ofNullable(this.matchedItem.get(player.getUUID()));
@@ -219,6 +234,7 @@ public final class DialogueComponent
 		this.overriddenStartingDialogue.clear();
 		this.flags.clear();
 		this.playerSpecificFlags.clear();
+		this.reachedTarget = false;
 		this.matchedItem.clear();
 	}
 	

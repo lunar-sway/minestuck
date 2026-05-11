@@ -1,0 +1,32 @@
+{
+  "fallback": "minecraft:empty",
+  "elements": [
+    {
+      "weight": 50,
+      "element": {
+        "element_type": "minecraft:single_pool_element",
+        "projection": "rigid",
+        "location": "minestuck:arena/spawner_ogre",
+        "processors": "minestuck:structure_block_registry"
+      }
+    },
+    {
+      "weight": 30,
+      "element": {
+        "element_type": "minecraft:single_pool_element",
+        "projection": "rigid",
+        "location": "minestuck:arena/spawner_basilisk",
+        "processors": "minestuck:structure_block_registry"
+      }
+    },
+    {
+      "weight": 20,
+      "element": {
+        "element_type": "minecraft:single_pool_element",
+        "projection": "rigid",
+        "location": "minestuck:arena/spawner_lich",
+        "processors": "minestuck:structure_block_registry"
+      }
+    }
+  ]
+}

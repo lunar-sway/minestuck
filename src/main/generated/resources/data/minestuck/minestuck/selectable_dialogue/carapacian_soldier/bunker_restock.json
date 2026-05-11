@@ -1,0 +1,19 @@
+{
+  "condition": {
+    "type": "minestuck:npc_location_predicate",
+    "predicate": {
+      "position": {
+        "y": {
+          "max": 64.0
+        }
+      },
+      "structures": [
+        "minestuck:derse_bunker",
+        "minestuck:prospit_bunker"
+      ]
+    }
+  },
+  "dialogue": "minestuck:carapacian_soldier/bunker_restock",
+  "dialogue_weight": 10,
+  "keep_on_reset": false
+}

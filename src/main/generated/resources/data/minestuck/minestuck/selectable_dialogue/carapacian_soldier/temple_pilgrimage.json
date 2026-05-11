@@ -1,0 +1,11 @@
+{
+  "condition": {
+    "type": "minestuck:npc_entity_predicate",
+    "predicate": {
+      "type": "#minestuck:carapacians/prospitian"
+    }
+  },
+  "dialogue": "minestuck:carapacian_soldier/temple_pilgrimage",
+  "dialogue_weight": 10,
+  "keep_on_reset": false
+}

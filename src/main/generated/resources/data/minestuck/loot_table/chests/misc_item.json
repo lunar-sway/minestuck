@@ -135,6 +135,23 @@
               "add": false,
               "count": {
                 "type": "minecraft:uniform",
+                "max": 7.0,
+                "min": 3.0
+              },
+              "function": "minecraft:set_count"
+            }
+          ],
+          "name": "minestuck:sorrow_gushers",
+          "quality": -1,
+          "weight": 7
+        },
+        {
+          "type": "minecraft:item",
+          "functions": [
+            {
+              "add": false,
+              "count": {
+                "type": "minecraft:uniform",
                 "max": 5.0,
                 "min": 1.0
               },

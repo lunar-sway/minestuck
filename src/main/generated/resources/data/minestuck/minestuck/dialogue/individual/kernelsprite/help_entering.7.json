@@ -1,0 +1,134 @@
+{
+  "conditioned_nodes": [
+    {
+      "condition": {
+        "type": "minestuck:player_entity_predicate",
+        "predicate": {
+          "slots": {
+            "container.*": {
+              "count": {
+                "min": 1
+              },
+              "items": "#minestuck:cruxite_artifacts"
+            }
+          }
+        }
+      },
+      "node": {
+        "animation": {},
+        "gui": "minestuck:textures/gui/dialogue/dialogue.png",
+        "messages": [
+          {
+            "type": "entity",
+            "message": "minestuck.dialogue.individual.kernelsprite.help_entering.7"
+          },
+          {
+            "type": "description",
+            "message": "minestuck.dialogue.individual.kernelsprite.help_entering.7.desc"
+          }
+        ],
+        "responses": [
+          {
+            "condition": {
+              "type": "minestuck:always_true"
+            },
+            "hide_if_failed": true,
+            "message": "minestuck.dialogue.individual.kernelsprite.help_entering.7.thanks_for_help",
+            "next_dialogue": {
+              "id": "minestuck:individual/kernelsprite/blank",
+              "reply_messages": [],
+              "set_as_entrypoint": true
+            },
+            "triggers": [
+              {
+                "type": "minestuck:go_to_block",
+                "accepted_distance": 6.0,
+                "predicate": {
+                  "blocks": [
+                    "minestuck:cruxtruder_corner",
+                    "minestuck:cruxtruder_side",
+                    "minestuck:cruxtruder_center",
+                    "minestuck:cruxtruder_top_corner",
+                    "minestuck:cruxtruder_top_side",
+                    "minestuck:cruxtruder_top_center",
+                    "minestuck:cruxtruder_tube"
+                  ]
+                },
+                "radius": 20,
+                "wait_permanently": true
+              }
+            ]
+          },
+          {
+            "condition": {
+              "type": "minestuck:always_true"
+            },
+            "hide_if_failed": true,
+            "message": "minestuck.dialogue.individual.kernelsprite.help_entering.7.anything_else",
+            "next_dialogue": {
+              "id": "minestuck:individual/kernelsprite/blank",
+              "reply_messages": [],
+              "set_as_entrypoint": true
+            },
+            "triggers": [
+              {
+                "type": "minestuck:go_to_block",
+                "accepted_distance": 6.0,
+                "predicate": {
+                  "blocks": [
+                    "minestuck:cruxtruder_corner",
+                    "minestuck:cruxtruder_side",
+                    "minestuck:cruxtruder_center",
+                    "minestuck:cruxtruder_top_corner",
+                    "minestuck:cruxtruder_top_side",
+                    "minestuck:cruxtruder_top_center",
+                    "minestuck:cruxtruder_tube"
+                  ]
+                },
+                "radius": 20,
+                "wait_permanently": true
+              }
+            ]
+          }
+        ]
+      }
+    }
+  ],
+  "default_node": {
+    "animation": {},
+    "gui": "minestuck:textures/gui/dialogue/dialogue.png",
+    "messages": [
+      {
+        "type": "entity",
+        "message": "minestuck.dialogue.individual.kernelsprite.help_entering.7.default"
+      },
+      {
+        "type": "description",
+        "message": "minestuck.dialogue.individual.kernelsprite.help_entering.7.default.desc"
+      }
+    ],
+    "responses": [
+      {
+        "condition": {
+          "type": "minestuck:always_true"
+        },
+        "hide_if_failed": true,
+        "message": "minestuck.dialogue.individual.kernelsprite.return",
+        "next_dialogue": {
+          "id": "minestuck:individual/kernelsprite/start",
+          "reply_messages": [],
+          "set_as_entrypoint": true
+        },
+        "triggers": [
+          {
+            "type": "minestuck:go_to_block",
+            "accepted_distance": 1.0,
+            "duration": 1,
+            "predicate": {},
+            "radius": 1
+          }
+        ]
+      }
+    ]
+  }
+}
