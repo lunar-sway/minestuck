@@ -37,6 +37,7 @@ import net.neoforged.bus.api.SubscribeEvent;
 import net.neoforged.fml.common.EventBusSubscriber;
 import net.neoforged.neoforge.common.util.FakePlayer;
 import net.neoforged.neoforge.event.ServerChatEvent;
+import net.neoforged.neoforge.event.TagsUpdatedEvent;
 import net.neoforged.neoforge.event.entity.item.ItemExpireEvent;
 import net.neoforged.neoforge.event.entity.living.LivingDamageEvent;
 import net.neoforged.neoforge.event.entity.living.LivingDeathEvent;
@@ -290,6 +291,11 @@ public class ServerEventHandler
 				}
 			}
 		}
+	}
+	
+	@SubscribeEvent
+	public static void onTagsUpdated(TagsUpdatedEvent event) {
+		KindAbstratusList.reloadFromTags();
 	}
 	
 	@SubscribeEvent
