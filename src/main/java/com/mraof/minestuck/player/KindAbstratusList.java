@@ -34,6 +34,7 @@ public class KindAbstratusList
 	public static final String WAND = "minestuck.wand";
 	public static final String STAR = "minestuck.star";
 	public static final String CAKE = "minestuck.cake";
+	public static final String CROSSBOW = "minestuck.crossbow";
 	
 	private static ArrayList<KindAbstratusType> typeList = new ArrayList<>();
 	// [addons]

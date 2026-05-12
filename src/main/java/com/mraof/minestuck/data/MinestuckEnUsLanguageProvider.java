@@ -2258,6 +2258,7 @@ public class MinestuckEnUsLanguageProvider extends MinestuckLanguageProvider
 		addStrife(KindAbstratusList.WAND, "Wandkind");
 		addStrife(KindAbstratusList.STAR, "Thrwstarkind");
 		addStrife(KindAbstratusList.CAKE, "Cakekind");
+		addStrife(KindAbstratusList.CROSSBOW, "Crossbowkind");
 		
 		add(MusicPlayerWeapon.TITLE, "Music Player");
 		add(MusicPlayerWeapon.HINT_INACTIVE, "Crouch and use to start playing");

@@ -18,6 +18,7 @@ import net.minecraft.data.PackOutput;
 import net.minecraft.data.tags.ItemTagsProvider;
 import net.minecraft.data.tags.TagsProvider;
 import net.minecraft.tags.BlockTags;
+import net.minecraft.tags.ItemTags;
 import net.minecraft.world.item.Item;
 import net.minecraft.world.item.Items;
 import net.minecraft.world.level.block.Block;
@@ -111,12 +112,13 @@ public class MinestuckItemTagsProvider extends ItemTagsProvider
 		List<MSToolType> minestuckToolTypes = Stream.concat(minestuckMiningToolTypes.stream(), minestuckMeleeToolTypes.stream()).toList();
 		
 		// [kinds abstractus]
-		tag(KIND_SWORD).add(SORD.get(), PAPER_SWORD.get(), SWONGE.get(), WET_SWONGE.get(), PUMORD.get(), WET_PUMORD.get(), CACTACEAE_CUTLASS.get(), STEAK_SWORD.get(), BEEF_SWORD.get(), IRRADIATED_STEAK_SWORD.get(), MACUAHUITL.get(), FROSTY_MACUAHUITL.get(), KATANA.get(), UNBREAKABLE_KATANA.get(), ANGEL_APOCALYPSE.get(), FIRE_POKER.get(), TOO_HOT_TO_HANDLE.get(), CALEDSCRATCH.get(), CALEDFWLCH.get(), ROYAL_DERINGER.get(), CLAYMORE.get(), CUTLASS_OF_ZILLYWAIR.get(), REGISWORD.get(), CRUEL_FATE_CRUCIBLE.get(), SCARLET_RIBBITAR.get(), DOGG_MACHETE.get(), COBALT_SABRE.get(), QUANTUM_SABRE.get(), SHATTER_BEACON.get(), SHATTER_BACON.get(), SUBTRACTSHUMIDIRE_ZOMORRODNEGATIVE.get(), MUSIC_SWORD.get(), PILLOW_TALK.get(), KRAKENS_EYE.get(), CINNAMON_SWORD.get(), UNION_BUSTER.get(), CHAINSAW_KATANA.get(), THORN_IN_YOUR_SIDE.get(), ROSE_PROTOCOL.get(), EMERALD_SWORD.get());
-//		tag(KIND_BOW).add();
-		tag(KIND_PICKAXE).add(EMERALD_PICKAXE.get());
-		tag(KIND_AXE).add(BATLEACKS.get(), COPSE_CRUSHER.get(), QUENCH_CRUSHER.get(), MELONSBANE.get(), CROP_CHOP.get(), THE_LAST_STRAW.get(), BATTLEAXE.get(), CANDY_BATTLEAXE.get(), CHOCO_LOCO_WOODSPLITTER.get(), STEEL_EDGE_CANDYCUTTER.get(), BLACKSMITH_BANE.get(), REGIAXE.get(), GOTHY_AXE.get(), SURPRISE_AXE.get(), SHOCK_AXE.get(), SHOCK_AXE_UNPOWERED.get(), SCRAXE.get(), LORENTZ_DISTRANSFORMATIONER.get(), PISTON_POWERED_POGO_AXEHAMMER.get(), RUBY_CROAK.get(), HEPHAESTUS_LUMBERJACK.get(), FISSION_FOCUSED_FAULT_FELLER.get(), BISECTOR.get(), FINE_CHINA_AXE.get(), EMERALD_AXE.get());
-		tag(KIND_HOE).add(EMERALD_HOE.get());
-		tag(KIND_SHOVEL).add(EMERALD_SHOVEL.get());
+		tag(KIND_SWORD).addTag(SWORDS).add(SORD.get(), PAPER_SWORD.get(), SWONGE.get(), WET_SWONGE.get(), PUMORD.get(), WET_PUMORD.get(), CACTACEAE_CUTLASS.get(), STEAK_SWORD.get(), BEEF_SWORD.get(), IRRADIATED_STEAK_SWORD.get(), MACUAHUITL.get(), FROSTY_MACUAHUITL.get(), KATANA.get(), UNBREAKABLE_KATANA.get(), ANGEL_APOCALYPSE.get(), FIRE_POKER.get(), TOO_HOT_TO_HANDLE.get(), CALEDSCRATCH.get(), CALEDFWLCH.get(), ROYAL_DERINGER.get(), CLAYMORE.get(), CUTLASS_OF_ZILLYWAIR.get(), REGISWORD.get(), CRUEL_FATE_CRUCIBLE.get(), SCARLET_RIBBITAR.get(), DOGG_MACHETE.get(), COBALT_SABRE.get(), QUANTUM_SABRE.get(), SHATTER_BEACON.get(), SHATTER_BACON.get(), SUBTRACTSHUMIDIRE_ZOMORRODNEGATIVE.get(), MUSIC_SWORD.get(), PILLOW_TALK.get(), KRAKENS_EYE.get(), CINNAMON_SWORD.get(), UNION_BUSTER.get(), CHAINSAW_KATANA.get(), THORN_IN_YOUR_SIDE.get(), ROSE_PROTOCOL.get(), EMERALD_SWORD.get());
+		tag(KIND_BOW).addTag(BOWS);
+		tag(KIND_CROSSBOW).add(Items.CROSSBOW);
+		tag(KIND_PICKAXE).addTag(PICKAXES).add(EMERALD_PICKAXE.get());
+		tag(KIND_AXE).addTag(AXES).add(BATLEACKS.get(), COPSE_CRUSHER.get(), QUENCH_CRUSHER.get(), MELONSBANE.get(), CROP_CHOP.get(), THE_LAST_STRAW.get(), BATTLEAXE.get(), CANDY_BATTLEAXE.get(), CHOCO_LOCO_WOODSPLITTER.get(), STEEL_EDGE_CANDYCUTTER.get(), BLACKSMITH_BANE.get(), REGIAXE.get(), GOTHY_AXE.get(), SURPRISE_AXE.get(), SHOCK_AXE.get(), SHOCK_AXE_UNPOWERED.get(), SCRAXE.get(), LORENTZ_DISTRANSFORMATIONER.get(), PISTON_POWERED_POGO_AXEHAMMER.get(), RUBY_CROAK.get(), HEPHAESTUS_LUMBERJACK.get(), FISSION_FOCUSED_FAULT_FELLER.get(), BISECTOR.get(), FINE_CHINA_AXE.get(), EMERALD_AXE.get());
+		tag(KIND_HOE).addTag(HOES).add(EMERALD_HOE.get());
+		tag(KIND_SHOVEL).addTag(SHOVELS).add(EMERALD_SHOVEL.get());
 		
 		tag(KIND_HAMMER).add(CLAW_HAMMER.get(), SLEDGE_HAMMER.get(), MAILBOX.get(), BLACKSMITH_HAMMER.get(), POGO_HAMMER.get(), WRINKLEFUCKER.get(), TELESCOPIC_SASSACRUSHER.get(), DEMOCRATIC_DEMOLITIONER.get(), BOOMBOX_BEATER.get(), REGI_HAMMER.get(), FEAR_NO_ANVIL.get(), MELT_MASHER.get(), ESTROGEN_EMPOWERED_EVERYTHING_ERADICATOR.get(), EEEEEEEEEEEE.get(), ZILLYHOO_HAMMER.get(), POPAMATIC_VRILLYHOO.get(), SCARLET_ZILLYHOO.get(), MWRTHWL.get());
 		tag(KIND_CANE).add(CANE.get(), VAUDEVILLE_HOOK.get(), BEAR_POKING_STICK.get(), CROWBAR.get(), UMBRELLA.get(), BARBERS_BEST_FRIEND.get(), UPPER_CRUST_CRUST_CANE.get(), IRON_CANE.get(), KISSY_CUTIE_HEART_HITTER.get(), MUTANT_CUTIE_CELL_CUTTER.get(), ZEPHYR_CANE.get(), SPEAR_CANE.get(), PARADISES_PORTABELLO.get(), REGI_CANE.get(), POGO_CANE.get(), CANDY_CANE.get(), SHARP_CANDY_CANE.get(), PRIM_AND_PROPER_WALKING_POLE.get(), DRAGON_CANE.get(), DRAGON_CANE_UNSHEATHED.get(), CHANCEWYRMS_EXTRA_FORTUNATE_STABBING_IMPLEMENT.get(), CHANCEWYRMS_EXTRA_FORTUNATE_STABBING_IMPLEMENT_UNSHEATHED.get(), LESS_PROPER_WALKING_STICK.get(), LESS_PROPER_WALKING_STICK_SHEATHED.get(), ROCKEFELLERS_WALKING_BLADECANE.get(), ROCKEFELLERS_WALKING_BLADECANE_SHEATHED.get());
@@ -139,6 +141,8 @@ public class MinestuckItemTagsProvider extends ItemTagsProvider
 		tag(KIND_CAKE).add(APPLE_CAKE.get(), BLUE_CAKE.get(), COLD_CAKE.get(), RED_CAKE.get(), HOT_CAKE.get(), REVERSE_CAKE.get(), FUCHSIA_CAKE.get(), NEGATIVE_CAKE.get(), CARROT_CAKE.get(), LARGE_CAKE.get(), PINK_FROSTED_TOP_LARGE_CAKE.get(), CHOCOLATEY_CAKE.get(), MOON_CAKE.get(), PAN_CAKE.get());
 		
 		tag(SWORDS).add(EMERALD_SWORD.get()).add(relevantItems(item -> hasToolType(item, List.of(SWORD_TOOL))));
+		tag(BOWS).add(Items.BOW);
+		tag(CROSSBOWS).add(Items.CROSSBOW);
 		tag(AXES).add(EMERALD_AXE.get()).add(relevantItems(item -> hasToolType(item, List.of(AXE_TOOL, CHAINSAW_TOOL))));
 		tag(PICKAXES).add(EMERALD_PICKAXE.get()).add(relevantItems(item -> hasToolType(item, List.of(PICKAXE_TOOL))));
 		tag(SHOVELS).add(EMERALD_SHOVEL.get()).add(relevantItems(item -> hasToolType(item, List.of(SHOVEL_TOOL, SPOON_TOOL))));

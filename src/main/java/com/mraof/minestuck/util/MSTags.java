@@ -122,6 +122,8 @@ public class MSTags
 	
 	public static class Items
 	{
+		public static final TagKey<Item> BOWS = tag("bows");
+		public static final TagKey<Item> CROSSBOWS = tag("crossbows");
 		public static final TagKey<Item> GLOWING_LOGS = tag("logs/glowing");
 		public static final TagKey<Item> FROST_LOGS = tag("logs/frost");
 		public static final TagKey<Item> RAINBOW_LOGS = tag("logs/rainbow");
@@ -190,6 +192,7 @@ public class MSTags
 		public static final TagKey<Item> KIND_WAND = tag("kind/wand");
 		public static final TagKey<Item> KIND_STAR = tag("kind/star");
 		public static final TagKey<Item> KIND_CAKE = tag("kind/cake");
+		public static final TagKey<Item> KIND_CROSSBOW = tag("kind/crossbow");
 		
 		private static TagKey<Item> tag(String name)
 		{
