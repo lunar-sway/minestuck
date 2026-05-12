@@ -1082,11 +1082,16 @@ public class MinestuckEnUsLanguageProvider extends MinestuckLanguageProvider
 		addItemTooltip(MSItems.TOO_HOT_TO_HANDLE, "This sick blade slices and burns through enemies like there is no tomorrow!");
 		addItem(MSItems.CALEDSCRATCH, "Caledscratch");
 		addItemTooltip(MSItems.CALEDSCRATCH, "The chosen weapon of Hephaestus, Guardian of the land of heat and clockwork. They say if you break this blade you incur their godly wrath.");
+		addItem(MSItems.HALF_CALEDSCRATCH, "½ Caledscratch");
+		addItemTooltip(MSItems.HALF_CALEDSCRATCH, "The chosen weapon of Hephaestus, Guardian of the land of heat and clockwork. Ugh...");
 		addItem(MSItems.CALEDFWLCH, "Caledfwlch");
 		addItemTooltip(MSItems.CALEDFWLCH, "Dumb Welsh Sword. Probably has some chamic destiny.");
 		addItem(MSItems.ROYAL_DERINGER, "Royal Deringer");
+		addItem(MSItems.HALF_ROYAL_DERINGER, "½ Royal Deringer");
 		addItem(MSItems.CLAYMORE, "Claymore");
 		addItemTooltip(MSItems.CLAYMORE, "A featherweight amongst greatswords. It's still bloody heavy, though!");
+		addItem(MSItems.HALF_CLAYMORE, "½ Claymore");
+		addItemTooltip(MSItems.HALF_CLAYMORE, "A featherweight amongst greatswords. Now it's just a piece of junk!");
 		addItem(MSItems.CUTLASS_OF_ZILLYWAIR, "Cutlass of Zillywair");
 		addItemTooltip(MSItems.CUTLASS_OF_ZILLYWAIR, "HooHoo! Another Zilly weapon imported straight from Zillywair! Enemies beware!");
 		addItem(MSItems.REGISWORD, "Regisword");
@@ -2233,6 +2238,7 @@ public class MinestuckEnUsLanguageProvider extends MinestuckLanguageProvider
 		addEffectDescription(MSEffects.SOPOR_SICKNESS, "Damages the player over time. Prevents the application of some effects, as long as their level is lower or equal");
 		
 		addStrife(KindAbstratusList.SWORD, "Bladekind");
+		addStrife(KindAbstratusList.HALF_SWORD, "½ Bladekind");
 		addStrife(KindAbstratusList.BOW, "Bowkind");
 		addStrife(KindAbstratusList.PICKAXE, "Pickaxekind");
 		addStrife(KindAbstratusList.AXE, "Axekind");

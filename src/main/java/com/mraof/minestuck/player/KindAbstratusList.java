@@ -7,8 +7,8 @@ import java.util.List;
 
 public class KindAbstratusList
 {
-	
 	public static final String SWORD = "minestuck.sword";
+	public static final String HALF_SWORD = "minestuck.half_sword";
 	public static final String BOW = "minestuck.bow";
 	public static final String PICKAXE = "minestuck.pickaxe";
 	public static final String AXE = "minestuck.axe";

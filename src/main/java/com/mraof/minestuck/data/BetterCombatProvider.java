@@ -109,6 +109,10 @@ public class BetterCombatProvider implements DataProvider
 		addWeapon(MSItems.TOO_HOT_TO_HANDLE, CUTLASS);
 		addWeapon(MSItems.COBALT_SABRE, CUTLASS);
 		
+		addWeapon(MSItems.HALF_CLAYMORE, SWORD);
+		addWeapon(MSItems.HALF_CALEDSCRATCH, DAGGER);
+		addWeapon(MSItems.HALF_ROYAL_DERINGER, DAGGER);
+		
 		addWeapon(MSItems.CLAYMORE, CLAYMORE);
 		addWeapon(MSItems.MACUAHUITL, CLAYMORE);
 		addWeapon(MSItems.FROSTY_MACUAHUITL, CLAYMORE);
