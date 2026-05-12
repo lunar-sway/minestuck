@@ -1,6 +1,7 @@
 package com.mraof.minestuck.network;
 
 import com.mraof.minestuck.Minestuck;
+import com.mraof.minestuck.player.KindAbstratusList;
 import com.mraof.minestuck.util.MSAttachments;
 import net.minecraft.network.FriendlyByteBuf;
 import net.minecraft.network.codec.ByteBufCodecs;
@@ -8,6 +9,9 @@ import net.minecraft.network.codec.StreamCodec;
 import net.minecraft.network.protocol.common.custom.CustomPacketPayload;
 import net.minecraft.server.level.ServerPlayer;
 import net.neoforged.neoforge.network.handling.IPayloadContext;
+
+import java.util.ArrayList;
+import java.util.List;
 
 public record SpecibusPacket(String specibusName) implements MSPacket.PlayToServer
 {
@@ -23,11 +27,15 @@ public record SpecibusPacket(String specibusName) implements MSPacket.PlayToServ
 	@Override
 	public void execute(IPayloadContext context, ServerPlayer player)
 	{
-		if (!player.getData(MSAttachments.SELECTED_SPECIBUS).isEmpty()) return;
-		if (com.mraof.minestuck.player.KindAbstratusList.getTypeFromName(specibusName()) == null) return;
+		List<String> selected = new ArrayList<>(player.getData(MSAttachments.SELECTED_SPECIBUS));
 		
-		player.setData(MSAttachments.SELECTED_SPECIBUS, specibusName());
+		if (selected.size() >= 4) return;
+		if (selected.contains(specibusName())) return;
+		if (KindAbstratusList.getTypeFromName(specibusName()) == null) return;
 		
-		context.reply(new SyncSpecibusPacket(specibusName()));
+		selected.add(specibusName());
+		player.setData(MSAttachments.SELECTED_SPECIBUS, selected);
+		
+		context.reply(new SyncSpecibusPacket(selected));
 	}
 }

@@ -58,6 +58,7 @@ import java.util.List;
 @EventBusSubscriber(modid = Minestuck.MOD_ID, bus = EventBusSubscriber.Bus.GAME)
 public class ServerEventHandler
 {
+	private static final float[] DAMAGE_MULTIPLIERS = { 1.75f, 1.5f, 1.25f, 1.0f };
 	@SubscribeEvent
 	public static void serverStopped(ServerStoppedEvent event)
 	{
@@ -116,10 +117,9 @@ public class ServerEventHandler
 			if(attackerIsRealPlayer)
 			{
 				ServerPlayer player = (ServerPlayer) attacker;
+				List<String> selected = player.getData(MSAttachments.SELECTED_SPECIBUS);
 				
-				KindAbstratusType type = getSelectedSpecibus(player);
-				
-				if(type != null && !type.partOf(player.getMainHandItem()))
+				if(!selected.isEmpty() && !hasSpecibusMatch(player))
 				{
 					event.setAmount(event.getAmount() * 0.15f);
 				}
@@ -142,19 +142,19 @@ public class ServerEventHandler
 		}
 	}
 	
-	private static KindAbstratusType getSelectedSpecibus(ServerPlayer player)
-	{
-		String selected = player.getData(MSAttachments.SELECTED_SPECIBUS);
-		
-		if(selected.isEmpty())
-			return null;
-		
-		return KindAbstratusList.getTypeFromName(selected);
-	}
+//	private static KindAbstratusType getSelectedSpecibus(ServerPlayer player)
+//	{
+//		List<String> selected = player.getData(MSAttachments.SELECTED_SPECIBUS);
+//
+//		if(selected.isEmpty())
+//			return null;
+//
+//		return KindAbstratusList.getTypeFromName(selected);
+//	}
 	
 	private static void syncSpecibus(ServerPlayer player)
 	{
-		String selected = player.getData(MSAttachments.SELECTED_SPECIBUS);
+		List<String> selected = player.getData(MSAttachments.SELECTED_SPECIBUS);
 		
 		if(!selected.isEmpty())
 		{
@@ -170,21 +170,32 @@ public class ServerEventHandler
 			syncSpecibus(player);
 	}
 	
-		@SubscribeEvent
-	public static void onLivingAttack(LivingIncomingDamageEvent event) {
-		if (!(event.getSource().getEntity() instanceof ServerPlayer player)) return;
-
-		String selected = player.getData(MSAttachments.SELECTED_SPECIBUS);
-		if (selected.isEmpty()) return;
-
-		KindAbstratusType type = KindAbstratusList.getTypeFromName(selected);
-		if (type == null) return;
-
-		if (!type.partOf(player.getMainHandItem())) {
-			float reducedDamage = event.getAmount() * 0.15f;
-			event.setAmount(reducedDamage);
-		}
+	private static boolean hasSpecibusMatch(ServerPlayer player)
+	{
+		List<String> selected = player.getData(MSAttachments.SELECTED_SPECIBUS);
+		if(selected.isEmpty()) return false;
+		
+		return selected.stream()
+				.map(KindAbstratusList::getTypeFromName)
+				.filter(java.util.Objects::nonNull)
+				.anyMatch(type -> type.partOf(player.getMainHandItem()));
 	}
+	
+//		@SubscribeEvent
+//	public static void onLivingAttack(LivingIncomingDamageEvent event) {
+//		if (!(event.getSource().getEntity() instanceof ServerPlayer player)) return;
+//
+//		String selected = player.getData(MSAttachments.SELECTED_SPECIBUS);
+//		if (selected.isEmpty()) return;
+//
+//		KindAbstratusType type = KindAbstratusList.getTypeFromName(selected);
+//		if (type == null) return;
+//
+//		if (!type.partOf(player.getMainHandItem())) {
+//			float reducedDamage = event.getAmount() * 0.15f;
+//			event.setAmount(reducedDamage);
+//		}
+//	}
 	// [debug_stuff]
 /*	@SubscribeEvent
 	public static void onLivingAttack(LivingIncomingDamageEvent event)
@@ -210,15 +221,13 @@ public class ServerEventHandler
 	{
 		if(!(event.getSource().getEntity() instanceof ServerPlayer player)) return;
 		
-		String selected = player.getData(MSAttachments.SELECTED_SPECIBUS);
+		List<String> selected = player.getData(MSAttachments.SELECTED_SPECIBUS);
 		if(selected.isEmpty()) return;
 		
-		KindAbstratusType type = KindAbstratusList.getTypeFromName(selected);
-		if(type == null) return;
-		
-		if(type.partOf(player.getMainHandItem()))
+		if(hasSpecibusMatch(player))
 		{
-			event.setNewDamage(event.getNewDamage() * 1.5f);
+			float multiplier = DAMAGE_MULTIPLIERS[Math.min(selected.size(), 4) - 1];
+			event.setNewDamage(event.getNewDamage() * multiplier);
 		}
 	}
 	
@@ -288,7 +297,7 @@ public class ServerEventHandler
 	{
 		ServerPlayer player = (ServerPlayer) event.getEntity();
 		TitleSelectionHook.cancelSelection(player);
-		String selected = player.getData(MSAttachments.SELECTED_SPECIBUS);
+		List<String> selected = player.getData(MSAttachments.SELECTED_SPECIBUS);
 		
 		if(!selected.isEmpty())
 		{
