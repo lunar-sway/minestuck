@@ -2250,10 +2250,8 @@ public class MinestuckEnUsLanguageProvider extends MinestuckLanguageProvider
 		add(CaptchaDeckHandler.TOO_LARGE, "Cannot captchalogue card, too much data stored");
 		add(GristCacheScreen.TITLE, "Grist Cache");
 		add(StrifeSpecibusScreen.TITLE, "Strife Specibus");
-		add(StrifeSpecibusScreen.KIND_ABSTRATUS_PROMPT, "Choose your Strife Specibus");
-		add(StrifeSpecibusScreen.KIND_ABSTRATUS_SELECTED, "Your Specibus");
-		add(CaptchaDeckScreen.TITLE, "Captchalogue Deck");
-		add(CaptchaDeckScreen.USE_ITEM, "Use Item");
+		add(StrifeSpecibusScreen.KIND_ABSTRATUS_PROMPT, "Pick Abstractus Kind");
+		add(StrifeSpecibusScreen.KIND_ABSTRATUS_SELECTED, "Your Abstractus Kind");
 		add(SylladexScreen.USE_ITEM, "Use Item");
 		add(EcheladderScreen.TITLE, "Echeladder");
 		add(EcheladderScreen.ATTACK, "Attack");

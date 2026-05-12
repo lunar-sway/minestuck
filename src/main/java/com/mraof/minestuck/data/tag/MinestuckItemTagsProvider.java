@@ -109,6 +109,8 @@ public class MinestuckItemTagsProvider extends ItemTagsProvider
 		List<MSToolType> minestuckMeleeToolTypes = List.of(LANCE_TOOL, CLUB_TOOL, KNIFE_TOOL, KEY_TOOL, FAN_TOOL, BATON_TOOL, STAFF_TOOL, CANE_TOOL, WAND_TOOL);
 		List<MSToolType> minestuckToolTypes = Stream.concat(minestuckMiningToolTypes.stream(), minestuckMeleeToolTypes.stream()).toList();
 		
+		tag(KIND_CANE).add(CANE.get(), VAUDEVILLE_HOOK.get(), BEAR_POKING_STICK.get(), CROWBAR.get(), UMBRELLA.get(), BARBERS_BEST_FRIEND.get(), UPPER_CRUST_CRUST_CANE.get(), IRON_CANE.get(), KISSY_CUTIE_HEART_HITTER.get(), MUTANT_CUTIE_CELL_CUTTER.get(), ZEPHYR_CANE.get(), SPEAR_CANE.get(), PARADISES_PORTABELLO.get(), REGI_CANE.get(), POGO_CANE.get(), CANDY_CANE.get(), SHARP_CANDY_CANE.get(), PRIM_AND_PROPER_WALKING_POLE.get(), DRAGON_CANE.get(), DRAGON_CANE_UNSHEATHED.get(), CHANCEWYRMS_EXTRA_FORTUNATE_STABBING_IMPLEMENT.get(), CHANCEWYRMS_EXTRA_FORTUNATE_STABBING_IMPLEMENT_UNSHEATHED.get(), LESS_PROPER_WALKING_STICK.get(), LESS_PROPER_WALKING_STICK_SHEATHED.get(), ROCKEFELLERS_WALKING_BLADECANE.get(), ROCKEFELLERS_WALKING_BLADECANE_SHEATHED.get());
+		
 		tag(SWORDS).add(EMERALD_SWORD.get()).add(relevantItems(item -> hasToolType(item, List.of(SWORD_TOOL))));
 		tag(AXES).add(EMERALD_AXE.get()).add(relevantItems(item -> hasToolType(item, List.of(AXE_TOOL, CHAINSAW_TOOL))));
 		tag(PICKAXES).add(EMERALD_PICKAXE.get()).add(relevantItems(item -> hasToolType(item, List.of(PICKAXE_TOOL))));

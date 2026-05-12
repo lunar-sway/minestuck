@@ -1,5 +1,6 @@
 package com.mraof.minestuck.player;
 
+import com.mraof.minestuck.util.MSTags;
 import net.minecraft.world.item.*;
 
 import java.util.ArrayList;
@@ -33,12 +34,13 @@ public class KindAbstratusList {
 		typeList.add(new KindAbstratusType(AXE).addItemClass(AxeItem.class));
 		typeList.add(new KindAbstratusType(HOE).addItemClass(HoeItem.class));
 		typeList.add(new KindAbstratusType(SHOVEL).addItemClass(ShovelItem.class));
-		typeList.add(new KindAbstratusType(SAW));
-		typeList.add(new KindAbstratusType(HAMMER));
-		typeList.add(new KindAbstratusType(CANE));
-		typeList.add(new KindAbstratusType(CLUB));
-		typeList.add(new KindAbstratusType(SICKLE));
-		typeList.add(new KindAbstratusType(SPORK));
+		
+		typeList.add(new KindAbstratusType(HAMMER).addItemTag(MSTags.Items.KIND_HAMMER));
+		typeList.add(new KindAbstratusType(CANE).addItemTag(MSTags.Items.KIND_CANE));
+		typeList.add(new KindAbstratusType(SAW).addItemTag(MSTags.Items.KIND_SAW));
+		typeList.add(new KindAbstratusType(CLUB).addItemTag(MSTags.Items.KIND_CLUB));
+		typeList.add(new KindAbstratusType(SICKLE).addItemTag(MSTags.Items.KIND_SICKLE));
+		typeList.add(new KindAbstratusType(SPORK).addItemTag(MSTags.Items.KIND_SPORK));
 	}
 	
 	public static void registerType(KindAbstratusType type) {

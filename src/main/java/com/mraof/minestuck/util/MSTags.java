@@ -161,7 +161,15 @@ public class MSTags
 		public static final TagKey<Item> UNREADABLE = tag("unreadable");
 		public static final TagKey<Item> LEGENDARY = tag("legendary");
 		public static final TagKey<Item> CRUXITE_ARTIFACTS = tag("cruxite_artifacts");
-
+		
+		// Kind Abstractuses
+		public static final TagKey<Item> KIND_HAMMER = tag("kind/hammer");
+		public static final TagKey<Item> KIND_CANE = tag("kind/cane");
+		public static final TagKey<Item> KIND_CLUB = tag("kind/club");
+		public static final TagKey<Item> KIND_SICKLE = tag("kind/sickle");
+		public static final TagKey<Item> KIND_SAW = tag("kind/saw");
+		public static final TagKey<Item> KIND_SPORK = tag("kind/spork");
+		
 		private static TagKey<Item> tag(String name)
 		{
 			return ItemTags.create(Minestuck.id(name));
@@ -285,6 +293,7 @@ public class MSTags
 	public static class TitleLandTypes
 	{
 		public static final TagKey<TitleLandType> MONSTERS = tag("monsters");
+		
 		private static TagKey<TitleLandType> tag(String name)
 		{
 			return TagKey.create(LandTypes.TITLE_KEY, Minestuck.id(name));

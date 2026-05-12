@@ -74,10 +74,10 @@ public class ServerEventHandler
 		
 		if(MinestuckConfig.SERVER.hardMode.get())
 			EntryEvent.tick(server);
-	
+		
 	}
 	
-	@SubscribeEvent(priority=EventPriority.LOWEST, receiveCanceled=false)
+	@SubscribeEvent(priority = EventPriority.LOWEST, receiveCanceled = false)
 	public static void onEntityDeath(LivingDeathEvent event)
 	{
 		if(event.getEntity() instanceof ServerPlayer)
@@ -85,11 +85,11 @@ public class ServerEventHandler
 			TitleSelectionHook.cancelSelection((ServerPlayer) event.getEntity());
 		}
 	}
-
+	
 	// Stores the crit result from the CriticalHitEvent, to be used during LivingHurtEvent to trigger special effects of any weapons.
 	// This method is reliable only as long as LivingHurtEvent is posted only on the main thread and after a matching CriticalHitEvent
 	private static boolean cachedCrit;
-
+	
 	@SubscribeEvent(priority = EventPriority.LOWEST)
 	public static void onCrit(CriticalHitEvent event)
 	{
@@ -102,7 +102,7 @@ public class ServerEventHandler
 		return entity instanceof ServerPlayer && cachedCrit;
 	}
 	
-	@SubscribeEvent(priority=EventPriority.NORMAL)
+	@SubscribeEvent(priority = EventPriority.NORMAL)
 	public static void onEntityAttack(LivingIncomingDamageEvent event)
 	{
 		if(event.getSource().getEntity() != null)
@@ -129,8 +129,7 @@ public class ServerEventHandler
 			{
 				double modifier = ((ServerPlayer) attacker).getAttributeValue(MSAttributes.UNDERLING_DAMAGE_MODIFIER);
 				event.setAmount((float) (event.getAmount() * modifier));
-			}
-			else if(injuredIsRealPlayer && attacker instanceof UnderlingEntity)
+			} else if(injuredIsRealPlayer && attacker instanceof UnderlingEntity)
 			{
 				double modifier = ((ServerPlayer) injured).getAttributeValue(MSAttributes.UNDERLING_PROTECTION_MODIFIER);
 				event.setAmount((float) (event.getAmount() * modifier));
@@ -163,6 +162,7 @@ public class ServerEventHandler
 					new SyncSpecibusPacket(selected));
 		}
 	}
+	
 	@SubscribeEvent
 	public static void onPlayerLogin(PlayerEvent.PlayerLoggedInEvent event)
 	{
@@ -170,33 +170,54 @@ public class ServerEventHandler
 			syncSpecibus(player);
 	}
 	
-	@SubscribeEvent
+		@SubscribeEvent
 	public static void onLivingAttack(LivingIncomingDamageEvent event) {
 		if (!(event.getSource().getEntity() instanceof ServerPlayer player)) return;
-		
+
 		String selected = player.getData(MSAttachments.SELECTED_SPECIBUS);
 		if (selected.isEmpty()) return;
-		
+
 		KindAbstratusType type = KindAbstratusList.getTypeFromName(selected);
 		if (type == null) return;
-		
+
 		if (!type.partOf(player.getMainHandItem())) {
 			float reducedDamage = event.getAmount() * 0.15f;
 			event.setAmount(reducedDamage);
 		}
 	}
-	
-	@SubscribeEvent
-	public static void onLivingDamagePre(LivingDamageEvent.Pre event) {
-		if (!(event.getSource().getEntity() instanceof ServerPlayer player)) return;
+	// [debug_stuff]
+/*	@SubscribeEvent
+	public static void onLivingAttack(LivingIncomingDamageEvent event)
+	{
+		if(!(event.getSource().getEntity() instanceof ServerPlayer attacker)) return;
 		
-		String selected = player.getData(MSAttachments.SELECTED_SPECIBUS);
-		if (selected.isEmpty()) return;
+		String selected = attacker.getData(MSAttachments.SELECTED_SPECIBUS);
+		if(selected.isEmpty()) return;
 		
 		KindAbstratusType type = KindAbstratusList.getTypeFromName(selected);
-		if (type == null) return;
+		if(type == null) return;
 		
-		if (type.partOf(player.getMainHandItem())) {
+		ItemStack held = attacker.getMainHandItem();
+		
+		if(!type.partOf(held))
+		{
+			event.setCanceled(true);
+		}
+	}*/
+	
+	@SubscribeEvent
+	public static void onLivingDamagePre(LivingDamageEvent.Pre event)
+	{
+		if(!(event.getSource().getEntity() instanceof ServerPlayer player)) return;
+		
+		String selected = player.getData(MSAttachments.SELECTED_SPECIBUS);
+		if(selected.isEmpty()) return;
+		
+		KindAbstratusType type = KindAbstratusList.getTypeFromName(selected);
+		if(type == null) return;
+		
+		if(type.partOf(player.getMainHandItem()))
+		{
 			event.setNewDamage(event.getNewDamage() * 1.5f);
 		}
 	}
@@ -276,7 +297,7 @@ public class ServerEventHandler
 		}
 	}
 	
-	@SubscribeEvent(priority=EventPriority.LOW, receiveCanceled=false)
+	@SubscribeEvent(priority = EventPriority.LOW, receiveCanceled = false)
 	public static void onServerChat(ServerChatEvent event)
 	{
 		Modus modus = CaptchaDeckHandler.getModus(event.getPlayer());
@@ -290,7 +311,7 @@ public class ServerEventHandler
 	public static void onGetItemBurnTime(FurnaceFuelBurnTimeEvent event)
 	{
 		if(event.getItemStack().getItem() == MSBlocks.TREATED_PLANKS.get().asItem())
-			event.setBurnTime(50);	//Do not set this number to 0.
+			event.setBurnTime(50);    //Do not set this number to 0.
 	}
 	
 	@SubscribeEvent
@@ -318,7 +339,8 @@ public class ServerEventHandler
 	public static void breadStaling(ItemExpireEvent event)
 	{
 		ItemEntity e = event.getEntity();
-		if(e.getItem().getCount() == 1 && (e.getItem().getItem() == Items.BREAD)) {
+		if(e.getItem().getCount() == 1 && (e.getItem().getItem() == Items.BREAD))
+		{
 			ItemEntity stalebread = new ItemEntity(e.level(), e.getX(), e.getY(), e.getZ(), new ItemStack(MSItems.STALE_BAGUETTE.get()));
 			e.level().addFreshEntity(stalebread);
 		}
