@@ -153,12 +153,14 @@ public class SendificatorBlockEntity extends MachineProcessBlockEntity implement
 		ItemStack fuel = itemHandler.getStackInSlot(1);
 		if(canBeRefueled(fuel))
 		{
-			//checks for a uranium itemstack in the lower(fuel) item slot, increases the fuel value if some is found and then removes one count from the fuel stack
-			if(fuel.is(ExtraModTags.Items.URANIUM_CHUNKS))
+			//Refill fuel
+			addFuel(fuel);
+			ItemStack taken = itemHandler.extractItem(1, 1, false);
+			ItemStack remainder = taken.getCraftingRemainingItem();
+			if(!remainder.isEmpty() && level != null)
 			{
-				//Refill fuel
-				addFuel(fuel);
-				itemHandler.extractItem(1, 1, false);
+				ItemEntity remainderEntity = new ItemEntity(level, worldPosition.getX(), worldPosition.getY(), worldPosition.getZ(), remainder);
+				level.addFreshEntity(remainderEntity);
 			}
 		}
 		

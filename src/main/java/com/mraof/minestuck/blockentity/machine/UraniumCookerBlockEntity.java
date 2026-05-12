@@ -14,6 +14,7 @@ import net.minecraft.core.HolderLookup;
 import net.minecraft.nbt.CompoundTag;
 import net.minecraft.network.chat.Component;
 import net.minecraft.world.MenuProvider;
+import net.minecraft.world.entity.item.ItemEntity;
 import net.minecraft.world.entity.player.Inventory;
 import net.minecraft.world.entity.player.Player;
 import net.minecraft.world.inventory.AbstractContainerMenu;
@@ -135,7 +136,13 @@ public class UraniumCookerBlockEntity extends MachineProcessBlockEntity implemen
 		{
 			//Refill fuel
 			addFuel(fuel);
-			itemHandler.extractItem(1, 1, false);
+			ItemStack taken = itemHandler.extractItem(1, 1, false);
+			ItemStack remainder = taken.getCraftingRemainingItem();
+			if(!remainder.isEmpty() && level != null)
+			{
+				ItemEntity remainderEntity = new ItemEntity(level, worldPosition.getX(), worldPosition.getY(), worldPosition.getZ(), remainder);
+				level.addFreshEntity(remainderEntity);
+			}
 		}
 		if(canIrradiate())
 		{

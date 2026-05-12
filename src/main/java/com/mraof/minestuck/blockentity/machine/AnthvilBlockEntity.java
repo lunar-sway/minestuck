@@ -121,7 +121,9 @@ public class AnthvilBlockEntity extends MachineProcessBlockEntity implements Men
 		if(anthvil.canBeRefueled(fuel))
 		{
 			anthvil.addFuel(fuel);
-			itemHandler.extractItem(1, 1, false);
+			ItemStack taken = itemHandler.extractItem(1, 1, false);
+			ItemStack remainder = taken.getCraftingRemainingItem();
+			if(!remainder.isEmpty() && !player.getInventory().add(remainder)) player.drop(remainder, false);
 		}
 		
 		GristSet pickedGrist = mendingGrist(level, slotStack);
