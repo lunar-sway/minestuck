@@ -1,0 +1,11 @@
+{
+  "type": "minestuck:grist_cost",
+  "grist_cost": {
+    "minestuck:build": 3075,
+    "minestuck:gold": 2358,
+    "minestuck:marble": 2260
+  },
+  "ingredient": {
+    "item": "minestuck:half_royal_deringer"
+  }
+}
