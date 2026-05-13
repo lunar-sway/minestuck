@@ -50,16 +50,13 @@ import net.neoforged.neoforge.event.server.ServerStoppedEvent;
 import net.neoforged.neoforge.event.tick.ServerTickEvent;
 import net.neoforged.neoforge.network.PacketDistributor;
 import net.neoforged.neoforge.server.ServerLifecycleHooks;
-import net.neoforged.neoforge.event.entity.living.LivingDamageEvent;
-import net.neoforged.neoforge.event.entity.living.LivingIncomingDamageEvent;
-
 
 import java.util.List;
 
 @EventBusSubscriber(modid = Minestuck.MOD_ID, bus = EventBusSubscriber.Bus.GAME)
 public class ServerEventHandler
 {
-	private static final float[] DAMAGE_MULTIPLIERS = { 1.75f, 1.5f, 1.25f, 1.0f };
+	private static final float[] DAMAGE_MULTIPLIERS = { 2.0f, 1.75f, 1.5f, 1.25f };
 	@SubscribeEvent
 	public static void serverStopped(ServerStoppedEvent event)
 	{
