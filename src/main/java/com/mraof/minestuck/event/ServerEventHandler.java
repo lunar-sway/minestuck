@@ -13,10 +13,10 @@ import com.mraof.minestuck.inventory.captchalogue.CaptchaDeckHandler;
 import com.mraof.minestuck.inventory.captchalogue.HashMapModus;
 import com.mraof.minestuck.inventory.captchalogue.Modus;
 import com.mraof.minestuck.item.MSItems;
-import com.mraof.minestuck.player.EnumAspect;
-import com.mraof.minestuck.player.IdentifierHandler;
-import com.mraof.minestuck.player.Title;
+import com.mraof.minestuck.network.SyncSpecibusPacket;
+import com.mraof.minestuck.player.*;
 import com.mraof.minestuck.skaianet.TitleSelectionHook;
+import com.mraof.minestuck.util.MSAttachments;
 import com.mraof.minestuck.world.storage.MSExtraData;
 import net.minecraft.server.MinecraftServer;
 import net.minecraft.server.level.ServerPlayer;
@@ -37,6 +37,7 @@ import net.neoforged.bus.api.SubscribeEvent;
 import net.neoforged.fml.common.EventBusSubscriber;
 import net.neoforged.neoforge.common.util.FakePlayer;
 import net.neoforged.neoforge.event.ServerChatEvent;
+import net.neoforged.neoforge.event.TagsUpdatedEvent;
 import net.neoforged.neoforge.event.entity.item.ItemExpireEvent;
 import net.neoforged.neoforge.event.entity.living.LivingDamageEvent;
 import net.neoforged.neoforge.event.entity.living.LivingDeathEvent;
@@ -47,6 +48,7 @@ import net.neoforged.neoforge.event.entity.player.PlayerEvent;
 import net.neoforged.neoforge.event.furnace.FurnaceFuelBurnTimeEvent;
 import net.neoforged.neoforge.event.server.ServerStoppedEvent;
 import net.neoforged.neoforge.event.tick.ServerTickEvent;
+import net.neoforged.neoforge.network.PacketDistributor;
 import net.neoforged.neoforge.server.ServerLifecycleHooks;
 
 import java.util.List;
@@ -54,6 +56,7 @@ import java.util.List;
 @EventBusSubscriber(modid = Minestuck.MOD_ID, bus = EventBusSubscriber.Bus.GAME)
 public class ServerEventHandler
 {
+	private static final float[] DAMAGE_MULTIPLIERS = { 2.0f, 1.75f, 1.5f, 1.25f };
 	@SubscribeEvent
 	public static void serverStopped(ServerStoppedEvent event)
 	{
@@ -70,10 +73,10 @@ public class ServerEventHandler
 		
 		if(MinestuckConfig.SERVER.hardMode.get())
 			EntryEvent.tick(server);
-	
+		
 	}
 	
-	@SubscribeEvent(priority=EventPriority.LOWEST, receiveCanceled=false)
+	@SubscribeEvent(priority = EventPriority.LOWEST, receiveCanceled = false)
 	public static void onEntityDeath(LivingDeathEvent event)
 	{
 		if(event.getEntity() instanceof ServerPlayer)
@@ -81,11 +84,11 @@ public class ServerEventHandler
 			TitleSelectionHook.cancelSelection((ServerPlayer) event.getEntity());
 		}
 	}
-
+	
 	// Stores the crit result from the CriticalHitEvent, to be used during LivingHurtEvent to trigger special effects of any weapons.
 	// This method is reliable only as long as LivingHurtEvent is posted only on the main thread and after a matching CriticalHitEvent
 	private static boolean cachedCrit;
-
+	
 	@SubscribeEvent(priority = EventPriority.LOWEST)
 	public static void onCrit(CriticalHitEvent event)
 	{
@@ -98,7 +101,7 @@ public class ServerEventHandler
 		return entity instanceof ServerPlayer && cachedCrit;
 	}
 	
-	@SubscribeEvent(priority=EventPriority.NORMAL)
+	@SubscribeEvent(priority = EventPriority.NORMAL)
 	public static void onEntityAttack(LivingIncomingDamageEvent event)
 	{
 		if(event.getSource().getEntity() != null)
@@ -109,14 +112,23 @@ public class ServerEventHandler
 			boolean attackerIsRealPlayer = attacker instanceof ServerPlayer && !(attacker instanceof FakePlayer);
 			boolean injuredIsRealPlayer = injured instanceof ServerPlayer && !(injured instanceof FakePlayer);
 			
+			if(attackerIsRealPlayer)
+			{
+				ServerPlayer player = (ServerPlayer) attacker;
+				List<String> selected = player.getData(MSAttachments.SELECTED_SPECIBUS);
+				
+				if(!selected.isEmpty() && !hasSpecibusMatch(player))
+				{
+					event.setAmount(event.getAmount() * 0.15f);
+				}
+			}
+			
 			if(attackerIsRealPlayer && injured instanceof UnderlingEntity)
 			{
-				//Increase damage to underling
 				double modifier = ((ServerPlayer) attacker).getAttributeValue(MSAttributes.UNDERLING_DAMAGE_MODIFIER);
 				event.setAmount((float) (event.getAmount() * modifier));
-			} else if (injuredIsRealPlayer && attacker instanceof UnderlingEntity)
+			} else if(injuredIsRealPlayer && attacker instanceof UnderlingEntity)
 			{
-				//Decrease damage to player
 				double modifier = ((ServerPlayer) injured).getAttributeValue(MSAttributes.UNDERLING_PROTECTION_MODIFIER);
 				event.setAmount((float) (event.getAmount() * modifier));
 			}
@@ -125,6 +137,95 @@ public class ServerEventHandler
 		if(event.getEntity() instanceof UnderlingEntity underling)
 		{
 			underling.onEntityDamaged(event.getSource(), event.getAmount());
+		}
+	}
+	
+//	private static KindAbstratusType getSelectedSpecibus(ServerPlayer player)
+//	{
+//		List<String> selected = player.getData(MSAttachments.SELECTED_SPECIBUS);
+//
+//		if(selected.isEmpty())
+//			return null;
+//
+//		return KindAbstratusList.getTypeFromName(selected);
+//	}
+	
+	private static void syncSpecibus(ServerPlayer player)
+	{
+		List<String> selected = player.getData(MSAttachments.SELECTED_SPECIBUS);
+		
+		if(!selected.isEmpty())
+		{
+			PacketDistributor.sendToPlayer(player,
+					new SyncSpecibusPacket(selected));
+		}
+	}
+	
+	@SubscribeEvent
+	public static void onPlayerLogin(PlayerEvent.PlayerLoggedInEvent event)
+	{
+		if(event.getEntity() instanceof ServerPlayer player)
+			syncSpecibus(player);
+	}
+	
+	private static boolean hasSpecibusMatch(ServerPlayer player)
+	{
+		List<String> selected = player.getData(MSAttachments.SELECTED_SPECIBUS);
+		if(selected.isEmpty()) return false;
+		
+		return selected.stream()
+				.map(KindAbstratusList::getTypeFromName)
+				.filter(java.util.Objects::nonNull)
+				.anyMatch(type -> type.partOf(player.getMainHandItem()));
+	}
+	
+//		@SubscribeEvent
+//	public static void onLivingAttack(LivingIncomingDamageEvent event) {
+//		if (!(event.getSource().getEntity() instanceof ServerPlayer player)) return;
+//
+//		String selected = player.getData(MSAttachments.SELECTED_SPECIBUS);
+//		if (selected.isEmpty()) return;
+//
+//		KindAbstratusType type = KindAbstratusList.getTypeFromName(selected);
+//		if (type == null) return;
+//
+//		if (!type.partOf(player.getMainHandItem())) {
+//			float reducedDamage = event.getAmount() * 0.15f;
+//			event.setAmount(reducedDamage);
+//		}
+//	}
+	// [debug_stuff]
+/*	@SubscribeEvent
+	public static void onLivingAttack(LivingIncomingDamageEvent event)
+	{
+		if(!(event.getSource().getEntity() instanceof ServerPlayer attacker)) return;
+		
+		String selected = attacker.getData(MSAttachments.SELECTED_SPECIBUS);
+		if(selected.isEmpty()) return;
+		
+		KindAbstratusType type = KindAbstratusList.getTypeFromName(selected);
+		if(type == null) return;
+		
+		ItemStack held = attacker.getMainHandItem();
+		
+		if(!type.partOf(held))
+		{
+			event.setCanceled(true);
+		}
+	}*/
+	
+	@SubscribeEvent
+	public static void onLivingDamagePre(LivingDamageEvent.Pre event)
+	{
+		if(!(event.getSource().getEntity() instanceof ServerPlayer player)) return;
+		
+		List<String> selected = player.getData(MSAttachments.SELECTED_SPECIBUS);
+		if(selected.isEmpty()) return;
+		
+		if(hasSpecibusMatch(player))
+		{
+			float multiplier = DAMAGE_MULTIPLIERS[Math.min(selected.size(), 4) - 1];
+			event.setNewDamage(event.getNewDamage() * multiplier);
 		}
 	}
 	
@@ -190,12 +291,25 @@ public class ServerEventHandler
 	}
 	
 	@SubscribeEvent
-	public static void playerChangedDimension(PlayerEvent.PlayerChangedDimensionEvent event)
-	{
-		TitleSelectionHook.cancelSelection((ServerPlayer) event.getEntity());
+	public static void onTagsUpdated(TagsUpdatedEvent event) {
+		KindAbstratusList.reloadFromTags();
 	}
 	
-	@SubscribeEvent(priority=EventPriority.LOW, receiveCanceled=false)
+	@SubscribeEvent
+	public static void playerChangedDimension(PlayerEvent.PlayerChangedDimensionEvent event)
+	{
+		ServerPlayer player = (ServerPlayer) event.getEntity();
+		TitleSelectionHook.cancelSelection(player);
+		List<String> selected = player.getData(MSAttachments.SELECTED_SPECIBUS);
+		
+		if(!selected.isEmpty())
+		{
+			PacketDistributor.sendToPlayer(player,
+					new SyncSpecibusPacket(selected));
+		}
+	}
+	
+	@SubscribeEvent(priority = EventPriority.LOW, receiveCanceled = false)
 	public static void onServerChat(ServerChatEvent event)
 	{
 		Modus modus = CaptchaDeckHandler.getModus(event.getPlayer());
@@ -209,7 +323,7 @@ public class ServerEventHandler
 	public static void onGetItemBurnTime(FurnaceFuelBurnTimeEvent event)
 	{
 		if(event.getItemStack().getItem() == MSBlocks.TREATED_PLANKS.get().asItem())
-			event.setBurnTime(50);	//Do not set this number to 0.
+			event.setBurnTime(50);    //Do not set this number to 0.
 	}
 	
 	@SubscribeEvent
@@ -237,7 +351,8 @@ public class ServerEventHandler
 	public static void breadStaling(ItemExpireEvent event)
 	{
 		ItemEntity e = event.getEntity();
-		if(e.getItem().getCount() == 1 && (e.getItem().getItem() == Items.BREAD)) {
+		if(e.getItem().getCount() == 1 && (e.getItem().getItem() == Items.BREAD))
+		{
 			ItemEntity stalebread = new ItemEntity(e.level(), e.getX(), e.getY(), e.getZ(), new ItemStack(MSItems.STALE_BAGUETTE.get()));
 			e.level().addFreshEntity(stalebread);
 		}
