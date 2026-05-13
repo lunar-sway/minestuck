@@ -2,7 +2,6 @@ package com.mraof.minestuck.client.util;
 
 import com.mojang.blaze3d.platform.InputConstants;
 import com.mraof.minestuck.Minestuck;
-import com.mraof.minestuck.client.gui.MSScreenFactories;
 import com.mraof.minestuck.client.gui.playerStats.PlayerStatsScreen;
 import com.mraof.minestuck.computer.editmode.ClientEditHandler;
 import com.mraof.minestuck.network.CaptchaDeckPackets;
@@ -74,7 +73,7 @@ public class MSKeyHandler
 	}
 	
 	@SubscribeEvent
-	public static void onKeyInput(InputEvent.Key event)	//This is only called during the game, when no gui is active
+	public static void onKeyInput(InputEvent.Key event)    //This is only called during the game, when no gui is active
 	{
 		if(isNotRelease(event) && Minecraft.getInstance().screen == null)
 		{
@@ -93,7 +92,7 @@ public class MSKeyHandler
 				PacketDistributor.sendToServer(new ToggleAspectEffectsPacket());
 			
 			if(sylladexKey.isActiveAndMatches(input) && ClientPlayerData.getModus() != null)
-				MSScreenFactories.displaySylladexScreen(ClientPlayerData.getModus());
+				PlayerStatsScreen.openGui(false);
 		}
 		
 	}

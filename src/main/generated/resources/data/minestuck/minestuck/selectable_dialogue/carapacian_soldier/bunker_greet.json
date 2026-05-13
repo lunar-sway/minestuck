@@ -1,0 +1,14 @@
+{
+  "condition": {
+    "type": "minestuck:npc_location_predicate",
+    "predicate": {
+      "structures": [
+        "minestuck:derse_bunker",
+        "minestuck:prospit_bunker"
+      ]
+    }
+  },
+  "dialogue": "minestuck:carapacian_soldier/bunker_greet/start",
+  "dialogue_weight": 35,
+  "keep_on_reset": false
+}

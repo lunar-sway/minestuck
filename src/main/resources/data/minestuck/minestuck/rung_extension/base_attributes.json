@@ -1,5 +1,5 @@
 {
-  "__comment": "At max rung, the player will have three rows of hearts, 200% damage, 75% damage reduction from underlings, 592% additional damage towards underlings, and 62.5% fall damage reduction",
+  "__comment": "At max rung, the player will have three rows of hearts, 200% damage, 75% damage reduction from underlings, 592% additional damage towards underlings, 62.5% fall damage reduction, and a maximum of 52 captcha cards",
   "attributes": [
     {
       "attribute": "minecraft:generic.max_health",
@@ -35,6 +35,13 @@
       "operation": "add_value",
       "value": 0.0,
       "change_per_rung": -0.01275
+    },
+    {
+      "attribute": "minestuck:player.captchalogue_capacity",
+      "id": "minestuck:echeladder_captchalogue_capacity",
+      "operation": "add_value",
+      "value": 8.0,
+      "change_per_rung": 0.9
     }
   ]
 }

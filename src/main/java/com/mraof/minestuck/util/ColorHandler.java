@@ -107,11 +107,6 @@ public final class ColorHandler
 				.orElse(BuiltinColors.DEFAULT_COLOR);
 	}
 	
-	public static int getColorForPlayer(ServerPlayer player)
-	{
-		return getColorForPlayer(IdentifierHandler.encode(player), player.level());
-	}
-	
 	public static int getColorForPlayer(PlayerIdentifier identifier, Level level)
 	{
 		return PlayerData.get(identifier, level).getData(MSAttachments.PLAYER_COLOR);

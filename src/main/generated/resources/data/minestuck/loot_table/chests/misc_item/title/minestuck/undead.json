@@ -52,7 +52,7 @@
             }
           ],
           "name": "minecraft:gunpowder",
-          "weight": 8
+          "weight": 4
         },
         {
           "type": "minecraft:item",
@@ -68,7 +68,7 @@
             }
           ],
           "name": "minecraft:string",
-          "weight": 10
+          "weight": 6
         },
         {
           "type": "minecraft:item",

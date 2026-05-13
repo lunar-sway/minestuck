@@ -61,6 +61,8 @@ public class LaptopBlock extends ComputerBlock
 	{
 		if(!(level.getBlockEntity(pos) instanceof ComputerBlockEntity computer))
 			return;
+
+		computer.closeAll();
 		
 		if(level instanceof ServerLevel serverLevel)
 			SkaianetData.get(serverLevel.getServer()).unregisterLaptop(computer);

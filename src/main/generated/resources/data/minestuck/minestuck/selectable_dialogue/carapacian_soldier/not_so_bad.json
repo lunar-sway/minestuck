@@ -1,6 +1,9 @@
 {
   "condition": {
-    "type": "minestuck:is_in_skaia"
+    "type": "minestuck:npc_location_predicate",
+    "predicate": {
+      "dimension": "minestuck:skaia"
+    }
   },
   "dialogue": "minestuck:carapacian_soldier/not_so_bad.1",
   "dialogue_weight": 10,

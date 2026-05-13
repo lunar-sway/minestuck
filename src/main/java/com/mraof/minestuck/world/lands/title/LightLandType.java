@@ -10,10 +10,13 @@ import com.mraof.minestuck.world.gen.structure.blocks.StructureBlockRegistry;
 import com.mraof.minestuck.world.lands.LandBiomeGenBuilder;
 import com.mraof.minestuck.world.lands.LandProperties;
 import com.mraof.minestuck.world.lands.terrain.TerrainLandType;
+import net.minecraft.core.HolderLookup;
+import net.minecraft.core.registries.Registries;
 import net.minecraft.sounds.SoundEvent;
 import net.minecraft.world.level.block.Blocks;
 import net.minecraft.world.level.block.state.BlockState;
 import net.minecraft.world.level.levelgen.GenerationStep;
+import net.minecraft.world.level.levelgen.placement.PlacedFeature;
 import net.minecraft.world.phys.Vec3;
 
 public class LightLandType extends TitleLandType
@@ -28,7 +31,7 @@ public class LightLandType extends TitleLandType
 	@Override
 	public String[] getNames()
 	{
-		return new String[] {LIGHT, BRIGHTNESS};
+		return new String[]{LIGHT, BRIGHTNESS};
 	}
 	
 	@Override
@@ -48,15 +51,20 @@ public class LightLandType extends TitleLandType
 	}
 	
 	@Override
+	public void addExtensions(HolderLookup.Provider provider, StructureBlockRegistry blocks)
+	{
+		HolderLookup.RegistryLookup<PlacedFeature> features = provider.lookupOrThrow(Registries.PLACED_FEATURE);
+		
+		addFeatureExtension(features, GenerationStep.Decoration.VEGETAL_DECORATION, MSPlacedFeatures.LIGHT_TREE, LandBiomeType.anyExcept(LandBiomeType.OCEAN));
+	}
+	
+	@Override
 	public void addBiomeGeneration(LandBiomeGenBuilder builder, StructureBlockRegistry blocks, LandBiomeSetType biomeSet)
 	{
 		BlockState lightBlock = blocks.getBlockState(StructureBlockRegistry.LIGHT_BLOCK);
 		
 		builder.addFeature(GenerationStep.Decoration.LOCAL_MODIFICATIONS, MSPlacedFeatures.MIXED_PILLARS_EXTRA, FeatureModifier.withState(lightBlock), LandBiomeType.ROUGH);
 		builder.addFeature(GenerationStep.Decoration.LOCAL_MODIFICATIONS, MSPlacedFeatures.SMALL_PILLAR, FeatureModifier.withState(lightBlock), LandBiomeType.anyExcept(LandBiomeType.ROUGH));
-		
-		builder.addFeature(GenerationStep.Decoration.VEGETAL_DECORATION, MSPlacedFeatures.LIGHT_TREE, LandBiomeType.anyExcept(LandBiomeType.OCEAN));
-		
 	}
 	
 	@Override
@@ -64,7 +72,7 @@ public class LightLandType extends TitleLandType
 	{
 		LandProperties properties = LandProperties.createPartial(otherType);
 		
-		return otherType.getSkylightBase() >= 1/2F && properties.forceThunder == LandProperties.ForceType.OFF;
+		return otherType.getSkylightBase() >= 1 / 2F && properties.forceThunder == LandProperties.ForceType.OFF;
 	}
 	
 	@Override

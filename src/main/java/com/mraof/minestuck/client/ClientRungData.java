@@ -16,7 +16,7 @@ import java.util.Optional;
 public final class ClientRungData
 {
 	private static final Rung.DisplayData DUMMY_DATA = new Rung.DisplayData(0xFFFFFF, 0x000000, 0, Optional.empty(),
-			new Rung.DisplayAttributes(0D, 0D, 1D, 1D));
+			new Rung.DisplayAttributes(0D, 0D, 1D, 1D, 1D));
 	private static List<Rung.DisplayData> RUNG_LIST = Collections.emptyList();
 	
 	public static int getFinalRungIndex()

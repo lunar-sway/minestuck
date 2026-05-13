@@ -53,6 +53,23 @@
           "name": "minecraft:chorus_fruit",
           "quality": -5,
           "weight": 10
+        },
+        {
+          "type": "minecraft:item",
+          "functions": [
+            {
+              "add": false,
+              "count": {
+                "type": "minecraft:uniform",
+                "max": 3.0,
+                "min": 1.0
+              },
+              "function": "minecraft:set_count"
+            }
+          ],
+          "name": "minecraft:popped_chorus_fruit",
+          "quality": -6,
+          "weight": 8
         }
       ],
       "name": "item",
