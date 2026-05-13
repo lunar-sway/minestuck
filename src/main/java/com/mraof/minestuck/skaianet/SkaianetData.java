@@ -2,8 +2,6 @@ package com.mraof.minestuck.skaianet;
 
 import com.mraof.minestuck.Minestuck;
 import com.mraof.minestuck.MinestuckConfig;
-import com.mraof.minestuck.blockentity.ComputerBlockEntity;
-import com.mraof.minestuck.computer.ISburbComputer;
 import com.mraof.minestuck.player.IdentifierHandler;
 import com.mraof.minestuck.player.PlayerIdentifier;
 import net.minecraft.MethodsReturnNonnullByDefault;
@@ -19,7 +17,6 @@ import net.minecraft.world.level.storage.DimensionDataStorage;
 import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.Logger;
 
-import javax.annotation.Nullable;
 import javax.annotation.ParametersAreNonnullByDefault;
 import java.util.*;
 
@@ -39,7 +36,6 @@ public final class SkaianetData extends SavedData
 	final SessionHandler sessionHandler;
 	private final Map<PlayerIdentifier, SburbPlayerData> playerDataMap = new HashMap<>();
 	private final Map<PlayerIdentifier, PredefineData> predefineData = new HashMap<>();
-	private final Map<PlayerIdentifier, ComputerBlockEntity> laptopRegistry = new HashMap<>();
 	
 	final MinecraftServer mcServer;
 	
@@ -150,24 +146,6 @@ public final class SkaianetData extends SavedData
 	{
 		if(getOrCreateData(player).getLandDimension() == null)
 			this.predefineData.computeIfAbsent(player, PredefineData::new).read(tag);
-	}
-	
-	public void registerLaptop(ComputerBlockEntity be)
-	{
-		if(be.getOwner() != null)
-			laptopRegistry.put(be.getOwner(), be);
-	}
-	
-	public void unregisterLaptop(ComputerBlockEntity be)
-	{
-		if(be.getOwner() != null)
-			laptopRegistry.remove(be.getOwner(), be);
-	}
-	
-	@Nullable
-	public ISburbComputer getLaptopForOwner(PlayerIdentifier owner)
-	{
-		return laptopRegistry.get(owner);
 	}
 	
 	/**

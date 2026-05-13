@@ -2,12 +2,10 @@ package com.mraof.minestuck.block.machine;
 
 import com.mraof.minestuck.blockentity.ComputerBlockEntity;
 
-import com.mraof.minestuck.skaianet.SkaianetData;
 import net.minecraft.core.BlockPos;
 import net.minecraft.core.Direction;
 import net.minecraft.nbt.CompoundTag;
 import net.minecraft.resources.ResourceLocation;
-import net.minecraft.server.level.ServerLevel;
 import net.minecraft.world.InteractionHand;
 import net.minecraft.world.ItemInteractionResult;
 import net.minecraft.world.entity.player.Player;
@@ -62,8 +60,7 @@ public class LaptopBlock extends ComputerBlock
 		if(!(level.getBlockEntity(pos) instanceof ComputerBlockEntity computer))
 			return;
 		
-		if(level instanceof ServerLevel serverLevel)
-			SkaianetData.get(serverLevel.getServer()).unregisterLaptop(computer);
+		computer.closeAll();
 		
 		CompoundTag beTag = computer.saveWithoutMetadata(level.registryAccess());
 		ItemStack pickupStack = new ItemStack(state.getBlock().asItem());
