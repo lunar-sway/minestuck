@@ -8,12 +8,14 @@ import com.mraof.minestuck.client.gui.MSScreenFactories;
 import com.mraof.minestuck.computer.ProgramTypes;
 import com.mraof.minestuck.computer.theme.MSComputerThemes;
 import com.mraof.minestuck.player.IdentifierHandler;
+import com.mraof.minestuck.skaianet.SkaianetData;
 import com.mraof.minestuck.skaianet.client.SkaiaClient;
 import com.mraof.minestuck.util.MSSoundEvents;
 import net.minecraft.MethodsReturnNonnullByDefault;
 import net.minecraft.core.BlockPos;
 import net.minecraft.core.Direction;
 import net.minecraft.resources.ResourceLocation;
+import net.minecraft.server.level.ServerLevel;
 import net.minecraft.sounds.SoundSource;
 import net.minecraft.util.StringRepresentable;
 import net.minecraft.world.InteractionHand;
@@ -161,6 +163,8 @@ public class ComputerBlock extends MachineBlock implements EntityBlock
 		if(level.getBlockEntity(pos) instanceof ComputerBlockEntity computer)
 		{
 			if(computer.isPickedUp()) return;
+			if(level instanceof ServerLevel serverLevel)
+				SkaianetData.get(serverLevel.getServer()).unregisterLaptop(computer);
 			computer.closeAll();
 			computer.dropAllDisks();
 		}

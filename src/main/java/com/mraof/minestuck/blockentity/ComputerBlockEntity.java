@@ -4,6 +4,7 @@ import com.mojang.serialization.Codec;
 import com.mraof.minestuck.MinestuckConfig;
 import com.mraof.minestuck.advancements.MSCriteriaTriggers;
 import com.mraof.minestuck.block.machine.ComputerBlock;
+import com.mraof.minestuck.block.machine.LaptopBlock;
 import com.mraof.minestuck.computer.*;
 import com.mraof.minestuck.computer.editmode.ServerEditHandler;
 import com.mraof.minestuck.computer.theme.MSComputerThemes;
@@ -12,6 +13,7 @@ import com.mraof.minestuck.item.components.MSItemComponents;
 import com.mraof.minestuck.network.MSPacket;
 import com.mraof.minestuck.player.IdentifierHandler;
 import com.mraof.minestuck.player.PlayerIdentifier;
+import com.mraof.minestuck.skaianet.SkaianetData;
 import com.mraof.minestuck.util.MSSoundEvents;
 import net.minecraft.MethodsReturnNonnullByDefault;
 import net.minecraft.commands.Commands;
@@ -173,6 +175,13 @@ public final class ComputerBlockEntity extends BlockEntity implements ISburbComp
 		super.onLoad();
 		for(ProgramType<?> programType : this.existingPrograms.keySet())
 			programType.eventHandler().onLoad(this);
+		
+		if(level instanceof ServerLevel serverLevel
+				&& getBlockState().getBlock() instanceof LaptopBlock
+				&& owner != null)
+		{
+			SkaianetData.get(serverLevel.getServer()).registerLaptop(this);
+		}
 	}
 	
 	public boolean isBrokenOrOff()
@@ -320,6 +329,12 @@ public final class ComputerBlockEntity extends BlockEntity implements ISburbComp
 		if(this.owner != null)
 			throw new IllegalStateException("Not allowed to set computer owner in this state");
 		this.owner = owner;
+		
+		if(level instanceof ServerLevel serverLevel
+				&& getBlockState().getBlock() instanceof LaptopBlock)
+		{
+			SkaianetData.get(serverLevel.getServer()).registerLaptop(this);
+		}
 	}
 	
 	public int clientSideOwnerId()
@@ -330,6 +345,8 @@ public final class ComputerBlockEntity extends BlockEntity implements ISburbComp
 	@Override
 	public ComputerReference createReference()
 	{
+		if(getBlockState().getBlock() instanceof LaptopBlock && owner != null)
+			return ComputerReference.forLaptop(owner);
 		return ComputerReference.of(this);
 	}
 	

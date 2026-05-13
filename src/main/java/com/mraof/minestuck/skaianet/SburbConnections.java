@@ -28,6 +28,7 @@ import java.util.stream.Stream;
 /**
  * Handles active connections and primary connections.
  * Sets the rules for when a player can connect to another player.
+ *
  * @author kirderf1
  */
 public final class SburbConnections
@@ -145,11 +146,18 @@ public final class SburbConnections
 	public Optional<ActiveConnection> getCheckedActiveConnection(PlayerIdentifier client)
 	{
 		return getActiveConnection(client).flatMap(connection -> {
-			Optional<ISburbComputer> cc = clientComputerIfValid(connection),
-					sc = serverComputerIfValid(connection);
+			Optional<ISburbComputer> cc = clientComputerIfValid(connection);
+			Optional<ISburbComputer> sc = serverComputerIfValid(connection);
+			
 			if(cc.isEmpty() || sc.isEmpty())
 			{
-				this.closeConnection(connection, cc.orElse(null), sc.orElse(null));
+				boolean clientMissing = cc.isEmpty()
+						&& !connection.clientComputer().allowsTemporaryAbsence();
+				boolean serverMissing = sc.isEmpty()
+						&& !connection.serverComputer().allowsTemporaryAbsence();
+				if(clientMissing || serverMissing)
+					this.closeConnection(connection, cc.orElse(null), sc.orElse(null));
+				
 				return Optional.empty();
 			}
 			
