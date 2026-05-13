@@ -28,8 +28,10 @@
       },
       {
         "condition": {
-          "type": "minestuck:is_from_kingdom",
-          "kingdom": "dersite"
+          "type": "minestuck:npc_entity_predicate",
+          "predicate": {
+            "type": "#minestuck:carapacians/dersite"
+          }
         },
         "hide_if_failed": true,
         "message": "minestuck.dialogue.carapacian_soldier.sword_barter.start.3.derse_loyalty",
@@ -38,8 +40,10 @@
       },
       {
         "condition": {
-          "type": "minestuck:is_from_kingdom",
-          "kingdom": "prospitian"
+          "type": "minestuck:npc_entity_predicate",
+          "predicate": {
+            "type": "#minestuck:carapacians/prospitian"
+          }
         },
         "hide_if_failed": true,
         "message": "minestuck.dialogue.carapacian_soldier.sword_barter.start.3.prospitian_loyalty",

@@ -59,6 +59,8 @@ public class LaptopBlock extends ComputerBlock
 	{
 		if(!(level.getBlockEntity(pos) instanceof ComputerBlockEntity computer))
 			return;
+
+		computer.closeAll();
 		
 		computer.closeAll();
 		

@@ -61,6 +61,7 @@ public final class MSCreativeTabs
 		
 		output.accept(MSItems.CAPTCHA_CARD.get());
 		output.accept(CaptchaCardItem.createPunchedCard(MSItems.CRUXITE_APPLE.get()));
+		output.accept(MSItems.ARRAY_MODUS_CARD.get());
 		output.accept(MSItems.STACK_MODUS_CARD.get());
 		output.accept(MSItems.QUEUE_MODUS_CARD.get());
 		output.accept(MSItems.QUEUESTACK_MODUS_CARD.get());
@@ -399,6 +400,7 @@ public final class MSCreativeTabs
 		output.accept(MSItems.CARROT_CAKE.get());
 		output.accept(MSItems.CHOCOLATEY_CAKE.get());
 		output.accept(MSItems.MOON_CAKE.get());
+		output.accept(MSItems.PAN_CAKE.get());
 		
 		output.accept(MSItems.PRIMED_TNT.get());
 		output.accept(MSItems.UNSTABLE_TNT.get());

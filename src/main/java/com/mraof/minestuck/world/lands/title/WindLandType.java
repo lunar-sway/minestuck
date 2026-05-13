@@ -1,15 +1,16 @@
 package com.mraof.minestuck.world.lands.title;
 
 import com.mraof.minestuck.util.MSSoundEvents;
-import com.mraof.minestuck.world.biome.LandBiomeSetType;
 import com.mraof.minestuck.world.biome.LandBiomeType;
 import com.mraof.minestuck.world.gen.feature.MSPlacedFeatures;
 import com.mraof.minestuck.world.gen.structure.blocks.StructureBlockRegistry;
-import com.mraof.minestuck.world.lands.LandBiomeGenBuilder;
 import com.mraof.minestuck.world.lands.LandProperties;
+import net.minecraft.core.HolderLookup;
+import net.minecraft.core.registries.Registries;
 import net.minecraft.sounds.SoundEvent;
 import net.minecraft.world.level.block.Blocks;
 import net.minecraft.world.level.levelgen.GenerationStep;
+import net.minecraft.world.level.levelgen.placement.PlacedFeature;
 import net.minecraft.world.phys.Vec3;
 
 public class WindLandType extends TitleLandType
@@ -23,7 +24,7 @@ public class WindLandType extends TitleLandType
 	@Override
 	public String[] getNames()
 	{
-		return new String[] {WIND};
+		return new String[]{WIND};
 	}
 	
 	@Override
@@ -43,10 +44,12 @@ public class WindLandType extends TitleLandType
 	}
 	
 	@Override
-	public void addBiomeGeneration(LandBiomeGenBuilder builder, StructureBlockRegistry blocks, LandBiomeSetType biomeSet)
+	public void addExtensions(HolderLookup.Provider provider, StructureBlockRegistry blocks)
 	{
-		builder.addFeature(GenerationStep.Decoration.LOCAL_MODIFICATIONS, MSPlacedFeatures.PARCEL_PYXIS, LandBiomeType.anyExcept(LandBiomeType.OCEAN));
-		builder.addFeature(GenerationStep.Decoration.VEGETAL_DECORATION, MSPlacedFeatures.BREATH_TREE, LandBiomeType.anyExcept(LandBiomeType.OCEAN));
+		HolderLookup.RegistryLookup<PlacedFeature> features = provider.lookupOrThrow(Registries.PLACED_FEATURE);
+		
+		addFeatureExtension(features, GenerationStep.Decoration.LOCAL_MODIFICATIONS, MSPlacedFeatures.PARCEL_PYXIS, LandBiomeType.anyExcept(LandBiomeType.OCEAN));
+		addFeatureExtension(features, GenerationStep.Decoration.VEGETAL_DECORATION, MSPlacedFeatures.BREATH_TREE, LandBiomeType.anyExcept(LandBiomeType.OCEAN));
 	}
 	
 	@Override

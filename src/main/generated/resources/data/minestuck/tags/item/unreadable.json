@@ -1,14 +1,7 @@
 {
   "values": [
-    "minestuck:cruel_fate_crucible",
-    "minestuck:royal_deringer",
     "minestuck:transportalizer",
     "minestuck:trans_portalizer",
-    "minestuck:fear_no_anvil",
-    "minestuck:typhonic_trivializer",
-    "minestuck:quill_of_echidna",
-    "minestuck:umbral_infiltrator",
-    "minestuck:fluorite_octet",
     "minestuck:client_disk",
     "minestuck:server_disk",
     "minestuck:gutter_thumb_drive",
@@ -17,8 +10,6 @@
     "minestuck:cueball",
     "minestuck:black_queens_ring",
     "minestuck:white_queens_ring",
-    "minestuck:black_kings_scepter",
-    "minestuck:white_kings_scepter",
     "minecraft:dragon_egg",
     "minecraft:dragon_head",
     "minecraft:dragon_breath",
@@ -32,7 +23,10 @@
     "minecraft:elytra",
     "minecraft:totem_of_undying",
     "minecraft:beacon",
+    "minecraft:ender_pearl",
     "minecraft:bedrock",
+    "#minestuck:legendary",
+    "#c:shulker_boxes",
     "minecraft:pumpkin"
   ]
 }

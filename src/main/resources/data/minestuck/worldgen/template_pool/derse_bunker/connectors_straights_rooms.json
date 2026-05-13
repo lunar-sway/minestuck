@@ -1,0 +1,222 @@
+{
+  "fallback": "minecraft:empty",
+  "elements": [
+    {
+      "weight": 5,
+      "element": {
+        "location": "minestuck:derse_bunker/connector_001",
+        "processors": "minestuck:structure_block_registry",
+        "projection": "rigid",
+        "element_type": "minecraft:single_pool_element"
+      }
+    },
+    {
+      "weight": 5,
+      "element": {
+        "location": "minestuck:derse_bunker/connector_002",
+        "processors": "minestuck:structure_block_registry",
+        "projection": "rigid",
+        "element_type": "minecraft:single_pool_element"
+      }
+    },
+    {
+      "weight": 5,
+      "element": {
+        "location": "minestuck:derse_bunker/connector_003",
+        "processors": "minestuck:structure_block_registry",
+        "projection": "rigid",
+        "element_type": "minecraft:single_pool_element"
+      }
+    },
+    {
+      "weight": 5,
+      "element": {
+        "location": "minestuck:derse_bunker/connector_004",
+        "processors": "minestuck:structure_block_registry",
+        "projection": "rigid",
+        "element_type": "minecraft:single_pool_element"
+      }
+    },
+    {
+      "weight": 5,
+      "element": {
+        "location": "minestuck:derse_bunker/connector_005",
+        "processors": "minestuck:structure_block_registry",
+        "projection": "rigid",
+        "element_type": "minecraft:single_pool_element"
+      }
+    },
+    {
+      "weight": 5,
+      "element": {
+        "location": "minestuck:derse_bunker/connector_007",
+        "processors": "minestuck:structure_block_registry",
+        "projection": "rigid",
+        "element_type": "minecraft:single_pool_element"
+      }
+    },
+    {
+      "weight": 5,
+      "element": {
+        "location": "minestuck:derse_bunker/connector_008",
+        "processors": "minestuck:structure_block_registry",
+        "projection": "rigid",
+        "element_type": "minecraft:single_pool_element"
+      }
+    },
+    {
+      "weight": 5,
+      "element": {
+        "location": "minestuck:derse_bunker/straight_004",
+        "processors": "minestuck:structure_block_registry",
+        "projection": "rigid",
+        "element_type": "minecraft:single_pool_element"
+      }
+    },
+    {
+      "weight": 5,
+      "element": {
+        "location": "minestuck:derse_bunker/straight_003",
+        "processors": "minestuck:structure_block_registry",
+        "projection": "rigid",
+        "element_type": "minecraft:single_pool_element"
+      }
+    },
+    {
+      "weight": 5,
+      "element": {
+        "location": "minestuck:derse_bunker/straight_002",
+        "processors": "minestuck:structure_block_registry",
+        "projection": "rigid",
+        "element_type": "minecraft:single_pool_element"
+      }
+    },
+    {
+      "weight": 5,
+      "element": {
+        "location": "minestuck:derse_bunker/straight_001",
+        "processors": "minestuck:structure_block_registry",
+        "projection": "rigid",
+        "element_type": "minecraft:single_pool_element"
+      }
+    },
+    {
+      "weight": 2,
+      "element": {
+        "location": "minestuck:derse_bunker/small_001",
+        "processors": "minestuck:structure_block_registry",
+        "projection": "rigid",
+        "element_type": "minecraft:single_pool_element"
+      }
+    },
+    {
+      "weight": 2,
+      "element": {
+        "location": "minestuck:derse_bunker/small_002",
+        "processors": "minestuck:structure_block_registry",
+        "projection": "rigid",
+        "element_type": "minecraft:single_pool_element"
+      }
+    },
+    {
+      "weight": 2,
+      "element": {
+        "location": "minestuck:derse_bunker/small_003",
+        "processors": "minestuck:structure_block_registry",
+        "projection": "rigid",
+        "element_type": "minecraft:single_pool_element"
+      }
+    },
+    {
+      "weight": 2,
+      "element": {
+        "location": "minestuck:derse_bunker/small_004",
+        "processors": "minestuck:structure_block_registry",
+        "projection": "rigid",
+        "element_type": "minecraft:single_pool_element"
+      }
+    },
+    {
+      "weight": 2,
+      "element": {
+        "location": "minestuck:derse_bunker/small_005",
+        "processors": "minestuck:structure_block_registry",
+        "projection": "rigid",
+        "element_type": "minecraft:single_pool_element"
+      }
+    },
+    {
+      "weight": 2,
+      "element": {
+        "location": "minestuck:derse_bunker/small_006",
+        "processors": "minestuck:structure_block_registry",
+        "projection": "rigid",
+        "element_type": "minecraft:single_pool_element"
+      }
+    },
+    {
+      "weight": 2,
+      "element": {
+        "location": "minestuck:derse_bunker/small_007",
+        "processors": "minestuck:structure_block_registry",
+        "projection": "rigid",
+        "element_type": "minecraft:single_pool_element"
+      }
+    },
+    {
+      "weight": 2,
+      "element": {
+        "location": "minestuck:derse_bunker/small_008",
+        "processors": "minestuck:structure_block_registry",
+        "projection": "rigid",
+        "element_type": "minecraft:single_pool_element"
+      }
+    },
+    {
+      "weight": 1,
+      "element": {
+        "location": "minestuck:derse_bunker/large_001",
+        "processors": "minestuck:structure_block_registry",
+        "projection": "rigid",
+        "element_type": "minecraft:single_pool_element"
+      }
+    },
+    {
+      "weight": 1,
+      "element": {
+        "location": "minestuck:derse_bunker/large_002",
+        "processors": "minestuck:structure_block_registry",
+        "projection": "rigid",
+        "element_type": "minecraft:single_pool_element"
+      }
+    },
+    {
+      "weight": 1,
+      "element": {
+        "location": "minestuck:derse_bunker/large_003",
+        "processors": "minestuck:structure_block_registry",
+        "projection": "rigid",
+        "element_type": "minecraft:single_pool_element"
+      }
+    },
+    {
+      "weight": 1,
+      "element": {
+        "location": "minestuck:derse_bunker/large_004",
+        "processors": "minestuck:structure_block_registry",
+        "projection": "rigid",
+        "element_type": "minecraft:single_pool_element"
+      }
+    },
+    {
+      "weight": 1,
+      "element": {
+        "location": "minestuck:derse_bunker/large_005",
+        "processors": "minestuck:structure_block_registry",
+        "projection": "rigid",
+        "element_type": "minecraft:single_pool_element"
+      }
+    }
+    
+  ]
+}

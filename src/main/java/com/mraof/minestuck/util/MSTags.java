@@ -57,6 +57,7 @@ public class MSTags
 		public static final TagKey<Block> WOOD_TERRAIN_BLOCKS = tag("terrain/wood_terrain_blocks");
 		public static final TagKey<Block> HEAT_TERRAIN_BLOCKS = tag("terrain/heat_terrain_blocks");
 		public static final TagKey<Block> ASPECT_TREE_PLACEABLE = tag("terrain/aspect_tree_placeable");
+		public static final TagKey<Block> LAND_OCEAN_FLUIDS = tag("land_ocean_fluids");
 		public static final TagKey<Block> CRUXITE_ORES = tag("ores/cruxite");
 		public static final TagKey<Block> URANIUM_ORES = tag("ores/uranium");
 		public static final TagKey<Block> COAL_ORES = tag("ores/coal");
@@ -159,6 +160,7 @@ public class MSTags
 		public static final TagKey<Item> CREATIVE_SHOCK_RIGHT_CLICK_LIMIT = tag("creative_shock_right_click_limit");
 		public static final TagKey<Item> UNREADABLE = tag("unreadable");
 		public static final TagKey<Item> LEGENDARY = tag("legendary");
+		public static final TagKey<Item> CRUXITE_ARTIFACTS = tag("cruxite_artifacts");
 
 		private static TagKey<Item> tag(String name)
 		{
@@ -225,6 +227,10 @@ public class MSTags
 		
 		public static final TagKey<Biome> HAS_LAND_GATE = tag("has_structure/land_gate");
 		public static final TagKey<Biome> HAS_SMALL_RUIN = tag("has_structure/small_ruin");
+		public static final TagKey<Biome> HAS_ARENA = tag("has_structure/arena");
+		public static final TagKey<Biome> HAS_PROSPIT_BUNKER = tag("has_structure/prospit_bunker");
+		public static final TagKey<Biome> HAS_DERSE_BUNKER = tag("has_structure/derse_bunker");
+		public static final TagKey<Biome> HAS_IMP_BUNKER = tag("has_structure/imp_bunker");
 		public static final TagKey<Biome> HAS_IMP_DUNGEON = tag("has_structure/imp_dungeon");
 		public static final TagKey<Biome> HAS_CONSORT_VILLAGE = tag("has_structure/consort_village");
 		

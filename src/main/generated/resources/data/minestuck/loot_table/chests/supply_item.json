@@ -96,6 +96,22 @@
               "add": false,
               "count": {
                 "type": "minecraft:uniform",
+                "max": 3.0,
+                "min": 1.0
+              },
+              "function": "minecraft:set_count"
+            }
+          ],
+          "name": "minecraft:baked_potato",
+          "weight": 10
+        },
+        {
+          "type": "minecraft:item",
+          "functions": [
+            {
+              "add": false,
+              "count": {
+                "type": "minecraft:uniform",
                 "max": 2.0,
                 "min": 1.0
               },
@@ -125,7 +141,7 @@
           ],
           "name": "minecraft:rotten_flesh",
           "quality": -2,
-          "weight": 15
+          "weight": 2
         },
         {
           "type": "minecraft:item",
@@ -142,7 +158,7 @@
           ],
           "name": "minecraft:bone",
           "quality": -1,
-          "weight": 12
+          "weight": 2
         },
         {
           "type": "minecraft:item",
@@ -159,7 +175,7 @@
           ],
           "name": "minestuck:phlegm_gushers",
           "quality": 1,
-          "weight": 7
+          "weight": 4
         }
       ],
       "name": "item",

@@ -3,7 +3,30 @@
   "pools": [
     {
       "bonus_rolls": 0.0,
-      "entries": [],
+      "entries": [
+        {
+          "type": "minecraft:item",
+          "functions": [
+            {
+              "add": false,
+              "count": {
+                "type": "minecraft:uniform",
+                "max": 2.0,
+                "min": 1.0
+              },
+              "function": "minecraft:set_count"
+            }
+          ],
+          "name": "minecraft:sculk_sensor",
+          "quality": 1,
+          "weight": 2
+        },
+        {
+          "type": "minecraft:item",
+          "name": "minecraft:spyglass",
+          "quality": 1
+        }
+      ],
       "name": "item",
       "rolls": 1.0
     }

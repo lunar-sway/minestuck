@@ -1,0 +1,64 @@
+{
+  "type": "minecraft:chest",
+  "pools": [
+    {
+      "bonus_rolls": 0.0,
+      "entries": [
+        {
+          "type": "minecraft:loot_table",
+          "value": "minestuck:chests/medium_basic",
+          "weight": 6
+        },
+        {
+          "type": "minecraft:loot_table",
+          "value": "minestuck:chests/regiweapons"
+        }
+      ],
+      "name": "ominous_vault",
+      "rolls": {
+        "type": "minecraft:uniform",
+        "max": 2.0,
+        "min": 1.0
+      }
+    },
+    {
+      "bonus_rolls": 0.0,
+      "entries": [
+        {
+          "type": "minecraft:item",
+          "functions": [
+            {
+              "count": {
+                "type": "minecraft:uniform",
+                "max": 3000.0,
+                "min": 1000.0
+              },
+              "function": "minestuck:set_boondollar_count"
+            }
+          ],
+          "name": "minestuck:boondollars",
+          "quality": -1,
+          "weight": 10
+        }
+      ],
+      "name": "boondollars",
+      "rolls": 1.0
+    },
+    {
+      "bonus_rolls": 0.0,
+      "entries": [
+        {
+          "type": "minecraft:loot_table",
+          "value": "minestuck:chests/rare_item"
+        }
+      ],
+      "name": "rare",
+      "rolls": {
+        "type": "minecraft:uniform",
+        "max": 5.0,
+        "min": 2.0
+      }
+    }
+  ],
+  "random_sequence": "minestuck:chests/medium_ominous_vault"
+}

@@ -15,6 +15,7 @@ import net.minecraft.network.codec.StreamCodec;
 import net.minecraft.network.protocol.common.custom.CustomPacketPayload;
 import net.minecraft.server.level.ServerPlayer;
 import net.minecraft.world.entity.EquipmentSlot;
+import net.minecraft.world.inventory.AbstractContainerMenu;
 import net.neoforged.neoforge.network.handling.IPayloadContext;
 
 import javax.annotation.Nullable;
@@ -99,11 +100,11 @@ public final class CaptchaDeckPackets
 		
 		public static final Type<CaptchalogueInventorySlot> ID = new Type<>(Minestuck.id("captcha_deck/captchalogue_inventory_slot"));
 		public static final StreamCodec<RegistryFriendlyByteBuf, CaptchalogueInventorySlot> STREAM_CODEC = StreamCodec.composite(
-			ByteBufCodecs.INT,
-			CaptchalogueInventorySlot::slotIndex,
-			ByteBufCodecs.INT,
-			CaptchalogueInventorySlot::windowId,
-			CaptchalogueInventorySlot::new	
+				ByteBufCodecs.INT,
+				CaptchalogueInventorySlot::slotIndex,
+				ByteBufCodecs.INT,
+				CaptchalogueInventorySlot::windowId,
+				CaptchalogueInventorySlot::new
 		);
 		
 		@Override
@@ -120,6 +121,32 @@ public final class CaptchaDeckPackets
 				return;
 			
 			CaptchaDeckHandler.captchalogueItemInSlot(player, slotIndex, windowId);
+		}
+	}
+	
+	/**
+	 * Captchalogues the item being carried in a menu
+	 */
+	public record CaptchalogueCarriedItem() implements MSPacket.PlayToServer
+	{
+		public static final Type<CaptchalogueCarriedItem> ID = new Type<>(Minestuck.id("captcha_deck/captchalogue_carried_item"));
+		public static final StreamCodec<RegistryFriendlyByteBuf, CaptchalogueCarriedItem> STREAM_CODEC = StreamCodec.unit(new CaptchalogueCarriedItem());
+		
+		@Override
+		public Type<? extends CustomPacketPayload> type()
+		{
+			return ID;
+		}
+		
+		@Override
+		public void execute(IPayloadContext context, ServerPlayer player)
+		{
+			if(ServerEditHandler.isInEditmode(player))
+				return;
+			
+			AbstractContainerMenu containerMenu = player.containerMenu;
+			if(containerMenu != null && !containerMenu.getCarried().isEmpty())
+				CaptchaDeckHandler.captchalogueItemCarried(player);
 		}
 	}
 	

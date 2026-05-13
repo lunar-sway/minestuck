@@ -287,7 +287,8 @@ public class StatStorerBlockEntity extends BlockEntity
 	{
 		if(level != null && !level.isClientSide())
 		{
-			for(BlockPos blockPos : BlockPos.betweenClosed(eventPos.offset(16, 16, 16), eventPos.offset(-16, -16, -16)))
+			int radius = MinestuckConfig.SERVER.statStorerRadius.get();
+			for(BlockPos blockPos : BlockPos.betweenClosed(eventPos.offset(radius, radius, radius), eventPos.offset(-radius, -radius, -radius)))
 			{
 				if(!level.isAreaLoaded(blockPos, 0))
 					return;

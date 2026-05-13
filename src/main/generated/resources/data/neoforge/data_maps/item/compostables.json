@@ -114,6 +114,9 @@
     "minestuck:onion": {
       "chance": 0.5
     },
+    "minestuck:pan_cake": {
+      "chance": 1.0
+    },
     "minestuck:paradises_portabello": {
       "chance": 1.0
     },

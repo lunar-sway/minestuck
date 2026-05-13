@@ -1054,7 +1054,7 @@ public final class MSBlocks
 	public static final DeferredBlock<Block> PINK_FROSTED_TOP_LARGE_CAKE = REGISTER.register("pink_frosted_top_large_cake", () -> new Block(Block.Properties.of().mapColor(MapColor.COLOR_BROWN).strength(0.5F).sound(SoundType.WOOL)));
 	public static final DeferredBlock<Block> CHOCOLATEY_CAKE = REGISTER.register("chocolatey_cake", () -> new SimpleCakeBlock(ofFullCopy(Blocks.CAKE), 2, 0.5F, null));
 	public static final DeferredBlock<Block> MOON_CAKE = REGISTER.register("moon_cake", () -> new SimpleCakeBlock(ofFullCopy(Blocks.CAKE), 2, 0.5F, null));
-	
+	public static final DeferredBlock<Block> PAN_CAKE = REGISTER.register("pan_cake", () -> new SimpleCakeBlock(ofFullCopy(Blocks.CAKE), 2, 0.5F, null));
 	
 	//Explosives
 	public static final DeferredBlock<Block> PRIMED_TNT = REGISTER.register("primed_tnt", () -> new SpecialTNTBlock(Block.Properties.of().mapColor(MapColor.FIRE).ignitedByLava().strength(0.0F).sound(SoundType.GRASS).isRedstoneConductor(MSBlocks::never), true, false, false));
