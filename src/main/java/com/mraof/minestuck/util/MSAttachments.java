@@ -21,6 +21,8 @@ import net.neoforged.neoforge.attachment.IAttachmentHolder;
 import net.neoforged.neoforge.registries.DeferredRegister;
 import net.neoforged.neoforge.registries.NeoForgeRegistries;
 
+import java.util.ArrayList;
+import java.util.List;
 import java.util.function.Function;
 import java.util.function.Supplier;
 
@@ -36,6 +38,9 @@ public final class MSAttachments
 			() -> AttachmentType.builder(restricted(() -> ColorHandler.BuiltinColors.DEFAULT_COLOR, PlayerData.class)).serialize(Codec.INT).build());
 	public static final Supplier<AttachmentType<Long>> BOONDOLLARS = REGISTER.register("boondollars",
 			() -> AttachmentType.builder(restricted(() -> 0L, PlayerData.class)).serialize(Codec.LONG).build());
+	
+	public static final Supplier<AttachmentType<List<String>>> SELECTED_SPECIBUS = REGISTER.register("selected_specibus",
+			() -> AttachmentType.<List<String>>builder(() -> new ArrayList<>()).serialize(Codec.list(Codec.STRING)).copyOnDeath().build());
 	public static final Supplier<AttachmentType<GristCache>> GRIST_CACHE = REGISTER.register("grist_cache",
 			() -> AttachmentType.serializable(restricted(GristCache::new, PlayerData.class)).build());
 	public static final Supplier<AttachmentType<Double>> GUTTER_MULTIPLIER = REGISTER.register("gutter_multiplier",

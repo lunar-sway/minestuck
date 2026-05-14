@@ -1082,9 +1082,12 @@ public class MinestuckEnUsLanguageProvider extends MinestuckLanguageProvider
 		addItemTooltip(MSItems.TOO_HOT_TO_HANDLE, "This sick blade slices and burns through enemies like there is no tomorrow!");
 		addItem(MSItems.CALEDSCRATCH, "Caledscratch");
 		addItemTooltip(MSItems.CALEDSCRATCH, "The chosen weapon of Hephaestus, Guardian of the land of heat and clockwork. They say if you break this blade you incur their godly wrath.");
+		addItem(MSItems.HALF_CALEDSCRATCH, "½ Caledscratch");
+		addItemTooltip(MSItems.HALF_CALEDSCRATCH, "The chosen weapon of Hephaestus, Guardian of the land of heat and clockwork. Ugh...");
 		addItem(MSItems.CALEDFWLCH, "Caledfwlch");
 		addItemTooltip(MSItems.CALEDFWLCH, "Dumb Welsh Sword. Probably has some chamic destiny.");
 		addItem(MSItems.ROYAL_DERINGER, "Royal Deringer");
+		addItem(MSItems.HALF_ROYAL_DERINGER, "½ Royal Deringer");
 		addItem(MSItems.CLAYMORE, "Claymore");
 		addItemTooltip(MSItems.CLAYMORE, "A featherweight amongst greatswords. It's still bloody heavy, though!");
 		addItem(MSItems.CUTLASS_OF_ZILLYWAIR, "Cutlass of Zillywair");
@@ -2155,6 +2158,7 @@ public class MinestuckEnUsLanguageProvider extends MinestuckLanguageProvider
 		addAdvancement(MSAdvancementProvider.BUY_OUT_SHOP, "Beware the Buyer", "Purchase every item available from a consort merchant");
 		addAdvancement(MSAdvancementProvider.BRICK_COMPUTER, "Brick Your Computer", "Did you try turning it on and off again?");
 		addAdvancement(MSAdvancementProvider.HAMMERGUY, "I Fucking Love Hammers", "Hahahah, hammer guy for life!");
+		addAdvancement(MSAdvancementProvider.CHEAP_PIECE_OF_SHIT, "CHEAP PIECE OF SHIT", "Break the bladekind weapon and get ½ of it");
 		
 		addLand(FungiLandType.FUNGI, "Fungi");
 		addLand(FungiLandType.DANK, "Dank");
@@ -2253,24 +2257,46 @@ public class MinestuckEnUsLanguageProvider extends MinestuckLanguageProvider
 		addEffect(MSEffects.SOPOR_SICKNESS, "Sopor Stupor");
 		addEffectDescription(MSEffects.SOPOR_SICKNESS, "Damages the player over time. Prevents the application of some effects, as long as their level is lower or equal");
 		
+		
+		
 		addStrife(KindAbstratusList.SWORD, "Bladekind");
+		addStrife(KindAbstratusList.HALF_SWORD, "½ Bladekind");
 		addStrife(KindAbstratusList.BOW, "Bowkind");
 		addStrife(KindAbstratusList.PICKAXE, "Pickaxekind");
 		addStrife(KindAbstratusList.AXE, "Axekind");
 		addStrife(KindAbstratusList.HOE, "Hoekind");
 		addStrife(KindAbstratusList.SHOVEL, "Spadekind");
 		addStrife(KindAbstratusList.HAMMER, "Hammerkind");
+		addStrife(KindAbstratusList.KNIFE, "Knifekind");
+		addStrife(KindAbstratusList.BATON, "Batonkind");
+		addStrife(KindAbstratusList.DICE, "Dicekind");
 		addStrife(KindAbstratusList.CANE, "Canekind");
 		addStrife(KindAbstratusList.CLUB, "Clubkind");
+		addStrife(KindAbstratusList.CLAW, "Clawkind");
+		addStrife(KindAbstratusList.CHAINSAW, "Sawkind");
+		addStrife(KindAbstratusList.LANCE, "Lancekind");
+		addStrife(KindAbstratusList.FAN, "Fankind");
 		addStrife(KindAbstratusList.SICKLE, "Sicklekind");
-		addStrife(KindAbstratusList.SPORK, "Sporkkind");
+		addStrife(KindAbstratusList.SCYTHE, "Scythekind");
+		addStrife(KindAbstratusList.STAFF, "Staffkind");
+		addStrife(KindAbstratusList.SPOON, "Spoonkind");
+		addStrife(KindAbstratusList.FORK, "Forkkind");
+//		addStrife(KindAbstratusList.SPORK, "Sporkkind");
+		addStrife(KindAbstratusList.NEEDLE, "Needlekind");
+		addStrife(KindAbstratusList.WAND, "Wandkind");
+		addStrife(KindAbstratusList.STAR, "Thrwstarkind");
+		addStrife(KindAbstratusList.CAKE, "Cakekind");
+		addStrife(KindAbstratusList.CROSSBOW, "Crossbowkind");
 		
 		add(MusicPlayerWeapon.TITLE, "Music Player");
 		add(MusicPlayerWeapon.HINT_INACTIVE, "Crouch and use to start playing");
 		add(CaptchaDeckHandler.TOO_LARGE, "Cannot captchalogue card, too much data stored");
 		add(GristCacheScreen.TITLE, "Grist Cache");
 		add(StrifeSpecibusScreen.TITLE, "Strife Specibus");
-		add(StrifeSpecibusScreen.KIND_ABSTRATUS, "Kind Abstratus");
+		add(StrifeSpecibusScreen.CONFIRM_TITLE, "Kind Abstrata");
+		add(StrifeSpecibusScreen.CONFIRM_BODY, "Add %s to your abstrata? This cannot be undone!");
+		add(StrifeSpecibusScreen.ABSTRATUS_PROMPT, "Choose Kind Abstrata (%s/4)");
+		add(StrifeSpecibusScreen.ABSTRATUS_FULL, "Kind Abstrata");
 		add(SylladexScreen.USE_ITEM, "Use Item");
 		add(EcheladderScreen.TITLE, "Echeladder");
 		add(EcheladderScreen.ATTACK, "Attack");

@@ -84,6 +84,10 @@ public class MinestuckItemModelProvider extends ItemModelProvider
 		handheldItem(MSItems.THORN_IN_YOUR_SIDE);
 		handheldItem(MSItems.ROSE_PROTOCOL);
 		
+		//1/2 Blades
+		handheldItem(MSItems.HALF_CALEDSCRATCH);
+		handheldItem(MSItems.HALF_ROYAL_DERINGER);
+		
 		//Knives
 		knifeWeapon(MSItems.DAGGER);
 		knifeWeapon(MSItems.DIAMOND_DAGGER);

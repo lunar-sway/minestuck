@@ -479,6 +479,9 @@ public final class MinestuckGristCostsProvider
 		GristCostRecipeBuilder.of(MSItems.THORN_IN_YOUR_SIDE.get()).grist(BUILD, 26).grist(RUBY, 1).build(recipeSaver);
 		GristCostRecipeBuilder.of(MSItems.ROSE_PROTOCOL.get()).grist(BUILD, 458).grist(IODINE, 114).grist(MERCURY, 92).grist(RUBY, 35).grist(URANIUM, 1).build(recipeSaver);
 		
+		GristCostRecipeBuilder.of(MSItems.HALF_ROYAL_DERINGER.get()).grist(BUILD, 3075).grist(GOLD, 2358).grist(MARBLE, 2260).build(recipeSaver);
+		GristCostRecipeBuilder.of(MSItems.HALF_CALEDSCRATCH.get()).grist(BUILD, 3000).grist(GARNET, 180).grist(MERCURY, 360).build(recipeSaver);
+		
 		GristCostRecipeBuilder.of(MSItems.DIAMOND_DAGGER.get()).grist(BUILD, 16).grist(DIAMOND, 36).build(recipeSaver);
 		GristCostRecipeBuilder.of(MSItems.PIGLINS_PRIDE.get()).grist(BUILD, 1730).grist(TAR, 865).grist(SULFUR, 692).grist(GOLD, 346).grist(URANIUM, 346).build(recipeSaver);
 		GristCostRecipeBuilder.of(MSItems.BASILISK_BREATH_DRAGONSLAYER.get()).grist(BUILD, 8176).grist(SHALE, 4088).grist(QUARTZ, 3270).grist(SULFUR, 3270).grist(AMETHYST, 2453).grist(URANIUM, 1635).build(recipeSaver);

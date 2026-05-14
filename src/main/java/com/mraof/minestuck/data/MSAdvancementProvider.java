@@ -47,6 +47,7 @@ public class MSAdvancementProvider implements AdvancementProvider.AdvancementGen
 	public static final String SEARCHING = "minestuck.searching";
 	public static final String LONG_TIME_COMING = "minestuck.long_time_coming";
 	public static final String CONNECT = "minestuck.connect";
+	public static final String CHEAP_PIECE_OF_SHIT = "minestuck.cheap_piece_of_shit";
 	public static final String SPEEDRUN = "minestuck.speedrun";
 	public static final String ENTRY = "minestuck.entry";
 	public static final String ALCHEMY = "minestuck.alchemy";
@@ -175,6 +176,9 @@ public class MSAdvancementProvider implements AdvancementProvider.AdvancementGen
 		AdvancementHolder hammerguy = Advancement.Builder.advancement().parent(root)
 				.display(MSItems.CLAW_HAMMER.get(), Component.translatable(title(HAMMERGUY)), Component.translatable(desc(HAMMERGUY)), null, AdvancementType.TASK, true, true, true)
 				.addCriterion("possess_hammer", InventoryChangeTrigger.TriggerInstance.hasItems(MSItems.CLAW_HAMMER.get())).save(saver, save_loc(HAMMERGUY));
+		AdvancementHolder cheapPieceOfShit = Advancement.Builder.advancement().parent(root)
+				.display(MSItems.HALF_CALEDSCRATCH.get(), Component.translatable(title(CHEAP_PIECE_OF_SHIT)), Component.translatable(desc(CHEAP_PIECE_OF_SHIT)), null, AdvancementType.CHALLENGE, true, true, true)
+				.addCriterion("bladekind_break", BladeKindBreakTrigger.TriggerInstance.any()).save(saver, save_loc(CHEAP_PIECE_OF_SHIT));
 		
 	}
 	

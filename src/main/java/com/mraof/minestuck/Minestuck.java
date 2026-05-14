@@ -145,7 +145,6 @@ public class Minestuck
 	{
 		MSSuggestionProviders.register();
 		
-		KindAbstratusList.registerTypes();
 		DeployList.registerItems();
 		MSDispenserBehaviours.registerBehaviours();
 		

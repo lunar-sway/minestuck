@@ -112,6 +112,10 @@ public class MSItems
 	public static final DeferredItem<Item> THORN_IN_YOUR_SIDE = REGISTER.register("thorn_in_your_side", () -> new WeaponItem(new WeaponItem.Builder(MSItemTypes.ORGANIC_TIER, 3, -2.4F).efficiency(1.0F).set(MSItemTypes.SWORD_TOOL).add(OnHitEffect.SWEEP), new Item.Properties()));
 	public static final DeferredItem<Item> ROSE_PROTOCOL = REGISTER.register("rose_protocol", () -> new WeaponItem(new WeaponItem.Builder(Tiers.DIAMOND, 3, -2.4F).efficiency(1.0F).set(MSItemTypes.SWORD_TOOL).add(OnHitEffect.SWEEP).add(OnHitEffect.setOnFire(6)), new Item.Properties().rarity(Rarity.UNCOMMON)));
 	
+	// 1/2 Blades
+	public static final DeferredItem<Item> HALF_CALEDSCRATCH = REGISTER.register("half_caledscratch", () -> new WeaponItem(new WeaponItem.Builder(Tiers.DIAMOND, 4, -2.4F).efficiency(15.0F).set(MSItemTypes.SWORD_TOOL).add(OnHitEffect.SWEEP), new Item.Properties().rarity(Rarity.RARE)));
+	public static final DeferredItem<Item> HALF_ROYAL_DERINGER = REGISTER.register("half_royal_deringer", () -> new WeaponItem(new WeaponItem.Builder(MSItemTypes.DENIZEN_TIER, 4, -2.4F).efficiency(15.0F).set(MSItemTypes.SWORD_TOOL).add(OnHitEffect.SWEEP), new Item.Properties().rarity(Rarity.EPIC)));
+	
 	
 	//Knives
 	public static final DeferredItem<Item> DAGGER = REGISTER.register("dagger", () -> new WeaponItem(new WeaponItem.Builder(Tiers.IRON, 0, -2.0F).efficiency(1.0F).set(MSItemTypes.KNIFE_TOOL).add(OnHitEffect.backstab(3)), new Item.Properties()));

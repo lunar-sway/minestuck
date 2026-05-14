@@ -1,0 +1,11 @@
+{
+  "type": "minestuck:grist_cost",
+  "grist_cost": {
+    "minestuck:build": 3000,
+    "minestuck:garnet": 180,
+    "minestuck:mercury": 360
+  },
+  "ingredient": {
+    "item": "minestuck:half_caledscratch"
+  }
+}

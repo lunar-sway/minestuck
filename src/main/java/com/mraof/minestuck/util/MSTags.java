@@ -122,6 +122,8 @@ public class MSTags
 	
 	public static class Items
 	{
+		public static final TagKey<Item> BOWS = tag("bows");
+		public static final TagKey<Item> CROSSBOWS = tag("crossbows");
 		public static final TagKey<Item> GLOWING_LOGS = tag("logs/glowing");
 		public static final TagKey<Item> FROST_LOGS = tag("logs/frost");
 		public static final TagKey<Item> RAINBOW_LOGS = tag("logs/rainbow");
@@ -161,6 +163,37 @@ public class MSTags
 		public static final TagKey<Item> UNREADABLE = tag("unreadable");
 		public static final TagKey<Item> LEGENDARY = tag("legendary");
 		public static final TagKey<Item> CRUXITE_ARTIFACTS = tag("cruxite_artifacts");
+		
+		// Kind Abstractuses
+		public static final TagKey<Item> KIND_SWORD = tag("kind/sword");
+		public static final TagKey<Item> KIND_HALF_SWORD = tag("kind/half_sword");
+		public static final TagKey<Item> KIND_BOW = tag("kind/bow");
+		public static final TagKey<Item> KIND_PICKAXE = tag("kind/pickaxe");
+		public static final TagKey<Item> KIND_AXE = tag("kind/axe");
+		public static final TagKey<Item> KIND_HOE = tag("kind/hoe");
+		public static final TagKey<Item> KIND_SHOVEL = tag("kind/shovel");
+		
+		public static final TagKey<Item> KIND_HAMMER = tag("kind/hammer");
+		public static final TagKey<Item> KIND_KNIFE = tag("kind/knife");
+		public static final TagKey<Item> KIND_BATON = tag("kind/baton");
+		public static final TagKey<Item> KIND_DICE = tag("kind/dice");
+		public static final TagKey<Item> KIND_CANE = tag("kind/cane");
+		public static final TagKey<Item> KIND_CLUB = tag("kind/club");
+		public static final TagKey<Item> KIND_CLAW = tag("kind/claw");
+		public static final TagKey<Item> KIND_CHAINSAW = tag("kind/chainsaw");
+		public static final TagKey<Item> KIND_LANCE = tag("kind/lance");
+		public static final TagKey<Item> KIND_FAN = tag("kind/fan");
+		public static final TagKey<Item> KIND_SICKLE = tag("kind/sickle");
+		public static final TagKey<Item> KIND_SCYTHE = tag("kind/scythe");
+		public static final TagKey<Item> KIND_STAFF = tag("kind/staff");
+		public static final TagKey<Item> KIND_SPOON = tag("kind/spoon");
+		public static final TagKey<Item> KIND_FORK = tag("kind/fork");
+		//		public static final TagKey<Item> KIND_SPORK = tag("kind/spork");
+		public static final TagKey<Item> KIND_NEEDLE = tag("kind/needle");
+		public static final TagKey<Item> KIND_WAND = tag("kind/wand");
+		public static final TagKey<Item> KIND_STAR = tag("kind/star");
+		public static final TagKey<Item> KIND_CAKE = tag("kind/cake");
+		public static final TagKey<Item> KIND_CROSSBOW = tag("kind/crossbow");
 
 		private static TagKey<Item> tag(String name)
 		{

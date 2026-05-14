@@ -2,6 +2,7 @@ package com.mraof.minestuck.event;
 
 import com.mraof.minestuck.Minestuck;
 import com.mraof.minestuck.MinestuckConfig;
+import com.mraof.minestuck.advancements.MSCriteriaTriggers;
 import com.mraof.minestuck.block.MSBlocks;
 import com.mraof.minestuck.effects.CreativeShockEffect;
 import com.mraof.minestuck.effects.MSEffects;
@@ -13,15 +14,19 @@ import com.mraof.minestuck.inventory.captchalogue.CaptchaDeckHandler;
 import com.mraof.minestuck.inventory.captchalogue.HashMapModus;
 import com.mraof.minestuck.inventory.captchalogue.Modus;
 import com.mraof.minestuck.item.MSItems;
+import com.mraof.minestuck.network.SyncSpecibusPacket;
 import com.mraof.minestuck.player.EnumAspect;
 import com.mraof.minestuck.player.IdentifierHandler;
+import com.mraof.minestuck.player.KindAbstratusList;
 import com.mraof.minestuck.player.Title;
 import com.mraof.minestuck.skaianet.TitleSelectionHook;
+import com.mraof.minestuck.util.MSAttachments;
 import com.mraof.minestuck.world.storage.MSExtraData;
 import net.minecraft.server.MinecraftServer;
 import net.minecraft.server.level.ServerPlayer;
 import net.minecraft.sounds.SoundEvents;
 import net.minecraft.sounds.SoundSource;
+import net.minecraft.world.InteractionHand;
 import net.minecraft.world.effect.MobEffect;
 import net.minecraft.world.effect.MobEffectInstance;
 import net.minecraft.world.effect.MobEffects;
@@ -29,6 +34,7 @@ import net.minecraft.world.entity.Entity;
 import net.minecraft.world.entity.EquipmentSlot;
 import net.minecraft.world.entity.LivingEntity;
 import net.minecraft.world.entity.item.ItemEntity;
+import net.minecraft.world.item.Item;
 import net.minecraft.world.item.ItemStack;
 import net.minecraft.world.item.Items;
 import net.minecraft.world.phys.AABB;
@@ -37,23 +43,25 @@ import net.neoforged.bus.api.SubscribeEvent;
 import net.neoforged.fml.common.EventBusSubscriber;
 import net.neoforged.neoforge.common.util.FakePlayer;
 import net.neoforged.neoforge.event.ServerChatEvent;
+import net.neoforged.neoforge.event.TagsUpdatedEvent;
 import net.neoforged.neoforge.event.entity.item.ItemExpireEvent;
-import net.neoforged.neoforge.event.entity.living.LivingDamageEvent;
-import net.neoforged.neoforge.event.entity.living.LivingDeathEvent;
-import net.neoforged.neoforge.event.entity.living.LivingIncomingDamageEvent;
-import net.neoforged.neoforge.event.entity.living.MobEffectEvent;
+import net.neoforged.neoforge.event.entity.living.*;
 import net.neoforged.neoforge.event.entity.player.CriticalHitEvent;
+import net.neoforged.neoforge.event.entity.player.PlayerDestroyItemEvent;
 import net.neoforged.neoforge.event.entity.player.PlayerEvent;
 import net.neoforged.neoforge.event.furnace.FurnaceFuelBurnTimeEvent;
 import net.neoforged.neoforge.event.server.ServerStoppedEvent;
 import net.neoforged.neoforge.event.tick.ServerTickEvent;
+import net.neoforged.neoforge.network.PacketDistributor;
 import net.neoforged.neoforge.server.ServerLifecycleHooks;
 
+import java.util.ArrayList;
 import java.util.List;
 
 @EventBusSubscriber(modid = Minestuck.MOD_ID, bus = EventBusSubscriber.Bus.GAME)
 public class ServerEventHandler
 {
+	private static final float[] DAMAGE_MULTIPLIERS = { 2.0f, 1.75f, 1.5f, 1.25f };
 	@SubscribeEvent
 	public static void serverStopped(ServerStoppedEvent event)
 	{
@@ -109,6 +117,17 @@ public class ServerEventHandler
 			boolean attackerIsRealPlayer = attacker instanceof ServerPlayer && !(attacker instanceof FakePlayer);
 			boolean injuredIsRealPlayer = injured instanceof ServerPlayer && !(injured instanceof FakePlayer);
 			
+			if(attackerIsRealPlayer)
+			{
+				ServerPlayer player = (ServerPlayer) attacker;
+				List<String> selected = player.getData(MSAttachments.SELECTED_SPECIBUS);
+				
+				if(!selected.isEmpty() && !hasSpecibusMatch(player))
+				{
+					event.setAmount(event.getAmount() * 0.15f);
+				}
+			}
+			
 			if(attackerIsRealPlayer && injured instanceof UnderlingEntity)
 			{
 				//Increase damage to underling
@@ -126,6 +145,100 @@ public class ServerEventHandler
 		{
 			underling.onEntityDamaged(event.getSource(), event.getAmount());
 		}
+	}
+	
+	//	private static KindAbstratusType getSelectedSpecibus(ServerPlayer player)
+//	{
+//		List<String> selected = player.getData(MSAttachments.SELECTED_SPECIBUS);
+//
+//		if(selected.isEmpty())
+//			return null;
+//
+//		return KindAbstratusList.getTypeFromName(selected);
+//	}
+	
+	private static void syncSpecibus(ServerPlayer player)
+	{
+		List<String> selected = player.getData(MSAttachments.SELECTED_SPECIBUS);
+		
+		if(!selected.isEmpty())
+		{
+			PacketDistributor.sendToPlayer(player,
+					new SyncSpecibusPacket(selected));
+		}
+	}
+	
+	@SubscribeEvent
+	public static void onPlayerLogin(PlayerEvent.PlayerLoggedInEvent event)
+	{
+		if(event.getEntity() instanceof ServerPlayer player)
+			syncSpecibus(player);
+	}
+	
+	private static boolean hasSpecibusMatch(ServerPlayer player)
+	{
+		List<String> selected = player.getData(MSAttachments.SELECTED_SPECIBUS);
+		if(selected.isEmpty()) return false;
+		
+		return selected.stream()
+				.map(KindAbstratusList::getTypeFromName)
+				.filter(java.util.Objects::nonNull)
+				.anyMatch(type -> type.partOf(player.getMainHandItem()));
+	}
+
+//		@SubscribeEvent
+//	public static void onLivingAttack(LivingIncomingDamageEvent event) {
+//		if (!(event.getSource().getEntity() instanceof ServerPlayer player)) return;
+//
+//		String selected = player.getData(MSAttachments.SELECTED_SPECIBUS);
+//		if (selected.isEmpty()) return;
+//
+//		KindAbstratusType type = KindAbstratusList.getTypeFromName(selected);
+//		if (type == null) return;
+//
+//		if (!type.partOf(player.getMainHandItem())) {
+//			float reducedDamage = event.getAmount() * 0.15f;
+//			event.setAmount(reducedDamage);
+//		}
+//	}
+	// [debug_stuff]
+/*	@SubscribeEvent
+	public static void onLivingAttack(LivingIncomingDamageEvent event)
+	{
+		if(!(event.getSource().getEntity() instanceof ServerPlayer attacker)) return;
+		
+		String selected = attacker.getData(MSAttachments.SELECTED_SPECIBUS);
+		if(selected.isEmpty()) return;
+		
+		KindAbstratusType type = KindAbstratusList.getTypeFromName(selected);
+		if(type == null) return;
+		
+		ItemStack held = attacker.getMainHandItem();
+		
+		if(!type.partOf(held))
+		{
+			event.setCanceled(true);
+		}
+	}*/
+	
+	@SubscribeEvent
+	public static void onLivingDamagePre(LivingDamageEvent.Pre event)
+	{
+		if(!(event.getSource().getEntity() instanceof ServerPlayer player)) return;
+		
+		List<String> selected = player.getData(MSAttachments.SELECTED_SPECIBUS);
+		if(selected.isEmpty()) return;
+		
+		if(hasSpecibusMatch(player))
+		{
+			float multiplier = DAMAGE_MULTIPLIERS[Math.min(selected.size(), 4) - 1];
+			event.setNewDamage(event.getNewDamage() * multiplier);
+		}
+	}
+	
+	@SubscribeEvent
+	public static void onTagsUpdated(TagsUpdatedEvent event) {
+		KindAbstratusList.reloadFromTags();
 	}
 	
 	@SubscribeEvent(priority = EventPriority.NORMAL, receiveCanceled = false)
@@ -193,6 +306,56 @@ public class ServerEventHandler
 	public static void playerChangedDimension(PlayerEvent.PlayerChangedDimensionEvent event)
 	{
 		TitleSelectionHook.cancelSelection((ServerPlayer) event.getEntity());
+		ServerPlayer player = (ServerPlayer) event.getEntity();
+		TitleSelectionHook.cancelSelection(player);
+		List<String> selected = player.getData(MSAttachments.SELECTED_SPECIBUS);
+		
+		if(!selected.isEmpty())
+		{
+			PacketDistributor.sendToPlayer(player,
+					new SyncSpecibusPacket(selected));
+		}
+	}
+	
+	@SubscribeEvent
+	public static void onEquipmentChange(LivingEquipmentChangeEvent event)
+	{
+		
+		if(!(event.getEntity() instanceof ServerPlayer player)) return;
+		if(event.getSlot() != EquipmentSlot.MAINHAND) return;
+		
+		ItemStack from = event.getFrom();
+		ItemStack to = event.getTo();
+		
+		if(from.isEmpty() || !to.isEmpty()) return;
+		if(from.getMaxDamage() <= 0) return;
+		if(from.getDamageValue() < from.getMaxDamage() - 2) return;
+		
+		Item halfItem = getHalfBlade(from.getItem());
+		if(halfItem == null) return;
+		
+		List<String> selected = new ArrayList<>(player.getData(MSAttachments.SELECTED_SPECIBUS));
+		if(!selected.contains(KindAbstratusList.SWORD)) return;
+		
+		player.setItemInHand(InteractionHand.MAIN_HAND, new ItemStack(halfItem));
+		
+		String halfSword = KindAbstratusList.HALF_SWORD;
+		if(!selected.contains(halfSword))
+		{
+			selected.add(halfSword);
+			player.setData(MSAttachments.SELECTED_SPECIBUS, selected);
+			PacketDistributor.sendToPlayer(player, new SyncSpecibusPacket(selected));
+		}
+		
+		MSCriteriaTriggers.BLADEKIND_BREAK.get().trigger(player);
+	}
+	
+	private static Item getHalfBlade(Item item)
+	{
+		
+		if(item == MSItems.CALEDSCRATCH.get()) return MSItems.HALF_CALEDSCRATCH.get();
+		if(item == MSItems.ROYAL_DERINGER.get()) return MSItems.HALF_ROYAL_DERINGER.get();
+		return null;
 	}
 	
 	@SubscribeEvent(priority=EventPriority.LOW, receiveCanceled=false)

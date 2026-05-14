@@ -1640,6 +1640,9 @@ public final class MSCreativeTabs
 		output.accept(MSItems.THORN_IN_YOUR_SIDE.get());
 		output.accept(MSItems.ROSE_PROTOCOL.get());
 		
+		output.accept(MSItems.HALF_CALEDSCRATCH.get());
+		output.accept(MSItems.HALF_ROYAL_DERINGER.get());
+		
 		output.accept(MSItems.DAGGER.get());
 		output.accept(MSItems.DIAMOND_DAGGER.get());
 		output.accept(MSItems.PIGLINS_PRIDE.get());
