@@ -15,10 +15,7 @@ import com.mraof.minestuck.inventory.captchalogue.HashMapModus;
 import com.mraof.minestuck.inventory.captchalogue.Modus;
 import com.mraof.minestuck.item.MSItems;
 import com.mraof.minestuck.network.SyncSpecibusPacket;
-import com.mraof.minestuck.player.EnumAspect;
-import com.mraof.minestuck.player.IdentifierHandler;
-import com.mraof.minestuck.player.KindAbstratusList;
-import com.mraof.minestuck.player.Title;
+import com.mraof.minestuck.player.*;
 import com.mraof.minestuck.skaianet.TitleSelectionHook;
 import com.mraof.minestuck.util.MSAttachments;
 import com.mraof.minestuck.util.MSTags;
@@ -59,6 +56,7 @@ import net.neoforged.neoforge.network.PacketDistributor;
 import net.neoforged.neoforge.server.ServerLifecycleHooks;
 
 import java.util.ArrayList;
+import java.util.HashSet;
 import java.util.List;
 
 @EventBusSubscriber(modid = Minestuck.MOD_ID, bus = EventBusSubscriber.Bus.GAME)
@@ -181,10 +179,16 @@ public class ServerEventHandler
 		List<String> selected = player.getData(MSAttachments.SELECTED_SPECIBUS);
 		if(selected.isEmpty()) return false;
 		
-		return selected.stream()
-				.map(KindAbstratusList::getTypeFromName)
-				.filter(java.util.Objects::nonNull)
-				.anyMatch(type -> type.partOf(player.getMainHandItem()));
+		ItemStack held = player.getMainHandItem();
+		
+		List<String> matchingTypes = KindAbstratusList.getTypeList().stream()
+				.filter(type -> type.partOf(held))
+				.map(KindAbstratusType::getUnlocalizedName)
+				.toList();
+		
+		if(matchingTypes.isEmpty()) return false;
+		
+		return new HashSet<>(selected).containsAll(matchingTypes);
 	}
 
 //		@SubscribeEvent

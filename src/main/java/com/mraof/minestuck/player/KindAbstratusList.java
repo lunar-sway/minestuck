@@ -81,7 +81,8 @@ public class KindAbstratusList {
 		
 		BuiltInRegistries.ITEM.getTagNames()
 				.filter(key -> key.location().getNamespace().equals(Minestuck.MOD_ID)
-						&& key.location().getPath().startsWith("kind/"))
+						&& key.location().getPath().startsWith("kind/")
+						&& !key.location().getPath().equals("kind/weapons"))
 				.sorted(Comparator.comparing(key -> key.location().getPath()))
 				.forEach(key -> {
 					String suffix = key.location().getPath().substring("kind/".length());
