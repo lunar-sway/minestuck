@@ -24,21 +24,23 @@ public class SpecibusResetItem extends Item
 	}
 	
 	@Override
-	public InteractionResultHolder<ItemStack> use(Level level, Player player, InteractionHand hand)
+	public InteractionResultHolder<ItemStack> use(Level level, Player player, InteractionHand usedHand)
 	{
-		if(level.isClientSide) return InteractionResultHolder.success(player.getItemInHand(hand));
-		
-		ServerPlayer serverPlayer = (ServerPlayer) player;
-		
-		serverPlayer.setData(MSAttachments.SELECTED_SPECIBUS, new ArrayList<>());
-		PacketDistributor.sendToPlayer(serverPlayer,
-				new SyncSpecibusPacket(new ArrayList<>(), MinestuckConfig.SERVER.maxSpecibusCount.get()));
-		
-		level.playSound(null,
-				player.getX(), player.getY(), player.getZ(),
-				SoundEvents.ENCHANTMENT_TABLE_USE,
-				SoundSource.PLAYERS, 1.0F, 1.0F);
-		
-		return InteractionResultHolder.success(player.getItemInHand(hand));
+		ItemStack itemStack = player.getItemInHand(usedHand);
+		if(player instanceof ServerPlayer serverPlayer)
+		{
+			itemStack.shrink(1);
+			serverPlayer.setData(MSAttachments.SELECTED_SPECIBUS, new ArrayList<>());
+			
+			PacketDistributor.sendToPlayer(serverPlayer,
+					new SyncSpecibusPacket(new ArrayList<>(),
+							MinestuckConfig.SERVER.maxSpecibusCount.get()));
+			
+			level.playSound(null,
+					player.getX(), player.getY(), player.getZ(),
+					SoundEvents.ENCHANTMENT_TABLE_USE,
+					SoundSource.PLAYERS, 1.0F, 1.0F);
+		}
+		return InteractionResultHolder.sidedSuccess(itemStack, level.isClientSide());
 	}
 }
