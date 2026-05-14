@@ -1,4 +1,7 @@
 {
+  "remove": [
+    "#minestuck:kind/half_sword"
+  ],
   "values": [
     "#minecraft:swords",
     "minestuck:sord",

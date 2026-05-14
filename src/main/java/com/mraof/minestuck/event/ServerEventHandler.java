@@ -56,8 +56,8 @@ import net.neoforged.neoforge.network.PacketDistributor;
 import net.neoforged.neoforge.server.ServerLifecycleHooks;
 
 import java.util.ArrayList;
-import java.util.HashSet;
 import java.util.List;
+import java.util.Objects;
 
 @EventBusSubscriber(modid = Minestuck.MOD_ID, bus = EventBusSubscriber.Bus.GAME)
 public class ServerEventHandler
@@ -181,14 +181,10 @@ public class ServerEventHandler
 		
 		ItemStack held = player.getMainHandItem();
 		
-		List<String> matchingTypes = KindAbstratusList.getTypeList().stream()
-				.filter(type -> type.partOf(held))
-				.map(KindAbstratusType::getUnlocalizedName)
-				.toList();
-		
-		if(matchingTypes.isEmpty()) return false;
-		
-		return new HashSet<>(selected).containsAll(matchingTypes);
+		return selected.stream()
+				.map(KindAbstratusList::getTypeFromName)
+				.filter(Objects::nonNull)
+				.anyMatch(type -> type.partOf(held));
 	}
 
 //		@SubscribeEvent
