@@ -50,6 +50,9 @@ public class MSItems
 {
 	public static final DeferredRegister.Items REGISTER = DeferredRegister.createItems(Minestuck.MOD_ID);
 	
+	// Specibus
+	public static final DeferredItem<Item> STRIFE_DECK = REGISTER.register("strife_deck", () -> new SpecibusResetItem(new Item.Properties().stacksTo(1)));
+	
 	//Hammers
 	public static final DeferredItem<Item> CLAW_HAMMER = REGISTER.register("claw_hammer", () -> new WeaponItem(new WeaponItem.Builder(Tiers.IRON, 2, -2.8F).efficiency(1.0F).set(MSItemTypes.HAMMER_TOOL), new Item.Properties()));
 	public static final DeferredItem<Item> SLEDGE_HAMMER = REGISTER.register("sledge_hammer", () -> new WeaponItem(new WeaponItem.Builder(Tiers.IRON, 4, -3.2F).efficiency(4.0F).set(MSItemTypes.HAMMER_TOOL), new Item.Properties()));
@@ -113,9 +116,11 @@ public class MSItems
 	public static final DeferredItem<Item> ROSE_PROTOCOL = REGISTER.register("rose_protocol", () -> new WeaponItem(new WeaponItem.Builder(Tiers.DIAMOND, 3, -2.4F).efficiency(1.0F).set(MSItemTypes.SWORD_TOOL).add(OnHitEffect.SWEEP).add(OnHitEffect.setOnFire(6)), new Item.Properties().rarity(Rarity.UNCOMMON)));
 	
 	// 1/2 Blades
-	public static final DeferredItem<Item> HALF_CALEDSCRATCH = REGISTER.register("half_caledscratch", () -> new WeaponItem(new WeaponItem.Builder(Tiers.DIAMOND, 4, -2.4F).efficiency(15.0F).set(MSItemTypes.SWORD_TOOL).add(OnHitEffect.SWEEP), new Item.Properties().rarity(Rarity.RARE)));
-	public static final DeferredItem<Item> HALF_ROYAL_DERINGER = REGISTER.register("half_royal_deringer", () -> new WeaponItem(new WeaponItem.Builder(MSItemTypes.DENIZEN_TIER, 4, -2.4F).efficiency(15.0F).set(MSItemTypes.SWORD_TOOL).add(OnHitEffect.SWEEP), new Item.Properties().rarity(Rarity.EPIC)));
-	
+	public static final DeferredItem<Item> HALF_KATANA = REGISTER.register("half_katana", () -> new WeaponItem(new WeaponItem.Builder(Tiers.IRON, 1, -2.4F).efficiency(15.0F).set(MSItemTypes.SWORD_TOOL).add(OnHitEffect.SWEEP), new Item.Properties()));
+	public static final DeferredItem<Item> HALF_CALEDFWLCH = REGISTER.register("half_caledfwlch", () -> new WeaponItem(new WeaponItem.Builder(MSItemTypes.WELSH_TIER, 2, -2.4F).efficiency(15.0F).set(MSItemTypes.SWORD_TOOL).add(OnHitEffect.SWEEP), new Item.Properties().rarity(Rarity.EPIC)));
+	public static final DeferredItem<Item> HALF_CALEDSCRATCH = REGISTER.register("half_caledscratch", () -> new WeaponItem(new WeaponItem.Builder(Tiers.DIAMOND, 3, -2.4F).efficiency(15.0F).set(MSItemTypes.SWORD_TOOL).add(OnHitEffect.SWEEP), new Item.Properties().rarity(Rarity.RARE)));
+	public static final DeferredItem<Item> HALF_ROYAL_DERINGER = REGISTER.register("half_royal_deringer", () -> new WeaponItem(new WeaponItem.Builder(MSItemTypes.DENIZEN_TIER, 3, -2.4F).efficiency(15.0F).set(MSItemTypes.SWORD_TOOL).add(OnHitEffect.SWEEP), new Item.Properties().rarity(Rarity.EPIC)));
+	public static final DeferredItem<Item> HALF_SCARLET_RIBBITAR = REGISTER.register("half_scarlet_ribbitar", () -> new WeaponItem(new WeaponItem.Builder(MSItemTypes.CORUNDUM_TIER, 3, -2.4F).efficiency(15.0F).set(MSItemTypes.SWORD_TOOL).add(OnHitEffect.SWEEP), new Item.Properties().rarity(Rarity.RARE)));
 	
 	//Knives
 	public static final DeferredItem<Item> DAGGER = REGISTER.register("dagger", () -> new WeaponItem(new WeaponItem.Builder(Tiers.IRON, 0, -2.0F).efficiency(1.0F).set(MSItemTypes.KNIFE_TOOL).add(OnHitEffect.backstab(3)), new Item.Properties()));

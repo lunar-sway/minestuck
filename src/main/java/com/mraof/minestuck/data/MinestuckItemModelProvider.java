@@ -26,6 +26,9 @@ public class MinestuckItemModelProvider extends ItemModelProvider
 	{
 		DreamerMoonBlocksData.addItems(this);
 		
+		// Specibuses
+		simpleItem(MSItems.STRIFE_DECK);
+		
 		//Hammers
 		handheldItem(MSItems.CLAW_HAMMER);
 		handheldItem(MSItems.SLEDGE_HAMMER);
@@ -85,6 +88,9 @@ public class MinestuckItemModelProvider extends ItemModelProvider
 		handheldItem(MSItems.ROSE_PROTOCOL);
 		
 		//1/2 Blades
+		handheldItem(MSItems.HALF_KATANA);
+		handheldItem(MSItems.HALF_CALEDFWLCH);
+		handheldItem(MSItems.HALF_SCARLET_RIBBITAR);
 		handheldItem(MSItems.HALF_CALEDSCRATCH);
 		handheldItem(MSItems.HALF_ROYAL_DERINGER);
 		

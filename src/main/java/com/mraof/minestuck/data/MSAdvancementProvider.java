@@ -177,7 +177,7 @@ public class MSAdvancementProvider implements AdvancementProvider.AdvancementGen
 				.display(MSItems.CLAW_HAMMER.get(), Component.translatable(title(HAMMERGUY)), Component.translatable(desc(HAMMERGUY)), null, AdvancementType.TASK, true, true, true)
 				.addCriterion("possess_hammer", InventoryChangeTrigger.TriggerInstance.hasItems(MSItems.CLAW_HAMMER.get())).save(saver, save_loc(HAMMERGUY));
 		AdvancementHolder cheapPieceOfShit = Advancement.Builder.advancement().parent(root)
-				.display(MSItems.HALF_CALEDSCRATCH.get(), Component.translatable(title(CHEAP_PIECE_OF_SHIT)), Component.translatable(desc(CHEAP_PIECE_OF_SHIT)), null, AdvancementType.CHALLENGE, true, true, true)
+				.display(MSItems.HALF_KATANA.get(), Component.translatable(title(CHEAP_PIECE_OF_SHIT)), Component.translatable(desc(CHEAP_PIECE_OF_SHIT)), null, AdvancementType.CHALLENGE, true, true, true)
 				.addCriterion("bladekind_break", BladeKindBreakTrigger.TriggerInstance.any()).save(saver, save_loc(CHEAP_PIECE_OF_SHIT));
 		
 	}

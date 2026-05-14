@@ -1,0 +1,16 @@
+{
+  "values": [
+    "#minestuck:kind/sword",
+    "#minestuck:kind/half_sword",
+    "#minestuck:kind/bow",
+    "#minestuck:kind/hammer",
+    "#minestuck:kind/cane",
+    "#minestuck:kind/club",
+    "#minestuck:kind/sickle",
+    "#minestuck:kind/chainsaw",
+    "#minestuck:kind/pickaxe",
+    "#minestuck:kind/axe",
+    "#minestuck:kind/hoe",
+    "#minestuck:kind/shovel"
+  ]
+}

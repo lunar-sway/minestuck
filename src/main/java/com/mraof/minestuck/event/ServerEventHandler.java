@@ -21,7 +21,10 @@ import com.mraof.minestuck.player.KindAbstratusList;
 import com.mraof.minestuck.player.Title;
 import com.mraof.minestuck.skaianet.TitleSelectionHook;
 import com.mraof.minestuck.util.MSAttachments;
+import com.mraof.minestuck.util.MSTags;
 import com.mraof.minestuck.world.storage.MSExtraData;
+import net.minecraft.core.registries.BuiltInRegistries;
+import net.minecraft.resources.ResourceLocation;
 import net.minecraft.server.MinecraftServer;
 import net.minecraft.server.level.ServerPlayer;
 import net.minecraft.sounds.SoundEvents;
@@ -61,7 +64,6 @@ import java.util.List;
 @EventBusSubscriber(modid = Minestuck.MOD_ID, bus = EventBusSubscriber.Bus.GAME)
 public class ServerEventHandler
 {
-	private static final float[] DAMAGE_MULTIPLIERS = { 2.0f, 1.75f, 1.5f, 1.25f };
 	@SubscribeEvent
 	public static void serverStopped(ServerStoppedEvent event)
 	{
@@ -163,8 +165,7 @@ public class ServerEventHandler
 		
 		if(!selected.isEmpty())
 		{
-			PacketDistributor.sendToPlayer(player,
-					new SyncSpecibusPacket(selected));
+			PacketDistributor.sendToPlayer(player, new SyncSpecibusPacket(selected, MinestuckConfig.SERVER.maxSpecibusCount.get()));
 		}
 	}
 	
@@ -220,7 +221,15 @@ public class ServerEventHandler
 			event.setCanceled(true);
 		}
 	}*/
-	
+	private static float getDamageMultiplier(int selectedCount)
+	{
+		int max = MinestuckConfig.SERVER.maxSpecibusCount.get();
+		if(selectedCount <= 0) return 1.0f;
+		if(selectedCount >= max) return 1.0f;
+		float step = 0.75f / (max - 1);
+		return 2.0f - step * (selectedCount - 1);
+	}
+
 	@SubscribeEvent
 	public static void onLivingDamagePre(LivingDamageEvent.Pre event)
 	{
@@ -231,7 +240,7 @@ public class ServerEventHandler
 		
 		if(hasSpecibusMatch(player))
 		{
-			float multiplier = DAMAGE_MULTIPLIERS[Math.min(selected.size(), 4) - 1];
+			float multiplier = getDamageMultiplier(selected.size());
 			event.setNewDamage(event.getNewDamage() * multiplier);
 		}
 	}
@@ -313,7 +322,7 @@ public class ServerEventHandler
 		if(!selected.isEmpty())
 		{
 			PacketDistributor.sendToPlayer(player,
-					new SyncSpecibusPacket(selected));
+					new SyncSpecibusPacket(selected, MinestuckConfig.SERVER.maxSpecibusCount.get()));
 		}
 	}
 	
@@ -331,7 +340,7 @@ public class ServerEventHandler
 		if(from.getMaxDamage() <= 0) return;
 		if(from.getDamageValue() < from.getMaxDamage() - 2) return;
 		
-		Item halfItem = getHalfBlade(from.getItem());
+		Item halfItem = getHalfBlade(from);
 		if(halfItem == null) return;
 		
 		List<String> selected = new ArrayList<>(player.getData(MSAttachments.SELECTED_SPECIBUS));
@@ -344,18 +353,21 @@ public class ServerEventHandler
 		{
 			selected.add(halfSword);
 			player.setData(MSAttachments.SELECTED_SPECIBUS, selected);
-			PacketDistributor.sendToPlayer(player, new SyncSpecibusPacket(selected));
+			PacketDistributor.sendToPlayer(player, new SyncSpecibusPacket(selected, MinestuckConfig.SERVER.maxSpecibusCount.get()));
 		}
 		
 		MSCriteriaTriggers.BLADEKIND_BREAK.get().trigger(player);
 	}
 	
-	private static Item getHalfBlade(Item item)
+	private static Item getHalfBlade(ItemStack stack)
 	{
+		if(!stack.is(MSTags.Items.KIND_SWORD)) return null;
+		ResourceLocation id = BuiltInRegistries.ITEM.getKey(stack.getItem());
+		ResourceLocation halfId = Minestuck.id("half_" + id.getPath());
 		
-		if(item == MSItems.CALEDSCRATCH.get()) return MSItems.HALF_CALEDSCRATCH.get();
-		if(item == MSItems.ROYAL_DERINGER.get()) return MSItems.HALF_ROYAL_DERINGER.get();
-		return null;
+		return BuiltInRegistries.ITEM.getOptional(halfId)
+				.filter(item -> new ItemStack(item).is(MSTags.Items.KIND_HALF_SWORD))
+				.orElse(null);
 	}
 	
 	@SubscribeEvent(priority=EventPriority.LOW, receiveCanceled=false)

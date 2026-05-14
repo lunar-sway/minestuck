@@ -1,0 +1,11 @@
+{
+  "type": "minestuck:grist_cost",
+  "grist_cost": {
+    "minestuck:build": 2048,
+    "minestuck:diamond": 256,
+    "minestuck:uranium": 512
+  },
+  "ingredient": {
+    "item": "minestuck:strife_deck"
+  }
+}

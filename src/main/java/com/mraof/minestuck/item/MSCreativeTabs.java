@@ -45,6 +45,8 @@ public final class MSCreativeTabs
 		output.accept(BoondollarsItem.setCount(new ItemStack(MSItems.BOONDOLLARS.get()), 1000));
 		output.accept(BoondollarsItem.setCount(new ItemStack(MSItems.BOONDOLLARS.get()), 10000));
 		
+		output.accept(MSItems.STRIFE_DECK.get());
+		
 		output.accept(MSItems.RAW_CRUXITE.get());
 		output.accept(MSItems.RAW_URANIUM.get());
 		output.accept(MSItems.ENERGY_CORE.get());
@@ -1640,6 +1642,9 @@ public final class MSCreativeTabs
 		output.accept(MSItems.THORN_IN_YOUR_SIDE.get());
 		output.accept(MSItems.ROSE_PROTOCOL.get());
 		
+		output.accept(MSItems.HALF_KATANA.get());
+		output.accept(MSItems.HALF_CALEDFWLCH.get());
+		output.accept(MSItems.HALF_SCARLET_RIBBITAR.get());
 		output.accept(MSItems.HALF_CALEDSCRATCH.get());
 		output.accept(MSItems.HALF_ROYAL_DERINGER.get());
 		

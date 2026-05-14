@@ -1,0 +1,11 @@
+{
+  "type": "minestuck:combination",
+  "input1": {
+    "tag": "minestuck:modus_card"
+  },
+  "input2": {
+    "tag": "minestuck:weapons"
+  },
+  "mode": "or",
+  "output": "minestuck:strife_deck"
+}

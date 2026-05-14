@@ -1,5 +1,6 @@
 package com.mraof.minestuck.client.gui.playerStats;
 
+import com.mraof.minestuck.client.ClientSpecibusData;
 import com.mraof.minestuck.network.SpecibusPacket;
 import com.mraof.minestuck.player.KindAbstratusList;
 import com.mraof.minestuck.player.KindAbstratusType;
@@ -59,11 +60,12 @@ public class StrifeSpecibusScreen extends PlayerStatsScreen
 		super.render(guiGraphics, mouseX, mouseY, partialTicks);
 		
 		List<String> selected = mc.player.getData(MSAttachments.SELECTED_SPECIBUS);
-		boolean isFull = selected.size() >= 4;
+		int maxCount = ClientSpecibusData.maxCount;
+		boolean isFull = selected.size() >= maxCount;
 		
 		String header = isFull
 				? Component.translatable(ABSTRATUS_FULL).getString()
-				: Component.translatable(ABSTRATUS_PROMPT, selected.size(), 4).getString();
+				: Component.translatable(ABSTRATUS_PROMPT, selected.size(), maxCount).getString();
 		guiGraphics.drawString(font, header,
 				(int) ((this.width / 2F) - mc.font.width(header) / 2F),
 				yOffset + 12, COLOR_TITLE, false);

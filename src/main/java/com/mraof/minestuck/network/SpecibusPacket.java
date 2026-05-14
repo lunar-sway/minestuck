@@ -1,6 +1,7 @@
 package com.mraof.minestuck.network;
 
 import com.mraof.minestuck.Minestuck;
+import com.mraof.minestuck.MinestuckConfig;
 import com.mraof.minestuck.player.KindAbstratusList;
 import com.mraof.minestuck.util.MSAttachments;
 import net.minecraft.network.FriendlyByteBuf;
@@ -29,13 +30,13 @@ public record SpecibusPacket(String specibusName) implements MSPacket.PlayToServ
 	{
 		List<String> selected = new ArrayList<>(player.getData(MSAttachments.SELECTED_SPECIBUS));
 		
-		if (selected.size() >= 4) return;
+		if(selected.size() >= MinestuckConfig.SERVER.maxSpecibusCount.get()) return;
 		if (selected.contains(specibusName())) return;
 		if (KindAbstratusList.getTypeFromName(specibusName()) == null) return;
 		
 		selected.add(specibusName());
 		player.setData(MSAttachments.SELECTED_SPECIBUS, selected);
 		
-		context.reply(new SyncSpecibusPacket(selected));
+		context.reply(new SyncSpecibusPacket(selected, MinestuckConfig.SERVER.maxSpecibusCount.get()));
 	}
 }

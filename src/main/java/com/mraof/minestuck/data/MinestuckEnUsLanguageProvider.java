@@ -1071,6 +1071,8 @@ public class MinestuckEnUsLanguageProvider extends MinestuckLanguageProvider
 		addItemTooltip(MSItems.FROSTY_MACUAHUITL, "Now featuring real Ice Shards");
 		addItem(MSItems.KATANA, "Katana");
 		addItemTooltip(MSItems.KATANA, "A powerful Katana, once wielded by the most powerful of Otaku Masters");
+		addItem(MSItems.HALF_KATANA, "½ Katana");
+		addItemTooltip(MSItems.HALF_KATANA, "So called \"powerful\" Katana. Shitty quality for shitty money");
 		addItem(MSItems.UNBREAKABLE_KATANA, "Unbreakable Katana");
 		addItemTooltip(MSItems.UNBREAKABLE_KATANA, "This Katana has been fused with bedrock to make it even more kawai- I mean powerful!");
 		addItem(MSItems.ANGEL_APOCALYPSE, "Angel Apocalypse");
@@ -1086,6 +1088,8 @@ public class MinestuckEnUsLanguageProvider extends MinestuckLanguageProvider
 		addItemTooltip(MSItems.HALF_CALEDSCRATCH, "The chosen weapon of Hephaestus, Guardian of the land of heat and clockwork. Ugh...");
 		addItem(MSItems.CALEDFWLCH, "Caledfwlch");
 		addItemTooltip(MSItems.CALEDFWLCH, "Dumb Welsh Sword. Probably has some chamic destiny.");
+		addItem(MSItems.HALF_CALEDFWLCH, "½ Caledfwlch");
+		addItemTooltip(MSItems.HALF_CALEDFWLCH, "Even dumber Welsh Sword. Probably has some chamic destiny.");
 		addItem(MSItems.ROYAL_DERINGER, "Royal Deringer");
 		addItem(MSItems.HALF_ROYAL_DERINGER, "½ Royal Deringer");
 		addItem(MSItems.CLAYMORE, "Claymore");
@@ -1097,6 +1101,7 @@ public class MinestuckEnUsLanguageProvider extends MinestuckLanguageProvider
 		addItem(MSItems.CRUEL_FATE_CRUCIBLE, "Cruel Fate Crucible");
 		addItemTooltip(MSItems.CRUEL_FATE_CRUCIBLE, "The aura of Nemesis enacts retribution on those who hurt it's wielder");
 		addItem(MSItems.SCARLET_RIBBITAR, "Scarlet Ribbitar");
+		addItem(MSItems.HALF_SCARLET_RIBBITAR, "½ Scarlet Ribbitar");
 		addItem(MSItems.DOGG_MACHETE, "Snoop Dogg Snow Cone Machete");
 		addItem(MSItems.COBALT_SABRE, "Cobalt Cobeam Coblade");
 		addItem(MSItems.QUANTUM_SABRE, "Quantum Sabre");
@@ -2257,7 +2262,8 @@ public class MinestuckEnUsLanguageProvider extends MinestuckLanguageProvider
 		addEffect(MSEffects.SOPOR_SICKNESS, "Sopor Stupor");
 		addEffectDescription(MSEffects.SOPOR_SICKNESS, "Damages the player over time. Prevents the application of some effects, as long as their level is lower or equal");
 		
-		
+		addItem(MSItems.STRIFE_DECK, "Strife Deck");
+		addTooltip(MSItems.STRIFE_DECK, "Allows you reset your Strife Deck");
 		
 		addStrife(KindAbstratusList.SWORD, "Bladekind");
 		addStrife(KindAbstratusList.HALF_SWORD, "½ Bladekind");

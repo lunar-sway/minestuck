@@ -481,6 +481,8 @@ public final class MinestuckGristCostsProvider
 		
 		GristCostRecipeBuilder.of(MSItems.HALF_ROYAL_DERINGER.get()).grist(BUILD, 3075).grist(GOLD, 2358).grist(MARBLE, 2260).build(recipeSaver);
 		GristCostRecipeBuilder.of(MSItems.HALF_CALEDSCRATCH.get()).grist(BUILD, 3000).grist(GARNET, 180).grist(MERCURY, 360).build(recipeSaver);
+		GristCostRecipeBuilder.of(MSItems.HALF_SCARLET_RIBBITAR.get()).grist(BUILD, 625).grist(RUBY, 862).grist(DIAMOND, 200).build(recipeSaver);
+		GristCostRecipeBuilder.of(MSItems.HALF_CALEDFWLCH.get()).grist(BUILD, 3281).grist(GOLD, 2494).grist(RUST, 1575).build(recipeSaver);
 		
 		GristCostRecipeBuilder.of(MSItems.DIAMOND_DAGGER.get()).grist(BUILD, 16).grist(DIAMOND, 36).build(recipeSaver);
 		GristCostRecipeBuilder.of(MSItems.PIGLINS_PRIDE.get()).grist(BUILD, 1730).grist(TAR, 865).grist(SULFUR, 692).grist(GOLD, 346).grist(URANIUM, 346).build(recipeSaver);
@@ -673,6 +675,8 @@ public final class MinestuckGristCostsProvider
 		GristCostRecipeBuilder.of(MSItems.UMBRAL_INFILTRATOR.get()).grist(BUILD, 600).grist(TAR, 450).grist(DIAMOND, 55).grist(MERCURY, 55).grist(QUARTZ, 1).build(recipeSaver);
 		GristCostRecipeBuilder.of(MSItems.SORCERERS_PINBALL.get()).grist(BUILD, 200).grist(MERCURY, 30).grist(IODINE, 5).build(recipeSaver);
 		GristCostRecipeBuilder.of(MSItems.MUSIC_SWORD.get()).grist(BUILD, 18760).grist(MARBLE, 1876 ).grist(RUST, 1407).grist(AMBER, 2345 ).build(recipeSaver);
+		
+		GristCostRecipeBuilder.of(MSItems.STRIFE_DECK.get()).grist(BUILD, 2048).grist(URANIUM, 512).grist(DIAMOND, 256).build(recipeSaver);
 		
 		GristCostRecipeBuilder.of(MSItems.ARRAY_MODUS_CARD.get()).grist(BUILD, 1024).grist(COBALT, 512).grist(DIAMOND, 256).grist(SHALE, 128).build(recipeSaver);
 		GristCostRecipeBuilder.of(MSItems.CAPTCHAROID_CAMERA.get()).grist(BUILD, 5000).grist(CAULK, 500).grist(GOLD, 500).grist(MARBLE, 500).grist(MERCURY, 500).grist(SHALE, 500).build(recipeSaver);

@@ -118,6 +118,9 @@ public class BetterCombatProvider implements DataProvider
 		addWeapon(MSItems.ANGEL_APOCALYPSE, RAPIER);
 		addWeapon(MSItems.FIRE_POKER, RAPIER);
 		
+		addWeapon(MSItems.HALF_KATANA, DAGGER);
+		addWeapon(MSItems.HALF_SCARLET_RIBBITAR, DAGGER);
+		addWeapon(MSItems.HALF_CALEDFWLCH, DAGGER);
 		addWeapon(MSItems.HALF_CALEDSCRATCH, DAGGER);
 		addWeapon(MSItems.HALF_ROYAL_DERINGER, DAGGER);
 		
