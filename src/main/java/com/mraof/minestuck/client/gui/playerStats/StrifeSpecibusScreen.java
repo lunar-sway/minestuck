@@ -1,5 +1,7 @@
 package com.mraof.minestuck.client.gui.playerStats;
 
+import com.google.common.collect.ImmutableList;
+import com.mojang.blaze3d.systems.RenderSystem;
 import com.mraof.minestuck.client.ClientSpecibusData;
 import com.mraof.minestuck.network.SpecibusPacket;
 import com.mraof.minestuck.player.KindAbstratusList;
@@ -7,8 +9,10 @@ import com.mraof.minestuck.player.KindAbstratusType;
 import com.mraof.minestuck.util.MSAttachments;
 import net.minecraft.client.gui.GuiGraphics;
 import net.minecraft.client.gui.screens.ConfirmScreen;
+import net.minecraft.client.resources.MobEffectTextureManager;
 import net.minecraft.network.chat.Component;
 import net.minecraft.resources.ResourceLocation;
+import net.minecraft.world.effect.MobEffects;
 import net.neoforged.neoforge.network.PacketDistributor;
 
 import javax.annotation.Nullable;
@@ -19,11 +23,11 @@ import java.util.List;
 public class StrifeSpecibusScreen extends PlayerStatsScreen
 {
 	public static final String TITLE = "minestuck.strife_specibus";
-	public static final String CONFIRM_TITLE = "minestuck.specibus.confirm_title";
+	public static final String ABSTRATA_TITLE = "minestuck.kind_abstrata";
 	public static final String CONFIRM_BODY = "minestuck.specibus.confirm_body";
-	public static final String ABSTRATUS_PROMPT = "minestuck.kind_abstratus_prompt";
-	public static final String ABSTRATUS_FULL = "minestuck.kind_abstratus_full";
-	
+	public static final String SLOTS = "minestuck.specibus.slots";
+	public static final String DAMAGE = "minestuck.specibus.damage";
+	public static final String DAMAGE_DESC = "minestuck.specibus.damage_desc";
 	private static final ResourceLocation GUI_TEXTURE = ResourceLocation.fromNamespaceAndPath("minestuck", "textures/gui/strife_selector.png");
 	private static final int COLUMN_WIDTH = 70;
 	private static final int COLUMNS = 3;
@@ -54,21 +58,22 @@ public class StrifeSpecibusScreen extends PlayerStatsScreen
 		guiGraphics.blit(GUI_TEXTURE, xOffset, yOffset, 0, 0, guiWidth, guiHeight);
 	}
 	
+	private static float getDisplayMultiplier(int count, int max)
+	{
+		if(count <= 0) return 1.0f;
+		if(max <= 1) return 2.0f;
+		float step = 0.75f / (max - 1);
+		return 2.0f - step * (count - 1);
+	}
 	@Override
 	public void render(GuiGraphics guiGraphics, int mouseX, int mouseY, float partialTicks)
 	{
 		super.render(guiGraphics, mouseX, mouseY, partialTicks);
 		
 		List<String> selected = mc.player.getData(MSAttachments.SELECTED_SPECIBUS);
-		int maxCount = ClientSpecibusData.maxCount;
-		boolean isFull = selected.size() >= maxCount;
+		boolean isFull = selected.size() >= ClientSpecibusData.maxCount;
 		
-		String header = isFull
-				? Component.translatable(ABSTRATUS_FULL).getString()
-				: Component.translatable(ABSTRATUS_PROMPT, selected.size(), maxCount).getString();
-		guiGraphics.drawString(font, header,
-				(int) ((this.width / 2F) - mc.font.width(header) / 2F),
-				yOffset + 12, COLOR_TITLE, false);
+		List<Component> tooltip = null;
 		
 		List<KindAbstratusType> types = KindAbstratusList.getTypeList();
 		for(int i = 0; i < types.size(); i++)
@@ -97,8 +102,49 @@ public class StrifeSpecibusScreen extends PlayerStatsScreen
 				guiGraphics.drawString(font, name, textX, cellY, isLocked ? COLOR_LOCKED : COLOR_UNSELECTED, false);
 			}
 		}
+		if(!selected.isEmpty())
+		{
+			int iconX = xOffset + 8;
+			int iconY = yOffset + 8;
+			
+			MobEffectTextureManager effectSprites = mc.getMobEffectTextures();
+			guiGraphics.blit(iconX, iconY, 0, 18, 18, effectSprites.get(MobEffects.DAMAGE_BOOST));
+			
+			float multiplier = getDisplayMultiplier(selected.size(), ClientSpecibusData.maxCount);
+			String multiplierText = Math.round(multiplier * 100) + "%";
+			
+			guiGraphics.drawString(font,
+					Component.translatable(DAMAGE),
+					iconX + 20, iconY, COLOR_TITLE, false);
+			guiGraphics.drawString(font,
+					multiplierText,
+					iconX + 20, iconY + 10, 0x0094FF, false);
+			
+			if(mouseInBounds(mouseY, iconY + 10, mouseX, iconX + 20, mc.font.width(multiplierText)))
+				tooltip = ImmutableList.of(
+						Component.translatable(DAMAGE_DESC)
+				);
+		}
+		
+		int slotsIconX = xOffset + guiWidth - 80;
+		int slotsIconY = yOffset + 8;
+		
+		RenderSystem.setShaderColor(1, 1, 1, 1);
+		guiGraphics.blit(PlayerStatsScreen.icons, slotsIconX, slotsIconY + 1, 16, 64, 16, 16);
+		
+		String slotsValue = String.valueOf(ClientSpecibusData.maxCount - selected.size());
+		
+		guiGraphics.drawString(font, Component.translatable(SLOTS), slotsIconX + 20, slotsIconY, COLOR_TITLE, false);
+		guiGraphics.drawString(font, slotsValue, slotsIconX + 20, slotsIconY + 10, 0x0094FF, false);
+		
 		drawActiveTabAndOther(guiGraphics, mouseX, mouseY);
 		
+		if(tooltip != null)
+			guiGraphics.renderComponentTooltip(font, tooltip, mouseX, mouseY);
+	}
+	private boolean mouseInBounds(int mouseY, int minY, int mouseX, int minX, int xDiff)
+	{
+		return (mouseY >= minY && mouseY < minY + mc.font.lineHeight) && (mouseX >= minX && mouseX < minX + xDiff);
 	}
 	
 	@Override
@@ -107,7 +153,7 @@ public class StrifeSpecibusScreen extends PlayerStatsScreen
 		if(button != 0) return super.mouseClicked(mouseX, mouseY, button);
 		
 		List<String> selected = mc.player.getData(MSAttachments.SELECTED_SPECIBUS);
-		if(selected.size() >= 4) return super.mouseClicked(mouseX, mouseY, button);
+		if(selected.size() >= ClientSpecibusData.maxCount) return super.mouseClicked(mouseX, mouseY, button);
 		
 		List<KindAbstratusType> types = KindAbstratusList.getTypeList();
 		for(int i = 0; i < types.size(); i++)
@@ -125,12 +171,13 @@ public class StrifeSpecibusScreen extends PlayerStatsScreen
 		}
 		return super.mouseClicked(mouseX, mouseY, button);
 	}
+	
 	private void openConfirmDialog(KindAbstratusType type)
 	{
 		pendingType = type;
 		mc.setScreen(new ConfirmScreen(
 				this::onConfirm,
-				Component.translatable(CONFIRM_TITLE),
+				Component.translatable(ABSTRATA_TITLE),
 				Component.translatable(CONFIRM_BODY, type.getDisplayName())
 		));
 	}

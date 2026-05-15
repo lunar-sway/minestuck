@@ -2299,10 +2299,9 @@ public class MinestuckEnUsLanguageProvider extends MinestuckLanguageProvider
 		add(CaptchaDeckHandler.TOO_LARGE, "Cannot captchalogue card, too much data stored");
 		add(GristCacheScreen.TITLE, "Grist Cache");
 		add(StrifeSpecibusScreen.TITLE, "Strife Specibus");
-		add(StrifeSpecibusScreen.CONFIRM_TITLE, "Kind Abstrata");
+		add(StrifeSpecibusScreen.ABSTRATA_TITLE, "Kind Abstrata");
+		add(StrifeSpecibusScreen.SLOTS, "Slots Left");
 		add(StrifeSpecibusScreen.CONFIRM_BODY, "Add %s to your abstrata? This cannot be undone!");
-		add(StrifeSpecibusScreen.ABSTRATUS_PROMPT, "Choose Kind Abstrata (%s/4)");
-		add(StrifeSpecibusScreen.ABSTRATUS_FULL, "Kind Abstrata");
 		add(SylladexScreen.USE_ITEM, "Use Item");
 		add(EcheladderScreen.TITLE, "Echeladder");
 		add(EcheladderScreen.ATTACK, "Attack");
@@ -2313,6 +2312,8 @@ public class MinestuckEnUsLanguageProvider extends MinestuckLanguageProvider
 		add(EcheladderScreen.DAMAGE_UNDERLING_INCREASE, "Damage against underlings: +%d%%");
 		add(EcheladderScreen.PROTECTION_UNDERLING, "Underling damage decreased to:");
 		add(EcheladderScreen.PROTECTION_UNDERLING_INCREASE, "Underling damage: -%.1f%%");
+		add(StrifeSpecibusScreen.DAMAGE, "Weapon Damage");
+		add(StrifeSpecibusScreen.DAMAGE_DESC, "Damage boost for weapons of active abstrata types");
 		add(Modus.CAPTCHA_LIMIT, "Reached max modi capacity for this rung");
 		add(InventoryEditmodeScreen.TITLE, "Deploy List");
 		add(EditmodeSettingsScreen.TITLE, "Editmode Settings");

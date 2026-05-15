@@ -224,8 +224,7 @@ public class ServerEventHandler
 	private static float getDamageMultiplier(int selectedCount)
 	{
 		int max = MinestuckConfig.SERVER.maxSpecibusCount.get();
-		if(selectedCount <= 0) return 1.0f;
-		if(selectedCount >= max) return 1.0f;
+		if(selectedCount <= 0 || max <= 1) return 1.0f;
 		float step = 0.75f / (max - 1);
 		return 2.0f - step * (selectedCount - 1);
 	}
@@ -351,6 +350,7 @@ public class ServerEventHandler
 		String halfSword = KindAbstratusList.HALF_SWORD;
 		if(!selected.contains(halfSword))
 		{
+			selected.remove(KindAbstratusList.SWORD);
 			selected.add(halfSword);
 			player.setData(MSAttachments.SELECTED_SPECIBUS, selected);
 			PacketDistributor.sendToPlayer(player, new SyncSpecibusPacket(selected, MinestuckConfig.SERVER.maxSpecibusCount.get()));
