@@ -37,6 +37,7 @@ import net.minecraft.world.entity.item.ItemEntity;
 import net.minecraft.world.item.Item;
 import net.minecraft.world.item.ItemStack;
 import net.minecraft.world.item.Items;
+import net.minecraft.world.item.enchantment.EnchantmentHelper;
 import net.minecraft.world.phys.AABB;
 import net.neoforged.bus.api.EventPriority;
 import net.neoforged.bus.api.SubscribeEvent;
@@ -55,9 +56,7 @@ import net.neoforged.neoforge.event.tick.ServerTickEvent;
 import net.neoforged.neoforge.network.PacketDistributor;
 import net.neoforged.neoforge.server.ServerLifecycleHooks;
 
-import java.util.ArrayList;
-import java.util.List;
-import java.util.Objects;
+import java.util.*;
 
 @EventBusSubscriber(modid = Minestuck.MOD_ID, bus = EventBusSubscriber.Bus.GAME)
 public class ServerEventHandler
@@ -325,7 +324,7 @@ public class ServerEventHandler
 		}
 	}
 	
-	@SubscribeEvent
+/*	@SubscribeEvent
 	public static void onEquipmentChange(LivingEquipmentChangeEvent event)
 	{
 		
@@ -345,7 +344,13 @@ public class ServerEventHandler
 		List<String> selected = new ArrayList<>(player.getData(MSAttachments.SELECTED_SPECIBUS));
 		if(!selected.contains(KindAbstratusList.SWORD)) return;
 		
-		player.setItemInHand(InteractionHand.MAIN_HAND, new ItemStack(halfItem));
+		ItemStack halfStack = new ItemStack(halfItem);
+		EnchantmentHelper.updateEnchantments(halfStack, mutable -> {
+			EnchantmentHelper.getEnchantmentsForCrafting(from).keySet().forEach(enchantment ->
+					mutable.set(enchantment, EnchantmentHelper.getEnchantmentsForCrafting(from).getLevel(enchantment))
+			);
+		});
+		player.setItemInHand(InteractionHand.MAIN_HAND, halfStack);
 		
 		String halfSword = KindAbstratusList.HALF_SWORD;
 		if(!selected.contains(halfSword))
@@ -357,7 +362,39 @@ public class ServerEventHandler
 		}
 		
 		MSCriteriaTriggers.BLADEKIND_BREAK.get().trigger(player);
+	}*/
+	@SubscribeEvent
+	public static void onItemDestroyed(PlayerDestroyItemEvent event) {
+		if (!(event.getEntity() instanceof ServerPlayer player)) return;
+		if (event.getHand() != InteractionHand.MAIN_HAND) return;
+
+		ItemStack from = event.getOriginal();
+		if (!from.isDamageableItem()) return;
+		Item halfItem = getHalfBlade(from);
+		if (halfItem == null) return;
+		
+		List<String> selected = new ArrayList<>(player.getData(MSAttachments.SELECTED_SPECIBUS));
+		if (!selected.contains(KindAbstratusList.SWORD)) return;
+		
+		ItemStack halfStack = new ItemStack(halfItem);
+		
+		EnchantmentHelper.updateEnchantments(halfStack, mutable -> {
+			EnchantmentHelper.getEnchantmentsForCrafting(from).keySet().forEach(enchantment ->
+					mutable.set(enchantment, EnchantmentHelper.getEnchantmentsForCrafting(from).getLevel(enchantment))
+			);
+		});
+		player.setItemInHand(InteractionHand.MAIN_HAND, halfStack);
+		
+		String halfSword = KindAbstratusList.HALF_SWORD;
+		if (!selected.contains(halfSword)) {
+			selected.remove(KindAbstratusList.SWORD);
+			selected.add(halfSword);
+			player.setData(MSAttachments.SELECTED_SPECIBUS, selected);
+			PacketDistributor.sendToPlayer(player, new SyncSpecibusPacket(selected, MinestuckConfig.SERVER.maxSpecibusCount.get()));
+		}
+		MSCriteriaTriggers.BLADEKIND_BREAK.get().trigger(player);
 	}
+	
 	
 	private static Item getHalfBlade(ItemStack stack)
 	{
