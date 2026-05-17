@@ -41,11 +41,11 @@ import java.util.Comparator;
 public class AnthvilBlockEntity extends MachineProcessBlockEntity implements MenuProvider
 {
 	public static final String TITLE = "container.minestuck.anthvil";
-	public static final short MAX_FUEL = 128;
-	public static final short MEND_FUEL_COST = 5;
+	public static final int MAX_FUEL = 128;
+	public static final int MEND_FUEL_COST = 5;
 	
-	private short fuel;
-	private final IUraniumHandler uraniumHandler = new SimpleUraniumHandler(() -> (int) MAX_FUEL, () -> (int) this.fuel, fuel -> this.fuel = (short) ((int) fuel))
+	private int fuel;
+	private final IUraniumHandler uraniumHandler = new SimpleUraniumHandler(() -> MAX_FUEL, () -> this.fuel, fuel -> this.fuel = fuel)
 	{
 		public boolean canExtractUranium()
 		{
@@ -64,7 +64,7 @@ public class AnthvilBlockEntity extends MachineProcessBlockEntity implements Men
 		@Override
 		public void set(int value)
 		{
-			fuel = (short) value;
+			fuel = value;
 		}
 	};
 	
@@ -85,7 +85,10 @@ public class AnthvilBlockEntity extends MachineProcessBlockEntity implements Men
 	{
 		super.loadAdditional(compound, provider);
 		
-		fuel = compound.getShort("fuel");
+		if (compound.contains("fuel", 2))
+			fuel = compound.getShort("fuel");
+		else
+			fuel = compound.getInt("fuel");
 	}
 	
 	@Override
@@ -93,7 +96,7 @@ public class AnthvilBlockEntity extends MachineProcessBlockEntity implements Men
 	{
 		super.saveAdditional(compound, provider);
 		
-		compound.putShort("fuel", fuel);
+		compound.putInt("fuel", fuel);
 	}
 	
 	@Override

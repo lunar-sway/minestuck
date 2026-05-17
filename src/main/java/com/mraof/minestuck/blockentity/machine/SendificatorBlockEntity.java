@@ -32,12 +32,12 @@ import java.util.Optional;
 public class SendificatorBlockEntity extends MachineProcessBlockEntity implements MenuProvider
 {
 	public static final String TITLE = "container.minestuck.sendificator";
-	public static final short MAX_FUEL = 128;
+	public static final int MAX_FUEL = 128;
 	
 	private final ProgressTracker progressTracker = new ProgressTracker(ProgressTracker.RunType.ONCE_OR_LOOPING, 0, this::setChanged, this::contentsValid);
 	
-	private short fuel;
-	private final IUraniumHandler uraniumHandler = new SimpleUraniumHandler(() -> (int) MAX_FUEL, () -> (int) this.fuel, fuel -> this.fuel = (short) ((int) fuel))
+	private int fuel;
+	private final IUraniumHandler uraniumHandler = new SimpleUraniumHandler(() -> MAX_FUEL, () -> this.fuel, fuel -> this.fuel = fuel)
 	{
 		public boolean canExtractUranium()
 		{
@@ -59,7 +59,7 @@ public class SendificatorBlockEntity extends MachineProcessBlockEntity implement
 		@Override
 		public void set(int value)
 		{
-			fuel = (short) value;
+			fuel = value;
 		}
 	};
 	private final OptionalPosHolder destinationHolder = OptionalPosHolder.forPos(() -> Optional.ofNullable(this.getDestinationBlockPos()));
@@ -101,7 +101,10 @@ public class SendificatorBlockEntity extends MachineProcessBlockEntity implement
 			this.destBlockPos = new BlockPos(destX, destY, destZ);
 		}
 		
-		fuel = compound.getShort("fuel");
+		if (compound.contains("fuel", 2))
+			fuel = compound.getShort("fuel");
+		else
+			fuel = compound.getInt("fuel");
 	}
 	
 	@Override
@@ -118,7 +121,7 @@ public class SendificatorBlockEntity extends MachineProcessBlockEntity implement
 			compound.putInt("destZ", destBlockPos.getZ());
 		}
 		
-		compound.putShort("fuel", fuel);
+		compound.putInt("fuel", fuel);
 	}
 	
 	@Override

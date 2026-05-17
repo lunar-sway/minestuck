@@ -20,10 +20,10 @@ public class PowerHubBlockEntity extends BlockEntity
 {
 	public static final String POWER_PROMPT = "block.minestuck.power_hub.power_prompt";
 	
-	public static final short MAX_POWER = 256;
+	public static final int MAX_POWER = 256;
 	
-	private short power;
-	private final IUraniumHandler powerHandler = new SimpleUraniumHandler(() -> (int) MAX_POWER, () -> (int) this.power, power -> this.power = (short) ((int) power))
+	private int power;
+	private final IUraniumHandler powerHandler = new SimpleUraniumHandler(() -> MAX_POWER, () -> this.power, power -> this.power = power)
 	{
 		public boolean canReceiveUranium()
 		{
@@ -41,7 +41,10 @@ public class PowerHubBlockEntity extends BlockEntity
 	{
 		super.loadAdditional(compound, provider);
 		
-		power = compound.getShort("power");
+		if (compound.contains("power", 2))
+			power = compound.getShort("power");
+		else
+			power = compound.getInt("power");
 	}
 	
 	@Override
@@ -49,7 +52,7 @@ public class PowerHubBlockEntity extends BlockEntity
 	{
 		super.saveAdditional(compound, provider);
 		
-		compound.putShort("power", power);
+		compound.putInt("power", power);
 	}
 	
 	public static void serverTick(Level level, BlockPos pos, BlockState state, PowerHubBlockEntity blockEntity)
@@ -88,9 +91,9 @@ public class PowerHubBlockEntity extends BlockEntity
 		}
 	}
 	
-	public short getPower()
+	public int getPower()
 	{
-		return (short) power;
+		return power;
 	}
 	
 	private void changePower(int amount)

@@ -51,12 +51,12 @@ public class UraniumCookerBlockEntity extends MachineProcessBlockEntity implemen
 		@Override
 		public void set(int value)
 		{
-			fuel = (short) value;
+			fuel = value;
 		}
 	};
 	
-	private short fuel;
-	private final IUraniumHandler uraniumHandler = new SimpleUraniumHandler(() -> (int) MAX_FUEL, () -> (int) this.fuel, fuel -> this.fuel = (short) ((int) fuel))
+	private int fuel;
+	private final IUraniumHandler uraniumHandler = new SimpleUraniumHandler(() -> MAX_FUEL, () -> this.fuel, fuel -> this.fuel = fuel)
 	{
 		public boolean canExtractUranium()
 		{
@@ -64,7 +64,7 @@ public class UraniumCookerBlockEntity extends MachineProcessBlockEntity implemen
 		}
 	};
 	
-	public static final short MAX_FUEL = 128;
+	public static final int MAX_FUEL = 128;
 	
 	public UraniumCookerBlockEntity(BlockPos pos, BlockState state)
 	{
@@ -82,7 +82,7 @@ public class UraniumCookerBlockEntity extends MachineProcessBlockEntity implemen
 	{
 		super.saveAdditional(compound, provider);
 		
-		compound.putShort("fuel", fuel);
+		compound.putInt("fuel", fuel);
 	}
 	
 	@Override
@@ -90,7 +90,10 @@ public class UraniumCookerBlockEntity extends MachineProcessBlockEntity implemen
 	{
 		super.loadAdditional(nbt, pRegistries);
 		
-		fuel = nbt.getShort("fuel");
+		if (nbt.contains("fuel", 2))
+			fuel = nbt.getShort("fuel");
+		else
+			fuel = nbt.getInt("fuel");
 	}
 	
 	@Override
