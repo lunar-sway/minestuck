@@ -2,7 +2,6 @@ package com.mraof.minestuck.player;
 
 import com.mraof.minestuck.Minestuck;
 import net.minecraft.core.registries.BuiltInRegistries;
-import net.minecraft.world.item.*;
 
 import java.util.ArrayList;
 import java.util.Comparator;
@@ -42,7 +41,7 @@ public class KindAbstratusList {
 	
 	private static ArrayList<KindAbstratusType> typeList = new ArrayList<>();
 	// [addons]
-	private static final List<KindAbstratusType> externalTypes = new ArrayList<>();
+	private static ArrayList<KindAbstratusType> externalTypes = new ArrayList<>();
 	
 	/*	public static void registerTypes()
 		{
@@ -109,7 +108,9 @@ public class KindAbstratusList {
 	}
 	
 	public static List<KindAbstratusType> getTypeList() {
-		return new ArrayList<KindAbstratusType>(typeList);
+		return new ArrayList<>(typeList);
 	}
-	
+	public static List<KindAbstratusType> getExternalType() {
+		return new ArrayList<>(externalTypes);
+	}
 }
