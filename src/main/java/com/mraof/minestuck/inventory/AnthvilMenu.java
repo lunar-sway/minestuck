@@ -1,8 +1,8 @@
 package com.mraof.minestuck.inventory;
 
+import com.mraof.minestuck.api.uranium.UraniumPower;
 import com.mraof.minestuck.block.MSBlocks;
-import com.mraof.minestuck.inventory.slot.InputSlot;
-import com.mraof.minestuck.item.MSItems;
+import com.mraof.minestuck.inventory.slot.UraniumPowerSlot;
 import net.minecraft.world.entity.player.Inventory;
 import net.minecraft.world.entity.player.Player;
 import net.minecraft.world.inventory.*;
@@ -43,7 +43,7 @@ public class AnthvilMenu extends AbstractContainerMenu
 		this.fuelHolder = fuelHolder;
 		
 		addSlot(new SlotItemHandler(inventory, 0, itemInputX, itemInputY));
-		addSlot(new InputSlot(inventory, 1, uraniumInputX, uraniumInputY, MSItems.RAW_URANIUM.get()));
+		addSlot(new UraniumPowerSlot(inventory, 1, uraniumInputX, uraniumInputY));
 		addDataSlot(fuelHolder);
 		
 		ContainerHelper.addPlayerInventorySlots(this::addSlot, 8, 84, playerInventory);
@@ -72,7 +72,7 @@ public class AnthvilMenu extends AbstractContainerMenu
 				result = moveItemStackTo(itemstackOrig, 3, allSlots, false);    //Send into the inventory
 			} else    //Shift-clicking from the inventory
 			{
-				if(itemstackOrig.getItem() == MSItems.RAW_URANIUM.get())
+				if(UraniumPower.hasUraniumPower(itemstackOrig))
 				{
 					result = moveItemStackTo(itemstackOrig, 1, 2, false);    //Send the uranium to the uranium input
 				} else
