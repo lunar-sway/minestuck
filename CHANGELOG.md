@@ -11,6 +11,7 @@ The format is based on [Keep a Changelog](https://keepachangelog.com/en/1.1.0/).
 - Players now cannot captchalogue items if they contain certain nested item components. This replaces the bugged maximum data system introduced in the last update
 - Uranium fuel is now data driven
 - Uranium power is now a neoforge capability, add-ons will have to update their machines
+- Weapons with additionnal knockback now use the Attack Knockback attribute
 
 ### Fixed
 
