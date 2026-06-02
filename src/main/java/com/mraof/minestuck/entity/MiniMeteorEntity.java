@@ -100,7 +100,7 @@ public class MiniMeteorEntity extends ThrowableProjectile implements ItemSupplie
 			Vec3 next = current.add(direction.scale(SPEED));
 			
 			Vec3 toTarget = Vec3.atCenterOf(targetPos).subtract(current);
-			if(toTarget.dot(direction) <= 0 || toTarget.length() <= SPEED)
+			if(toTarget.dot(direction) <= 0)
 			{
 				onImpactManual();
 				discard();

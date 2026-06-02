@@ -1,6 +1,7 @@
 package com.mraof.minestuck.client;
 
 import com.mraof.minestuck.Minestuck;
+import com.mraof.minestuck.MinestuckConfig;
 import com.mraof.minestuck.entry.meteor.MeteorManager;
 import net.neoforged.api.distmarker.Dist;
 import net.neoforged.bus.api.SubscribeEvent;
@@ -13,6 +14,7 @@ public class MeteorSkyEffect
 	@SubscribeEvent
 	public static void onFogColor(ViewportEvent.ComputeFogColor event)
 	{
+		if(!MinestuckConfig.CLIENT.meteorSkyFog.get()) return;
 		if(!MeteorClientHandler.hasActiveMeteor()) return;
 		
 		int ticksElapsed = MeteorClientHandler.getLocalPlayerMeteorTicks();

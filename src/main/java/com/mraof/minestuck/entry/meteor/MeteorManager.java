@@ -37,6 +37,7 @@ public class MeteorManager extends SavedData
 	
 	private static final Logger LOGGER = LogManager.getLogger();
 	private static final String DATA_NAME = Minestuck.MOD_ID + "_meteors";
+	private final Set<String> impactPending = new HashSet<>();
 	
 	/**
 	 * Total countdown: 4 min 13 sec = 253 seconds = 5060 ticks
@@ -201,17 +202,32 @@ public class MeteorManager extends SavedData
 		
 		for(MeteorCountdown cd : countdowns.values())
 		{
+			String key = cd.getPlayerKey();
+			
+			if(impactPending.contains(key))
+			{
+				handleImpact(cd);
+				toRemove.add(key);
+				continue;
+			}
+			
 			cd.tick();
 			processMilestones(cd);
 			
 			if(cd.isExpired())
 			{
-				handleImpact(cd);
-				toRemove.add(cd.getPlayerKey());
+				MeteorEntity meteor = findMeteorEntity(cd);
+				if(meteor != null)
+					meteor.moveTick(TOTAL_TICKS);
+				
+				impactPending.add(key);
 			}
 		}
 		
-		toRemove.forEach(countdowns::remove);
+		toRemove.forEach(key -> {
+			countdowns.remove(key);
+			impactPending.remove(key);
+		});
 	}
 	
 	private void processMilestones(MeteorCountdown cd)

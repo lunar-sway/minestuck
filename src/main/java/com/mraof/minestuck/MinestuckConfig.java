@@ -48,6 +48,7 @@ public class MinestuckConfig
 		public final BooleanValue alchemyIcons;
 		public final BooleanValue npcDialogueTextColors;
 		public final BooleanValue impactScreenShake;
+		public final BooleanValue meteorSkyFog;
 		
 		private Client(Builder builder)
 		{
@@ -62,6 +63,8 @@ public class MinestuckConfig
 					.define("npcDialogueTextColors", true);
 			impactScreenShake = builder.comment("Determines whether player would see the screen shake or not from the nearby meteor impacts (pre-medium).")
 				.define("impactScreenShake", true);
+			meteorSkyFog = builder.comment("Determines whether player would see the fog colour changes from the nearby meteor impacts (pre-medium).")
+					.define("meteorSkyFog", true);
 			builder.pop();
 		}
 	}
