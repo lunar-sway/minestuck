@@ -13,15 +13,18 @@ The format is based on [Keep a Changelog](https://keepachangelog.com/en/1.1.0/).
 ### Changed
 
 - Players now cannot captchalogue items if they contain certain nested item components. This replaces the bugged maximum data system introduced in the last update
+- Uranium fuel is now data driven
+- Uranium power is now a neoforge capability, add-ons will have to update their machines
 
 ### Fixed
 
 - Fixed players starting off with no captcha cards
+- Fixed a dupe exploit with a fully sylladex
 - Fixed client side crash when trying to widget a captcha card holding another captcha card
 
 ### Contributors for this release
 
-- Dweblenod
+- Dweblenod, medsal15
 
 ## [1.21.1-1.14.0.0] - 2026-04-13
 
