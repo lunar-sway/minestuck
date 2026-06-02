@@ -1,16 +1,16 @@
 package com.mraof.minestuck.entry.meteor;
 
 import com.mraof.minestuck.Minestuck;
-import com.mraof.minestuck.MinestuckConfig;
+import com.mraof.minestuck.entity.KernelspriteEntity;
 import com.mraof.minestuck.entity.MSEntityTypes;
 import com.mraof.minestuck.entity.MeteorEntity;
 import com.mraof.minestuck.entity.MiniMeteorEntity;
-import com.mraof.minestuck.network.MeteorPackets;
+import com.mraof.minestuck.player.PlayerData;
 import com.mraof.minestuck.player.PlayerIdentifier;
-
 import com.mraof.minestuck.skaianet.SburbPlayerData;
-import com.mraof.minestuck.skaianet.SkaianetData;
 import com.mraof.minestuck.skaianet.Session;
+import com.mraof.minestuck.skaianet.SkaianetData;
+import com.mraof.minestuck.util.MSAttachments;
 import net.minecraft.core.BlockPos;
 import net.minecraft.core.HolderLookup;
 import net.minecraft.nbt.CompoundTag;
@@ -20,14 +20,24 @@ import net.minecraft.resources.ResourceKey;
 import net.minecraft.server.MinecraftServer;
 import net.minecraft.server.level.ServerLevel;
 import net.minecraft.server.level.ServerPlayer;
+import net.minecraft.world.entity.LivingEntity;
 import net.minecraft.world.level.Level;
 import net.minecraft.world.level.entity.EntityTypeTest;
+import net.minecraft.world.level.levelgen.Heightmap.Types;
 import net.minecraft.world.level.saveddata.SavedData;
-import net.neoforged.neoforge.network.PacketDistributor;
+import net.minecraft.world.phys.AABB;
 import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.Logger;
 
 import java.util.*;
+
+import static com.mraof.minestuck.MinestuckConfig.SERVER;
+import static com.mraof.minestuck.network.MeteorPackets.*;
+import static com.mraof.minestuck.util.MSSoundEvents.*;
+import static net.minecraft.core.BlockPos.*;
+import static net.minecraft.world.level.block.Block.*;
+import static net.minecraft.world.level.block.Blocks.*;
+import static net.neoforged.neoforge.network.PacketDistributor.sendToPlayer;
 
 /**
  * Manages all active meteor countdowns.
@@ -35,10 +45,6 @@ import java.util.*;
  */
 public class MeteorManager extends SavedData
 {
-	
-	private static final Logger LOGGER = LogManager.getLogger();
-	private static final String DATA_NAME = Minestuck.MOD_ID + "_meteors";
-	private final Set<String> impactPending = new HashSet<>();
 	
 	/**
 	 * Total countdown: 4 min 13 sec = 253 seconds = 5060 ticks
@@ -52,7 +58,9 @@ public class MeteorManager extends SavedData
 	 * Final acceleration phase: 10-15 seconds before impact = ~300 ticks
 	 */
 	public static final int DASH_PHASE_TICKS = TOTAL_TICKS - 300;
-	
+	private static final Logger LOGGER = LogManager.getLogger();
+	private static final String DATA_NAME = Minestuck.MOD_ID + "_meteors";
+	private final Set<String> impactPending = new HashSet<>();
 	// Map: player UUID string -> countdown data
 	private final Map<String, MeteorCountdown> countdowns = new HashMap<>();
 	private final MinecraftServer mcServer;
@@ -71,6 +79,11 @@ public class MeteorManager extends SavedData
 			MeteorCountdown cd = MeteorCountdown.read(list.getCompound(i));
 			if(cd != null) countdowns.put(cd.getPlayerKey(), cd);
 		}
+	}
+	
+	public static MeteorManager get(MinecraftServer server)
+	{
+		return server.overworld().getDataStorage().computeIfAbsent(new Factory<>(() -> new MeteorManager(server), (nbt, provider) -> new MeteorManager(server, nbt)), DATA_NAME);
 	}
 	
 	public void respawnEntitiesForActiveCountdowns()
@@ -109,11 +122,6 @@ public class MeteorManager extends SavedData
 	public boolean isDirty()
 	{
 		return true;
-	}
-	
-	public static MeteorManager get(MinecraftServer server)
-	{
-		return server.overworld().getDataStorage().computeIfAbsent(new Factory<>(() -> new MeteorManager(server), (nbt, provider) -> new MeteorManager(server, nbt)), DATA_NAME);
 	}
 	
 	/**
@@ -176,7 +184,7 @@ public class MeteorManager extends SavedData
 		meteor.moveTo(startX, startY, startZ, 0.0F, 90.0F);
 		
 		meteor.setTargetPos(target);
-		meteor.setOwnerKey(countdown.getPlayerKey());
+		meteor.setOwner(countdown.getOwner());
 		meteor.setMeteorSize(countdown.getMeteorSize());
 		level.addFreshEntity(meteor);
 		
@@ -188,13 +196,13 @@ public class MeteorManager extends SavedData
 	{
 		for(MeteorCountdown cd : countdowns.values())
 		{
-			PacketDistributor.sendToPlayer(player, new MeteorPackets.CountdownStart(cd.getPlayerKey(), cd.getCruxtruderPos(), cd.getLevelKey(), cd.getMeteorSize(), cd.getMeteorEntityId(), cd.getTicksElapsed()));
+			sendToPlayer(player, new CountdownStart(cd.getPlayerKey(), cd.getCruxtruderPos(), cd.getLevelKey(), cd.getMeteorSize(), cd.getMeteorEntityId(), cd.getTicksElapsed()));
 		}
 	}
 	
 	private void broadcastCountdownStart(MeteorCountdown countdown)
 	{
-		mcServer.getPlayerList().getPlayers().forEach(p -> PacketDistributor.sendToPlayer(p, new MeteorPackets.CountdownStart(countdown.getPlayerKey(), countdown.getCruxtruderPos(), countdown.getLevelKey(), countdown.getMeteorSize(), countdown.getMeteorEntityId(), countdown.getTicksElapsed())));
+		mcServer.getPlayerList().getPlayers().forEach(p -> sendToPlayer(p, new CountdownStart(countdown.getPlayerKey(), countdown.getCruxtruderPos(), countdown.getLevelKey(), countdown.getMeteorSize(), countdown.getMeteorEntityId(), countdown.getTicksElapsed())));
 	}
 	
 	public void tick()
@@ -218,8 +226,7 @@ public class MeteorManager extends SavedData
 			if(cd.isExpired())
 			{
 				MeteorEntity meteor = findMeteorEntity(cd);
-				if(meteor != null)
-					meteor.moveTick(TOTAL_TICKS);
+				if(meteor != null) meteor.moveTick(TOTAL_TICKS);
 				
 				impactPending.add(key);
 			}
@@ -256,7 +263,7 @@ public class MeteorManager extends SavedData
 		ServerPlayer player = pid.getPlayer(mcServer);
 		if(player != null)
 		{
-			PacketDistributor.sendToPlayer(player, new MeteorPackets.PlayMeteorMusic(true));
+			sendToPlayer(player, new PlayMeteorMusic(true));
 		}
 	}
 	
@@ -268,7 +275,7 @@ public class MeteorManager extends SavedData
 	 */
 	private void spawnMiniMeteorsIfNeeded(MeteorCountdown cd)
 	{
-		if(!MinestuckConfig.SERVER.meteorShower.get()) return;
+		if(!SERVER.meteorShower.get()) return;
 		
 		int ticks = cd.getTicksElapsed();
 		int interval;
@@ -299,16 +306,16 @@ public class MeteorManager extends SavedData
 		if(level == null) return;
 		
 		long existingCount = level.getEntities(EntityTypeTest.forClass(MiniMeteorEntity.class), e -> true).size();
-		if(existingCount >= MinestuckConfig.SERVER.miniMeteorsCount.get()) return;
+		if(existingCount >= SERVER.miniMeteorsCount.get()) return;
 		
 		BlockPos center = cd.getCruxtruderPos();
-		int radius = MinestuckConfig.SERVER.artifactRange.get() + 5;
+		int radius = SERVER.artifactRange.get() + 5;
 		
 		double angle = level.random.nextDouble() * Math.PI * 2;
 		double dist = level.random.nextDouble() * radius;
 		double targetX = center.getX() + 0.5 + Math.cos(angle) * dist;
 		double targetZ = center.getZ() + 0.5 + Math.sin(angle) * dist;
-		double targetY = level.getHeight(net.minecraft.world.level.levelgen.Heightmap.Types.MOTION_BLOCKING, (int) targetX, (int) targetZ);
+		double targetY = level.getHeight(Types.MOTION_BLOCKING, (int) targetX, (int) targetZ);
 		
 		double spawnOffsetX = (level.random.nextDouble() - 0.5) * 30;
 		double spawnOffsetZ = (level.random.nextDouble() - 0.5) * 30;
@@ -325,8 +332,8 @@ public class MeteorManager extends SavedData
 		MeteorEntity meteor = findMeteorEntity(cd);
 		if(meteor == null) return;
 		
-		MeteorPackets.MeteorPosition packet = new MeteorPackets.MeteorPosition(cd.getMeteorEntityId(), cd.getTicksElapsed());
-		mcServer.getPlayerList().getPlayers().forEach(p -> PacketDistributor.sendToPlayer(p, packet));
+		MeteorPosition packet = new MeteorPosition(cd.getMeteorEntityId(), cd.getTicksElapsed());
+		mcServer.getPlayerList().getPlayers().forEach(p -> sendToPlayer(p, packet));
 	}
 	
 	private MeteorEntity findMeteorEntity(MeteorCountdown cd)
@@ -358,34 +365,43 @@ public class MeteorManager extends SavedData
 		{
 			createCrater(level, impactPos, cd);
 			
-			int range = com.mraof.minestuck.MinestuckConfig.SERVER.artifactRange.get() + 10;
-			net.minecraft.world.phys.AABB aabb = new net.minecraft.world.phys.AABB(impactPos.getX() - range, impactPos.getY() - range, impactPos.getZ() - range, impactPos.getX() + range, impactPos.getY() + range, impactPos.getZ() + range);
+			int range = SERVER.artifactRange.get() + 10;
+			AABB aabb = new AABB(impactPos.getX() - range, impactPos.getY() - range, impactPos.getZ() - range, impactPos.getX() + range, impactPos.getY() + range, impactPos.getZ() + range);
 			
-			level.getEntitiesOfClass(net.minecraft.world.entity.LivingEntity.class, aabb).forEach(entity -> {
+			for(LivingEntity entity : level.getEntitiesOfClass(LivingEntity.class, aabb))
+			{
 				if(!(entity instanceof ServerPlayer))
 				{
 					entity.hurt(level.damageSources().explosion(null, null), Float.MAX_VALUE);
 					if(entity.isAlive()) entity.kill();
 				}
-			});
+				if(!(entity instanceof KernelspriteEntity) && !SburbPlayerData.get(player).hasEntered())
+				{
+					entity.discard();
+					PlayerData data = PlayerData.get(meteor.getOwner(), level.getServer());
+					data.setData(MSAttachments.HAS_KERNELSPRITE, false);
+				}
+			}
 			if(player != null) player.hurt(level.damageSources().explosion(null, null), Float.MAX_VALUE);
 		}
 		
-		level.playSound(null, impactPos, com.mraof.minestuck.util.MSSoundEvents.METEOR_IMPACT.get(), net.minecraft.sounds.SoundSource.AMBIENT, 5.0f, 0.8f);
+		level.playSound(null, impactPos, METEOR_IMPACT.get(), net.minecraft.sounds.SoundSource.AMBIENT, 10.0f, 0.8f);
 		
 		if(player != null)
-			net.neoforged.neoforge.network.PacketDistributor.sendToPlayer(player, new com.mraof.minestuck.network.MeteorPackets.PlayMeteorMusic(false));
+		{
+			sendToPlayer(player, new PlayMeteorMusic(false));
+		}
 		
-		mcServer.getPlayerList().getPlayers().forEach(p -> net.neoforged.neoforge.network.PacketDistributor.sendToPlayer(p, new com.mraof.minestuck.network.MeteorPackets.MeteorRemoved(cd.getMeteorEntityId())));
+		mcServer.getPlayerList().getPlayers().forEach(p -> sendToPlayer(p, new MeteorRemoved(cd.getMeteorEntityId())));
 	}
 	
 	private void createCrater(ServerLevel level, BlockPos center, MeteorCountdown cd)
 	{
-		int range = com.mraof.minestuck.MinestuckConfig.SERVER.artifactRange.get();
+		int range = SERVER.artifactRange.get();
 		float meteorSize = cd.getMeteorSize();
 		int craterRadius = (int) (range * meteorSize);
 		
-		for(BlockPos pos : net.minecraft.core.BlockPos.betweenClosed(center.offset(-craterRadius, -craterRadius, -craterRadius), center.offset(craterRadius, craterRadius, craterRadius)))
+		for(BlockPos pos : betweenClosed(center.offset(-craterRadius, -craterRadius, -craterRadius), center.offset(craterRadius, craterRadius, craterRadius)))
 		{
 			double dx = pos.getX() - center.getX();
 			double dy = pos.getY() - center.getY();
@@ -393,9 +409,9 @@ public class MeteorManager extends SavedData
 			
 			if(dx * dx + dy * dy + dz * dz <= craterRadius * craterRadius)
 			{
-				if(!level.getBlockState(pos).is(net.minecraft.world.level.block.Blocks.BEDROCK))
+				if(!level.getBlockState(pos).is(BEDROCK))
 				{
-					level.setBlock(pos.immutable(), net.minecraft.world.level.block.Blocks.AIR.defaultBlockState(), net.minecraft.world.level.block.Block.UPDATE_CLIENTS);
+					level.setBlock(pos.immutable(), AIR.defaultBlockState(), UPDATE_CLIENTS);
 				}
 			}
 		}

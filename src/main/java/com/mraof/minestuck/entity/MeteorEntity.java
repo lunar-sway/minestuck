@@ -1,6 +1,8 @@
 package com.mraof.minestuck.entity;
 
 import com.mraof.minestuck.entry.meteor.MeteorManager;
+import com.mraof.minestuck.player.IdentifierHandler;
+import com.mraof.minestuck.player.PlayerIdentifier;
 import net.minecraft.core.BlockPos;
 import net.minecraft.nbt.CompoundTag;
 import net.minecraft.network.syncher.EntityDataAccessor;
@@ -9,8 +11,10 @@ import net.minecraft.network.syncher.SynchedEntityData;
 import net.minecraft.server.level.ServerLevel;
 import net.minecraft.world.entity.Entity;
 import net.minecraft.world.entity.EntityType;
+import net.minecraft.world.entity.player.Player;
 import net.minecraft.world.level.Level;
 import net.minecraft.world.phys.Vec3;
+import org.intellij.lang.annotations.Identifier;
 import software.bernie.geckolib.animatable.GeoAnimatable;
 import software.bernie.geckolib.animatable.instance.AnimatableInstanceCache;
 import software.bernie.geckolib.animation.AnimatableManager;
@@ -34,7 +38,7 @@ public class MeteorEntity extends Entity implements GeoAnimatable
 	public static final double HEIGHT_ABOVE_TARGET = 300.0;
 	
 	private BlockPos targetPos = BlockPos.ZERO;
-	private String ownerKey = "";
+	private PlayerIdentifier owner;
 	
 	public MeteorEntity(EntityType<?> type, Level level)
 	{
@@ -179,26 +183,34 @@ public class MeteorEntity extends Entity implements GeoAnimatable
 	}
 	
 	@Override
-	public void addAdditionalSaveData(CompoundTag tag)
+	public void addAdditionalSaveData(CompoundTag compound)
 	{
-		tag.putInt("TargetX", targetPos.getX());
-		tag.putInt("TargetY", targetPos.getY());
-		tag.putInt("TargetZ", targetPos.getZ());
-		tag.putString("OwnerKey", ownerKey);
-		tag.putFloat("MeteorSize", getMeteorSize());
+		if (owner != null)
+			owner.saveToNBT(compound, "owner");
+		compound.putInt("targetX", targetPos.getX());
+		compound.putInt("targetY", targetPos.getY());
+		compound.putInt("targetZ", targetPos.getZ());
+		compound.putFloat("size", getMeteorSize());
 	}
 	
 	@Override
-	public void readAdditionalSaveData(CompoundTag tag)
+	public void readAdditionalSaveData(CompoundTag nbt)
 	{
-		targetPos = new BlockPos(tag.getInt("TargetX"), tag.getInt("TargetY"), tag.getInt("TargetZ"));
-		ownerKey = tag.getString("OwnerKey");
-		setMeteorSize(tag.getFloat("MeteorSize"));
+		if (nbt.contains("targetX") || nbt.contains("targetY") || nbt.contains("targetZ"))
+			targetPos = new BlockPos(nbt.getInt("targetX"), nbt.getInt("targetY"), nbt.getInt("targetZ"));
+		if(nbt.contains("owner"))
+			owner = IdentifierHandler.load(nbt, "owner").result().orElse(null);
+		if(nbt.contains("size"))
+			setMeteorSize(nbt.getFloat("size"));
 	}
 	
-	public void setOwnerKey(String key)
+	public PlayerIdentifier getOwner(){
+		return owner;
+	}
+	
+	public void setOwner(PlayerIdentifier owner)
 	{
-		this.ownerKey = key;
+		this.owner = owner;
 	}
 	
 	public void setMeteorSize(float size)
