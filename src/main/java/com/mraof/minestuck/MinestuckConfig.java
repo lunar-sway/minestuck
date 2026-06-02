@@ -61,9 +61,12 @@ public class MinestuckConfig
 					.defineEnum("echeladderAnimation", AnimationSpeed.NORMAL);
 			npcDialogueTextColors = builder.comment("Determines whether an NPC will use their custom formatted color value when talking in a dialogue screen.")
 					.define("npcDialogueTextColors", true);
-			impactScreenShake = builder.comment("Determines whether player would see the screen shake or not from the nearby meteor impacts (pre-medium).")
-				.define("impactScreenShake", true);
-			meteorSkyFog = builder.comment("Determines whether player would see the fog colour changes from the nearby meteor impacts (pre-medium).")
+			builder.pop();
+			
+			builder.push("entry");
+			impactScreenShake = builder.comment("Determines whether player would see the screen shake or not from the nearby mini meteor impacts.")
+					.define("impactScreenShake", true);
+			meteorSkyFog = builder.comment("Determines whether player would see the fog and clouds colour changes from an approaching asteroid.")
 					.define("meteorSkyFog", true);
 			builder.pop();
 		}
