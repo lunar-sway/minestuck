@@ -1,5 +1,8 @@
 package com.mraof.minestuck.blockentity.machine;
 
+import com.mraof.minestuck.api.uranium.IUraniumHandler;
+import com.mraof.minestuck.api.uranium.SimpleUraniumHandler;
+import com.mraof.minestuck.api.uranium.UraniumPower;
 import com.mraof.minestuck.blockentity.MSBlockEntityTypes;
 import com.mraof.minestuck.inventory.OptionalPosHolder;
 import com.mraof.minestuck.inventory.SendificatorMenu;
@@ -26,13 +29,21 @@ import net.neoforged.neoforge.items.wrapper.RangedWrapper;
 import javax.annotation.Nullable;
 import java.util.Optional;
 
-public class SendificatorBlockEntity extends MachineProcessBlockEntity implements MenuProvider, UraniumPowered
+public class SendificatorBlockEntity extends MachineProcessBlockEntity implements MenuProvider
 {
 	public static final String TITLE = "container.minestuck.sendificator";
-	public static final short MAX_FUEL = 128;
+	public static final int MAX_FUEL = 128;
 	
 	private final ProgressTracker progressTracker = new ProgressTracker(ProgressTracker.RunType.ONCE_OR_LOOPING, 0, this::setChanged, this::contentsValid);
-	private short fuel = 0;
+	
+	private int fuel;
+	private final IUraniumHandler uraniumHandler = new SimpleUraniumHandler(() -> MAX_FUEL, () -> this.fuel, fuel -> this.fuel = fuel)
+	{
+		public boolean canExtractUranium()
+		{
+			return false;
+		}
+	};
 	
 	@Nullable
 	private BlockPos destBlockPos;
@@ -48,7 +59,7 @@ public class SendificatorBlockEntity extends MachineProcessBlockEntity implement
 		@Override
 		public void set(int value)
 		{
-			fuel = (short) value;
+			fuel = value;
 		}
 	};
 	private final OptionalPosHolder destinationHolder = OptionalPosHolder.forPos(() -> Optional.ofNullable(this.getDestinationBlockPos()));
@@ -90,7 +101,10 @@ public class SendificatorBlockEntity extends MachineProcessBlockEntity implement
 			this.destBlockPos = new BlockPos(destX, destY, destZ);
 		}
 		
-		fuel = compound.getShort("fuel");
+		if (compound.contains("fuel", 2))
+			fuel = compound.getShort("fuel");
+		else
+			fuel = compound.getInt("fuel");
 	}
 	
 	@Override
@@ -107,7 +121,7 @@ public class SendificatorBlockEntity extends MachineProcessBlockEntity implement
 			compound.putInt("destZ", destBlockPos.getZ());
 		}
 		
-		compound.putShort("fuel", fuel);
+		compound.putInt("fuel", fuel);
 	}
 	
 	@Override
@@ -131,7 +145,7 @@ public class SendificatorBlockEntity extends MachineProcessBlockEntity implement
 		
 		ItemStack fuel = itemHandler.getStackInSlot(1);
 		ItemStack input = itemHandler.getStackInSlot(0);
-		return canBeRefueled() && fuel.is(ExtraModTags.Items.URANIUM_CHUNKS) || !input.isEmpty();
+		return canBeRefueled(fuel) || !input.isEmpty();
 	}
 	
 	/**
@@ -139,14 +153,17 @@ public class SendificatorBlockEntity extends MachineProcessBlockEntity implement
 	 */
 	private void processContents()
 	{
-		if(canBeRefueled())
+		ItemStack fuel = itemHandler.getStackInSlot(1);
+		if(canBeRefueled(fuel))
 		{
-			//checks for a uranium itemstack in the lower(fuel) item slot, increases the fuel value if some is found and then removes one count from the fuel stack
-			if(itemHandler.getStackInSlot(1).is(ExtraModTags.Items.URANIUM_CHUNKS))
+			//Refill fuel
+			addFuel(fuel);
+			ItemStack taken = itemHandler.extractItem(1, 1, false);
+			ItemStack remainder = taken.getCraftingRemainingItem();
+			if(!remainder.isEmpty() && level != null)
 			{
-				//Refill fuel
-				addFuel((short) FUEL_INCREASE);
-				itemHandler.extractItem(1, 1, false);
+				ItemEntity remainderEntity = new ItemEntity(level, worldPosition.getX(), worldPosition.getY(), worldPosition.getZ(), remainder);
+				level.addFreshEntity(remainderEntity);
 			}
 		}
 		
@@ -166,7 +183,7 @@ public class SendificatorBlockEntity extends MachineProcessBlockEntity implement
 						ItemEntity itemEntity = new ItemEntity(level, destinationPos.getX(), destinationPos.getY(), destinationPos.getZ(), sentStack);
 						level.addFreshEntity(itemEntity);
 						
-						fuel = (short) (fuel - 8);
+						this.fuel -= 8;
 					}
 				}
 			}
@@ -184,21 +201,16 @@ public class SendificatorBlockEntity extends MachineProcessBlockEntity implement
 	/**
 	 * Checks that fuel can be added without any excess/wasted points being attributed
 	 */
-	public boolean canBeRefueled()
+	public boolean canBeRefueled(ItemStack fuelStack)
 	{
-		return fuel <= MAX_FUEL - FUEL_INCREASE;
+		int amount = UraniumPower.getUraniumPower(fuelStack);
+		return fuel + amount <= MAX_FUEL;
 	}
 	
-	@Override
-	public boolean atMaxFuel()
+	public void addFuel(ItemStack fuelStack)
 	{
-		return fuel >= MAX_FUEL;
-	}
-	
-	@Override
-	public void addFuel(short fuelAmount)
-	{
-		fuel += fuelAmount;
+		int amount = UraniumPower.getUraniumPower(fuelStack);
+		fuel += amount;
 	}
 	
 	@Nullable
@@ -212,6 +224,12 @@ public class SendificatorBlockEntity extends MachineProcessBlockEntity implement
 		if(side == Direction.DOWN)
 			return null;
 		return new RangedWrapper(this.itemHandler, 1, 2);
+	}
+	
+	@Nullable
+	public IUraniumHandler getUraniumHandler(@Nullable Direction side)
+	{
+		return uraniumHandler;
 	}
 	
 	public void openMenu(ServerPlayer player)
