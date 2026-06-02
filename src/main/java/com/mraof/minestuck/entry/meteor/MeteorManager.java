@@ -8,6 +8,7 @@ import com.mraof.minestuck.entity.MiniMeteorEntity;
 import com.mraof.minestuck.network.MeteorPackets;
 import com.mraof.minestuck.player.PlayerIdentifier;
 
+import com.mraof.minestuck.skaianet.SburbPlayerData;
 import com.mraof.minestuck.skaianet.SkaianetData;
 import com.mraof.minestuck.skaianet.Session;
 import net.minecraft.core.BlockPos;
@@ -347,7 +348,7 @@ public class MeteorManager extends SavedData
 		if(meteor != null) meteor.discard();
 		
 		ServerPlayer player = cd.getOwner().getPlayer(mcServer);
-		boolean hasEntered = player != null && com.mraof.minestuck.skaianet.SburbPlayerData.get(player).hasEntered();
+		boolean hasEntered = player != null && SburbPlayerData.get(player).hasEntered();
 		
 		if(hasEntered)
 		{
