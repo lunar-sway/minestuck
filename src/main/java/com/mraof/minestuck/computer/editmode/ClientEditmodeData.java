@@ -9,12 +9,15 @@ import com.mraof.minestuck.network.editmode.ServerEditPackets;
 import net.minecraft.client.Minecraft;
 import net.minecraft.network.chat.Component;
 import net.minecraft.resources.ResourceKey;
+import net.minecraft.server.level.ServerPlayer;
 import net.minecraft.world.entity.player.Player;
 import net.minecraft.world.level.Level;
 import net.neoforged.api.distmarker.Dist;
 import net.neoforged.bus.api.SubscribeEvent;
 import net.neoforged.fml.common.EventBusSubscriber;
+import net.neoforged.neoforge.client.event.RenderLivingEvent;
 import net.neoforged.neoforge.client.event.RenderPlayerEvent;
+import net.neoforged.neoforge.event.entity.player.PlayerEvent;
 import net.neoforged.neoforge.event.level.LevelEvent;
 
 import javax.annotation.Nullable;
@@ -65,8 +68,7 @@ public final class ClientEditmodeData
 	public static void onExitPacket(ServerEditPackets.Exit ignored)
 	{
 		Player player = Minecraft.getInstance().player;
-		if(player != null)
-			player.fallDistance = 0;
+		if(player != null) player.fallDistance = 0;
 		disable();
 	}
 	
@@ -77,16 +79,17 @@ public final class ClientEditmodeData
 		if(Minecraft.getInstance().screen instanceof EditmodeSettingsScreen screen)
 			screen.recreateTeleportButtons();
 	}
+	
 	@SubscribeEvent
 	public static void onRenderPlayer(RenderPlayerEvent.Pre event)
 	{
-		if(event.getEntity().isInvisible() && MinestuckConfig.SERVER.editInvisibility.get())
+		if(ClientEditmodeData.isInEditmode() && MinestuckConfig.SERVER.editInvisibility.get())
 			event.setCanceled(true);
 	}
+	
 	@SubscribeEvent
 	public static void onWorldUnload(LevelEvent.Unload event)
 	{
-		if(event.getLevel().isClientSide())
-			disable();
+		if(event.getLevel().isClientSide()) disable();
 	}
 }

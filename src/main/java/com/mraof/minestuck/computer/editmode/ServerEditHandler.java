@@ -100,7 +100,7 @@ public final class ServerEditHandler    //TODO Consider splitting this class int
 		if(!player.level().isClientSide){
 			reset(getData(player));
 		if(player.isInvisible())
-			player.setInvisible(true);
+			player.setInvisible(false);
 		}
 	}
 	
