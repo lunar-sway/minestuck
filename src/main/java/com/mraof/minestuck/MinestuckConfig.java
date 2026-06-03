@@ -226,7 +226,7 @@ public class MinestuckConfig
 			artifactRange = builder.comment("Radius of the land brought into the medium.")
 					.defineInRange("artifactRange",30,0,Integer.MAX_VALUE);
 			meteorShower = builder.comment("If this is true, players will need to survive countless mini meteors that would destroy the area around the activated cruxtruder.")
-					.define("meteorShower",false);
+					.define("meteorShower",true);
 			miniMeteorsCount = builder.comment("Determines the count of maximum spawn rate of mini meteors at once.")
 					.defineInRange("miniMeteorsCount", 4,1, 8);
 			builder.pop();
