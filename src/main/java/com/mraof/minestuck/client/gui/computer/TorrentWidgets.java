@@ -33,6 +33,31 @@ public class TorrentWidgets
 		return input * 2;
 	}
 	
+	protected static void drawIcon(int x, int y, ResourceLocation icon, float iconScale)
+	{
+		if(icon == null) return;
+		
+		RenderSystem.setShader(GameRenderer::getPositionTexShader);
+		RenderSystem.setShaderTexture(0, icon);
+		
+		float uvScale = 1F / 16F;
+		
+		int iconW = 16;
+		int iconH = 16;
+		
+		float scaledW = iconW * iconScale;
+		float scaledH = iconH * iconScale;
+		
+		BufferBuilder render = Tesselator.getInstance()
+				.begin(VertexFormat.Mode.QUADS, DefaultVertexFormat.POSITION_TEX);
+		
+		render.addVertex(x, y + scaledH, 0).setUv(0, 1);
+		render.addVertex(x + scaledW, y + scaledH, 0).setUv(1, 1);
+		render.addVertex(x + scaledW, y, 0).setUv(1, 0);
+		render.addVertex(x, y, 0).setUv(0, 0);
+		
+		BufferUploader.drawWithShader(render.buildOrThrow());
+	}
 	protected static void drawIcon(int x, int y, ResourceLocation icon)
 	{
 		if(icon == null) return;

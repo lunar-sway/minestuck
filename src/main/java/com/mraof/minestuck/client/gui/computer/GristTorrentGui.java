@@ -39,6 +39,9 @@ public final class GristTorrentGui extends Screen implements ProgramGui<ProgramT
 	
 	public static final ResourceLocation GUI_MAIN = Minestuck.id("textures/gui/torrent.png");
 	
+	private static final ResourceLocation BUILD_ICON = Minestuck.id("textures/grist/build.png");
+	private static final ResourceLocation TORRENT_ICON = Minestuck.id("textures/grist/torrent.png");
+	
 	static final int GUI_WIDTH = 190;
 	static final int GUI_HEIGHT = 200;
 	private GatesContainer gatesContainer;
@@ -155,6 +158,19 @@ public final class GristTorrentGui extends Screen implements ProgramGui<ProgramT
 		filterContainer.updateCounts();
 		
 		super.render(guiGraphics, mouseX, mouseY, partialTicks);
+		
+		int gutterX = xOffset + 53;
+		int gutterY = yOffset + 185;
+		
+		int iconSize = 16;
+		
+		int buildX = gutterX - 6 - iconSize;
+		int torrentX = buildX - 12 - iconSize;
+		int iconY = gutterY - (iconSize - 3) / 2 - 8;
+		
+		TorrentWidgets.drawIcon(xOffset + 44, yOffset + 3, TORRENT_ICON, 1.25f);
+		TorrentWidgets.drawIcon(buildX, iconY, BUILD_ICON, 1.25f);
+		TorrentWidgets.drawIcon(torrentX, iconY, TORRENT_ICON, 1.25f);
 		
 		if(gutterLoading)
 		{
