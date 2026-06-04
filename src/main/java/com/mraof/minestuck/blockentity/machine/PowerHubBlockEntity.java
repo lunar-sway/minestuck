@@ -1,7 +1,13 @@
 package com.mraof.minestuck.blockentity.machine;
 
+import javax.annotation.Nullable;
+
+import com.mraof.minestuck.api.uranium.IUraniumHandler;
+import com.mraof.minestuck.api.uranium.SimpleUraniumHandler;
+import com.mraof.minestuck.api.uranium.UraniumCapabilities;
 import com.mraof.minestuck.blockentity.MSBlockEntityTypes;
 import net.minecraft.core.BlockPos;
+import net.minecraft.core.Direction;
 import net.minecraft.core.HolderLookup;
 import net.minecraft.nbt.CompoundTag;
 import net.minecraft.network.chat.Component;
@@ -14,9 +20,16 @@ public class PowerHubBlockEntity extends BlockEntity
 {
 	public static final String POWER_PROMPT = "block.minestuck.power_hub.power_prompt";
 	
-	public static final short MAX_POWER = 256;
+	public static final int MAX_POWER = 256;
 	
-	private short power = 0;
+	private int power;
+	private final IUraniumHandler powerHandler = new SimpleUraniumHandler(() -> MAX_POWER, () -> this.power, power -> this.power = power)
+	{
+		public boolean canReceiveUranium()
+		{
+			return false;
+		}
+	};
 	
 	public PowerHubBlockEntity(BlockPos pos, BlockState state)
 	{
@@ -28,7 +41,10 @@ public class PowerHubBlockEntity extends BlockEntity
 	{
 		super.loadAdditional(compound, provider);
 		
-		power = compound.getShort("power");
+		if (compound.contains("power", 2))
+			power = compound.getShort("power");
+		else
+			power = compound.getInt("power");
 	}
 	
 	@Override
@@ -36,7 +52,7 @@ public class PowerHubBlockEntity extends BlockEntity
 	{
 		super.saveAdditional(compound, provider);
 		
-		compound.putShort("power", power);
+		compound.putInt("power", power);
 	}
 	
 	public static void serverTick(Level level, BlockPos pos, BlockState state, PowerHubBlockEntity blockEntity)
@@ -52,6 +68,12 @@ public class PowerHubBlockEntity extends BlockEntity
 			{
 				poweredBlockEntity.addFuel((short) 1);
 				blockEntity.changePower(-1);
+			}
+			var capability = UraniumCapabilities.BLOCK.getCapability(level, pos.above(), null, null, null);
+			if(capability != null && capability.canReceiveUranium() && capability.getUraniumStored() < capability.getMaxUraniumStored())
+			{
+				int inserted = capability.receiveUranium(blockEntity.getPower(), false);
+				blockEntity.changePower(-inserted);
 			}
 		}
 	}
@@ -69,15 +91,21 @@ public class PowerHubBlockEntity extends BlockEntity
 		}
 	}
 	
-	public short getPower()
+	public int getPower()
 	{
 		return power;
 	}
 	
 	private void changePower(int amount)
 	{
-		this.power += (short) amount;
+		power += amount;
 		
 		this.setChanged();
+	}
+	
+	@Nullable
+	public IUraniumHandler getUraniumHandler(@Nullable Direction side)
+	{
+		return powerHandler;
 	}
 }

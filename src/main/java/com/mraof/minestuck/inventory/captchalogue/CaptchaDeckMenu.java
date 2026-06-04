@@ -3,6 +3,7 @@ package com.mraof.minestuck.inventory.captchalogue;
 import com.mraof.minestuck.inventory.ContainerHelper;
 import com.mraof.minestuck.inventory.MSMenuTypes;
 import com.mraof.minestuck.item.CaptchaCardItem;
+import com.mraof.minestuck.network.CaptchaDeckPackets;
 import net.minecraft.world.Container;
 import net.minecraft.world.SimpleContainer;
 import net.minecraft.world.entity.player.Inventory;
@@ -10,10 +11,10 @@ import net.minecraft.world.entity.player.Player;
 import net.minecraft.world.inventory.AbstractContainerMenu;
 import net.minecraft.world.inventory.Slot;
 import net.minecraft.world.item.ItemStack;
+import net.neoforged.neoforge.network.PacketDistributor;
 
 public class CaptchaDeckMenu extends AbstractContainerMenu
 {
-	
 	private final Container inventory = new SimpleContainer(1);
 	private final Player owner;
 	
@@ -36,8 +37,8 @@ public class CaptchaDeckMenu extends AbstractContainerMenu
 	
 	private void addSlots(Inventory playerInventory)
 	{
-		ContainerHelper.addPlayerInventorySlots(this::addSlot, 9, 63, playerInventory);
-		addSlot(new Slot(this.inventory, 0, 81, 32)
+		ContainerHelper.addPlayerInventorySlots(this::addSlot, 9, 156, playerInventory);
+		addSlot(new Slot(this.inventory, 0, 177, 156)
 		{
 			@Override
 			public boolean mayPlace(ItemStack stack)
@@ -78,7 +79,10 @@ public class CaptchaDeckMenu extends AbstractContainerMenu
 			} else
 			{
 				if(!getSlot(slotCount - 1).mayPlace(stack1) || !moveItemStackTo(stack1, slotCount - 1, slotCount, false))
+				{
+					PacketDistributor.sendToServer(new CaptchaDeckPackets.CaptchalogueInventorySlot(index, playerIn.containerMenu.containerId));
 					return ItemStack.EMPTY;
+				}
 			}
 			
 			if(!ItemStack.matches(stack1, slot.getItem()))

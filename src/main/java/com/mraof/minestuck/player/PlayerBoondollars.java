@@ -3,7 +3,9 @@ package com.mraof.minestuck.player;
 import com.mraof.minestuck.Minestuck;
 import com.mraof.minestuck.network.BoondollarDataPacket;
 import com.mraof.minestuck.util.MSAttachments;
+import com.mraof.minestuck.util.MSSoundEvents;
 import net.minecraft.server.level.ServerPlayer;
+import net.minecraft.sounds.SoundSource;
 import net.neoforged.bus.api.SubscribeEvent;
 import net.neoforged.fml.common.EventBusSubscriber;
 import net.neoforged.neoforge.event.entity.player.PlayerEvent;
@@ -16,23 +18,29 @@ public final class PlayerBoondollars
 		return playerData.getData(MSAttachments.BOONDOLLARS);
 	}
 	
-	public static void addBoondollars(PlayerData playerData, long amount)
+	public static void addBoondollars(PlayerData playerData, long amount, boolean playSound)
 	{
 		if(amount < 0)
 			throw new IllegalArgumentException("Boondollar amount may not be negative.");
+		
+		if(playSound)
+			playSound(playerData);
 		
 		setBoondollars(playerData, getBoondollars(playerData) + amount);
 	}
 	
-	public static void takeBoondollars(PlayerData playerData, long amount)
+	public static void takeBoondollars(PlayerData playerData, long amount, boolean playSound)
 	{
 		if(amount < 0)
 			throw new IllegalArgumentException("Boondollar amount may not be negative.");
 		
+		if(playSound)
+			playSound(playerData);
+		
 		setBoondollars(playerData, getBoondollars(playerData) - amount);
 	}
 	
-	public static boolean tryTakeBoondollars(PlayerData playerData, long amount)
+	public static boolean tryTakeBoondollars(PlayerData playerData, long amount, boolean playSound)
 	{
 		if(amount < 0)
 			throw new IllegalArgumentException("Boondollar amount may not be negative.");
@@ -41,6 +49,9 @@ public final class PlayerBoondollars
 		
 		if(newAmount < 0)
 			return false;
+		
+		if(playSound)
+			playSound(playerData);
 		
 		setBoondollars(playerData, newAmount);
 		return true;
@@ -56,6 +67,13 @@ public final class PlayerBoondollars
 			playerData.setData(MSAttachments.BOONDOLLARS, amount);
 			sendBoondollars(playerData.getPlayer(), playerData);
 		}
+	}
+	
+	private static void playSound(PlayerData playerData)
+	{
+		ServerPlayer player = playerData.getPlayer();
+		float pitch = (player.getRandom().nextFloat() / 2) + 0.75f;
+		player.level().playSound(null, player.blockPosition(), MSSoundEvents.ITEM_BOONDOLLARS_USE.get(), SoundSource.PLAYERS, 1, pitch);
 	}
 	
 	@SubscribeEvent

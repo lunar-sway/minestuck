@@ -9,10 +9,7 @@ import net.minecraft.world.Container;
 import net.minecraft.world.SimpleContainer;
 import net.minecraft.world.entity.player.Inventory;
 import net.minecraft.world.entity.player.Player;
-import net.minecraft.world.inventory.AbstractContainerMenu;
-import net.minecraft.world.inventory.ContainerData;
-import net.minecraft.world.inventory.SimpleContainerData;
-import net.minecraft.world.inventory.Slot;
+import net.minecraft.world.inventory.*;
 import net.minecraft.world.item.ItemStack;
 
 public class ConsortMerchantMenu extends AbstractContainerMenu
@@ -77,6 +74,15 @@ public class ConsortMerchantMenu extends AbstractContainerMenu
 		// because this menu doesn't have inventory slots. For this reason, sync the inventory when this menu is closed.
 		if(playerIn instanceof ServerPlayer player)
 			player.inventoryMenu.sendAllDataToRemote();
+	}
+	
+	@Override
+	public void clicked(int slotId, int button, ClickType clickType, Player player)
+	{
+		if(clickType == ClickType.CLONE || clickType == ClickType.SWAP)
+			return;
+		
+		super.clicked(slotId, button, clickType, player);
 	}
 	
 	public int getPrice(int index)

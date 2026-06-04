@@ -1,0 +1,12 @@
+{
+  "condition": {
+    "type": "minestuck:npc_near_entity_predicate",
+    "count": 8,
+    "predicate": {
+      "type": "#minestuck:consorts"
+    }
+  },
+  "dialogue": "minestuck:consort/too_crowded",
+  "dialogue_weight": 10,
+  "keep_on_reset": false
+}

@@ -44,16 +44,17 @@ public final class MSPayloads
 		registerPlayToClient(registrar, LandTypesDataPacket.ID, LandTypesDataPacket.STREAM_CODEC);
 		
 		//Color Selector Packets
-		registerPlayToClient(registrar, PlayerColorPackets.OpenSelection.ID,  PlayerColorPackets.OpenSelection.STREAM_CODEC);
-		registerPlayToClient(registrar, PlayerColorPackets.Data.ID,  PlayerColorPackets.Data.STREAM_CODEC);
-		registerPlayToServer(registrar, PlayerColorPackets.SelectIndex.ID,  PlayerColorPackets.SelectIndex.STREAM_CODEC);
-		registerPlayToServer(registrar, PlayerColorPackets.SelectRGB.ID,  PlayerColorPackets.SelectRGB.STREAM_CODEC);
+		registerPlayToClient(registrar, PlayerColorPackets.OpenSelection.ID, PlayerColorPackets.OpenSelection.STREAM_CODEC);
+		registerPlayToClient(registrar, PlayerColorPackets.Data.ID, PlayerColorPackets.Data.STREAM_CODEC);
+		registerPlayToServer(registrar, PlayerColorPackets.SelectIndex.ID, PlayerColorPackets.SelectIndex.STREAM_CODEC);
+		registerPlayToServer(registrar, PlayerColorPackets.SelectRGB.ID, PlayerColorPackets.SelectRGB.STREAM_CODEC);
 		
 		//Captchalogue Deck Packets
 		registerPlayToClient(registrar, CaptchaDeckPackets.ModusData.ID, CaptchaDeckPackets.ModusData.STREAM_CODEC);
 		registerPlayToServer(registrar, CaptchaDeckPackets.TriggerModusButton.ID, CaptchaDeckPackets.TriggerModusButton.STREAM_CODEC);
 		registerPlayToServer(registrar, CaptchaDeckPackets.CaptchalogueHeldItem.ID, CaptchaDeckPackets.CaptchalogueHeldItem.STREAM_CODEC);
 		registerPlayToServer(registrar, CaptchaDeckPackets.CaptchalogueInventorySlot.ID, CaptchaDeckPackets.CaptchalogueInventorySlot.STREAM_CODEC);
+		registerPlayToServer(registrar, CaptchaDeckPackets.CaptchalogueCarriedItem.ID, CaptchaDeckPackets.CaptchalogueCarriedItem.STREAM_CODEC);
 		registerPlayToServer(registrar, CaptchaDeckPackets.GetItem.ID, CaptchaDeckPackets.GetItem.STREAM_CODEC);
 		registerPlayToServer(registrar, CaptchaDeckPackets.SetModusParameter.ID, CaptchaDeckPackets.SetModusParameter.STREAM_CODEC);
 		

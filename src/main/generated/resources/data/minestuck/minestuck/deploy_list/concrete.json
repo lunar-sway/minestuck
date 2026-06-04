@@ -1,0 +1,271 @@
+{
+  "entries": [
+    {
+      "cost": [
+        {
+          "grist": {
+            "minestuck:build": 1,
+            "minestuck:chalk": 1,
+            "minestuck:cobalt": 1
+          }
+        }
+      ],
+      "item": {
+        "count": 1,
+        "id": "minecraft:white_concrete"
+      },
+      "tier": 2
+    },
+    {
+      "cost": [
+        {
+          "grist": {
+            "minestuck:build": 1,
+            "minestuck:chalk": 1,
+            "minestuck:cobalt": 1,
+            "minestuck:tar": 1
+          }
+        }
+      ],
+      "item": {
+        "count": 1,
+        "id": "minecraft:light_gray_concrete"
+      },
+      "tier": 2
+    },
+    {
+      "cost": [
+        {
+          "grist": {
+            "minestuck:build": 1,
+            "minestuck:chalk": 1,
+            "minestuck:cobalt": 1,
+            "minestuck:tar": 1
+          }
+        }
+      ],
+      "item": {
+        "count": 1,
+        "id": "minecraft:gray_concrete"
+      },
+      "tier": 2
+    },
+    {
+      "cost": [
+        {
+          "grist": {
+            "minestuck:build": 1,
+            "minestuck:cobalt": 1,
+            "minestuck:tar": 1
+          }
+        }
+      ],
+      "item": {
+        "count": 1,
+        "id": "minecraft:black_concrete"
+      },
+      "tier": 2
+    },
+    {
+      "cost": [
+        {
+          "grist": {
+            "minestuck:amber": 1,
+            "minestuck:build": 1,
+            "minestuck:cobalt": 1,
+            "minestuck:iodine": 1
+          }
+        }
+      ],
+      "item": {
+        "count": 1,
+        "id": "minecraft:brown_concrete"
+      },
+      "tier": 2
+    },
+    {
+      "cost": [
+        {
+          "grist": {
+            "minestuck:build": 1,
+            "minestuck:cobalt": 1,
+            "minestuck:garnet": 1
+          }
+        }
+      ],
+      "item": {
+        "count": 1,
+        "id": "minecraft:red_concrete"
+      },
+      "tier": 2
+    },
+    {
+      "cost": [
+        {
+          "grist": {
+            "minestuck:amber": 1,
+            "minestuck:build": 1,
+            "minestuck:cobalt": 1,
+            "minestuck:garnet": 1
+          }
+        }
+      ],
+      "item": {
+        "count": 1,
+        "id": "minecraft:orange_concrete"
+      },
+      "tier": 2
+    },
+    {
+      "cost": [
+        {
+          "grist": {
+            "minestuck:amber": 1,
+            "minestuck:build": 1,
+            "minestuck:cobalt": 1
+          }
+        }
+      ],
+      "item": {
+        "count": 1,
+        "id": "minecraft:yellow_concrete"
+      },
+      "tier": 2
+    },
+    {
+      "cost": [
+        {
+          "grist": {
+            "minestuck:amber": 1,
+            "minestuck:build": 1,
+            "minestuck:chalk": 1,
+            "minestuck:cobalt": 1
+          }
+        }
+      ],
+      "item": {
+        "count": 1,
+        "id": "minecraft:lime_concrete"
+      },
+      "tier": 2
+    },
+    {
+      "cost": [
+        {
+          "grist": {
+            "minestuck:amber": 1,
+            "minestuck:build": 1,
+            "minestuck:cobalt": 1
+          }
+        }
+      ],
+      "item": {
+        "count": 1,
+        "id": "minecraft:green_concrete"
+      },
+      "tier": 2
+    },
+    {
+      "cost": [
+        {
+          "grist": {
+            "minestuck:amber": 1,
+            "minestuck:amethyst": 1,
+            "minestuck:build": 1,
+            "minestuck:cobalt": 1
+          }
+        }
+      ],
+      "item": {
+        "count": 1,
+        "id": "minecraft:cyan_concrete"
+      },
+      "tier": 2
+    },
+    {
+      "cost": [
+        {
+          "grist": {
+            "minestuck:amethyst": 1,
+            "minestuck:build": 1,
+            "minestuck:chalk": 1,
+            "minestuck:cobalt": 1
+          }
+        }
+      ],
+      "item": {
+        "count": 1,
+        "id": "minecraft:light_blue_concrete"
+      },
+      "tier": 2
+    },
+    {
+      "cost": [
+        {
+          "grist": {
+            "minestuck:amethyst": 1,
+            "minestuck:build": 1,
+            "minestuck:cobalt": 1
+          }
+        }
+      ],
+      "item": {
+        "count": 1,
+        "id": "minecraft:blue_concrete"
+      },
+      "tier": 2
+    },
+    {
+      "cost": [
+        {
+          "grist": {
+            "minestuck:amethyst": 1,
+            "minestuck:build": 1,
+            "minestuck:cobalt": 1,
+            "minestuck:garnet": 1
+          }
+        }
+      ],
+      "item": {
+        "count": 1,
+        "id": "minecraft:purple_concrete"
+      },
+      "tier": 2
+    },
+    {
+      "cost": [
+        {
+          "grist": {
+            "minestuck:amethyst": 1,
+            "minestuck:build": 1,
+            "minestuck:cobalt": 1,
+            "minestuck:garnet": 1
+          }
+        }
+      ],
+      "item": {
+        "count": 1,
+        "id": "minecraft:magenta_concrete"
+      },
+      "tier": 2
+    },
+    {
+      "cost": [
+        {
+          "grist": {
+            "minestuck:build": 1,
+            "minestuck:chalk": 1,
+            "minestuck:cobalt": 1,
+            "minestuck:garnet": 1
+          }
+        }
+      ],
+      "item": {
+        "count": 1,
+        "id": "minecraft:pink_concrete"
+      },
+      "tier": 2
+    }
+  ],
+  "priority": 1.0
+}

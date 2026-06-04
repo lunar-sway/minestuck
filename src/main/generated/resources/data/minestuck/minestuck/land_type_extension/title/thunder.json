@@ -1,0 +1,12 @@
+{
+  "features": [
+    {
+      "biome_types": [
+        "normal",
+        "rough"
+      ],
+      "feature": "minestuck:tree/doom",
+      "step": "vegetal_decoration"
+    }
+  ]
+}

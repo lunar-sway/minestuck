@@ -1,9 +1,9 @@
 package com.mraof.minestuck.inventory;
 
+import com.mraof.minestuck.api.uranium.UraniumPower;
 import com.mraof.minestuck.block.MSBlocks;
-import com.mraof.minestuck.inventory.slot.InputSlot;
 import com.mraof.minestuck.inventory.slot.OutputSlot;
-import com.mraof.minestuck.item.MSItems;
+import com.mraof.minestuck.inventory.slot.UraniumPowerSlot;
 import net.minecraft.core.BlockPos;
 import net.minecraft.network.FriendlyByteBuf;
 import net.minecraft.world.entity.player.Inventory;
@@ -14,6 +14,7 @@ import net.minecraft.world.level.block.Block;
 import net.neoforged.neoforge.items.IItemHandler;
 import net.neoforged.neoforge.items.ItemStackHandler;
 import net.neoforged.neoforge.items.SlotItemHandler;
+
 import javax.annotation.Nonnull;
 
 public class UraniumCookerMenu extends MachineContainerMenu
@@ -46,7 +47,7 @@ public class UraniumCookerMenu extends MachineContainerMenu
 		this.fuelHolder = fuelHolder;
 		
 		addSlot(new SlotItemHandler(inventory, 0, itemInputX, itemInputY));
-		addSlot(new InputSlot(inventory, 1, uraniumInputX, uraniumInputY, MSItems.RAW_URANIUM.get()));
+		addSlot(new UraniumPowerSlot(inventory, 1, uraniumInputX, uraniumInputY));
 		addSlot(new OutputSlot(inventory, 2, itemOutputX, itemOutputY));
 		addDataSlot(fuelHolder);
 		
@@ -67,7 +68,7 @@ public class UraniumCookerMenu extends MachineContainerMenu
 		Slot slot = this.slots.get(slotNumber);
 		int allSlots = this.slots.size();
 		
-		if (slot.hasItem())
+		if(slot.hasItem())
 		{
 			ItemStack itemstackOrig = slot.getItem().copy();
 			itemstack = itemstackOrig.copy();
@@ -82,14 +83,14 @@ public class UraniumCookerMenu extends MachineContainerMenu
 				result = moveItemStackTo(itemstackOrig, 3, allSlots, false);    //Send into the inventory
 			} else if(slotNumber == 2)    //Shift-clicking from the output slot
 			{
-				if(itemstackOrig.getItem() == MSItems.RAW_URANIUM.get())
+				if(UraniumPower.hasUraniumPower(itemstackOrig))
 					result = moveItemStackTo(itemstackOrig, 0, 1, false);    //Send the uranium back to the uranium input
 				else
 					result = moveItemStackTo(itemstackOrig, 3, allSlots, false);    //Send the non-uranium to the inventory
 				
 			} else    //Shift-clicking from the inventory
 			{
-				if(itemstackOrig.getItem() == MSItems.RAW_URANIUM.get())
+				if(UraniumPower.hasUraniumPower(itemstackOrig))
 				{
 					result = moveItemStackTo(itemstackOrig, 1, 2, false);    //Send the uranium to the uranium input
 				} else

@@ -15,9 +15,19 @@
       },
       {
         "condition": {
-          "type": "minestuck:player_item",
-          "item": "minestuck:faygo_cola"
+          "type": "minestuck:player_entity_predicate",
+          "predicate": {
+            "slots": {
+              "container.*": {
+                "count": {
+                  "min": 1
+                },
+                "items": "minestuck:faygo_cola"
+              }
+            }
+          }
         },
+        "fail_tooltip": "minestuck.dialogue.consort.faygo_cola_scalemate_pyralspite.ask_drink.condition",
         "hide_if_failed": false,
         "message": "minestuck.dialogue.consort.faygo_cola_scalemate_pyralspite.ask_drink.exchange",
         "next_dialogue": {

@@ -49,10 +49,9 @@ public class PorkhollowCommand    //Much like /gristSend and /land, is a tempora
 		ServerPlayer player = source.getPlayerOrException();
 		player.playNotifySound(MSSoundEvents.ITEM_BOONDOLLARS_USE.get(),SoundSource.PLAYERS,1,(player.getRandom().nextFloat()/2)+0.75f);
 		
-		if(PlayerBoondollars.tryTakeBoondollars(PlayerData.get(player).orElseThrow(), amount))
+		if(PlayerBoondollars.tryTakeBoondollars(PlayerData.get(player).orElseThrow(), amount, true))
 		{
-			PlayerBoondollars.addBoondollars(PlayerData.get(target).orElseThrow(), amount);
-			target.playNotifySound(MSSoundEvents.ITEM_BOONDOLLARS_USE.get(),SoundSource.PLAYERS,1,(target.getRandom().nextFloat()/2)+0.75f);
+			PlayerBoondollars.addBoondollars(PlayerData.get(target).orElseThrow(), amount, true);
 			source.sendSuccess(() -> Component.translatable(SEND, amount, target.getDisplayName()), true);
 			target.sendSystemMessage(Component.translatable(RECEIVE, amount, player.getDisplayName()));
 			return 1;
@@ -63,13 +62,13 @@ public class PorkhollowCommand    //Much like /gristSend and /land, is a tempora
 	{
 		ServerPlayer player = source.getPlayerOrException();
 		
-		if(PlayerBoondollars.tryTakeBoondollars(PlayerData.get(player).orElseThrow(), amount))
+		if(PlayerBoondollars.tryTakeBoondollars(PlayerData.get(player).orElseThrow(), amount, false))
 		{
 			ItemStack stack = BoondollarsItem.setCount(new ItemStack(MSItems.BOONDOLLARS.get()), amount);
 			if(!player.addItem(stack))
 			{
 				ItemEntity entity = player.drop(stack, false);
-				if (entity != null)
+				if(entity != null)
 					entity.setNoPickUpDelay();
 			}
 			

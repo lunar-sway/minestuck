@@ -1,5 +1,6 @@
 {
   "values": [
+    "minestuck:array_modus_card",
     "minestuck:stack_modus_card",
     "minestuck:queue_modus_card",
     "minestuck:queuestack_modus_card",

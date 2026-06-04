@@ -1,0 +1,26 @@
+{
+  "features": [
+    {
+      "biome_types": [
+        "normal"
+      ],
+      "feature": "minestuck:rabbit_placement",
+      "step": "top_layer_modification"
+    },
+    {
+      "biome_types": [
+        "rough"
+      ],
+      "feature": "minestuck:small_rabbit_placement",
+      "step": "top_layer_modification"
+    },
+    {
+      "biome_types": [
+        "normal",
+        "rough"
+      ],
+      "feature": "minestuck:tree/life",
+      "step": "vegetal_decoration"
+    }
+  ]
+}

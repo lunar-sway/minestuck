@@ -9,6 +9,7 @@ import com.mraof.minestuck.player.EnumClass;
 import net.minecraft.data.PackOutput;
 import net.minecraft.network.chat.contents.TranslatableContents;
 import net.minecraft.resources.ResourceLocation;
+import net.minecraft.world.effect.MobEffect;
 import net.minecraft.world.entity.EntityType;
 import net.minecraft.world.item.CreativeModeTab;
 import net.minecraft.world.item.Item;
@@ -146,6 +147,14 @@ public abstract class MinestuckLanguageProvider extends LanguageProvider
 	{
 		add("land."+key, value);
 	}
+	protected void addDimension(String key, String value)
+	{
+		add("dimension.minestuck."+key, value);
+	}
+	protected void addBiome(String key, String value)
+	{
+		add("biome.minestuck."+key, value);
+	}
 	protected void addStrife(String key, String value)
 	{
 		add("strife."+key, value);
@@ -207,5 +216,10 @@ public abstract class MinestuckLanguageProvider extends LanguageProvider
 	{
 		add("painting." + modid + "." + key + ".title", title);
 		add("painting." + modid + "." + key + ".author", author);
+	}
+
+    protected void addEffectDescription(Supplier<? extends MobEffect> effect, String desc)
+	{
+		add(effect.get().getDescriptionId() + ".description", desc);
 	}
 }

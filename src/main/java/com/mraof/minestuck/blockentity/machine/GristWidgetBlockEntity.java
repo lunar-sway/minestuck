@@ -2,6 +2,7 @@ package com.mraof.minestuck.blockentity.machine;
 
 import com.mraof.minestuck.MinestuckConfig;
 import com.mraof.minestuck.api.alchemy.GristSet;
+import com.mraof.minestuck.api.alchemy.GristTypes;
 import com.mraof.minestuck.api.alchemy.recipe.GristCostRecipe;
 import com.mraof.minestuck.block.machine.GristWidgetBlock;
 import com.mraof.minestuck.blockentity.MSBlockEntityTypes;
@@ -80,13 +81,7 @@ public class GristWidgetBlockEntity extends MachineProcessBlockEntity implements
 	}
 	
 	@Nullable
-	public GristSet getGristWidgetResult()
-	{
-		return getGristWidgetResult(itemHandler.getStackInSlot(0), level);
-	}
-	
-	@Nullable
-	public static GristSet getGristWidgetResult(ItemStack stack, Level level)
+	public static GristSet getGristWidgetResult(ItemStack stack, Level level, boolean fullValue)
 	{
 		if(level == null)
 			return null;
@@ -96,12 +91,8 @@ public class GristWidgetBlockEntity extends MachineProcessBlockEntity implements
 		if(containedItem.isEmpty())
 			return null;
 		
-		return GristCostRecipe.findCostForItem(containedItem, null, true, level);
-	}
-	
-	public int getGristWidgetBoondollarValue()
-	{
-		return getGristWidgetBoondollarValue(getGristWidgetResult());
+		GristSet gristSet = GristCostRecipe.findCostForItem(containedItem, GristTypes.BUILD.get(), true, level);
+		return fullValue ? gristSet : gristSet.mutableCopy().scale(MinestuckConfig.SERVER.gristWidgetPercentage.get().floatValue(), false);
 	}
 	
 	public static int getGristWidgetBoondollarValue(GristSet set)
@@ -117,21 +108,21 @@ public class GristWidgetBlockEntity extends MachineProcessBlockEntity implements
 	
 	private boolean contentsValid()
 	{
-		if(MinestuckConfig.SERVER.disableGristWidget.get())
+		if(MinestuckConfig.SERVER.gristWidgetPercentage.get() == 0)
 			return false;
 		if(level.hasNeighborSignal(this.getBlockPos()))
 			return false;
-		int i = getGristWidgetBoondollarValue();
+		int i = getGristWidgetBoondollarValue(getGristWidgetResult(itemHandler.getStackInSlot(0), level, true));
 		return owner != null && i != 0 && i <= PlayerBoondollars.getBoondollars(PlayerData.get(owner, level));
 	}
 	
 	private void processContents()
 	{
-		GristSet gristSet = getGristWidgetResult();
+		GristSet gristSet = getGristWidgetResult(itemHandler.getStackInSlot(0), level, false);
 		if(gristSet == null)
 			return;
 		
-		if(!PlayerBoondollars.tryTakeBoondollars(PlayerData.get(owner, level), getGristWidgetBoondollarValue()))
+		if(!PlayerBoondollars.tryTakeBoondollars(PlayerData.get(owner, level), getGristWidgetBoondollarValue(getGristWidgetResult(itemHandler.getStackInSlot(0), level, true)), true))
 		{
 			LOGGER.warn("Failed to remove boondollars for a grist widget from {}'s porkhollow", owner.getUsername());
 			return;

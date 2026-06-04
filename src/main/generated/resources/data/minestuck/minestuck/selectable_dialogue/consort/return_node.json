@@ -1,0 +1,32 @@
+{
+  "condition": {
+    "type": "minestuck:list",
+    "conditions": [
+      {
+        "type": "minestuck:list",
+        "conditions": [
+          {
+            "type": "minestuck:npc_entity_predicate",
+            "predicate": {
+              "type": "minestuck:salamander"
+            }
+          },
+          {
+            "type": "minestuck:npc_entity_predicate",
+            "predicate": {
+              "type": "minestuck:nakagator"
+            }
+          }
+        ],
+        "list_type": "any"
+      },
+      {
+        "type": "minestuck:is_in_land"
+      }
+    ],
+    "list_type": "all"
+  },
+  "dialogue": "minestuck:consort/return_node/start",
+  "dialogue_weight": 10,
+  "keep_on_reset": false
+}
