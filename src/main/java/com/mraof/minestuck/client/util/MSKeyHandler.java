@@ -2,6 +2,7 @@ package com.mraof.minestuck.client.util;
 
 import com.mojang.blaze3d.platform.InputConstants;
 import com.mraof.minestuck.Minestuck;
+import com.mraof.minestuck.client.gui.StrifeSwitcherHud;
 import com.mraof.minestuck.client.gui.playerStats.PlayerStatsScreen;
 import com.mraof.minestuck.computer.editmode.ClientEditHandler;
 import com.mraof.minestuck.network.CaptchaDeckPackets;
@@ -31,12 +32,20 @@ public class MSKeyHandler
 	public static final String CAPTCHALOGUE = "key.minestuck.captchalogue";
 	public static final String ASPECT_EFFECT_TOGGLE = "key.minestuck.aspext_effect_toggle";
 	public static final String SYLLADEX = "key.minestuck.sylladex";
+	public static final String STRIFE = "key.minestuck.strife";
+	public static final String STRIFE_LEFT = "key.minestuck.strifeLeft";
+	public static final String STRIFE_RIGHT = "key.minestuck.strifeRight";
+	public static final String SWAP_OFFHAND = "key.minestuck.swapOffhand";
 	
 	public static KeyMapping statKey;
 	public static KeyMapping editKey;
 	public static KeyMapping captchaKey;
 	public static KeyMapping effectToggleKey;
 	public static KeyMapping sylladexKey;
+	public static KeyMapping strifeKey;
+	public static KeyMapping strifeLeftKey;
+	public static KeyMapping strifeRightKey;
+	public static KeyMapping swapOffhandKey;
 	
 	public static void registerKeys(RegisterKeyMappingsEvent event)
 	{
@@ -53,6 +62,15 @@ public class MSKeyHandler
 		event.register(effectToggleKey);
 		sylladexKey = new KeyMapping(SYLLADEX, GLFW.GLFW_KEY_UNKNOWN, CATEGORY);
 		event.register(sylladexKey);
+		
+		strifeKey = new KeyMapping(STRIFE, GLFW.GLFW_KEY_V, CATEGORY);
+		event.register(strifeKey);
+		strifeLeftKey = new KeyMapping(STRIFE_LEFT, GLFW.GLFW_KEY_UNKNOWN, CATEGORY);
+		event.register(strifeLeftKey);
+		strifeRightKey = new KeyMapping(STRIFE_RIGHT, GLFW.GLFW_KEY_UNKNOWN, CATEGORY);
+		event.register(strifeRightKey);
+		swapOffhandKey = new KeyMapping(SWAP_OFFHAND, GLFW.GLFW_KEY_B, CATEGORY);
+		event.register(swapOffhandKey);
 	}
 	
 	@SubscribeEvent
@@ -93,6 +111,34 @@ public class MSKeyHandler
 			
 			if(sylladexKey.isActiveAndMatches(input) && ClientPlayerData.getModus() != null)
 				PlayerStatsScreen.openGui(false);
+			
+			if(strifeKey.isActiveAndMatches(input))
+			{
+				if(event.getAction() == GLFW.GLFW_PRESS)
+					StrifeSwitcherHud.beginSwitch(false);
+				
+				if(event.getAction() == GLFW.GLFW_RELEASE)
+					StrifeSwitcherHud.finishSwitch();
+			}
+			
+			if(swapOffhandKey.isActiveAndMatches(input))
+			{
+				if(event.getAction() == GLFW.GLFW_PRESS)
+					StrifeSwitcherHud.beginSwitch(true);
+				
+				if(event.getAction() == GLFW.GLFW_RELEASE)
+					StrifeSwitcherHud.finishSwitch();
+			}
+			
+			if(event.getAction() != GLFW.GLFW_RELEASE
+					&& StrifeSwitcherHud.showSwitcher)
+			{
+				if(strifeLeftKey.isActiveAndMatches(input))
+					StrifeSwitcherHud.scroll(Minecraft.getInstance(), -1);
+				
+				if(strifeRightKey.isActiveAndMatches(input))
+					StrifeSwitcherHud.scroll(Minecraft.getInstance(), 1);
+			}
 		}
 		
 	}

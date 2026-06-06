@@ -45,7 +45,7 @@ public final class MSCreativeTabs
 		output.accept(BoondollarsItem.setCount(new ItemStack(MSItems.BOONDOLLARS.get()), 1000));
 		output.accept(BoondollarsItem.setCount(new ItemStack(MSItems.BOONDOLLARS.get()), 10000));
 		
-		output.accept(MSItems.STRIFE_DECK.get());
+		output.accept(MSItems.STRIFE_CARD.get());
 		
 		output.accept(MSItems.RAW_CRUXITE.get());
 		output.accept(MSItems.RAW_URANIUM.get());

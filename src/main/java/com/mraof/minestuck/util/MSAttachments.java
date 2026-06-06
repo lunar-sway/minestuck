@@ -9,10 +9,7 @@ import com.mraof.minestuck.entity.dialogue.DialogueComponent;
 import com.mraof.minestuck.fluid.MSFluidType;
 import com.mraof.minestuck.inventory.captchalogue.CaptchaDeckHandler;
 import com.mraof.minestuck.inventory.musicplayer.MusicPlaying;
-import com.mraof.minestuck.player.Echeladder;
-import com.mraof.minestuck.player.GristCache;
-import com.mraof.minestuck.player.PlayerData;
-import com.mraof.minestuck.player.Title;
+import com.mraof.minestuck.player.*;
 import net.minecraft.server.level.ServerPlayer;
 import net.minecraft.world.entity.LivingEntity;
 import net.minecraft.world.entity.player.Player;
@@ -32,6 +29,9 @@ public final class MSAttachments
 	
 	public static final Supplier<AttachmentType<CaptchaDeckHandler.ModusHolder>> MODUS_HOLDER = REGISTER.register("modus_holder",
 			() -> AttachmentType.serializable(restricted(CaptchaDeckHandler.ModusHolder::new, PlayerData.class)).build());
+	public static final Supplier<AttachmentType<StrifePortfolioData>> STRIFE_PORTFOLIO = REGISTER.register("strife_portfolio",
+					() -> AttachmentType.builder(StrifePortfolioData::new).serialize(StrifePortfolioData.CODEC).build());
+	
 	public static final Supplier<AttachmentType<Boolean>> HAS_KERNELSPRITE = REGISTER.register("has_kernelsprite",
 			() -> AttachmentType.builder(restricted(() -> false, PlayerData.class)).serialize(Codec.BOOL).build());
 	public static final Supplier<AttachmentType<Integer>> PLAYER_COLOR = REGISTER.register("player_color",

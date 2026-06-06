@@ -1,6 +1,8 @@
 package com.mraof.minestuck;
 
 import com.mraof.minestuck.computer.editmode.DeployList;
+import com.mraof.minestuck.player.Rungs;
+import com.sun.jdi.FloatValue;
 import net.minecraft.server.MinecraftServer;
 import net.neoforged.bus.api.SubscribeEvent;
 import net.neoforged.fml.common.EventBusSubscriber;
@@ -122,6 +124,11 @@ public class MinestuckConfig
 		public final IntValue overworldEditRange;
 		public final IntValue landEditRange;
 		public final BooleanValue giveItems;
+		public final BooleanValue restrictedStrife;
+		public final BooleanValue keepPortfolioOnDeath;
+		public final IntValue strifeDeckMaxSize;
+		public final IntValue abstrataSwitcherRung;
+		public final DoubleValue weaponAttackMultiplier;
 		
 		private Server(Builder builder)
 		{
@@ -145,6 +152,27 @@ public class MinestuckConfig
 					"- Fireballs will rain around players entering the medium",
 					"- Medium dungeons spawners contain Liches instead of Imps",
 					"- Underlings have a 50% chance to have the artifact grist").define("hardMode", false);
+			restrictedStrife = builder
+					.comment("Prevents players from attacking or using right-click abilities with a weapon " +
+							"that is not assigned to their Strife Portfolio.")
+					.define("restrictedStrife", true);
+			keepPortfolioOnDeath = builder
+					.comment("If true, the Strife Portfolio is kept on death. " +
+							"Otherwise all specibus slots are dropped as Strife Cards.")
+					.define("keepPortfolioOnDeath", true);
+			strifeDeckMaxSize = builder
+					.comment("Maximum number of weapons that can be stored in a single Strife Deck slot. " +
+							"Set to -1 to remove the limit.")
+					.defineInRange("strifeDeckMaxSize", 20, -1, Integer.MAX_VALUE);
+			abstrataSwitcherRung = builder
+					.comment("Echeladder rung required to unlock the Strife Specibus Quick-Switcher " +
+							"(hold strife key + scroll to switch specibus slots). " +
+							"Set to -1 to allow all players, or to " + Rungs.finalRung() + " to disable entirely.")
+					.defineInRange("abstrataSwitcherRung", 17, -1, Rungs.finalRung());
+			weaponAttackMultiplier = builder
+					.comment("When restrictedStrife is enabled, this is the fraction of normal damage dealt " +
+							"when attacking with an unassigned weapon (0.15 = 15% damage).")
+					.defineInRange("weaponAttackMultiplier", 0.15F, 0.0F, 1.0F);
 			builder.pop();
 			
 			builder.push("sylladex");
