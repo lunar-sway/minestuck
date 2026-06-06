@@ -1,0 +1,10 @@
+{
+  "values": {
+    "minestuck:raw_uranium": {
+      "uranium_power": 32
+    },
+    "minestuck:uranium_block": {
+      "uranium_power": 320
+    }
+  }
+}

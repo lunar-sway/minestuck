@@ -1,5 +1,6 @@
 package com.mraof.minestuck.data;
 
+import com.mraof.minestuck.api.uranium.UraniumPower;
 import com.mraof.minestuck.block.AspectTreeBlocks;
 import com.mraof.minestuck.entity.MSEntityTypes;
 import com.mraof.minestuck.item.MSItems;
@@ -350,6 +351,11 @@ public class DataMapGenerator extends DataMapProvider
 		parrot.add((Holder<EntityType<?>>) MSEntityTypes.BASILISK, new ParrotImitation(MSSoundEvents.ENTITY_BASILISK_AMBIENT.get()), false);
 		parrot.add((Holder<EntityType<?>>) MSEntityTypes.LICH, new ParrotImitation(MSSoundEvents.ENTITY_LICH_AMBIENT.get()), false);
 		
+		/* URANIUM FUELS */
+		
+		var uraniumFuels = this.builder(UraniumPower.URANIUM_POWER_MAP);
+		uraniumFuels.add(MSItems.RAW_URANIUM, new UraniumPower(32), false);
+		uraniumFuels.add(MSItems.URANIUM_BLOCK, new UraniumPower(320), false); // None of the minestuck machines can hold this lmao
 	}
 
 }

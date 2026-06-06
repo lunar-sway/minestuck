@@ -2228,13 +2228,34 @@ public class MinestuckEnUsLanguageProvider extends MinestuckLanguageProvider
 		addLand(TowersLandType.TOWERS, "Towers");
 		add(LandTypePair.FORMAT, "Land of %s and %s");
 		add(SburbHandler.CHAT_LAND_ENTRY, "Welcome to %s.");
+		addDimension("skaia", "The Battlefield");
+		addDimension("veil", "The Veil");
+		addDimension("prospit", "Prospit");
+		addDimension("derse", "Derse");
+		addBiome("skaia", "The Battlefield");
+		addBiome("veil", "The Veil");
+		addBiome("prospit", "Prospit");
+		addBiome("derse", "Derse");
+		addBiome("land_default_ocean", "Land Ocean");
+		addBiome("land_default_normal", "Land Normal");
+		addBiome("land_default_rough", "Land Rough");
+		addBiome("land_high_humid_ocean", "Land Ocean");
+		addBiome("land_high_humid_normal", "Land Normal");
+		addBiome("land_high_humid_rough", "Land Rough");
+		addBiome("land_no_rain_ocean", "Land Ocean");
+		addBiome("land_no_rain_normal", "Land Normal");
+		addBiome("land_no_rain_rough", "Land Rough");
+		addBiome("land_snow_ocean", "Land Ocean");
+		addBiome("land_snow_normal", "Land Normal");
+		addBiome("land_snow_rough", "Land Rough");
 		
 		addEffect(MSEffects.CREATIVE_SHOCK, "Creative Shock");
-		addEffectDescription(MSEffects.CREATIVE_SHOCK, "Prevents various actions depending on the level:\n" +
-				"- Level I: Prevents placing and mining blocks\n" +
-				"- Level II: Prevents opening redstone machinery GUIs\n" +
-				"- Level III: Prevents usage of some mobility items\n" +
-				"- Levels IV, V, and VI apply level I, II, and III respectively to creative players"
+		addEffectDescription(MSEffects.CREATIVE_SHOCK, """
+				Prevents various actions depending on the level:
+				- Level I: Prevents placing and mining blocks
+				- Level II: Prevents opening redstone machinery GUIs
+				- Level III: Prevents usage of some mobility items
+				- Levels IV, V, and VI apply level I, II, and III respectively to creative players"""
 		);
 		addEffect(MSEffects.SUSPICION, "Suspicion");
 		addEffectDescription(MSEffects.SUSPICION, "Pushes entities away and prevents them from riding or being ridden.");

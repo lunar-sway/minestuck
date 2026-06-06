@@ -2,6 +2,7 @@ package com.mraof.minestuck.blockentity.machine;
 
 import com.mraof.minestuck.MinestuckConfig;
 import com.mraof.minestuck.api.alchemy.GristSet;
+import com.mraof.minestuck.api.alchemy.GristTypes;
 import com.mraof.minestuck.api.alchemy.recipe.GristCostRecipe;
 import com.mraof.minestuck.block.machine.GristWidgetBlock;
 import com.mraof.minestuck.blockentity.MSBlockEntityTypes;
@@ -90,7 +91,7 @@ public class GristWidgetBlockEntity extends MachineProcessBlockEntity implements
 		if(containedItem.isEmpty())
 			return null;
 		
-		GristSet gristSet = GristCostRecipe.findCostForItem(containedItem, null, true, level);
+		GristSet gristSet = GristCostRecipe.findCostForItem(containedItem, GristTypes.BUILD.get(), true, level);
 		return fullValue ? gristSet : gristSet.mutableCopy().scale(MinestuckConfig.SERVER.gristWidgetPercentage.get().floatValue(), false);
 	}
 	
