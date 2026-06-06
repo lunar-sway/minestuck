@@ -57,7 +57,7 @@ public abstract class PlayerStatsScreen extends MinestuckScreen
 			}
 			return null;
 		}, SylladexScreen.TITLE, false),
-		STRIFE_SPECIBUS(StrifeSpecibusScreen::new, StrifeSpecibusScreen.TITLE, false),
+		STRIFE_SPECIBUS(StrifePortfolioScreen::new, StrifePortfolioScreen.TITLE, false),
 		ECHELADDER(EcheladderScreen::new, EcheladderScreen.TITLE, false),
 		GRIST_CACHE(GristCacheScreen::new, GristCacheScreen.TITLE, true);
 		

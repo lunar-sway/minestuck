@@ -7,5 +7,5 @@
     "tag": "minestuck:weapons"
   },
   "mode": "or",
-  "output": "minestuck:strife_deck"
+  "output": "minestuck:strife_card"
 }

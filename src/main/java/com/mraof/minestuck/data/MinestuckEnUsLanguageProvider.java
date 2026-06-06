@@ -2241,8 +2241,24 @@ public class MinestuckEnUsLanguageProvider extends MinestuckLanguageProvider
 		addEffect(MSEffects.SOPOR_SICKNESS, "Sopor Stupor");
 		addEffectDescription(MSEffects.SOPOR_SICKNESS, "Damages the player over time. Prevents the application of some effects, as long as their level is lower or equal");
 		
-		addItem(MSItems.STRIFE_DECK, "Strife Deck");
-		addTooltip(MSItems.STRIFE_DECK, "Allows you reset your Strife Deck");
+		addItem(MSItems.STRIFE_CARD, "Strife Card");
+		addTooltip(MSItems.STRIFE_CARD, "Assign to portfolio or select a weapon type");
+		
+		add("status.strife.portfolioFull", "Your Strife Portfolio is full!");
+		add("status.strife.portfolioDuplicate", "Your portfolio already has a %s slot.");
+		add("status.strife.assign", "Added %s to your Strife Portfolio.");
+		add("status.strife.assignWeapon", "Assigned %s to %s.");
+		add("status.strife.strifeDeckFull", "%s is full!");
+		add("status.strife.weaponMismatch", "%s doesn't match any specibus in your portfolio.");
+		add("status.strife.unlockSwitcher", "Strife Specibus Quick-Switcher unlocked!");
+		add("item.minestuck.strife_card.blank", "Blank! Right-click to assign a weapon type");
+
+		add(StrifePortfolioScreen.TITLE, "Strife Portfolio");
+		add("gui.strifePortfolio.deck", "Weapon Deck");
+		add("gui.strifePortfolio.specibus", "strife specibus");
+		add("gui.strifePortfolio.noActive", "No specibus selected");
+		add("gui.strifeCard.title", "Select Abstrata Type");
+		add("gui.strifeCard.label", "ABSTRATA");
 		
 		addStrife(KindAbstratusList.SWORD, "Bladekind");
 		addStrife(KindAbstratusList.HALF_SWORD, "½ Bladekind");
@@ -2277,10 +2293,6 @@ public class MinestuckEnUsLanguageProvider extends MinestuckLanguageProvider
 		add(MusicPlayerWeapon.HINT_INACTIVE, "Crouch and use to start playing");
 		add(CaptchaDeckHandler.TOO_LARGE, "Cannot captchalogue card, too much data stored");
 		add(GristCacheScreen.TITLE, "Grist Cache");
-		add(StrifeSpecibusScreen.TITLE, "Strife Specibus");
-		add(StrifeSpecibusScreen.ABSTRATA_TITLE, "Kind Abstrata");
-		add(StrifeSpecibusScreen.SLOTS, "Slots Left");
-		add(StrifeSpecibusScreen.CONFIRM_BODY, "Add %s to your abstrata? This cannot be undone!");
 		add(SylladexScreen.USE_ITEM, "Use Item");
 		add(EcheladderScreen.TITLE, "Echeladder");
 		add(EcheladderScreen.ATTACK, "Attack");
@@ -2291,8 +2303,6 @@ public class MinestuckEnUsLanguageProvider extends MinestuckLanguageProvider
 		add(EcheladderScreen.DAMAGE_UNDERLING_INCREASE, "Damage against underlings: +%d%%");
 		add(EcheladderScreen.PROTECTION_UNDERLING, "Underling damage decreased to:");
 		add(EcheladderScreen.PROTECTION_UNDERLING_INCREASE, "Underling damage: -%.1f%%");
-		add(StrifeSpecibusScreen.DAMAGE, "Weapon Damage");
-		add(StrifeSpecibusScreen.DAMAGE_DESC, "Damage boost for weapons of active abstrata types");
 		add(Modus.CAPTCHA_LIMIT, "Reached max modi capacity for this rung");
 		add(InventoryEditmodeScreen.TITLE, "Deploy List");
 		add(EditmodeSettingsScreen.TITLE, "Editmode Settings");
@@ -2558,6 +2568,11 @@ public class MinestuckEnUsLanguageProvider extends MinestuckLanguageProvider
 		add(MSKeyHandler.CAPTCHALOGUE, "Captchalogue Held Item");
 		add(MSKeyHandler.ASPECT_EFFECT_TOGGLE, "Toggle Aspect Effects");
 		add(MSKeyHandler.SYLLADEX, "Open Sylladex");
+
+		add(MSKeyHandler.STRIFE, "Manage Strife Switcher");
+		add(MSKeyHandler.STRIFE_LEFT, "Previous Weapon");
+		add(MSKeyHandler.STRIFE_RIGHT, "Next Weapon");
+		add(MSKeyHandler.SWAP_OFFHAND, "Swap Weapon To Offhand");
 		
 		add(LotusFlowerEntity.REGROW, "There are no petals on this plant, maybe it will regrow?");
 		

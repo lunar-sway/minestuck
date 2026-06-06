@@ -51,8 +51,7 @@ public class MSItems
 	public static final DeferredRegister.Items REGISTER = DeferredRegister.createItems(Minestuck.MOD_ID);
 	
 	// Specibus
-	public static final DeferredItem<Item> STRIFE_DECK = REGISTER.register("strife_deck", () -> new SpecibusResetItem(new Item.Properties().stacksTo(1)));
-	
+	public static final DeferredItem<Item> STRIFE_CARD = REGISTER.register("strife_card", () -> new StrifeCardItem(new Item.Properties().stacksTo(16)));
 	//Hammers
 	public static final DeferredItem<Item> CLAW_HAMMER = REGISTER.register("claw_hammer", () -> new WeaponItem(new WeaponItem.Builder(Tiers.IRON, 2, -2.8F).efficiency(1.0F).set(MSItemTypes.HAMMER_TOOL), new Item.Properties()));
 	public static final DeferredItem<Item> SLEDGE_HAMMER = REGISTER.register("sledge_hammer", () -> new WeaponItem(new WeaponItem.Builder(Tiers.IRON, 4, -3.2F).efficiency(4.0F).set(MSItemTypes.HAMMER_TOOL), new Item.Properties()));

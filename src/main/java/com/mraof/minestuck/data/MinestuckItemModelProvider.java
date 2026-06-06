@@ -27,7 +27,7 @@ public class MinestuckItemModelProvider extends ItemModelProvider
 		DreamerMoonBlocksData.addItems(this);
 		
 		// Specibuses
-		simpleItem(MSItems.STRIFE_DECK);
+		simpleItem(MSItems.STRIFE_CARD);
 		
 		//Hammers
 		handheldItem(MSItems.CLAW_HAMMER);

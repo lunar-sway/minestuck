@@ -14,7 +14,6 @@ import com.mraof.minestuck.inventory.captchalogue.CaptchaDeckHandler;
 import com.mraof.minestuck.inventory.captchalogue.HashMapModus;
 import com.mraof.minestuck.inventory.captchalogue.Modus;
 import com.mraof.minestuck.item.MSItems;
-import com.mraof.minestuck.network.SyncSpecibusPacket;
 import com.mraof.minestuck.player.*;
 import com.mraof.minestuck.skaianet.TitleSelectionHook;
 import com.mraof.minestuck.util.MSAttachments;
@@ -53,7 +52,6 @@ import net.neoforged.neoforge.event.entity.player.PlayerEvent;
 import net.neoforged.neoforge.event.furnace.FurnaceFuelBurnTimeEvent;
 import net.neoforged.neoforge.event.server.ServerStoppedEvent;
 import net.neoforged.neoforge.event.tick.ServerTickEvent;
-import net.neoforged.neoforge.network.PacketDistributor;
 import net.neoforged.neoforge.server.ServerLifecycleHooks;
 
 import java.util.*;
@@ -116,17 +114,6 @@ public class ServerEventHandler
 			boolean attackerIsRealPlayer = attacker instanceof ServerPlayer && !(attacker instanceof FakePlayer);
 			boolean injuredIsRealPlayer = injured instanceof ServerPlayer && !(injured instanceof FakePlayer);
 			
-			if(attackerIsRealPlayer)
-			{
-				ServerPlayer player = (ServerPlayer) attacker;
-				List<String> selected = player.getData(MSAttachments.SELECTED_SPECIBUS);
-				
-				if(!selected.isEmpty() && !hasSpecibusMatch(player))
-				{
-					event.setAmount(event.getAmount() * 0.15f);
-				}
-			}
-			
 			if(attackerIsRealPlayer && injured instanceof UnderlingEntity)
 			{
 				//Increase damage to underling
@@ -155,36 +142,6 @@ public class ServerEventHandler
 //
 //		return KindAbstratusList.getTypeFromName(selected);
 //	}
-	
-	private static void syncSpecibus(ServerPlayer player)
-	{
-		List<String> selected = player.getData(MSAttachments.SELECTED_SPECIBUS);
-		
-		if(!selected.isEmpty())
-		{
-			PacketDistributor.sendToPlayer(player, new SyncSpecibusPacket(selected, MinestuckConfig.SERVER.maxSpecibusCount.get()));
-		}
-	}
-	
-	@SubscribeEvent
-	public static void onPlayerLogin(PlayerEvent.PlayerLoggedInEvent event)
-	{
-		if(event.getEntity() instanceof ServerPlayer player)
-			syncSpecibus(player);
-	}
-	
-	private static boolean hasSpecibusMatch(ServerPlayer player)
-	{
-		List<String> selected = player.getData(MSAttachments.SELECTED_SPECIBUS);
-		if(selected.isEmpty()) return false;
-		
-		ItemStack held = player.getMainHandItem();
-		
-		return selected.stream()
-				.map(KindAbstratusList::getTypeFromName)
-				.filter(Objects::nonNull)
-				.anyMatch(type -> type.partOf(held));
-	}
 
 //		@SubscribeEvent
 //	public static void onLivingAttack(LivingIncomingDamageEvent event) {
@@ -227,21 +184,7 @@ public class ServerEventHandler
 		float step = 0.75f / (max - 1);
 		return 2.0f - step * (selectedCount - 1);
 	}
-
-	@SubscribeEvent
-	public static void onLivingDamagePre(LivingDamageEvent.Pre event)
-	{
-		if(!(event.getSource().getEntity() instanceof ServerPlayer player)) return;
-		
-		List<String> selected = player.getData(MSAttachments.SELECTED_SPECIBUS);
-		if(selected.isEmpty()) return;
-		
-		if(hasSpecibusMatch(player))
-		{
-			float multiplier = getDamageMultiplier(selected.size());
-			event.setNewDamage(event.getNewDamage() * multiplier);
-		}
-	}
+	
 	
 	@SubscribeEvent
 	public static void onTagsUpdated(TagsUpdatedEvent event) {
@@ -313,15 +256,6 @@ public class ServerEventHandler
 	public static void playerChangedDimension(PlayerEvent.PlayerChangedDimensionEvent event)
 	{
 		TitleSelectionHook.cancelSelection((ServerPlayer) event.getEntity());
-		ServerPlayer player = (ServerPlayer) event.getEntity();
-		TitleSelectionHook.cancelSelection(player);
-		List<String> selected = player.getData(MSAttachments.SELECTED_SPECIBUS);
-		
-		if(!selected.isEmpty())
-		{
-			PacketDistributor.sendToPlayer(player,
-					new SyncSpecibusPacket(selected, MinestuckConfig.SERVER.maxSpecibusCount.get()));
-		}
 	}
 	
 /*	@SubscribeEvent
@@ -363,37 +297,6 @@ public class ServerEventHandler
 		
 		MSCriteriaTriggers.BLADEKIND_BREAK.get().trigger(player);
 	}*/
-	@SubscribeEvent
-	public static void onItemDestroyed(PlayerDestroyItemEvent event) {
-		if (!(event.getEntity() instanceof ServerPlayer player)) return;
-		if (event.getHand() != InteractionHand.MAIN_HAND) return;
-
-		ItemStack from = event.getOriginal();
-		if (!from.isDamageableItem()) return;
-		Item halfItem = getHalfBlade(from);
-		if (halfItem == null) return;
-		
-		List<String> selected = new ArrayList<>(player.getData(MSAttachments.SELECTED_SPECIBUS));
-		if (!selected.contains(KindAbstratusList.SWORD)) return;
-		
-		ItemStack halfStack = new ItemStack(halfItem);
-		
-		EnchantmentHelper.updateEnchantments(halfStack, mutable -> {
-			EnchantmentHelper.getEnchantmentsForCrafting(from).keySet().forEach(enchantment ->
-					mutable.set(enchantment, EnchantmentHelper.getEnchantmentsForCrafting(from).getLevel(enchantment))
-			);
-		});
-		player.setItemInHand(InteractionHand.MAIN_HAND, halfStack);
-		
-		String halfSword = KindAbstratusList.HALF_SWORD;
-		if (!selected.contains(halfSword)) {
-			selected.remove(KindAbstratusList.SWORD);
-			selected.add(halfSword);
-			player.setData(MSAttachments.SELECTED_SPECIBUS, selected);
-			PacketDistributor.sendToPlayer(player, new SyncSpecibusPacket(selected, MinestuckConfig.SERVER.maxSpecibusCount.get()));
-		}
-		MSCriteriaTriggers.BLADEKIND_BREAK.get().trigger(player);
-	}
 	
 	
 	private static Item getHalfBlade(ItemStack stack)
