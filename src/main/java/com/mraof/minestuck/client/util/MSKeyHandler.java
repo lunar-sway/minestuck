@@ -93,10 +93,10 @@ public class MSKeyHandler
 	@SubscribeEvent
 	public static void onKeyInput(InputEvent.Key event)    //This is only called during the game, when no gui is active
 	{
+		InputConstants.Key input = InputConstants.getKey(event.getKey(), event.getScanCode());
+		
 		if(isNotRelease(event) && Minecraft.getInstance().screen == null)
 		{
-			InputConstants.Key input = InputConstants.getKey(event.getKey(), event.getScanCode());
-			
 			if(statKey.isActiveAndMatches(input))
 				PlayerStatsScreen.openGui(false);
 			
@@ -111,36 +111,33 @@ public class MSKeyHandler
 			
 			if(sylladexKey.isActiveAndMatches(input) && ClientPlayerData.getModus() != null)
 				PlayerStatsScreen.openGui(false);
-			
-			if(strifeKey.isActiveAndMatches(input))
-			{
-				if(event.getAction() == GLFW.GLFW_PRESS)
-					StrifeSwitcherHud.beginSwitch(false);
-				
-				if(event.getAction() == GLFW.GLFW_RELEASE)
-					StrifeSwitcherHud.finishSwitch();
-			}
-			
-			if(swapOffhandKey.isActiveAndMatches(input))
-			{
-				if(event.getAction() == GLFW.GLFW_PRESS)
-					StrifeSwitcherHud.beginSwitch(true);
-				
-				if(event.getAction() == GLFW.GLFW_RELEASE)
-					StrifeSwitcherHud.finishSwitch();
-			}
-			
-			if(event.getAction() != GLFW.GLFW_RELEASE
-					&& StrifeSwitcherHud.showSwitcher)
-			{
-				if(strifeLeftKey.isActiveAndMatches(input))
-					StrifeSwitcherHud.scroll(Minecraft.getInstance(), -1);
-				
-				if(strifeRightKey.isActiveAndMatches(input))
-					StrifeSwitcherHud.scroll(Minecraft.getInstance(), 1);
-			}
 		}
 		
+		if(strifeKey.isActiveAndMatches(input))
+		{
+			if(event.getAction() == GLFW.GLFW_PRESS)
+				StrifeSwitcherHud.beginSwitch(false);
+			
+			if(event.getAction() == GLFW.GLFW_RELEASE)
+				StrifeSwitcherHud.finishSwitch();
+		}
+		if(swapOffhandKey.isActiveAndMatches(input))
+		{
+			if(event.getAction() == GLFW.GLFW_PRESS)
+				StrifeSwitcherHud.beginSwitch(true);
+			
+			if(event.getAction() == GLFW.GLFW_RELEASE)
+				StrifeSwitcherHud.finishSwitch();
+		}
+		if(event.getAction() != GLFW.GLFW_RELEASE
+				&& StrifeSwitcherHud.showSwitcher)
+		{
+			if(strifeLeftKey.isActiveAndMatches(input))
+				StrifeSwitcherHud.scroll(Minecraft.getInstance(), -1);
+			
+			if(strifeRightKey.isActiveAndMatches(input))
+				StrifeSwitcherHud.scroll(Minecraft.getInstance(), 1);
+		}
 	}
 	
 	private static void captchalogueInGame()
