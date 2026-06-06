@@ -12,6 +12,12 @@
         },
         {
           "type": "minecraft:item",
+          "name": "minestuck:cake_mix",
+          "quality": 2,
+          "weight": 4
+        },
+        {
+          "type": "minecraft:item",
           "name": "minestuck:reverse_cake"
         },
         {

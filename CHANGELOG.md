@@ -8,19 +8,30 @@ The format is based on [Keep a Changelog](https://keepachangelog.com/en/1.1.0/).
 
 ### Added
 
-- Strife deck
+- Strife Portfolio
+
+## [1.21.1-1.14.0.1] - 2026-06-01
+
+### Added
+
+- Language files for biomes and dimensions
 
 ### Changed
 
 - Players now cannot captchalogue items if they contain certain nested item components. This replaces the bugged maximum data system introduced in the last update
+- Uranium fuel is now data driven
+- Uranium power is now a neoforge capability, add-ons will have to update their machines
+- Cakemix now spawning in supply chests and much more often in The Land of Desserts
 
 ### Fixed
 
 - Fixed players starting off with no captcha cards
+- Fixed a dupe exploit with a fully sylladex
+- Fixed client side crash when trying to widget a captcha card holding another captcha card
 
 ### Contributors for this release
 
-- Dweblenod, Fl1s
+- Dweblenod, medsal15, Fl1s
 
 ## [1.21.1-1.14.0.0] - 2026-04-13
 

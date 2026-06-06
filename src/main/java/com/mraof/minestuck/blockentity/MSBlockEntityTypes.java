@@ -1,6 +1,7 @@
 package com.mraof.minestuck.blockentity;
 
 import com.mraof.minestuck.Minestuck;
+import com.mraof.minestuck.api.uranium.UraniumCapabilities;
 import com.mraof.minestuck.block.AspectTreeBlocks;
 import com.mraof.minestuck.block.MSBlocks;
 import com.mraof.minestuck.block.SkaiaBlocks;
@@ -132,5 +133,10 @@ public final class MSBlockEntityTypes
 		event.registerBlockEntity(Capabilities.ItemHandler.BLOCK, MSBlockEntityTypes.GRIST_WIDGET.get(), GristWidgetBlockEntity::getItemHandler);
 		event.registerBlockEntity(Capabilities.ItemHandler.BLOCK, MSBlockEntityTypes.URANIUM_COOKER.get(), UraniumCookerBlockEntity::getItemHandler);
 		event.registerBlockEntity(Capabilities.ItemHandler.BLOCK, MSBlockEntityTypes.ANTHVIL.get(), AnthvilBlockEntity::getItemHandler);
+		
+		event.registerBlockEntity(UraniumCapabilities.BLOCK, MSBlockEntityTypes.SENDIFICATOR.get(), SendificatorBlockEntity::getUraniumHandler);
+		event.registerBlockEntity(UraniumCapabilities.BLOCK, MSBlockEntityTypes.URANIUM_COOKER.get(), UraniumCookerBlockEntity::getUraniumHandler);
+		event.registerBlockEntity(UraniumCapabilities.BLOCK, MSBlockEntityTypes.ANTHVIL.get(), AnthvilBlockEntity::getUraniumHandler);
+		event.registerBlockEntity(UraniumCapabilities.BLOCK, MSBlockEntityTypes.POWER_HUB.get(), PowerHubBlockEntity::getUraniumHandler);
 	}
 }
