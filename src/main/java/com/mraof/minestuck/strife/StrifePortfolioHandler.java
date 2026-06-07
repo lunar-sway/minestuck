@@ -379,8 +379,8 @@ public final class StrifePortfolioHandler
 	 */
 	public static void unassignSelected(ServerPlayer player)
 	{
-		StrifePortfolioData data  = getData(player);
-		StrifeSpecibus      selSp = data.getSelectedSpecibus();
+		StrifePortfolioData data = getData(player);
+		StrifeSpecibus selSp = data.getSelectedSpecibus();
 		if(selSp == null) return;
 		
 		if(data.isArmed())

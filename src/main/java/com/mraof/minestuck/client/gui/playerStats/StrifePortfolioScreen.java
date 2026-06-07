@@ -3,6 +3,7 @@ package com.mraof.minestuck.client.gui.playerStats;
 import com.mojang.blaze3d.systems.RenderSystem;
 import com.mraof.minestuck.Minestuck;
 import com.mraof.minestuck.network.*;
+import com.mraof.minestuck.player.ClientPlayerData;
 import com.mraof.minestuck.player.KindAbstratusType;
 import com.mraof.minestuck.player.StrifePortfolioData;
 import com.mraof.minestuck.player.StrifeSpecibus;
@@ -32,6 +33,7 @@ public class StrifePortfolioScreen extends PlayerStatsScreen
 	private static final ResourceLocation FRAME_TEX = ms("textures/gui/strife_specibus/strife_portfolio.png");
 	private static final ResourceLocation CARD_TEX = ms("textures/gui/strife_specibus/strife_card.png");
 	private static final String ICONS = "textures/gui/strife_specibus/icons/";
+	private static final ResourceLocation PORTFOLIO_ICONS = ms("textures/gui/icons.png");
 	
 	private static final float CS = 0.25f;
 	
@@ -64,6 +66,11 @@ public class StrifePortfolioScreen extends PlayerStatsScreen
 		mouseY = my;
 		selectedCard = -1;
 		
+		if(ClientPlayerData.hasDataCheckerAccess())
+		{
+			RenderSystem.setShaderColor(1, 1, 1, 1);
+			g.blit(PORTFOLIO_ICONS, xOffset + 198, yOffset, 112, 32, 28, 35);
+		}
 		StrifePortfolioData data = mc.player.getData(MSAttachments.STRIFE_PORTFOLIO.get());
 		StrifeSpecibus[] port = data.getPortfolio();
 		int active = data.getSelectedSpecibusIndex();
