@@ -39,6 +39,7 @@ public class StrifePortfolioScreen extends PlayerStatsScreen
 	
 	// Card fan: {offsetX, offsetY, portfolioSlotIndex}
 	private static final int[][] FAN = {{159, 69, 2}, {107, 77, 1}, {159, 25, 3}, {56, 80, 4}, {107, 33, 5}, {56, 40, 0}, {107, 7, 8}, {12, 50, 9}, {59, 7, 7}, {11, 9, 6},};
+	private final float[] hoverAnim = new float[StrifePortfolioData.PORTFOLIO_SIZE];
 	
 	private int selectedCard = -1; // slot index the mouse is over (-1 = none)
 	private int mouseX, mouseY;
@@ -112,6 +113,18 @@ public class StrifePortfolioScreen extends PlayerStatsScreen
 		for(int[] f : FAN)
 			detectHover(g, f[0], f[1], f[2], true, port, active);
 		
+		float speed = 0.2F;
+		
+		for(int i = 0; i < hoverAnim.length; i++)
+		{
+			boolean hovered = i == selectedCard;
+			
+			if(hovered)
+				hoverAnim[i] = Math.min(1F, hoverAnim[i] + speed);
+			else
+				hoverAnim[i] = Math.max(0F, hoverAnim[i] - speed);
+		}
+		
 		// foreground frame overlay
 		RenderSystem.setShaderColor(1, 1, 1, 1);
 		g.blit(FRAME_TEX, xOffset, yOffset, 0, 0, guiWidth, guiHeight);
@@ -155,8 +168,10 @@ public class StrifePortfolioScreen extends PlayerStatsScreen
 		if(sp == null) return;
 		
 		// hover pop-out offset
-		int ox = (idx == selectedCard) ? -5 : 0;
-		int oy = (idx == selectedCard) ? -5 : 0;
+		float anim = hoverAnim[idx];
+		
+		int ox = -(int)(anim * 3F);
+		int oy = -(int)(anim * 3F);
 		int x = xOffset + cx + ox;
 		int y = yOffset + cy + oy;
 		
