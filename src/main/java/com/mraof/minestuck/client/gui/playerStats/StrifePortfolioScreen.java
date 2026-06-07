@@ -38,7 +38,7 @@ public class StrifePortfolioScreen extends PlayerStatsScreen
 	private static final float CS = 0.25f;
 	
 	// Card fan: {offsetX, offsetY, portfolioSlotIndex}
-	private static final int[][] FAN = {{11, 9, 6}, {59, 7, 7}, {12, 50, 9}, {107, 7, 8}, {56, 40, 0}, {107, 33, 5}, {56, 80, 4}, {159, 25, 3}, {107, 77, 1}, {159, 69, 2},};
+	private static final int[][] FAN = {{159, 69, 2}, {107, 77, 1}, {159, 25, 3}, {56, 80, 4}, {107, 33, 5}, {56, 40, 0}, {107, 7, 8}, {12, 50, 9}, {59, 7, 7}, {11, 9, 6},};
 	
 	private int selectedCard = -1; // slot index the mouse is over (-1 = none)
 	private int mouseX, mouseY;
@@ -208,7 +208,7 @@ public class StrifePortfolioScreen extends PlayerStatsScreen
 		int n = 0;
 		for(ItemStack stack : items)
 		{
-			int ix = (int) (deckX + (n % 5) * 23) - (n / 5);
+			int ix = (deckX + (n % 5) * 23) - (n / 5);
 			int iy = 193 - (n / 5) * 2;
 			
 			int sx = x + Math.round(ix * CS);
@@ -219,7 +219,7 @@ public class StrifePortfolioScreen extends PlayerStatsScreen
 			
 			// item icon at card scale
 			g.pose().pushPose();
-			g.pose().translate(sx + Math.round(2 * CS) - 0.8, sy + Math.round(4 * CS), 0f);
+			g.pose().translate(sx + Math.round(2 * CS) - 0.9, sy + Math.round(4 * CS), 0f);
 			g.pose().scale(CS, CS, CS);
 			g.renderItem(stack, 0, 0);
 			g.pose().popPose();
