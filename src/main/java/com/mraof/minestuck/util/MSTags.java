@@ -173,7 +173,6 @@ public class MSTags
 		public static final TagKey<Item> KIND_AXE = tag("kind/axe");
 		public static final TagKey<Item> KIND_HOE = tag("kind/hoe");
 		public static final TagKey<Item> KIND_SHOVEL = tag("kind/shovel");
-		
 		public static final TagKey<Item> KIND_HAMMER = tag("kind/hammer");
 		public static final TagKey<Item> KIND_KNIFE = tag("kind/knife");
 		public static final TagKey<Item> KIND_BATON = tag("kind/baton");
@@ -181,7 +180,7 @@ public class MSTags
 		public static final TagKey<Item> KIND_CANE = tag("kind/cane");
 		public static final TagKey<Item> KIND_CLUB = tag("kind/club");
 		public static final TagKey<Item> KIND_CLAW = tag("kind/claw");
-		public static final TagKey<Item> KIND_CHAINSAW = tag("kind/chainsaw");
+		public static final TagKey<Item> KIND_SAW = tag("kind/saw");
 		public static final TagKey<Item> KIND_LANCE = tag("kind/lance");
 		public static final TagKey<Item> KIND_FAN = tag("kind/fan");
 		public static final TagKey<Item> KIND_SICKLE = tag("kind/sickle");

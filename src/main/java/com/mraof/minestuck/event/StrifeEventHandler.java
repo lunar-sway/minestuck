@@ -268,10 +268,6 @@ public final class StrifeEventHandler
 		return null;
 	}
 	
-	// =========================================================================
-	// Dropped items: strip STRIFE_ASSIGNED so assigned weapons become normal
-	// =========================================================================
-	
 	@SubscribeEvent
 	public static void onPlayerDropItem(ItemTossEvent event)
 	{
