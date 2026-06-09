@@ -2279,7 +2279,7 @@ public class MinestuckEnUsLanguageProvider extends MinestuckLanguageProvider
 		add("gui.strifePortfolio.specibus", "strife specibus");
 		add("gui.strifePortfolio.noActive", "No specibus selected");
 		add("gui.strifeCard.title", "Select Abstrata Type");
-		add("gui.strifeCard.label", "ABSTRATA");
+		add("gui.strifeCard.label", "kind abstrata");
 		
 		addStrife(KindAbstratusList.SWORD, "Bladekind");
 		addStrife(KindAbstratusList.HALF_SWORD, "½ Bladekind");
@@ -2295,7 +2295,7 @@ public class MinestuckEnUsLanguageProvider extends MinestuckLanguageProvider
 		addStrife(KindAbstratusList.CANE, "Canekind");
 		addStrife(KindAbstratusList.CLUB, "Clubkind");
 		addStrife(KindAbstratusList.CLAW, "Clawkind");
-		addStrife(KindAbstratusList.CHAINSAW, "Sawkind");
+		addStrife(KindAbstratusList.SAW, "Sawkind");
 		addStrife(KindAbstratusList.LANCE, "Lancekind");
 		addStrife(KindAbstratusList.FAN, "Fankind");
 		addStrife(KindAbstratusList.SICKLE, "Sicklekind");

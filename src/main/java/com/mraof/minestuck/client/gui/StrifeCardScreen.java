@@ -12,7 +12,6 @@ import net.minecraft.resources.ResourceLocation;
 import net.minecraft.world.InteractionHand;
 import net.neoforged.neoforge.network.PacketDistributor;
 
-import java.util.ArrayList;
 import java.util.List;
 
 /**
@@ -25,19 +24,19 @@ public class StrifeCardScreen extends Screen
 	
 	private static final ResourceLocation GUI_TEX = ResourceLocation.fromNamespaceAndPath(Minestuck.MOD_ID, "textures/gui/strife_specibus/strife_selector.png");
 	
-	private static final String ICONS = "textures/gui/strife_specibus/icons/";
-	
 	private static final int COLUMNS = 2;
-	private static final int COL_W = 50;
+	private static final int COL_W = 49;
 	
 	private static final int LIST_X = 27;
 	private static final int LIST_Y = 23;
 	private static final int LIST_H = 155;
 	
+	// Y offset where item rows actually start rendering (below the header area in the texture)
+	private static final int LIST_ITEMS_Y = 61;
 	private static final int SCROLL_X = 128;
 	private static final int SCROLL_Y = 23;
 	private static final int SCROLL_H = 155;
-	
+	private static final float TEXT_SCALE = 0.65f;
 	private final InteractionHand hand;
 	private List<KindAbstratusType> types;
 	
@@ -48,6 +47,7 @@ public class StrifeCardScreen extends Screen
 	private int maxScroll;
 	
 	private int scroll = 0;
+	private boolean draggingScrollbar = false;
 	
 	public StrifeCardScreen(InteractionHand hand)
 	{
@@ -63,10 +63,11 @@ public class StrifeCardScreen extends Screen
 		xOff = (width - GUI_W) / 2;
 		yOff = (height - GUI_H) / 2;
 		
-		types = new ArrayList<>(KindAbstratusList.getTypeList());
+		types = KindAbstratusList.getTypeList();
 		
-		rowH = minecraft.font.lineHeight + 1;
-		visibleRows = LIST_H / rowH;
+		rowH = minecraft.font.lineHeight;
+		int itemAreaH = (LIST_Y + LIST_H) - LIST_ITEMS_Y;
+		visibleRows = itemAreaH / rowH;
 		
 		int totalRows = (types.size() + COLUMNS - 1) / COLUMNS;
 		maxScroll = Math.max(0, totalRows - visibleRows);
@@ -85,67 +86,40 @@ public class StrifeCardScreen extends Screen
 		
 		RenderSystem.setShaderColor(1, 1, 1, 1);
 		
-		int listLeft = xOff + LIST_X - 11;
-		int listTop = yOff + 59;
+		// Black background for the list area
+		g.fill(xOff + LIST_X, yOff + LIST_Y, xOff + SCROLL_X, yOff + LIST_Y + LIST_H, 0xFF000000);
+		g.enableScissor(xOff + LIST_X, yOff + LIST_Y, xOff + SCROLL_X, yOff + LIST_Y + LIST_H);
 		
 		int firstItem = scroll * COLUMNS;
-		
-		g.fill(xOff + LIST_X, yOff + LIST_Y, xOff + LIST_X + COL_W * COLUMNS, yOff + LIST_Y + LIST_H, 0xFF000000);
-		
-		g.enableScissor(xOff + LIST_X, yOff + LIST_Y, xOff + LIST_X + COL_W * COLUMNS, yOff + LIST_Y + LIST_H);
 		
 		for(int row = 0; row < visibleRows; row++)
 		{
 			for(int col = 0; col < COLUMNS; col++)
 			{
 				int index = firstItem + row * COLUMNS + col;
-				
 				if(index >= types.size()) continue;
 				
 				KindAbstratusType type = types.get(index);
 				
-				int ex = listLeft + col * COL_W;
-				int ey = listTop + row * rowH;
+				// Screen-space top-left corner of this cell
+				int cellX = xOff + LIST_X + col * COL_W;
+				int cellY = yOff + LIST_ITEMS_Y + row * rowH;
 				
-				boolean hovered = isInRegion(ex + 11, ey + 1, COL_W, rowH, mx, my);
-				
-				boolean iconHovered = isInRegion(ex + 11, ey + 1, 12, 12, mx, my);
-				
+				boolean hovered = isInRegion(cellX, cellY, COL_W, rowH, mx, my);
 				int textColor = hovered ? 0x000000 : 0xFFFFFF;
-				int iconBg = iconHovered ? 0xFF000000 : 0xFFFFFFFF;
 				
-				// ICON BACKGROUND
-				g.fill(ex + 11, ey + 1, ex + 11 + 12, ey + 1 + 12, iconBg);
-				
-				// TEXT HOVER BACKGROUND
 				if(hovered)
 				{
-					g.fill(ex + 11, ey + 1, ex + 11 + COL_W, ey + 1 + rowH, 0xFFAFAFAF);
+					g.fill(cellX, cellY, cellX + COL_W, cellY + rowH, 0xFFAFAFAF);
 				}
 				
-				// TEXT SCALE
-				float scale = 0.75f;
+				String displayName = type.getDisplayName().getString();
+				float textScreenX = cellX + 4;
+				float textScreenY = cellY + (rowH - minecraft.font.lineHeight * TEXT_SCALE) / 2f;
 				
 				g.pose().pushPose();
-				g.pose().scale(scale, scale, 1f);
-				
-				g.drawString(minecraft.font, type.getDisplayName(), (int) ((ex + COL_W - minecraft.font.width(type.getDisplayName().getString()) + 10) / scale), (int) ((ey + 3) / scale), textColor, false);
-				
-				g.pose().popPose();
-				
-				// ICON
-				String suffix = iconSuffix(type);
-				ResourceLocation icon = ResourceLocation.fromNamespaceAndPath(Minestuck.MOD_ID, ICONS + suffix + ".png");
-				
-				float s = 12f / 16f;
-				
-				g.pose().pushPose();
-				g.pose().scale(s, s, 1f);
-				
-				RenderSystem.setShaderColor(1, 1, 1, 1);
-				
-				g.blit(icon, (int) ((ex + 11) / s), (int) ((ey + 1) / s), 0, 0, 16, 16, 16, 16);
-				
+				g.pose().scale(TEXT_SCALE, TEXT_SCALE, 1f);
+				g.drawString(minecraft.font, displayName, (int) (textScreenX / TEXT_SCALE), (int) (textScreenY / TEXT_SCALE), textColor, false);
 				g.pose().popPose();
 			}
 		}
@@ -156,21 +130,37 @@ public class StrifeCardScreen extends Screen
 		
 		g.blit(GUI_TEX, xOff, yOff, 0, 0, GUI_W, GUI_H);
 		
+		// Scrollbar thumb
 		int thumbY = (maxScroll > 0) ? (int) ((SCROLL_H - 15) * ((float) scroll / Math.max(1, maxScroll))) : 0;
-		
 		int thumbU = (maxScroll > 0) ? 232 : 244;
-		
 		g.blit(GUI_TEX, xOff + SCROLL_X, yOff + SCROLL_Y + thumbY, thumbU, 0, 12, 15);
+		
+		String label = Component.translatable("gui.strifeCard.label").getString();
+		int labelFontWidth = minecraft.font.width(label);
+		
+		float availableLength = GUI_H - 12f;
+		float labelScale = Math.min(1.2f, availableLength / labelFontWidth);
+		
+		int centerX = xOff + GUI_W / 2 + 5;
+		int centerY = yOff + 128;
+		
+		g.pose().pushPose();
+		g.pose().translate(centerX, centerY, 0);
+		g.pose().mulPose(com.mojang.math.Axis.ZP.rotationDegrees(270F));
+		g.pose().scale(labelScale, labelScale, 1F);
+		
+		int lx = -(int) (labelFontWidth / 2f);
+		int ly = -(int) ((GUI_W / 2F - 6) / labelScale);
+		
+		g.drawString(minecraft.font, label, lx, ly, 0xFFFFFF, false);
+		g.pose().popPose();
 	}
 	
 	@Override
 	public boolean mouseScrolled(double mx, double my, double scrollX, double scrollY)
 	{
 		if(maxScroll <= 0) return false;
-		
-		if(scrollY > 0) scroll = Math.max(0, scroll - 1);
-		else scroll = Math.min(maxScroll, scroll + 1);
-		
+		scroll = clamp(scroll - (int) Math.signum(scrollY), 0, maxScroll);
 		return true;
 	}
 	
@@ -179,9 +169,6 @@ public class StrifeCardScreen extends Screen
 	{
 		if(button != 0) return super.mouseClicked(mx, my, button);
 		
-		int listLeft = xOff + LIST_X - 11;
-		int listTop = yOff + 59;
-		
 		int firstItem = scroll * COLUMNS;
 		
 		for(int row = 0; row < visibleRows; row++)
@@ -189,23 +176,46 @@ public class StrifeCardScreen extends Screen
 			for(int col = 0; col < COLUMNS; col++)
 			{
 				int index = firstItem + row * COLUMNS + col;
-				
 				if(index >= types.size()) continue;
 				
-				int ex = listLeft + col * COL_W;
-				int ey = listTop + row * rowH;
+				int cellX = xOff + LIST_X + col * COL_W;
+				int cellY = yOff + LIST_ITEMS_Y + row * rowH;
 				
-				if(isInRegion(ex + 11, ey + 1, COL_W, rowH, (int) mx, (int) my))
+				if(isInRegion(cellX, cellY, COL_W, rowH, (int) mx, (int) my))
 				{
 					PacketDistributor.sendToServer(new SelectAbstrataForCardPacket(hand, types.get(index).getUnlocalizedName()));
-					
 					onClose();
 					return true;
 				}
 			}
 		}
 		
+		if(isInRegion(xOff + SCROLL_X, yOff + SCROLL_Y, 12, SCROLL_H, (int) mx, (int) my))
+		{
+			draggingScrollbar = true;
+			updateScrollFromMouse(my);
+			return true;
+		}
+		
 		return super.mouseClicked(mx, my, button);
+	}
+	
+	@Override
+	public boolean mouseDragged(double mx, double my, int button, double dragX, double dragY)
+	{
+		if(button == 0 && draggingScrollbar)
+		{
+			updateScrollFromMouse(my);
+			return true;
+		}
+		return super.mouseDragged(mx, my, button, dragX, dragY);
+	}
+	
+	@Override
+	public boolean mouseReleased(double mx, double my, int button)
+	{
+		if(button == 0) draggingScrollbar = false;
+		return super.mouseReleased(mx, my, button);
 	}
 	
 	private boolean isInRegion(int rx, int ry, int rw, int rh, int px, int py)
@@ -213,10 +223,15 @@ public class StrifeCardScreen extends Screen
 		return px >= rx && px < rx + rw && py >= ry && py < ry + rh;
 	}
 	
-	private static String iconSuffix(KindAbstratusType type)
+	private void updateScrollFromMouse(double my)
 	{
-		String n = type.getUnlocalizedName();
-		int dot = n.lastIndexOf('.');
-		return dot >= 0 ? n.substring(dot + 1) : n;
+		if(maxScroll <= 0) return;
+		float rel = (float) (my - (yOff + SCROLL_Y) - 15 / 2F) / (SCROLL_H - 15);
+		scroll = clamp(Math.round(rel * maxScroll), 0, maxScroll);
+	}
+	
+	private static int clamp(int value, int min, int max)
+	{
+		return Math.max(min, Math.min(max, value));
 	}
 }
