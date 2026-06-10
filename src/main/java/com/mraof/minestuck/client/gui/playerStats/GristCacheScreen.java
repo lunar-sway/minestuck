@@ -1,8 +1,6 @@
 package com.mraof.minestuck.client.gui.playerStats;
 
 import com.mraof.minestuck.api.alchemy.GristTypes;
-import com.mraof.minestuck.computer.editmode.ClientEditmodeData;
-import com.mraof.minestuck.player.ClientPlayerData;
 import net.minecraft.client.gui.GuiGraphics;
 import net.minecraft.client.gui.components.Button;
 import net.minecraft.network.chat.Component;
@@ -55,13 +53,6 @@ public class GristCacheScreen extends PlayerStatsScreen
 	public void render(GuiGraphics guiGraphics, int mouseX, int mouseY, float partialTicks)
 	{
 		super.render(guiGraphics, mouseX, mouseY, partialTicks);
-		
-		String cacheMessage;
-		if(ClientEditmodeData.isInEditmode() || ClientPlayerData.getTitle() == null)
-			cacheMessage = getTitle().getString();
-		else cacheMessage = ClientPlayerData.getTitle().asTextComponent().getString();
-		guiGraphics.drawString(font, cacheMessage, (this.width / 2F) - mc.font.width(cacheMessage) / 2F, yOffset + 12, 0x404040, false);
-
 		drawActiveTabAndOther(guiGraphics, mouseX, mouseY);
 		
 		this.drawGrist(guiGraphics, xOffset, yOffset, mouseX, mouseY, page);

@@ -4,6 +4,7 @@ import com.google.common.collect.ImmutableList;
 import com.mojang.blaze3d.systems.RenderSystem;
 import com.mraof.minestuck.MinestuckConfig;
 import com.mraof.minestuck.client.ClientRungData;
+import com.mraof.minestuck.computer.editmode.ClientEditmodeData;
 import com.mraof.minestuck.item.MSItems;
 import com.mraof.minestuck.player.ClientPlayerData;
 import com.mraof.minestuck.player.Rung;
@@ -120,6 +121,20 @@ public class EcheladderScreen extends PlayerStatsScreen
 		
 		guiGraphics.blit(guiEcheladder, xOffset, yOffset, 0, 0, guiWidth, guiHeight);
 		
+		String titleText;
+		if(ClientEditmodeData.isInEditmode() || ClientPlayerData.getTitle() == null)
+		{
+			titleText = "";
+		} else
+		{
+			titleText = ClientPlayerData.getTitle().asTextComponent().getString();
+		}
+		
+		if(!titleText.isEmpty())
+		{
+			guiGraphics.drawString(font, titleText, xOffset + 90 + 78 - font.width(titleText) / 2, yOffset + 20, , false);
+		}
+		
 		//scroll bar
 		float scrollPercentage = (float) scroll / maxScroll;
 		guiGraphics.blit(guiEcheladder, xOffset + 80, (int) (yOffset + 42 + (130F * (1F - scrollPercentage))), 0, 243, 7, 13);
@@ -198,7 +213,7 @@ public class EcheladderScreen extends PlayerStatsScreen
 		
 		
 		String msg = title.getString();
-		guiGraphics.drawString(font, msg, xOffset + 168 - mc.font.width(msg) / 2F, yOffset + 12, GREY, false);
+		guiGraphics.drawString(font, msg, xOffset + 168 - mc.font.width(msg) / 2F, yOffset + 10, GREY, false);
 		
 		Rung.DisplayData rungData = ClientRungData.getData(currentRung);
 		

@@ -40,7 +40,7 @@ public final class TorrentHelper
 	}
 	
 	
-	public static void handleTorrent(TorrentSession torrentSession, List<TorrentSession> sessions, MinecraftServer server)
+	public static void handleTorrent(TorrentSession torrentSession, MinecraftServer server)
 	{
 		PlayerIdentifier seeder = torrentSession.getSeeder();
 		

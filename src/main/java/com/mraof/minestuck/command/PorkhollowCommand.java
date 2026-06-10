@@ -47,8 +47,6 @@ public class PorkhollowCommand    //Much like /gristSend and /land, is a tempora
 	private static int send(CommandSourceStack source, ServerPlayer target, long amount) throws CommandSyntaxException
 	{
 		ServerPlayer player = source.getPlayerOrException();
-		player.playNotifySound(MSSoundEvents.ITEM_BOONDOLLARS_USE.get(),SoundSource.PLAYERS,1,(player.getRandom().nextFloat()/2)+0.75f);
-		
 		if(PlayerBoondollars.tryTakeBoondollars(PlayerData.get(player).orElseThrow(), amount, true))
 		{
 			PlayerBoondollars.addBoondollars(PlayerData.get(target).orElseThrow(), amount, true);

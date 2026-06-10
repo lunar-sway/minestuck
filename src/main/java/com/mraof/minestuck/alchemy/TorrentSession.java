@@ -135,7 +135,7 @@ public class TorrentSession
 			List<TorrentSession> sessions = data.getTorrentSessions();
 			for(TorrentSession torrentSession : sessions)
 			{
-				TorrentHelper.handleTorrent(torrentSession, sessions, server);
+				TorrentHelper.handleTorrent(torrentSession, server);
 			}
 			sendOutUpdates(sessions, server);
 		}
