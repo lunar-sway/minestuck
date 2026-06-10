@@ -132,7 +132,7 @@ public class EcheladderScreen extends PlayerStatsScreen
 		
 		if(!titleText.isEmpty())
 		{
-			guiGraphics.drawString(font, titleText, xOffset + 90 + 78 - font.width(titleText) / 2, yOffset + 20, , false);
+			guiGraphics.drawString(font, titleText, xOffset + 90 + 78 - font.width(titleText) / 2, yOffset + 20, 0x404040, false);
 		}
 		
 		//scroll bar
