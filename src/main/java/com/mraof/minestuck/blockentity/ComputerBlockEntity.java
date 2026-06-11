@@ -57,7 +57,7 @@ public final class ComputerBlockEntity extends BlockEntity implements ISburbComp
 	public static final String DISK_REJECT = "block.minestuck.computer.disk_reject";
 	
 	private static final Logger LOGGER = LogManager.getLogger();
-	private static final int DISK_CAPACITY = 6;
+	private static final int DISK_CAPACITY = 5;
 	private boolean pickedUp = false;
 	private static final Codec<NonNullList<ItemStack>> DISK_LIST_CODEC = NonNullList.codecOf(ItemStack.SINGLE_ITEM_CODEC);
 	
