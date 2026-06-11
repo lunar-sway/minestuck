@@ -352,7 +352,7 @@ public final class CaptchaDeckHandler
 			if(addedItems > addedCards)
 			{    //Item was captchalogued, but the card remained
 				launchAnyItem(player, new ItemStack(MSItems.CAPTCHA_CARD.get(), addedItems - addedCards));    //TODO split existing stack and instead remove the content to keep any other nbt data
-				card.shrink(addedCards);
+				card.shrink(addedItems - addedCards);
 			} else if(addedCards > addedItems)
 			{    //The card was used, but the item failed to captchalogue
 				for(int i = addedItems; i < addedCards; i++)

@@ -147,6 +147,14 @@ public abstract class MinestuckLanguageProvider extends LanguageProvider
 	{
 		add("land."+key, value);
 	}
+	protected void addDimension(String key, String value)
+	{
+		add("dimension.minestuck."+key, value);
+	}
+	protected void addBiome(String key, String value)
+	{
+		add("biome.minestuck."+key, value);
+	}
 	protected void addStrife(String key, String value)
 	{
 		add("strife."+key, value);
