@@ -1,6 +1,7 @@
 package com.mraof.minestuck.computer.editmode;
 
 import com.mraof.minestuck.Minestuck;
+import com.mraof.minestuck.alchemy.TorrentSession;
 import com.mraof.minestuck.api.alchemy.GristAmount;
 import com.mraof.minestuck.api.alchemy.GristSet;
 import com.mraof.minestuck.api.alchemy.GristType;
@@ -238,7 +239,7 @@ public final class ClientEditHandler
 		}
 	}
 	
-	private static ClientPlayerData.ClientCache getGristCache()
+	private static TorrentSession.ClientCache getGristCache()
 	{
 		return ClientPlayerData.getGristCache(ClientPlayerData.CacheSource.EDITMODE);
 	}

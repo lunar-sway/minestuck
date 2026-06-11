@@ -7,6 +7,7 @@ import com.mraof.minestuck.MinestuckConfig;
 import com.mraof.minestuck.api.alchemy.GristSet;
 import com.mraof.minestuck.api.alchemy.GristType;
 import com.mraof.minestuck.api.alchemy.GristTypes;
+import com.mraof.minestuck.player.GristCache;
 import com.mraof.minestuck.player.IdentifierHandler;
 import com.mraof.minestuck.player.PlayerIdentifier;
 import com.mraof.minestuck.world.storage.MSExtraData;
@@ -148,9 +149,9 @@ public class TorrentSession
 		TorrentHelper.createPlayerTorrentSession(player, player.server);
 	}
 	
-	public List<GristType> getViableSeeding(LimitedCache cache)
+	public List<GristType> getViableSeeding(ClientCache cache)
 	{
-		return getViableSeeding(cache.set);
+		return getViableSeeding(cache.set());
 	}
 	
 	/**
@@ -190,23 +191,27 @@ public class TorrentSession
 		//TODO find a way to express the share ratio, for potential leech banning
 	}
 	
-	//TODO This overlaps heavily with ClientCache, however that uses GristSet which does not have a CODEC
-	public record LimitedCache(GristSet.Immutable set, long limit)
+	public record ClientCache(GristSet.Immutable set, long limit)
 	{
-		public static final Codec<LimitedCache> CODEC = RecordCodecBuilder.create(instance -> instance.group(
-				GristSet.Codecs.NON_NEGATIVE_CODEC.fieldOf("grist_set").forGetter(LimitedCache::set),
-				Codec.LONG.fieldOf("limit").forGetter(LimitedCache::limit)
-		).apply(instance, LimitedCache::new));
-		public static final StreamCodec<RegistryFriendlyByteBuf, LimitedCache> STREAM_CODEC = StreamCodec.composite(
+		public static final Codec<ClientCache> CODEC = RecordCodecBuilder.create(instance -> instance.group(
+				GristSet.Codecs.NON_NEGATIVE_CODEC.fieldOf("grist_set").forGetter(ClientCache::set),
+				Codec.LONG.fieldOf("limit").forGetter(ClientCache::limit)
+		).apply(instance, ClientCache::new));
+		public static final StreamCodec<RegistryFriendlyByteBuf, ClientCache> STREAM_CODEC = StreamCodec.composite(
 				GristSet.Codecs.STREAM_CODEC,
-				LimitedCache::set,
+				ClientCache::set,
 				ByteBufCodecs.VAR_LONG,
-				LimitedCache::limit,
-				LimitedCache::new
+				ClientCache::limit,
+				ClientCache::new
 		);
+		
+		public boolean canAfford(GristSet cost)
+		{
+			return GristCache.canAfford(this.set, cost, this.limit);
+		}
 	}
 	
-	public record TorrentClientData(String username,int playerColor, int status, List<GristType> seededTypes, Map<Integer, List<GristType>> leeches, LimitedCache cache)
+	public record TorrentClientData(String username,int playerColor, int status, List<GristType> seededTypes, Map<Integer, List<GristType>> leeches, ClientCache cache)
 	{
 		public static final StreamCodec<RegistryFriendlyByteBuf, TorrentClientData> STREAM_CODEC = StreamCodec.composite(
 				ByteBufCodecs.STRING_UTF8,
@@ -219,7 +224,7 @@ public class TorrentSession
 				TorrentClientData::seededTypes,
 				ByteBufCodecs.map(HashMap::new, ByteBufCodecs.INT, GristType.STREAM_CODEC.apply(ByteBufCodecs.list())),
 				TorrentClientData::leeches,
-				LimitedCache.STREAM_CODEC,
+				ClientCache.STREAM_CODEC,
 				TorrentClientData::cache,
 				TorrentClientData::new);
 		
@@ -227,7 +232,7 @@ public class TorrentSession
 		public boolean hasEntered() { return status >= 1; }
 		public List<GristType> getViableSeeding()
 		{
-			return this.seededTypes.stream().filter(this.cache.set::hasType).toList();
+			return this.seededTypes.stream().filter(this.cache.set()::hasType).toList();
 		}
 	}
 }

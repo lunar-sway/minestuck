@@ -277,32 +277,14 @@ public class TorrentWidgets
 			
 			if(torrentData != null)
 			{
-				ResourceLocation colorTex = ResourceLocation.fromNamespaceAndPath("minestuck", "textures/gui/color_selector.png"
-				);
-				float r, g, b;
-				
-				if(torrentData.status() == 2)
-				{
-					int color = getPlayerColor(torrentData);
-					r = ((color >> 16) & 0xFF) / 255F;
-					g = ((color >> 8) & 0xFF) / 255F;
-					b = (color & 0xFF) / 255F;
-				} else
-				{
-					r = 0.5F;
-					g = 0.5F;
-					b = 0.5F;
-				}
+				ResourceLocation colorTex = ResourceLocation.fromNamespaceAndPath("minestuck", "textures/gui/color_selector.png");
 				
 				guiGraphics.pose().pushPose();
-				
 				guiGraphics.pose().translate(getX(), getY() - 5, 0);
 				guiGraphics.pose().scale(0.27F, 0.27F, 1.0F);
 				
-				RenderSystem.setShaderColor(r, g, b, 1.0F);
-				
+				applyPlayerShaderColor(torrentData);
 				guiGraphics.blit(colorTex, 0, 0, 47, 47, 181, 24, 54, 56, 256, 256);
-				
 				RenderSystem.setShaderColor(1, 1, 1, 1);
 				
 				guiGraphics.pose().popPose();
@@ -494,31 +476,15 @@ public class TorrentWidgets
 		@Override
 		protected void renderWidget(GuiGraphics guiGraphics, int mouseX, int mouseY, float partialTick)
 		{
-			int x = getX();
-			int y = getY();
-			float r, g, b;
-			if(data.status() == 2)
-			{
-				int color = getPlayerColor(data);
-				r = ((color >> 16) & 0xFF) / 255F;
-				g = ((color >> 8) & 0xFF) / 255F;
-				b = (color & 0xFF) / 255F;
-			} else
-			{
-				r = g = b = 0.5F;
-			}
-			
 			guiGraphics.pose().pushPose();
-			guiGraphics.pose().translate(x, y, 0);
+			guiGraphics.pose().translate(getX(), getY(), 0);
 			guiGraphics.pose().scale(SCALE, SCALE, 1.0F);
 			
-			RenderSystem.setShaderColor(r, g, b, 1.0F);
+			applyPlayerShaderColor(data);
 			guiGraphics.blit(COLOR_TEX, 0, 0, 47, 47, 181, 24, 54, 56, 256, 256);
 			RenderSystem.setShaderColor(1, 1, 1, 1);
 			
 			guiGraphics.pose().popPose();
-			
-			x += (int) (ICON_W * SCALE) + SPACING;
 		}
 		
 		@Override
@@ -1133,25 +1099,37 @@ public class TorrentWidgets
 		if(data != null && data.status() == 2)
 		{
 			int base = data.playerColor();
-			int r = Math.min(((base >> 16) & 0xFF) + 40, 255);
-			int g = Math.min(((base >> 8) & 0xFF) + 40, 255);
-			int b = Math.min((base & 0xFF) + 40, 255);
+			int r = Math.min(redComponent(base)   + 40, 255);
+			int g = Math.min(greenComponent(base) + 40, 255);
+			int b = Math.min(blueComponent(base)  + 40, 255);
 			return 0xFF000000 | (r << 16) | (g << 8) | b;
 		}
 		return GristTorrentGui.LIGHT_BLUE;
 	}
+	static int redComponent(int color)   { return (color >> 16) & 0xFF; }
+	static int greenComponent(int color) { return (color >> 8)  & 0xFF; }
+	static int blueComponent(int color)  { return  color        & 0xFF; }
 	
-	// Want to add a stroke around the playerIcon & active scrollBar part for better visibility
-	static boolean isColorBright(int color)
+	static void applyShaderColor(int packedColor)
 	{
-		int r = (color >> 16) & 0xFF;
-		int g = (color >> 8) & 0xFF;
-		int b = color & 0xFF;
-		return (0.299 * r + 0.587 * g + 0.114 * b) > 128;
+		RenderSystem.setShaderColor(
+				redComponent(packedColor)   / 255F,
+				greenComponent(packedColor) / 255F,
+				blueComponent(packedColor)  / 255F,
+				1.0F
+		);
 	}
 	
-	static int getBackdropColor(int playerColor)
+	static boolean isColorBright(int color)
 	{
-		return isColorBright(playerColor) ? 0xFF1A1A1A : 0xFFE8E8E8;
+		return (0.299 * redComponent(color) + 0.587 * greenComponent(color) + 0.114 * blueComponent(color)) > 128;
+	}
+	
+	static void applyPlayerShaderColor(TorrentSession.TorrentClientData data)
+	{
+		if(data != null && data.status() == 2)
+			applyShaderColor(getPlayerColor(data));
+		else
+			RenderSystem.setShaderColor(0.5F, 0.5F, 0.5F, 1.0F);
 	}
 }

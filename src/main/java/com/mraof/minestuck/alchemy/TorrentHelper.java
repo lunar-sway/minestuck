@@ -91,7 +91,7 @@ public final class TorrentHelper
 					{
 						PlayerData leechData = PlayerData.get(sessionPlayerID, server);
 						GristCache leechCache = GristCache.get(leechData);
-						TorrentSession.LimitedCache leechLimitedCache = new TorrentSession.LimitedCache(leechCache.getGristSet(), Echeladder.get(leechData).getGristCapacity());
+						TorrentSession.ClientCache leechLimitedCache = new TorrentSession.ClientCache(leechCache.getGristSet().asImmutable(), Echeladder.get(leechData).getGristCapacity());
 						
 						boolean entered = SburbPlayerData.get(sessionPlayerID, server).hasEntered();
 						boolean online = sessionPlayerID.getPlayer(server) != null;

@@ -2,6 +2,7 @@ package com.mraof.minestuck.client.util;
 
 import com.mojang.blaze3d.systems.RenderSystem;
 import com.mraof.minestuck.MinestuckConfig;
+import com.mraof.minestuck.alchemy.TorrentSession;
 import com.mraof.minestuck.api.alchemy.GristAmount;
 import com.mraof.minestuck.api.alchemy.GristSet;
 import com.mraof.minestuck.api.alchemy.GristType;
@@ -51,7 +52,7 @@ public class GuiUtil
 			return;
 		}
 		
-		ClientPlayerData.ClientCache cache = ClientPlayerData.getGristCache(ClientPlayerData.CacheSource.PLAYER);
+		TorrentSession.ClientCache cache = ClientPlayerData.getGristCache(ClientPlayerData.CacheSource.PLAYER);
 		GristSet playerGrist = cache.set();
 		if(!MinestuckConfig.CLIENT.alchemyIcons.get())
 		{

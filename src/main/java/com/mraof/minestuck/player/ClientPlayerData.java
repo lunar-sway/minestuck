@@ -88,21 +88,13 @@ public final class ClientPlayerData
 		return boondollars;
 	}
 	
-	public static ClientCache getGristCache(CacheSource cacheSource)
+	public static TorrentSession.ClientCache getGristCache(CacheSource cacheSource)
 	{
 		return switch(cacheSource)
 		{
-			case PLAYER -> new ClientCache(ClientPlayerData.playerGrist, ClientRungData.getData(ClientPlayerData.getRung()).gristCapacity());
-			case EDITMODE -> new ClientCache(ClientPlayerData.targetGrist, targetCacheLimit);
+			case PLAYER -> new TorrentSession.ClientCache(ClientPlayerData.playerGrist.asImmutable(), ClientRungData.getData(ClientPlayerData.getRung()).gristCapacity());
+			case EDITMODE -> new TorrentSession.ClientCache(ClientPlayerData.targetGrist.asImmutable(), targetCacheLimit);
 		};
-	}
-	
-	public record ClientCache(GristSet set, long limit)
-	{
-		public boolean canAfford(GristSet cost)
-		{
-			return GristCache.canAfford(this.set, cost, this.limit);
-		}
 	}
 	
 	public enum CacheSource

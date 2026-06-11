@@ -3,6 +3,7 @@ package com.mraof.minestuck.client.gui.toasts;
 import com.mojang.blaze3d.systems.RenderSystem;
 import com.mojang.blaze3d.vertex.PoseStack;
 import com.mraof.minestuck.alchemy.GristHelper;
+import com.mraof.minestuck.alchemy.TorrentSession;
 import com.mraof.minestuck.api.alchemy.GristAmount;
 import com.mraof.minestuck.api.alchemy.GristType;
 import com.mraof.minestuck.client.util.GuiUtil;
@@ -188,7 +189,7 @@ public class GristToast implements Toast
 	
 	public static void handlePacket(GristToastPacket packet)
 	{
-		ClientPlayerData.ClientCache cache = ClientPlayerData.getGristCache(packet.isCacheOwner() ? ClientPlayerData.CacheSource.PLAYER : ClientPlayerData.CacheSource.EDITMODE);
+		TorrentSession.ClientCache cache = ClientPlayerData.getGristCache(packet.isCacheOwner() ? ClientPlayerData.CacheSource.PLAYER : ClientPlayerData.CacheSource.EDITMODE);
 		GristHelper.EnumSource source = packet.source();
 		ToastComponent toasts = Minecraft.getInstance().getToasts();
 		
