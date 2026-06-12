@@ -156,11 +156,10 @@ public class ComputerBlock extends MachineBlock implements EntityBlock
 		super.onRemove(state, level, pos, newState, isMoving);
 	}
 	
-	private void dropItems(Level level, BlockPos pos)
+	protected void dropItems(Level level, BlockPos pos)
 	{
 		if(level.getBlockEntity(pos) instanceof ComputerBlockEntity computer)
 		{
-			if(computer.isPickedUp()) return;
 			computer.closeAll();
 			computer.dropAllDisks();
 		}

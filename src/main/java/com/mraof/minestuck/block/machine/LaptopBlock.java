@@ -66,10 +66,12 @@ public class LaptopBlock extends ComputerBlock
 		ItemStack pickupStack = new ItemStack(state.getBlock().asItem());
 		BlockItem.setBlockEntityData(pickupStack, computer.getType(), beTag);
 		
-		computer.setPickedUp(true);
 		level.removeBlock(pos, false);
 		
 		if(!player.addItem(pickupStack))
 			player.drop(pickupStack, false);
 	}
+	
+	@Override
+	protected void dropItems(Level level, BlockPos pos){}
 }

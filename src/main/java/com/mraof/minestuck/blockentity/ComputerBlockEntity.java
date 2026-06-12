@@ -58,7 +58,6 @@ public final class ComputerBlockEntity extends BlockEntity implements ISburbComp
 	
 	private static final Logger LOGGER = LogManager.getLogger();
 	private static final int DISK_CAPACITY = 5;
-	private boolean pickedUp = false;
 	private static final Codec<NonNullList<ItemStack>> DISK_LIST_CODEC = NonNullList.codecOf(ItemStack.SINGLE_ITEM_CODEC);
 	
 	@Nullable
@@ -438,15 +437,5 @@ public final class ComputerBlockEntity extends BlockEntity implements ISburbComp
 					|| player.hasPermissions(Commands.LEVEL_GAMEMASTERS);
 		} else
 			return true;
-	}
-	
-	public void setPickedUp(boolean pickedUp)
-	{
-		this.pickedUp = pickedUp;
-	}
-	
-	public boolean isPickedUp()
-	{
-		return pickedUp;
 	}
 }
