@@ -6,6 +6,14 @@ The format is based on [Keep a Changelog](https://keepachangelog.com/en/1.1.0/).
 
 ## [Unreleased]
 
+### Changed
+
+- Laptops can now be picked up
+
+- ### Contributors for this release
+
+- Fl1s
+
 ## [1.21.1-1.14.0.1] - 2026-06-01
 
 ### Added
