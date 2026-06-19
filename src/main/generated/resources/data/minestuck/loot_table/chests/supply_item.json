@@ -118,6 +118,23 @@
               "function": "minecraft:set_count"
             }
           ],
+          "name": "minestuck:cake_mix",
+          "quality": 1,
+          "weight": 2
+        },
+        {
+          "type": "minecraft:item",
+          "functions": [
+            {
+              "add": false,
+              "count": {
+                "type": "minecraft:uniform",
+                "max": 2.0,
+                "min": 1.0
+              },
+              "function": "minecraft:set_count"
+            }
+          ],
           "name": "minecraft:experience_bottle",
           "quality": 2
         },
