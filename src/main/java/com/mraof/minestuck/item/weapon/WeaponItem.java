@@ -2,6 +2,8 @@ package com.mraof.minestuck.item.weapon;
 
 import com.google.common.collect.ImmutableList;
 import com.google.common.collect.Streams;
+import com.mraof.minestuck.Minestuck;
+
 import net.minecraft.MethodsReturnNonnullByDefault;
 import net.minecraft.core.BlockPos;
 import net.minecraft.core.Holder;
@@ -16,6 +18,8 @@ import net.minecraft.world.entity.EquipmentSlotGroup;
 import net.minecraft.world.entity.LivingEntity;
 import net.minecraft.world.entity.ai.attributes.Attribute;
 import net.minecraft.world.entity.ai.attributes.AttributeModifier;
+import net.minecraft.world.entity.ai.attributes.Attributes;
+import net.minecraft.world.entity.ai.attributes.AttributeModifier.Operation;
 import net.minecraft.world.entity.player.Player;
 import net.minecraft.world.item.*;
 import net.minecraft.world.item.component.ItemAttributeModifiers;
@@ -283,6 +287,11 @@ public class WeaponItem extends TieredItem
 		{
 			attributeBuilder.add(attribute, modifier, slot);
 			return this;
+		}
+		
+		public Builder addKnockbackEffect(float knockback)
+		{
+			return addAttributeModifier(Attributes.ATTACK_KNOCKBACK, new AttributeModifier(Minestuck.id("minestuck_weapon"), knockback, Operation.ADD_VALUE));
 		}
 		
 		private Properties updateProperties(Properties properties)
