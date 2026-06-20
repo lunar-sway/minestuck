@@ -2,8 +2,11 @@ package com.mraof.minestuck.item.weapon;
 
 import com.google.common.collect.ImmutableList;
 import com.google.common.collect.Streams;
+import com.mraof.minestuck.Minestuck;
+
 import net.minecraft.MethodsReturnNonnullByDefault;
 import net.minecraft.core.BlockPos;
+import net.minecraft.core.Holder;
 import net.minecraft.core.component.DataComponents;
 import net.minecraft.tags.TagKey;
 import net.minecraft.world.InteractionHand;
@@ -11,9 +14,15 @@ import net.minecraft.world.InteractionResult;
 import net.minecraft.world.InteractionResultHolder;
 import net.minecraft.world.entity.Entity;
 import net.minecraft.world.entity.EquipmentSlot;
+import net.minecraft.world.entity.EquipmentSlotGroup;
 import net.minecraft.world.entity.LivingEntity;
+import net.minecraft.world.entity.ai.attributes.Attribute;
+import net.minecraft.world.entity.ai.attributes.AttributeModifier;
+import net.minecraft.world.entity.ai.attributes.Attributes;
+import net.minecraft.world.entity.ai.attributes.AttributeModifier.Operation;
 import net.minecraft.world.entity.player.Player;
 import net.minecraft.world.item.*;
+import net.minecraft.world.item.component.ItemAttributeModifiers;
 import net.minecraft.world.item.component.Tool;
 import net.minecraft.world.item.context.UseOnContext;
 import net.minecraft.world.level.Level;
@@ -175,6 +184,7 @@ public class WeaponItem extends TieredItem
 		private UseAnim useAction = UseAnim.NONE;
 		private final List<FinishUseItemEffect> itemUsageEffects = new ArrayList<>();
 		private final List<InventoryTickEffect> tickEffects = new ArrayList<>();
+		private final ItemAttributeModifiers.Builder attributeBuilder = ItemAttributeModifiers.builder();
 		
 		public Builder(Tier tier, int attackDamage, float attackSpeed)
 		{
@@ -265,9 +275,32 @@ public class WeaponItem extends TieredItem
 			return this;
 		}
 		
+		/**
+		 * Shorthand for addAttributeModifier that defaults to main hand
+		 */
+		public Builder addAttributeModifier(Holder<Attribute> attribute, AttributeModifier modifier)
+		{
+			return this.addAttributeModifier(attribute, modifier, EquipmentSlotGroup.MAINHAND);
+		}
+		
+		public Builder addAttributeModifier(Holder<Attribute> attribute, AttributeModifier modifier, EquipmentSlotGroup slot)
+		{
+			attributeBuilder.add(attribute, modifier, slot);
+			return this;
+		}
+		
+		public Builder addKnockbackEffect(float knockback)
+		{
+			return addAttributeModifier(Attributes.ATTACK_KNOCKBACK, new AttributeModifier(Minestuck.id("minestuck_weapon"), knockback, Operation.ADD_VALUE));
+		}
+		
 		private Properties updateProperties(Properties properties)
 		{
-			properties.attributes(DiggerItem.createAttributes(this.tier, this.attackDamage, this.attackSpeed));
+			for (ItemAttributeModifiers.Entry modifier : DiggerItem.createAttributes(this.tier, this.attackDamage, this.attackSpeed).modifiers()) {
+				attributeBuilder.add(modifier.attribute(), modifier.modifier(), modifier.slot());
+			}
+			properties.attributes(attributeBuilder.build());
+
 			ArrayList<TagKey<Block>> mineableBlocks = new ArrayList<>();
 			for(MSToolType toolType : this.toolType)
 			{
