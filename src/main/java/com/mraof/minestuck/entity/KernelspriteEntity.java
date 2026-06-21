@@ -1,6 +1,15 @@
 package com.mraof.minestuck.entity;
 
+import com.google.common.collect.ImmutableList;
+import com.google.common.collect.ImmutableMap;
+import com.google.common.collect.ImmutableSet;
+import com.mojang.datafixers.util.Pair;
+import com.mojang.serialization.Dynamic;
 import com.mraof.minestuck.Minestuck;
+import com.mraof.minestuck.entity.ai.brain.MSActivity;
+import com.mraof.minestuck.entity.ai.brain.MSMemoryModuleType;
+import com.mraof.minestuck.entity.ai.brain.MSPoiTypes;
+import com.mraof.minestuck.entity.ai.brain.MSSensorType;
 import com.mraof.minestuck.entity.dialogue.DialogueComponent;
 import com.mraof.minestuck.entity.dialogue.DialogueEntity;
 import com.mraof.minestuck.player.IdentifierHandler;
@@ -10,21 +19,35 @@ import com.mraof.minestuck.util.MSAttachments;
 import com.mraof.minestuck.util.MSSoundEvents;
 import net.minecraft.ChatFormatting;
 import net.minecraft.core.BlockPos;
+import net.minecraft.core.GlobalPos;
+import net.minecraft.core.Holder;
 import net.minecraft.nbt.CompoundTag;
 import net.minecraft.network.syncher.EntityDataAccessor;
 import net.minecraft.network.syncher.EntityDataSerializers;
 import net.minecraft.network.syncher.SynchedEntityData;
+import net.minecraft.server.level.ServerLevel;
 import net.minecraft.server.level.ServerPlayer;
 import net.minecraft.sounds.SoundEvent;
 import net.minecraft.util.Mth;
+import net.minecraft.util.valueproviders.UniformInt;
 import net.minecraft.world.InteractionHand;
 import net.minecraft.world.InteractionResult;
 import net.minecraft.world.entity.*;
+import net.minecraft.world.entity.ai.Brain;
 import net.minecraft.world.entity.ai.attributes.AttributeSupplier;
 import net.minecraft.world.entity.ai.attributes.Attributes;
+import net.minecraft.world.entity.ai.behavior.*;
 import net.minecraft.world.entity.ai.control.MoveControl;
 import net.minecraft.world.entity.ai.goal.*;
+import net.minecraft.world.entity.ai.memory.MemoryModuleType;
+import net.minecraft.world.entity.ai.memory.MemoryStatus;
+import net.minecraft.world.entity.ai.sensing.Sensor;
+import net.minecraft.world.entity.ai.sensing.SensorType;
+import net.minecraft.world.entity.ai.village.poi.PoiType;
+import net.minecraft.world.entity.animal.armadillo.Armadillo;
+import net.minecraft.world.entity.animal.armadillo.ArmadilloAi;
 import net.minecraft.world.entity.player.Player;
+import net.minecraft.world.entity.schedule.Activity;
 import net.minecraft.world.level.Level;
 import net.minecraft.world.phys.Vec3;
 import net.neoforged.bus.api.SubscribeEvent;
@@ -33,6 +56,10 @@ import net.neoforged.neoforge.event.entity.player.PlayerEvent;
 
 import javax.annotation.Nullable;
 import java.util.EnumSet;
+import java.util.List;
+import java.util.Map;
+import java.util.Set;
+import java.util.function.BiPredicate;
 
 @EventBusSubscriber(modid = Minestuck.MOD_ID, bus = EventBusSubscriber.Bus.GAME)
 public class KernelspriteEntity extends PathfinderMob implements DialogueEntity
@@ -47,6 +74,13 @@ public class KernelspriteEntity extends PathfinderMob implements DialogueEntity
 	private BlockPos boundOrigin;
 	private int wanderRadius = 20;
 	private PlayerIdentifier owner;
+	
+	private static final ImmutableList<MemoryModuleType<?>> MEMORY_TYPES = ImmutableList.of(MSMemoryModuleType.MACHINE_LOCATIONS.get());
+	private static final ImmutableList<SensorType<? extends Sensor<? super KernelspriteEntity>>> SENSOR_TYPES = ImmutableList.of(MSSensorType.MACHINE_SENSOR.get());
+	public static final Map<MemoryModuleType<List<GlobalPos>>, BiPredicate<KernelspriteEntity, Holder<PoiType>>> POI_MEMORIES = ImmutableMap.of(
+			MSMemoryModuleType.MACHINE_LOCATIONS.get(),
+			(entity, holder) -> holder.is(MSPoiTypes.ALCHEMITER_KEY)
+	);
 	
 	public KernelspriteEntity(EntityType<? extends PathfinderMob> entityType, Level level)
 	{
@@ -129,6 +163,107 @@ public class KernelspriteEntity extends PathfinderMob implements DialogueEntity
 		super.registerGoals();
 		this.goalSelector.addGoal(0, new FloatGoal(this));
 		this.goalSelector.addGoal(7, new RandomLookAroundGoal(this));
+	}
+	
+	@Override
+	public Brain<KernelspriteEntity> getBrain()
+	{
+		return (Brain<KernelspriteEntity>) super.getBrain();
+	}
+	
+	@Override
+	protected Brain.Provider<KernelspriteEntity> brainProvider()
+	{
+		return Brain.provider(MEMORY_TYPES, SENSOR_TYPES);
+	}
+	
+	@Override
+	protected Brain<KernelspriteEntity> makeBrain(Dynamic<?> dynamic)
+	{
+		Brain<KernelspriteEntity> brain = this.brainProvider().makeBrain(dynamic);
+		this.registerBrainGoals(brain);
+		return brain;
+	}
+	
+	public void refreshBrain(ServerLevel serverLevel)
+	{
+		Brain<KernelspriteEntity> brain = this.getBrain();
+		brain.stopAll(serverLevel, this);
+		this.brain = brain.copyWithoutBehaviors();
+		this.registerBrainGoals(this.getBrain());
+	}
+	
+	private void registerBrainGoals(Brain<KernelspriteEntity> brain)
+	{
+		initCoreActivity(brain);
+		initIdleActivity(brain);
+		brain.setCoreActivities(Set.of(Activity.CORE));
+		brain.setDefaultActivity(Activity.IDLE);
+		brain.useDefaultActivity();
+		
+		/*brain.addActivityWithConditions(
+				Activity.WORK,
+				VillagerGoalPackages.getWorkPackage(villagerprofession, 1F),
+				ImmutableSet.of(Pair.of(MSMemoryModuleType.MACHINE_LOCATIONS, MemoryStatus.VALUE_PRESENT))
+		);*/
+	}
+	
+	private static void initCoreActivity(Brain<KernelspriteEntity> brain) {
+		brain.addActivity(
+				Activity.CORE,
+				0,
+				ImmutableList.of(
+						new Swim(0.8F),
+						new ArmadilloAi.ArmadilloPanic(2.0F),
+						new LookAtTargetSink(45, 90),
+						new MoveToTargetSink() {
+							@Override
+							protected boolean checkExtraStartConditions(ServerLevel p_316506_, Mob p_316710_) {
+								if (p_316710_ instanceof Armadillo armadillo && armadillo.isScared()) {
+									return false;
+								}
+								
+								return super.checkExtraStartConditions(p_316506_, p_316710_);
+							}
+						},
+						new CountDownCooldownTicks(MemoryModuleType.TEMPTATION_COOLDOWN_TICKS),
+						new CountDownCooldownTicks(MemoryModuleType.GAZE_COOLDOWN_TICKS),
+						ARMADILLO_ROLLING_OUT
+				)
+		);
+	}
+	
+	private static void initIdleActivity(Brain<KernelspriteEntity> brain) {
+		brain.addActivity(
+				Activity.IDLE,
+				ImmutableList.of(
+						Pair.of(0, SetEntityLookTargetSometimes.create(EntityType.PLAYER, 6.0F, UniformInt.of(30, 60))),
+						Pair.of(1, new AnimalMakeLove(EntityType.ARMADILLO, 1.0F, 1)),
+						Pair.of(
+								2,
+								new RunOne<>(
+										ImmutableList.of(
+												Pair.of(new FollowTemptation(p_316818_ -> 1.25F, p_319682_ -> p_319682_.isBaby() ? 1.0 : 2.0), 1),
+												Pair.of(BabyFollowAdult.create(ADULT_FOLLOW_RANGE, 1.25F), 1)
+										)
+								)
+						),
+						Pair.of(3, new RandomLookAround(UniformInt.of(150, 250), 30.0F, 0.0F, 0.0F)),
+						Pair.of(
+								4,
+								new RunOne<>(
+										ImmutableMap.of(MemoryModuleType.WALK_TARGET, MemoryStatus.VALUE_ABSENT),
+										ImmutableList.of(
+												Pair.of(RandomStroll.stroll(1.0F), 1), Pair.of(SetWalkTargetFromLookTarget.create(1.0F, 3), 1), Pair.of(new DoNothing(30, 60), 1)
+										)
+								)
+						)
+				)
+		);
+	}
+	
+	public static void updateActivity(Armadillo armadillo) {
+		armadillo.getBrain().setActiveActivityToFirstValid(ImmutableList.of(Activity.IDLE));
 	}
 	
 	public void setRandomMoveGoal(boolean add)
@@ -336,7 +471,7 @@ public class KernelspriteEntity extends PathfinderMob implements DialogueEntity
 		{
 			Level level = KernelspriteEntity.this.level();
 			BlockPos mobPos = KernelspriteEntity.this.blockPosition();
- 			if(!level.getBlockState(mobPos).blocksMotion())
+			if(!level.getBlockState(mobPos).blocksMotion())
 				return;
 			
 			for(BlockPos iteratePos : BlockPos.betweenClosed(mobPos.offset(1, 1, 1), mobPos.offset(-1, -1, -1)))
