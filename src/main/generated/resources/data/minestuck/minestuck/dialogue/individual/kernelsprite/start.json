@@ -94,7 +94,7 @@
             {
               "type": "minestuck:npc_near_poi",
               "poi_key": "minestuck:gate",
-              "radius": 20
+              "radius": 50
             },
             {
               "type": "minestuck:list",

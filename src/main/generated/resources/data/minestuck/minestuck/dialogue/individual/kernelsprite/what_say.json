@@ -4,7 +4,7 @@
       "condition": {
         "type": "minestuck:npc_near_poi",
         "poi_key": "minestuck:cruxtruder",
-        "radius": 20
+        "radius": 50
       },
       "node": {
         "animation": {},

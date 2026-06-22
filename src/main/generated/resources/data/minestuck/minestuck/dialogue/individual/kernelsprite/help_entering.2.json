@@ -4,7 +4,7 @@
       "condition": {
         "type": "minestuck:npc_near_poi",
         "poi_key": "minestuck:totem_lathe",
-        "radius": 20
+        "radius": 50
       },
       "node": {
         "animation": {},
@@ -41,7 +41,7 @@
                   2,
                   1
                 ],
-                "radius": 15,
+                "radius": 30,
                 "wait_permanently": true
               }
             ]

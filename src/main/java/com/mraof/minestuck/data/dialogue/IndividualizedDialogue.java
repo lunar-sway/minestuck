@@ -67,7 +67,7 @@ public final class IndividualizedDialogue
 						"Please alchemize artifact.", "It moves towards the middle section of the Alchemiter.")
 						.addResponse(new ResponseBuilder(l.subMsg("next", "What's next?"))
 								.addPlayerMessage(l.subMsg("next_player", "What's next?"))
-								.addTrigger(new GoToPoi(MSPoiTypes.ALCHEMITER_KEY, new Vec3i(0, 1, 0), 15, 1, 240, 1, 6, true))
+								.addTrigger(new GoToPoi(MSPoiTypes.ALCHEMITER_KEY, new Vec3i(0, 1, 0), 30, 1, 240, 1, 6, true))
 								.nextDialogue(helpEntering7)
 								.setNextAsEntrypoint()
 						)
@@ -80,11 +80,11 @@ public final class IndividualizedDialogue
 				);
 				
 				var helpEntering5 = builder.add("help_entering.5", new NodeSelectorBuilder()
-						.node(isNearPoi(MSPoiTypes.ALCHEMITER_KEY, 30, 1), kernelspriteNode(l,
+						.node(isNearPoi(MSPoiTypes.ALCHEMITER_KEY, 50, 1), kernelspriteNode(l,
 								"Identified Alchemiter. Please insert carved dowel.", "It is now gesturing specifically to the portion of the Alchemiter with a small pedestal.")
 								.addResponse(new ResponseBuilder(l.subMsg("next", "What's next?"))
 										.addPlayerMessage(l.subMsg("next_player", "What's next?"))
-										.addTrigger(new GoToPoi(MSPoiTypes.ALCHEMITER_KEY, new Vec3i(1, 1, 1), 15, 1, 240, 1, 6, true))
+										.addTrigger(new GoToPoi(MSPoiTypes.ALCHEMITER_KEY, new Vec3i(1, 1, 1), 30, 1, 240, 1, 6, true))
 										.nextDialogue(helpEntering6)
 										.setNextAsEntrypoint())
 								.addResponse(returnDialogue))
@@ -109,7 +109,7 @@ public final class IndividualizedDialogue
 						"Please insert punched card.", "It moves towards the section of the Totem Lathe with a slot for captchalogue cards. Maybe it needs a specific captchalogue card?")
 						.addResponse(new ResponseBuilder(l.subMsg("next", "What's next?"))
 								.addPlayerMessage(l.subMsg("next_player", "What's next?"))
-								.addTrigger(new GoToPoi(MSPoiTypes.TOTEM_LATHE_KEY, new Vec3i(-1, 2, -1), 15, 1, 240, 1, 6, true))
+								.addTrigger(new GoToPoi(MSPoiTypes.TOTEM_LATHE_KEY, new Vec3i(-1, 2, -1), 30, 1, 240, 1, 6, true))
 								.nextDialogue(helpEntering4)
 								.setNextAsEntrypoint())
 						.addResponse(returnDialogue)
@@ -121,11 +121,11 @@ public final class IndividualizedDialogue
 				);
 				
 				var helpEntering2 = builder.add("help_entering.2", new NodeSelectorBuilder()
-						.node(isNearPoi(MSPoiTypes.TOTEM_LATHE_KEY, 20, 1), kernelspriteNode(l,
+						.node(isNearPoi(MSPoiTypes.TOTEM_LATHE_KEY, 50, 1), kernelspriteNode(l,
 								"Identified Totem Lathe. Please insert uncarved dowel.", "It is now gesturing specifically to the middle section of the Totem Lathe.")
 								.addResponse(new ResponseBuilder(l.subMsg("next", "What's next?"))
 										.addPlayerMessage(l.subMsg("next_player", "What's next?"))
-										.addTrigger(new GoToPoi(MSPoiTypes.TOTEM_LATHE_KEY, new Vec3i(1, 2, 1), 15, 1, 240, 1, 6, true))
+										.addTrigger(new GoToPoi(MSPoiTypes.TOTEM_LATHE_KEY, new Vec3i(1, 2, 1), 30, 1, 240, 1, 6, true))
 										.nextDialogue(helpEntering3)
 										.setNextAsEntrypoint())
 								.addResponse(returnDialogue))
@@ -157,7 +157,7 @@ public final class IndividualizedDialogue
 				);
 				
 				var whatSay = builder.add("what_say", new NodeSelectorBuilder()
-						.node(isNearPoi(MSPoiTypes.CRUXTRUDER_KEY, 20, 1), kernelspriteNode(l, "near_block",
+						.node(isNearPoi(MSPoiTypes.CRUXTRUDER_KEY, 50, 1), kernelspriteNode(l, "near_block",
 								"help command queried. Do you wish to learn about Entry?", "The static continues, but you get the sense that it is gesturing at the Cruxtruder.")
 								.addResponse(new ResponseBuilder(l.subMsg("help_entering", "Can you help me use that machine?"))
 										.addPlayerMessage(l.subMsg("help_entering_player", "Can you help me use that machine?"))
@@ -184,7 +184,7 @@ public final class IndividualizedDialogue
 										"Kernelsprite initialized. Please input command.", "All you hear is static, but you think it is talking.")
 										.addResponse(new ResponseBuilder(l.subMsg("what_kernel", "What are you?")).nextDialogue(whatKernel))
 										.addResponse(new ResponseBuilder(l.subMsg("go_home", "Can you please go somewhere else? [Stay near Gate]"))
-												.visibleCondition(l.subText("go_home_cond", "Is not close enough to a Gate or is already there."), all(isNearPoi(MSPoiTypes.GATE_KEY, 20, 1), none(isNearPoi(MSPoiTypes.GATE_KEY, 4, 1))))
+												.visibleCondition(l.subText("go_home_cond", "Is not close enough to a Gate or is already there."), all(isNearPoi(MSPoiTypes.GATE_KEY, 50, 1), none(isNearPoi(MSPoiTypes.GATE_KEY, 4, 1))))
 												.addTrigger(new GoToPoi(MSPoiTypes.GATE_KEY, Vec3i.ZERO, 50, 0.5, 360, 1, 4, true)))
 										.addResponse(new ResponseBuilder(l.subMsg("go_free", "You don't have to stay here anymore [Roam free]"))
 												.condition(isNearPoi(MSPoiTypes.GATE_KEY, 4, 1))

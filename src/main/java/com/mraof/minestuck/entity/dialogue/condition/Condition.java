@@ -463,7 +463,7 @@ public interface Condition
 		@Override
 		public Component getFailureTooltip()
 		{
-			return Component.literal("NPC is not near the correct block(s)");
+			return Component.literal("NPC is not near the correct POI(s)");
 		}
 	}
 	
