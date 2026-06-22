@@ -6,6 +6,7 @@ import com.mojang.serialization.MapCodec;
 import com.mojang.serialization.codecs.RecordCodecBuilder;
 import com.mraof.minestuck.advancements.MSCriteriaTriggers;
 import com.mraof.minestuck.entity.ai.GoToBlockGoal;
+import com.mraof.minestuck.entity.ai.GoToPoiGoal;
 import com.mraof.minestuck.entity.consort.ConsortEntity;
 import com.mraof.minestuck.entity.consort.ConsortReputation;
 import com.mraof.minestuck.entity.consort.ConsortRewardHandler;
@@ -30,6 +31,7 @@ import net.minecraft.world.SimpleMenuProvider;
 import net.minecraft.world.entity.EquipmentSlot;
 import net.minecraft.world.entity.LivingEntity;
 import net.minecraft.world.entity.PathfinderMob;
+import net.minecraft.world.entity.ai.village.poi.PoiType;
 import net.minecraft.world.item.Item;
 import net.minecraft.world.item.ItemStack;
 import net.minecraft.world.level.storage.loot.LootParams;
@@ -458,6 +460,39 @@ public sealed interface Trigger
 						mob.goalSelector.removeGoal(goToBlockGoal);
 				});
 				mob.goalSelector.addGoal(priority, new GoToBlockGoal(mob, predicate, speedModifier, duration, radius, acceptedDistance, waitPermanently));
+			}
+		}
+	}
+	
+	record GoToPoi(ResourceKey<PoiType> poiKey, int radius, double speedModifier, int duration, int priority, double acceptedDistance, boolean waitPermanently) implements Trigger
+	{
+		static final MapCodec<GoToPoi> CODEC = RecordCodecBuilder.mapCodec(instance -> instance.group(
+				ResourceKey.codec(Registries.POINT_OF_INTEREST_TYPE).fieldOf("poi_key").forGetter(GoToPoi::poiKey),
+				Codec.INT.optionalFieldOf("radius", 8).forGetter(GoToPoi::radius),
+				Codec.DOUBLE.optionalFieldOf("speed_modifier", 1.0).forGetter(GoToPoi::speedModifier),
+				Codec.INT.optionalFieldOf("duration", 240).forGetter(GoToPoi::duration),
+				Codec.INT.optionalFieldOf("priority", 1).forGetter(GoToPoi::priority),
+				Codec.DOUBLE.optionalFieldOf("accepted_distance", 3.0D).forGetter(GoToPoi::acceptedDistance),
+				Codec.BOOL.optionalFieldOf("wait_permanently", false).forGetter(GoToPoi::waitPermanently)
+		).apply(instance, GoToPoi::new));
+		
+		@Override
+		public MapCodec<GoToPoi> codec()
+		{
+			return CODEC;
+		}
+		
+		@Override
+		public void triggerEffect(LivingEntity entity, ServerPlayer player)
+		{
+			if(entity instanceof PathfinderMob mob)
+			{
+				mob.goalSelector.getAvailableGoals().iterator().forEachRemaining(wrappedGoal ->
+				{
+					if(wrappedGoal != null && wrappedGoal.getGoal() instanceof GoToPoiGoal goToBlockGoal)
+						mob.goalSelector.removeGoal(goToBlockGoal);
+				});
+				mob.goalSelector.addGoal(priority, new GoToPoiGoal(mob, poiKey, speedModifier, duration, radius, acceptedDistance, waitPermanently));
 			}
 		}
 	}
