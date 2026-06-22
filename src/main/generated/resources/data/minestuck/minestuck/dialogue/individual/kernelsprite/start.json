@@ -92,26 +92,16 @@
           "type": "minestuck:list",
           "conditions": [
             {
-              "type": "minestuck:npc_near_block_predicate",
-              "predicate": {
-                "blocks": [
-                  "minestuck:gate",
-                  "minestuck:gate_main"
-                ]
-              },
+              "type": "minestuck:npc_near_poi",
+              "poi_key": "minestuck:gate",
               "radius": 20
             },
             {
               "type": "minestuck:list",
               "conditions": [
                 {
-                  "type": "minestuck:npc_near_block_predicate",
-                  "predicate": {
-                    "blocks": [
-                      "minestuck:gate",
-                      "minestuck:gate_main"
-                    ]
-                  },
+                  "type": "minestuck:npc_near_poi",
+                  "poi_key": "minestuck:gate",
                   "radius": 4
                 }
               ],
@@ -137,13 +127,8 @@
       },
       {
         "condition": {
-          "type": "minestuck:npc_near_block_predicate",
-          "predicate": {
-            "blocks": [
-              "minestuck:gate",
-              "minestuck:gate_main"
-            ]
-          },
+          "type": "minestuck:npc_near_poi",
+          "poi_key": "minestuck:gate",
           "radius": 4
         },
         "hide_if_failed": true,

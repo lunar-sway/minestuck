@@ -3,6 +3,7 @@ package com.mraof.minestuck.entity.ai;
 import com.mraof.minestuck.entity.KernelspriteEntity;
 import com.mraof.minestuck.entity.dialogue.DialogueEntity;
 import net.minecraft.core.BlockPos;
+import net.minecraft.core.Vec3i;
 import net.minecraft.resources.ResourceKey;
 import net.minecraft.server.level.ServerLevel;
 import net.minecraft.world.entity.PathfinderMob;
@@ -10,6 +11,7 @@ import net.minecraft.world.entity.ai.goal.MoveToBlockGoal;
 import net.minecraft.world.entity.ai.village.poi.PoiManager;
 import net.minecraft.world.entity.ai.village.poi.PoiRecord;
 import net.minecraft.world.entity.ai.village.poi.PoiType;
+import net.minecraft.world.level.Level;
 import net.minecraft.world.level.LevelReader;
 
 import java.util.Comparator;
@@ -21,13 +23,15 @@ public class GoToPoiGoal extends MoveToBlockGoal
 {
 	private final DialogueEntity dialogueMob;
 	private final ResourceKey<PoiType> poiKey;
+	private final Vec3i posOffset;
 	private final double acceptedDistance;
 	private final int searchRange;
 	private final boolean waitPermanently;
 	private int duration;
 	
-	public GoToPoiGoal(PathfinderMob mob, ResourceKey<PoiType> poiKey, double speedModifier, int duration, int searchRange, double acceptedDistance, boolean waitPermanently)
+	public GoToPoiGoal(PathfinderMob mob, ResourceKey<PoiType> poiKey, Vec3i posOffset, double speedModifier, int duration, int searchRange, double acceptedDistance, boolean waitPermanently)
 	{
+		//does not make use of original searchRange
 		super(mob, speedModifier, 0, 0);
 		
 		if(mob instanceof DialogueEntity dialogueMob)
@@ -35,6 +39,7 @@ public class GoToPoiGoal extends MoveToBlockGoal
 		else
 			this.dialogueMob = null;
 		this.poiKey = poiKey;
+		this.posOffset = posOffset;
 		this.duration = duration;
 		this.searchRange = searchRange;
 		this.acceptedDistance = acceptedDistance;
@@ -58,6 +63,20 @@ public class GoToPoiGoal extends MoveToBlockGoal
 	public void start()
 	{
 		super.start();
+		
+		//try to prioritize air block next to target
+		Level level = mob.level();
+		if(level.getBlockState(blockPos).blocksMotion())
+		{
+			for(BlockPos iteratePos : BlockPos.betweenClosed(blockPos.offset(1, 1, 1), blockPos.offset(-1, -1, -1)))
+			{
+				if(mob.isWithinRestriction(iteratePos) && !level.getBlockState(iteratePos).blocksMotion())
+				{
+					blockPos = iteratePos;
+					break;
+				}
+			}
+		}
 		
 		dialogueMob.getDialogueComponent().setHasReachedTarget(false);
 		mob.clearRestriction();
@@ -125,7 +144,7 @@ public class GoToPoiGoal extends MoveToBlockGoal
 		Stream<PoiRecord> recordStream = manager.getInRange(holder -> holder.is(poiKey), mobPos, searchRange, PoiManager.Occupancy.ANY);
 		Optional<BlockPos> oPos = recordStream.map(PoiRecord::getPos).min(Comparator.comparingDouble(pos -> pos.distSqr(pos)));
 		
-		oPos.ifPresent(pos -> this.blockPos = pos);
+		oPos.ifPresent(pos -> this.blockPos = pos.offset(posOffset));
 		return oPos.isPresent();
 	}
 	
@@ -134,101 +153,4 @@ public class GoToPoiGoal extends MoveToBlockGoal
 	{
 		return false;
 	}
-	
-	/*private final PathfinderMob mob;
-	private final DialogueEntity dialogueMob;
-	private final ResourceKey<PoiType> poiKey;
-	private final double acceptedDistance;
-	private final boolean waitPermanently;
-	private final int searchRange;
-	
-	private int duration;
-	private BlockPos blockPos = BlockPos.ZERO;
-	
-	public GoToPoiGoal(PathfinderMob mob, ResourceKey<PoiType> poiKey, double speedModifier, int duration, int searchRange, double acceptedDistance, boolean waitPermanently)
-	{
-		this.mob = mob;
-		if(mob instanceof DialogueEntity dialogueMob)
-			this.dialogueMob = dialogueMob;
-		else
-			this.dialogueMob = null;
-		this.poiKey = poiKey;
-		this.duration = duration;
-		this.searchRange = searchRange;
-		this.acceptedDistance = acceptedDistance;
-		this.waitPermanently = waitPermanently;
-		this.setFlags(EnumSet.of(Flag.JUMP, Flag.MOVE));
-	}
-	
-	@Override
-	public boolean canUse()
-	{
-		return dialogueMob != null && findPoi();
-	}
-	
-	@Override
-	public boolean canContinueToUse()
-	{
-		return super.canContinueToUse() && duration > 0 && !isReachedTarget();
-	}
-	
-	@Override
-	public void start()
-	{
-		//mob.remainingCooldownBeforeLocatingNewHive = 200;
-		Optional<BlockPos> poi = findPoi();
-		if(poi.isPresent())
-		{
-			for(BlockPos blockpos : list)
-			{
-				if(!mob.goToHiveGoal.isTargetBlacklisted(blockpos))
-				{
-					mob.hivePos = blockpos;
-					return;
-				}
-			}
-			
-			mob.goToHiveGoal.clearBlacklist();
-			mob.hivePos = list.get(0);
-		}
-	}
-	
-	@Override
-	public void tick() {
-		BlockPos blockpos = this.getMoveToTarget();
-		if (!blockpos.closerToCenterThan(this.mob.position(), this.acceptedDistance())) {
-			this.reachedTarget = false;
-			this.tryTicks++;
-			if (this.shouldRecalculatePath()) {
-				this.mob.getNavigation().moveTo((double)blockpos.getX() + 0.5, (double)blockpos.getY(), (double)blockpos.getZ() + 0.5, this.speedModifier);
-			}
-		} else {
-			this.reachedTarget = true;
-			this.tryTicks--;
-		}
-	}
-	
-	protected boolean isReachedTarget() {
-		return this.reachedTarget;
-	}
-	
-	protected BlockPos getMoveToTarget() {
-		return this.blockPos.above();
-	}
-	
-	protected void moveMobToBlock()
-	{
-		this.mob.getNavigation().moveTo((double) this.blockPos.getX() + 0.5, (double) (this.blockPos.getY() + 1), (double) this.blockPos.getZ() + 0.5, this.speedModifier);
-	}
-	
-	private boolean findPoi()
-	{
-		BlockPos mobPos = mob.blockPosition();
-		PoiManager manager = ((ServerLevel) mob.level()).getPoiManager();
-		Stream<PoiRecord> recordStream = manager.getInRange(holder -> holder.is(poiKey), mobPos, searchRange, PoiManager.Occupancy.ANY);
-		Optional<BlockPos> oPos = recordStream.map(PoiRecord::getPos).min(Comparator.comparingDouble(pos -> pos.distSqr(pos)));
-		
-		oPos.ifPresent(pos -> this.blockPos = pos);
-		return oPos.isPresent();
-	}*/
 }

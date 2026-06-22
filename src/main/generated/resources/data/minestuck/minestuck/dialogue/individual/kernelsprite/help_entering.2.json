@@ -2,10 +2,8 @@
   "conditioned_nodes": [
     {
       "condition": {
-        "type": "minestuck:npc_near_block_predicate",
-        "predicate": {
-          "blocks": "minestuck:totem_lathe_wheel"
-        },
+        "type": "minestuck:npc_near_poi",
+        "poi_key": "minestuck:totem_lathe",
         "radius": 20
       },
       "node": {
@@ -35,11 +33,14 @@
             },
             "triggers": [
               {
-                "type": "minestuck:go_to_block",
+                "type": "minestuck:go_to_poi",
                 "accepted_distance": 6.0,
-                "predicate": {
-                  "blocks": "minestuck:totem_lathe_top_corner"
-                },
+                "poi_key": "minestuck:totem_lathe",
+                "pos_offset": [
+                  1,
+                  2,
+                  1
+                ],
                 "radius": 15,
                 "wait_permanently": true
               }
@@ -58,11 +59,11 @@
             },
             "triggers": [
               {
-                "type": "minestuck:go_to_block",
+                "type": "minestuck:go_to_poi",
                 "accepted_distance": 1.0,
                 "duration": 1,
-                "predicate": {},
-                "radius": 1
+                "poi_key": "minestuck:cruxtruder",
+                "radius": 50
               }
             ]
           }
@@ -110,11 +111,11 @@
         },
         "triggers": [
           {
-            "type": "minestuck:go_to_block",
+            "type": "minestuck:go_to_poi",
             "accepted_distance": 1.0,
             "duration": 1,
-            "predicate": {},
-            "radius": 1
+            "poi_key": "minestuck:cruxtruder",
+            "radius": 50
           }
         ]
       }

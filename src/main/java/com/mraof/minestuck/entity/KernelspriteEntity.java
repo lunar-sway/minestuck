@@ -32,7 +32,7 @@ import net.neoforged.fml.common.EventBusSubscriber;
 import net.neoforged.neoforge.event.entity.player.PlayerEvent;
 
 import javax.annotation.Nullable;
-import java.util.*;
+import java.util.EnumSet;
 
 @EventBusSubscriber(modid = Minestuck.MOD_ID, bus = EventBusSubscriber.Bus.GAME)
 public class KernelspriteEntity extends PathfinderMob implements DialogueEntity
@@ -47,13 +47,6 @@ public class KernelspriteEntity extends PathfinderMob implements DialogueEntity
 	private BlockPos boundOrigin;
 	private int wanderRadius = 20;
 	private PlayerIdentifier owner;
-	
-	/*private static final ImmutableList<MemoryModuleType<?>> MEMORY_TYPES = ImmutableList.of(MSMemoryModuleType.MACHINE_LOCATIONS.get());
-	private static final ImmutableList<SensorType<? extends Sensor<? super KernelspriteEntity>>> SENSOR_TYPES = ImmutableList.of(MSSensorType.MACHINE_SENSOR.get());
-	public static final Map<MemoryModuleType<List<GlobalPos>>, BiPredicate<KernelspriteEntity, Holder<PoiType>>> POI_MEMORIES = ImmutableMap.of(
-			MSMemoryModuleType.MACHINE_LOCATIONS.get(),
-			(entity, holder) -> holder.is(MSPoiTypes.ALCHEMITER_KEY)
-	);*/
 	
 	public KernelspriteEntity(EntityType<? extends PathfinderMob> entityType, Level level)
 	{
@@ -137,59 +130,6 @@ public class KernelspriteEntity extends PathfinderMob implements DialogueEntity
 		this.goalSelector.addGoal(0, new FloatGoal(this));
 		this.goalSelector.addGoal(7, new RandomLookAroundGoal(this));
 	}
-	
-	/*@Override
-	public Brain<KernelspriteEntity> getBrain()
-	{
-		return (Brain<KernelspriteEntity>) super.getBrain();
-	}
-	
-	@Override
-	protected Brain.Provider<KernelspriteEntity> brainProvider()
-	{
-		return Brain.provider(MEMORY_TYPES, SENSOR_TYPES);
-	}
-	
-	@Override
-	protected Brain<KernelspriteEntity> makeBrain(Dynamic<?> dynamic)
-	{
-		Brain<KernelspriteEntity> brain = this.brainProvider().makeBrain(dynamic);
-		this.registerBrainGoals(brain);
-		return brain;
-	}
-	
-	public void refreshBrain(ServerLevel serverLevel)
-	{
-		Brain<KernelspriteEntity> brain = this.getBrain();
-		brain.stopAll(serverLevel, this);
-		this.brain = brain.copyWithoutBehaviors();
-		this.registerBrainGoals(this.getBrain());
-	}
-	
-	private void registerBrainGoals(Brain<KernelspriteEntity> brain)
-	{*/
-		/*initCoreActivity(brain);
-		initIdleActivity(brain);
-		brain.setCoreActivities(Set.of(Activity.CORE));
-		brain.setDefaultActivity(Activity.IDLE);
-		brain.useDefaultActivity();*/
-		
-		/*brain.addActivityWithConditions(
-				Activity.WORK,
-				VillagerGoalPackages.getWorkPackage(villagerprofession, 1F),
-				ImmutableSet.of(Pair.of(MSMemoryModuleType.MACHINE_LOCATIONS, MemoryStatus.VALUE_PRESENT))
-		);*//*
-	}
-	
-	public List<GlobalPos> getMachineMemory()
-	{
-		List<GlobalPos> machineMemory = new ArrayList<>();
-		Optional<List<GlobalPos>> oMachineMemories = brain.getMemory(MSMemoryModuleType.MACHINE_LOCATIONS.get());
-		
-		oMachineMemories.ifPresent(machineMemory::addAll);
-		
-		return machineMemory;
-	}*/
 	
 	public void setRandomMoveGoal(boolean add)
 	{
@@ -396,7 +336,7 @@ public class KernelspriteEntity extends PathfinderMob implements DialogueEntity
 		{
 			Level level = KernelspriteEntity.this.level();
 			BlockPos mobPos = KernelspriteEntity.this.blockPosition();
- 			if(!level.getBlockState(mobPos).blocksMotion())
+			if(!level.getBlockState(mobPos).blocksMotion())
 				return;
 			
 			for(BlockPos iteratePos : BlockPos.betweenClosed(mobPos.offset(1, 1, 1), mobPos.offset(-1, -1, -1)))
