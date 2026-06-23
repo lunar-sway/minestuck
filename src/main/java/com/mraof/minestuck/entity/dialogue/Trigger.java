@@ -5,6 +5,7 @@ import com.mojang.serialization.DataResult;
 import com.mojang.serialization.MapCodec;
 import com.mojang.serialization.codecs.RecordCodecBuilder;
 import com.mraof.minestuck.advancements.MSCriteriaTriggers;
+import com.mraof.minestuck.entity.KernelspriteEntity;
 import com.mraof.minestuck.entity.ai.GoToPoiGoal;
 import com.mraof.minestuck.entity.consort.ConsortEntity;
 import com.mraof.minestuck.entity.consort.ConsortReputation;
@@ -453,14 +454,14 @@ public sealed interface Trigger
 		@Override
 		public void triggerEffect(LivingEntity entity, ServerPlayer player)
 		{
-			if(entity instanceof PathfinderMob mob)
+			if(entity instanceof KernelspriteEntity kernelsprite)
 			{
-				mob.goalSelector.getAvailableGoals().iterator().forEachRemaining(wrappedGoal ->
+				kernelsprite.goalSelector.getAvailableGoals().iterator().forEachRemaining(wrappedGoal ->
 				{
 					if(wrappedGoal != null && wrappedGoal.getGoal() instanceof GoToPoiGoal goToBlockGoal)
-						mob.goalSelector.removeGoal(goToBlockGoal);
+						kernelsprite.goalSelector.removeGoal(goToBlockGoal);
 				});
-				mob.goalSelector.addGoal(priority, new GoToPoiGoal(mob, poiKey, posOffset, speedModifier, duration, radius, acceptedDistance, waitPermanently));
+				kernelsprite.goalSelector.addGoal(priority, new GoToPoiGoal(kernelsprite, poiKey, posOffset, speedModifier, duration, radius, acceptedDistance, waitPermanently));
 			}
 		}
 	}
