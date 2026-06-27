@@ -52,7 +52,7 @@ public final class ButtonListHelper
 		buttons.clear();
 		for(int i = 0; i < 4; i++)
 		{
-			ExtendedButton button = new ExtendedButton(gui.xOffset + 14, gui.yOffset + 60 + i * 24, 120, 20, Component.empty(), this::onButtonPressed);
+			ExtendedButton button = new ThemedButton(gui.xOffset + 14, gui.yOffset + 60 + i * 24, 120, 20, Component.empty(), this::onButtonPressed, gui.selectedTheme);
 			gui.addRenderableWidget(button);
 			buttons.add(button);
 		}

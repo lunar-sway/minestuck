@@ -17,6 +17,7 @@ import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
+import java.util.Optional;
 import java.util.concurrent.CompletableFuture;
 
 /**
@@ -38,7 +39,7 @@ public class ComputerThemeProvider implements DataProvider
 	protected void registerThemes()
 	{
 		add(MSComputerThemes.DEFAULT, ComputerTheme.Data.DEFAULT);
-		add(MSComputerThemes.PESTERCHUM, 0x404040);
+		addWithButtons(MSComputerThemes.PESTERCHUM, 0x404040);
 		add(MSComputerThemes.TROLLIAN, 0xFF0000);
 		add(MSComputerThemes.CROCKER, 0x000000);
 		add(MSComputerThemes.TYPHEUS, 0x6DAFAD);
@@ -60,10 +61,21 @@ public class ComputerThemeProvider implements DataProvider
 		add(MSComputerThemes.MINESTUCK, 0xFFFFFF);
 	}
 	
+	protected void addWithButtons(ResourceLocation id, int textColor)
+	{
+		ResourceLocation buttonLocations = id.withPath(name -> "theme/" + name);
+		add(id, new ComputerTheme.Data(id.withPath(name -> "textures/gui/theme/" + name + ".png"),
+				textColor,
+				// gui/widget and .png are added automatically
+				Optional.of(buttonLocations.withSuffix("/button")),
+				Optional.of(buttonLocations.withSuffix("/button_disabled")),
+				Optional.of(buttonLocations.withSuffix("/button_highlighted"))));
+	}
+	
 	protected void add(ResourceLocation id, int textColor)
 	{
 		ResourceLocation textureLocation = id.withPath(name -> "textures/gui/theme/" + name + ".png");
-		add(id, new ComputerTheme.Data(textureLocation, textColor));
+		add(id, new ComputerTheme.Data(textureLocation, textColor, Optional.empty(), Optional.empty(), Optional.empty()));
 	}
 	
 	protected void add(ResourceLocation id, ComputerTheme.Data data)
