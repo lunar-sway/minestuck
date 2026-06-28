@@ -41,20 +41,10 @@
             },
             "triggers": [
               {
-                "type": "minestuck:go_to_block",
+                "type": "minestuck:go_to_poi",
                 "accepted_distance": 6.0,
-                "predicate": {
-                  "blocks": [
-                    "minestuck:cruxtruder_corner",
-                    "minestuck:cruxtruder_side",
-                    "minestuck:cruxtruder_center",
-                    "minestuck:cruxtruder_top_corner",
-                    "minestuck:cruxtruder_top_side",
-                    "minestuck:cruxtruder_top_center",
-                    "minestuck:cruxtruder_tube"
-                  ]
-                },
-                "radius": 20,
+                "poi_key": "minestuck:cruxtruder",
+                "radius": 50,
                 "wait_permanently": true
               }
             ]
@@ -72,20 +62,10 @@
             },
             "triggers": [
               {
-                "type": "minestuck:go_to_block",
+                "type": "minestuck:go_to_poi",
                 "accepted_distance": 6.0,
-                "predicate": {
-                  "blocks": [
-                    "minestuck:cruxtruder_corner",
-                    "minestuck:cruxtruder_side",
-                    "minestuck:cruxtruder_center",
-                    "minestuck:cruxtruder_top_corner",
-                    "minestuck:cruxtruder_top_side",
-                    "minestuck:cruxtruder_top_center",
-                    "minestuck:cruxtruder_tube"
-                  ]
-                },
-                "radius": 20,
+                "poi_key": "minestuck:cruxtruder",
+                "radius": 50,
                 "wait_permanently": true
               }
             ]
@@ -121,11 +101,11 @@
         },
         "triggers": [
           {
-            "type": "minestuck:go_to_block",
+            "type": "minestuck:go_to_poi",
             "accepted_distance": 1.0,
             "duration": 1,
-            "predicate": {},
-            "radius": 1
+            "poi_key": "minestuck:cruxtruder",
+            "radius": 50
           }
         ]
       }

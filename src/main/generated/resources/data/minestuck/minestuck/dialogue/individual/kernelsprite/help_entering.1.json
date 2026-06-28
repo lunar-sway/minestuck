@@ -26,21 +26,10 @@
         },
         "triggers": [
           {
-            "type": "minestuck:go_to_block",
+            "type": "minestuck:go_to_poi",
             "accepted_distance": 6.0,
-            "predicate": {
-              "blocks": [
-                "minestuck:totem_lathe_card_slot",
-                "minestuck:totem_lathe_bottom_left",
-                "minestuck:totem_lathe_bottom_right",
-                "minestuck:totem_lathe_middle",
-                "minestuck:totem_lathe_wheel",
-                "minestuck:totem_lathe_dowel_rod",
-                "minestuck:totem_lathe_top",
-                "minestuck:totem_lathe_top_corner"
-              ]
-            },
-            "radius": 13,
+            "poi_key": "minestuck:totem_lathe",
+            "radius": 50,
             "wait_permanently": true
           }
         ]
@@ -58,11 +47,11 @@
         },
         "triggers": [
           {
-            "type": "minestuck:go_to_block",
+            "type": "minestuck:go_to_poi",
             "accepted_distance": 1.0,
             "duration": 1,
-            "predicate": {},
-            "radius": 1
+            "poi_key": "minestuck:cruxtruder",
+            "radius": 50
           }
         ]
       }
