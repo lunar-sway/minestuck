@@ -58,8 +58,8 @@ public class ComputerThemeScreen extends ThemedScreen
 		
 		this.previousButton = new ThemedButton(xOffset + SCREEN_OFFSET_X + 108, yOffset + SCREEN_OFFSET_Y + 8, 16, 16, Component.literal("<"), button -> prevPage(), selectedTheme);
 		this.nextButton = new ThemedButton(xOffset + SCREEN_OFFSET_X + 133, yOffset + SCREEN_OFFSET_Y + 8, 16, 16, Component.literal(">"), button -> nextPage(), selectedTheme);
-		addRenderableWidget(this.nextButton);
 		addRenderableWidget(this.previousButton);
+		addRenderableWidget(this.nextButton);
 		
 		recreateThemeButtons();
 		
@@ -79,7 +79,7 @@ public class ComputerThemeScreen extends ThemedScreen
 			int xPositionOffset = 76 * (i % ENTRIES_ACROSS);
 			
 			ThemedButton entryButton = new ThemedButton(xOffset + SCREEN_OFFSET_X + 5 + xPositionOffset, yOffset + SCREEN_OFFSET_Y + 30 + yPositionOffset, 72, 14, theme.name(),
-					button -> selectTheme(theme), selectedTheme);
+					button -> selectTheme(theme), theme);
 			entryButtons.add(addRenderableWidget(entryButton));
 		}
 		
@@ -92,7 +92,6 @@ public class ComputerThemeScreen extends ThemedScreen
 		previousButton.setTheme(theme);
 		nextButton.setTheme(theme);
 		doneButton.setTheme(theme);
-		entryButtons.forEach(button -> button.setTheme(theme));
 	}
 	
 	@Override

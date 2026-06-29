@@ -40,25 +40,25 @@ public class ComputerThemeProvider implements DataProvider
 	{
 		add(MSComputerThemes.DEFAULT, ComputerTheme.Data.DEFAULT);
 		addWithButtons(MSComputerThemes.PESTERCHUM, 0x404040);
-		add(MSComputerThemes.TROLLIAN, 0xFF0000);
-		add(MSComputerThemes.CROCKER, 0x000000);
-		add(MSComputerThemes.TYPHEUS, 0x6DAFAD);
-		add(MSComputerThemes.CETUS, 0x9081EE);
-		add(MSComputerThemes.HEPHAESTUS, 0xFFFFFF);
-		add(MSComputerThemes.ECHIDNA, 0x005DFF);
-		add(MSComputerThemes.JOY, 0x282828);
-		add(MSComputerThemes.SBURB_95, 0x282828);
-		add(MSComputerThemes.SBURB_10, 0xFFFFFF);
-		add(MSComputerThemes.SCOURGING_HEAT, 0xFFFFFF);
-		add(MSComputerThemes.LIFDOFF, 0xFFFF00);
-		add(MSComputerThemes.SKAIANET_GREEN, 0xFFFFFF);
-		add(MSComputerThemes.SKAIANET_WHITE, 0x006600);
-		add(MSComputerThemes.SKAIANET_BLACK, 0xFFFFFF);
-		add(MSComputerThemes.ASTRAL_CHARTS, 0xFFFFFF);
-		add(MSComputerThemes.TILLDEATH, 0xFFFFFF);
-		add(MSComputerThemes.LOWAS, 0xBFEFEA);
-		add(MSComputerThemes.SPIROGRAPH, 0x006600);
-		add(MSComputerThemes.MINESTUCK, 0xFFFFFF);
+		addWithButtons(MSComputerThemes.TROLLIAN, 0xFF0000);
+		addWithButtons(MSComputerThemes.CROCKER, 0x000000);
+		addWithButtons(MSComputerThemes.TYPHEUS, 0x6DAFAD);
+		addWithButtons(MSComputerThemes.CETUS, 0x9081EE);
+		addWithButtons(MSComputerThemes.HEPHAESTUS, 0xFFFFFF);
+		addWithButtons(MSComputerThemes.ECHIDNA, 0x005DFF);
+		addWithButtons(MSComputerThemes.JOY, 0x282828);
+		addWithButtons(MSComputerThemes.SBURB_95, 0x282828);
+		addWithButtons(MSComputerThemes.SBURB_10, 0xFFFFFF);
+		addWithButtons(MSComputerThemes.SCOURGING_HEAT, 0xFFFFFF);
+		addWithButtons(MSComputerThemes.LIFDOFF, 0xFFFF00);
+		addWithButtons(MSComputerThemes.SKAIANET_GREEN, 0xFFFFFF);
+		addWithButtons(MSComputerThemes.SKAIANET_WHITE, 0x006600);
+		addWithButtons(MSComputerThemes.SKAIANET_BLACK, 0xFFFFFF);
+		addWithButtons(MSComputerThemes.ASTRAL_CHARTS, 0xFFFFFF);
+		addWithButtons(MSComputerThemes.TILLDEATH, 0xFFFFFF);
+		addWithButtons(MSComputerThemes.LOWAS, 0xBFEFEA);
+		addWithButtons(MSComputerThemes.SPIROGRAPH, 0x006600);
+		addWithButtons(MSComputerThemes.MINESTUCK, 0xFFFFFF);
 	}
 	
 	protected void addWithButtons(ResourceLocation id, int textColor)
@@ -75,7 +75,7 @@ public class ComputerThemeProvider implements DataProvider
 	protected void add(ResourceLocation id, int textColor)
 	{
 		ResourceLocation textureLocation = id.withPath(name -> "textures/gui/theme/" + name + ".png");
-		add(id, new ComputerTheme.Data(textureLocation, textColor, Optional.empty(), Optional.empty(), Optional.empty()));
+		add(id, new ComputerTheme.Data(textureLocation, textColor));
 	}
 	
 	protected void add(ResourceLocation id, ComputerTheme.Data data)

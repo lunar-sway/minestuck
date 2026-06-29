@@ -15,7 +15,13 @@ import net.minecraft.resources.ResourceLocation;
 public record ComputerTheme(ResourceLocation id, Data data)
 {
 	/**
-	 * Represents the json data of a theme, which determine what wallpaper and text color appears on in-game computers.
+	 * Represents the json data of a theme
+	 * <p>
+	 * @param texturePath The background texture of the theme
+	 * @param textColor Color of the text
+	 * @param buttonPath If provided, the texture for clickable buttons
+	 * @param buttonDisabledPath If provided, the texture for unclickable buttons
+	 * @param buttonHighlitedPath If provided, the texture for focused buttons (hovering/pressing tab)
 	 */
 	public record Data(ResourceLocation texturePath, int textColor, Optional<ResourceLocation> buttonPath, Optional<ResourceLocation> buttonDisabledPath, Optional<ResourceLocation> buttonHighlitedPath)
 	{
@@ -28,7 +34,12 @@ public record ComputerTheme(ResourceLocation id, Data data)
 						ResourceLocation.CODEC.optionalFieldOf("button_highlighted_location").forGetter(Data::buttonHighlitedPath)
 				).apply(instance, Data::new));
 		
-		public static final Data DEFAULT = new Data(ResourceLocation.fromNamespaceAndPath(Minestuck.MOD_ID, "textures/gui/theme/default.png"), 0x404040, Optional.empty(), Optional.empty(), Optional.empty());
+		public Data(ResourceLocation texturePath, int textColor)
+		{
+			this(texturePath, textColor, Optional.empty(), Optional.empty(), Optional.empty());
+		}
+		
+		public static final Data DEFAULT = new Data(ResourceLocation.fromNamespaceAndPath(Minestuck.MOD_ID, "textures/gui/theme/default.png"), 0x404040);
 	}
 	
 	public MutableComponent name()

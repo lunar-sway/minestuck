@@ -8,7 +8,7 @@ The format is based on [Keep a Changelog](https://keepachangelog.com/en/1.1.0/).
 
 ### Added
 
-- Computer themes have custom buttons
+- Computer themes can have custom buttons
 
 ### Changed
 

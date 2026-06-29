@@ -21,6 +21,7 @@ import net.minecraft.locale.Language;
 public class ThemedButton extends ExtendedButton
 {
 	protected WidgetSprites sprites;
+	protected int textColor = 16777215;
 	
 	public ThemedButton(int xPos, int yPos, int width, int height, Component displayString, OnPress handler, ComputerTheme theme)
 	{
@@ -31,7 +32,7 @@ public class ThemedButton extends ExtendedButton
 	{
 		super(xPos, yPos, width, height, displayString, handler, createNarration);
 		
-		this.sprites = widgetSpritesFromTheme(theme);
+		setTheme(theme);
 	}
 	
 	public ThemedButton(Button.Builder builder)
@@ -52,10 +53,18 @@ public class ThemedButton extends ExtendedButton
 	public void setTheme(ComputerTheme theme)
 	{
 		sprites = widgetSpritesFromTheme(theme);
+		// In case there is no custom button, use the default text color
+		ComputerTheme.Data data = theme.data();
+		if (data.buttonPath().isEmpty())
+			textColor = 16777215;
+		else
+			textColor = theme.data().textColor();
 	}
 	
 	/**
 	 * Draws this button to the screen.
+	 * <p>
+	 * Mostly a copy of ExtendedButton, but without text shadow
 	 */
 	@Override
 	public void renderWidget(GuiGraphics guiGraphics, int mouseX, int mouseY, float partialTick)
@@ -64,6 +73,6 @@ public class ThemedButton extends ExtendedButton
 		guiGraphics.blitSprite(sprites.get(this.active, this.isHoveredOrFocused()), this.getX(), this.getY(), this.getWidth(), this.getHeight());
 		
 		final FormattedText buttonText = mc.font.ellipsize(this.getMessage(), this.width - 6); // Remove 6 pixels so that the text is always contained within the button's borders
-		guiGraphics.drawCenteredString(mc.font, Language.getInstance().getVisualOrder(buttonText), this.getX() + this.width / 2, this.getY() + (this.height - 8) / 2, getFGColor());
+		guiGraphics.drawString(mc.font, Language.getInstance().getVisualOrder(buttonText), this.getX() + (this.width - mc.font.width(Language.getInstance().getVisualOrder(buttonText))) / 2, this.getY() + (this.height - 8) / 2, textColor, false);
 	}
 }
