@@ -13,8 +13,10 @@ import net.minecraft.core.Holder;
 import net.minecraft.core.HolderSet;
 import net.minecraft.core.Registry;
 import net.minecraft.nbt.CompoundTag;
+import net.minecraft.resources.ResourceKey;
 import net.minecraft.tags.TagKey;
 import net.minecraft.world.entity.EntityType;
+import net.minecraft.world.entity.ai.village.poi.PoiType;
 import net.minecraft.world.inventory.SlotRanges;
 import net.minecraft.world.item.Item;
 import net.minecraft.world.level.ItemLike;
@@ -48,6 +50,7 @@ public final class Conditions
 		REGISTER.register("consort_terrain_land_type", () -> InConsortTerrainLandType.CODEC);
 		REGISTER.register("title_land_type", () -> InTitleLandType.CODEC);
 		REGISTER.register("title_land_type_tag", () -> InTitleLandTypeTag.CODEC);
+		REGISTER.register("npc_near_poi", () -> NPCNearPoi.CODEC);
 		REGISTER.register("npc_near_block_predicate", () -> NPCNearBlockPredicate.CODEC);
 		REGISTER.register("npc_near_entity_predicate", () -> NPCNearEntityPredicate.CODEC);
 		REGISTER.register("npc_location_predicate", () -> NPCLocationPredicate.CODEC);
@@ -133,6 +136,11 @@ public final class Conditions
 	public static Condition isInTitleLand(TagKey<TitleLandType> tag)
 	{
 		return new InTitleLandTypeTag(tag);
+	}
+	
+	public static Condition isNearPoi(ResourceKey<PoiType> poiKey, int radius, int count)
+	{
+		return new NPCNearPoi(poiKey, radius, count);
 	}
 	
 	public static Condition isNearBlock(Block block, int radius, int count)

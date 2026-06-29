@@ -13,10 +13,15 @@ The format is based on [Keep a Changelog](https://keepachangelog.com/en/1.1.0/).
 ### Changed
 
 - Laptops can now be picked up
+- The range at which the Kernelsprite detects and travels to blocks has increased
 
-- ### Contributors for this release
+### Fixed
 
-- Fl1s, medsal15
+- Fixed server tick crash related to kernelsprite dialogue
+
+### Contributors for this release
+
+- Fl1s, Dweblenod, medsal15
 
 ## [1.21.1-1.14.0.1] - 2026-06-01
 
