@@ -12,7 +12,6 @@ import net.minecraft.world.entity.LivingEntity;
 import net.minecraft.world.entity.player.Player;
 import net.minecraft.world.item.Item;
 import net.minecraft.world.item.ItemStack;
-import net.minecraft.world.item.ShovelItem;
 import net.minecraft.world.item.context.UseOnContext;
 import net.minecraft.world.level.Level;
 import net.minecraft.world.level.block.Block;
@@ -20,6 +19,7 @@ import net.minecraft.world.level.block.Blocks;
 import net.minecraft.world.level.block.state.BlockState;
 import net.minecraft.world.level.gameevent.GameEvent;
 import net.minecraft.world.phys.BlockHitResult;
+import net.neoforged.neoforge.common.ItemAbilities;
 
 import java.util.function.Supplier;
 
@@ -87,7 +87,9 @@ public interface RightClickBlockEffect
 	}
 	
 	/**
-	 * Flattens all blocks (according to ShovelItem::getShovelPathingState) in a given radius
+	 * Flattens all blocks in a given radius
+	 * <p>
+	 * Needs the WeaponItem to have {@link ItemAbilities#SHOVEL_FLATTEN}
 	 */
 	static RightClickBlockEffect flattenArea(int radius)
 	{
@@ -105,7 +107,7 @@ public interface RightClickBlockEffect
 					{
 						BlockPos blockPos = pos.offset(x, y, z);
 						BlockState baseState = level.getBlockState(blockPos);
-						BlockState newState = ShovelItem.getShovelPathingState(baseState);
+						BlockState newState = baseState.getToolModifiedState(context, ItemAbilities.SHOVEL_FLATTEN, false);
 						
 						if(newState != null && level.getBlockState(blockPos.above()).isAir())
 						{
