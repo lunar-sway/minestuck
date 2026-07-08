@@ -97,17 +97,21 @@ public interface RightClickBlockEffect
 			Player player = context.getPlayer();
 			int convertions = 0;
 			
-			for (int x = -radius; x <= radius; x++) {
-				for (int y = -radius; y <= radius; y++) {
-					for (int z = -radius; z <= radius; z++) {
+			for(int x = -radius; x <= radius; x++)
+			{
+				for(int y = -radius; y <= radius; y++)
+				{
+					for(int z = -radius; z <= radius; z++)
+					{
 						BlockPos blockPos = pos.offset(x, y, z);
 						BlockState baseState = level.getBlockState(blockPos);
 						BlockState newState = ShovelItem.getShovelPathingState(baseState);
 						
-						if (newState != null && level.getBlockState(blockPos.above()).isAir()) {
+						if(newState != null && level.getBlockState(blockPos.above()).isAir())
+						{
 							level.playSound(player, blockPos, SoundEvents.SHOVEL_FLATTEN, SoundSource.BLOCKS, 1F, 1F);
 							
-							if (!level.isClientSide)
+							if(!level.isClientSide)
 							{
 								level.setBlock(blockPos, newState, 11);
 								level.gameEvent(GameEvent.BLOCK_CHANGE, blockPos, GameEvent.Context.of(player, newState));
@@ -121,7 +125,7 @@ public interface RightClickBlockEffect
 			
 			if(convertions > 0)
 			{
-				if (!level.isClientSide)
+				if(!level.isClientSide)
 					context.getItemInHand().hurtAndBreak(convertions + 1, player, LivingEntity.getSlotForHand(context.getHand()));
 				return InteractionResult.sidedSuccess(level.isClientSide);
 			}
