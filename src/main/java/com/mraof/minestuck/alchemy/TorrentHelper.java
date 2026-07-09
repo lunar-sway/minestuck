@@ -91,7 +91,7 @@ public final class TorrentHelper
 					{
 						PlayerData leechData = PlayerData.get(sessionPlayerID, server);
 						GristCache leechCache = GristCache.get(leechData);
-						TorrentSession.ClientCache leechLimitedCache = new TorrentSession.ClientCache(leechCache.getGristSet().asImmutable(), Echeladder.get(leechData).getGristCapacity());
+						ClientPlayerData.ClientCache leechClientCache = new ClientPlayerData.ClientCache(leechCache.getGristSet().asImmutable(), Echeladder.get(leechData).getGristCapacity());
 						
 						boolean entered = SburbPlayerData.get(sessionPlayerID, server).hasEntered();
 						boolean online = sessionPlayerID.getPlayer(server) != null;
@@ -99,7 +99,7 @@ public final class TorrentHelper
 						
 						
 						visibleTorrentData.put(sessionPlayerID.getId(), new TorrentSession.TorrentClientData(sessionPlayerID.getUsername(), leechData.getData(MSAttachments.PLAYER_COLOR), status, session.getSeeding(),
-								session.getLeeching().stream().collect(Collectors.toMap(leech -> leech.id().getId(), TorrentSession.Leech::gristTypes)), leechLimitedCache));
+								session.getLeeching().stream().collect(Collectors.toMap(leech -> leech.id().getId(), TorrentSession.Leech::gristTypes)), leechClientCache));
 					}
 				});
 				

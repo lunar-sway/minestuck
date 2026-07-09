@@ -168,7 +168,7 @@ public class GristGutter
 	public static void onServerTickEvent(ServerTickEvent.Pre event)
 	{
 		//noinspection resource
-		if(event.getServer().overworld().getGameTime() % 20 == 0)
+		if(event.getServer().overworld().getGameTime() % 200 == 0)
 		{
 			for(Session session : SessionHandler.get(event.getServer()).getSessions())
 				session.getGristGutter().distributeToPlayers();

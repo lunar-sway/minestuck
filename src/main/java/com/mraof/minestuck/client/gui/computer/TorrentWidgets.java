@@ -40,8 +40,6 @@ public class TorrentWidgets
 		RenderSystem.setShader(GameRenderer::getPositionTexShader);
 		RenderSystem.setShaderTexture(0, icon);
 		
-		float uvScale = 1F / 16F;
-		
 		int iconW = 16;
 		int iconH = 16;
 		
@@ -457,7 +455,6 @@ public class TorrentWidgets
 		private static final int ICON_W = 47;
 		private static final int ICON_H = 47;
 		private static final float SCALE = 0.27F;
-		private static final int SPACING = 2;
 		static final int RENDERED_W = (int) (ICON_W * SCALE);
 		static final int RENDERED_H = (int) (ICON_H * SCALE);
 		private TorrentSession.TorrentClientData data;
@@ -956,12 +953,6 @@ public class TorrentWidgets
 	{
 		private final ScrollingXWidget<?> target;
 		
-		public HorizontalScrollBar(int pX, int pY, int pWidth, ScrollingXWidget<?> target)
-		{
-			super(pX, pY, pWidth, 1, Component.empty());
-			this.target = target;
-		}
-		
 		public HorizontalScrollBar(int pX, int pY, int pWidth, int pHeight, ScrollingXWidget<?> target)
 		{
 			super(pX, pY, pWidth, pHeight, Component.empty());
@@ -1119,12 +1110,7 @@ public class TorrentWidgets
 				1.0F
 		);
 	}
-	
-	static boolean isColorBright(int color)
-	{
-		return (0.299 * redComponent(color) + 0.587 * greenComponent(color) + 0.114 * blueComponent(color)) > 128;
-	}
-	
+
 	static void applyPlayerShaderColor(TorrentSession.TorrentClientData data)
 	{
 		if(data != null && data.status() == 2)

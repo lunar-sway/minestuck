@@ -2,7 +2,6 @@ package com.mraof.minestuck.client.gui;
 
 import com.mojang.blaze3d.systems.RenderSystem;
 import com.mojang.blaze3d.vertex.*;
-import com.mraof.minestuck.alchemy.TorrentSession;
 import com.mraof.minestuck.api.alchemy.GristSet;
 import com.mraof.minestuck.api.alchemy.GristType;
 import com.mraof.minestuck.api.alchemy.GristTypes;
@@ -42,7 +41,7 @@ public abstract class MinestuckScreen extends Screen
 		//Show the name of the grist instead of the count if displaying a tooltip
 		boolean showName = false;
 		GristType tooltipType = null;
-		TorrentSession.ClientCache cache = ClientPlayerData.getGristCache(ClientEditmodeData.isInEditmode() ? ClientPlayerData.CacheSource.EDITMODE : ClientPlayerData.CacheSource.PLAYER);
+		ClientPlayerData.ClientCache cache = ClientPlayerData.getGristCache(ClientEditmodeData.isInEditmode() ? ClientPlayerData.CacheSource.EDITMODE : ClientPlayerData.CacheSource.PLAYER);
 		GristSet clientGrist = cache.set();
 		long cacheLimit = cache.limit();
 		

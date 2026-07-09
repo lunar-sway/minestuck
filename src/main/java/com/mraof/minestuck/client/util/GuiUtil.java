@@ -52,7 +52,7 @@ public class GuiUtil
 			return;
 		}
 		
-		TorrentSession.ClientCache cache = ClientPlayerData.getGristCache(ClientPlayerData.CacheSource.PLAYER);
+		ClientPlayerData.ClientCache cache = ClientPlayerData.getGristCache(ClientPlayerData.CacheSource.PLAYER);
 		GristSet playerGrist = cache.set();
 		if(!MinestuckConfig.CLIENT.alchemyIcons.get())
 		{

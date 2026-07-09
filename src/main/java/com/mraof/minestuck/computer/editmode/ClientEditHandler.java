@@ -239,7 +239,7 @@ public final class ClientEditHandler
 		}
 	}
 	
-	private static TorrentSession.ClientCache getGristCache()
+	private static ClientPlayerData.ClientCache getGristCache()
 	{
 		return ClientPlayerData.getGristCache(ClientPlayerData.CacheSource.EDITMODE);
 	}

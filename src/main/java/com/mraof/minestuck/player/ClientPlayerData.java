@@ -1,5 +1,7 @@
 package com.mraof.minestuck.player;
 
+import com.mojang.serialization.Codec;
+import com.mojang.serialization.codecs.RecordCodecBuilder;
 import com.mraof.minestuck.Minestuck;
 import com.mraof.minestuck.MinestuckConfig;
 import com.mraof.minestuck.alchemy.TorrentSession;
@@ -14,6 +16,9 @@ import com.mraof.minestuck.network.editmode.EditmodeCacheLimitPacket;
 import com.mraof.minestuck.util.ColorHandler;
 import net.minecraft.client.Minecraft;
 import net.minecraft.core.HolderLookup;
+import net.minecraft.network.RegistryFriendlyByteBuf;
+import net.minecraft.network.codec.ByteBufCodecs;
+import net.minecraft.network.codec.StreamCodec;
 import net.neoforged.api.distmarker.Dist;
 import net.neoforged.bus.api.SubscribeEvent;
 import net.neoforged.fml.LogicalSide;
@@ -88,13 +93,33 @@ public final class ClientPlayerData
 		return boondollars;
 	}
 	
-	public static TorrentSession.ClientCache getGristCache(CacheSource cacheSource)
+	public static ClientCache getGristCache(CacheSource cacheSource)
 	{
 		return switch(cacheSource)
 		{
-			case PLAYER -> new TorrentSession.ClientCache(ClientPlayerData.playerGrist.asImmutable(), ClientRungData.getData(ClientPlayerData.getRung()).gristCapacity());
-			case EDITMODE -> new TorrentSession.ClientCache(ClientPlayerData.targetGrist.asImmutable(), targetCacheLimit);
+			case PLAYER -> new ClientCache(ClientPlayerData.playerGrist.asImmutable(), ClientRungData.getData(ClientPlayerData.getRung()).gristCapacity());
+			case EDITMODE -> new ClientCache(ClientPlayerData.targetGrist.asImmutable(), targetCacheLimit);
 		};
+	}
+	
+	public record ClientCache(GristSet.Immutable set, long limit)
+	{
+		public static final Codec<ClientCache> CODEC = RecordCodecBuilder.create(instance -> instance.group(
+				GristSet.Codecs.NON_NEGATIVE_CODEC.fieldOf("grist_set").forGetter(ClientCache::set),
+				Codec.LONG.fieldOf("limit").forGetter(ClientCache::limit)
+		).apply(instance, ClientCache::new));
+		
+		public static final StreamCodec<RegistryFriendlyByteBuf, ClientCache> STREAM_CODEC = StreamCodec.composite(
+				GristSet.Codecs.STREAM_CODEC,
+				ClientCache::set,
+				ByteBufCodecs.VAR_LONG,
+				ClientCache::limit,
+				ClientCache::new
+		);
+		public boolean canAfford(GristSet cost)
+		{
+			return GristCache.canAfford(this.set, cost, this.limit);
+		}
 	}
 	
 	public enum CacheSource

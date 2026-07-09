@@ -12,11 +12,12 @@ The format is based on [Keep a Changelog](https://keepachangelog.com/en/1.1.0/).
 
 ### Changed
 
-- Laptops can now be picked up
+- Laptops can now be pickАed up
+- Updated Grist Cache gui texture
 
 - ### Contributors for this release
 
-- Fl1s
+- Dweblenod, Cibernet, Riotmode, kirderf1, Caldw3ll, Fl1s
 
 ## [1.21.1-1.14.0.1] - 2026-06-01
 
@@ -889,8 +890,7 @@ The format is based on [Keep a Changelog](https://keepachangelog.com/en/1.1.0/).
 
 ### Contributors for this release
 
-- Riotmode, rose_bushes_, Dweblenod, kirderf1, Doro, Akisephila, blankMushroom
-- Riotmode, rose_bushes_, Dweblenod, kirderf1, Doro, Akisephila, blankMushroom
+- Riotmode, rose_bushes_, Dweblenod, kirderf1, DORO, Akisephila, blankMushroom
 
 ## [1.18.2-1.9.0.2] - 2023-01-09
 
