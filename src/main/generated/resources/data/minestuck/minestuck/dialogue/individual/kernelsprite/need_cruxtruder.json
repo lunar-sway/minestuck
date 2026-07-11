@@ -26,11 +26,11 @@
         },
         "triggers": [
           {
-            "type": "minestuck:go_to_block",
+            "type": "minestuck:go_to_poi",
             "accepted_distance": 1.0,
             "duration": 1,
-            "predicate": {},
-            "radius": 1
+            "poi_key": "minestuck:cruxtruder",
+            "radius": 50
           }
         ]
       }

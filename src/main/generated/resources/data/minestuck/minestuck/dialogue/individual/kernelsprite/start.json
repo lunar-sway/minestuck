@@ -92,26 +92,16 @@
           "type": "minestuck:list",
           "conditions": [
             {
-              "type": "minestuck:npc_near_block_predicate",
-              "predicate": {
-                "blocks": [
-                  "minestuck:gate",
-                  "minestuck:gate_main"
-                ]
-              },
-              "radius": 20
+              "type": "minestuck:npc_near_poi",
+              "poi_key": "minestuck:gate",
+              "radius": 50
             },
             {
               "type": "minestuck:list",
               "conditions": [
                 {
-                  "type": "minestuck:npc_near_block_predicate",
-                  "predicate": {
-                    "blocks": [
-                      "minestuck:gate",
-                      "minestuck:gate_main"
-                    ]
-                  },
+                  "type": "minestuck:npc_near_poi",
+                  "poi_key": "minestuck:gate",
                   "radius": 4
                 }
               ],
@@ -125,16 +115,11 @@
         "message": "minestuck.dialogue.individual.kernelsprite.start.go_home",
         "triggers": [
           {
-            "type": "minestuck:go_to_block",
+            "type": "minestuck:go_to_poi",
             "accepted_distance": 4.0,
             "duration": 360,
-            "predicate": {
-              "blocks": [
-                "minestuck:gate",
-                "minestuck:gate_main"
-              ]
-            },
-            "radius": 20,
+            "poi_key": "minestuck:gate",
+            "radius": 50,
             "speed_modifier": 0.5,
             "wait_permanently": true
           }
@@ -142,28 +127,18 @@
       },
       {
         "condition": {
-          "type": "minestuck:npc_near_block_predicate",
-          "predicate": {
-            "blocks": [
-              "minestuck:gate",
-              "minestuck:gate_main"
-            ]
-          },
+          "type": "minestuck:npc_near_poi",
+          "poi_key": "minestuck:gate",
           "radius": 4
         },
         "hide_if_failed": true,
         "message": "minestuck.dialogue.individual.kernelsprite.start.go_free",
         "triggers": [
           {
-            "type": "minestuck:go_to_block",
+            "type": "minestuck:go_to_poi",
             "accepted_distance": 6.0,
             "duration": 1,
-            "predicate": {
-              "blocks": [
-                "minestuck:gate",
-                "minestuck:gate_main"
-              ]
-            },
+            "poi_key": "minestuck:gate",
             "radius": 6,
             "speed_modifier": 0.05
           }

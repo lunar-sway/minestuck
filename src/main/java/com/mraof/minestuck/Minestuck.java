@@ -16,6 +16,7 @@ import com.mraof.minestuck.computer.editmode.DeployList;
 import com.mraof.minestuck.effects.MSEffects;
 import com.mraof.minestuck.entity.MSAttributes;
 import com.mraof.minestuck.entity.MSEntityTypes;
+import com.mraof.minestuck.entity.ai.brain.MSPoiTypes;
 import com.mraof.minestuck.entity.dialogue.Triggers;
 import com.mraof.minestuck.entity.dialogue.condition.Conditions;
 import com.mraof.minestuck.entry.BlockCopier;
@@ -79,6 +80,7 @@ public class Minestuck
 		MSFluids.TYPE_REGISTER.register(eventBus);
 		MSBlockEntityTypes.REGISTER.register(eventBus);
 		MSEntityTypes.REGISTER.register(eventBus);
+		MSPoiTypes.REGISTER.register(eventBus);
 		MSMenuTypes.REGISTER.register(eventBus);
 		GristTypes.register(eventBus);
 		MSEffects.REGISTER.register(eventBus);
