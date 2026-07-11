@@ -12,10 +12,15 @@ The format is based on [Keep a Changelog](https://keepachangelog.com/en/1.1.0/).
 
 ### Changed
 
-- Laptops can now be pickАed up
 - Updated Grist Cache gui texture
+- Laptops can now be picked up
+- The range at which the Kernelsprite detects and travels to blocks has increased
 
-- ### Contributors for this release
+### Fixed
+
+- Fixed server tick crash related to kernelsprite dialogue
+
+### Contributors for this release
 
 - Dweblenod, Cibernet, Riotmode, kirderf1, Caldw3ll, Fl1s
 
@@ -30,6 +35,7 @@ The format is based on [Keep a Changelog](https://keepachangelog.com/en/1.1.0/).
 - Players now cannot captchalogue items if they contain certain nested item components. This replaces the bugged maximum data system introduced in the last update
 - Uranium fuel is now data driven
 - Uranium power is now a neoforge capability, add-ons will have to update their machines
+- Weapons with additionnal knockback now use the Attack Knockback attribute
 - Cakemix now spawning in supply chests and much more often in The Land of Desserts
 
 ### Fixed
