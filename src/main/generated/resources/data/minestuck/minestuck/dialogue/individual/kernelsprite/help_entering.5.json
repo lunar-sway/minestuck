@@ -2,11 +2,9 @@
   "conditioned_nodes": [
     {
       "condition": {
-        "type": "minestuck:npc_near_block_predicate",
-        "predicate": {
-          "blocks": "minestuck:alchemiter_totem_pad"
-        },
-        "radius": 20
+        "type": "minestuck:npc_near_poi",
+        "poi_key": "minestuck:alchemiter",
+        "radius": 50
       },
       "node": {
         "animation": {},
@@ -35,12 +33,15 @@
             },
             "triggers": [
               {
-                "type": "minestuck:go_to_block",
+                "type": "minestuck:go_to_poi",
                 "accepted_distance": 6.0,
-                "predicate": {
-                  "blocks": "minestuck:alchemiter_center"
-                },
-                "radius": 20,
+                "poi_key": "minestuck:alchemiter",
+                "pos_offset": [
+                  1,
+                  1,
+                  1
+                ],
+                "radius": 30,
                 "wait_permanently": true
               }
             ]
@@ -58,11 +59,11 @@
             },
             "triggers": [
               {
-                "type": "minestuck:go_to_block",
+                "type": "minestuck:go_to_poi",
                 "accepted_distance": 1.0,
                 "duration": 1,
-                "predicate": {},
-                "radius": 1
+                "poi_key": "minestuck:cruxtruder",
+                "radius": 50
               }
             ]
           }
@@ -110,11 +111,11 @@
         },
         "triggers": [
           {
-            "type": "minestuck:go_to_block",
+            "type": "minestuck:go_to_poi",
             "accepted_distance": 1.0,
             "duration": 1,
-            "predicate": {},
-            "radius": 1
+            "poi_key": "minestuck:cruxtruder",
+            "radius": 50
           }
         ]
       }

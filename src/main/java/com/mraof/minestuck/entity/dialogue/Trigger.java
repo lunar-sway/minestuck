@@ -5,7 +5,8 @@ import com.mojang.serialization.DataResult;
 import com.mojang.serialization.MapCodec;
 import com.mojang.serialization.codecs.RecordCodecBuilder;
 import com.mraof.minestuck.advancements.MSCriteriaTriggers;
-import com.mraof.minestuck.entity.ai.GoToBlockGoal;
+import com.mraof.minestuck.entity.KernelspriteEntity;
+import com.mraof.minestuck.entity.ai.GoToPoiGoal;
 import com.mraof.minestuck.entity.consort.ConsortEntity;
 import com.mraof.minestuck.entity.consort.ConsortReputation;
 import com.mraof.minestuck.entity.consort.ConsortRewardHandler;
@@ -16,9 +17,9 @@ import com.mraof.minestuck.player.PlayerBoondollars;
 import com.mraof.minestuck.player.PlayerData;
 import net.minecraft.MethodsReturnNonnullByDefault;
 import net.minecraft.Util;
-import net.minecraft.advancements.critereon.BlockPredicate;
 import net.minecraft.commands.CommandSourceStack;
 import net.minecraft.commands.Commands;
+import net.minecraft.core.Vec3i;
 import net.minecraft.core.registries.BuiltInRegistries;
 import net.minecraft.core.registries.Registries;
 import net.minecraft.network.chat.Component;
@@ -29,7 +30,7 @@ import net.minecraft.server.level.ServerPlayer;
 import net.minecraft.world.SimpleMenuProvider;
 import net.minecraft.world.entity.EquipmentSlot;
 import net.minecraft.world.entity.LivingEntity;
-import net.minecraft.world.entity.PathfinderMob;
+import net.minecraft.world.entity.ai.village.poi.PoiType;
 import net.minecraft.world.item.Item;
 import net.minecraft.world.item.ItemStack;
 import net.minecraft.world.level.storage.loot.LootParams;
@@ -429,20 +430,22 @@ public sealed interface Trigger
 		}
 	}
 	
-	record GoToBlock(BlockPredicate predicate, int radius, double speedModifier, int duration, int priority, double acceptedDistance, boolean waitPermanently) implements Trigger
+	record GoToPoi(ResourceKey<PoiType> poiKey, Vec3i posOffset, int radius, double speedModifier, int duration,
+	               int priority, double acceptedDistance, boolean waitPermanently) implements Trigger
 	{
-		static final MapCodec<GoToBlock> CODEC = RecordCodecBuilder.mapCodec(instance -> instance.group(
-				BlockPredicate.CODEC.fieldOf("predicate").forGetter(GoToBlock::predicate),
-				Codec.INT.optionalFieldOf("radius", 8).forGetter(GoToBlock::radius),
-				Codec.DOUBLE.optionalFieldOf("speed_modifier", 1.0).forGetter(GoToBlock::speedModifier),
-				Codec.INT.optionalFieldOf("duration", 240).forGetter(GoToBlock::duration),
-				Codec.INT.optionalFieldOf("priority", 1).forGetter(GoToBlock::priority),
-				Codec.DOUBLE.optionalFieldOf("accepted_distance", 3.0D).forGetter(GoToBlock::acceptedDistance),
-				Codec.BOOL.optionalFieldOf("wait_permanently", false).forGetter(GoToBlock::waitPermanently)
-		).apply(instance, GoToBlock::new));
+		static final MapCodec<GoToPoi> CODEC = RecordCodecBuilder.mapCodec(instance -> instance.group(
+				ResourceKey.codec(Registries.POINT_OF_INTEREST_TYPE).fieldOf("poi_key").forGetter(GoToPoi::poiKey),
+				Vec3i.CODEC.optionalFieldOf("pos_offset", Vec3i.ZERO).forGetter(GoToPoi::posOffset),
+				Codec.INT.optionalFieldOf("radius", 8).forGetter(GoToPoi::radius),
+				Codec.DOUBLE.optionalFieldOf("speed_modifier", 1.0).forGetter(GoToPoi::speedModifier),
+				Codec.INT.optionalFieldOf("duration", 240).forGetter(GoToPoi::duration),
+				Codec.INT.optionalFieldOf("priority", 1).forGetter(GoToPoi::priority),
+				Codec.DOUBLE.optionalFieldOf("accepted_distance", 3.0D).forGetter(GoToPoi::acceptedDistance),
+				Codec.BOOL.optionalFieldOf("wait_permanently", false).forGetter(GoToPoi::waitPermanently)
+		).apply(instance, GoToPoi::new));
 		
 		@Override
-		public MapCodec<GoToBlock> codec()
+		public MapCodec<GoToPoi> codec()
 		{
 			return CODEC;
 		}
@@ -450,14 +453,14 @@ public sealed interface Trigger
 		@Override
 		public void triggerEffect(LivingEntity entity, ServerPlayer player)
 		{
-			if(entity instanceof PathfinderMob mob)
+			if(entity instanceof KernelspriteEntity kernelsprite)
 			{
-				mob.goalSelector.getAvailableGoals().iterator().forEachRemaining(wrappedGoal ->
+				kernelsprite.goalSelector.getAvailableGoals().iterator().forEachRemaining(wrappedGoal ->
 				{
-					if(wrappedGoal != null && wrappedGoal.getGoal() instanceof GoToBlockGoal goToBlockGoal)
-						mob.goalSelector.removeGoal(goToBlockGoal);
+					if(wrappedGoal != null && wrappedGoal.getGoal() instanceof GoToPoiGoal goToBlockGoal)
+						kernelsprite.goalSelector.removeGoal(goToBlockGoal);
 				});
-				mob.goalSelector.addGoal(priority, new GoToBlockGoal(mob, predicate, speedModifier, duration, radius, acceptedDistance, waitPermanently));
+				kernelsprite.goalSelector.addGoal(priority, new GoToPoiGoal(kernelsprite, poiKey, posOffset, speedModifier, duration, radius, acceptedDistance, waitPermanently));
 			}
 		}
 	}
