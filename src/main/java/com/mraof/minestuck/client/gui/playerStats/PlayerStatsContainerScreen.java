@@ -55,19 +55,23 @@ public abstract class PlayerStatsContainerScreen<T extends AbstractContainerMenu
 		
 		if(mode)
 		{
-			for(NormalGuiType type : NormalGuiType.values())
-				if(type != normalTab && (!type.reqMedium() || SkaiaClient.hasPlayerEntered() || minecraft.gameMode.hasInfiniteItems()))
+			NormalGuiType[] visible = visibleNormalTabs();
+			for(NormalGuiType type : visible)
+				if(type != normalTab)
 				{
 					int i = type.ordinal();
-					guiGraphics.blit(PlayerStatsScreen.icons, xOffset + i*(tabWidth + 2), yOffset - tabHeight + tabOverlap, i==0? 0:tabWidth, 0, tabWidth, tabHeight);
+					TabSprites.TabSprite sprite = type.getSpritePool().get(positionOf(visible, type), false);
+					guiGraphics.blit(PlayerStatsScreen.icons, xOffset + i*(tabWidth + 2), yOffset - tabHeight + tabOverlap, sprite.u(), sprite.v(), tabWidth, tabHeight);
 				}
 		} else
 		{
-			for(EditmodeGuiType type : EditmodeGuiType.values())
+			EditmodeGuiType[] visible = EditmodeGuiType.values();
+			for(EditmodeGuiType type : visible)
 				if(type != editmodeTab)
 				{
 					int i = type.ordinal();
-					guiGraphics.blit(PlayerStatsScreen.icons, xOffset + i*(tabWidth + 2), yOffset - tabHeight + tabOverlap, i==0? 0:tabWidth, 0, tabWidth, tabHeight);
+					TabSprites.TabSprite sprite = type.getSpritePool().get(positionOf(visible, type), false);
+					guiGraphics.blit(PlayerStatsScreen.icons, xOffset + i*(tabWidth + 2), yOffset - tabHeight + tabOverlap, sprite.u(), sprite.v(), tabWidth, tabHeight);
 				}
 		}
 		
@@ -88,8 +92,10 @@ public abstract class PlayerStatsContainerScreen<T extends AbstractContainerMenu
 		RenderSystem.setShaderColor(1, 1, 1, 1);
 		
 		int index = (mode? normalTab:editmodeTab).ordinal();
+		TabSprites.TabPosition activePos = mode ? positionOf(visibleNormalTabs(), normalTab) : positionOf(EditmodeGuiType.values(), editmodeTab);
+		TabSprites.TabSprite activeSprite = (mode ? normalTab.getSpritePool() : editmodeTab.getSpritePool()).get(activePos, true);
 		guiGraphics.blit(PlayerStatsScreen.icons, xOffset + index*(tabWidth+2), yOffset - tabHeight + tabOverlap,
-				index == 0? 0:tabWidth, tabHeight, tabWidth, tabHeight);
+				activeSprite.u(), activeSprite.v(), tabWidth, tabHeight);
 		
 		for(int i = 0; i < (mode? NormalGuiType.values():EditmodeGuiType.values()).length; i++)
 			if(!mode || !NormalGuiType.values()[i].reqMedium() || SkaiaClient.hasPlayerEntered() || minecraft.gameMode.hasInfiniteItems())
@@ -154,5 +160,20 @@ public abstract class PlayerStatsContainerScreen<T extends AbstractContainerMenu
 			return true;
 		}
 		else return super.keyPressed(keyCode, scanCode, i);
+	}
+	
+	private NormalGuiType[] visibleNormalTabs()
+	{
+		return java.util.Arrays.stream(NormalGuiType.values())
+				.filter(type -> !type.reqMedium() || SkaiaClient.hasPlayerEntered() || minecraft.gameMode.hasInfiniteItems())
+				.toArray(NormalGuiType[]::new);
+	}
+	
+	private static <T> TabSprites.TabPosition positionOf(T[] visible, T type)
+	{
+		int idx = java.util.Arrays.asList(visible).indexOf(type);
+		if(idx <= 0) return TabSprites.TabPosition.LEFT;
+		if(idx == visible.length - 1) return TabSprites.TabPosition.RIGHT;
+		return TabSprites.TabPosition.MIDDLE;
 	}
 }
