@@ -110,8 +110,6 @@ public class MinestuckItemTagsProvider extends ItemTagsProvider
 		List<MSToolType> minestuckToolTypes = Stream.concat(minestuckMiningToolTypes.stream(), minestuckMeleeToolTypes.stream()).toList();
 		
 		tag(SWORDS).add(EMERALD_SWORD.get()).add(relevantItems(item -> hasToolType(item, List.of(SWORD_TOOL))));
-		tag(BOWS).add(Items.BOW);
-		tag(CROSSBOWS).add(Items.CROSSBOW);
 		tag(AXES).add(EMERALD_AXE.get()).add(relevantItems(item -> hasToolType(item, List.of(AXE_TOOL, CHAINSAW_TOOL))));
 		tag(PICKAXES).add(EMERALD_PICKAXE.get()).add(relevantItems(item -> hasToolType(item, List.of(PICKAXE_TOOL))));
 		tag(SHOVELS).add(EMERALD_SHOVEL.get()).add(relevantItems(item -> hasToolType(item, List.of(SHOVEL_TOOL, SPOON_TOOL))));
@@ -121,8 +119,8 @@ public class MinestuckItemTagsProvider extends ItemTagsProvider
 		// [kinds abstractus]
 		tag(KIND_SWORD).addTag(SWORDS).add(SORD.get(), PAPER_SWORD.get(), SWONGE.get(), WET_SWONGE.get(), PUMORD.get(), WET_PUMORD.get(), CACTACEAE_CUTLASS.get(), STEAK_SWORD.get(), BEEF_SWORD.get(), IRRADIATED_STEAK_SWORD.get(), MACUAHUITL.get(), FROSTY_MACUAHUITL.get(), KATANA.get(), UNBREAKABLE_KATANA.get(), ANGEL_APOCALYPSE.get(), FIRE_POKER.get(), TOO_HOT_TO_HANDLE.get(), CALEDSCRATCH.get(), CALEDFWLCH.get(), ROYAL_DERINGER.get(), CLAYMORE.get(), CUTLASS_OF_ZILLYWAIR.get(), REGISWORD.get(), CRUEL_FATE_CRUCIBLE.get(), SCARLET_RIBBITAR.get(), DOGG_MACHETE.get(), COBALT_SABRE.get(), QUANTUM_SABRE.get(), SHATTER_BEACON.get(), SHATTER_BACON.get(), SUBTRACTSHUMIDIRE_ZOMORRODNEGATIVE.get(), MUSIC_SWORD.get(), PILLOW_TALK.get(), KRAKENS_EYE.get(), CINNAMON_SWORD.get(), UNION_BUSTER.get(), CHAINSAW_KATANA.get(), THORN_IN_YOUR_SIDE.get(), ROSE_PROTOCOL.get(), EMERALD_SWORD.get()).remove(KIND_HALF_SWORD);
 		tag(KIND_HALF_SWORD).add(HALF_KATANA.get(), HALF_CALEDFWLCH.get(), HALF_ROYAL_DERINGER.get(), HALF_SCARLET_RIBBITAR.get(),  HALF_CALEDSCRATCH.get());
-		tag(KIND_BOW).addTag(BOWS);
-		tag(KIND_CROSSBOW).add(Items.CROSSBOW);
+		tag(KIND_BOW).addTag(TOOLS_BOW);
+		tag(KIND_CROSSBOW).addTag(TOOLS_CROSSBOW);
 		tag(KIND_PICKAXE).addTag(PICKAXES).add(EMERALD_PICKAXE.get());
 		tag(KIND_AXE).addTag(AXES).add(BATLEACKS.get(), COPSE_CRUSHER.get(), QUENCH_CRUSHER.get(), MELONSBANE.get(), CROP_CHOP.get(), THE_LAST_STRAW.get(), BATTLEAXE.get(), CANDY_BATTLEAXE.get(), CHOCO_LOCO_WOODSPLITTER.get(), STEEL_EDGE_CANDYCUTTER.get(), BLACKSMITH_BANE.get(), REGIAXE.get(), GOTHY_AXE.get(), SURPRISE_AXE.get(), SHOCK_AXE.get(), SHOCK_AXE_UNPOWERED.get(), SCRAXE.get(), LORENTZ_DISTRANSFORMATIONER.get(), PISTON_POWERED_POGO_AXEHAMMER.get(), RUBY_CROAK.get(), HEPHAESTUS_LUMBERJACK.get(), FISSION_FOCUSED_FAULT_FELLER.get(), BISECTOR.get(), FINE_CHINA_AXE.get(), EMERALD_AXE.get());
 		tag(KIND_HOE).addTag(HOES).add(EMERALD_HOE.get());
