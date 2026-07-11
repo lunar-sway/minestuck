@@ -56,14 +56,14 @@ public class MSKeyHandler
 		event.register(statKey);
 		editKey = new KeyMapping(EXIT_EDIT_MODE, KeyConflictContext.IN_GAME, InputConstants.Type.KEYSYM, GLFW.GLFW_KEY_K, CATEGORY);
 		event.register(editKey);
-		captchaKey = new KeyMapping(CAPTCHALOGUE, GLFW.GLFW_KEY_C, CATEGORY);
+		captchaKey = new KeyMapping(CAPTCHALOGUE, GLFW.GLFW_KEY_V, CATEGORY);
 		event.register(captchaKey);
 		effectToggleKey = new KeyMapping(ASPECT_EFFECT_TOGGLE, KeyConflictContext.IN_GAME, InputConstants.Type.KEYSYM, GLFW.GLFW_KEY_BACKSLASH, CATEGORY);
 		event.register(effectToggleKey);
 		sylladexKey = new KeyMapping(SYLLADEX, GLFW.GLFW_KEY_UNKNOWN, CATEGORY);
 		event.register(sylladexKey);
 		
-		strifeKey = new KeyMapping(STRIFE, GLFW.GLFW_KEY_V, CATEGORY);
+		strifeKey = new KeyMapping(STRIFE, GLFW.GLFW_KEY_C, CATEGORY);
 		event.register(strifeKey);
 		strifeLeftKey = new KeyMapping(STRIFE_LEFT, GLFW.GLFW_KEY_UNKNOWN, CATEGORY);
 		event.register(strifeLeftKey);
