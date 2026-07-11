@@ -56,7 +56,7 @@ public class MSKeyHandler
 		event.register(statKey);
 		editKey = new KeyMapping(EXIT_EDIT_MODE, KeyConflictContext.IN_GAME, InputConstants.Type.KEYSYM, GLFW.GLFW_KEY_K, CATEGORY);
 		event.register(editKey);
-		captchaKey = new KeyMapping(CAPTCHALOGUE, GLFW.GLFW_KEY_V, CATEGORY);
+		captchaKey = new KeyMapping(CAPTCHALOGUE, GLFW.GLFW_KEY_C, CATEGORY);
 		event.register(captchaKey);
 		effectToggleKey = new KeyMapping(ASPECT_EFFECT_TOGGLE, KeyConflictContext.IN_GAME, InputConstants.Type.KEYSYM, GLFW.GLFW_KEY_BACKSLASH, CATEGORY);
 		event.register(effectToggleKey);
