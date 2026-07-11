@@ -94,6 +94,13 @@ public class MinestuckConfig
 		public final EnumValue<AvailableOptions> hashmapChatModusSetting;
 		public final EnumValue<AvailableOptions> arrayChatModusSetting;
 		
+		//Strife
+		public final BooleanValue restrictedStrife;
+		public final BooleanValue keepPortfolioOnDeath;
+		public final IntValue strifeDeckMaxSize;
+		public final IntValue abstrataSwitcherRung;
+		public final DoubleValue weaponAttackMultiplier;
+		
 		//Mechanics
 		public final BooleanValue hardMode;
 		public final IntValue maxSpecibusCount;
@@ -124,11 +131,6 @@ public class MinestuckConfig
 		public final IntValue overworldEditRange;
 		public final IntValue landEditRange;
 		public final BooleanValue giveItems;
-		public final BooleanValue restrictedStrife;
-		public final BooleanValue keepPortfolioOnDeath;
-		public final IntValue strifeDeckMaxSize;
-		public final IntValue abstrataSwitcherRung;
-		public final DoubleValue weaponAttackMultiplier;
 		
 		private Server(Builder builder)
 		{
