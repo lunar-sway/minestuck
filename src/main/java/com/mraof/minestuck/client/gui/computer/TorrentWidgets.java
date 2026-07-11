@@ -552,11 +552,11 @@ public class TorrentWidgets
 				return;
 			
 			List<GristType> userSeeding = userData.getViableSeeding();
-			typeUpSpeed = TorrentHelper.getSeedRateMod(userSeeding);
+			typeUpSpeed = TorrentHelper.getSeedRateMod(userSeeding, userData.cache().set().getValue());
 			
 			for(TorrentSession.TorrentClientData dataEntry : filteredData)
 			{
-				int entrySeedRate = TorrentHelper.getSeedRateMod(dataEntry.getViableSeeding());
+				int entrySeedRate = TorrentHelper.getSeedRateMod(dataEntry.getViableSeeding(), dataEntry.cache().set().getValue());
 				minDownSpeed = Math.min(minDownSpeed, entrySeedRate);
 				maxDownSpeed = Math.max(maxDownSpeed, entrySeedRate);
 			}

@@ -49,7 +49,7 @@ public final class TorrentHelper
 		
 		List<GristType> seeding = torrentSession.getViableSeeding(seederCache.getGristSet());
 		
-		int seedRateMod = getSeedRateMod(seeding);
+		int seedRateMod = getSeedRateMod(seeding, GristCache.get(seederData).getGristSet().getValue());
 		
 		if(seedRateMod == 0)
 			return;
@@ -126,8 +126,9 @@ public final class TorrentHelper
 			
 			//try to add the grist to the leeches cache and if successful then try to remove from seeder cache
 			GristSet remainder = leechCache.addWithinCapacity(gristAmount, null);
-			if(remainder.isEmpty())
-				seederCache.tryTake(gristAmount, null);
+			long actuallyAdded = gristAmount.amount() - remainder.getGrist(grist);
+			if(actuallyAdded > 0)
+				seederCache.tryTake(new GristAmount(grist, (int) actuallyAdded), null);
 		});
 	}
 	
@@ -135,13 +136,14 @@ public final class TorrentHelper
 	 * Takes a list of seeded grist types (removing any instances where there is no grist to seed),
 	 * and returns a rate at which all available grist should be distributed
 	 */
-	public static int getSeedRateMod(List<GristType> seeding)
+	public static int getSeedRateMod(List<GristType> seeding, double cacheAmount)
 	{
 		int numberSeeds = seeding.size();
 		
 		if(numberSeeds == 0)
 			return 0; //TODO this may be an unwise way to handle this
 		
-		return Math.max(1, (int) (GristTypes.REGISTRY.stream().count() / numberSeeds));
+		int scaleFactor = cacheAmount > 0 ? (int) (cacheAmount / GristTypes.REGISTRY.stream().count()) : 1;
+		return Math.max(1, scaleFactor / numberSeeds);
 	}
 }
