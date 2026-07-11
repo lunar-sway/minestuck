@@ -2,7 +2,7 @@ package com.mraof.minestuck.client.gui.playerStats;
 
 import com.mojang.blaze3d.systems.RenderSystem;
 import com.mraof.minestuck.Minestuck;
-import com.mraof.minestuck.network.*;
+import com.mraof.minestuck.network.StrifePackets;
 import com.mraof.minestuck.player.ClientPlayerData;
 import com.mraof.minestuck.player.KindAbstratusType;
 import com.mraof.minestuck.player.StrifePortfolioData;
@@ -280,8 +280,8 @@ public class StrifePortfolioScreen extends PlayerStatsScreen
 		// card fan click
 		if(selectedCard >= 0)
 		{
-			if(button == 0) PacketDistributor.sendToServer(new SetActiveStrifePacket(selectedCard));
-			else if(button == 1) PacketDistributor.sendToServer(new RetrieveStrifeCardPacket(selectedCard));
+			if(button == 0) PacketDistributor.sendToServer(new StrifePackets.SetActiveStrifePacket(selectedCard));
+			else if(button == 1) PacketDistributor.sendToServer(new StrifePackets.RetrieveStrifeCardPacket(selectedCard));
 			return true;
 		}
 		
@@ -291,8 +291,8 @@ public class StrifePortfolioScreen extends PlayerStatsScreen
 			int sx = xOffset + 22 + 20 * i;
 			int sy = yOffset + 165;
 			if(!isPointInRegion(sx, sy, 18, 18, (int) mx, (int) my)) continue;
-			if(button == 0) PacketDistributor.sendToServer(new SetActiveStrifePacket(i));
-			else if(button == 1) PacketDistributor.sendToServer(new RetrieveStrifeCardPacket(i));
+			if(button == 0) PacketDistributor.sendToServer(new StrifePackets.SetActiveStrifePacket(i));
+			else if(button == 1) PacketDistributor.sendToServer(new StrifePackets.RetrieveStrifeCardPacket(i));
 			return true;
 		}
 		
@@ -315,7 +315,7 @@ public class StrifePortfolioScreen extends PlayerStatsScreen
 				int sz = Math.round(16 * CS);
 				if(isPointInRegion(wx, wy, sz, sz, (int) mx, (int) my))
 				{
-					PacketDistributor.sendToServer(new RetrieveWeaponPacket(i, InteractionHand.MAIN_HAND));
+					PacketDistributor.sendToServer(new StrifePackets.RetrieveWeaponPacket(i, InteractionHand.MAIN_HAND));
 					return true;
 				}
 				n++;

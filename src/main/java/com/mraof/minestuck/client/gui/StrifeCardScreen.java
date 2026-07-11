@@ -2,7 +2,7 @@ package com.mraof.minestuck.client.gui;
 
 import com.mojang.blaze3d.systems.RenderSystem;
 import com.mraof.minestuck.Minestuck;
-import com.mraof.minestuck.network.SelectAbstrataForCardPacket;
+import com.mraof.minestuck.network.StrifePackets;
 import com.mraof.minestuck.player.KindAbstratusList;
 import com.mraof.minestuck.player.KindAbstratusType;
 import net.minecraft.client.gui.GuiGraphics;
@@ -183,7 +183,7 @@ public class StrifeCardScreen extends Screen
 				
 				if(isInRegion(cellX, cellY, COL_W, rowH, (int) mx, (int) my))
 				{
-					PacketDistributor.sendToServer(new SelectAbstrataForCardPacket(hand, types.get(index).getUnlocalizedName()));
+					PacketDistributor.sendToServer(new StrifePackets.SelectAbstrataForCardPacket(hand, types.get(index).getUnlocalizedName()));
 					onClose();
 					return true;
 				}

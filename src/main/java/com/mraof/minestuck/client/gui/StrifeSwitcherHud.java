@@ -3,7 +3,7 @@ package com.mraof.minestuck.client.gui;
 import com.mojang.blaze3d.systems.RenderSystem;
 import com.mraof.minestuck.Minestuck;
 import com.mraof.minestuck.item.components.MSItemComponents;
-import com.mraof.minestuck.network.*;
+import com.mraof.minestuck.network.StrifePackets;
 import com.mraof.minestuck.player.KindAbstratusType;
 import com.mraof.minestuck.player.StrifePortfolioData;
 import com.mraof.minestuck.player.StrifeSpecibus;
@@ -66,7 +66,7 @@ public final class StrifeSwitcherHud
 		if(!offhandMode && hasItem && !data.isPortfolioEmpty())
 		{
 			PacketDistributor.sendToServer(
-					new AssignStrifePacket(InteractionHand.MAIN_HAND));
+					new StrifePackets.AssignStrifePacket(InteractionHand.MAIN_HAND));
 			showSwitcher = false;
 			return;
 		}
@@ -100,7 +100,7 @@ public final class StrifeSwitcherHud
 		
 		if(offhandMode)
 		{
-			PacketDistributor.sendToServer(new SwapOffhandStrifePacket(selSpecibus, selWeapon));
+			PacketDistributor.sendToServer(new StrifePackets.SwapOffhandStrifePacket(selSpecibus, selWeapon));
 		} else
 		{
 			boolean sneaking = mc.player != null && mc.player.isCrouching();
@@ -113,7 +113,7 @@ public final class StrifeSwitcherHud
 			} else
 			{
 				// Arm/disarm selected weapon
-				PacketDistributor.sendToServer(new RetrieveWeaponPacket(selWeapon, InteractionHand.MAIN_HAND));
+				PacketDistributor.sendToServer(new StrifePackets.RetrieveWeaponPacket(selWeapon, InteractionHand.MAIN_HAND));
 			}
 		}
 	}
@@ -148,7 +148,7 @@ public final class StrifeSwitcherHud
 			curPos = Math.floorMod(curPos + dir, ne.length);
 			selSpecibus = data.getSpecibusIndex(ne[curPos]);
 			selWeapon = 0;
-			PacketDistributor.sendToServer(new SetActiveStrifePacket(selSpecibus));
+			PacketDistributor.sendToServer(new StrifePackets.SetActiveStrifePacket(selSpecibus));
 		} else
 		{
 			if(selSpecibus < 0 || selSpecibus >= data.getPortfolio().length) return;
