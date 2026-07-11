@@ -219,27 +219,30 @@ public class StrifePortfolioScreen extends PlayerStatsScreen
 		
 		// weapon items
 		LinkedList<ItemStack> items = sp.getContents();
-		int deckX = (int) (94 - 23 * (Math.min(items.size(), 5) / 2f));
-		int n = 0;
-		for(ItemStack stack : items)
+		int shown = Math.min(items.size(), 5);
+		int deckX = (int) (94 - 23 * (shown / 2f));
+
+		for(int n = 0; n < shown; n++)
 		{
-			int ix = (deckX + (n % 5) * 23) - (n / 5);
-			int iy = 193 - (n / 5) * 2;
-			
-			int sx = x + Math.round(ix * CS);
-			int sy = y + Math.round(iy * CS);
+			ItemStack stack = items.get(n);
+			int ix = deckX + n * 23;
+			int iy = 193;
 			
 			// slot frame from icons.png
-			scaleBlit(g, CS, sx, sy, PlayerStatsScreen.icons, 0, 122, 21, 26);
+			g.pose().pushPose();
+			g.pose().scale(CS, CS, 1f);
+			RenderSystem.setShaderColor(1, 1, 1, 1);
+			g.blit(PlayerStatsScreen.icons, (int) (x / CS) + ix, (int) (y / CS) + iy, 0, 122, 21, 26);
+			g.pose().popPose();
 			
 			// item icon at card scale
 			g.pose().pushPose();
-			g.pose().translate(sx + Math.round(2 * CS) - 0.9, sy + Math.round(4 * CS), 0f);
-			g.pose().scale(CS, CS, CS);
+			g.pose().scale(CS, CS, 1f);
+			g.pose().translate((x / CS) + ix + 2, (y / CS) + iy + 4, 0f);
 			g.renderItem(stack, 0, 0);
 			g.pose().popPose();
 			
-			n++;
+			g.flush();
 		}
 	}
 	
