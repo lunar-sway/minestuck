@@ -27,6 +27,7 @@ import net.minecraft.core.HolderSet;
 import net.minecraft.core.registries.BuiltInRegistries;
 import net.minecraft.core.registries.Registries;
 import net.minecraft.network.chat.Component;
+import net.minecraft.resources.ResourceKey;
 import net.minecraft.resources.ResourceLocation;
 import net.minecraft.server.level.ServerLevel;
 import net.minecraft.server.level.ServerPlayer;
@@ -34,6 +35,8 @@ import net.minecraft.tags.TagKey;
 import net.minecraft.world.entity.Entity;
 import net.minecraft.world.entity.LivingEntity;
 import net.minecraft.world.entity.Mob;
+import net.minecraft.world.entity.ai.village.poi.PoiManager;
+import net.minecraft.world.entity.ai.village.poi.PoiType;
 import net.minecraft.world.entity.player.Player;
 import net.minecraft.world.item.Item;
 import net.minecraft.world.item.ItemStack;
@@ -426,6 +429,41 @@ public interface Condition
 		public Component getFailureTooltip()
 		{
 			return Component.literal("Is not in specific Land tag");
+		}
+	}
+	
+	record NPCNearPoi(ResourceKey<PoiType> poiKey, int radius, int count) implements NpcOnlyCondition
+	{
+		static final MapCodec<NPCNearPoi> CODEC = RecordCodecBuilder.mapCodec(instance -> instance.group(
+				ResourceKey.codec(Registries.POINT_OF_INTEREST_TYPE).fieldOf("poi_key").forGetter(NPCNearPoi::poiKey),
+				Codec.INT.optionalFieldOf("radius", 8).forGetter(NPCNearPoi::radius),
+				Codec.INT.optionalFieldOf("count", 1).forGetter(NPCNearPoi::count)
+		).apply(instance, NPCNearPoi::new));
+		
+		@Override
+		public MapCodec<NPCNearPoi> codec()
+		{
+			return CODEC;
+		}
+		
+		@Override
+		public boolean test(LivingEntity entity)
+		{
+			if(entity.level() instanceof ServerLevel serverLevel)
+			{
+				PoiManager manager = serverLevel.getPoiManager();
+				long count = manager.getCountInRange(holder -> holder.is(poiKey), entity.blockPosition(), radius, PoiManager.Occupancy.ANY);
+				
+				return count >= this.count;
+			}
+			
+			return false;
+		}
+		
+		@Override
+		public Component getFailureTooltip()
+		{
+			return Component.literal("NPC is not near the correct POI(s)");
 		}
 	}
 	

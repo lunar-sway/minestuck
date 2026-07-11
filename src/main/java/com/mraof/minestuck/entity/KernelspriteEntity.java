@@ -336,7 +336,7 @@ public class KernelspriteEntity extends PathfinderMob implements DialogueEntity
 		{
 			Level level = KernelspriteEntity.this.level();
 			BlockPos mobPos = KernelspriteEntity.this.blockPosition();
- 			if(!level.getBlockState(mobPos).blocksMotion())
+			if(!level.getBlockState(mobPos).blocksMotion())
 				return;
 			
 			for(BlockPos iteratePos : BlockPos.betweenClosed(mobPos.offset(1, 1, 1), mobPos.offset(-1, -1, -1)))
