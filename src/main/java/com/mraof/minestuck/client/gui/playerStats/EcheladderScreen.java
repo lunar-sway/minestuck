@@ -44,10 +44,10 @@ public class EcheladderScreen extends PlayerStatsScreen
 	private static final int RUNG_Y = 14;
 	private static final int VISIBLE_RUNG_COUNT = 12;
 	private static final int BOONDOLLAR_Y = 12;
-	private static final int ATTACK_Y = 84;
-	private static final int HEALTH_Y = 120;
-	private static final int CACHE_Y = 156;
-	private static final int CAPTCHA_Y = 176;
+	private static final int ATTACK_Y = 88;
+	private static final int HEALTH_Y = 124;
+	private static final int CACHE_Y = 159;
+	private static final int CAPTCHA_Y = 179;
 	
 	private static final int GREY = 0x404040;
 	private static final int BLUE = 0x0094FF;
@@ -162,14 +162,14 @@ public class EcheladderScreen extends PlayerStatsScreen
 	
 	private void renderPlayerModel(GuiGraphics guiGraphics, int mouseX, int mouseY)
 	{
-		int x1 = xOffset + 14;
-		int y1 = yOffset + 14;
-		int x2 = x1 + 56;
-		int y2 = y1 + 64;
-		int scale = 28;
+		int x1 = xOffset + 19;
+		int y1 = yOffset + 29;
+		int x2 = x1 + 50;
+		int y2 = y1 + 50;
+		int scale = 50;
 		
 		InventoryScreen.renderEntityInInventoryFollowsMouse(
-				guiGraphics, x1, y1, x2, y2, scale, 0.0625F,
+				guiGraphics, x1, y1, x2, y2, scale, 0.6F,
 				(float) mouseX, (float) mouseY, this.minecraft.player);
 	}
 	
@@ -276,9 +276,9 @@ public class EcheladderScreen extends PlayerStatsScreen
 		int maxX = xOffset + 35 + xMod;
 		
 		String str = "+" + (Math.round(100 * rungData.attributes().attackBonus()) - Math.round(100 * prevRungData.attributes().attackBonus())) + "%!";
-		guiGraphics.fill(minX, yOffset + ATTACK_Y + 18 + yMod, maxX, yOffset + ATTACK_Y + 30 + yMod, bg);
+		guiGraphics.fill(minX, yOffset + ATTACK_Y + 20 + yMod, maxX, yOffset + ATTACK_Y + 32 + yMod, bg);
 		int strX = xOffset + 20 + xMod - mc.font.width(str) / 2;
-		int strY = yOffset + ATTACK_Y + 20 + yMod;
+		int strY = yOffset + ATTACK_Y + 22 + yMod;
 		guiGraphics.drawString(font, str, strX, strY, textColor, false);
 		
 		if(mouseInBounds(mouseY, strY, mouseX, strX, mc.font.width(str)))
@@ -290,9 +290,9 @@ public class EcheladderScreen extends PlayerStatsScreen
 		
 		double d = (rungData.attributes().healthBoost() - prevRungData.attributes().healthBoost()) / 2D;
 		str = String.format(Locale.ROOT, "+%.1f!", d);
-		guiGraphics.fill(minX, yOffset + HEALTH_Y + 18 + yMod, maxX, yOffset + HEALTH_Y + 30 + yMod, bg);
+		guiGraphics.fill(minX, yOffset + HEALTH_Y + 20 + yMod, maxX, yOffset + HEALTH_Y + 32 + yMod, bg);
 		strX = xOffset + 20 + xMod - mc.font.width(str) / 2;
-		strY = yOffset + HEALTH_Y + 20 + yMod;
+		strY = yOffset + HEALTH_Y + 22 + yMod;
 		guiGraphics.drawString(font, str, strX, strY, textColor, false);
 		
 		if(mouseInBounds(mouseY, strY, mouseX, strX, mc.font.width(str)))
