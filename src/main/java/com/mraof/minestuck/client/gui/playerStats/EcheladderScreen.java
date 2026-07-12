@@ -7,6 +7,7 @@ import com.mraof.minestuck.client.ClientRungData;
 import com.mraof.minestuck.computer.editmode.ClientEditmodeData;
 import com.mraof.minestuck.player.ClientPlayerData;
 import com.mraof.minestuck.player.Rung;
+import com.mraof.minestuck.util.MSSoundEvents;
 import net.minecraft.client.gui.GuiGraphics;
 import net.minecraft.client.gui.components.AbstractWidget;
 import net.minecraft.client.gui.components.Tooltip;
@@ -14,6 +15,7 @@ import net.minecraft.client.gui.narration.NarrationElementOutput;
 import net.minecraft.client.gui.screens.inventory.InventoryScreen;
 import net.minecraft.client.resources.MobEffectTextureManager;
 import net.minecraft.client.resources.language.I18n;
+import net.minecraft.client.resources.sounds.SimpleSoundInstance;
 import net.minecraft.network.chat.Component;
 import net.minecraft.resources.ResourceLocation;
 import net.minecraft.util.Mth;
@@ -79,10 +81,17 @@ public class EcheladderScreen extends PlayerStatsScreen
 	private static final int STREAM_PARTICLES_PER_TICK_MIN = 1;
 	private static final int STREAM_PARTICLES_PER_TICK_MAX = 3;
 	
+	private static final int BOONDOLLAR_SOUND_INTERVAL_TICKS = 5;
+	private static final float BOONDOLLAR_SOUND_JITTER = 0.4F;
+	private static final float BOONDOLLAR_SOUND_VOLUME = 0.5F;
+	private static final float BOONDOLLAR_SOUND_MIN_PITCH = 0.85F;
+	private static final float BOONDOLLAR_SOUND_MAX_PITCH = 1.3F;
+	
 	private final List<BoondollarParticle> boondollarParticles = new ArrayList<>();
 	private final RandomSource particleRandom = RandomSource.create();
 	private int lastAnimatedRungForBurst = -1;
 	private int streamTicksElapsed = -1;
+	private int nextSoundAtTick = -1;
 	
 	private int scroll = 0;
 	private final int maxScroll;
@@ -116,6 +125,7 @@ public class EcheladderScreen extends PlayerStatsScreen
 		
 		lastAnimatedRungForBurst = fromRung;
 		streamTicksElapsed = -1;
+		nextSoundAtTick = -1;
 		boondollarParticles.clear();
 		
 		rungBars.clear();
@@ -146,6 +156,7 @@ public class EcheladderScreen extends PlayerStatsScreen
 		{
 			lastAnimatedRungForBurst = currentRung;
 			streamTicksElapsed = 0;
+			nextSoundAtTick = 0;
 		}
 		
 		tickBoondollarStream();
@@ -211,7 +222,15 @@ public class EcheladderScreen extends PlayerStatsScreen
 		if(streamTicksElapsed >= STREAM_TOTAL_TICKS)
 		{
 			streamTicksElapsed = -1;
+			nextSoundAtTick = -1;
 			return;
+		}
+		
+		if(streamTicksElapsed >= nextSoundAtTick)
+		{
+			playBoondollarSound();
+			float jitter = 1F + (particleRandom.nextFloat() - 0.5F) * BOONDOLLAR_SOUND_JITTER;
+			nextSoundAtTick = streamTicksElapsed + Math.max(1, Math.round(BOONDOLLAR_SOUND_INTERVAL_TICKS * jitter));
 		}
 		
 		int count;
@@ -229,6 +248,12 @@ public class EcheladderScreen extends PlayerStatsScreen
 			spawnSingleBoondollar();
 		
 		streamTicksElapsed++;
+	}
+	
+	private void playBoondollarSound()
+	{
+		float pitch = BOONDOLLAR_SOUND_MIN_PITCH + particleRandom.nextFloat() * (BOONDOLLAR_SOUND_MAX_PITCH - BOONDOLLAR_SOUND_MIN_PITCH);
+		this.minecraft.getSoundManager().play(SimpleSoundInstance.forUI(MSSoundEvents.EVENT_ECHELADDER_BOONDOLLARS.get(), pitch, BOONDOLLAR_SOUND_VOLUME));
 	}
 	
 	private void spawnSingleBoondollar()
