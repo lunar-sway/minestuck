@@ -1,9 +1,14 @@
 package com.mraof.minestuck.command;
 
 import com.mojang.brigadier.CommandDispatcher;
+import com.mojang.brigadier.arguments.IntegerArgumentType;
 import com.mojang.brigadier.builder.ArgumentBuilder;
 import com.mraof.minestuck.alchemy.GristHelper;
+import com.mraof.minestuck.api.alchemy.GristAmount;
 import com.mraof.minestuck.api.alchemy.GristSet;
+import com.mraof.minestuck.api.alchemy.GristType;
+import com.mraof.minestuck.api.alchemy.GristTypes;
+import com.mraof.minestuck.api.alchemy.MutableGristSet;
 import com.mraof.minestuck.api.alchemy.NonNegativeGristSet;
 import com.mraof.minestuck.command.argument.GristSetArgument;
 import com.mraof.minestuck.player.GristCache;
@@ -36,11 +41,27 @@ public class GristCommand
 	}
 	private static ArgumentBuilder<CommandSourceStack, ?> createAdd()
 	{
-		return Commands.literal("add").then(Commands.argument("targets", EntityArgument.players()).then(Commands.argument("grist", GristSetArgument.gristSet()).executes(context -> add(context.getSource(), EntityArgument.getPlayers(context, "targets"), GristSetArgument.getGristArgument(context, "grist")))));
+		return Commands.literal("add").then(Commands.argument("targets", EntityArgument.players()).then(Commands.argument("grist", GristSetArgument.gristSet()).executes(context -> add(context.getSource(), EntityArgument.getPlayers(context, "targets"), GristSetArgument.getGristArgument(context, "grist")))).then(Commands.literal("all").then(Commands.argument("amount", IntegerArgumentType.integer()).executes(context -> add(context.getSource(), EntityArgument.getPlayers(context, "targets"), allTypesSet(IntegerArgumentType.getInteger(context, "amount")))))));
 	}
 	private static ArgumentBuilder<CommandSourceStack, ?> createSet()
 	{
-		return Commands.literal("set").then(Commands.argument("targets", EntityArgument.players()).then(Commands.argument("grist", GristSetArgument.nonNegativeSet()).executes(context -> set(context.getSource(), EntityArgument.getPlayers(context, "targets"), GristSetArgument.getNonNegativeGristArgument(context, "grist")))));
+		return Commands.literal("set").then(Commands.argument("targets", EntityArgument.players()).then(Commands.argument("grist", GristSetArgument.nonNegativeSet()).executes(context -> set(context.getSource(), EntityArgument.getPlayers(context, "targets"), GristSetArgument.getNonNegativeGristArgument(context, "grist")))).then(Commands.literal("all").then(Commands.argument("amount", IntegerArgumentType.integer(0)).executes(context -> set(context.getSource(), EntityArgument.getPlayers(context, "targets"), allTypesNonNegativeSet(IntegerArgumentType.getInteger(context, "amount")))))));
+	}
+	
+	private static MutableGristSet allTypesSet(int amount)
+	{
+		MutableGristSet set = MutableGristSet.newDefault();
+		for(GristType type : GristTypes.REGISTRY)
+			set.add(type, amount);
+		return set;
+	}
+	
+	private static NonNegativeGristSet allTypesNonNegativeSet(int amount)
+	{
+		NonNegativeGristSet set = new NonNegativeGristSet();
+		for(GristType type : GristTypes.REGISTRY)
+			set.set(type, amount);
+		return set;
 	}
 	
 	private static int get(CommandSourceStack source, Collection<ServerPlayer> players)
@@ -90,7 +111,11 @@ public class GristCommand
 	{
 		for(ServerPlayer player : players)
 		{
-			GristCache.get(player).set(grist);
+			GristCache cache = GristCache.get(player);
+			NonNegativeGristSet newSet = new NonNegativeGristSet(cache.getGristSet());
+			for(GristAmount amount : grist.asAmounts())
+				newSet.set(amount.type(), amount.amount());
+			cache.set(newSet);
 		}
 		source.sendSuccess(() -> Component.translatable(SET, players.size(), grist.asTextComponent()), true);
 		return players.size();

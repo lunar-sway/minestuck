@@ -1340,6 +1340,7 @@
   "block.minestuck.wooden_lamp": "Wooden Lamp",
   "block.minestuck.xnor_gate_block": "XNOR Gate",
   "block.minestuck.xor_gate_block": "XOR Gate",
+  "commands.minestuck.add_rung": "Successfully added %d rungs to %s players on the echeladder.",
   "commands.minestuck.check_land": "You are currently in %s.",
   "commands.minestuck.check_land.fail": "You are currently not in a land dimension.",
   "commands.minestuck.debuglands.invalid_chain": "The given land list is not valid for this command",

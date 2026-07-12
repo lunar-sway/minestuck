@@ -2504,6 +2504,7 @@ public class MinestuckEnUsLanguageProvider extends MinestuckLanguageProvider
 		add(GristCommand.FAILURE, "Failed to modify the grist cache for %s.");
 		add(GristCommand.SET, "Set the grist cache for %s players to %s.");
 		add(RungCommand.SET_SUCCESS, "Successfully changed the echeladder of %s players to rung %d with %d%% progress.");
+		add(RungCommand.ADD_SUCCESS, "Successfully added %d rungs to %s players on the echeladder.");
 		add(RungCommand.GET_SUCCESS, "%s's current echeladder rung is: %d.");
 		add(PorkhollowCommand.SEND, "Successfully sent %s boondollars to %s.");
 		add(PorkhollowCommand.RECEIVE, "Received %s boondollars from %s.");
