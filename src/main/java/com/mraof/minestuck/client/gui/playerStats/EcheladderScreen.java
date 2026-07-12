@@ -17,6 +17,7 @@ import net.minecraft.client.resources.language.I18n;
 import net.minecraft.network.chat.Component;
 import net.minecraft.resources.ResourceLocation;
 import net.minecraft.util.Mth;
+import net.minecraft.util.RandomSource;
 import net.minecraft.world.effect.MobEffects;
 import org.lwjgl.glfw.GLFW;
 
@@ -54,6 +55,35 @@ public class EcheladderScreen extends PlayerStatsScreen
 	private static final int TIME_BEFORE_ANIMATION = 10, TIME_BEFORE_NEXT = 16, TIME_FOR_RUNG = 4, TIME_FOR_SHOW_ONLY = 65;
 	private static final int TIME_TILL_NEXT = TIME_BEFORE_NEXT + TIME_FOR_RUNG;
 	
+	//Boondollar burst
+	private static final int BOONDOLLAR_ANIM_U = 208;
+	private static final int BOONDOLLAR_ANIM_V = 48;
+	private static final int BOONDOLLAR_ANIM_WIDTH = 48;
+	private static final int BOONDOLLAR_ANIM_HEIGHT = 16;
+	private static final int BOONDOLLAR_ANIM_FRAME_COUNT = 2;
+	private static final int BOONDOLLAR_ANIM_FRAME_TICKS = 3;
+	
+	private static final float BOONDOLLAR_ORIGIN_X = 237;
+	private static final float BOONDOLLAR_ORIGIN_Y_MIN = 42;
+	private static final float BOONDOLLAR_ORIGIN_Y_MAX = 53;
+	
+	private static final float BOONDOLLAR_MIN_SPEED_X = 3.5F;
+	private static final float BOONDOLLAR_MAX_SPEED_X = 7.0F;
+	private static final float BOONDOLLAR_SPREAD_Y = 2.5F;
+	private static final int BOONDOLLAR_MIN_LIFE_TICKS = 14;
+	private static final int BOONDOLLAR_MAX_LIFE_TICKS = 22;
+	
+	private static final int STREAM_MAIN_TICKS = 60;
+	private static final int STREAM_TAPER_TICKS = 20;
+	private static final int STREAM_TOTAL_TICKS = STREAM_MAIN_TICKS + STREAM_TAPER_TICKS;
+	private static final int STREAM_PARTICLES_PER_TICK_MIN = 1;
+	private static final int STREAM_PARTICLES_PER_TICK_MAX = 3;
+	
+	private final List<BoondollarParticle> boondollarParticles = new ArrayList<>();
+	private final RandomSource particleRandom = RandomSource.create();
+	private int lastAnimatedRungForBurst = -1;
+	private int streamTicksElapsed = -1;
+	
 	private int scroll = 0;
 	private final int maxScroll;
 	
@@ -84,6 +114,10 @@ public class EcheladderScreen extends PlayerStatsScreen
 		fromRung = lastRung;
 		lastRung = ClientPlayerData.getRung();
 		
+		lastAnimatedRungForBurst = fromRung;
+		streamTicksElapsed = -1;
+		boondollarParticles.clear();
+		
 		rungBars.clear();
 		for(int i = 0; i <= ClientRungData.getFinalRungIndex(); i++)
 		{
@@ -107,6 +141,14 @@ public class EcheladderScreen extends PlayerStatsScreen
 		int speedFactor = MinestuckConfig.CLIENT.echeladderAnimation.get().getSpeed();
 		
 		calculateRungAnimationStep(speedFactor);
+		
+		if(currentRung > lastAnimatedRungForBurst)
+		{
+			lastAnimatedRungForBurst = currentRung;
+			streamTicksElapsed = 0;
+		}
+		
+		tickBoondollarStream();
 		
 		rungBars.forEach(rungBar -> {
 			rungBar.setY(rungBar.initY + getScrollMod());
@@ -153,10 +195,80 @@ public class EcheladderScreen extends PlayerStatsScreen
 			}
 		}
 		
+		updateAndRenderBoondollarParticles(guiGraphics);
+		
 		drawActiveTabAndOther(guiGraphics, mouseX, mouseY);
 		
 		if(tooltip != null)
 			guiGraphics.renderComponentTooltip(font, tooltip, mouseX, mouseY);
+	}
+	
+	private void tickBoondollarStream()
+	{
+		if(streamTicksElapsed < 0)
+			return;
+		
+		if(streamTicksElapsed >= STREAM_TOTAL_TICKS)
+		{
+			streamTicksElapsed = -1;
+			return;
+		}
+		
+		int count;
+		if(streamTicksElapsed < STREAM_MAIN_TICKS)
+		{
+			count = STREAM_PARTICLES_PER_TICK_MIN + particleRandom.nextInt(STREAM_PARTICLES_PER_TICK_MAX - STREAM_PARTICLES_PER_TICK_MIN + 1);
+		} else
+		{
+			int taperProgress = streamTicksElapsed - STREAM_MAIN_TICKS;
+			float taperFactor = 1F - (float) taperProgress / STREAM_TAPER_TICKS;
+			count = particleRandom.nextFloat() < taperFactor ? 1 : 0;
+		}
+		
+		for(int i = 0; i < count; i++)
+			spawnSingleBoondollar();
+		
+		streamTicksElapsed++;
+	}
+	
+	private void spawnSingleBoondollar()
+	{
+		float originY = BOONDOLLAR_ORIGIN_Y_MIN + particleRandom.nextFloat() * (BOONDOLLAR_ORIGIN_Y_MAX - BOONDOLLAR_ORIGIN_Y_MIN);
+		float vx = BOONDOLLAR_MIN_SPEED_X + particleRandom.nextFloat() * (BOONDOLLAR_MAX_SPEED_X - BOONDOLLAR_MIN_SPEED_X);
+		float vy = (particleRandom.nextFloat() - 0.5F) * BOONDOLLAR_SPREAD_Y;
+		int life = BOONDOLLAR_MIN_LIFE_TICKS + particleRandom.nextInt(BOONDOLLAR_MAX_LIFE_TICKS - BOONDOLLAR_MIN_LIFE_TICKS + 1);
+		int frameOffset = particleRandom.nextInt(BOONDOLLAR_ANIM_FRAME_COUNT);
+		
+		boondollarParticles.add(new BoondollarParticle(BOONDOLLAR_ORIGIN_X, originY, vx, vy, life, frameOffset));
+	}
+	
+	private void updateAndRenderBoondollarParticles(GuiGraphics guiGraphics)
+	{
+		if(boondollarParticles.isEmpty())
+			return;
+		
+		RenderSystem.setShaderColor(1, 1, 1, 1);
+		
+		Iterator<BoondollarParticle> it = boondollarParticles.iterator();
+		while(it.hasNext())
+		{
+			BoondollarParticle particle = it.next();
+			particle.x += particle.vx;
+			particle.y += particle.vy;
+			particle.ageTicks++;
+			
+			if(particle.ageTicks >= particle.lifeTicks || particle.x > guiWidth + BOONDOLLAR_ANIM_WIDTH)
+			{
+				it.remove();
+				continue;
+			}
+			
+			int frame = (particle.spawnFrameOffset + particle.ageTicks / BOONDOLLAR_ANIM_FRAME_TICKS) % BOONDOLLAR_ANIM_FRAME_COUNT;
+			int v = BOONDOLLAR_ANIM_V + frame * BOONDOLLAR_ANIM_HEIGHT;
+			
+			guiGraphics.blit(PlayerStatsScreen.icons, xOffset + Math.round(particle.x), yOffset + Math.round(particle.y),
+					BOONDOLLAR_ANIM_U, v, BOONDOLLAR_ANIM_WIDTH, BOONDOLLAR_ANIM_HEIGHT);
+		}
 	}
 	
 	private void renderPlayerModel(GuiGraphics guiGraphics, int mouseX, int mouseY)
@@ -369,6 +481,25 @@ public class EcheladderScreen extends PlayerStatsScreen
 		}
 		
 		return super.mouseClicked(xcor, ycor, mouseButton);
+	}
+	
+	private static final class BoondollarParticle
+	{
+		float x, y;
+		final float vx, vy;
+		int ageTicks;
+		final int lifeTicks;
+		final int spawnFrameOffset;
+		
+		BoondollarParticle(float x, float y, float vx, float vy, int lifeTicks, int spawnFrameOffset)
+		{
+			this.x = x;
+			this.y = y;
+			this.vx = vx;
+			this.vy = vy;
+			this.lifeTicks = lifeTicks;
+			this.spawnFrameOffset = spawnFrameOffset;
+		}
 	}
 	
 	private final class RungBar extends AbstractWidget
