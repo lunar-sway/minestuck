@@ -12,6 +12,7 @@ import net.minecraft.client.gui.GuiGraphics;
 import net.minecraft.client.gui.components.AbstractWidget;
 import net.minecraft.client.gui.components.Tooltip;
 import net.minecraft.client.gui.narration.NarrationElementOutput;
+import net.minecraft.client.gui.screens.inventory.InventoryScreen;
 import net.minecraft.client.resources.MobEffectTextureManager;
 import net.minecraft.client.resources.language.I18n;
 import net.minecraft.network.chat.Component;
@@ -43,10 +44,10 @@ public class EcheladderScreen extends PlayerStatsScreen
 	private static final int RUNG_Y = 14;
 	private static final int VISIBLE_RUNG_COUNT = 12;
 	private static final int BOONDOLLAR_Y = 12;
-	private static final int ATTACK_Y = 30;
-	private static final int HEALTH_Y = 78;
-	private static final int CACHE_Y = 126;
-	private static final int CAPTCHA_Y = 174;
+	private static final int ATTACK_Y = 84;
+	private static final int HEALTH_Y = 120;
+	private static final int CACHE_Y = 156;
+	private static final int CAPTCHA_Y = 176;
 	
 	private static final int GREY = 0x404040;
 	private static final int BLUE = 0x0094FF;
@@ -91,7 +92,7 @@ public class EcheladderScreen extends PlayerStatsScreen
 			
 			Optional<String> tooltip = ClientRungData.getData(i).description();
 			
-			RungBar rungBar = new RungBar(xOffset + 90, yOffset + 175 - i * RUNG_Y, 146, RUNG_Y, name, tooltip, i);
+			RungBar rungBar = new RungBar(xOffset + 96, yOffset + 175 - i * RUNG_Y, 140, RUNG_Y, name, tooltip, i);
 			rungBars.add(rungBar);
 			addRenderableWidget(rungBar);
 			
@@ -132,20 +133,21 @@ public class EcheladderScreen extends PlayerStatsScreen
 		
 		if(!titleText.isEmpty())
 		{
-			guiGraphics.drawString(font, titleText, xOffset + 90 + 78 - font.width(titleText) / 2, yOffset + 20, 0x404040, false);
+			guiGraphics.drawString(font, titleText, xOffset + 96 + 70 - font.width(titleText) / 2, yOffset + 20, 0x404040, false);
 		}
 		
 		//scroll bar
 		float scrollPercentage = (float) scroll / maxScroll;
-		guiGraphics.blit(guiEcheladder, xOffset + 80, (int) (yOffset + 42 + (130F * (1F - scrollPercentage))), 0, 243, 7, 13);
+		guiGraphics.blit(guiEcheladder, xOffset + 86, (int) (yOffset + 42 + (130F * (1F - scrollPercentage))), 0, 243, 7, 13);
 		
+		renderPlayerModel(guiGraphics, mouseX, mouseY);
 		List<Component> tooltip = drawEffectIconsAndText(guiGraphics, currentRung, mouseX, mouseY);
 		
 		if(fromRung < currentRung)
 		{
-			for(int rung = Math.max(fromRung, currentRung - 4) + 1; rung <= currentRung; rung++)
+			for(int rung = Math.max(fromRung, currentRung - 2) + 1; rung <= currentRung; rung++)
 			{
-				int index = rung - 1 - Math.max(fromRung, currentRung - 4);
+				int index = rung - 1 - Math.max(fromRung, currentRung - 2);
 				List<Component> newTooltip = drawGainedRungBonuses(guiGraphics, rung, index, mouseX, mouseY);
 				if(newTooltip != null)
 					tooltip = newTooltip;
@@ -156,6 +158,19 @@ public class EcheladderScreen extends PlayerStatsScreen
 		
 		if(tooltip != null)
 			guiGraphics.renderComponentTooltip(font, tooltip, mouseX, mouseY);
+	}
+	
+	private void renderPlayerModel(GuiGraphics guiGraphics, int mouseX, int mouseY)
+	{
+		int x1 = xOffset + 14;
+		int y1 = yOffset + 14;
+		int x2 = x1 + 56;
+		int y2 = y1 + 64;
+		int scale = 28;
+		
+		InventoryScreen.renderEntityInInventoryFollowsMouse(
+				guiGraphics, x1, y1, x2, y2, scale, 0.0625F,
+				(float) mouseX, (float) mouseY, this.minecraft.player);
 	}
 	
 	private int getScrollMod()
@@ -341,7 +356,7 @@ public class EcheladderScreen extends PlayerStatsScreen
 	@Override
 	public boolean mouseClicked(double xcor, double ycor, int mouseButton)
 	{
-		if(mouseButton == 0 && xcor >= xOffset + 80 && xcor < xOffset + 87)
+		if(mouseButton == 0 && xcor >= xOffset + 86 && xcor < xOffset + 93)
 		{
 			if(ycor >= yOffset + 35 && ycor < yOffset + 42)
 			{
@@ -384,16 +399,16 @@ public class EcheladderScreen extends PlayerStatsScreen
 			{
 				textColor = ClientRungData.getData(rung).textColor();
 				//full bar
-				guiGraphics.fill(x, y + 2, x + 146, y + 14, backgroundColor);
+				guiGraphics.fill(x, y + 2, x + 140, y + 14, backgroundColor);
 			} else if(rung == currentRung + 1 && animationCycle == 0)
 			{
 				//progress bar
 				float brightness = (((backgroundColor >> 16) & 0xFF) + ((backgroundColor >> 8) & 0xFF) + (backgroundColor & 0xFF)) / 765F;
 				boolean isDark = brightness < 0.2;
-				guiGraphics.fill(x, y + 12, x + (int) (146 * ClientPlayerData.getRungProgress()), y + 14, isDark ? 0xFFFFFFFF : backgroundColor);
+				guiGraphics.fill(x, y + 12, x + (int) (140 * ClientPlayerData.getRungProgress()), y + 14, isDark ? 0xFFFFFFFF : backgroundColor);
 			}
 			
-			guiGraphics.drawString(font, this.getMessage(), x + 73 - mc.font.width(this.getMessage()) / 2, y + 4, textColor, false);
+			guiGraphics.drawString(font, this.getMessage(), x + 70 - mc.font.width(this.getMessage()) / 2, y + 4, textColor, false);
 		}
 		
 		public void updateVisibility()
