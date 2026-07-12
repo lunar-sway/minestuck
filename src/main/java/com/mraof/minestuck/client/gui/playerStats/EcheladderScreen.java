@@ -5,7 +5,6 @@ import com.mojang.blaze3d.systems.RenderSystem;
 import com.mraof.minestuck.MinestuckConfig;
 import com.mraof.minestuck.client.ClientRungData;
 import com.mraof.minestuck.computer.editmode.ClientEditmodeData;
-import com.mraof.minestuck.item.MSItems;
 import com.mraof.minestuck.player.ClientPlayerData;
 import com.mraof.minestuck.player.Rung;
 import net.minecraft.client.gui.GuiGraphics;
@@ -222,9 +221,9 @@ public class EcheladderScreen extends PlayerStatsScreen
 		RenderSystem.setShaderColor(1, 1, 1, 1);
 		guiGraphics.blit(PlayerStatsScreen.icons, xOffset + 5, yOffset + BOONDOLLAR_Y - 5, 238, 16, 18, 18);
 		guiGraphics.blit(xOffset + 5, yOffset + ATTACK_Y, 0, 18, 18, effectSprites.get(MobEffects.DAMAGE_BOOST));
-		guiGraphics.blit(xOffset + 5, yOffset + HEALTH_Y, 0, 18, 18, effectSprites.get(MobEffects.HEALTH_BOOST));
+		guiGraphics.blit(PlayerStatsScreen.icons, xOffset + 5, yOffset + HEALTH_Y, 64, 80, 16, 16);
 		guiGraphics.blit(PlayerStatsScreen.icons, xOffset + 6, yOffset + CACHE_Y + 1, 48, 64, 16, 16);
-		guiGraphics.renderItem(MSItems.CAPTCHA_CARD.toStack(), xOffset + 5, yOffset + CAPTCHA_Y);
+		guiGraphics.blit(PlayerStatsScreen.icons, xOffset + 5, yOffset + CAPTCHA_Y, 48, 80,16, 16);
 		
 		
 		String msg = title.getString();
