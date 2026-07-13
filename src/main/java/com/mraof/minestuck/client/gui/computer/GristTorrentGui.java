@@ -106,16 +106,19 @@ public final class GristTorrentGui extends Screen implements ProgramGui<ProgramT
 		
 		if(minecraft == null || minecraft.player == null)
 			return;
-		TorrentSession.TorrentClientData userDataEntry = visibleTorrentData.get(SkaiaClient.playerId);
-		
-		torrentContainerRow = new TorrentContainerRow(xOffset + 2, gristWidgetsYOffset);
+		torrentContainerRow = new TorrentContainerRow(xOffset + 5, gristWidgetsYOffset);
 		addRenderableWidget(torrentContainerRow);
 		addTorrentSessions();
 		
-		HorizontalScrollBar playersScrollBar = new HorizontalScrollBar(
-				xOffset, gristWidgetsYOffset - 9,
-				torrentContainerRow.getWidth() - 1, 2, torrentContainerRow);
-		addRenderableWidget(playersScrollBar);
+		ScrollArrowButton leftArrow = new ScrollArrowButton(
+				xOffset - 10, gristWidgetsYOffset, TorrentContainer.HEIGHT,
+				ScrollArrowButton.Direction.LEFT, torrentContainerRow);
+		addRenderableWidget(leftArrow);
+		
+		ScrollArrowButton rightArrow = new ScrollArrowButton(
+				xOffset + 190 + 2, gristWidgetsYOffset, TorrentContainer.HEIGHT,
+				ScrollArrowButton.Direction.RIGHT, torrentContainerRow);
+		addRenderableWidget(rightArrow);
 		
 		statsContainer = new StatsContainer(xOffset + GristStat.X_OFFSET_FROM_EDGE, yOffset + GristStat.Y_OFFSET_FROM_EDGE, font);
 		addRenderableWidget(statsContainer);

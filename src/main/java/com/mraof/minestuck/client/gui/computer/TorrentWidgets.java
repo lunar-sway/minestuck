@@ -3,6 +3,7 @@ package com.mraof.minestuck.client.gui.computer;
 import com.mojang.blaze3d.systems.RenderSystem;
 import com.mojang.blaze3d.vertex.*;
 import com.mojang.datafixers.util.Pair;
+import com.mojang.math.Axis;
 import com.mraof.minestuck.alchemy.TorrentHelper;
 import com.mraof.minestuck.alchemy.TorrentSession;
 import com.mraof.minestuck.api.alchemy.GristAmount;
@@ -28,6 +29,7 @@ import java.util.concurrent.atomic.AtomicInteger;
 
 public class TorrentWidgets
 {
+	static final ResourceLocation TORRENT_MISC = com.mraof.minestuck.Minestuck.id("textures/gui/torrent_misc.png");
 	static int scale(int input)
 	{
 		return input * 2;
@@ -91,6 +93,8 @@ public class TorrentWidgets
 		public static final int GRIST_COUNT_X = GRIST_ICON_X + 13;
 		public static final float BAR_WIDTH = 22F;
 		
+		private static final int ENTRY_BG_U = 0;
+		private static final int ENTRY_BG_V = 0;
 		private TorrentSession.TorrentClientData torrentData;
 		public final GristType gristType;
 		private final Integer playerId;
@@ -138,6 +142,7 @@ public class TorrentWidgets
 			int x = getX();
 			int y = getY();
 			
+			guiGraphics.blit(TORRENT_MISC, x, y, WIDTH, HEIGHT, ENTRY_BG_U, ENTRY_BG_V, WIDTH, HEIGHT, 256, 256);
 			guiGraphics.pose().pushPose();
 			guiGraphics.pose().scale(0.5F, 0.5F, 0.5F);
 			
@@ -202,9 +207,12 @@ public class TorrentWidgets
 	protected static class TorrentContainer extends ScrollingYWidget<GristEntry>
 	{
 		private TorrentSession.TorrentClientData torrentData;
-		public static final int WIDTH = GristEntry.WIDTH + 5;
+		public static final int WIDTH = GristEntry.WIDTH + 3;
 		public static final int HEIGHT = (GristEntry.HEIGHT + 1) * 6;
 		
+		private static final long ROTATION_PERIOD_MS = 24000L;
+		private static final float ICON_RENDER_SCALE = 0.27F;
+		private static final float ICON_LOCAL_SIZE = 47F;
 		public final Integer playerId;
 		private final String username;
 		private final Font font;
@@ -277,9 +285,16 @@ public class TorrentWidgets
 			{
 				ResourceLocation colorTex = ResourceLocation.fromNamespaceAndPath("minestuck", "textures/gui/color_selector.png");
 				
+				long time = System.currentTimeMillis();
+				float angle = (time % ROTATION_PERIOD_MS) / (float) ROTATION_PERIOD_MS * 360F;
+				float centerOffset = (ICON_LOCAL_SIZE / 2F) * ICON_RENDER_SCALE;
+				
 				guiGraphics.pose().pushPose();
 				guiGraphics.pose().translate(getX(), getY() - 5, 0);
-				guiGraphics.pose().scale(0.27F, 0.27F, 1.0F);
+				guiGraphics.pose().translate(centerOffset, centerOffset, 0);
+				guiGraphics.pose().mulPose(Axis.ZP.rotationDegrees(angle));
+				guiGraphics.pose().translate(-centerOffset, -centerOffset, 0);
+				guiGraphics.pose().scale(ICON_RENDER_SCALE, ICON_RENDER_SCALE, 1.0F);
 				
 				applyPlayerShaderColor(torrentData);
 				guiGraphics.blit(colorTex, 0, 0, 47, 47, 181, 24, 54, 56, 256, 256);
@@ -397,6 +412,69 @@ public class TorrentWidgets
 		}
 	}
 	
+	protected static class ScrollArrowButton extends AbstractWidget
+	{
+		public enum Direction
+		{
+			LEFT, RIGHT
+		}
+		
+		public static final int WIDTH = 8;
+		
+		private static final int LEFT_INACTIVE_U = 0, LEFT_INACTIVE_V = 32;
+		private static final int LEFT_ACTIVE_U = 8, LEFT_ACTIVE_V = 32;
+		private static final int RIGHT_ACTIVE_U = 16, RIGHT_ACTIVE_V = 32;
+		private static final int RIGHT_INACTIVE_U = 24, RIGHT_INACTIVE_V = 32;
+		
+		private final Direction direction;
+		private final ScrollingXWidget<?> target;
+		
+		public ScrollArrowButton(int pX, int pY, int pHeight, Direction direction, ScrollingXWidget<?> target)
+		{
+			super(pX, pY, WIDTH, pHeight, Component.empty());
+			this.direction = direction;
+			this.target = target;
+		}
+		
+		public boolean isActive()
+		{
+			return direction == Direction.LEFT ? target.getScroll() > 0 : target.getScroll() < target.getMaxScroll();
+		}
+		
+		@Override
+		protected void renderWidget(GuiGraphics guiGraphics, int mouseX, int mouseY, float partialTick)
+		{
+			boolean active = isActive();
+			int u = direction == Direction.LEFT
+					? (active ? LEFT_ACTIVE_U : LEFT_INACTIVE_U)
+					: (active ? RIGHT_ACTIVE_U : RIGHT_INACTIVE_U);
+			int v = direction == Direction.LEFT
+					? (active ? LEFT_ACTIVE_V : LEFT_INACTIVE_V)
+					: (active ? RIGHT_ACTIVE_V : RIGHT_INACTIVE_V);
+			
+			guiGraphics.blit(TORRENT_MISC, getX(), getY(), width, height, u, v, WIDTH, height, 256, 256);
+		}
+		
+		@Override
+		public void onClick(double mouseX, double mouseY, int button)
+		{
+			if(!isActive()) return;
+			
+			target.setScroll(target.getScroll() + (direction == Direction.LEFT ? -1 : 1));
+		}
+		
+		@Override
+		protected boolean isValidClickButton(int pButton)
+		{
+			return pButton == 0;
+		}
+		
+		@Override
+		protected void updateWidgetNarration(NarrationElementOutput narrationElementOutput)
+		{
+		}
+	}
+	
 	protected static class GatesContainer extends ScrollingXWidget<GateIcon>
 	{
 		private static final int VISIBLE_COUNT = 4;
@@ -473,6 +551,7 @@ public class TorrentWidgets
 		@Override
 		protected void renderWidget(GuiGraphics guiGraphics, int mouseX, int mouseY, float partialTick)
 		{
+			// intentionally static - no rotation here, unlike the per-player icon in TorrentContainer
 			guiGraphics.pose().pushPose();
 			guiGraphics.pose().translate(getX(), getY(), 0);
 			guiGraphics.pose().scale(SCALE, SCALE, 1.0F);
@@ -492,7 +571,7 @@ public class TorrentWidgets
 	
 	protected static class GristStat extends AbstractWidget
 	{
-		public static final int X_OFFSET_FROM_EDGE = 40;
+		public static final int X_OFFSET_FROM_EDGE = 50;
 		public static final int Y_OFFSET_FROM_EDGE = 130;
 		public static final int WIDTH = GristTorrentGui.GUI_WIDTH - X_OFFSET_FROM_EDGE;
 		public static final int HEIGHT = 12;
@@ -628,9 +707,9 @@ public class TorrentWidgets
 	
 	protected static class FilterContainer extends AbstractWidget
 	{
-		public static final int X_OFFSET_FROM_EDGE = 1;
+		public static final int X_OFFSET_FROM_EDGE = 8;
 		public static final int Y_OFFSET_FROM_EDGE = 128;
-		public static final int WIDTH = GristStat.X_OFFSET_FROM_EDGE - 2;
+		public static final int WIDTH = GristStat.X_OFFSET_FROM_EDGE - X_OFFSET_FROM_EDGE - 5;
 		public static final int ROW_HEIGHT = 6;
 		public static final int HEIGHT = ROW_HEIGHT * GristTorrentGui.TorrentFilter.values().length + 6;
 		
