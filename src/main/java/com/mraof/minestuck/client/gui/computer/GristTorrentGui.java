@@ -48,6 +48,7 @@ public final class GristTorrentGui extends Screen implements ProgramGui<ProgramT
 	
 	static final int LIGHT_BLUE = 0xFF19B3EF;
 	static final int LIGHT_GREY = 0xFFF5F5F5;
+	static final int GREY = 0xFFCFCFCF;
 	static final int DARK_GREY = 0xFF333333;
 	
 	private ComputerBlockEntity computer;
@@ -111,7 +112,7 @@ public final class GristTorrentGui extends Screen implements ProgramGui<ProgramT
 		addTorrentSessions();
 		
 		ScrollArrowButton leftArrow = new ScrollArrowButton(
-				xOffset - 10, gristWidgetsYOffset, TorrentContainer.HEIGHT,
+				xOffset - 12, gristWidgetsYOffset, TorrentContainer.HEIGHT,
 				ScrollArrowButton.Direction.LEFT, torrentContainerRow);
 		addRenderableWidget(leftArrow);
 		

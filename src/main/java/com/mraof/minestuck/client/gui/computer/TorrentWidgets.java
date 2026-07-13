@@ -172,7 +172,7 @@ public class TorrentWidgets
 		private int getColor()
 		{
 			//is gray unless active, at which point color is determined by whether it is owned by the user
-			int color = GristTorrentGui.DARK_GREY;
+			int color = GristTorrentGui.GREY;
 			
 			if(isActive)
 				color = isOwner ? 0xFF00FF00 : 0xFFFF0000;
@@ -419,12 +419,12 @@ public class TorrentWidgets
 			LEFT, RIGHT
 		}
 		
-		public static final int WIDTH = 8;
+		public static final int WIDTH = 10;
 		
 		private static final int LEFT_INACTIVE_U = 0, LEFT_INACTIVE_V = 32;
-		private static final int LEFT_ACTIVE_U = 8, LEFT_ACTIVE_V = 32;
-		private static final int RIGHT_ACTIVE_U = 16, RIGHT_ACTIVE_V = 32;
-		private static final int RIGHT_INACTIVE_U = 24, RIGHT_INACTIVE_V = 32;
+		private static final int LEFT_ACTIVE_U = 10, LEFT_ACTIVE_V = 32;
+		private static final int RIGHT_ACTIVE_U = 20, RIGHT_ACTIVE_V = 32;
+		private static final int RIGHT_INACTIVE_U = 30, RIGHT_INACTIVE_V = 32;
 		
 		private final Direction direction;
 		private final ScrollingXWidget<?> target;
@@ -712,6 +712,9 @@ public class TorrentWidgets
 		public static final int WIDTH = GristStat.X_OFFSET_FROM_EDGE - X_OFFSET_FROM_EDGE - 5;
 		public static final int ROW_HEIGHT = 6;
 		public static final int HEIGHT = ROW_HEIGHT * GristTorrentGui.TorrentFilter.values().length + 6;
+		public static final int ICON_WIDTH = 7;
+		public static final int ICON_HEIGHT = 7;
+		private static final int START_U = 48, START_V = 0;
 		
 		private final Map<GristTorrentGui.TorrentFilter, Integer> filterCounts = new HashMap<>();
 		
@@ -752,10 +755,27 @@ public class TorrentWidgets
 			for(int i = 0; i < filters.length; i++)
 			{
 				GristTorrentGui.TorrentFilter filter = filters[i];
+				
+				int y = scale(getY() + i * ROW_HEIGHT + 5);
+				int x = scale(getX());
+				guiGraphics.blit(
+						TORRENT_MISC,
+						scale(getX() - 7),
+						scale(getY() + i * ROW_HEIGHT + 4),
+						10,
+						10,
+						START_U + i * 7,
+						START_V,
+						ICON_WIDTH,
+						ICON_HEIGHT,
+						256,
+						256
+				);
 				int count = filterCounts.getOrDefault(filter, 0);
-				String label = filter.toString() + "(" + count + ")";
+				String label = filter + "(" + count + ")";
 				int color = filter == activeFilter ? GristTorrentGui.LIGHT_BLUE : GristTorrentGui.DARK_GREY;
-				guiGraphics.drawString(font, label, scale(getX() + 1), scale(getY() + i * ROW_HEIGHT + 5), color, false);
+				
+				guiGraphics.drawString(font, label, x + 2, y, color, false);
 			}
 			
 			guiGraphics.pose().popPose();
