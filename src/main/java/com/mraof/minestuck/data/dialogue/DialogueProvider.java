@@ -245,7 +245,7 @@ public final class DialogueProvider implements DataProvider
 		private boolean hideIfFailed = true;
 		private Function<ResourceLocation, String> failTooltip = id -> null;
 		
-		ResponseBuilder(MessageProducer message)
+		public ResponseBuilder(MessageProducer message)
 		{
 			this.message = message;
 		}
