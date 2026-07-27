@@ -422,6 +422,7 @@ public class MinestuckItemModelProvider extends ItemModelProvider
 		simpleItem(MSItems.AMPHIBEANIE);
 		simpleItem(MSItems.NOSTRILDAMUS);
 		simpleItem(MSItems.PONYTAIL);
+		simpleItem(MSItems.ANOMALOCARIS_HAT);
 		
 		//Core Items
 		simpleItem(MSItems.RAW_CRUXITE);

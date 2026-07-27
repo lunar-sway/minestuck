@@ -4,7 +4,7 @@ import java.util.function.Consumer;
 
 import org.jetbrains.annotations.Nullable;
 
-import com.mraof.minestuck.client.model.armor.PrismarineArmorModel;
+import com.mraof.minestuck.client.model.armor.GeoArmorModel;
 
 import net.minecraft.client.model.HumanoidModel;
 import net.minecraft.core.Holder;
@@ -23,13 +23,15 @@ import software.bernie.geckolib.constant.DefaultAnimations;
 import software.bernie.geckolib.renderer.GeoArmorRenderer;
 import software.bernie.geckolib.util.GeckoLibUtil;
 
-public class PrismarineArmorItem extends ArmorItem implements GeoItem
+public class GeoArmorItem extends ArmorItem implements GeoItem
 {
 	private final AnimatableInstanceCache cache = GeckoLibUtil.createInstanceCache(this);
+	private final String name;
 	
-	public PrismarineArmorItem(Holder<ArmorMaterial> pMaterial, Type pType, Properties pProperties)
+	public GeoArmorItem(Holder<ArmorMaterial> pMaterial, Type pType, String pName, Properties pProperties)
 	{
 		super(pMaterial, pType, pProperties);
+		this.name = pName;
 	}
 	
 	@Override
@@ -56,7 +58,7 @@ public class PrismarineArmorItem extends ArmorItem implements GeoItem
 																						   ItemStack itemStack, @Nullable EquipmentSlot equipmentSlot, @Nullable HumanoidModel<T> original)
 			{
 				if(this.renderer == null)
-					this.renderer = new GeoArmorRenderer<>(new PrismarineArmorModel());
+					this.renderer = new GeoArmorRenderer<>(new GeoArmorModel(name));
 				
 				return this.renderer;
 			}
