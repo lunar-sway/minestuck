@@ -1,4 +1,7 @@
 {
+  "button_disabled_location": "minestuck:theme/skaianet_green/button_disabled",
+  "button_highlighted_location": "minestuck:theme/skaianet_green/button_highlighted",
+  "button_location": "minestuck:theme/skaianet_green/button",
   "text_color": 16777215,
   "texture_location": "minestuck:textures/gui/theme/skaianet_green.png"
 }
