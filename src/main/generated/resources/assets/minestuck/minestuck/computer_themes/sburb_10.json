@@ -1,4 +1,7 @@
 {
+  "button_disabled_location": "minestuck:theme/sburb_10/button_disabled",
+  "button_highlighted_location": "minestuck:theme/sburb_10/button_highlighted",
+  "button_location": "minestuck:theme/sburb_10/button",
   "text_color": 16777215,
   "texture_location": "minestuck:textures/gui/theme/sburb_10.png"
 }
