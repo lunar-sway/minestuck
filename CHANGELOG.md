@@ -19,6 +19,7 @@ The format is based on [Keep a Changelog](https://keepachangelog.com/en/1.1.0/).
 ### Fixed
 
 - Fixed server tick crash related to kernelsprite dialogue
+- Fixed certain block not being in their relevant tag
 
 ### Contributors for this release
 
