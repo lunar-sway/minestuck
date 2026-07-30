@@ -37,6 +37,7 @@ import net.minecraft.world.item.component.Unbreakable;
 import net.minecraft.world.level.block.Block;
 import net.minecraft.world.level.block.Blocks;
 import net.neoforged.neoforge.common.DeferredSpawnEggItem;
+import net.neoforged.neoforge.common.ItemAbilities;
 import net.neoforged.neoforge.registries.DeferredBlock;
 import net.neoforged.neoforge.registries.DeferredItem;
 import net.neoforged.neoforge.registries.DeferredRegister;
@@ -387,7 +388,7 @@ public class MSItems
 	public static final DeferredItem<Item> SILVER_SPOON = REGISTER.register("silver_spoon", () -> new WeaponItem(new WeaponItem.Builder(Tiers.IRON, 1, -2.4F).efficiency(1.0F).set(MSItemTypes.SPOON_TOOL), new Item.Properties()));
 	public static final DeferredItem<Item> MELONBALLER = REGISTER.register("melonballer", () -> new WeaponItem(new WeaponItem.Builder(Tiers.IRON, 2, -2.4F).efficiency(1.0F).set(MSItemTypes.SPOON_TOOL).set(RightClickBlockEffect.scoopBlock(() -> Blocks.MELON)), new MSItemProperties().durability(500)));
 	public static final DeferredItem<Item> SIGHTSEEKER = REGISTER.register("sightseeker", () -> new WeaponItem(new WeaponItem.Builder(MSItemTypes.ORGANIC_TIER, 6, -2.4F).efficiency(1.0F).set(MSItemTypes.FORK_TOOL), new Item.Properties()));
-	public static final DeferredItem<Item> TERRAIN_FLATENATOR = REGISTER.register("terrain_flatenator", () -> new WeaponItem(new WeaponItem.Builder(Tiers.IRON, 3, -2.4F).efficiency(10.0F).set(MSItemTypes.SPOON_TOOL).set(new FarmineEffect(Integer.MAX_VALUE, 50)), new MSItemProperties().durability(1024))); //TODO fix inability to use for terrain flattenation
+	public static final DeferredItem<Item> TERRAIN_FLATENATOR = REGISTER.register("terrain_flatenator", () -> new WeaponItem(new WeaponItem.Builder(Tiers.IRON, 3, -2.4F).efficiency(10.0F).set(MSItemTypes.SPOON_TOOL).set(new FarmineEffect(Integer.MAX_VALUE, 50)).set(RightClickBlockEffect.flattenArea(1)).add(ItemAbilities.SHOVEL_FLATTEN), new MSItemProperties().durability(1024)));
 	public static final DeferredItem<Item> NOSFERATU_SPOON = REGISTER.register("nosferatu_spoon", () -> new WeaponItem(new WeaponItem.Builder(Tiers.IRON, 5, -2.4F).efficiency(1.0F).set(MSItemTypes.SPOON_TOOL).add(OnHitEffect.LIFE_SATURATION), new MSItemProperties().durability(2048).rarity(Rarity.UNCOMMON)));
 	public static final DeferredItem<Item> THRONGLER = REGISTER.register("throngler", () -> new WeaponItem(new WeaponItem.Builder(Tiers.DIAMOND, 5, -2.4F).efficiency(1.0F).set(MSItemTypes.SPOON_TOOL), new MSItemProperties().durability(3200).rarity(Rarity.UNCOMMON)));
 	public static final DeferredItem<Item> WET_MEAT_SHIT_THRONGLER = REGISTER.register("wet_meat_shit_throngler", () -> new WeaponItem(new WeaponItem.Builder(MSItemTypes.MEAT_TIER, 10, -2.9F).efficiency(1.0F).set(MSItemTypes.FORK_TOOL), new MSItemProperties().durability(3500).rarity(Rarity.UNCOMMON)));
