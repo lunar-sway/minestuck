@@ -6,11 +6,14 @@ import com.mraof.minestuck.computer.theme.ComputerTheme;
 import com.mraof.minestuck.player.Echeladder;
 import com.mraof.minestuck.player.EnumAspect;
 import com.mraof.minestuck.player.EnumClass;
+
+import net.minecraft.core.Holder;
 import net.minecraft.data.PackOutput;
 import net.minecraft.network.chat.contents.TranslatableContents;
 import net.minecraft.resources.ResourceLocation;
 import net.minecraft.world.effect.MobEffect;
 import net.minecraft.world.entity.EntityType;
+import net.minecraft.world.entity.ai.attributes.Attribute;
 import net.minecraft.world.item.CreativeModeTab;
 import net.minecraft.world.item.Item;
 import net.minecraft.world.item.ItemStack;
@@ -221,5 +224,10 @@ public abstract class MinestuckLanguageProvider extends LanguageProvider
     protected void addEffectDescription(Supplier<? extends MobEffect> effect, String desc)
 	{
 		add(effect.get().getDescriptionId() + ".description", desc);
+	}
+
+    protected void addAttribute(Holder<Attribute> attribute, String desc)
+	{
+		add(attribute.value().getDescriptionId(), desc);
 	}
 }
