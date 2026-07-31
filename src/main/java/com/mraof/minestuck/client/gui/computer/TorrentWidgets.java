@@ -1141,6 +1141,23 @@ public class TorrentWidgets
 			return super.mouseScrolled(mouseX, mouseY, scrollX, scrollY);
 		}
 		
+		@Override
+		public boolean mouseClicked(double pMouseX, double pMouseY, int pButton)
+		{
+			for(T child : children())
+			{
+				if(!child.visible) continue;
+				
+				if(child.mouseClicked(pMouseX, pMouseY, pButton))
+				{
+					setFocused(child);
+					if(pButton == 0) setDragging(true);
+					return true;
+				}
+			}
+			return false;
+		}
+		
 		public void setScroll(int newScroll)
 		{
 			this.scroll = Math.max(0, Math.min(getMaxScroll(), newScroll));
