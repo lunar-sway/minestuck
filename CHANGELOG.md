@@ -9,6 +9,8 @@ The format is based on [Keep a Changelog](https://keepachangelog.com/en/1.1.0/).
 ### Added
 
 - Strife deck
+- Terrain Flatenator can now flatten terrain
+- Computer themes can have custom buttons
 
 ### Changed
 
@@ -18,23 +20,11 @@ The format is based on [Keep a Changelog](https://keepachangelog.com/en/1.1.0/).
 ### Fixed
 
 - Fixed server tick crash related to kernelsprite dialogue
+- Fixed certain block not being in their relevant tag
 
 ### Contributors for this release
 
-- Fl1s, Dweblenod
-
-### Changed
-
-- Laptops can now be picked up
-- The range at which the Kernelsprite detects and travels to blocks has increased
-
-### Fixed
-
-- Fixed server tick crash related to kernelsprite dialogue
-
-### Contributors for this release
-
-- Fl1s, Dweblenod
+- Fl1s, Dweblenod, medsal15
 
 ## [1.21.1-1.14.0.1] - 2026-06-01
 
