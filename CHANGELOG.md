@@ -9,6 +9,8 @@ The format is based on [Keep a Changelog](https://keepachangelog.com/en/1.1.0/).
 ### Added
 
 - GristTorrent Computer App
+- Terrain Flatenator can now flatten terrain
+- Computer themes can have custom buttons
 
 ### Changed
 
@@ -19,10 +21,11 @@ The format is based on [Keep a Changelog](https://keepachangelog.com/en/1.1.0/).
 ### Fixed
 
 - Fixed server tick crash related to kernelsprite dialogue
+- Fixed certain block not being in their relevant tag
 
 ### Contributors for this release
 
-- Dweblenod, Cibernet, Riotmode, kirderf1, Caldw3ll, Fl1s
+- Dweblenod, Cibernet, Riotmode, kirderf1, medsal15, Caldw3ll, Fl1s
 
 ## [1.21.1-1.14.0.1] - 2026-06-01
 

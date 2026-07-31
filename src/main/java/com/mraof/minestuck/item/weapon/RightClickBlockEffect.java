@@ -8,6 +8,7 @@ import net.minecraft.sounds.SoundEvents;
 import net.minecraft.sounds.SoundSource;
 import net.minecraft.world.InteractionResult;
 import net.minecraft.world.entity.EquipmentSlot;
+import net.minecraft.world.entity.LivingEntity;
 import net.minecraft.world.entity.player.Player;
 import net.minecraft.world.item.Item;
 import net.minecraft.world.item.ItemStack;
@@ -16,7 +17,9 @@ import net.minecraft.world.level.Level;
 import net.minecraft.world.level.block.Block;
 import net.minecraft.world.level.block.Blocks;
 import net.minecraft.world.level.block.state.BlockState;
+import net.minecraft.world.level.gameevent.GameEvent;
 import net.minecraft.world.phys.BlockHitResult;
+import net.neoforged.neoforge.common.ItemAbilities;
 
 import java.util.function.Supplier;
 
@@ -79,6 +82,55 @@ public interface RightClickBlockEffect
 				return InteractionResult.SUCCESS;
 			}
 			
+			return InteractionResult.PASS;
+		});
+	}
+	
+	/**
+	 * Flattens all blocks in a given radius
+	 * <p>
+	 * Needs the WeaponItem to have {@link ItemAbilities#SHOVEL_FLATTEN}
+	 */
+	static RightClickBlockEffect flattenArea(int radius)
+	{
+		return withoutCreativeShock((context) -> {
+			Level level = context.getLevel();
+			BlockPos pos = context.getClickedPos();
+			Player player = context.getPlayer();
+			int convertions = 0;
+			
+			for(int x = -radius; x <= radius; x++)
+			{
+				for(int y = -radius; y <= radius; y++)
+				{
+					for(int z = -radius; z <= radius; z++)
+					{
+						BlockPos blockPos = pos.offset(x, y, z);
+						BlockState baseState = level.getBlockState(blockPos);
+						BlockState newState = baseState.getToolModifiedState(context, ItemAbilities.SHOVEL_FLATTEN, false);
+						
+						if(newState != null && level.getBlockState(blockPos.above()).isAir())
+						{
+							level.playSound(player, blockPos, SoundEvents.SHOVEL_FLATTEN, SoundSource.BLOCKS, 1F, 1F);
+							
+							if(!level.isClientSide)
+							{
+								level.setBlock(blockPos, newState, 11);
+								level.gameEvent(GameEvent.BLOCK_CHANGE, blockPos, GameEvent.Context.of(player, newState));
+							}
+							
+							convertions++;
+						}
+					}
+				}
+			}
+			
+			if(convertions > 0)
+			{
+				if(!level.isClientSide)
+					context.getItemInHand().hurtAndBreak(convertions + 1, player, LivingEntity.getSlotForHand(context.getHand()));
+				return InteractionResult.sidedSuccess(level.isClientSide);
+			}
 			return InteractionResult.PASS;
 		});
 	}

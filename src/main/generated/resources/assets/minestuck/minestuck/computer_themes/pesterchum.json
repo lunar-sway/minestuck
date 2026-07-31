@@ -1,4 +1,7 @@
 {
+  "button_disabled_location": "minestuck:theme/pesterchum/button_disabled",
+  "button_highlighted_location": "minestuck:theme/pesterchum/button_highlighted",
+  "button_location": "minestuck:theme/pesterchum/button",
   "text_color": 4210752,
   "texture_location": "minestuck:textures/gui/theme/pesterchum.png"
 }

@@ -1,6 +1,30 @@
 {
   "values": [
+    "minestuck:cruxite_door",
     "minestuck:perfectly_generic_door",
-    "minestuck:cruxite_door"
+    "minestuck:carved_door",
+    "minestuck:treated_door",
+    "minestuck:lacquered_door",
+    "minestuck:glowing_door",
+    "minestuck:frost_door",
+    "minestuck:rainbow_door",
+    "minestuck:end_door",
+    "minestuck:dead_door",
+    "minestuck:cindered_door",
+    "minestuck:shadewood_door",
+    "minestuck:blood_aspect_door",
+    "minestuck:breath_aspect_door",
+    "minestuck:doom_aspect_door",
+    "minestuck:heart_aspect_door",
+    "minestuck:hope_aspect_door",
+    "minestuck:life_aspect_door",
+    "minestuck:light_aspect_door",
+    "minestuck:mind_aspect_door",
+    "minestuck:rage_aspect_door",
+    "minestuck:space_aspect_door",
+    "minestuck:time_aspect_door",
+    "minestuck:void_aspect_door",
+    "minestuck:prospit_door",
+    "minestuck:derse_door"
   ]
 }

@@ -8,7 +8,6 @@ import com.mraof.minestuck.network.computer.ThemeSelectPacket;
 import net.minecraft.client.gui.GuiGraphics;
 import net.minecraft.client.gui.components.Button;
 import net.minecraft.network.chat.Component;
-import net.neoforged.neoforge.client.gui.widget.ExtendedButton;
 import net.neoforged.neoforge.network.PacketDistributor;
 
 import javax.annotation.ParametersAreNonnullByDefault;
@@ -34,10 +33,11 @@ public class ComputerThemeScreen extends ThemedScreen
 	private static final Comparator<ComputerTheme> THEME_SORTER = Comparator.comparing(theme -> !theme.id().equals(MSComputerThemes.DEFAULT));
 	
 	private int page = 0;
-	private Button previousButton;
-	private Button nextButton;
+	private ThemedButton previousButton;
+	private ThemedButton nextButton;
+	private ThemedButton doneButton;
 	
-	private final List<Button> entryButtons = new ArrayList<>();
+	private final List<ThemedButton> entryButtons = new ArrayList<>();
 	
 	private final List<ComputerTheme> themes = new ArrayList<>();
 	
@@ -56,14 +56,15 @@ public class ComputerThemeScreen extends ThemedScreen
 		themes.clear();
 		ComputerThemes.instance().allThemes().stream().sorted(THEME_SORTER).forEach(themes::add);
 		
-		this.previousButton = new ExtendedButton(xOffset + SCREEN_OFFSET_X + 108, yOffset + SCREEN_OFFSET_Y + 8, 16, 16, Component.literal("<"), button -> prevPage());
-		this.nextButton = new ExtendedButton(xOffset + SCREEN_OFFSET_X + 133, yOffset + SCREEN_OFFSET_Y + 8, 16, 16, Component.literal(">"), button -> nextPage());
-		addRenderableWidget(this.nextButton);
+		this.previousButton = new ThemedButton(xOffset + SCREEN_OFFSET_X + 108, yOffset + SCREEN_OFFSET_Y + 8, 16, 16, Component.literal("<"), button -> prevPage(), selectedTheme);
+		this.nextButton = new ThemedButton(xOffset + SCREEN_OFFSET_X + 133, yOffset + SCREEN_OFFSET_Y + 8, 16, 16, Component.literal(">"), button -> nextPage(), selectedTheme);
 		addRenderableWidget(this.previousButton);
+		addRenderableWidget(this.nextButton);
 		
 		recreateThemeButtons();
 		
-		addRenderableWidget(new ExtendedButton(this.width / 2 - 20, yOffset + SCREEN_OFFSET_Y + 104, 40, 14, Component.translatable(DONE_MESSAGE), button -> finish()));
+		this.doneButton = new ThemedButton(this.width / 2 - 20, yOffset + SCREEN_OFFSET_Y + 104, 40, 14, Component.translatable(DONE_MESSAGE), button -> finish(), selectedTheme);
+		addRenderableWidget(doneButton);
 	}
 	
 	public void recreateThemeButtons()
@@ -77,12 +78,20 @@ public class ComputerThemeScreen extends ThemedScreen
 			int yPositionOffset = 18 * ((i / ENTRIES_ACROSS) % ENTRIES_DOWN);
 			int xPositionOffset = 76 * (i % ENTRIES_ACROSS);
 			
-			ExtendedButton entryButton = new ExtendedButton(xOffset + SCREEN_OFFSET_X + 5 + xPositionOffset, yOffset + SCREEN_OFFSET_Y + 30 + yPositionOffset, 72, 14, theme.name(),
-					button -> selectedTheme = theme);
+			ThemedButton entryButton = new ThemedButton(xOffset + SCREEN_OFFSET_X + 5 + xPositionOffset, yOffset + SCREEN_OFFSET_Y + 30 + yPositionOffset, 72, 14, theme.name(),
+					button -> selectTheme(theme), theme);
 			entryButtons.add(addRenderableWidget(entryButton));
 		}
 		
 		updateButtonStates();
+	}
+	
+	private void selectTheme(ComputerTheme theme)
+	{
+		selectedTheme = theme;
+		previousButton.setTheme(theme);
+		nextButton.setTheme(theme);
+		doneButton.setTheme(theme);
 	}
 	
 	@Override
