@@ -1,6 +1,7 @@
 package com.mraof.minestuck.item;
 
 import com.mraof.minestuck.item.components.MSItemComponents;
+import com.mraof.minestuck.network.StrifePackets;
 import com.mraof.minestuck.player.StrifeSpecibus;
 import com.mraof.minestuck.strife.StrifePortfolioHandler;
 import net.minecraft.ChatFormatting;
@@ -49,7 +50,7 @@ public class StrifeCardItem extends Item
 			StrifePortfolioHandler.assignStrife(serverPlayer, hand);
 		} else
 		{
-			net.neoforged.neoforge.network.PacketDistributor.sendToPlayer(serverPlayer, new com.mraof.minestuck.network.OpenStrifeCardGuiPacket(hand));
+			net.neoforged.neoforge.network.PacketDistributor.sendToPlayer(serverPlayer, new StrifePackets.OpenStrifeCardGuiPacket(hand));
 		}
 		
 		return InteractionResultHolder.success(stack);

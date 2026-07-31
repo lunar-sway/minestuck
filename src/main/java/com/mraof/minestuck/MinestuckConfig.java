@@ -93,6 +93,13 @@ public class MinestuckConfig
 		public final EnumValue<AvailableOptions> hashmapChatModusSetting;
 		public final EnumValue<AvailableOptions> arrayChatModusSetting;
 		
+		//Strife
+		public final BooleanValue restrictedStrife;
+		public final BooleanValue keepPortfolioOnDeath;
+		public final IntValue strifeDeckMaxSize;
+		public final IntValue abstrataSwitcherRung;
+		public final DoubleValue weaponAttackMultiplier;
+		
 		//Mechanics
 		public final BooleanValue hardMode;
 		public final IntValue maxSpecibusCount;

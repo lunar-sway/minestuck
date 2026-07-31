@@ -2,7 +2,7 @@ package com.mraof.minestuck.client.gui.playerStats;
 
 import com.mojang.blaze3d.systems.RenderSystem;
 import com.mraof.minestuck.Minestuck;
-import com.mraof.minestuck.network.*;
+import com.mraof.minestuck.network.StrifePackets;
 import com.mraof.minestuck.player.ClientPlayerData;
 import com.mraof.minestuck.player.KindAbstratusType;
 import com.mraof.minestuck.player.StrifePortfolioData;
@@ -219,27 +219,30 @@ public class StrifePortfolioScreen extends PlayerStatsScreen
 		
 		// weapon items
 		LinkedList<ItemStack> items = sp.getContents();
-		int deckX = (int) (94 - 23 * (Math.min(items.size(), 5) / 2f));
-		int n = 0;
-		for(ItemStack stack : items)
+		int shown = Math.min(items.size(), 5);
+		int deckX = (int) (94 - 23 * (shown / 2f));
+
+		for(int n = 0; n < shown; n++)
 		{
-			int ix = (deckX + (n % 5) * 23) - (n / 5);
-			int iy = 193 - (n / 5) * 2;
-			
-			int sx = x + Math.round(ix * CS);
-			int sy = y + Math.round(iy * CS);
+			ItemStack stack = items.get(n);
+			int ix = deckX + n * 23;
+			int iy = 193;
 			
 			// slot frame from icons.png
-			scaleBlit(g, CS, sx, sy, PlayerStatsScreen.icons, 0, 122, 21, 26);
+			g.pose().pushPose();
+			g.pose().scale(CS, CS, 1f);
+			RenderSystem.setShaderColor(1, 1, 1, 1);
+			g.blit(PlayerStatsScreen.icons, (int) (x / CS) + ix, (int) (y / CS) + iy, 0, 122, 21, 26);
+			g.pose().popPose();
 			
 			// item icon at card scale
 			g.pose().pushPose();
-			g.pose().translate(sx + Math.round(2 * CS) - 0.9, sy + Math.round(4 * CS), 0f);
-			g.pose().scale(CS, CS, CS);
+			g.pose().scale(CS, CS, 1f);
+			g.pose().translate((x / CS) + ix + 2, (y / CS) + iy + 4, 0f);
 			g.renderItem(stack, 0, 0);
 			g.pose().popPose();
 			
-			n++;
+			g.flush();
 		}
 	}
 	
@@ -280,8 +283,8 @@ public class StrifePortfolioScreen extends PlayerStatsScreen
 		// card fan click
 		if(selectedCard >= 0)
 		{
-			if(button == 0) PacketDistributor.sendToServer(new SetActiveStrifePacket(selectedCard));
-			else if(button == 1) PacketDistributor.sendToServer(new RetrieveStrifeCardPacket(selectedCard));
+			if(button == 0) PacketDistributor.sendToServer(new StrifePackets.SetActiveStrifePacket(selectedCard));
+			else if(button == 1) PacketDistributor.sendToServer(new StrifePackets.RetrieveStrifeCardPacket(selectedCard));
 			return true;
 		}
 		
@@ -291,8 +294,8 @@ public class StrifePortfolioScreen extends PlayerStatsScreen
 			int sx = xOffset + 22 + 20 * i;
 			int sy = yOffset + 165;
 			if(!isPointInRegion(sx, sy, 18, 18, (int) mx, (int) my)) continue;
-			if(button == 0) PacketDistributor.sendToServer(new SetActiveStrifePacket(i));
-			else if(button == 1) PacketDistributor.sendToServer(new RetrieveStrifeCardPacket(i));
+			if(button == 0) PacketDistributor.sendToServer(new StrifePackets.SetActiveStrifePacket(i));
+			else if(button == 1) PacketDistributor.sendToServer(new StrifePackets.RetrieveStrifeCardPacket(i));
 			return true;
 		}
 		
@@ -315,7 +318,7 @@ public class StrifePortfolioScreen extends PlayerStatsScreen
 				int sz = Math.round(16 * CS);
 				if(isPointInRegion(wx, wy, sz, sz, (int) mx, (int) my))
 				{
-					PacketDistributor.sendToServer(new RetrieveWeaponPacket(i, InteractionHand.MAIN_HAND));
+					PacketDistributor.sendToServer(new StrifePackets.RetrieveWeaponPacket(i, InteractionHand.MAIN_HAND));
 					return true;
 				}
 				n++;

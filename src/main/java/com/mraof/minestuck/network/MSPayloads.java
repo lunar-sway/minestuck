@@ -163,15 +163,15 @@ public final class MSPayloads
 		registerPlayToClient(registrar, PushPlayerPacket.ID, PushPlayerPacket.STREAM_CODEC);
 		
 		//Strife Packets
-		registerPlayToClient(registrar, SyncPortfolioPacket.ID, SyncPortfolioPacket.STREAM_CODEC);
-		registerPlayToClient(registrar, OpenStrifeCardGuiPacket.ID, OpenStrifeCardGuiPacket.STREAM_CODEC);
+		registerPlayToClient(registrar, StrifePackets.SyncPortfolioPacket.ID, StrifePackets.SyncPortfolioPacket.STREAM_CODEC);
+		registerPlayToClient(registrar, StrifePackets.OpenStrifeCardGuiPacket.ID, StrifePackets.OpenStrifeCardGuiPacket.STREAM_CODEC);
 		
-		registerPlayToServer(registrar, AssignStrifePacket.ID, AssignStrifePacket.STREAM_CODEC);
-		registerPlayToServer(registrar, RetrieveStrifeCardPacket.ID, RetrieveStrifeCardPacket.STREAM_CODEC);
-		registerPlayToServer(registrar, RetrieveWeaponPacket.ID, RetrieveWeaponPacket.STREAM_CODEC);
-		registerPlayToServer(registrar, SetActiveStrifePacket.ID, SetActiveStrifePacket.STREAM_CODEC);
-		registerPlayToServer(registrar, SwapOffhandStrifePacket.ID, SwapOffhandStrifePacket.STREAM_CODEC);
-		registerPlayToServer(registrar, SelectAbstrataForCardPacket.ID, SelectAbstrataForCardPacket.STREAM_CODEC);
+		registerPlayToServer(registrar, StrifePackets.AssignStrifePacket.ID, StrifePackets.AssignStrifePacket.STREAM_CODEC);
+		registerPlayToServer(registrar, StrifePackets.RetrieveStrifeCardPacket.ID, StrifePackets.RetrieveStrifeCardPacket.STREAM_CODEC);
+		registerPlayToServer(registrar, StrifePackets.RetrieveWeaponPacket.ID, StrifePackets.RetrieveWeaponPacket.STREAM_CODEC);
+		registerPlayToServer(registrar, StrifePackets.SetActiveStrifePacket.ID, StrifePackets.SetActiveStrifePacket.STREAM_CODEC);
+		registerPlayToServer(registrar, StrifePackets.SwapOffhandStrifePacket.ID, StrifePackets.SwapOffhandStrifePacket.STREAM_CODEC);
+		registerPlayToServer(registrar, StrifePackets.SelectAbstrataForCardPacket.ID, StrifePackets.SelectAbstrataForCardPacket.STREAM_CODEC);
 	}
 	
 	private static <T extends MSPacket.PlayToServer> void registerPlayToServer(PayloadRegistrar registrar, CustomPacketPayload.Type<T> type, StreamCodec<? super RegistryFriendlyByteBuf, T> codec)

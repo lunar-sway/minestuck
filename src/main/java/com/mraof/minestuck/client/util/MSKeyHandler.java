@@ -63,7 +63,7 @@ public class MSKeyHandler
 		sylladexKey = new KeyMapping(SYLLADEX, GLFW.GLFW_KEY_UNKNOWN, CATEGORY);
 		event.register(sylladexKey);
 		
-		strifeKey = new KeyMapping(STRIFE, GLFW.GLFW_KEY_V, CATEGORY);
+		strifeKey = new KeyMapping(STRIFE, GLFW.GLFW_KEY_C, CATEGORY);
 		event.register(strifeKey);
 		strifeLeftKey = new KeyMapping(STRIFE_LEFT, GLFW.GLFW_KEY_UNKNOWN, CATEGORY);
 		event.register(strifeLeftKey);

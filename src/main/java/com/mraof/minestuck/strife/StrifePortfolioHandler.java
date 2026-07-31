@@ -4,8 +4,7 @@ import com.mraof.minestuck.entity.MSAttributes;
 import com.mraof.minestuck.item.MSItems;
 import com.mraof.minestuck.item.StrifeCardItem;
 import com.mraof.minestuck.item.components.MSItemComponents;
-import com.mraof.minestuck.network.OpenStrifeCardGuiPacket;
-import com.mraof.minestuck.network.SyncPortfolioPacket;
+import com.mraof.minestuck.network.StrifePackets;
 import com.mraof.minestuck.player.KindAbstratusType;
 import com.mraof.minestuck.player.StrifePortfolioData;
 import com.mraof.minestuck.player.StrifeSpecibus;
@@ -53,7 +52,7 @@ public final class StrifePortfolioHandler
 	
 	public static void syncToClient(ServerPlayer player)
 	{
-		PacketDistributor.sendToPlayer(player, new SyncPortfolioPacket(getData(player)));
+		PacketDistributor.sendToPlayer(player, new StrifePackets.SyncPortfolioPacket(getData(player)));
 	}
 	
 	public static boolean addSpecibus(ServerPlayer player, StrifeSpecibus specibus)
@@ -85,7 +84,7 @@ public final class StrifePortfolioHandler
 	
 	/**
 	 * Tries to assign the item in the player's hand to any compatible specibus slot.
-	 * If the card is blank, an {@link OpenStrifeCardGuiPacket} is sent instead.
+	 * If the card is blank, an {@link StrifePackets.OpenStrifeCardGuiPacket} is sent instead.
 	 */
 	public static void assignStrife(ServerPlayer player, InteractionHand hand)
 	{
@@ -101,7 +100,7 @@ public final class StrifePortfolioHandler
 			} else
 			{
 				// Blank card – open the abstrata-selection GUI on client
-				PacketDistributor.sendToPlayer(player, new OpenStrifeCardGuiPacket(hand));
+				PacketDistributor.sendToPlayer(player, new StrifePackets.OpenStrifeCardGuiPacket(hand));
 			}
 		} else
 		{
