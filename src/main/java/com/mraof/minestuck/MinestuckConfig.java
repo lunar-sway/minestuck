@@ -96,7 +96,6 @@ public class MinestuckConfig
 		//Strife
 		public final BooleanValue restrictedStrife;
 		public final BooleanValue keepPortfolioOnDeath;
-		public final IntValue strifeDeckMaxSize;
 		public final IntValue abstrataSwitcherRung;
 		public final DoubleValue weaponAttackMultiplier;
 		
@@ -130,16 +129,12 @@ public class MinestuckConfig
 		public final IntValue overworldEditRange;
 		public final IntValue landEditRange;
 		public final BooleanValue giveItems;
-		public final BooleanValue restrictedStrife;
-		public final BooleanValue keepPortfolioOnDeath;
-		public final IntValue abstrataSwitcherRung;
-		public final DoubleValue weaponAttackMultiplier;
 		
 		private Server(Builder builder)
 		{
 			builder.push("mechanics");
 			maxSpecibusCount = builder.comment("Maximum number of Kind Abstratuses a player can select. Damage bonus decreases with each additional abstratus selected.")
-					.defineInRange("maxSpecibusCount", 4, 1, 12);
+					.defineInRange("maxSpecibusCount", 4, 1, 10);
 			echeladderProgress = builder.comment("If this is true, players will be able to see their progress towards the next rung. This is server side and will only be active in multiplayer if the server/Lan host has it activated.")
 					.define("echeladderProgress", true);
 			rungHealthOnRespawn = builder.comment("If true, players will respawn with full health, rung bonuses included. If false, health will be left alone (typically meaning that you respawn with 10 hearts)")
