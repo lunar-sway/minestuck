@@ -50,7 +50,7 @@ public final class TorrentHelper
 		return new TorrentSession(IdentifierHandler.createNewFakeIdentifier(), seeding, new ArrayList<>());
 	}
 	
-	public static void debugStuff(MinecraftServer server, MSExtraData data)
+/*	public static void debugStuff(MinecraftServer server, MSExtraData data)
 	{
 		for(ServerPlayer player : server.getPlayerList().getPlayers())
 			if(player.isHolding(MSItems.ALLWEDDOL.get()))
@@ -83,7 +83,7 @@ public final class TorrentHelper
 				playerSession.addLeech(new TorrentSession.Leech(testIDs.get(0), leechGrist));
 				MSExtraData.get(server).tryAddTorrentSession(playerSession);
 			}
-	}
+	}*/
 	
 	
 	
