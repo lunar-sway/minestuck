@@ -470,6 +470,7 @@ public class MSItems
 	public static final DeferredItem<MSArmorItem> NOSTRILDAMUS = REGISTER.register("nostrildamus", () -> new MSArmorItem(MSItemTypes.CLOTH_ARMOR, ArmorItem.Type.HELMET, new Item.Properties().stacksTo(1)));
 	public static final DeferredItem<MSArmorItem> PONYTAIL = REGISTER.register("ponytail", () -> new MSArmorItem(MSItemTypes.CLOTH_ARMOR, ArmorItem.Type.HELMET, new Item.Properties().stacksTo(1)));
 	public static final DeferredItem<Item> ANOMALOCARIS_HAT = REGISTER.register("anomalocaris_hat", () -> new GeoArmorItem(MSItemTypes.CLOTH_ARMOR, ArmorItem.Type.HELMET, "anomalocaris_hat", new Item.Properties().stacksTo(1)));
+	public static final DeferredItem<Item> ALIEN_BOPPERS = REGISTER.register("alien_boppers", () -> new GeoArmorItem(MSItemTypes.CLOTH_ARMOR, ArmorItem.Type.HELMET, "alien_boppers", new Item.Properties().stacksTo(1)));
 	
 	
 	//Core Items
