@@ -1,6 +1,30 @@
 {
   "values": [
+    "minestuck:cruxite_trapdoor",
     "minestuck:perfectly_generic_trapdoor",
-    "minestuck:cruxite_trapdoor"
+    "minestuck:carved_trapdoor",
+    "minestuck:treated_trapdoor",
+    "minestuck:lacquered_trapdoor",
+    "minestuck:glowing_trapdoor",
+    "minestuck:frost_trapdoor",
+    "minestuck:rainbow_trapdoor",
+    "minestuck:end_trapdoor",
+    "minestuck:dead_trapdoor",
+    "minestuck:cindered_trapdoor",
+    "minestuck:shadewood_trapdoor",
+    "minestuck:blood_aspect_trapdoor",
+    "minestuck:breath_aspect_trapdoor",
+    "minestuck:doom_aspect_trapdoor",
+    "minestuck:heart_aspect_trapdoor",
+    "minestuck:hope_aspect_trapdoor",
+    "minestuck:life_aspect_trapdoor",
+    "minestuck:light_aspect_trapdoor",
+    "minestuck:mind_aspect_trapdoor",
+    "minestuck:rage_aspect_trapdoor",
+    "minestuck:space_aspect_trapdoor",
+    "minestuck:time_aspect_trapdoor",
+    "minestuck:void_aspect_trapdoor",
+    "minestuck:prospit_trapdoor",
+    "minestuck:derse_trapdoor"
   ]
 }

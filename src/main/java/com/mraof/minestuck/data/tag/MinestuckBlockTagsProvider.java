@@ -2,6 +2,7 @@ package com.mraof.minestuck.data.tag;
 
 import com.mraof.minestuck.Minestuck;
 import com.mraof.minestuck.block.MSBlocks;
+import com.mraof.minestuck.block.plant.FlammableLogBlock;
 import com.mraof.minestuck.data.AspectTreeBlocksData;
 import com.mraof.minestuck.data.DreamerMoonBlocksData;
 import com.mraof.minestuck.data.SkaiaBlocksData;
@@ -12,8 +13,7 @@ import net.minecraft.core.HolderLookup;
 import net.minecraft.data.PackOutput;
 import net.minecraft.tags.BlockTags;
 import net.minecraft.tags.TagKey;
-import net.minecraft.world.level.block.Block;
-import net.minecraft.world.level.block.Blocks;
+import net.minecraft.world.level.block.*;
 import net.neoforged.neoforge.common.Tags;
 import net.neoforged.neoforge.common.data.BlockTagsProvider;
 import net.neoforged.neoforge.common.data.ExistingFileHelper;
@@ -21,6 +21,8 @@ import org.jetbrains.annotations.Nullable;
 
 import javax.annotation.ParametersAreNonnullByDefault;
 import java.util.concurrent.CompletableFuture;
+import java.util.function.Predicate;
+import java.util.function.Supplier;
 
 import static com.mraof.minestuck.block.MSBlocks.*;
 import static com.mraof.minestuck.util.MSTags.Blocks.*;
@@ -72,18 +74,16 @@ public final class MinestuckBlockTagsProvider extends BlockTagsProvider
 		tag(PLANKS).add(GLOWING_PLANKS.get(), SHADEWOOD_PLANKS.get(), FROST_PLANKS.get(), RAINBOW_PLANKS.get(), END_PLANKS.get(), DEAD_PLANKS.get(), CARVED_PLANKS.get(), TREATED_PLANKS.get(), LACQUERED_PLANKS.get(), CINDERED_PLANKS.get());
 		tag(STONE_BRICKS).add(DECREPIT_STONE_BRICKS.get(), MOSSY_DECREPIT_STONE_BRICKS.get(), FLOWERY_MOSSY_STONE_BRICKS.get());
 		tag(WOODEN_BUTTONS).add(WOODEN_EXPLOSIVE_BUTTON.get());
-		tag(BUTTONS).add(STONE_EXPLOSIVE_BUTTON.get());
+		tag(BUTTONS).add(relevantBlocks(block -> block instanceof ButtonBlock));
+		
 		tag(WOODEN_STAIRS).add(RAINBOW_STAIRS.get(), END_STAIRS.get(), DEAD_STAIRS.get(), CARVED_STAIRS.get(), TREATED_PLANKS_STAIRS.get(), LACQUERED_STAIRS.get(), CINDERED_STAIRS.get());
 		tag(WOODEN_SLABS).add(GLOWING_SLAB.get(), SHADEWOOD_SLAB.get(), FROST_SLAB.get(), RAINBOW_SLAB.get(), END_SLAB.get(), DEAD_SLAB.get(), CARVED_SLAB.get(), CARVED_HEAVY_PLANK_SLAB.get(), TREATED_PLANKS_SLAB.get(), TREATED_HEAVY_PLANK_SLAB.get(), LACQUERED_SLAB.get(), LACQUERED_HEAVY_PLANK_SLAB.get(), CINDERED_SLAB.get());
-		tag(SAPLINGS).add(RAINBOW_SAPLING.get(), END_SAPLING.get(), SHADEWOOD_SAPLING.get(), FROST_SAPLING.get());
-		tag(LOGS).addTags(GLOWING_LOGS, FROST_LOGS, RAINBOW_LOGS, END_LOGS, VINE_LOGS, FLOWERY_VINE_LOGS, DEAD_LOGS, PETRIFIED_LOGS, ASPECT_LOGS, SHADEWOOD_LOGS, CINDERED_LOGS);
+		tag(SAPLINGS).add(relevantBlocks(block -> block instanceof SaplingBlock));
+		tag(LOGS).add(relevantBlocks(block -> block instanceof FlammableLogBlock));
 		tag(ENDERMAN_HOLDABLE).add(THOUGHT_DIRT.get());
-		tag(STAIRS).add(COARSE_STONE_STAIRS.get(), COARSE_STONE_BRICK_STAIRS.get(), SHADE_STAIRS.get(), SHADE_BRICK_STAIRS.get(), FROST_TILE_STAIRS.get(), FROST_BRICK_STAIRS.get(), CAST_IRON_STAIRS.get(), BLACK_STONE_STAIRS.get(), BLACK_STONE_BRICK_STAIRS.get(), MAGMATIC_BLACK_STONE_BRICK_STAIRS.get(),
-				IGNEOUS_STONE_STAIRS.get(), POLISHED_IGNEOUS_STAIRS.get(), POLISHED_IGNEOUS_BRICK_STAIRS.get(), MAGMATIC_POLISHED_IGNEOUS_BRICK_STAIRS.get(), MYCELIUM_STAIRS.get(), MYCELIUM_BRICK_STAIRS.get(), CHALK_STAIRS.get(), CHALK_BRICK_STAIRS.get(), PINK_STONE_BRICK_STAIRS.get(),
-				BROWN_STONE_BRICK_STAIRS.get(), GREEN_STONE_BRICK_STAIRS.get(), FLOWERY_MOSSY_STONE_BRICK_STAIRS.get());
-		tag(SLABS).add(COARSE_STONE_SLAB.get(), COARSE_STONE_BRICK_SLAB.get(), CHALK_SLAB.get(), CHALK_BRICK_SLAB.get(), PINK_STONE_BRICK_SLAB.get(), BROWN_STONE_BRICK_SLAB.get(), GREEN_STONE_BRICK_SLAB.get(), BLACK_STONE_SLAB.get(), BLACK_STONE_BRICK_SLAB.get(), MAGMATIC_BLACK_STONE_BRICK_SLAB.get(),
-				IGNEOUS_STONE_SLAB.get(), POLISHED_IGNEOUS_SLAB.get(), POLISHED_IGNEOUS_BRICK_SLAB.get(), MAGMATIC_POLISHED_IGNEOUS_BRICK_SLAB.get(), MYCELIUM_SLAB.get(), MYCELIUM_BRICK_SLAB.get(), FLOWERY_MOSSY_STONE_BRICK_SLAB.get(), FROST_TILE_SLAB.get(), FROST_BRICK_SLAB.get(), SHADE_SLAB.get(), SHADE_BRICK_SLAB.get());
-		tag(LEAVES).add(FROST_LEAVES.get(), RAINBOW_LEAVES.get(), END_LEAVES.get()).addTags(MSTags.Blocks.SHADEWOOD_LEAVES);
+		tag(STAIRS).add(relevantBlocks(block -> block instanceof StairBlock));
+		tag(SLABS).add(relevantBlocks(block -> block instanceof SlabBlock));
+		tag(LEAVES).add(relevantBlocks(block -> block instanceof LeavesBlock));
 		tag(CLIMBABLE).add(GREEN_STONE_BRICK_EMBEDDED_LADDER.get(), GLOWING_MUSHROOM_VINES.get(), GLOWING_LADDER.get(), FROST_LADDER.get(), RAINBOW_LADDER.get(), END_LADDER.get(), DEAD_LADDER.get(), TREATED_LADDER.get(), SHADEWOOD_LADDER.get(), CINDERED_LADDER.get());
 		tag(GUARDED_BY_PIGLINS).add(GOLD_SEEDS.get());
 		tag(MUSHROOM_GROW_BLOCK).add(BLUE_DIRT.get());
@@ -108,7 +108,7 @@ public final class MinestuckBlockTagsProvider extends BlockTagsProvider
 		tag(Tags.Blocks.STONES).add(COARSE_STONE.get(), SHADE_STONE.get(), MYCELIUM_STONE.get(), BLACK_STONE.get(), IGNEOUS_STONE.get(), PUMICE_STONE.get(), COARSE_END_STONE.get(), PINK_STONE.get(), BROWN_STONE.get(), GREEN_STONE.get(), UNCARVED_WOOD.get());
 		tag(Tags.Blocks.STORAGE_BLOCKS).addTags(CRUXITE_STORAGE_BLOCKS, ExtraModTags.Blocks.URANIUM_STORAGE_BLOCKS);
 		tag(Tags.Blocks.BOOKSHELVES).add(GLOWING_BOOKSHELF.get(), FROST_BOOKSHELF.get(), RAINBOW_BOOKSHELF.get(), END_BOOKSHELF.get(), DEAD_BOOKSHELF.get(), TREATED_BOOKSHELF.get(), SHADEWOOD_BOOKSHELF.get(), CINDERED_BOOKSHELF.get());
-		tag(FLOWER_POTS).add(POTTED_FROST_SAPLING.get(), POTTED_RAINBOW_SAPLING.get(), POTTED_END_SAPLING.get(), POTTED_SHADEWOOD_SAPLING.get());
+		tag(FLOWER_POTS).add(relevantBlocks(block -> block instanceof FlowerPotBlock));
 		
 		tag(WOOD_TERRAIN_BLOCKS).add(UNCARVED_WOOD.get(), CHIPBOARD.get(), WOOD_SHAVINGS.get(), CARVED_HEAVY_PLANKS.get(), CARVED_PLANKS.get(),
 				TREATED_UNCARVED_WOOD.get(), TREATED_CHIPBOARD.get(), TREATED_WOOD_SHAVINGS.get(), TREATED_HEAVY_PLANKS.get(), TREATED_PLANKS.get(),
@@ -317,56 +317,18 @@ public final class MinestuckBlockTagsProvider extends BlockTagsProvider
 		tag(CRUXITE_STORAGE_BLOCKS).add(CRUXITE_BLOCK.get());
 		tag(END_SAPLING_DIRT).addTag(Tags.Blocks.END_STONES).add(END_GRASS.get());
 		
-		tag(WALLS).add(BLACK_COBBLESTONE_WALL.get(), BLACK_STONE_BRICK_WALL.get(), BLACK_STONE_WALL.get(), POLISHED_BLACK_STONE_WALL.get(),
-				BLOOD_SHADE_BRICK_WALL.get(), MOSSY_SHADE_BRICK_WALL.get(), SHADE_BRICK_WALL.get(), SHADE_WALL.get(), SMOOTH_SHADE_STONE_WALL.get(), TAR_SHADE_BRICK_WALL.get(),
-				BROWN_STONE_BRICK_WALL.get(), BROWN_STONE_WALL.get(), POLISHED_BROWN_STONE_WALL.get(),
-				CHALK_BRICK_WALL.get(), CHALK_WALL.get(), FLOWERY_CHALK_BRICK_WALL.get(), MOSSY_CHALK_BRICK_WALL.get(), POLISHED_CHALK_WALL.get(),
-				CRUXITE_BRICK_WALL.get(), CRUXITE_WALL.get(), POLISHED_CRUXITE_WALL.get(), URANIUM_WALL.get(),
-				FLOWERY_FROST_BRICK_WALL.get(), FROST_BRICK_WALL.get(), FROST_TILE_WALL.get(),
-				GREEN_STONE_BRICK_WALL.get(), GREEN_STONE_WALL.get(), HORIZONTAL_GREEN_STONE_BRICK_WALL.get(), POLISHED_GREEN_STONE_WALL.get(), VERTICAL_GREEN_STONE_BRICK_WALL.get(),
-				MAGMATIC_BLACK_STONE_BRICK_WALL.get(), IGNEOUS_STONE_WALL.get(), POLISHED_IGNEOUS_WALL.get(), POLISHED_IGNEOUS_BRICK_WALL.get(), MAGMATIC_POLISHED_IGNEOUS_BRICK_WALL.get(),
-				FLOWERY_MYCELIUM_BRICK_WALL.get(), MOSSY_MYCELIUM_BRICK_WALL.get(), MYCELIUM_BRICK_WALL.get(), MYCELIUM_COBBLESTONE_WALL.get(), MYCELIUM_STONE_WALL.get(), POLISHED_MYCELIUM_STONE_WALL.get(),
-				MOSSY_PINK_STONE_BRICK_WALL.get(), PINK_STONE_BRICK_WALL.get(), PINK_STONE_WALL.get(), POLISHED_PINK_STONE_WALL.get(),
-				CAST_IRON_WALL.get(), PERFECTLY_GENERIC_WALL.get(), COARSE_STONE_BRICK_WALL.get(), COARSE_STONE_WALL.get(),
-				DECREPIT_STONE_BRICK_WALL.get(), FLOWERY_MOSSY_COBBLESTONE_WALL.get(), FLOWERY_MOSSY_STONE_BRICK_WALL.get(), MOSSY_DECREPIT_STONE_BRICK_WALL.get());
-		
-		tag(FENCES).add(PERFECTLY_GENERIC_FENCE.get(), GLOWING_FENCE.get(), UNCARVED_WOOD_FENCE.get(), CHIPBOARD_FENCE.get(), CARVED_FENCE.get(), TREATED_UNCARVED_WOOD_FENCE.get(),
-				TREATED_CHIPBOARD_FENCE.get(), TREATED_FENCE.get(), LACQUERED_UNCARVED_WOOD_FENCE.get(), LACQUERED_CHIPBOARD_FENCE.get(), LACQUERED_FENCE.get(), FROST_FENCE.get(),
-				RAINBOW_FENCE.get(), END_FENCE.get(), DEAD_FENCE.get(), SHADEWOOD_FENCE.get(), CINDERED_FENCE.get());
-		
+		tag(WALLS).add(relevantBlocks(block -> block instanceof WallBlock));
+		tag(FENCES).add(relevantBlocks(block -> block instanceof FenceBlock));
 		tag(WOODEN_FENCES).add(PERFECTLY_GENERIC_FENCE.get(), GLOWING_FENCE.get(), UNCARVED_WOOD_FENCE.get(), CHIPBOARD_FENCE.get(), CARVED_FENCE.get(), TREATED_UNCARVED_WOOD_FENCE.get(),
 				TREATED_CHIPBOARD_FENCE.get(), TREATED_FENCE.get(), LACQUERED_UNCARVED_WOOD_FENCE.get(), LACQUERED_CHIPBOARD_FENCE.get(), LACQUERED_FENCE.get(), FROST_FENCE.get(),
 				RAINBOW_FENCE.get(), END_FENCE.get(), DEAD_FENCE.get(), SHADEWOOD_FENCE.get(), CINDERED_FENCE.get());
-		
-		tag(FENCE_GATES).add(PERFECTLY_GENERIC_FENCE_GATE.get(), GLOWING_FENCE_GATE.get(), UNCARVED_WOOD_FENCE_GATE.get(), CHIPBOARD_FENCE_GATE.get(), CARVED_FENCE_GATE.get(),
-				TREATED_UNCARVED_WOOD_FENCE_GATE.get(), TREATED_CHIPBOARD_FENCE_GATE.get(), TREATED_FENCE_GATE.get(), LACQUERED_UNCARVED_WOOD_FENCE_GATE.get(),
-				LACQUERED_CHIPBOARD_FENCE_GATE.get(), LACQUERED_FENCE_GATE.get(), FROST_FENCE_GATE.get(), RAINBOW_FENCE_GATE.get(), END_FENCE_GATE.get(), DEAD_FENCE_GATE.get(),
-				SHADEWOOD_FENCE_GATE.get(), CINDERED_FENCE_GATE.get());
-		
-		tag(PRESSURE_PLATES).add(PERFECTLY_GENERIC_PRESSURE_PLATE.get(), GLOWING_PRESSURE_PLATE.get(), UNCARVED_WOOD_PRESSURE_PLATE.get(), CHIPBOARD_PRESSURE_PLATE.get(),
-				CARVED_PRESSURE_PLATE.get(), TREATED_UNCARVED_WOOD_PRESSURE_PLATE.get(), TREATED_CHIPBOARD_PRESSURE_PLATE.get(), TREATED_PRESSURE_PLATE.get(),
-				LACQUERED_UNCARVED_WOOD_PRESSURE_PLATE.get(), LACQUERED_CHIPBOARD_PRESSURE_PLATE.get(), LACQUERED_PRESSURE_PLATE.get(), FROST_PRESSURE_PLATE.get(),
-				RAINBOW_PRESSURE_PLATE.get(), END_PRESSURE_PLATE.get(), DEAD_PRESSURE_PLATE.get(), SHADEWOOD_PRESSURE_PLATE.get(), CINDERED_PRESSURE_PLATE.get(),
-				CRUXITE_PRESSURE_PLATE.get(), URANIUM_PRESSURE_PLATE.get(), COARSE_STONE_PRESSURE_PLATE.get(), SHADE_PRESSURE_PLATE.get(),
-				CAST_IRON_PRESSURE_PLATE.get(), MYCELIUM_STONE_PRESSURE_PLATE.get(), BLACK_STONE_PRESSURE_PLATE.get(), IGNEOUS_STONE_PRESSURE_PLATE.get(),
-				PUMICE_STONE_PRESSURE_PLATE.get(), CHALK_PRESSURE_PLATE.get(), PINK_STONE_PRESSURE_PLATE.get(), BROWN_STONE_PRESSURE_PLATE.get());
-		
+		tag(FENCE_GATES).add(relevantBlocks(block -> block instanceof FenceGateBlock));
+		tag(PRESSURE_PLATES).add(relevantBlocks(block -> block instanceof PressurePlateBlock));
 		tag(WOODEN_DOORS).add(CARVED_DOOR.get(), CINDERED_DOOR.get(), DEAD_DOOR.get(), END_DOOR.get(), FROST_DOOR.get(), GLOWING_DOOR.get(), LACQUERED_DOOR.get(), RAINBOW_DOOR.get(), SHADEWOOD_DOOR.get(), TREATED_DOOR.get());
-		tag(DOORS).add(PERFECTLY_GENERIC_DOOR.get(), CRUXITE_DOOR.get());
+		tag(DOORS).add(relevantBlocks(block -> block instanceof DoorBlock));
 		tag(WOODEN_TRAPDOORS).add(CARVED_TRAPDOOR.get(), CINDERED_TRAPDOOR.get(), DEAD_TRAPDOOR.get(), END_TRAPDOOR.get(), FROST_TRAPDOOR.get(), GLOWING_TRAPDOOR.get(), LACQUERED_TRAPDOOR.get(), RAINBOW_TRAPDOOR.get(), SHADEWOOD_TRAPDOOR.get(), TREATED_TRAPDOOR.get());
-		tag(TRAPDOORS).add(PERFECTLY_GENERIC_TRAPDOOR.get(), CRUXITE_TRAPDOOR.get());
-		
-		tag(SIGNS).add(PERFECTLY_GENERIC_SIGN.get(), PERFECTLY_GENERIC_HANGING_SIGN.get(), PERFECTLY_GENERIC_WALL_SIGN.get(), PERFECTLY_GENERIC_WALL_HANGING_SIGN.get(),
-				GLOWING_SIGN.get(), GLOWING_HANGING_SIGN.get(), GLOWING_WALL_SIGN.get(), GLOWING_WALL_HANGING_SIGN.get(),
-				SHADEWOOD_SIGN.get(), SHADEWOOD_HANGING_SIGN.get(), SHADEWOOD_WALL_SIGN.get(), SHADEWOOD_WALL_HANGING_SIGN.get(),
-				DEAD_SIGN.get(), DEAD_HANGING_SIGN.get(), DEAD_WALL_SIGN.get(), DEAD_WALL_HANGING_SIGN.get(),
-				END_SIGN.get(), END_HANGING_SIGN.get(), END_WALL_SIGN.get(), END_WALL_HANGING_SIGN.get(),
-				FROST_SIGN.get(), FROST_HANGING_SIGN.get(), FROST_WALL_SIGN.get(), FROST_WALL_HANGING_SIGN.get(),
-				RAINBOW_SIGN.get(), RAINBOW_HANGING_SIGN.get(), RAINBOW_WALL_SIGN.get(), RAINBOW_WALL_HANGING_SIGN.get(),
-				CARVED_SIGN.get(), CARVED_HANGING_SIGN.get(), CARVED_WALL_SIGN.get(), CARVED_WALL_HANGING_SIGN.get(),
-				TREATED_SIGN.get(), TREATED_HANGING_SIGN.get(), TREATED_WALL_SIGN.get(), TREATED_WALL_HANGING_SIGN.get(),
-				LACQUERED_SIGN.get(), LACQUERED_HANGING_SIGN.get(), LACQUERED_WALL_SIGN.get(), LACQUERED_WALL_HANGING_SIGN.get(),
-				CINDERED_SIGN.get(), CINDERED_HANGING_SIGN.get(), CINDERED_WALL_SIGN.get(), CINDERED_WALL_HANGING_SIGN.get());
+		tag(TRAPDOORS).add(relevantBlocks(block -> block instanceof TrapDoorBlock));
+		tag(SIGNS).add(relevantBlocks(block -> block instanceof SignBlock));
 		
 		tag(ROTATOR_WHITELISTED).add(Blocks.REPEATER, Blocks.COMPARATOR, AND_GATE_BLOCK.get(), OR_GATE_BLOCK.get(), XOR_GATE_BLOCK.get(), NAND_GATE_BLOCK.get(), NOR_GATE_BLOCK.get(), XNOR_GATE_BLOCK.get(), AREA_EFFECT_BLOCK.get(), WIRELESS_REDSTONE_TRANSMITTER.get(), REMOTE_COMPARATOR.get(), PLATFORM_GENERATOR.get(), ITEM_MAGNET.get());
 		tag(PLATFORM_ABSORBING).addTag(Tags.Blocks.OBSIDIANS).add(Blocks.BEDROCK, Blocks.NETHER_PORTAL, Blocks.END_PORTAL, Blocks.END_PORTAL_FRAME, Blocks.REINFORCED_DEEPSLATE, PUSHABLE_BLOCK.get()); //excludes Platform Receptacle blocks as they only absorb conditionally
@@ -417,6 +379,11 @@ public final class MinestuckBlockTagsProvider extends BlockTagsProvider
 			if(!block.defaultBlockState().requiresCorrectToolForDrops())
 				throw new IllegalStateException("You forgot to set requiresCorrectToolForDrops for block %s. It is needed to prevent drops when mining without any tool.".formatted(block));
 		}
+	}
+	
+	private static Block[] relevantBlocks(Predicate<Block> predicate)
+	{
+		return MSBlocks.REGISTER.getEntries().stream().map(Supplier::get).filter(predicate).toArray(Block[]::new);
 	}
 	
 	@Override

@@ -1,4 +1,7 @@
 {
+  "button_disabled_location": "minestuck:theme/cetus/button_disabled",
+  "button_highlighted_location": "minestuck:theme/cetus/button_highlighted",
+  "button_location": "minestuck:theme/cetus/button",
   "text_color": 9470446,
   "texture_location": "minestuck:textures/gui/theme/cetus.png"
 }
