@@ -1,0 +1,11 @@
+{
+  "type": "minestuck:combination",
+  "input1": {
+    "item": "minecraft:glowstone"
+  },
+  "input2": {
+    "item": "minecraft:leather_helmet"
+  },
+  "mode": "and",
+  "output": "minestuck:alien_boppers"
+}
