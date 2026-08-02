@@ -9,12 +9,15 @@ The format is based on [Keep a Changelog](https://keepachangelog.com/en/1.1.0/).
 ### Added
 
 - GristTorrent Computer App
+- New /rung add, get, set commands
 - Terrain Flatenator can now flatten terrain
 - Computer themes can have custom buttons
 
 ### Changed
 
 - Updated Grist Cache gui texture
+- Echeladder progression animation
+- Some of GUI textures (grist cache & strife specibus)
 - Laptops can now be picked up
 - The range at which the Kernelsprite detects and travels to blocks has increased
 
