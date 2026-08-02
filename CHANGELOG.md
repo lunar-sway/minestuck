@@ -24,7 +24,7 @@ The format is based on [Keep a Changelog](https://keepachangelog.com/en/1.1.0/).
 
 ### Contributors for this release
 
-- Fl1s, Dweblenod, medsal15
+- Fl1s, Dweblenod, medsal15, Emma "Dilemma"
 
 ## [1.21.1-1.14.0.1] - 2026-06-01
 
