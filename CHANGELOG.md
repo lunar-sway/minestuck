@@ -10,6 +10,7 @@ The format is based on [Keep a Changelog](https://keepachangelog.com/en/1.1.0/).
 
 - GristTorrent Computer App
 - New /rung add, get, set commands
+- New /grist [args] all command
 - Terrain Flatenator can now flatten terrain
 - Computer themes can have custom buttons
 
