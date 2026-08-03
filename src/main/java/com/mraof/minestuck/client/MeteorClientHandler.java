@@ -1,18 +1,23 @@
 package com.mraof.minestuck.client;
 
+import com.mraof.minestuck.Minestuck;
 import com.mraof.minestuck.network.MeteorPackets;
 import com.mraof.minestuck.util.MSSoundEvents;
 import net.minecraft.client.Minecraft;
 import net.minecraft.client.resources.sounds.SimpleSoundInstance;
+import net.neoforged.api.distmarker.Dist;
+import net.neoforged.bus.api.SubscribeEvent;
+import net.neoforged.fml.common.EventBusSubscriber;
+import net.neoforged.neoforge.client.event.ClientPlayerNetworkEvent;
 
 import javax.annotation.Nullable;
 import java.util.HashMap;
 import java.util.Map;
-
 /**
  * Clientside handler for meteor events.
  * Manages sound playback and provides data for the renderer.
  */
+@EventBusSubscriber(modid = Minestuck.MOD_ID, bus = EventBusSubscriber.Bus.GAME, value = Dist.CLIENT)
 public final class MeteorClientHandler
 {
 	
@@ -109,5 +114,20 @@ public final class MeteorClientHandler
 	public static boolean hasMeteor(int entityId)
 	{
 		return activeMeteorTicks.containsKey(entityId);
+	}
+	
+	@SubscribeEvent
+	public static void onLoggingOut(ClientPlayerNetworkEvent.LoggingOut event)
+	{
+		activeMeteorTicks.clear();
+		localPlayerMeteorKey = null;
+		localPlayerMeteorTicks = 0;
+		countdownStartGameTime = -1;
+		
+		if(currentMusicInstance != null)
+		{
+			Minecraft.getInstance().getSoundManager().stop(currentMusicInstance);
+			currentMusicInstance = null;
+		}
 	}
 }

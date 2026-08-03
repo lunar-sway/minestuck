@@ -8,9 +8,7 @@ import net.minecraft.resources.ResourceKey;
 import net.minecraft.world.level.Level;
 import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.Logger;
-
 import javax.annotation.Nullable;
-
 public class MeteorCountdown
 {
 	

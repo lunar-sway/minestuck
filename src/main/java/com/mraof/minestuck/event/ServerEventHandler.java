@@ -1,13 +1,11 @@
 package com.mraof.minestuck.event;
 
 import com.mraof.minestuck.Minestuck;
-import com.mraof.minestuck.MinestuckConfig;
 import com.mraof.minestuck.block.MSBlocks;
 import com.mraof.minestuck.effects.CreativeShockEffect;
 import com.mraof.minestuck.effects.MSEffects;
 import com.mraof.minestuck.entity.MSAttributes;
 import com.mraof.minestuck.entity.underling.UnderlingEntity;
-//import com.mraof.minestuck.entry.EntryEvent;
 import com.mraof.minestuck.entry.meteor.MeteorManager;
 import com.mraof.minestuck.inventory.captchalogue.ArrayModus;
 import com.mraof.minestuck.inventory.captchalogue.CaptchaDeckHandler;
@@ -48,6 +46,7 @@ import net.neoforged.neoforge.event.entity.player.PlayerEvent;
 import net.neoforged.neoforge.event.furnace.FurnaceFuelBurnTimeEvent;
 import net.neoforged.neoforge.event.server.ServerStartedEvent;
 import net.neoforged.neoforge.event.server.ServerStoppedEvent;
+import net.neoforged.neoforge.event.server.ServerStoppingEvent;
 import net.neoforged.neoforge.event.tick.ServerTickEvent;
 import net.neoforged.neoforge.server.ServerLifecycleHooks;
 
@@ -78,6 +77,12 @@ public class ServerEventHandler
 	public static void onServerStarted(ServerStartedEvent event)
 	{
 		MeteorManager.get(event.getServer()).respawnEntitiesForActiveCountdowns();
+	}
+	
+	@SubscribeEvent
+	public static void onServerStopping(ServerStoppingEvent event)
+	{
+		MeteorManager.get(event.getServer()).finishActiveImpactsImmediately();
 	}
 	
 	@SubscribeEvent

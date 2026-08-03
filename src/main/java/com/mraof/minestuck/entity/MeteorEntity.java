@@ -159,8 +159,8 @@ public class MeteorEntity extends Entity implements GeoAnimatable
 	
 	private float getUnifiedProgress(int ticksElapsed)
 	{
-		int total = com.mraof.minestuck.entry.meteor.MeteorManager.TOTAL_TICKS;
-		int dashStart = com.mraof.minestuck.entry.meteor.MeteorManager.DASH_PHASE_TICKS;
+		int total = MeteorManager.TOTAL_TICKS;
+		int dashStart = MeteorManager.DASH_PHASE_TICKS;
 		
 		if(ticksElapsed <= 0) return 0.0F;
 		if(ticksElapsed >= total) return 1.0F;

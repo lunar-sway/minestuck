@@ -5,7 +5,6 @@ import com.mraof.minestuck.block.machine.CruxtruderBlock;
 import com.mraof.minestuck.blockentity.machine.CruxtruderBlockEntity;
 import com.mraof.minestuck.entity.KernelspriteEntity;
 import com.mraof.minestuck.entity.MSEntityTypes;
-import com.mraof.minestuck.entity.dialogue.condition.Conditions;
 import com.mraof.minestuck.player.PlayerData;
 import com.mraof.minestuck.player.PlayerIdentifier;
 import com.mraof.minestuck.skaianet.SburbPlayerData;
@@ -16,7 +15,6 @@ import net.minecraft.server.level.ServerLevel;
 import net.minecraft.server.level.ServerPlayer;
 import net.minecraft.sounds.SoundEvents;
 import net.minecraft.sounds.SoundSource;
-import net.minecraft.world.entity.Entity;
 import net.minecraft.world.level.BlockGetter;
 import net.minecraft.world.level.Level;
 import net.minecraft.world.level.block.Block;
@@ -27,7 +25,6 @@ import net.minecraft.world.phys.shapes.CollisionContext;
 import net.minecraft.world.phys.shapes.VoxelShape;
 import com.mraof.minestuck.entry.meteor.MeteorManager;
 
-import static com.mraof.minestuck.entity.dialogue.condition.Conditions.hasEntered;
 
 public class CruxtruderLidBlock extends Block
 {

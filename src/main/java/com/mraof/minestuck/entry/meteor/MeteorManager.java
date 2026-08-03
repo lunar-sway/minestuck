@@ -58,9 +58,13 @@ public class MeteorManager extends SavedData
 	 * Final acceleration phase: 10-15 seconds before impact = ~300 ticks
 	 */
 	public static final int DASH_PHASE_TICKS = TOTAL_TICKS - 300;
+	// Total block operations budgeted per tick across all active crater jobs, split evenly between them
+	private static final int CRATER_BLOCKS_PER_TICK_TOTAL = 12_000;
+	private static final int MIN_CRATER_BLOCKS_PER_TICK = 512;
 	private static final Logger LOGGER = LogManager.getLogger();
 	private static final String DATA_NAME = Minestuck.MOD_ID + "_meteors";
 	private final Set<String> impactPending = new HashSet<>();
+	private final Map<String, CraterJob> activeImpacts = new HashMap<>();
 	// Map: player UUID string -> countdown data
 	private final Map<String, MeteorCountdown> countdowns = new HashMap<>();
 	private final MinecraftServer mcServer;
@@ -215,7 +219,7 @@ public class MeteorManager extends SavedData
 			
 			if(impactPending.contains(key))
 			{
-				handleImpact(cd);
+				startImpact(cd);
 				toRemove.add(key);
 				continue;
 			}
@@ -236,6 +240,8 @@ public class MeteorManager extends SavedData
 			countdowns.remove(key);
 			impactPending.remove(key);
 		});
+		
+		tickImpacts();
 	}
 	
 	private void processMilestones(MeteorCountdown cd)
@@ -344,83 +350,162 @@ public class MeteorManager extends SavedData
 		return entity instanceof MeteorEntity me ? me : null;
 	}
 	
-	private void handleImpact(MeteorCountdown cd)
+	private void startImpact(MeteorCountdown cd)
 	{
 		ServerLevel level = mcServer.getLevel(cd.getLevelKey());
 		if(level == null) return;
 		
-		BlockPos impactPos = cd.getCruxtruderPos();
-		
-		MeteorEntity meteor = findMeteorEntity(cd);
-		if(meteor != null) meteor.discard();
-		
-		ServerPlayer player = cd.getOwner().getPlayer(mcServer);
-		boolean hasEntered = player != null && SburbPlayerData.get(player).hasEntered();
-		
-		if(hasEntered)
-		{
-			float power = 3.0f + cd.getMeteorSize();
-			level.explode(null, impactPos.getX() + 0.5, impactPos.getY() + 0.5, impactPos.getZ() + 0.5, power, Level.ExplosionInteraction.TNT);
-		} else
-		{
-			createCrater(level, impactPos, cd);
-			
-			int range = SERVER.artifactRange.get() + 10;
-			AABB aabb = new AABB(impactPos.getX() - range, impactPos.getY() - range, impactPos.getZ() - range, impactPos.getX() + range, impactPos.getY() + range, impactPos.getZ() + range);
-			
-			for(LivingEntity entity : level.getEntitiesOfClass(LivingEntity.class, aabb))
-			{
-				if(!(entity instanceof ServerPlayer))
-				{
-					entity.hurt(level.damageSources().explosion(null, null), Float.MAX_VALUE);
-					if(entity.isAlive()) entity.kill();
-				}
-				if(!(entity instanceof KernelspriteEntity) && !SburbPlayerData.get(player).hasEntered())
-				{
-					entity.discard();
-					PlayerData data = PlayerData.get(meteor.getOwner(), level.getServer());
-					data.setData(MSAttachments.HAS_KERNELSPRITE, false);
-				}
-			}
-			if(player != null) player.hurt(level.damageSources().explosion(null, null), Float.MAX_VALUE);
-		}
-		
-		level.playSound(null, impactPos, METEOR_IMPACT.get(), net.minecraft.sounds.SoundSource.AMBIENT, 10.0f, 0.8f);
-		
-		if(player != null)
-		{
-			sendToPlayer(player, new PlayMeteorMusic(false));
-		}
-		
-		mcServer.getPlayerList().getPlayers().forEach(p -> sendToPlayer(p, new MeteorRemoved(cd.getMeteorEntityId())));
+		activeImpacts.put(cd.getPlayerKey(), new CraterJob(cd, level));
 	}
 	
-	private void createCrater(ServerLevel level, BlockPos center, MeteorCountdown cd)
+	private void tickImpacts()
 	{
-		int range = SERVER.artifactRange.get();
-		float meteorSize = cd.getMeteorSize();
-		int craterRadius = (int) (range * meteorSize);
+		if(activeImpacts.isEmpty())
+			return;
 		
-		for(BlockPos pos : betweenClosed(center.offset(-craterRadius, -craterRadius, -craterRadius), center.offset(craterRadius, craterRadius, craterRadius)))
+		int perJobBudget = Math.max(MIN_CRATER_BLOCKS_PER_TICK, CRATER_BLOCKS_PER_TICK_TOTAL / activeImpacts.size());
+		
+		Iterator<CraterJob> iterator = activeImpacts.values().iterator();
+		while(iterator.hasNext())
 		{
-			double dx = pos.getX() - center.getX();
-			double dy = pos.getY() - center.getY();
-			double dz = pos.getZ() - center.getZ();
+			CraterJob job = iterator.next();
+			job.tick(perJobBudget);
 			
-			if(dx * dx + dy * dy + dz * dz <= craterRadius * craterRadius)
+			if(job.isFinished())
+				iterator.remove();
+		}
+	}
+	
+	/**
+	 * activeImpacts isnt persisted to NBT (unlike countdowns), so a crater job that's still spread across
+	 * ticks when the server stops would otherwise be silently abandoned halfcarved on the next load. Called
+	 * from ServerStoppingEvent to finish any in-progress craters in one go before shutdown instead.
+	 */
+	public void finishActiveImpactsImmediately()
+	{
+		for(CraterJob job : activeImpacts.values())
+		{
+			job.tick(Integer.MAX_VALUE);
+		}
+		activeImpacts.clear();
+	}
+	
+	/**
+	 * Spreads the crater block removal for a single meteor impact across multiple ticks instead of
+	 * clearing the whole sphere in one go, using the same per-tick budget pattern as EntryProcess.
+	 * Everything that isnnt proportional to the crater's block volume (the extra explosion bursts,
+	 * entity cleanup, sound/packets) still runs in one go once the block removal is done
+	 */
+	private final class CraterJob
+	{
+		private final MeteorCountdown cd;
+		private final ServerLevel level;
+		private final BlockPos impactPos;
+		private final ServerPlayer player;
+		private final boolean hasEntered;
+		private final int craterRadius;
+		
+		private Iterator<? extends BlockPos> blockIterator;
+		private boolean finished = false;
+		
+		CraterJob(MeteorCountdown cd, ServerLevel level)
+		{
+			this.cd = cd;
+			this.level = level;
+			this.impactPos = cd.getCruxtruderPos();
+			
+			MeteorEntity meteor = findMeteorEntity(cd);
+			if(meteor != null) meteor.discard();
+			
+			this.player = cd.getOwner().getPlayer(mcServer);
+			this.hasEntered = player != null && SburbPlayerData.get(player).hasEntered();
+			
+			int range = SERVER.artifactRange.get();
+			this.craterRadius = (int) (range * cd.getMeteorSize());
+			
+			if(hasEntered)
 			{
-				if(!level.getBlockState(pos).is(BEDROCK))
+				float power = 3.0f + cd.getMeteorSize();
+				level.explode(null, impactPos.getX() + 0.5, impactPos.getY() + 0.5, impactPos.getZ() + 0.5, power, Level.ExplosionInteraction.TNT);
+			} else
+			{
+				float meteorSize = cd.getMeteorSize();
+				for(int i = 0; i < 5 + (int) (meteorSize * 2); i++)
 				{
-					level.setBlock(pos.immutable(), AIR.defaultBlockState(), UPDATE_CLIENTS);
+					double ox = (level.random.nextDouble() - 0.5) * craterRadius * 2;
+					double oz = (level.random.nextDouble() - 0.5) * craterRadius * 2;
+					level.explode(null, impactPos.getX() + ox, impactPos.getY() + 2, impactPos.getZ() + oz, 4.0f + meteorSize, Level.ExplosionInteraction.TNT);
 				}
+				
+				int entityRange = SERVER.artifactRange.get() + 10;
+				AABB aabb = new AABB(impactPos.getX() - entityRange, impactPos.getY() - entityRange, impactPos.getZ() - entityRange, impactPos.getX() + entityRange, impactPos.getY() + entityRange, impactPos.getZ() + entityRange);
+				
+				for(LivingEntity entity : level.getEntitiesOfClass(LivingEntity.class, aabb))
+				{
+					if(!(entity instanceof ServerPlayer))
+					{
+						entity.hurt(level.damageSources().explosion(null, null), Float.MAX_VALUE);
+						if(entity.isAlive()) entity.kill();
+					}
+					if(!(entity instanceof KernelspriteEntity) && player != null && !SburbPlayerData.get(player).hasEntered())
+					{
+						entity.discard();
+						PlayerData data = PlayerData.get(cd.getOwner(), level.getServer());
+						data.setData(MSAttachments.HAS_KERNELSPRITE, false);
+					}
+				}
+				if(player != null) player.hurt(level.damageSources().explosion(null, null), Float.MAX_VALUE);
+				
+				blockIterator = betweenClosed(impactPos.offset(-craterRadius, -craterRadius, -craterRadius), impactPos.offset(craterRadius, craterRadius, craterRadius)).iterator();
+			}
+			
+			level.playSound(null, impactPos, METEOR_IMPACT.get(), net.minecraft.sounds.SoundSource.AMBIENT, 10.0f, 0.8f);
+			
+			if(player != null)
+			{
+				sendToPlayer(player, new PlayMeteorMusic(false));
+			}
+			
+			mcServer.getPlayerList().getPlayers().forEach(p -> sendToPlayer(p, new MeteorRemoved(cd.getMeteorEntityId())));
+		}
+		
+		void tick(int budget)
+		{
+			if(blockIterator == null)
+			{
+				finished = true;
+				return;
+			}
+			
+			int processed = 0;
+			while(blockIterator.hasNext() && processed < budget)
+			{
+				BlockPos pos = blockIterator.next();
+				processed++;
+				
+				double dx = pos.getX() - impactPos.getX();
+				double dy = pos.getY() - impactPos.getY();
+				double dz = pos.getZ() - impactPos.getZ();
+				
+				if(dx * dx + dy * dy + dz * dz <= (double) craterRadius * craterRadius)
+				{
+					if(!level.getBlockState(pos).is(BEDROCK))
+					{
+						level.setBlock(pos.immutable(), AIR.defaultBlockState(), UPDATE_CLIENTS);
+					}
+				}
+			}
+			
+			if(!blockIterator.hasNext())
+			{
+				blockIterator = null;
+				finished = true;
 			}
 		}
 		
-		for(int i = 0; i < 5 + (int) (meteorSize * 2); i++)
+		boolean isFinished()
 		{
-			double ox = (level.random.nextDouble() - 0.5) * craterRadius * 2;
-			double oz = (level.random.nextDouble() - 0.5) * craterRadius * 2;
-			level.explode(null, center.getX() + ox, center.getY() + 2, center.getZ() + oz, 4.0f + meteorSize, Level.ExplosionInteraction.TNT);
+			return finished;
 		}
 	}
 }
