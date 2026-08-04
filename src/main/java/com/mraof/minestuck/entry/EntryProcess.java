@@ -75,9 +75,8 @@ public class EntryProcess
 	private static final Logger LOGGER = LogManager.getLogger();
 	public static final TicketType<Unit> CHUNK_TICKET_TYPE = TicketType.create("entry", (_left, _right) -> 0);
 	
-	// Total block operations handed out to all active entry processes per tick, split evenly between them
-	private static final int BLOCKS_PER_TICK_TOTAL = 12_000;
-	private static final int MIN_BLOCKS_PER_TICK_PER_PROCESS = 512;
+	private static final int BLOCKS_PER_TICK_TOTAL = 1_500;
+	private static final int MIN_BLOCKS_PER_TICK_PER_PROCESS = 200;
 	
 	private enum Phase
 	{
@@ -245,11 +244,21 @@ public class EntryProcess
 	
 	private void advance(long gameTime, int budget)
 	{
-		if(phase != Phase.WAITING && phase != Phase.DONE && playerId.getPlayer(landLevel.getServer()) != player)
+		if(phase != Phase.WAITING && phase != Phase.DONE)
 		{
-			LOGGER.warn("Player disconnected during entry, aborting entry process for {}", playerId);
-			phase = Phase.DONE;
-			return;
+			if(playerId.getPlayer(landLevel.getServer()) != player)
+			{
+				LOGGER.warn("Player disconnected during entry, aborting entry process for {}", playerId);
+				phase = Phase.DONE;
+				return;
+			}
+			
+			if(player.isDeadOrDying())
+			{
+				LOGGER.warn("Player died during entry (likely their own meteor catching up to them), aborting entry process for {}", playerId);
+				phase = Phase.DONE;
+				return;
+			}
 		}
 		
 		switch(phase)
@@ -441,6 +450,8 @@ public class EntryProcess
 			placeGates(landLevel);
 			
 			MSExtraData.get(landLevel).addPostEntryTask(new PostEntryTask(landLevel.dimension(), origin.getX() + xDiff, origin.getY() + yDiff, origin.getZ() + zDiff, artifactRange));
+			
+			com.mraof.minestuck.entry.meteor.MeteorManager.get(player.server).cancelCountdown(playerId);
 			
 			SburbHandler.onEntry(player.server, player);
 			

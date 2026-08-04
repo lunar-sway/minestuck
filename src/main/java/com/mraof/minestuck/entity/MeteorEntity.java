@@ -34,6 +34,7 @@ public class MeteorEntity extends Entity implements GeoAnimatable
 	private static final EntityDataAccessor<Float> RENDER_YAW = SynchedEntityData.defineId(MeteorEntity.class, EntityDataSerializers.FLOAT);
 	private static final EntityDataAccessor<Float> RENDER_PITCH = SynchedEntityData.defineId(MeteorEntity.class, EntityDataSerializers.FLOAT);
 	private static final EntityDataAccessor<BlockPos> TARGET_POS = SynchedEntityData.defineId(MeteorEntity.class, EntityDataSerializers.BLOCK_POS);
+	private static final EntityDataAccessor<Boolean> IN_DASH_PHASE = SynchedEntityData.defineId(MeteorEntity.class, EntityDataSerializers.BOOLEAN);
 	public static final double MAX_WORLD_HEIGHT_LIMIT = 380.0;
 	public static final double HEIGHT_ABOVE_TARGET = 300.0;
 	
@@ -54,6 +55,7 @@ public class MeteorEntity extends Entity implements GeoAnimatable
 		builder.define(RENDER_YAW, 0.0f);
 		builder.define(RENDER_PITCH, 0.0f);
 		builder.define(TARGET_POS, BlockPos.ZERO);
+		builder.define(IN_DASH_PHASE, false);
 	}
 	
 	public void setRenderAngles(float yaw, float pitch)
@@ -100,6 +102,9 @@ public class MeteorEntity extends Entity implements GeoAnimatable
 	{
 		if(targetPos == null) return;
 		
+		if(!level().isClientSide)
+			this.entityData.set(IN_DASH_PHASE, ticksElapsed >= MeteorManager.DASH_PHASE_TICKS);
+		
 		Vec3 target = Vec3.atCenterOf(targetPos);
 		double targetX = target.x;
 		double targetZ = target.z;
@@ -114,6 +119,11 @@ public class MeteorEntity extends Entity implements GeoAnimatable
 		
 		setPos(targetX, expectedY, targetZ);
 		applyRotation();
+	}
+	
+	public boolean isDashPhase()
+	{
+		return this.entityData.get(IN_DASH_PHASE);
 	}
 	
 	private void updateMovement()

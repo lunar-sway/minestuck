@@ -49,6 +49,7 @@ public class MinestuckConfig
 		public final BooleanValue npcDialogueTextColors;
 		public final BooleanValue impactScreenShake;
 		public final BooleanValue meteorSkyFog;
+		public final BooleanValue meteorImpactFlash;
 		
 		private Client(Builder builder)
 		{
@@ -68,6 +69,8 @@ public class MinestuckConfig
 					.define("impactScreenShake", true);
 			meteorSkyFog = builder.comment("Determines whether player would see the fog and clouds colour changes from an approaching asteroid.")
 					.define("meteorSkyFog", true);
+			meteorImpactFlash = builder.comment("Determines whether the screen flashes white in the last few seconds before your meteor impacts (if you haven't entered the Medium yet).")
+					.define("meteorImpactFlash", true);
 			builder.pop();
 		}
 	}

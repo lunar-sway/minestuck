@@ -26,6 +26,7 @@ public class LandSkySpriteUploader extends TextureAtlasHolder
 	private static final ResourceLocation PROSPIT = Minestuck.id("prospit");
 	private static final ResourceLocation DERSE = Minestuck.id("derse");
 	private static final ResourceLocation METEOR = Minestuck.id("meteor");
+	private static final ResourceLocation SKY_METEOR = Minestuck.id("sky_meteor");
 	
 	private static LandSkySpriteUploader INSTANCE;
 	
@@ -63,6 +64,11 @@ public class LandSkySpriteUploader extends TextureAtlasHolder
 	public TextureAtlasSprite getMeteorSprite()
 	{
 		return getSprite(METEOR);
+	}
+	
+	public TextureAtlasSprite getSkyMeteorSprite()
+	{
+		return getSprite(SKY_METEOR);
 	}
 	
 	public TextureAtlasSprite getPlanetSprite(TerrainLandType type, int index)
