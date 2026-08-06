@@ -102,22 +102,28 @@ public class MeteorEntity extends Entity implements GeoAnimatable
 	{
 		if(targetPos == null) return;
 		
+		boolean dashPhase = ticksElapsed >= MeteorManager.DASH_PHASE_TICKS;
 		if(!level().isClientSide)
-			this.entityData.set(IN_DASH_PHASE, ticksElapsed >= MeteorManager.DASH_PHASE_TICKS);
+			this.entityData.set(IN_DASH_PHASE, dashPhase);
 		
 		Vec3 target = Vec3.atCenterOf(targetPos);
-		double targetX = target.x;
-		double targetZ = target.z;
-		
 		double startHeightY = getSpawnHeightY(targetPos);
-		double totalDistanceY = startHeightY - target.y;
 		
-		float progress = getUnifiedProgress(ticksElapsed);
-		double expectedY = startHeightY - (totalDistanceY * progress);
+		if(!dashPhase)
+		{
+			setPos(target.x, startHeightY, target.z);
+		} else
+		{
+			int remainingTicks = Math.max(1, MeteorManager.TOTAL_TICKS - ticksElapsed);
+			double currentY = this.getY();
+			double remainingDistance = currentY - target.y;
+			double newY = currentY - remainingDistance / remainingTicks;
+			
+			if(newY < target.y) newY = target.y;
+			
+			setPos(target.x, newY, target.z);
+		}
 		
-		if(expectedY < target.y) expectedY = target.y;
-		
-		setPos(targetX, expectedY, targetZ);
 		applyRotation();
 	}
 	

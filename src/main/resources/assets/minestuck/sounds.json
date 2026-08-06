@@ -10,7 +10,7 @@
   "meteor_theme": {
     "sounds": [
       {
-        "name": "minestuck:music/meteor_theme",
+        "name": "minestuck:music/miscellaneous/meteor_theme",
         "stream": true
       }
     ],

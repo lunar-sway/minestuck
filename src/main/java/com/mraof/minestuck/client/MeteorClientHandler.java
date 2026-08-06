@@ -95,6 +95,11 @@ public final class MeteorClientHandler
 		return localPlayerMeteorTicks;
 	}
 	
+	public static int getLocalPlayerMeteorEntityId()
+	{
+		return activeMeteorTicks.keySet().stream().findFirst().orElse(-1);
+	}
+	
 	public static void onMeteorRemoved(int entityId)
 	{
 		activeMeteorTicks.remove(entityId);

@@ -75,8 +75,8 @@ public class EntryProcess
 	private static final Logger LOGGER = LogManager.getLogger();
 	public static final TicketType<Unit> CHUNK_TICKET_TYPE = TicketType.create("entry", (_left, _right) -> 0);
 	
-	private static final int BLOCKS_PER_TICK_TOTAL = 1_500;
-	private static final int MIN_BLOCKS_PER_TICK_PER_PROCESS = 200;
+	private static final int BLOCKS_PER_TICK_TOTAL = 4000;
+	private static final int MIN_BLOCKS_PER_TICK_PER_PROCESS = 500;
 	
 	private enum Phase
 	{
@@ -179,7 +179,6 @@ public class EntryProcess
 		activeProcesses.add(process);
 		
 		PacketDistributor.sendToAllPlayers(new EntryEffectPackets.Effect(player.level().dimension(), process.origin, process.artifactRange));
-		LOGGER.info("Entry queued for {}", identifier);
 	}
 	
 	private static void secondEntryTeleport(ServerPlayer player, ResourceKey<Level> land)
@@ -248,14 +247,12 @@ public class EntryProcess
 		{
 			if(playerId.getPlayer(landLevel.getServer()) != player)
 			{
-				LOGGER.warn("Player disconnected during entry, aborting entry process for {}", playerId);
 				phase = Phase.DONE;
 				return;
 			}
 			
 			if(player.isDeadOrDying())
 			{
-				LOGGER.warn("Player died during entry (likely their own meteor catching up to them), aborting entry process for {}", playerId);
 				phase = Phase.DONE;
 				return;
 			}
@@ -286,12 +283,10 @@ public class EntryProcess
 		player = playerId.getPlayer(landLevel.getServer());
 		if(player == null)
 		{
-			LOGGER.warn("Player left before entry was completed. Cancelling entry.");
 			phase = Phase.DONE;
 			return;
 		}
 		
-		LOGGER.info("Checking entry block conditions");
 		blockIterator = EntryBlockIterator.get(origin.getX(), origin.getY(), origin.getZ(), artifactRange).iterator();
 		foundComputer = false;
 		phase = Phase.CHECKING;
@@ -343,7 +338,6 @@ public class EntryProcess
 				return;
 			}
 			
-			LOGGER.info("Entry starting");
 			blockIterator = EntryBlockIterator.get(origin.getX(), origin.getY(), origin.getZ(), artifactRange).iterator();
 			phase = Phase.COPYING;
 		}
@@ -458,7 +452,6 @@ public class EntryProcess
 			LOGGER.info("Entry finished in {}ms", System.currentTimeMillis() - creationTime);
 		} catch(Exception e)
 		{
-			LOGGER.error("Exception when {} tried to enter their land.", player.getName().getString(), e);
 			notifyException();
 		} finally
 		{

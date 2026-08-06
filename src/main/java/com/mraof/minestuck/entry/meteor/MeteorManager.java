@@ -52,9 +52,9 @@ public class MeteorManager extends SavedData
 	 */
 	public static final int TOTAL_TICKS = 5060;
 	/**
-	 * Theme starts 41 seconds before impact = 820 ticks before end
+	 * Theme starts 55 seconds before impact = 1140 ticks before end
 	 */
-	public static final int MUSIC_TRIGGER_TICKS = TOTAL_TICKS - 820;
+	public static final int MUSIC_TRIGGER_TICKS = TOTAL_TICKS - 1140;
 	/**
 	 * Final acceleration phase: 10-15 seconds before impact = ~300 ticks
 	 */
@@ -155,18 +155,14 @@ public class MeteorManager extends SavedData
 		String key = player.getCommandString();
 		if(countdowns.containsKey(key))
 		{
-			LOGGER.debug("Meteor countdown already running for {}", player.getUsername());
 			return;
 		}
-		
 		int sessionSize = getEnteredPlayerCount(player);
 		
 		MeteorCountdown countdown = new MeteorCountdown(player, cruxtruderPos, levelKey, sessionSize);
 		countdowns.put(key, countdown);
 		spawnMeteorEntity(countdown);
 		sendCountdownStart(countdown);
-		
-		LOGGER.info("Meteor countdown started for {} (session size: {})", player.getUsername(), sessionSize);
 	}
 	
 	public void cancelCountdown(PlayerIdentifier playerId)
@@ -273,7 +269,6 @@ public class MeteorManager extends SavedData
 				
 				if(cd.isExpired())
 				{
-					LOGGER.info("[Meteor] Countdown expired for {} at ticksElapsed={}", key, cd.getTicksElapsed());
 					MeteorEntity meteor = findMeteorEntity(cd);
 					if(meteor != null) meteor.moveTick(TOTAL_TICKS);
 					
@@ -281,7 +276,6 @@ public class MeteorManager extends SavedData
 				}
 			} catch(Exception e)
 			{
-				LOGGER.error("[Meteor] Exception while processing countdown for {}, cancelling it", key, e);
 				toRemove.add(key);
 			}
 		}
@@ -300,7 +294,6 @@ public class MeteorManager extends SavedData
 		
 		if(ticks == MUSIC_TRIGGER_TICKS && !cd.isMusicTriggered())
 		{
-			LOGGER.info("[Meteor] Reached MUSIC_TRIGGER_TICKS ({}) for {}, triggering music", ticks, cd.getPlayerKey());
 			cd.setMusicTriggered(true);
 			triggerMusic(cd);
 		}
@@ -320,11 +313,9 @@ public class MeteorManager extends SavedData
 		ServerPlayer player = pid.getPlayer(mcServer);
 		if(player != null)
 		{
-			LOGGER.info("[Meteor] Sending PlayMeteorMusic(true) to {}", player.getGameProfile().getName());
 			sendToPlayer(player, new PlayMeteorMusic(true));
 		} else
 		{
-			LOGGER.warn("[Meteor] Music trigger fired for {} but owner is offline, nothing sent", cd.getPlayerKey());
 		}
 	}
 	
@@ -366,7 +357,6 @@ public class MeteorManager extends SavedData
 		ServerLevel level = mcServer.getLevel(cd.getLevelKey());
 		if(level == null)
 		{
-			LOGGER.warn("[Meteor] spawnMiniMeteor: level {} not loaded for {}", cd.getLevelKey(), cd.getPlayerKey());
 			return;
 		}
 		
@@ -375,7 +365,6 @@ public class MeteorManager extends SavedData
 		
 		AABB nearby = new AABB(center).inflate(radius + 30);
 		long existingCount = level.getEntities(EntityTypeTest.forClass(MiniMeteorEntity.class), nearby, e -> true).size();
-		LOGGER.debug("[Meteor] spawnMiniMeteor: {} existing mini meteors near {} (cap {})", existingCount, center, SERVER.miniMeteorsCount.get());
 		if(existingCount >= SERVER.miniMeteorsCount.get()) return;
 		
 		double angle = level.random.nextDouble() * Math.PI * 2;
@@ -415,64 +404,55 @@ public class MeteorManager extends SavedData
 	
 	private void startImpact(MeteorCountdown cd)
 	{
-		LOGGER.info("[Meteor] startImpact() begin for {} at {}", cd.getPlayerKey(), cd.getCruxtruderPos());
-		
 		ServerLevel level = mcServer.getLevel(cd.getLevelKey());
 		if(level == null)
 		{
-			LOGGER.warn("[Meteor] startImpact(): level {} not loaded, aborting impact for {}", cd.getLevelKey(), cd.getPlayerKey());
 			return;
 		}
-		
 		BlockPos impactPos = cd.getCruxtruderPos();
-		
 		MeteorEntity meteor = findMeteorEntity(cd);
-		LOGGER.info("[Meteor] startImpact(): meteor entity = {}", meteor);
 		if(meteor != null) meteor.discard();
 		
 		ServerPlayer player = cd.getOwner().getPlayer(mcServer);
-		LOGGER.info("[Meteor] startImpact(): owner online = {}", player != null);
-		// A player who has already physically left the origin dimension (e.g. mid-teleport into their land,
-		// in the narrow window before SburbPlayerData formally catches up and flags them as entered) shouldn't
-		// still be killable by the meteor they already escaped, thenm check both the formal flag and their current
-		// dimension. cancelCountdown() handles the common case (called once entry actually finishes));
 		boolean hasEntered = player != null && (SburbPlayerData.get(player).hasEntered() || player.level().dimension() != cd.getLevelKey());
-		LOGGER.info("[Meteor] startImpact(): hasEntered = {}", hasEntered);
-		
-		// Deliberately NOT tied to artifactRange (a separate "how much land moves with you on entry" setting)
-		// - a small fixed base scaled by meteor size, capped so even a maxed-out session-size meteor doesnt
-		// dig an enormous pit. Also see CraterJob below
-		// it only digs downward (like a hemisphere), not a full
-		// sphere; a meteor punches a hole in the ground, it doesnt also hollow out an equal dome of open
-		// sky above the impact point. Between the two this cuts total destroyed volume roughly 4x to 8x versus
-		// what it was
 		int baseCraterRadius = 14;
 		int craterRadius = Math.min(30, Math.round(baseCraterRadius * cd.getMeteorSize()));
-		LOGGER.info("[Meteor] startImpact(): craterRadius = {} (base={}, meteorSize={})", craterRadius, baseCraterRadius, cd.getMeteorSize());
 		
 		if(hasEntered)
 		{
 			float power = 3.0f + cd.getMeteorSize();
 			level.explode(null, impactPos.getX() + 0.5, impactPos.getY() + 0.5, impactPos.getZ() + 0.5, power, Level.ExplosionInteraction.TNT);
-			LOGGER.info("[Meteor] startImpact(): hasEntered branch - simple explosion done, power={}", power);
 		} else
 		{
 			float meteorSize = cd.getMeteorSize();
 			int burstCount = 3 + (int) meteorSize;
-			LOGGER.info("[Meteor] startImpact(): running {} burst explosions", burstCount);
 			for(int i = 0; i < burstCount; i++)
 			{
 				double ox = (level.random.nextDouble() - 0.5) * craterRadius * 2;
 				double oz = (level.random.nextDouble() - 0.5) * craterRadius * 2;
 				level.explode(null, impactPos.getX() + ox, impactPos.getY() + 2, impactPos.getZ() + oz, 4.0f + meteorSize, Level.ExplosionInteraction.TNT);
 			}
-			LOGGER.info("[Meteor] startImpact(): burst explosions done");
+			int shaftRadius = 5;
+			int shaftHeight = 80;
+			for(int dy = 1; dy <= shaftHeight; dy++)
+			{
+				for(int dx = -shaftRadius; dx <= shaftRadius; dx++)
+				{
+					for(int dz = -shaftRadius; dz <= shaftRadius; dz++)
+					{
+						if(dx * dx + dz * dz > shaftRadius * shaftRadius) continue;
+						BlockPos shaftPos = impactPos.offset(dx, dy, dz);
+						net.minecraft.world.level.block.state.BlockState shaftState = level.getBlockState(shaftPos);
+						if(shaftState.getDestroySpeed(level, shaftPos) >= 0)
+							level.setBlock(shaftPos, AIR.defaultBlockState(), UPDATE_CLIENTS);
+					}
+				}
+			}
 			
 			int entityRange = SERVER.artifactRange.get() + 10;
 			AABB aabb = new AABB(impactPos.getX() - entityRange, impactPos.getY() - entityRange, impactPos.getZ() - entityRange, impactPos.getX() + entityRange, impactPos.getY() + entityRange, impactPos.getZ() + entityRange);
 			
 			List<LivingEntity> nearbyEntities = level.getEntitiesOfClass(LivingEntity.class, aabb);
-			LOGGER.info("[Meteor] startImpact(): {} living entities in blast AABB {}", nearbyEntities.size(), aabb);
 			
 			PlayerData ownerData = (player != null && !hasEntered) ? PlayerData.get(cd.getOwner(), level.getServer()) : null;
 			for(LivingEntity entity : nearbyEntities)
@@ -490,29 +470,21 @@ public class MeteorManager extends SavedData
 				
 				entity.kill();
 			}
-			LOGGER.info("[Meteor] startImpact(): entity sweep done");
 			
 			if(player != null)
 			{
-				player.hurt(level.damageSources().explosion(null, null), Float.MAX_VALUE);
-				LOGGER.info("[Meteor] startImpact(): owner hurt() called, isAlive={}, isDeadOrDying={}", player.isAlive(), player.isDeadOrDying());
+				player.kill();
 			}
 			CraterJob job = new CraterJob(level, impactPos, craterRadius);
 			activeImpacts.put(cd.getPlayerKey(), job);
-			LOGGER.info("[Meteor] startImpact(): CraterJob created and registered for {}, activeImpacts now has {} entries", cd.getPlayerKey(), activeImpacts.size());
 		}
 		
 		level.playSound(null, impactPos, METEOR_IMPACT.get(), net.minecraft.sounds.SoundSource.AMBIENT, 10.0f, 0.8f);
-		LOGGER.info("[Meteor] startImpact(): impact sound played");
-		
 		if(player != null)
 		{
 			sendToPlayer(player, new PlayMeteorMusic(false));
 			sendToPlayer(player, new MeteorRemoved(cd.getMeteorEntityId()));
-			LOGGER.info("[Meteor] startImpact(): PlayMeteorMusic(false) and MeteorRemoved sent to owner");
 		}
-		
-		LOGGER.info("[Meteor] startImpact() end for {}", cd.getPlayerKey());
 	}
 	
 	private void tickImpacts()
@@ -526,7 +498,6 @@ public class MeteorManager extends SavedData
 		while(iterator.hasNext())
 		{
 			Map.Entry<String, CraterJob> entry = iterator.next();
-			String key = entry.getKey();
 			CraterJob job = entry.getValue();
 			
 			try
@@ -534,14 +505,12 @@ public class MeteorManager extends SavedData
 				job.tick(perJobBudget);
 			} catch(Exception e)
 			{
-				LOGGER.error("[Meteor] Exception while carving crater for {}, abandoning that crater job (terrain will be left half-carved)", key, e);
 				iterator.remove();
 				continue;
 			}
 			
 			if(job.isFinished())
 			{
-				LOGGER.info("[Meteor] CraterJob for {} finished, {} blocks processed total", key, job.blocksProcessed);
 				iterator.remove();
 			}
 		}
@@ -570,7 +539,6 @@ public class MeteorManager extends SavedData
 			this.craterRadius = craterRadius;
 			this.estimatedTotalPositions = estimateTotalPositions(craterRadius);
 			this.blockIterator = newIterator();
-			LOGGER.info("[Meteor] CraterJob created at {} in {}, radius={}, ~{} positions to scan", impactPos, level.dimension().location(), craterRadius, estimatedTotalPositions);
 		}
 		
 		private CraterJob(ServerLevel level, BlockPos impactPos, int craterRadius, long alreadyProcessed)
@@ -580,7 +548,6 @@ public class MeteorManager extends SavedData
 			this.craterRadius = craterRadius;
 			this.estimatedTotalPositions = estimateTotalPositions(craterRadius);
 			this.blockIterator = newIterator();
-			LOGGER.info("[Meteor] CraterJob resumed at {} in {}, radius={}, {} of ~{} positions already done", impactPos, level.dimension().location(), craterRadius, alreadyProcessed, estimatedTotalPositions);
 			fastForward(alreadyProcessed);
 		}
 		
@@ -608,7 +575,6 @@ public class MeteorManager extends SavedData
 			{
 				blockIterator = null;
 				finished = true;
-				LOGGER.info("[Meteor] CraterJob at {}: fast-forward already covered the entire crater, marking finished immediately", impactPos);
 			}
 		}
 		
@@ -641,12 +607,6 @@ public class MeteorManager extends SavedData
 						level.setBlock(pos.immutable(), AIR.defaultBlockState(), UPDATE_CLIENTS);
 					}
 				}
-			}
-			
-			if(tickCallCount % 20 == 0 || processed == 0)
-			{
-				double percent = estimatedTotalPositions > 0 ? (100.0 * blocksProcessed / estimatedTotalPositions) : 100.0;
-				LOGGER.info("[Meteor] CraterJob at {}: tick #{}, processed {} this call, {}/{} total ({}%)", impactPos, tickCallCount, processed, blocksProcessed, estimatedTotalPositions, String.format("%.1f", percent));
 			}
 			
 			if(!blockIterator.hasNext())
