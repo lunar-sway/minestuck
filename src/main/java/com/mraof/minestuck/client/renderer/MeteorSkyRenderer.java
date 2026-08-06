@@ -52,8 +52,6 @@ public class MeteorSkyRenderer
 		float size = Mth.lerp(progress * progress, MIN_SIZE, MAX_SIZE);
 		
 		Matrix4f matrix = new Matrix4f(event.getModelViewMatrix());
-		matrix.rotateX(0.05F);
-		
 		SessionRenderHelper.drawSkyMeteor(matrix, size, LandSkySpriteUploader.getInstance().getSkyMeteorSprite(), frameIndex, FRAME_COUNT);
 	}
 }

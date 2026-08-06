@@ -432,6 +432,11 @@ public class MeteorManager extends SavedData
 				double oz = (level.random.nextDouble() - 0.5) * craterRadius * 2;
 				level.explode(null, impactPos.getX() + ox, impactPos.getY() + 2, impactPos.getZ() + oz, 4.0f + meteorSize, Level.ExplosionInteraction.TNT);
 			}
+			
+			// Guaranteed-clear narrow shaft straight up from the impact point (unlike burst explosions,
+			// which destroy blocks probabilistically) - so a house built directly above doesn't survive
+			// just because explosions didn't roll well. Small radius keeps this cheap enough to do in one
+			// go, same as everything else above.
 			int shaftRadius = 5;
 			int shaftHeight = 80;
 			for(int dy = 1; dy <= shaftHeight; dy++)
@@ -457,8 +462,12 @@ public class MeteorManager extends SavedData
 			PlayerData ownerData = (player != null && !hasEntered) ? PlayerData.get(cd.getOwner(), level.getServer()) : null;
 			for(LivingEntity entity : nearbyEntities)
 			{
-				if(entity instanceof ServerPlayer)
+				if(entity instanceof ServerPlayer otherPlayer)
+				{
+					if(otherPlayer != player && !SburbPlayerData.get(otherPlayer).hasEntered())
+						otherPlayer.kill();
 					continue;
+				}
 				
 				if(entity instanceof KernelspriteEntity)
 				{
