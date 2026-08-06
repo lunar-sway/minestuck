@@ -13,6 +13,7 @@ The format is based on [Keep a Changelog](https://keepachangelog.com/en/1.1.0/).
 - New /grist [args] all command
 - Terrain Flatenator can now flatten terrain
 - Computer themes can have custom buttons
+- Anomalocaris hat and alien boppers
 
 ### Changed
 
@@ -29,7 +30,7 @@ The format is based on [Keep a Changelog](https://keepachangelog.com/en/1.1.0/).
 
 ### Contributors for this release
 
-- Dweblenod, Cibernet, Riotmode, kirderf1, medsal15, Caldw3ll, Fl1s
+- Dweblenod, Cibernet, Riotmode, kirderf1, medsal15, Caldw3ll, Fl1s, Emma "Dilemma"
 
 ## [1.21.1-1.14.0.1] - 2026-06-01
 

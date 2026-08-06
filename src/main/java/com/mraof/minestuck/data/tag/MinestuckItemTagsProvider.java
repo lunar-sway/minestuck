@@ -114,7 +114,7 @@ public class MinestuckItemTagsProvider extends ItemTagsProvider
 		tag(PICKAXES).add(EMERALD_PICKAXE.get()).add(relevantItems(item -> hasToolType(item, List.of(PICKAXE_TOOL))));
 		tag(SHOVELS).add(EMERALD_SHOVEL.get()).add(relevantItems(item -> hasToolType(item, List.of(SHOVEL_TOOL, SPOON_TOOL))));
 		tag(HOES).add(EMERALD_HOE.get(), HELLBRINGERS_HOE_INACTIVE.get(), HELLBRINGERS_HOE_ACTIVE.get());
-		tag(HEAD_ARMOR).add(PRISMARINE_HELMET.get(), IRON_LASS_GLASSES.get(), PROSPIT_CIRCLET.get(), DERSE_CIRCLET.get(), AMPHIBEANIE.get(), NOSTRILDAMUS.get(), PONYTAIL.get());
+		tag(HEAD_ARMOR).add(PRISMARINE_HELMET.get(), IRON_LASS_GLASSES.get(), PROSPIT_CIRCLET.get(), DERSE_CIRCLET.get(), AMPHIBEANIE.get(), NOSTRILDAMUS.get(), PONYTAIL.get(), ANOMALOCARIS_HAT.get(), ALIEN_BOPPERS.get());
 		tag(CHEST_ARMOR).add(PRISMARINE_CHESTPLATE.get(), IRON_LASS_CHESTPLATE.get(), PROSPIT_SHIRT.get(), DERSE_SHIRT.get());
 		tag(LEG_ARMOR).add(PRISMARINE_LEGGINGS.get(), IRON_LASS_SKIRT.get(), PROSPIT_PANTS.get(), DERSE_PANTS.get());
 		tag(FOOT_ARMOR).add(PRISMARINE_BOOTS.get(), IRON_LASS_SHOES.get(), PROSPIT_SHOES.get(), DERSE_SHOES.get());

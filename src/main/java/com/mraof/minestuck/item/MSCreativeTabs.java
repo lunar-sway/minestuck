@@ -1935,6 +1935,8 @@ public final class MSCreativeTabs
 		output.accept(MSItems.AMPHIBEANIE.get());
 		output.accept(MSItems.NOSTRILDAMUS.get());
 		output.accept(MSItems.PONYTAIL.get());
+		output.accept(MSItems.ANOMALOCARIS_HAT.get());
+		output.accept(MSItems.ALIEN_BOPPERS.get());
 	}
 	
 	@SubscribeEvent

@@ -1538,6 +1538,10 @@ public class MinestuckEnUsLanguageProvider extends MinestuckLanguageProvider
 		addItem(MSItems.AMPHIBEANIE, "Amphibeanie");
 		addItem(MSItems.NOSTRILDAMUS, "Nostrildamus");
 		addItem(MSItems.PONYTAIL, "Ponytail");
+		addItem(MSItems.ANOMALOCARIS_HAT, "Anomalocaris Hat");
+		addItemTooltip(MSItems.ANOMALOCARIS_HAT, "An anomalocaris does their best!");
+		addItem(MSItems.ALIEN_BOPPERS, "Alien Boppers");
+		addItemTooltip(MSItems.ALIEN_BOPPERS, "They call outwards to the stars, signaling a message of friendliness.");
 		addItem(MSItems.BOONDOLLARS, "Boondollars");
 		addItemExtra(MSItems.BOONDOLLARS, "amount", "Amount: %s");
 		addItem(MSItems.RAW_CRUXITE, "Raw Cruxite");
