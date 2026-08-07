@@ -433,27 +433,6 @@ public class MeteorManager extends SavedData
 				level.explode(null, impactPos.getX() + ox, impactPos.getY() + 2, impactPos.getZ() + oz, 4.0f + meteorSize, Level.ExplosionInteraction.TNT);
 			}
 			
-			// Guaranteed-clear narrow shaft straight up from the impact point (unlike burst explosions,
-			// which destroy blocks probabilistically) - so a house built directly above doesn't survive
-			// just because explosions didn't roll well. Small radius keeps this cheap enough to do in one
-			// go, same as everything else above.
-			int shaftRadius = 5;
-			int shaftHeight = 80;
-			for(int dy = 1; dy <= shaftHeight; dy++)
-			{
-				for(int dx = -shaftRadius; dx <= shaftRadius; dx++)
-				{
-					for(int dz = -shaftRadius; dz <= shaftRadius; dz++)
-					{
-						if(dx * dx + dz * dz > shaftRadius * shaftRadius) continue;
-						BlockPos shaftPos = impactPos.offset(dx, dy, dz);
-						net.minecraft.world.level.block.state.BlockState shaftState = level.getBlockState(shaftPos);
-						if(shaftState.getDestroySpeed(level, shaftPos) >= 0)
-							level.setBlock(shaftPos, AIR.defaultBlockState(), UPDATE_CLIENTS);
-					}
-				}
-			}
-			
 			int entityRange = SERVER.artifactRange.get() + 10;
 			AABB aabb = new AABB(impactPos.getX() - entityRange, impactPos.getY() - entityRange, impactPos.getZ() - entityRange, impactPos.getX() + entityRange, impactPos.getY() + entityRange, impactPos.getZ() + entityRange);
 			
@@ -464,8 +443,8 @@ public class MeteorManager extends SavedData
 			{
 				if(entity instanceof ServerPlayer otherPlayer)
 				{
-					if(otherPlayer != player && !SburbPlayerData.get(otherPlayer).hasEntered())
-						otherPlayer.kill();
+					if(otherPlayer == player && !SburbPlayerData.get(otherPlayer).hasEntered())
+						otherPlayer.hurt(level.damageSources().explosion(null, null), Float.MAX_VALUE);
 					continue;
 				}
 				
@@ -477,12 +456,7 @@ public class MeteorManager extends SavedData
 					continue;
 				}
 				
-				entity.kill();
-			}
-			
-			if(player != null)
-			{
-				player.kill();
+				entity.hurt(level.damageSources().explosion(null, null), Float.MAX_VALUE);
 			}
 			CraterJob job = new CraterJob(level, impactPos, craterRadius);
 			activeImpacts.put(cd.getPlayerKey(), job);
@@ -535,6 +509,7 @@ public class MeteorManager extends SavedData
 		private final BlockPos impactPos;
 		private final int craterRadius;
 		private final long estimatedTotalPositions;
+		private static final int SHAFT_HEIGHT = 80;
 		
 		private long blocksProcessed = 0;
 		private int tickCallCount = 0;
@@ -563,13 +538,14 @@ public class MeteorManager extends SavedData
 		private static long estimateTotalPositions(int craterRadius)
 		{
 			long sideXZ = (long) craterRadius * 2 + 1;
-			long heightY = craterRadius + 1L;
-			return sideXZ * sideXZ * heightY;
+			long heightBelow = craterRadius + 1L;
+			long heightAbove = SHAFT_HEIGHT;
+			return sideXZ * sideXZ * (heightBelow + heightAbove);
 		}
 		
 		private Iterator<? extends BlockPos> newIterator()
 		{
-			return betweenClosed(impactPos.offset(-craterRadius, -craterRadius, -craterRadius), impactPos.offset(craterRadius, 0, craterRadius)).iterator();
+			return betweenClosed(impactPos.offset(-craterRadius, -craterRadius, -craterRadius), impactPos.offset(craterRadius, SHAFT_HEIGHT, craterRadius)).iterator();
 		}
 		
 		private void fastForward(long count)
@@ -608,10 +584,17 @@ public class MeteorManager extends SavedData
 				double dy = pos.getY() - impactPos.getY();
 				double dz = pos.getZ() - impactPos.getZ();
 				
-				if(dx * dx + dy * dy + dz * dz <= (double) craterRadius * craterRadius)
-				{
-					net.minecraft.world.level.block.state.BlockState state = level.getBlockState(pos);
-					if(state.getDestroySpeed(level, pos) >= 0)
+				if (dy <= 0){
+					if(dx * dx + dy * dy + dz * dz <= (double) craterRadius * craterRadius)
+					{
+						net.minecraft.world.level.block.state.BlockState state = level.getBlockState(pos);
+						if(state.getDestroySpeed(level, pos) >= 0)
+						{
+							level.setBlock(pos.immutable(), AIR.defaultBlockState(), UPDATE_CLIENTS);
+						}
+					}
+				} else {
+					if(dx * dx + dz * dz <= (double) craterRadius * craterRadius)
 					{
 						level.setBlock(pos.immutable(), AIR.defaultBlockState(), UPDATE_CLIENTS);
 					}

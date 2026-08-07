@@ -75,8 +75,8 @@ public class EntryProcess
 	private static final Logger LOGGER = LogManager.getLogger();
 	public static final TicketType<Unit> CHUNK_TICKET_TYPE = TicketType.create("entry", (_left, _right) -> 0);
 	
-	private static final int BLOCKS_PER_TICK_TOTAL = 4000;
-	private static final int MIN_BLOCKS_PER_TICK_PER_PROCESS = 500;
+	private static final int BLOCKS_PER_TICK_TOTAL = 10000;
+	private static final int MIN_BLOCKS_PER_TICK_PER_PROCESS = 1000;
 	
 	private enum Phase
 	{
