@@ -1,6 +1,5 @@
 package com.mraof.minestuck.data.worldgen;
 
-import com.mraof.minestuck.Minestuck;
 import com.mraof.minestuck.world.gen.structure.blocks.StructureBlockRegistry;
 import com.mraof.minestuck.world.lands.LandTypeExtensions;
 import com.mraof.minestuck.world.lands.LandTypes;
@@ -45,7 +44,7 @@ public class MSLandTypeExtensionProvider implements DataProvider
 			
 			for(Map.Entry<ResourceLocation, LandTypeExtensions.ParsedExtension> entry : extensionsMap.entrySet())
 			{
-				Path path = getPath(entry.getKey().getPath());
+				Path path = getPath(entry.getKey());
 				futures.add(DataProvider.saveStable(cache, provider, LandTypeExtensions.ParsedExtension.CODEC, entry.getValue(), path));
 			}
 			
@@ -53,30 +52,31 @@ public class MSLandTypeExtensionProvider implements DataProvider
 		});
 	}
 	
-	private void addExtensions(HolderLookup.Provider provider)
+	protected void addExtensions(HolderLookup.Provider provider)
 	{
-		LandTypes.TERRAIN_REGISTRY.entrySet().forEach(entry ->
-				{
-					TerrainLandType landType = entry.getValue();
-					StructureBlockRegistry blockRegistry = new StructureBlockRegistry();
-					landType.registerBlocks(blockRegistry);
-					extensionsMap.put(entry.getKey().location().withPrefix("terrain/"), landType.getExtensions(provider, blockRegistry));
-				}
-		);
+		LandTypes.TERRAIN_REGISTRY.entrySet().forEach(entry -> addTerrain(entry.getValue(), entry.getKey().location(), provider));
 		
-		LandTypes.TITLE_REGISTRY.entrySet().forEach(entry ->
-				{
-					TitleLandType landType = entry.getValue();
-					StructureBlockRegistry blockRegistry = new StructureBlockRegistry();
-					landType.registerBlocks(blockRegistry);
-					extensionsMap.put(entry.getKey().location().withPrefix("title/"), landType.getExtensions(provider, blockRegistry));
-				}
-		);
+		LandTypes.TITLE_REGISTRY.entrySet().forEach(entry -> addTitle(entry.getValue(), entry.getKey().location(), provider));
 	}
 	
-	private Path getPath(String id)
+	protected void addTerrain(TerrainLandType terrain, ResourceLocation id, HolderLookup.Provider provider)
 	{
-		return this.output.getOutputFolder(PackOutput.Target.DATA_PACK).resolve(Minestuck.MOD_ID).resolve("minestuck/land_type_extension/" + id + ".json");
+		StructureBlockRegistry blockRegistry = new StructureBlockRegistry();
+		terrain.registerBlocks(blockRegistry);
+		extensionsMap.put(id.withPrefix("terrain/"), terrain.getExtensions(provider, blockRegistry));
+	}
+	
+	protected void addTitle(TitleLandType title, ResourceLocation id, HolderLookup.Provider provider)
+	{
+		StructureBlockRegistry blockRegistry = new StructureBlockRegistry();
+		title.registerBlocks(blockRegistry);
+		extensionsMap.put(id.withPrefix("title/"), title.getExtensions(provider, blockRegistry));
+	}
+	
+	private Path getPath(ResourceLocation id)
+	{
+		// A land's extension is loaded at [<namespace>/minestuck/land_type_extension/<type>/<path>.json]
+		return this.output.getOutputFolder(PackOutput.Target.DATA_PACK).resolve(id.getNamespace()).resolve("minestuck/land_type_extension/" + id.getPath() + ".json");
 	}
 	
 	@Override
