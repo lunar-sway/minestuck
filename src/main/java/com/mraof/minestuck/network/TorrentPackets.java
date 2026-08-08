@@ -3,9 +3,12 @@ package com.mraof.minestuck.network;
 import com.mraof.minestuck.Minestuck;
 import com.mraof.minestuck.alchemy.TorrentSession;
 import com.mraof.minestuck.api.alchemy.GristType;
+import com.mraof.minestuck.blockentity.ComputerBlockEntity;
 import com.mraof.minestuck.player.ClientPlayerData;
 import com.mraof.minestuck.player.IdentifierHandler;
+import com.mraof.minestuck.player.PlayerIdentifier;
 import com.mraof.minestuck.world.storage.MSExtraData;
+import net.minecraft.core.BlockPos;
 import net.minecraft.network.RegistryFriendlyByteBuf;
 import net.minecraft.network.codec.ByteBufCodecs;
 import net.minecraft.network.codec.StreamCodec;
@@ -38,10 +41,12 @@ public class TorrentPackets
 		}
 	}
 	
-	public record ModifySeeding(GristType gristType, boolean isSeeding) implements MSPacket.PlayToServer
+	public record ModifySeeding(BlockPos computerPos, GristType gristType, boolean isSeeding) implements MSPacket.PlayToServer
 	{
 		public static final Type<ModifySeeding> ID = new Type<>(Minestuck.id("torrent_modify_seeding"));
 		public static final StreamCodec<RegistryFriendlyByteBuf, ModifySeeding> STREAM_CODEC = StreamCodec.composite(
+				BlockPos.STREAM_CODEC,
+				ModifySeeding::computerPos,
 				GristType.STREAM_CODEC,
 				ModifySeeding::gristType,
 				ByteBufCodecs.BOOL,
@@ -59,17 +64,21 @@ public class TorrentPackets
 		public void execute(IPayloadContext context, ServerPlayer player)
 		{
 			MinecraftServer server = player.server;
-			MSExtraData data = MSExtraData.get(server);
 			
-			data.updateTorrentSeeding(IdentifierHandler.encode(player), gristType, isSeeding);
+			ComputerBlockEntity.getAccessibleComputer(player, computerPos).ifPresent(computer -> {
+				PlayerIdentifier owner = resolveOwner(computer, player);
+				MSExtraData.get(server).updateTorrentSeeding(owner, gristType, isSeeding);
+			});
 		}
 	}
 	
-	public record ModifyLeeching(Integer targetId, GristType gristType,
-								 boolean isLeeching) implements MSPacket.PlayToServer
+	public record ModifyLeeching(BlockPos computerPos, Integer targetId, GristType gristType,
+	                             boolean isLeeching) implements MSPacket.PlayToServer
 	{
 		public static final Type<ModifyLeeching> ID = new Type<>(Minestuck.id("torrent_modify_leeching"));
 		public static final StreamCodec<RegistryFriendlyByteBuf, ModifyLeeching> STREAM_CODEC = StreamCodec.composite(
+				BlockPos.STREAM_CODEC,
+				ModifyLeeching::computerPos,
 				ByteBufCodecs.INT,
 				ModifyLeeching::targetId,
 				GristType.STREAM_CODEC,
@@ -89,9 +98,22 @@ public class TorrentPackets
 		public void execute(IPayloadContext context, ServerPlayer player)
 		{
 			MinecraftServer server = player.server;
-			MSExtraData data = MSExtraData.get(server);
 			
-			data.updateTorrentLeeching(IdentifierHandler.getById(targetId), IdentifierHandler.encode(player), gristType, isLeeching);
+			ComputerBlockEntity.getAccessibleComputer(player, computerPos).ifPresent(computer -> {
+				PlayerIdentifier owner = resolveOwner(computer, player);
+				MSExtraData.get(server).updateTorrentLeeching(IdentifierHandler.getById(targetId), owner, gristType, isLeeching);
+			});
 		}
+	}
+	
+	private static PlayerIdentifier resolveOwner(ComputerBlockEntity computer, ServerPlayer player)
+	{
+		PlayerIdentifier owner = computer.getOwner();
+		if(owner == null)
+		{
+			owner = IdentifierHandler.encode(player);
+			computer.initializeOwner(owner);
+		}
+		return owner;
 	}
 }

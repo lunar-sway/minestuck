@@ -319,6 +319,7 @@ public final class ComputerBlockEntity extends BlockEntity implements ISburbComp
 		if(this.owner != null)
 			throw new IllegalStateException("Not allowed to set computer owner in this state");
 		this.owner = owner;
+		markDirtyAndResend();
 	}
 	
 	public int clientSideOwnerId()

@@ -19,6 +19,7 @@ import net.minecraft.client.gui.components.AbstractWidget;
 import net.minecraft.client.gui.components.Tooltip;
 import net.minecraft.client.gui.narration.NarrationElementOutput;
 import net.minecraft.client.renderer.GameRenderer;
+import net.minecraft.core.BlockPos;
 import net.minecraft.network.chat.Component;
 import net.minecraft.network.chat.MutableComponent;
 import net.minecraft.resources.ResourceLocation;
@@ -98,18 +99,20 @@ public class TorrentWidgets
 		private TorrentSession.TorrentClientData torrentData;
 		public final GristType gristType;
 		private final Integer playerId;
+		private final BlockPos computerPos;
 		public long gristAmount;
 		public long cacheLimit;
 		public boolean isOwner;
 		private boolean isActive;
 		private Font font;
 		
-		public GristEntry(int pX, int pY, GristType gristType, int playerId)
+		public GristEntry(int pX, int pY, GristType gristType, int playerId, BlockPos computerPos)
 		{
 			super(pX, pY, WIDTH, HEIGHT, Component.empty());
 			
 			this.gristType = gristType;
 			this.playerId = playerId;
+			this.computerPos = computerPos;
 			
 			visible = false;
 		}
@@ -193,9 +196,9 @@ public class TorrentWidgets
 			
 			isActive = !isActive;
 			if(isOwner)
-				PacketDistributor.sendToServer(new TorrentPackets.ModifySeeding(gristType, isActive));
+				PacketDistributor.sendToServer(new TorrentPackets.ModifySeeding(computerPos, gristType, isActive));
 			else
-				PacketDistributor.sendToServer(new TorrentPackets.ModifyLeeching(playerId, gristType, isActive));
+				PacketDistributor.sendToServer(new TorrentPackets.ModifyLeeching(computerPos, playerId, gristType, isActive));
 		}
 		
 		@Override
@@ -216,23 +219,25 @@ public class TorrentWidgets
 		public final Integer playerId;
 		private final String username;
 		private final Font font;
+		private final int ownerId;
 		
-		public TorrentContainer(int pX, int pY, Font font, Integer playerId, String username)
+		public TorrentContainer(int pX, int pY, Font font, Integer playerId, String username, int ownerId, BlockPos computerPos)
 		{
 			super(pX, pY, WIDTH, HEIGHT);
 			
 			this.playerId = playerId;
 			this.username = username;
 			this.font = font;
+			this.ownerId = ownerId;
 			
 			int yOffset = 1; //this is 1 because there needs to be room to render the name of the torrent's seeder
 			for(GristType type : GristTypes.REGISTRY)
 			{
-				GristEntry gristEntry = new GristEntry(pX, pY + ((GristEntry.HEIGHT + 1) * yOffset), type, playerId);
+				GristEntry gristEntry = new GristEntry(pX, pY + ((GristEntry.HEIGHT + 1) * yOffset), type, playerId, computerPos);
 				if(this.children().size() < visibleEntryCount())
 					gristEntry.visible = true;
 				
-				gristEntry.isOwner = playerId == SkaiaClient.playerId;
+				gristEntry.isOwner = playerId == ownerId;
 				gristEntry.font = font;
 				
 				this.children().add(gristEntry);
@@ -250,13 +255,13 @@ public class TorrentWidgets
 				
 				gristEntry.torrentData = torrentData;
 				gristEntry.isActive = gristEntry.isOwner ? torrentData.seededTypes().contains(entryGristType)
-						: torrentData.leeches().getOrDefault(SkaiaClient.playerId, Collections.emptyList()).contains(entryGristType);
+						: torrentData.leeches().getOrDefault(ownerId, Collections.emptyList()).contains(entryGristType);
 				gristEntry.gristAmount = torrentData.cache().set().getGrist(entryGristType);
 				gristEntry.cacheLimit = torrentData.cache().limit();
 				
 				gristEntry.setTooltip();
 			}
-			if(!torrentData.hasEntered() && playerId != SkaiaClient.playerId)
+			if(!torrentData.hasEntered() && playerId != ownerId)
 				this.children().forEach(entry -> entry.visible = false);
 			
 			updateVisibilityAndPosition();
@@ -328,7 +333,7 @@ public class TorrentWidgets
 		@Override
 		public void updateVisibilityAndPosition()
 		{
-			if(torrentData != null && !torrentData.hasEntered() && playerId != SkaiaClient.playerId)
+			if(torrentData != null && !torrentData.hasEntered() && playerId != ownerId)
 			{
 				this.children().forEach(entry -> entry.visible = false);
 				return;
@@ -581,16 +586,18 @@ public class TorrentWidgets
 		private TorrentSession.TorrentClientData userData;
 		private final Font font;
 		private final GristType gristType;
+		private final int ownerId;
 		private Pair<Integer, Integer> seedsData = Pair.of(0, 0); //first is seeds being utilized and second is total seeds available
 		private Pair<Integer, Integer> typeDownSpeedRange = Pair.of(0, 0); //first is minimum speed and second is maximum
 		private int typeUpSpeed = 0;
 		
-		public GristStat(int pX, int pY, Font font, GristType gristType)
+		public GristStat(int pX, int pY, Font font, GristType gristType, int ownerId)
 		{
 			super(pX, pY, WIDTH, HEIGHT, Component.empty());
 			
 			this.font = font;
 			this.gristType = gristType;
+			this.ownerId = ownerId;
 			
 			visible = false;
 			
@@ -599,28 +606,28 @@ public class TorrentWidgets
 		
 		public void updateStats()
 		{
-			userData = GristTorrentGui.visibleTorrentData.get(SkaiaClient.playerId);
+			userData = GristTorrentGui.visibleTorrentData.get(ownerId);
+			if(userData == null) return;
 			
 			int minDownSpeed = Integer.MAX_VALUE;
 			int maxDownSpeed = 1;
 			AtomicInteger totalSeeds = new AtomicInteger();
-			userIsLeeching = false;
+			
+			userIsLeeching = GristTorrentGui.visibleTorrentData.entrySet().stream()
+					.filter(e -> e.getKey() != ownerId)
+					.anyMatch(e -> e.getValue().leeches()
+							.getOrDefault(ownerId, Collections.emptyList())
+							.contains(gristType));
 			
 			List<TorrentSession.TorrentClientData> filteredData = new ArrayList<>();
 			GristTorrentGui.visibleTorrentData.forEach((key, value) -> {
-				if(key == SkaiaClient.playerId) return;
+				if(key == ownerId) return;
 				
 				boolean couldSeed = value.cache().set().asAmounts().stream().anyMatch(gristAmount -> gristAmount.hasType(gristType) && !gristAmount.isEmpty());
 				boolean tryingToSeed = value.seededTypes().stream().anyMatch(iterateType -> iterateType.equals(gristType));
-				if(!userIsLeeching)
-					userIsLeeching = value.leeches().getOrDefault(SkaiaClient.playerId, Collections.emptyList()).contains(gristType);
 				
 				if(tryingToSeed)
 				{
-					boolean currentLeech = value.leeches()
-							.getOrDefault(SkaiaClient.playerId, Collections.emptyList())
-							.contains(gristType);
-					if(currentLeech) userIsLeeching = true;
 					if(couldSeed) totalSeeds.addAndGet(1);
 					if(userIsLeeching)
 						filteredData.add(value);
@@ -654,7 +661,7 @@ public class TorrentWidgets
 			
 			//down
 			MutableComponent downText = speedAppend(typeDownSpeedRange.getFirst());
-//			.append(" - ").append(speedAppend(typeDownSpeedRange.getSecond()))
+//		.append(" - ").append(speedAppend(typeDownSpeedRange.getSecond()))
 			
 			guiGraphics.drawString(font, downText, scale(getX() + 21), scale(getY() + TEXT_Y_OFFSET), GristTorrentGui.LIGHT_BLUE, false);
 			
@@ -721,12 +728,14 @@ public class TorrentWidgets
 		public GristTorrentGui.TorrentFilter activeFilter = GristTorrentGui.TorrentFilter.ALL;
 		private final Font font;
 		private final GristTorrentGui gui;
+		private final int ownerId;
 		
-		public FilterContainer(int pX, int pY, Font font, GristTorrentGui gui)
+		public FilterContainer(int pX, int pY, Font font, GristTorrentGui gui, int ownerId)
 		{
 			super(pX, pY, WIDTH, HEIGHT, Component.empty());
 			this.font = font;
 			this.gui = gui;
+			this.ownerId = ownerId;
 			updateCounts();
 		}
 		
@@ -738,7 +747,7 @@ public class TorrentWidgets
 				GristTorrentGui.TorrentFilter filter = GristTorrentGui.TorrentFilter.values()[i];
 				for(GristType gristType : GristTypes.REGISTRY)
 				{
-					GristStat stat = new GristStat(0, 0, font, gristType);
+					GristStat stat = new GristStat(0, 0, font, gristType, ownerId);
 					if(stat.matchesFilter(filter)) count++;
 				}
 				filterCounts.put(filter, count);
@@ -817,12 +826,14 @@ public class TorrentWidgets
 		private static final Map<GristType, Long> previousGristAmounts = new HashMap<>();
 		
 		private final Font font;
+		private final int ownerId;
 		
-		public StatsContainer(int pX, int pY, Font font)
+		public StatsContainer(int pX, int pY, Font font, int ownerId)
 		{
 			super(pX, pY, WIDTH, HEIGHT);
 			
 			this.font = font;
+			this.ownerId = ownerId;
 		}
 		
 		public void updateStats(GristTorrentGui.TorrentFilter filter)
@@ -832,7 +843,7 @@ public class TorrentWidgets
 			int i = 0;
 			for(GristType gristType : GristTypes.REGISTRY)
 			{
-				GristStat gristStat = new GristStat(this.getX(), this.getY() + 6 + ((GristStat.HEIGHT + 1) * i), font, gristType);
+				GristStat gristStat = new GristStat(this.getX(), this.getY() + 6 + ((GristStat.HEIGHT + 1) * i), font, gristType, ownerId);
 				gristStat.sessionDownloaded = downloadedAmounts.getOrDefault(gristType, 0L);
 				
 				if(gristStat.matchesFilter(filter))
@@ -847,19 +858,19 @@ public class TorrentWidgets
 		
 		public void trackDownloads()
 		{
-			TorrentSession.TorrentClientData userData = GristTorrentGui.visibleTorrentData.get(SkaiaClient.playerId);
-			if(userData == null) return;
+			TorrentSession.TorrentClientData ownerData = GristTorrentGui.visibleTorrentData.get(ownerId);
+			if(ownerData == null) return;
 			
 			for(GristType gristType : GristTypes.REGISTRY)
 			{
-				long current = userData.cache().set().getGrist(gristType);
+				long current = ownerData.cache().set().getGrist(gristType);
 				long previous = previousGristAmounts.getOrDefault(gristType, current);
 				long delta = current - previous;
 				
 				boolean isLeeching = GristTorrentGui.visibleTorrentData.entrySet().stream()
-						.filter(e -> e.getKey() != SkaiaClient.playerId)
+						.filter(e -> e.getKey() != ownerId)
 						.anyMatch(e -> e.getValue().leeches()
-								.getOrDefault(SkaiaClient.playerId, Collections.emptyList())
+								.getOrDefault(ownerId, Collections.emptyList())
 								.contains(gristType));
 				
 				if(isLeeching && delta > 0)

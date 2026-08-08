@@ -13,10 +13,7 @@ import net.minecraft.server.MinecraftServer;
 import net.minecraft.server.level.ServerPlayer;
 import net.neoforged.neoforge.network.PacketDistributor;
 
-import java.util.ArrayList;
-import java.util.HashMap;
-import java.util.List;
-import java.util.Map;
+import java.util.*;
 import java.util.stream.Collectors;
 
 public final class TorrentHelper
@@ -85,8 +82,6 @@ public final class TorrentHelper
 			}
 	}*/
 	
-	
-	
 	public static void handleTorrent(TorrentSession torrentSession, MinecraftServer server)
 	{
 		PlayerIdentifier seeder = torrentSession.getSeeder();
@@ -98,15 +93,45 @@ public final class TorrentHelper
 		
 		int seedRateMod = getSeedRateMod(seeding, GristCache.get(seederData).getGristSet().getValue());
 		
-		if(seedRateMod == 0)
-			return;
-		
 		List<TorrentSession.Leech> leeching = torrentSession.getLeeching();
 		
-		for(GristType grist : seeding)
+		if(seedRateMod > 0)
 		{
-			handleGristSeed(grist, leeching, seedRateMod, seederCache, server);
+			for(GristType grist : seeding)
+				handleGristSeed(grist, leeching, seedRateMod, seederCache, server);
 		}
+		
+		if(MinestuckConfig.SERVER.gristTorrentNonSeededTrickle.get())
+		{
+			Set<GristType> seedingSet = new HashSet<>(seeding);
+			Set<GristType> requestedButNotSeeded = leeching.stream()
+					.flatMap(leech -> leech.gristTypes().stream())
+					.filter(type -> !seedingSet.contains(type))
+					.collect(Collectors.toSet());
+			
+			for(GristType grist : requestedButNotSeeded)
+				handleNonSeededTrickle(grist, leeching, seederCache, server);
+		}
+	}
+	
+	private static void handleNonSeededTrickle(GristType grist, List<TorrentSession.Leech> leeching, GristCache seederCache, MinecraftServer server)
+	{
+		List<TorrentSession.Leech> eligibleLeeches = leeching.stream()
+				.filter(leech -> leech.gristTypes().contains(grist)).toList();
+		if(eligibleLeeches.isEmpty() || seederCache.getGristSet().getGrist(grist) <= 0)
+			return;
+		
+		GristAmount gristAmount = new GristAmount(grist, 1);
+		
+		eligibleLeeches.forEach(leech -> {
+			PlayerData leechData = PlayerData.get(leech.id(), server);
+			GristCache leechCache = GristCache.get(leechData);
+			
+			GristSet remainder = leechCache.addWithinCapacity(gristAmount, null);
+			long actuallyAdded = gristAmount.amount() - remainder.getGrist(grist);
+			if(actuallyAdded > 0)
+				seederCache.tryTake(new GristAmount(grist, (int) actuallyAdded), null);
+		});
 	}
 	
 	public static void sendOutUpdates(List<TorrentSession> sessions, MinecraftServer server)
@@ -130,9 +155,6 @@ public final class TorrentHelper
 					
 					boolean inSameSession = SessionHandler.get(server).isInSameSession(seeder, sessionPlayerID);
 					boolean isVisible = globalVisibility || (sessionOnly && inSameSession);
-					
-					//TODO remove this, temp testing
-					isVisible = true;
 					
 					if(isVisible)
 					{

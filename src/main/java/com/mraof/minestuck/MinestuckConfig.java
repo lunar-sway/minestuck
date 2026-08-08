@@ -114,6 +114,7 @@ public class MinestuckConfig
 		public final EnumValue<PermissionType> dataCheckerPermission;
 		public final EnumValue<TorrentVisibility> gristTorrentVisibility;
 		public final BooleanValue gristTorrentSeedAll;
+		public final BooleanValue gristTorrentNonSeededTrickle;
 		
 		//Edit Mode
 		public final BooleanValue showGristChanges;
@@ -175,6 +176,10 @@ public class MinestuckConfig
 					.defineEnum("gristTorrentVisibility", TorrentVisibility.SESSION);
 			gristTorrentSeedAll = builder.comment("Whether players will seed all grist types initially. Will seed nothing initially if false.")
 					.define("gristTorrentSeedAll", true);
+			gristTorrentNonSeededTrickle = builder.comment(
+							"If true, a leech requesting a grist type the seeder isn't actively seeding will still get a slow ",
+							"trickle of 1 grist/sec (if the seeder has any of that type), instead of nothing.")
+					.define("gristTorrentNonSeededTrickle", false);
 			builder.pop();
 			
 			builder.push("editMode");

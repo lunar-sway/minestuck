@@ -133,6 +133,20 @@ public class GristGutter
 		for(GristAmount amount : set.asAmounts())
 			this.addGristInternal(amount.type(), amount.amount());
 	}
+	public static void pushUpdateToPlayer(ServerPlayer player)
+	{
+		GristGutter.get(player).ifPresent(gutter ->
+				PacketDistributor.sendToPlayer(player, new GutterUpdatePacket(gutter.gristSet.asImmutable(), gutter.getRemainingCapacity())));
+	}
+	
+	public void pushUpdateToSession(MinecraftServer server)
+	{
+		this.gutterPlayers().forEach(id -> {
+			ServerPlayer player = id.getPlayer(server);
+			if(player != null)
+				pushUpdateToPlayer(player);
+		});
+	}
 	
 	/**
 	 * The grist set is currently only modified here,
