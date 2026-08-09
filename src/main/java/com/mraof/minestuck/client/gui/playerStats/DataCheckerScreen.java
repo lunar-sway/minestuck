@@ -2,25 +2,36 @@ package com.mraof.minestuck.client.gui.playerStats;
 
 import com.mojang.blaze3d.platform.InputConstants;
 import com.mojang.blaze3d.systems.RenderSystem;
+import com.mraof.minestuck.client.ClientDimensionData;
+import com.mraof.minestuck.client.renderer.LandSkySpriteUploader;
 import com.mraof.minestuck.client.util.MSKeyHandler;
 import com.mraof.minestuck.network.DataCheckerPackets;
 import com.mraof.minestuck.player.ClientPlayerData;
 import com.mraof.minestuck.player.EnumAspect;
 import com.mraof.minestuck.player.EnumClass;
 import com.mraof.minestuck.player.Title;
+import com.mraof.minestuck.skaianet.LandChain;
+import com.mraof.minestuck.skaianet.client.SkaiaClient;
 import com.mraof.minestuck.world.lands.LandTypePair;
 import net.minecraft.client.Minecraft;
 import net.minecraft.client.gui.GuiGraphics;
+import net.minecraft.client.gui.components.AbstractWidget;
 import net.minecraft.client.gui.components.Button;
+import net.minecraft.client.gui.components.Tooltip;
+import net.minecraft.client.gui.narration.NarrationElementOutput;
 import net.minecraft.client.gui.screens.ChatScreen;
 import net.minecraft.client.gui.screens.Screen;
+import net.minecraft.client.renderer.texture.TextureAtlasSprite;
 import net.minecraft.nbt.CompoundTag;
 import net.minecraft.nbt.ListTag;
 import net.minecraft.nbt.NbtOps;
 import net.minecraft.nbt.Tag;
 import net.minecraft.network.chat.Component;
+import net.minecraft.resources.ResourceKey;
 import net.minecraft.resources.ResourceLocation;
 import net.minecraft.util.Mth;
+import net.minecraft.util.RandomSource;
+import net.minecraft.world.level.Level;
 import net.neoforged.neoforge.client.gui.widget.ExtendedButton;
 import net.neoforged.neoforge.network.PacketDistributor;
 import org.apache.logging.log4j.LogManager;
@@ -29,6 +40,9 @@ import org.apache.logging.log4j.Logger;
 import java.util.ArrayList;
 import java.util.HashSet;
 import java.util.List;
+import java.util.Random;
+import java.util.stream.IntStream;
+import java.util.stream.Stream;
 
 public class DataCheckerScreen extends Screen
 {
@@ -75,6 +89,21 @@ public class DataCheckerScreen extends Screen
 			PacketDistributor.sendToServer(DataCheckerPackets.Request.create());
 		
 		componentChanged();
+		
+		LandChain landChain = SkaiaClient.getLandChain(this.minecraft.level.dimension());
+		List<ResourceKey<Level>> landKeys = landChain.lands();
+		List<LandWidget> landWidgets = new ArrayList<>();
+		SessionWidget sessionWidget = new SessionWidget(xOffset, yOffset, 100, 100, landWidgets);
+		addRenderableWidget(sessionWidget);
+		
+		for(int i = 0; i < landKeys.size(); i++)
+		{
+			ResourceKey<Level> landKey = landKeys.get(i);
+			LandWidget landWidget = new LandWidget(xOffset + 5, yOffset + 5 + (i * 15), landKey);
+			landWidgets.add(landWidget);
+			addRenderableWidget(landWidget);
+		}
+		
 	}
 	
 	@Override
@@ -102,7 +131,7 @@ public class DataCheckerScreen extends Screen
 			if(newIndex != index)
 			{
 				index = newIndex;
-				updateGuiButtons();
+				//updateGuiButtons();
 			}
 		}
 		
@@ -414,6 +443,86 @@ public class DataCheckerScreen extends Screen
 		}
 	}
 	
+	public static class SessionWidget extends AbstractWidget
+	{
+		public final List<LandWidget> landWidgets;
+		
+		public SessionWidget(int x, int y, int width, int height, List<LandWidget> landWidgets)
+		{
+			super(x, y, width, height, Component.empty());
+			this.landWidgets = landWidgets;
+		}
+		
+		@Override
+		protected void renderWidget(GuiGraphics guiGraphics, int mouseX, int mouseY, float partialTick)
+		{
+			int centerX = getX() + (width / 2);
+			int centerY = getY() + (height / 2);
+			
+			guiGraphics.fill(getX(), getY(), getX() + width, getY() + height, 0xFF111111);
+			
+			guiGraphics.blit(centerX - 10, centerY - 10, 0, 20, 20, LandSkySpriteUploader.getInstance().getSkaiaSprite());
+			guiGraphics.blit(centerX - 10, centerY + 15, 0, 4, 4, LandSkySpriteUploader.getInstance().getProspitSprite());
+			
+			guiGraphics.blit(centerX - 10, centerY + 15, 0, 4, 4, LandSkySpriteUploader.getInstance().getDerseSprite());
+		}
+		
+		@Override
+		protected void updateWidgetNarration(NarrationElementOutput narrationElementOutput)
+		{
+			this.defaultButtonNarrationText(narrationElementOutput);
+		}
+		
+		@Override
+		protected boolean isValidClickButton(int button)
+		{
+			return false;
+		}
+		
+		@Override
+		public boolean isActive()
+		{
+			boolean active = super.isActive();
+			landWidgets.forEach(landWidget -> landWidget.active = active);
+			
+			return active;
+		}
+	}
+	
+	public static class LandWidget extends AbstractWidget
+	{
+		public final ResourceKey<Level> land;
+		
+		public LandWidget(int x, int y, ResourceKey<Level> land)
+		{
+			super(x, y, 5, 5, Component.empty());
+			this.land = land;
+		}
+		
+		@Override
+		protected void renderWidget(GuiGraphics guiGraphics, int mouseX, int mouseY, float partialTick)
+		{
+			Random random = new Random(land.hashCode());
+			int index = random.nextInt(LandSkySpriteUploader.VARIANT_COUNT);
+			
+			LandTypePair landTypes = ClientDimensionData.getLandTypes(land);
+			
+			TextureAtlasSprite planetSprite = LandSkySpriteUploader.getInstance().getPlanetSprite(landTypes.getTerrain(), index);
+			TextureAtlasSprite overlaySprite = LandSkySpriteUploader.getInstance().getOverlaySprite(landTypes.getTitle(), index);
+			
+			guiGraphics.blit(getX(), getY(), 0, 10, 10, planetSprite);
+			guiGraphics.blit(getX(), getY(), 0, 10, 10, overlaySprite);
+			
+			setTooltip(Tooltip.create(landTypes.createNamedRandomly(RandomSource.create(0)).asComponentWithLandFont()));
+		}
+		
+		@Override
+		protected void updateWidgetNarration(NarrationElementOutput narrationElementOutput)
+		{
+			this.defaultButtonNarrationText(narrationElementOutput);
+		}
+	}
+	
 	public static class SessionComponent implements IDataComponent
 	{
 		List<IDataComponent> list = new ArrayList<>();
@@ -574,7 +683,7 @@ public class DataCheckerScreen extends Screen
 		@Override
 		public IDataComponent onButtonPressed()
 		{
-			ChatScreen chat = new ChatScreen("/grist @" + name + " get");
+			ChatScreen chat = new ChatScreen("/grist get @" + name);
 			Minecraft.getInstance().setScreen(chat);
 			return null;
 		}

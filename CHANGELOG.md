@@ -21,6 +21,7 @@ The format is based on [Keep a Changelog](https://keepachangelog.com/en/1.1.0/).
 
 - Fixed server tick crash related to kernelsprite dialogue
 - Fixed certain block not being in their relevant tag
+- Fixed `View Grist Cache` button in Data Checker giving an incorrectly formatted command
 
 ### Contributors for this release
 
