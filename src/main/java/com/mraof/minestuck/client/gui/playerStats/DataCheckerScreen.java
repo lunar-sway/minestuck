@@ -61,12 +61,12 @@ public class DataCheckerScreen extends Screen
 	@Override
 	public void init()
 	{
-		int xOffset = (width - GUI_WIDTH)/2;
-		int yOffset = (height - GUI_HEIGHT)/2;
+		int xOffset = (width - GUI_WIDTH) / 2;
+		int yOffset = (height - GUI_HEIGHT) / 2;
 		for(int i = 0; i < 5; i++)
 		{
 			final int id = i;
-			contentButtons[id] = addRenderableWidget(new ExtendedButton(xOffset + 5, yOffset + LIST_Y + i*22, 180, 20, Component.empty(), button -> contentButton(id)));
+			contentButtons[id] = addRenderableWidget(new ExtendedButton(xOffset + 5, yOffset + LIST_Y + i * 22, 180, 20, Component.empty(), button -> contentButton(id)));
 		}
 		returnButton = addRenderableWidget(Button.builder(Component.empty(), button -> goBack()).pos(xOffset + GUI_WIDTH - 25, yOffset + 5).size(18, 18).build());
 		refreshButton = addRenderableWidget(Button.builder(Component.empty(), button -> refresh()).pos(xOffset + GUI_WIDTH - 45, yOffset + 5).size(18, 18).build());
@@ -82,17 +82,17 @@ public class DataCheckerScreen extends Screen
 	{
 		super.renderBackground(guiGraphics, mouseX, mouseY, partialTicks);
 		
-		int xOffset = (width - GUI_WIDTH)/2;
-		int yOffset = (height - GUI_HEIGHT)/2;
+		int xOffset = (width - GUI_WIDTH) / 2;
+		int yOffset = (height - GUI_HEIGHT) / 2;
 		guiGraphics.blit(guiBackground, xOffset, yOffset, 0, 0, GUI_WIDTH, GUI_HEIGHT);
 	}
 	
 	@Override
 	public void render(GuiGraphics guiGraphics, int mouseX, int mouseY, float partialTicks)
 	{
-		int xOffset = (width - GUI_WIDTH)/2;
-		int yOffset = (height - GUI_HEIGHT)/2;
-		boolean canScroll = guiComponent != null && guiComponent.getComponentList().size() > 5 ? true : false;
+		int xOffset = (width - GUI_WIDTH) / 2;
+		int yOffset = (height - GUI_HEIGHT) / 2;
+		boolean canScroll = guiComponent != null && guiComponent.getComponentList().size() > 5;
 		
 		if(canScroll && isScrolling)
 		{
@@ -123,20 +123,21 @@ public class DataCheckerScreen extends Screen
 			List<IDataComponent> list = guiComponent.getComponentList();
 			for(int i = 0; i < 5; i++)
 			{
-				guiGraphics.drawString(font, guiComponent.getName(), xOffset + 9, yOffset + 15 - font.lineHeight/2, 0, false);
+				guiGraphics.drawString(font, guiComponent.getName(), xOffset + 9, yOffset + 15 - font.lineHeight / 2, 0, false);
 				IDataComponent component = i + index < list.size() ? list.get(i + index) : null;
 				if(component != null && !component.isButton())
 				{
 					RenderSystem.setShaderColor(1, 1, 1, 1);
-					guiGraphics.blit(guiBackground, xOffset + 5, yOffset + LIST_Y + i*22, 0, 236, 180, 20);
-					guiGraphics.drawString(font, component.getName(), xOffset + 9, yOffset + LIST_Y + 10 - font.lineHeight/2 + i*22, 0, false);
+					guiGraphics.blit(guiBackground, xOffset + 5, yOffset + LIST_Y + i * 22, 0, 236, 180, 20);
+					guiGraphics.drawString(font, component.getName(), xOffset + 9, yOffset + LIST_Y + 10 - font.lineHeight / 2 + i * 22, 0, false);
 				}
 			}
-		} else guiGraphics.drawString(font, "Retrieving data from server...", xOffset + 9, yOffset + 15 - font.lineHeight/2, 0, false);
+		} else
+			guiGraphics.drawString(font, "Retrieving data from server...", xOffset + 9, yOffset + 15 - font.lineHeight / 2, 0, false);
 		
 		RenderSystem.setShaderColor(1, 1, 1, 1);
 		int textureIndex = canScroll ? 232 : 244;
-		guiGraphics.blit(guiBackground, (width - GUI_WIDTH)/2 + 190, (height - GUI_HEIGHT)/2 + LIST_Y + 1 + (int) displayIndex*91, textureIndex, 0, 12, 15);
+		guiGraphics.blit(guiBackground, (width - GUI_WIDTH) / 2 + 190, (height - GUI_HEIGHT) / 2 + LIST_Y + 1 + (int) displayIndex * 91, textureIndex, 0, 12, 15);
 	}
 	
 	@Override
@@ -165,7 +166,7 @@ public class DataCheckerScreen extends Screen
 			
 			if(index != prevIndex)
 			{
-				displayIndex = index/((float) size - 5);
+				displayIndex = index / ((float) size - 5);
 				updateGuiButtons();
 			}
 			return true;
@@ -175,8 +176,8 @@ public class DataCheckerScreen extends Screen
 	@Override
 	public boolean mouseClicked(double mouseX, double mouseY, int mouseButton)
 	{
-		int xOffset = (width - GUI_WIDTH)/2;
-		int yOffset = (height - GUI_HEIGHT)/2;
+		int xOffset = (width - GUI_WIDTH) / 2;
+		int yOffset = (height - GUI_HEIGHT) / 2;
 		if(mouseButton == 0 && mouseX >= xOffset + 190 && mouseX < xOffset + 202 && mouseY >= yOffset + LIST_Y + 1 && mouseY < yOffset + LIST_Y + 102)
 		{
 			isScrolling = true;
@@ -263,8 +264,7 @@ public class DataCheckerScreen extends Screen
 		{
 			minecraft.setScreen(null);
 			return true;
-		}
-		else return super.keyPressed(keyCode, scanCode, i);
+		} else return super.keyPressed(keyCode, scanCode, i);
 	}
 	
 	public interface IDataComponent
@@ -288,6 +288,7 @@ public class DataCheckerScreen extends Screen
 		{
 			this(String.format(message, args));
 		}
+		
 		public TextField(String message)
 		{
 			this.message = message;
@@ -298,21 +299,25 @@ public class DataCheckerScreen extends Screen
 		{
 			return null;
 		}
+		
 		@Override
 		public List<IDataComponent> getComponentList()
 		{
 			return null;
 		}
+		
 		@Override
 		public IDataComponent onButtonPressed()
 		{
 			return null;
 		}
+		
 		@Override
 		public boolean isButton()
 		{
 			return false;
 		}
+		
 		@Override
 		public String getName()
 		{
@@ -332,21 +337,25 @@ public class DataCheckerScreen extends Screen
 		{
 			return null;
 		}
+		
 		@Override
 		public List<IDataComponent> getComponentList()
 		{
 			return null;
 		}
+		
 		@Override
 		public IDataComponent onButtonPressed()
 		{
 			return null;
 		}
+		
 		@Override
 		public boolean isButton()
 		{
 			return false;
 		}
+		
 		@Override
 		public String getName()
 		{
@@ -379,25 +388,29 @@ public class DataCheckerScreen extends Screen
 		{
 			return null;
 		}
+		
 		@Override
 		public List<IDataComponent> getComponentList()
 		{
 			return list;
 		}
+		
 		@Override
 		public IDataComponent onButtonPressed()
 		{
 			return this;
 		}
+		
 		@Override
 		public boolean isButton()
 		{
 			return true;
 		}
+		
 		@Override
 		public String getName()
 		{
-			return "Data Checker";	//Either "Data Checker" or "Sessions"
+			return "Data Checker";    //Either "Data Checker" or "Sessions"
 		}
 	}
 	
@@ -433,21 +446,25 @@ public class DataCheckerScreen extends Screen
 		{
 			return parent;
 		}
+		
 		@Override
 		public List<IDataComponent> getComponentList()
 		{
 			return list;
 		}
+		
 		@Override
 		public IDataComponent onButtonPressed()
 		{
 			return this;
 		}
+		
 		@Override
 		public boolean isButton()
 		{
 			return true;
 		}
+		
 		@Override
 		public String getName()
 		{
@@ -499,26 +516,31 @@ public class DataCheckerScreen extends Screen
 			
 			list.add(new GristCacheButton(connectionTag.getString("clientId")));
 		}
+		
 		@Override
 		public IDataComponent getParentComponent()
 		{
 			return parent;
 		}
+		
 		@Override
 		public List<IDataComponent> getComponentList()
 		{
 			return list;
 		}
+		
 		@Override
 		public IDataComponent onButtonPressed()
 		{
 			return this;
 		}
+		
 		@Override
 		public boolean isButton()
 		{
 			return true;
 		}
+		
 		@Override
 		public String getName()
 		{
@@ -531,32 +553,38 @@ public class DataCheckerScreen extends Screen
 	public static class GristCacheButton implements IDataComponent
 	{
 		String name;
+		
 		public GristCacheButton(String name)
 		{
 			this.name = name;
 		}
+		
 		@Override
 		public IDataComponent getParentComponent()
 		{
 			return null;
 		}
+		
 		@Override
 		public List<IDataComponent> getComponentList()
 		{
 			return null;
 		}
+		
 		@Override
 		public IDataComponent onButtonPressed()
 		{
-			ChatScreen chat = new ChatScreen("/grist @"+name+" get");
+			ChatScreen chat = new ChatScreen("/grist @" + name + " get");
 			Minecraft.getInstance().setScreen(chat);
 			return null;
 		}
+		
 		@Override
 		public boolean isButton()
 		{
 			return true;
 		}
+		
 		@Override
 		public String getName()
 		{
