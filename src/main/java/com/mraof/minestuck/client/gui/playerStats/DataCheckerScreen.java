@@ -41,8 +41,6 @@ import java.util.ArrayList;
 import java.util.HashSet;
 import java.util.List;
 import java.util.Random;
-import java.util.stream.IntStream;
-import java.util.stream.Stream;
 
 public class DataCheckerScreen extends Screen
 {
@@ -52,6 +50,8 @@ public class DataCheckerScreen extends Screen
 	private static final ResourceLocation guiBackground = ResourceLocation.fromNamespaceAndPath("minestuck", "textures/gui/data_check.png");
 	private static final int GUI_WIDTH = 210, GUI_HEIGHT = 140;
 	private static final int LIST_Y = 25;
+	
+	private static final int LAND_RADIUS = 50;
 	
 	public static IDataComponent activeComponent = null;
 	private IDataComponent guiComponent;
@@ -77,11 +77,12 @@ public class DataCheckerScreen extends Screen
 	{
 		int xOffset = (width - GUI_WIDTH) / 2;
 		int yOffset = (height - GUI_HEIGHT) / 2;
-		for(int i = 0; i < 5; i++)
+		/*for(int i = 0; i < 5; i++)
 		{
 			final int id = i;
 			contentButtons[id] = addRenderableWidget(new ExtendedButton(xOffset + 5, yOffset + LIST_Y + i * 22, 180, 20, Component.empty(), button -> contentButton(id)));
 		}
+		*/
 		returnButton = addRenderableWidget(Button.builder(Component.empty(), button -> goBack()).pos(xOffset + GUI_WIDTH - 25, yOffset + 5).size(18, 18).build());
 		refreshButton = addRenderableWidget(Button.builder(Component.empty(), button -> refresh()).pos(xOffset + GUI_WIDTH - 45, yOffset + 5).size(18, 18).build());
 		
@@ -90,20 +91,44 @@ public class DataCheckerScreen extends Screen
 		
 		componentChanged();
 		
+		buildWidgets(xOffset, yOffset);
+	}
+	
+	private void buildWidgets(int xOffset, int yOffset)
+	{
 		LandChain landChain = SkaiaClient.getLandChain(this.minecraft.level.dimension());
 		List<ResourceKey<Level>> landKeys = landChain.lands();
 		List<LandWidget> landWidgets = new ArrayList<>();
-		SessionWidget sessionWidget = new SessionWidget(xOffset, yOffset, 100, 100, landWidgets);
+		SessionWidget sessionWidget = new SessionWidget(xOffset + 5, yOffset + 5, GUI_HEIGHT - 10, landWidgets, landChain.isLoop());
 		addRenderableWidget(sessionWidget);
+		
+		//leaves a space open visually if the loop is not closed
+		int landPositionCount = landKeys.size() + (landChain.isLoop() ? 0 : 1);
+		int size = Math.clamp(landPositionCount / 4, 8, 12);
+		int spriteOffset = size / 2;
 		
 		for(int i = 0; i < landKeys.size(); i++)
 		{
 			ResourceKey<Level> landKey = landKeys.get(i);
-			LandWidget landWidget = new LandWidget(xOffset + 5, yOffset + 5 + (i * 15), landKey);
+			
+			float rotation = ((float) i / landPositionCount) * 360;
+			int landX = getXOnRadius(sessionWidget.getCenterX(), LAND_RADIUS, rotation) - spriteOffset;
+			int landY = getYOnRadius(sessionWidget.getCenterY(), LAND_RADIUS, rotation) - spriteOffset;
+			
+			LandWidget landWidget = new LandWidget(landX, landY, size, landKey);
 			landWidgets.add(landWidget);
 			addRenderableWidget(landWidget);
 		}
-		
+	}
+	
+	private static int getXOnRadius(int center, int radius, float rotation)
+	{
+		return (int) (center + radius * Math.cos(Math.toRadians(rotation)));
+	}
+	
+	private static int getYOnRadius(int center, int radius, float rotation)
+	{
+		return (int) (center + radius * Math.sin(Math.toRadians(rotation)));
 	}
 	
 	@Override
@@ -267,7 +292,7 @@ public class DataCheckerScreen extends Screen
 	
 	public void updateGuiButtons()
 	{
-		if(guiComponent != null)
+		/*if(guiComponent != null)
 		{
 			List<IDataComponent> components = guiComponent.getComponentList();
 			
@@ -283,7 +308,7 @@ public class DataCheckerScreen extends Screen
 				} else button.visible = false;
 			}
 		} else for(Button button : contentButtons)
-			button.visible = false;
+			button.visible = false;*/
 	}
 	
 	@Override
@@ -443,34 +468,43 @@ public class DataCheckerScreen extends Screen
 		}
 	}
 	
-	public static class SessionWidget extends AbstractWidget
+	public static class SessionWidget extends IncipisphereWidget
 	{
 		public final List<LandWidget> landWidgets;
+		public final boolean isOpen;
 		
-		public SessionWidget(int x, int y, int width, int height, List<LandWidget> landWidgets)
+		public SessionWidget(int x, int y, int size, List<LandWidget> landWidgets, boolean isOpen)
 		{
-			super(x, y, width, height, Component.empty());
+			super(x, y, size);
 			this.landWidgets = landWidgets;
+			this.isOpen = isOpen;
 		}
 		
 		@Override
 		protected void renderWidget(GuiGraphics guiGraphics, int mouseX, int mouseY, float partialTick)
 		{
-			int centerX = getX() + (width / 2);
-			int centerY = getY() + (height / 2);
-			
 			guiGraphics.fill(getX(), getY(), getX() + width, getY() + height, 0xFF111111);
 			
-			guiGraphics.blit(centerX - 10, centerY - 10, 0, 20, 20, LandSkySpriteUploader.getInstance().getSkaiaSprite());
-			guiGraphics.blit(centerX - 10, centerY + 15, 0, 4, 4, LandSkySpriteUploader.getInstance().getProspitSprite());
+			RandomSource randomSource = RandomSource.create(0);
 			
-			guiGraphics.blit(centerX - 10, centerY + 15, 0, 4, 4, LandSkySpriteUploader.getInstance().getDerseSprite());
-		}
-		
-		@Override
-		protected void updateWidgetNarration(NarrationElementOutput narrationElementOutput)
-		{
-			this.defaultButtonNarrationText(narrationElementOutput);
+			int meteorCount = 200;
+			for(int i = 0; i < meteorCount; i++)
+			{
+				float rotation = ((float) i / meteorCount) * 360;
+				int veilX = getXOnRadius(getCenterX(), (int) (LAND_RADIUS * 1.2), rotation) + randomSource.nextIntBetweenInclusive(-3, 3);
+				int veilY = getYOnRadius(getCenterY(), (int) (LAND_RADIUS * 1.2), rotation) + randomSource.nextIntBetweenInclusive(-3, 3);
+				guiGraphics.fill(veilX, veilY, veilX + 1, veilY + 1, randomSource.nextBoolean() ? 0xFFFFFFFF : 0xFFDDDDDD);
+			}
+			
+			int skaiaSize = 16;
+			int kingdomSize = 4;
+			guiGraphics.blit(getCenterX() - skaiaSize / 2, getCenterY() - skaiaSize / 2, 0, skaiaSize, skaiaSize, LandSkySpriteUploader.getInstance().getSkaiaSprite());
+			guiGraphics.blit(getCenterX() + 13, getCenterY() - 5, 0, kingdomSize, kingdomSize, LandSkySpriteUploader.getInstance().getProspitSprite());
+			
+			guiGraphics.blit(getX() + 10, getY() + height - 10, 0, kingdomSize, kingdomSize, LandSkySpriteUploader.getInstance().getDerseSprite());
+			
+			//if(isOpen)
+			//	guiGraphics.blitSprite(GristType.DUMMY_ICON_LOCATION, getX() + 10, getY() + height - 10, 0, 4, 4);
 		}
 		
 		@Override
@@ -489,14 +523,18 @@ public class DataCheckerScreen extends Screen
 		}
 	}
 	
-	public static class LandWidget extends AbstractWidget
+	public static class LandWidget extends IncipisphereWidget
 	{
 		public final ResourceKey<Level> land;
+		public final LandTypePair landTypes;
 		
-		public LandWidget(int x, int y, ResourceKey<Level> land)
+		public LandWidget(int x, int y, int size, ResourceKey<Level> land)
 		{
-			super(x, y, 5, 5, Component.empty());
+			super(x, y, size);
 			this.land = land;
+			this.landTypes = ClientDimensionData.getLandTypes(land);
+			
+			setTooltip(Tooltip.create(landTypes.createNamedRandomly(RandomSource.create(0)).asComponentWithLandFont()));
 		}
 		
 		@Override
@@ -505,21 +543,43 @@ public class DataCheckerScreen extends Screen
 			Random random = new Random(land.hashCode());
 			int index = random.nextInt(LandSkySpriteUploader.VARIANT_COUNT);
 			
-			LandTypePair landTypes = ClientDimensionData.getLandTypes(land);
-			
 			TextureAtlasSprite planetSprite = LandSkySpriteUploader.getInstance().getPlanetSprite(landTypes.getTerrain(), index);
 			TextureAtlasSprite overlaySprite = LandSkySpriteUploader.getInstance().getOverlaySprite(landTypes.getTitle(), index);
 			
-			guiGraphics.blit(getX(), getY(), 0, 10, 10, planetSprite);
-			guiGraphics.blit(getX(), getY(), 0, 10, 10, overlaySprite);
-			
-			setTooltip(Tooltip.create(landTypes.createNamedRandomly(RandomSource.create(0)).asComponentWithLandFont()));
+			guiGraphics.blit(getX(), getY(), 0, size, size, planetSprite);
+			guiGraphics.blit(getX(), getY(), 0, size, size, overlaySprite);
+		}
+	}
+	
+	public static class IncipisphereWidget extends AbstractWidget
+	{
+		public int size;
+		
+		public IncipisphereWidget(int x, int y, int size)
+		{
+			super(x, y, size, size, Component.empty());
+			this.size = size;
+		}
+		
+		@Override
+		protected void renderWidget(GuiGraphics guiGraphics, int mouseX, int mouseY, float partialTick)
+		{
 		}
 		
 		@Override
 		protected void updateWidgetNarration(NarrationElementOutput narrationElementOutput)
 		{
 			this.defaultButtonNarrationText(narrationElementOutput);
+		}
+		
+		public int getCenterX()
+		{
+			return getX() + (width / 2);
+		}
+		
+		public int getCenterY()
+		{
+			return getY() + (height / 2);
 		}
 	}
 	
