@@ -2,8 +2,13 @@ package com.mraof.minestuck.client;
 
 import com.mraof.minestuck.Minestuck;
 import com.mraof.minestuck.MinestuckConfig;
+import com.mraof.minestuck.entity.MeteorEntity;
 import com.mraof.minestuck.entry.meteor.MeteorManager;
 import net.minecraft.client.Minecraft;
+import net.minecraft.util.Mth;
+import net.minecraft.world.level.entity.EntityTypeTest;
+import net.minecraft.world.phys.AABB;
+import net.minecraft.world.phys.Vec3;
 import net.neoforged.api.distmarker.Dist;
 import net.neoforged.bus.api.SubscribeEvent;
 import net.neoforged.fml.common.EventBusSubscriber;
@@ -12,6 +17,7 @@ import net.neoforged.neoforge.client.event.ViewportEvent;
 @EventBusSubscriber(modid = Minestuck.MOD_ID, bus = EventBusSubscriber.Bus.GAME, value = Dist.CLIENT)
 public class MeteorScreenShake
 {
+	private static final double SHAKE_RADIUS = 300.0;
 	private static float miniImpactShake = 0.0f;
 	private static int miniImpactTicks = 0;
 	
@@ -29,20 +35,26 @@ public class MeteorScreenShake
 	public static void onCameraSetup(ViewportEvent.ComputeCameraAngles event)
 	{
 		if(!MinestuckConfig.CLIENT.impactScreenShake.get()) return;
-		if(!MeteorClientHandler.hasActiveMeteor()) return;
 		
 		Minecraft mc = Minecraft.getInstance();
-		if(mc.level == null) return;
+		if(mc.level == null || mc.player == null) return;
 		
-		int ticksElapsed = MeteorClientHandler.getLocalPlayerMeteorTicks();
-		int totalTicks = MeteorManager.TOTAL_TICKS;
-		int ticksLeft = totalTicks - ticksElapsed;
+		Vec3 camPos = mc.gameRenderer.getMainCamera().getPosition();
+		AABB search = new AABB(camPos, camPos).inflate(SHAKE_RADIUS);
 		
 		float meteorShake = 0.0f;
-		if(ticksLeft <= 600)
+		for(MeteorEntity meteor : mc.level.getEntities(EntityTypeTest.forClass(MeteorEntity.class), search, e -> true))
 		{
+			int ticksLeft = MeteorManager.TOTAL_TICKS - meteor.getTicksElapsed();
+			if(ticksLeft > 600) continue;
+			
 			float shakeProgress = 1.0f - (float) ticksLeft / 600.0f;
-			meteorShake = shakeProgress * shakeProgress * 0.3f;
+			float baseShake = shakeProgress * shakeProgress * 0.3f;
+			
+			double distance = camPos.distanceTo(meteor.position());
+			float falloff = Mth.clamp((float) (1.0 - distance / SHAKE_RADIUS), 0.0f, 1.0f);
+			
+			meteorShake += baseShake * falloff;
 		}
 		
 		float currentMiniShake = 0.0f;

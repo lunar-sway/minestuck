@@ -52,9 +52,9 @@ public class MeteorManager extends SavedData
 	 */
 	public static final int TOTAL_TICKS = 5060;
 	/**
-	 * Theme starts 55 seconds before impact = 1140 ticks before end
+	 * Theme starts 1 minute before impact = 1200 ticks before end
 	 */
-	public static final int MUSIC_TRIGGER_TICKS = TOTAL_TICKS - 1140;
+	public static final int MUSIC_TRIGGER_TICKS = TOTAL_TICKS - 1200;
 	/**
 	 * Final acceleration phase: 10-15 seconds before impact = ~300 ticks
 	 */
@@ -373,12 +373,10 @@ public class MeteorManager extends SavedData
 		double targetZ = center.getZ() + 0.5 + Math.sin(angle) * dist;
 		double targetY = level.getHeight(Types.MOTION_BLOCKING, (int) targetX, (int) targetZ);
 		
-		double spawnOffsetX = (level.random.nextDouble() - 0.5) * 30;
-		double spawnOffsetZ = (level.random.nextDouble() - 0.5) * 30;
 		double spawnY = targetY + 60 + level.random.nextDouble() * 30;
 		
 		MiniMeteorEntity mini = new MiniMeteorEntity(MSEntityTypes.MINI_METEOR.get(), level);
-		mini.moveTo(targetX + spawnOffsetX, spawnY, targetZ + spawnOffsetZ);
+		mini.moveTo(targetX, spawnY, targetZ);
 		mini.setTargetPos(new BlockPos((int) targetX, (int) targetY, (int) targetZ));
 		level.addFreshEntity(mini);
 	}
@@ -431,6 +429,23 @@ public class MeteorManager extends SavedData
 				double ox = (level.random.nextDouble() - 0.5) * craterRadius * 2;
 				double oz = (level.random.nextDouble() - 0.5) * craterRadius * 2;
 				level.explode(null, impactPos.getX() + ox, impactPos.getY() + 2, impactPos.getZ() + oz, 4.0f + meteorSize, Level.ExplosionInteraction.TNT);
+			}
+			
+			int shaftRadius = 5;
+			int shaftHeight = 80;
+			for(int dy = 1; dy <= shaftHeight; dy++)
+			{
+				for(int dx = -shaftRadius; dx <= shaftRadius; dx++)
+				{
+					for(int dz = -shaftRadius; dz <= shaftRadius; dz++)
+					{
+						if(dx * dx + dz * dz > shaftRadius * shaftRadius) continue;
+						BlockPos shaftPos = impactPos.offset(dx, dy, dz);
+						net.minecraft.world.level.block.state.BlockState shaftState = level.getBlockState(shaftPos);
+						if(shaftState.getDestroySpeed(level, shaftPos) >= 0)
+							level.setBlock(shaftPos, AIR.defaultBlockState(), UPDATE_CLIENTS);
+					}
+				}
 			}
 			
 			int entityRange = SERVER.artifactRange.get() + 10;
@@ -509,7 +524,6 @@ public class MeteorManager extends SavedData
 		private final BlockPos impactPos;
 		private final int craterRadius;
 		private final long estimatedTotalPositions;
-		private static final int SHAFT_HEIGHT = 80;
 		
 		private long blocksProcessed = 0;
 		private int tickCallCount = 0;
@@ -538,14 +552,13 @@ public class MeteorManager extends SavedData
 		private static long estimateTotalPositions(int craterRadius)
 		{
 			long sideXZ = (long) craterRadius * 2 + 1;
-			long heightBelow = craterRadius + 1L;
-			long heightAbove = SHAFT_HEIGHT;
-			return sideXZ * sideXZ * (heightBelow + heightAbove);
+			long heightY = craterRadius + 1L;
+			return sideXZ * sideXZ * heightY;
 		}
 		
 		private Iterator<? extends BlockPos> newIterator()
 		{
-			return betweenClosed(impactPos.offset(-craterRadius, -craterRadius, -craterRadius), impactPos.offset(craterRadius, SHAFT_HEIGHT, craterRadius)).iterator();
+			return betweenClosed(impactPos.offset(-craterRadius, -craterRadius, -craterRadius), impactPos.offset(craterRadius, 0, craterRadius)).iterator();
 		}
 		
 		private void fastForward(long count)
@@ -584,17 +597,10 @@ public class MeteorManager extends SavedData
 				double dy = pos.getY() - impactPos.getY();
 				double dz = pos.getZ() - impactPos.getZ();
 				
-				if (dy <= 0){
-					if(dx * dx + dy * dy + dz * dz <= (double) craterRadius * craterRadius)
-					{
-						net.minecraft.world.level.block.state.BlockState state = level.getBlockState(pos);
-						if(state.getDestroySpeed(level, pos) >= 0)
-						{
-							level.setBlock(pos.immutable(), AIR.defaultBlockState(), UPDATE_CLIENTS);
-						}
-					}
-				} else {
-					if(dx * dx + dz * dz <= (double) craterRadius * craterRadius)
+				if(dx * dx + dy * dy + dz * dz <= (double) craterRadius * craterRadius)
+				{
+					net.minecraft.world.level.block.state.BlockState state = level.getBlockState(pos);
+					if(state.getDestroySpeed(level, pos) >= 0)
 					{
 						level.setBlock(pos.immutable(), AIR.defaultBlockState(), UPDATE_CLIENTS);
 					}
