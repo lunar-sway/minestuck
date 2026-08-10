@@ -192,7 +192,13 @@ public class EcheladderScreen extends PlayerStatsScreen
 		float scrollPercentage = (float) scroll / maxScroll;
 		guiGraphics.blit(guiEcheladder, xOffset + 86, (int) (yOffset + 42 + (130F * (1F - scrollPercentage))), 0, 243, 7, 13);
 		
-		renderPlayerModel(guiGraphics, mouseX, mouseY);
+		if (MinestuckConfig.CLIENT.echeladderPlayerFrameBorders.get())
+		{
+			renderPlayerBeyondBorders(guiGraphics, mouseX, mouseY);
+		} else {
+			renderPlayerWithinBorders(guiGraphics, mouseX, mouseY);
+		}
+		
 		List<Component> tooltip = drawEffectIconsAndText(guiGraphics, currentRung, mouseX, mouseY);
 		
 		if(fromRung < currentRung)
@@ -297,21 +303,21 @@ public class EcheladderScreen extends PlayerStatsScreen
 	}
 	
 	// clean mode
-/*	private void renderPlayerModel(GuiGraphics guiGraphics, int mouseX, int mouseY)
+	private void renderPlayerWithinBorders(GuiGraphics guiGraphics, int mouseX, int mouseY)
 	{
-		int x1 = xOffset + 18;
+		int x1 = xOffset + 20;
 		int y1 = yOffset + 30;
-		int x2 = x1 + 52;
+		int x2 = x1 + 49;
 		int y2 = y1 + 49;
 		int scale = 50;
 		
 		InventoryScreen.renderEntityInInventoryFollowsMouse(
 				guiGraphics, x1, y1, x2, y2, scale, 0.580F,
 				(float) mouseX, (float) mouseY, this.minecraft.player);
-	}*/
+	}
 	
 	// boderless mode
-	private void renderPlayerModel(GuiGraphics guiGraphics, int mouseX, int mouseY)
+	private void renderPlayerBeyondBorders(GuiGraphics guiGraphics, int mouseX, int mouseY)
 	{
 		int x1 = xOffset + 17;
 		int y1 = yOffset + 15;
