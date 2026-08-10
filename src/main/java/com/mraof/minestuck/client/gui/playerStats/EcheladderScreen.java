@@ -296,17 +296,40 @@ public class EcheladderScreen extends PlayerStatsScreen
 		}
 	}
 	
-	private void renderPlayerModel(GuiGraphics guiGraphics, int mouseX, int mouseY)
+	// clean mode
+/*	private void renderPlayerModel(GuiGraphics guiGraphics, int mouseX, int mouseY)
 	{
-		int x1 = xOffset + 19;
-		int y1 = yOffset + 29;
-		int x2 = x1 + 50;
-		int y2 = y1 + 50;
+		int x1 = xOffset + 18;
+		int y1 = yOffset + 30;
+		int x2 = x1 + 52;
+		int y2 = y1 + 49;
 		int scale = 50;
 		
 		InventoryScreen.renderEntityInInventoryFollowsMouse(
-				guiGraphics, x1, y1, x2, y2, scale, 0.6F,
+				guiGraphics, x1, y1, x2, y2, scale, 0.580F,
 				(float) mouseX, (float) mouseY, this.minecraft.player);
+	}*/
+	
+	// boderless mode
+	private void renderPlayerModel(GuiGraphics guiGraphics, int mouseX, int mouseY)
+	{
+		int x1 = xOffset + 17;
+		int y1 = yOffset + 15;
+		int x2 = x1 + 52;
+		int y2 = y1 + 64;
+		int scale = 50;
+		
+		int pad = 40;
+		int rx1 = x1 - pad;
+		int ry1 = y1 - pad;
+		int rx2 = x2 + pad;
+		int ry2 = y2 + pad;
+		
+		guiGraphics.enableScissor(rx1, ry1, x2, y2);
+		InventoryScreen.renderEntityInInventoryFollowsMouse(
+				guiGraphics, rx1, ry1, rx2, ry2, scale, 0.580F,
+				(float) mouseX, (float) mouseY, this.minecraft.player);
+		guiGraphics.disableScissor();
 	}
 	
 	private int getScrollMod()
