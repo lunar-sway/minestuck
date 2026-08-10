@@ -2,7 +2,6 @@ package com.mraof.minestuck.client.gui.playerStats;
 
 import com.mojang.blaze3d.platform.InputConstants;
 import com.mojang.blaze3d.systems.RenderSystem;
-import com.mraof.minestuck.client.ClientDimensionData;
 import com.mraof.minestuck.client.renderer.LandSkySpriteUploader;
 import com.mraof.minestuck.client.util.MSKeyHandler;
 import com.mraof.minestuck.network.DataCheckerPackets;
@@ -22,25 +21,24 @@ import net.minecraft.client.gui.narration.NarrationElementOutput;
 import net.minecraft.client.gui.screens.ChatScreen;
 import net.minecraft.client.gui.screens.Screen;
 import net.minecraft.client.renderer.texture.TextureAtlasSprite;
+import net.minecraft.core.registries.Registries;
 import net.minecraft.nbt.CompoundTag;
 import net.minecraft.nbt.ListTag;
 import net.minecraft.nbt.NbtOps;
 import net.minecraft.nbt.Tag;
 import net.minecraft.network.chat.Component;
+import net.minecraft.network.chat.MutableComponent;
+import net.minecraft.network.chat.Style;
 import net.minecraft.resources.ResourceKey;
 import net.minecraft.resources.ResourceLocation;
 import net.minecraft.util.Mth;
 import net.minecraft.util.RandomSource;
 import net.minecraft.world.level.Level;
-import net.neoforged.neoforge.client.gui.widget.ExtendedButton;
 import net.neoforged.neoforge.network.PacketDistributor;
 import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.Logger;
 
-import java.util.ArrayList;
-import java.util.HashSet;
-import java.util.List;
-import java.util.Random;
+import java.util.*;
 
 public class DataCheckerScreen extends Screen
 {
@@ -51,7 +49,7 @@ public class DataCheckerScreen extends Screen
 	private static final int GUI_WIDTH = 210, GUI_HEIGHT = 140;
 	private static final int LIST_Y = 25;
 	
-	private static final int LAND_RADIUS = 50;
+	private static final int LAND_RADIUS = 40;
 	
 	public static IDataComponent activeComponent = null;
 	private IDataComponent guiComponent;
@@ -96,7 +94,40 @@ public class DataCheckerScreen extends Screen
 	
 	private void buildWidgets(int xOffset, int yOffset)
 	{
-		LandChain landChain = SkaiaClient.getLandChain(this.minecraft.level.dimension());
+		if(!(activeComponent instanceof MainComponent mainComponent))
+			return;
+		
+		CompoundTag data = mainComponent.nbt;
+		
+		ListTag sessionList = data.getList("sessions", Tag.TAG_COMPOUND);
+		for(int sessionIt = 0; sessionIt < sessionList.size(); sessionIt++)
+		{
+			buildSession(sessionList, sessionIt, xOffset, yOffset);
+		}
+	}
+	
+	private void buildSession(ListTag sessionList, int sessionIt, int xOffset, int yOffset)
+	{
+		CompoundTag sessionTag = sessionList.getCompound(sessionIt);
+		
+		Map<ResourceKey<Level>, CompoundTag> connectionData = new HashMap<>();
+		ListTag connectionList = sessionTag.getList("connections", Tag.TAG_COMPOUND);
+		for(int connectionIt = 0; connectionIt < connectionList.size(); connectionIt++)
+		{
+			CompoundTag connectionTag = connectionList.getCompound(connectionIt);
+			
+			if(connectionTag.contains("clientDim"))
+			{
+				ResourceKey<Level> landKey = ResourceKey.create(Registries.DIMENSION, ResourceLocation.parse(connectionTag.getString("clientDim")));
+				connectionData.put(landKey, connectionTag);
+			}
+		}
+		
+		//dimension = Level.RESOURCE_KEY_CODEC.parse(NbtOps.INSTANCE, ).resultOrPartial(LOGGER::error).orElse(null);
+		//LandChain landChain = SkaiaClient.getLandChain(this.minecraft.level.dimension());
+		
+		//TODO use connections for list instead and have a blank representation if they havent Entered
+		LandChain landChain = SkaiaClient.getLandChain(connectionData.entrySet().stream().findFirst().get().getKey());
 		List<ResourceKey<Level>> landKeys = landChain.lands();
 		List<LandWidget> landWidgets = new ArrayList<>();
 		SessionWidget sessionWidget = new SessionWidget(xOffset + 5, yOffset + 5, GUI_HEIGHT - 10, landWidgets, landChain.isLoop());
@@ -104,18 +135,19 @@ public class DataCheckerScreen extends Screen
 		
 		//leaves a space open visually if the loop is not closed
 		int landPositionCount = landKeys.size() + (landChain.isLoop() ? 0 : 1);
-		int size = Math.clamp(landPositionCount / 4, 8, 12);
+		int size = Math.clamp(-(landPositionCount / 5) + 12, 8, 12);
 		int spriteOffset = size / 2;
 		
 		for(int i = 0; i < landKeys.size(); i++)
 		{
-			ResourceKey<Level> landKey = landKeys.get(i);
+			ResourceKey<Level> landKeyIt = landKeys.get(i);
 			
 			float rotation = ((float) i / landPositionCount) * 360;
 			int landX = getXOnRadius(sessionWidget.getCenterX(), LAND_RADIUS, rotation) - spriteOffset;
 			int landY = getYOnRadius(sessionWidget.getCenterY(), LAND_RADIUS, rotation) - spriteOffset;
 			
-			LandWidget landWidget = new LandWidget(landX, landY, size, landKey);
+			CompoundTag landNbt = connectionData.getOrDefault(landKeyIt, new CompoundTag());
+			LandWidget landWidget = new LandWidget(landX, landY, size, landKeyIt, landNbt);
 			landWidgets.add(landWidget);
 			addRenderableWidget(landWidget);
 		}
@@ -419,10 +451,13 @@ public class DataCheckerScreen extends Screen
 	
 	public static class MainComponent implements IDataComponent
 	{
+		public CompoundTag nbt;
 		List<IDataComponent> list = new ArrayList<IDataComponent>();
 		
 		public MainComponent(CompoundTag data)
 		{
+			nbt = data;
+			
 			if(data == null || data.isEmpty())
 				return;
 			
@@ -483,7 +518,8 @@ public class DataCheckerScreen extends Screen
 		@Override
 		protected void renderWidget(GuiGraphics guiGraphics, int mouseX, int mouseY, float partialTick)
 		{
-			guiGraphics.fill(getX(), getY(), getX() + width, getY() + height, 0xFF111111);
+			//backdrop
+			guiGraphics.fill(getX(), getY(), getX() + width, getY() + height, 0xFF000000);
 			
 			RandomSource randomSource = RandomSource.create(0);
 			
@@ -491,8 +527,8 @@ public class DataCheckerScreen extends Screen
 			for(int i = 0; i < meteorCount; i++)
 			{
 				float rotation = ((float) i / meteorCount) * 360;
-				int veilX = getXOnRadius(getCenterX(), (int) (LAND_RADIUS * 1.2), rotation) + randomSource.nextIntBetweenInclusive(-3, 3);
-				int veilY = getYOnRadius(getCenterY(), (int) (LAND_RADIUS * 1.2), rotation) + randomSource.nextIntBetweenInclusive(-3, 3);
+				int veilX = getXOnRadius(getCenterX(), (int) (LAND_RADIUS * 1.3), rotation) + randomSource.nextIntBetweenInclusive(-3, 3);
+				int veilY = getYOnRadius(getCenterY(), (int) (LAND_RADIUS * 1.3), rotation) + randomSource.nextIntBetweenInclusive(-3, 3);
 				guiGraphics.fill(veilX, veilY, veilX + 1, veilY + 1, randomSource.nextBoolean() ? 0xFFFFFFFF : 0xFFDDDDDD);
 			}
 			
@@ -503,6 +539,7 @@ public class DataCheckerScreen extends Screen
 			
 			guiGraphics.blit(getX() + 10, getY() + height - 10, 0, kingdomSize, kingdomSize, LandSkySpriteUploader.getInstance().getDerseSprite());
 			
+			//TODO replace with blank representation, handle on connection/land basis?
 			//if(isOpen)
 			//	guiGraphics.blitSprite(GristType.DUMMY_ICON_LOCATION, getX() + 10, getY() + height - 10, 0, 4, 4);
 		}
@@ -526,28 +563,64 @@ public class DataCheckerScreen extends Screen
 	public static class LandWidget extends IncipisphereWidget
 	{
 		public final ResourceKey<Level> land;
-		public final LandTypePair landTypes;
+		public final Optional<LandTypePair.Named> oNamed;
+		public final CompoundTag landNbt;
 		
-		public LandWidget(int x, int y, int size, ResourceKey<Level> land)
+		public LandWidget(int x, int y, int size, ResourceKey<Level> land, CompoundTag landNbt)
 		{
 			super(x, y, size);
 			this.land = land;
-			this.landTypes = ClientDimensionData.getLandTypes(land);
+			this.landNbt = landNbt;
 			
-			setTooltip(Tooltip.create(landTypes.createNamedRandomly(RandomSource.create(0)).asComponentWithLandFont()));
+			Optional<LandTypePair.Named> oNamed = Optional.empty();
+			if(land != null && landNbt.contains("landTypes"))
+				oNamed = LandTypePair.Named.CODEC.parse(NbtOps.INSTANCE, landNbt.get("landTypes")).resultOrPartial(LOGGER::error);
+			this.oNamed = oNamed;
+			
+			MutableComponent component = Component.empty();
+			
+			oNamed.ifPresent(named -> component.append(named.asComponentWithLandFont()));
+			component.append("\n" + landNbt.getString("client")).withStyle(Style.EMPTY);
+			component.append("\n\n" + "Server is " + landNbt.getString("server"));
+			component.append("\n" + "Is Primary Connection: " + landNbt.getBoolean("isMain"));
+			
+			setTooltip(Tooltip.create(component));
 		}
 		
 		@Override
 		protected void renderWidget(GuiGraphics guiGraphics, int mouseX, int mouseY, float partialTick)
 		{
-			Random random = new Random(land.hashCode());
-			int index = random.nextInt(LandSkySpriteUploader.VARIANT_COUNT);
+			if(!oNamed.isPresent())
+				return;
 			
-			TextureAtlasSprite planetSprite = LandSkySpriteUploader.getInstance().getPlanetSprite(landTypes.getTerrain(), index);
-			TextureAtlasSprite overlaySprite = LandSkySpriteUploader.getInstance().getOverlaySprite(landTypes.getTitle(), index);
+			LandTypePair.Named named = oNamed.get();
+			
+			//Random random = new Random(land.hashCode());
+			//int index = random.nextInt(LandSkySpriteUploader.VARIANT_COUNT);
+			
+			TextureAtlasSprite planetSprite = LandSkySpriteUploader.getInstance().getPlanetSprite(named.landTypes().getTerrain(), named.terrainNameIndex());
+			TextureAtlasSprite overlaySprite = LandSkySpriteUploader.getInstance().getOverlaySprite(named.landTypes().getTitle(), named.titleNameIndex());
 			
 			guiGraphics.blit(getX(), getY(), 0, size, size, planetSprite);
 			guiGraphics.blit(getX(), getY(), 0, size, size, overlaySprite);
+		}
+		
+		public void temp()
+		{
+			//list.add(new TextField("Land dim: %s", (!landDim.isEmpty() ? landDim : "Pre-entry")));
+			
+			if(landNbt.contains("class"))
+			{
+				byte cl = landNbt.getByte("class"), as = landNbt.getByte("aspect");
+				Title title = new Title(EnumClass.values()[cl], EnumAspect.values()[as]);
+			}
+			
+			//if(landNbt.contains("titleLandType"))
+			//String titleType = "Title land type: %s" + landNbt.getString("titleLandType");
+			//if(landNbt.contains("terrainLandType"))
+			//list.add(new TextField("Terrain land type: %s", landNbt.getString("terrainLandType")));
+			
+			//list.add(new GristCacheButton(landNbt.getString("clientId")));
 		}
 	}
 	
