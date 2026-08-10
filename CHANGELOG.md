@@ -19,7 +19,7 @@ The format is based on [Keep a Changelog](https://keepachangelog.com/en/1.1.0/).
 
 - Updated Grist Cache gui texture
 - Echeladder progression animation
-- Some of GUI textures (grist cache & strife specibus)
+- Some of header textures (grist cache & strife specibus)
 - Laptops can now be picked up
 - The range at which the Kernelsprite detects and travels to blocks has increased
 
