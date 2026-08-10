@@ -325,7 +325,7 @@ public class EcheladderScreen extends PlayerStatsScreen
 		int y2 = y1 + 64;
 		int scale = 50;
 		
-		int pad = 40;
+		int pad = 14;
 		int rx1 = x1 - pad;
 		int ry1 = y1 - pad;
 		int rx2 = x2 + pad;
