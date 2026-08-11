@@ -9,16 +9,13 @@ import com.mraof.minestuck.player.ClientPlayerData;
 import com.mraof.minestuck.player.EnumAspect;
 import com.mraof.minestuck.player.EnumClass;
 import com.mraof.minestuck.player.Title;
-import com.mraof.minestuck.skaianet.LandChain;
-import com.mraof.minestuck.skaianet.client.SkaiaClient;
 import com.mraof.minestuck.world.lands.LandTypePair;
-import net.minecraft.client.Minecraft;
+import net.minecraft.ChatFormatting;
 import net.minecraft.client.gui.GuiGraphics;
 import net.minecraft.client.gui.components.AbstractWidget;
 import net.minecraft.client.gui.components.Button;
 import net.minecraft.client.gui.components.Tooltip;
 import net.minecraft.client.gui.narration.NarrationElementOutput;
-import net.minecraft.client.gui.screens.ChatScreen;
 import net.minecraft.client.gui.screens.Screen;
 import net.minecraft.client.renderer.texture.TextureAtlasSprite;
 import net.minecraft.core.registries.Registries;
@@ -28,17 +25,18 @@ import net.minecraft.nbt.NbtOps;
 import net.minecraft.nbt.Tag;
 import net.minecraft.network.chat.Component;
 import net.minecraft.network.chat.MutableComponent;
-import net.minecraft.network.chat.Style;
 import net.minecraft.resources.ResourceKey;
 import net.minecraft.resources.ResourceLocation;
-import net.minecraft.util.Mth;
 import net.minecraft.util.RandomSource;
 import net.minecraft.world.level.Level;
+import net.neoforged.neoforge.client.gui.widget.ExtendedButton;
 import net.neoforged.neoforge.network.PacketDistributor;
 import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.Logger;
 
-import java.util.*;
+import java.util.ArrayList;
+import java.util.List;
+import java.util.Optional;
 
 public class DataCheckerScreen extends Screen
 {
@@ -55,6 +53,8 @@ public class DataCheckerScreen extends Screen
 	private Button refreshButton;
 	private int index;
 	private boolean isScrolling;
+	private int xOffset;
+	private int yOffset;
 	
 	public DataCheckerScreen()
 	{
@@ -70,68 +70,65 @@ public class DataCheckerScreen extends Screen
 	@Override
 	public void init()
 	{
-		int xOffset = (width - GUI_WIDTH) / 2;
-		int yOffset = (height - GUI_HEIGHT) / 2;
-		
-		refreshButton = addRenderableWidget(Button.builder(Component.empty(), button -> refresh()).pos(xOffset + GUI_WIDTH - 45, yOffset + 5).size(18, 18).build());
+		xOffset = (width - GUI_WIDTH) / 2;
+		yOffset = (height - GUI_HEIGHT) / 2;
 		
 		if(nbt.isEmpty())
 			PacketDistributor.sendToServer(DataCheckerPackets.Request.create());
 		
-		buildWidgets(xOffset, yOffset);
+		buildWidgets();
 	}
 	
-	private void buildWidgets(int xOffset, int yOffset)
+	private void buildWidgets()
 	{
+		//TODO window needs resizing or closed for session buttons to show up. Using refresh button does not work to refresh
+		refreshButton = addRenderableWidget(Button.builder(Component.empty(), button -> refresh()).pos(xOffset + GUI_WIDTH - 45, yOffset + 5).size(18, 18).build());
+		
 		ListTag sessionList = nbt.getList("sessions", Tag.TAG_COMPOUND);
+		List<SessionButton> buttons = new ArrayList<>();
+		
 		for(int sessionIt = 0; sessionIt < sessionList.size(); sessionIt++)
 		{
-			buildSession(sessionList, sessionIt, xOffset, yOffset);
+			CompoundTag sessionTag = sessionList.getCompound(sessionIt);
+			ListTag connectionTags = sessionTag.getList("connections", Tag.TAG_COMPOUND);
+			
+			boolean completed = false;
+			if(sessionTag.contains("completed"))
+				completed = sessionTag.getBoolean("completed");
+			
+			List<LandWidget> landWidgets = new ArrayList<>();
+			SessionWidget sessionWidget = new SessionWidget(xOffset + 5, yOffset + 5, GUI_HEIGHT - 10, landWidgets);
+			sessionWidget.visible = false;
+			sessionWidget.active = false;
+			addRenderableWidget(sessionWidget);
+			SessionButton sessionButton = new SessionButton(xOffset + GUI_HEIGHT - 4, yOffset + 24 + (sessionIt * 22), 56, 20, Component.literal("Session " + sessionIt), sessionWidget);
+			//TODO add player names to Session button
+			//sessionButton.setTooltip(Tooltip.create(Component.literal()));
+			addRenderableWidget(sessionButton);
+			buttons.add(sessionButton);
+			
+			buildLandWidgets(connectionTags, completed, sessionWidget, landWidgets);
 		}
 	}
 	
-	private void buildSession(ListTag sessionList, int sessionIt, int xOffset, int yOffset)
+	private void buildLandWidgets(ListTag connectionTags, boolean completed, SessionWidget sessionWidget, List<LandWidget> landWidgets)
 	{
-		CompoundTag sessionTag = sessionList.getCompound(sessionIt);
-		
-		Map<ResourceKey<Level>, CompoundTag> connectionData = new HashMap<>();
-		ListTag connectionList = sessionTag.getList("connections", Tag.TAG_COMPOUND);
-		for(int connectionIt = 0; connectionIt < connectionList.size(); connectionIt++)
-		{
-			CompoundTag connectionTag = connectionList.getCompound(connectionIt);
-			
-			if(connectionTag.contains("clientDim"))
-			{
-				ResourceKey<Level> landKey = ResourceKey.create(Registries.DIMENSION, ResourceLocation.parse(connectionTag.getString("clientDim")));
-				connectionData.put(landKey, connectionTag);
-			}
-		}
-		
-		//dimension = Level.RESOURCE_KEY_CODEC.parse(NbtOps.INSTANCE, ).resultOrPartial(LOGGER::error).orElse(null);
-		//LandChain landChain = SkaiaClient.getLandChain(this.minecraft.level.dimension());
-		
-		//TODO use connections for list instead and have a blank representation if they havent Entered
-		LandChain landChain = SkaiaClient.getLandChain(connectionData.entrySet().stream().findFirst().get().getKey());
-		List<ResourceKey<Level>> landKeys = landChain.lands();
-		List<LandWidget> landWidgets = new ArrayList<>();
-		SessionWidget sessionWidget = new SessionWidget(xOffset + 5, yOffset + 5, GUI_HEIGHT - 10, landWidgets, landChain.isLoop());
-		addRenderableWidget(sessionWidget);
-		
-		//leaves a space open visually if the loop is not closed
-		int landPositionCount = landKeys.size() + (landChain.isLoop() ? 0 : 1);
-		int size = Math.clamp(-(landPositionCount / 5) + 12, 8, 12);
+		//leave a space open visually if the loop is not closed
+		int landPositionCount = connectionTags.size() + (completed ? 0 : 1);
+		int size = Math.clamp(-(landPositionCount / 5) + 14, 6, 14);
 		int spriteOffset = size / 2;
 		
-		for(int i = 0; i < landKeys.size(); i++)
+		for(int connectionIt = 0; connectionIt < connectionTags.size(); connectionIt++)
 		{
-			ResourceKey<Level> landKeyIt = landKeys.get(i);
+			CompoundTag connectionTag = connectionTags.getCompound(connectionIt);
 			
-			float rotation = ((float) i / landPositionCount) * 360;
+			float rotation = ((float) connectionIt / landPositionCount) * 360;
 			int landX = getXOnRadius(sessionWidget.getCenterX(), LAND_RADIUS, rotation) - spriteOffset;
 			int landY = getYOnRadius(sessionWidget.getCenterY(), LAND_RADIUS, rotation) - spriteOffset;
 			
-			CompoundTag landNbt = connectionData.getOrDefault(landKeyIt, new CompoundTag());
-			LandWidget landWidget = new LandWidget(landX, landY, size, landKeyIt, landNbt);
+			LandWidget landWidget = new LandWidget(landX, landY, size, connectionTag);
+			landWidget.visible = false;
+			landWidget.active = false;
 			landWidgets.add(landWidget);
 			addRenderableWidget(landWidget);
 		}
@@ -152,16 +149,14 @@ public class DataCheckerScreen extends Screen
 	{
 		super.renderBackground(guiGraphics, mouseX, mouseY, partialTicks);
 		
-		int xOffset = (width - GUI_WIDTH) / 2;
-		int yOffset = (height - GUI_HEIGHT) / 2;
 		guiGraphics.blit(guiBackground, xOffset, yOffset, 0, 0, GUI_WIDTH, GUI_HEIGHT);
 	}
 	
 	@Override
 	public void render(GuiGraphics guiGraphics, int mouseX, int mouseY, float partialTicks)
 	{
-		int xOffset = (width - GUI_WIDTH) / 2;
-		int yOffset = (height - GUI_HEIGHT) / 2;
+		xOffset = (width - GUI_WIDTH) / 2;
+		yOffset = (height - GUI_HEIGHT) / 2;
 		/*boolean canScroll = guiComponent != null && guiComponent.getComponentList().size() > 5;
 		
 		if(canScroll && isScrolling)
@@ -268,6 +263,8 @@ public class DataCheckerScreen extends Screen
 	{
 		PacketDistributor.sendToServer(DataCheckerPackets.Request.create());
 		nbt = new CompoundTag();
+		
+		buildWidgets();
 	}
 	
 	@Override
@@ -283,18 +280,18 @@ public class DataCheckerScreen extends Screen
 	public static class SessionWidget extends IncipisphereWidget
 	{
 		public final List<LandWidget> landWidgets;
-		public final boolean isOpen;
 		
-		public SessionWidget(int x, int y, int size, List<LandWidget> landWidgets, boolean isOpen)
+		public SessionWidget(int x, int y, int size, List<LandWidget> landWidgets)
 		{
 			super(x, y, size);
 			this.landWidgets = landWidgets;
-			this.isOpen = isOpen;
 		}
 		
 		@Override
 		protected void renderWidget(GuiGraphics guiGraphics, int mouseX, int mouseY, float partialTick)
 		{
+			updateChildren();
+			
 			//backdrop
 			guiGraphics.fill(getX(), getY(), getX() + width, getY() + height, 0xFF000000);
 			
@@ -304,8 +301,9 @@ public class DataCheckerScreen extends Screen
 			for(int i = 0; i < meteorCount; i++)
 			{
 				float rotation = ((float) i / meteorCount) * 360;
-				int veilX = getXOnRadius(getCenterX(), (int) (LAND_RADIUS * 1.3), rotation) + randomSource.nextIntBetweenInclusive(-3, 3);
-				int veilY = getYOnRadius(getCenterY(), (int) (LAND_RADIUS * 1.3), rotation) + randomSource.nextIntBetweenInclusive(-3, 3);
+				int veilRadius = (int) (LAND_RADIUS * 1.35);
+				int veilX = getXOnRadius(getCenterX(), veilRadius, rotation) + randomSource.nextIntBetweenInclusive(-3, 3);
+				int veilY = getYOnRadius(getCenterY(), veilRadius, rotation) + randomSource.nextIntBetweenInclusive(-3, 3);
 				guiGraphics.fill(veilX, veilY, veilX + 1, veilY + 1, randomSource.nextBoolean() ? 0xFFFFFFFF : 0xFFDDDDDD);
 			}
 			
@@ -327,13 +325,10 @@ public class DataCheckerScreen extends Screen
 			return false;
 		}
 		
-		@Override
-		public boolean isActive()
+		public void updateChildren()
 		{
-			boolean active = super.isActive();
-			landWidgets.forEach(landWidget -> landWidget.active = active);
-			
-			return active;
+			landWidgets.forEach(landWidget -> landWidget.visible = this.visible);
+			landWidgets.forEach(landWidget -> landWidget.active = this.active);
 		}
 	}
 	
@@ -343,21 +338,33 @@ public class DataCheckerScreen extends Screen
 		public final Optional<LandTypePair.Named> oNamed;
 		public final CompoundTag landNbt;
 		
-		public LandWidget(int x, int y, int size, ResourceKey<Level> land, CompoundTag landNbt)
+		public LandWidget(int x, int y, int size, CompoundTag landNbt)
 		{
 			super(x, y, size);
-			this.land = land;
+			
+			ResourceKey<Level> landKey = null;
+			if(landNbt.contains("clientDim"))
+				landKey = ResourceKey.create(Registries.DIMENSION, ResourceLocation.parse(landNbt.getString("clientDim")));
+			
+			this.land = landKey;
 			this.landNbt = landNbt;
+			
+			MutableComponent component = Component.empty();
 			
 			Optional<LandTypePair.Named> oNamed = Optional.empty();
 			if(land != null && landNbt.contains("landTypes"))
 				oNamed = LandTypePair.Named.CODEC.parse(NbtOps.INSTANCE, landNbt.get("landTypes")).resultOrPartial(LOGGER::error);
 			this.oNamed = oNamed;
+			if(oNamed.isPresent())
+				component.append(oNamed.get().asComponentWithLandFont());
+			else
+				component.append("Land of ").append("Null").withStyle(ChatFormatting.OBFUSCATED).append(" and ").withStyle(ChatFormatting.RESET).append("Null").withStyle(ChatFormatting.OBFUSCATED);
 			
-			MutableComponent component = Component.empty();
+			MutableComponent landPlayer = Component.literal("\n" + landNbt.getString("client")).withStyle(ChatFormatting.RESET);
+			if(landNbt.contains("playerColor"))
+				landPlayer.withColor(landNbt.getInt("playerColor"));
+			component.append(landPlayer);
 			
-			oNamed.ifPresent(named -> component.append(named.asComponentWithLandFont()));
-			component.append("\n" + landNbt.getString("client")).withStyle(Style.EMPTY);
 			component.append("\n\n" + "Server is " + landNbt.getString("server"));
 			component.append("\n" + "Is Primary Connection: " + landNbt.getBoolean("isMain"));
 			
@@ -367,19 +374,29 @@ public class DataCheckerScreen extends Screen
 		@Override
 		protected void renderWidget(GuiGraphics guiGraphics, int mouseX, int mouseY, float partialTick)
 		{
-			if(!oNamed.isPresent())
-				return;
+			//TODO highlight if hovered
 			
-			LandTypePair.Named named = oNamed.get();
-			
-			//Random random = new Random(land.hashCode());
-			//int index = random.nextInt(LandSkySpriteUploader.VARIANT_COUNT);
-			
-			TextureAtlasSprite planetSprite = LandSkySpriteUploader.getInstance().getPlanetSprite(named.landTypes().getTerrain(), named.terrainNameIndex());
-			TextureAtlasSprite overlaySprite = LandSkySpriteUploader.getInstance().getOverlaySprite(named.landTypes().getTitle(), named.titleNameIndex());
-			
-			guiGraphics.blit(getX(), getY(), 0, size, size, planetSprite);
-			guiGraphics.blit(getX(), getY(), 0, size, size, overlaySprite);
+			if(oNamed.isPresent())
+			{
+				LandTypePair.Named named = oNamed.get();
+				
+				TextureAtlasSprite planetSprite = LandSkySpriteUploader.getInstance().getPlanetSprite(named.landTypes().getTerrain(), named.terrainNameIndex());
+				TextureAtlasSprite overlaySprite = LandSkySpriteUploader.getInstance().getOverlaySprite(named.landTypes().getTitle(), named.titleNameIndex());
+				
+				guiGraphics.blit(getX(), getY(), 0, size, size, planetSprite);
+				guiGraphics.blit(getX(), getY(), 0, size, size, overlaySprite);
+			} else
+			{
+				//placeholder for planet
+				guiGraphics.fill(getX(), getY(), getX() + size, getY() + size, 0xFFFFFFFF);
+				guiGraphics.fill(getX() + 1, getY() + 1, getX() + size - 1, getY() + size - 1, 0xFF000000);
+			}
+		}
+		
+		@Override
+		public boolean isFocused()
+		{
+			return false;
 		}
 		
 		public void temp()
@@ -430,6 +447,34 @@ public class DataCheckerScreen extends Screen
 		public int getCenterY()
 		{
 			return getY() + (height / 2);
+		}
+	}
+	
+	public static class SessionButton extends ExtendedButton
+	{
+		public final SessionWidget sessionWidget;
+		
+		protected SessionButton(int x, int y, int width, int height, Component message, SessionWidget sessionWidget)
+		{
+			super(x, y, width, height, message, Button::onPress, DEFAULT_NARRATION);
+			this.sessionWidget = sessionWidget;
+		}
+		
+		@Override
+		public void onPress()
+		{
+		
+		}
+		
+		@Override
+		public boolean isHoveredOrFocused()
+		{
+			boolean hoveredOrFocused = super.isHoveredOrFocused();
+			sessionWidget.visible = hoveredOrFocused;
+			sessionWidget.active = hoveredOrFocused;
+			sessionWidget.updateChildren();
+			
+			return hoveredOrFocused;
 		}
 	}
 }

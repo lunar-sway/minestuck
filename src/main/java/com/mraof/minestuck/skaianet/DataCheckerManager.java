@@ -3,6 +3,7 @@ package com.mraof.minestuck.skaianet;
 import com.mraof.minestuck.network.DataCheckerPackets;
 import com.mraof.minestuck.player.PlayerIdentifier;
 import com.mraof.minestuck.player.Title;
+import com.mraof.minestuck.util.ColorHandler;
 import com.mraof.minestuck.world.lands.LandTypePair;
 import com.mraof.minestuck.world.lands.LandTypes;
 import com.mraof.minestuck.world.lands.terrain.TerrainLandType;
@@ -55,6 +56,8 @@ public class DataCheckerManager
 		
 		CompoundTag sessionTag = new CompoundTag();
 		sessionTag.put("connections", connectionList);
+		
+		sessionTag.putBoolean("completed", session.completed);
 		return sessionTag;
 	}
 	
@@ -88,6 +91,8 @@ public class DataCheckerManager
 	
 	private static void writeExtraData(CompoundTag tag, PlayerIdentifier player, MinecraftServer mcServer)
 	{
+		tag.putInt("playerColor", ColorHandler.getColorForPlayer(player, mcServer.overworld()));
+		
 		SkaianetData skaianetData = SkaianetData.get(mcServer);
 		SburbPlayerData playerData = skaianetData.getOrCreateData(player);
 		ResourceKey<Level> landDimensionKey = playerData.getLandDimension();
