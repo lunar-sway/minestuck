@@ -18,7 +18,7 @@ The format is based on [Keep a Changelog](https://keepachangelog.com/en/1.1.0/).
 
 - Laptops can now be picked up
 - The range at which the Kernelsprite detects and travels to blocks has increased
-- Seperated edit mode hotkeys in settings
+- Separated edit mode hotkeys in settings
 
 ### Fixed
 
