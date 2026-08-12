@@ -22,7 +22,9 @@ import net.minecraft.network.chat.Component;
 import net.minecraft.network.codec.ByteBufCodecs;
 import net.minecraft.network.codec.StreamCodec;
 import net.minecraft.network.protocol.common.custom.CustomPacketPayload;
+import net.minecraft.server.level.ServerLevel;
 import net.minecraft.server.level.ServerPlayer;
+import net.minecraft.sounds.SoundEvent;
 import net.minecraft.sounds.SoundSource;
 import net.minecraft.world.InteractionHand;
 import net.minecraft.world.InteractionResult;
@@ -30,6 +32,7 @@ import net.minecraft.world.entity.player.Player;
 import net.minecraft.world.item.BlockItem;
 import net.minecraft.world.item.ItemStack;
 import net.minecraft.world.item.context.UseOnContext;
+import net.minecraft.world.level.ChunkPos;
 import net.minecraft.world.level.Level;
 import net.minecraft.world.level.block.Block;
 import net.minecraft.world.level.block.LevelEvent;
@@ -200,7 +203,7 @@ public final class EditmodeDragPackets
 		}
 		
 		List<Captured> captured = new ArrayList<>();
-		MutableGristSet totalCost = MutableGristSet.newDefault();
+		MutableGristSet fullCostTotal = MutableGristSet.newDefault();
 		
 		for(BlockPos pos : BlockPos.betweenClosed(min, max))
 		{
@@ -222,7 +225,7 @@ public final class EditmodeDragPackets
 			DeployEntry entry = DeployList.getEntryForItem(stack, data.sburbData(), level);
 			GristSet fullCost = entry != null ? entry.getCurrentCost(data.sburbData()) : GristCostRecipe.findCostForItem(stack, null, false, level);
 			if(fullCost != null)
-				totalCost.add(isCopy ? fullCost.asImmutable() : moveCost(fullCost));
+				fullCostTotal.add(fullCost.asImmutable());
 		}
 		
 		if(captured.isEmpty())
@@ -249,7 +252,8 @@ public final class EditmodeDragPackets
 			}
 		}
 		
-		GristSet.Immutable cost = totalCost.asImmutable();
+		GristSet.Immutable cost = isCopy ? fullCostTotal.asImmutable() : moveCost(fullCostTotal.asImmutable());
+		
 		if(!data.getGristCache().canAfford(cost))
 		{
 			player.sendSystemMessage(GristCache.createMissingMessage(cost), true);
@@ -260,6 +264,10 @@ public final class EditmodeDragPackets
 		if(!isCopy)
 			for(Captured c : captured)
 				level.removeBlock(c.sourcePos(), false);
+		
+		List<BlockPos> broadcastFrom = new ArrayList<>();
+		List<BlockPos> broadcastTo = new ArrayList<>();
+		List<BlockPos> placedPositions = new ArrayList<>(captured.size());
 		
 		for(Captured c : captured)
 		{
@@ -276,11 +284,28 @@ public final class EditmodeDragPackets
 				movedTag.putInt("z", dest.getZ());
 				level.getBlockEntity(dest).loadWithComponents(movedTag, level.registryAccess());
 			}
+			
+			placedPositions.add(dest);
+			
+			if(!isCopy)
+			{
+				broadcastFrom.add(c.sourcePos());
+				broadcastTo.add(dest);
+			}
+		}
+		
+		for(BlockPos dest : placedPositions)
+		{
+			BlockState current = level.getBlockState(dest);
+			BlockState updated = Block.updateFromNeighbourShapes(current, level, dest);
+			if(updated != current)
+				level.setBlock(dest, updated, 3);
 		}
 		
 		data.getGristCache().tryTake(cost, GristHelper.EnumSource.SERVER);
 		
-		level.playSound(player, anchor, MSSoundEvents.EVENT_EDIT_TOOL_REVISE.get(), SoundSource.AMBIENT, 1.0f, 1.0f);
+		SoundEvent commitSound = isCopy ? MSSoundEvents.EVENT_EDIT_TOOL_COPY.get() : MSSoundEvents.EVENT_EDIT_TOOL_MOVE.get();
+		level.playSound(player, anchor, commitSound, SoundSource.AMBIENT, 1.0f, 1.0f);
 		player.swing(InteractionHand.MAIN_HAND);
 		
 		ServerEditHandler.removeCursorEntity(player, false);

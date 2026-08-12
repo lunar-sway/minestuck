@@ -2361,6 +2361,8 @@
   "key.minestuck.select_edit_mode": "Select",
   "key.minestuck.stats_gui": "View General Minestuck Gui",
   "key.minestuck.sylladex": "Open Sylladex",
+  "key.minestuck.zoom_in_selection": "Zoom In",
+  "key.minestuck.zoom_out_selection": "Zoom Out",
   "land.format": "Land of %s and %s",
   "land.minestuck.blood": "Blood",
   "land.minestuck.boreal_forests": "Boreal Forests",

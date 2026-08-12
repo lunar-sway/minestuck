@@ -6,6 +6,7 @@ import com.mraof.minestuck.Minestuck;
 import com.mraof.minestuck.MinestuckConfig;
 import com.mraof.minestuck.block.machine.EditmodeDestroyable;
 import com.mraof.minestuck.block.machine.MachineBlock;
+import com.mraof.minestuck.client.renderer.SelectedPreviewRenderer;
 import com.mraof.minestuck.client.util.MSKeyHandler;
 import com.mraof.minestuck.network.editmode.EditmodeDragPackets;
 import com.mraof.minestuck.player.ClientPlayerData;
@@ -15,11 +16,14 @@ import com.mraof.minestuck.util.MSTags;
 import net.minecraft.client.Camera;
 import net.minecraft.client.KeyMapping;
 import net.minecraft.client.Minecraft;
+import net.minecraft.client.renderer.ItemBlockRenderTypes;
 import net.minecraft.client.renderer.MultiBufferSource;
 import net.minecraft.client.renderer.RenderType;
+import net.minecraft.client.renderer.block.BlockRenderDispatcher;
 import net.minecraft.core.BlockPos;
 import net.minecraft.sounds.SoundSource;
 import net.minecraft.util.Mth;
+import net.minecraft.util.RandomSource;
 import net.minecraft.world.entity.ai.attributes.Attributes;
 import net.minecraft.world.entity.player.Player;
 import net.minecraft.world.item.BlockItem;
@@ -62,6 +66,7 @@ public class ClientEditToolDrag
 	private static boolean wasPreviewingMove = false;
 	private static boolean wasPreviewingCopy = false;
 	private static Boolean clickModeActiveIsCopy = null; // null = no click-mode session pending; false = move armed; true = copy armed
+	private static final RandomSource PREVIEW_RANDOM = RandomSource.create();
 	
 	@SubscribeEvent
 	public static void onClientTick(ClientTickEvent.Pre event)
@@ -84,6 +89,69 @@ public class ClientEditToolDrag
 	public static void renderWorld(RenderLevelStageEvent event)
 	{
 		ClientEditToolDrag.renderOutlines(event);
+		ClientEditToolDrag.renderBlockPreview(event);
+	}
+	
+	/**
+	 * Renders the textured block models of the pending move/copy ghost preview.
+	 */
+	private static void renderBlockPreview(RenderLevelStageEvent event)
+	{
+		Minecraft mc = Minecraft.getInstance();
+		if(event.getStage() != RenderLevelStageEvent.Stage.AFTER_TRANSLUCENT_BLOCKS || mc.player == null
+				|| mc.getCameraEntity() != mc.player || !mc.player.isAlive() || !ClientEditmodeData.isInEditmode())
+			return;
+		
+		Player player = mc.player;
+		EditTools cap = player.getData(MSAttachments.EDIT_TOOLS);
+		
+		if(!cap.isPreviewing() || cap.getPreviewAnchor() == null || ClientSelectionCache.getEntries().isEmpty())
+			return;
+		if(ClientSelectionCache.getEntries().size() > 512)
+			return;
+		
+		int sizeX = ClientSelectionCache.getSizeX();
+		int sizeZ = ClientSelectionCache.getSizeZ();
+		Rotation rot = Rotation.values()[Math.floorMod(cap.getPreviewRotation(), 4)];
+		BlockPos minCorner = cap.getPreviewAnchor();
+		
+		Camera camera = event.getCamera();
+		double camX = camera.getPosition().x;
+		double camY = camera.getPosition().y;
+		double camZ = camera.getPosition().z;
+		
+		RenderSystem.enableBlend();
+		RenderSystem.defaultBlendFunc();
+		RenderSystem.depthMask(false);
+		
+		MultiBufferSource.BufferSource previewBuffer = MultiBufferSource.immediate(new ByteBufferBuilder(4096));
+		BlockRenderDispatcher blockRenderer = mc.getBlockRenderer();
+		PoseStack poseStack = event.getPoseStack();
+		Level level = player.level();
+		float alpha = 0.55f;
+		
+		for(ClientSelectionCache.Entry entry : ClientSelectionCache.getEntries())
+		{
+			BlockPos dest = minCorner.offset(EditmodeDragPackets.rotateOffset(entry.localOffset(), sizeX, sizeZ, rot));
+			BlockState state = entry.state().rotate(rot);
+			
+			poseStack.pushPose();
+			poseStack.translate(dest.getX() - camX, dest.getY() - camY, dest.getZ() - camZ);
+			
+			for(RenderType ignored : ItemBlockRenderTypes.getRenderLayers(state))
+			{
+				VertexConsumer raw = previewBuffer.getBuffer(RenderType.translucent());
+				VertexConsumer wrapped = new SelectedPreviewRenderer(raw, alpha);
+				blockRenderer.renderBatched(state, dest, level, poseStack, wrapped, false, PREVIEW_RANDOM);
+			}
+			
+			poseStack.popPose();
+		}
+		
+		previewBuffer.endBatch();
+		
+		RenderSystem.depthMask(true);
+		RenderSystem.disableBlend();
 	}
 	
 	/**
@@ -381,6 +449,13 @@ public class ClientEditToolDrag
 		
 		if(moveDown || copyDown)
 		{
+			double distance = cap.getPreviewDistance();
+			if(MSKeyHandler.zoomInKey.isDown())
+				distance += 0.6;
+			if(MSKeyHandler.zoomOutKey.isDown())
+				distance -= 0.6;
+			cap.setPreviewDistance(Mth.clamp(distance, 1.0, 64.0));
+			
 			Vec3 eye = player.getEyePosition();
 			Vec3 look = player.getLookAngle();
 			Vec3 target = eye.add(look.scale(cap.getPreviewDistance()));
@@ -693,17 +768,6 @@ public class ClientEditToolDrag
 						minCorner.getX() + footprintX, minCorner.getY() + sizeY, minCorner.getZ() + footprintZ)
 						.move(-d1, -d2, -d3).deflate(0.002);
 				drawBoxOutline(event.getPoseStack(), lineBuffer, footprintBox, r, g, 0f, 1f);
-				
-				//wireframe of the block shapes, so you see what you're placing
-				if(ClientSelectionCache.getEntries().size() <= 1024)
-				{
-					for(ClientSelectionCache.Entry entry : ClientSelectionCache.getEntries())
-					{
-						BlockPos dest = minCorner.offset(EditmodeDragPackets.rotateOffset(entry.localOffset(), sizeX, sizeZ, rot));
-						AABB box = new AABB(dest).move(-d1, -d2, -d3).deflate(0.03);
-						drawBoxOutline(event.getPoseStack(), lineBuffer, box, r, g, 0f, 0.4f);
-					}
-				}
 			}
 			
 			//:4 move animation

@@ -6,16 +6,13 @@ import com.mraof.minestuck.client.gui.playerStats.PlayerStatsScreen;
 import com.mraof.minestuck.computer.editmode.ClientEditHandler;
 import com.mraof.minestuck.computer.editmode.ClientEditToolDrag;
 import com.mraof.minestuck.computer.editmode.ClientEditmodeData;
-import com.mraof.minestuck.computer.editmode.EditTools;
 import com.mraof.minestuck.network.CaptchaDeckPackets;
 import com.mraof.minestuck.network.ToggleAspectEffectsPacket;
 import com.mraof.minestuck.player.ClientPlayerData;
-import com.mraof.minestuck.util.MSAttachments;
 import net.minecraft.client.KeyMapping;
 import net.minecraft.client.Minecraft;
 import net.minecraft.client.gui.screens.inventory.AbstractContainerScreen;
 import net.minecraft.client.gui.screens.inventory.CreativeModeInventoryScreen;
-import net.minecraft.world.entity.player.Player;
 import net.minecraft.world.inventory.Slot;
 import net.neoforged.api.distmarker.Dist;
 import net.neoforged.bus.api.SubscribeEvent;
@@ -44,12 +41,16 @@ public class MSKeyHandler
 	public static final String ROTATE_SELECTION = "key.minestuck.rotate_selection";
 	public static final String MOVE_SELECTION = "key.minestuck.move_selection";
 	public static final String COPY_SELECTION = "key.minestuck.copy_selection";
+	public static final String ZOOM_IN_SELECTION = "key.minestuck.zoom_in_selection";
+	public static final String ZOOM_OUT_SELECTION = "key.minestuck.zoom_out_selection";
 	
 	public static KeyMapping selectKey;
 	public static KeyMapping clearKey;
 	public static KeyMapping rotateKey;
 	public static KeyMapping moveKey;
 	public static KeyMapping copyKey;
+	public static KeyMapping zoomInKey;
+	public static KeyMapping zoomOutKey;
 	
 	public static KeyMapping statKey;
 	public static KeyMapping editKey;
@@ -75,6 +76,10 @@ public class MSKeyHandler
 		event.register(moveKey);
 		copyKey = new KeyMapping(COPY_SELECTION, KeyConflictContext.IN_GAME, InputConstants.Type.KEYSYM, GLFW.GLFW_KEY_C, CATEGORY_EDITMODE);
 		event.register(copyKey);
+		zoomInKey = new KeyMapping(ZOOM_IN_SELECTION, KeyConflictContext.IN_GAME, InputConstants.Type.KEYSYM, GLFW.GLFW_KEY_EQUAL, CATEGORY_EDITMODE);
+		event.register(zoomInKey);
+		zoomOutKey = new KeyMapping(ZOOM_OUT_SELECTION, KeyConflictContext.IN_GAME, InputConstants.Type.KEYSYM, GLFW.GLFW_KEY_MINUS, CATEGORY_EDITMODE);
+		event.register(zoomOutKey);
 		
 		editKey = new KeyMapping(EXIT_EDIT_MODE, KeyConflictContext.IN_GAME, InputConstants.Type.KEYSYM, GLFW.GLFW_KEY_K, CATEGORY_EDITMODE);
 		event.register(editKey);
@@ -149,22 +154,5 @@ public class MSKeyHandler
 			if(slot != null && slot.hasItem())
 				PacketDistributor.sendToServer(new CaptchaDeckPackets.CaptchalogueInventorySlot(slot.index, screen.getMenu().containerId));
 		}
-	}
-	
-	@SubscribeEvent
-	public static void onScroll(net.neoforged.neoforge.client.event.InputEvent.MouseScrollingEvent event)
-	{
-		if(!(moveKey.isDown() || copyKey.isDown()) || !ClientEditmodeData.isInEditmode())
-			return;
-		
-		Player player = Minecraft.getInstance().player;
-		if(player == null)
-			return;
-		
-		EditTools cap = player.getData(MSAttachments.EDIT_TOOLS);
-		double newDistance = net.minecraft.util.Mth.clamp(cap.getPreviewDistance() + event.getScrollDeltaY() * 1.5, 1.0, 64.0);
-		cap.setPreviewDistance(newDistance);
-		
-		event.setCanceled(true); //dont also scroll the hotbar while adjusting placement distance
 	}
 }

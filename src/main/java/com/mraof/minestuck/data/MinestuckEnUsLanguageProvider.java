@@ -2558,6 +2558,8 @@ public class MinestuckEnUsLanguageProvider extends MinestuckLanguageProvider
 		add(MSKeyHandler.ROTATE_SELECTION, "Rotate");
 		add(MSKeyHandler.MOVE_SELECTION, "Move");
 		add(MSKeyHandler.COPY_SELECTION, "Copy");
+		add(MSKeyHandler.ZOOM_IN_SELECTION, "Zoom In");
+		add(MSKeyHandler.ZOOM_OUT_SELECTION, "Zoom Out");
 		
 		add(LotusFlowerEntity.REGROW, "There are no petals on this plant, maybe it will regrow?");
 		
