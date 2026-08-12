@@ -298,13 +298,13 @@ public final class EditmodeDragPackets
 		}
 	}
 	
-	/** 10% of the item normal cost per grist type rounded; floor of 1 per type present. */
+	/** 5% of the item normal cost per grist type rounded; floor of 1 per type present. */
 	private static GristSet.Immutable moveCost(GristSet fullCost)
 	{
 		MutableGristSet set = MutableGristSet.newDefault();
 		for(GristAmount amount : fullCost.asAmounts())
 		{
-			long reduced = Math.max(1, Math.round(amount.amount() * 0.1));
+			long reduced = Math.max(1, Math.round(amount.amount() * 0.05));
 			set.add(amount.type(), reduced);
 		}
 		return set.asImmutable();
