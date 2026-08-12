@@ -65,6 +65,7 @@ public class ClientEditToolDrag
 		if (player == null || !player.isAlive() || !ClientEditmodeData.isInEditmode())
 			return;
 		
+		ClientSelectionCache.tickPending(player.level());
 		EditTools cap = player.getData(MSAttachments.EDIT_TOOLS);
 		
 		ClientEditToolDrag.doRecycleCode(mc, player, cap);
@@ -260,6 +261,8 @@ public class ClientEditToolDrag
 			BlockPos max = new BlockPos(Math.max(a.getX(), b.getX()), Math.max(a.getY(), b.getY()), Math.max(a.getZ(), b.getZ()));
 			ClientSelectionCache.capture(player.level(), min, max);
 			
+			player.playSound(MSSoundEvents.EVENT_EDIT_TOOL_SELECT.get(), 1.0f, 1.0f);
+			
 			PacketDistributor.sendToServer(new EditmodeDragPackets.Reset());
 			cap.resetDragTools();
 		}
@@ -321,6 +324,22 @@ public class ClientEditToolDrag
 		copyKeyWasDown = copyKey.isDown();
 	}
 	
+	public static void clearSelection()
+	{
+		Minecraft mc = Minecraft.getInstance();
+		if(mc.player == null)
+			return;
+		
+		EditTools cap = mc.player.getData(MSAttachments.EDIT_TOOLS);
+		if(cap.getSelectionPos1() == null && cap.getSelectionPos2() == null)
+			return; //nothing to clear, dont spam the cancel sound
+		
+		cap.clearSelection();
+		cap.clearPreview();
+		ClientSelectionCache.clear();
+		mc.player.playSound(MSSoundEvents.EVENT_EDIT_TOOL_CLEAR.get(), 0.7f, 0.6f);
+	}
+	
 	public static void cycleRotation()
 	{
 		Minecraft mc = Minecraft.getInstance();
@@ -348,6 +367,8 @@ public class ClientEditToolDrag
 			PacketDistributor.sendToServer(new EditmodeDragPackets.CopySelection(oldPos1, oldPos2, anchor, rotation));
 		else
 			PacketDistributor.sendToServer(new EditmodeDragPackets.MoveSelection(oldPos1, oldPos2, anchor, rotation));
+		
+		Minecraft.getInstance().player.playSound(isCopy ? MSSoundEvents.EVENT_EDIT_TOOL_COPY.get() : MSSoundEvents.EVENT_EDIT_TOOL_MOVE.get(), 1.0f, 1.0f);
 		
 		if(!isCopy)
 		{

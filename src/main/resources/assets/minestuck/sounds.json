@@ -953,6 +953,16 @@
       }
     ]
   },
+  "event.edit_tools.clear": {
+    "category": "ambient",
+    "subtitle": "subtitles.minestuck.tool_clear",
+    "sounds": [
+      {
+        "name": "minestuck:random/tool_clear",
+        "stream": false
+      }
+    ]
+  },
   "event.edit_tools.move": {
     "category": "ambient",
     "subtitle": "subtitles.minestuck.tool_move",

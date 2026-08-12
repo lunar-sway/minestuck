@@ -5,6 +5,7 @@ import com.mraof.minestuck.client.gui.EditmodeSettingsScreen;
 import com.mraof.minestuck.client.util.MSKeyHandler;
 import com.mraof.minestuck.network.editmode.EditmodeLocationsPacket;
 import com.mraof.minestuck.network.editmode.ServerEditPackets;
+import com.mraof.minestuck.util.MSSoundEvents;
 import net.minecraft.client.Minecraft;
 import net.minecraft.network.chat.Component;
 import net.minecraft.resources.ResourceKey;
@@ -57,7 +58,10 @@ public final class ClientEditmodeData
 	{
 		Player player = Minecraft.getInstance().player;
 		if(player != null)
+		{
 			player.sendSystemMessage(Component.translatable(ENTERED, MSKeyHandler.editKey.getTranslatedKeyMessage()));
+			player.playSound(MSSoundEvents.EVENT_EDIT_MODE_ENTER.get(), 1.0f, 1.0f);
+		}
 		activated = true;
 	}
 	
@@ -65,7 +69,10 @@ public final class ClientEditmodeData
 	{
 		Player player = Minecraft.getInstance().player;
 		if(player != null)
+		{
 			player.fallDistance = 0;
+			player.playSound(MSSoundEvents.EVENT_EDIT_MODE_EXIT.get(), 1.0f, 1.0f);
+		}
 		disable();
 	}
 	

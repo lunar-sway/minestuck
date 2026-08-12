@@ -31,6 +31,8 @@ import org.lwjgl.glfw.GLFW;
 public class MSKeyHandler
 {
 	public static final String CATEGORY = "key.categories.minestuck";
+	public static final String CATEGORY_EDITMODE = "key.categories.minestuck.editmode";
+	
 	public static final String STATS_GUI = "key.minestuck.stats_gui";
 	public static final String CAPTCHALOGUE = "key.minestuck.captchalogue";
 	public static final String ASPECT_EFFECT_TOGGLE = "key.minestuck.aspext_effect_toggle";
@@ -38,11 +40,13 @@ public class MSKeyHandler
 	
 	public static final String EXIT_EDIT_MODE = "key.minestuck.exit_edit_mode";
 	public static final String SELECT_EDIT_MODE = "key.minestuck.select_edit_mode";
+	public static final String CLEAR_EDIT_MODE = "key.minestuck.clear_edit_mode";
 	public static final String ROTATE_SELECTION = "key.minestuck.rotate_selection";
 	public static final String MOVE_SELECTION = "key.minestuck.move_selection";
 	public static final String COPY_SELECTION = "key.minestuck.copy_selection";
 	
 	public static KeyMapping selectKey;
+	public static KeyMapping clearKey;
 	public static KeyMapping rotateKey;
 	public static KeyMapping moveKey;
 	public static KeyMapping copyKey;
@@ -61,17 +65,20 @@ public class MSKeyHandler
 		statKey = new KeyMapping(STATS_GUI, GLFW.GLFW_KEY_G, CATEGORY);
 		event.register(statKey);
 		
-		selectKey = new KeyMapping(SELECT_EDIT_MODE, KeyConflictContext.IN_GAME, InputConstants.Type.KEYSYM, GLFW.GLFW_KEY_R, CATEGORY);
+		selectKey = new KeyMapping(SELECT_EDIT_MODE, KeyConflictContext.IN_GAME, InputConstants.Type.KEYSYM, GLFW.GLFW_KEY_Z, CATEGORY_EDITMODE);
 		event.register(selectKey);
-		rotateKey = new KeyMapping(ROTATE_SELECTION, KeyConflictContext.IN_GAME, InputConstants.Type.KEYSYM, GLFW.GLFW_KEY_APOSTROPHE, CATEGORY);
+		clearKey = new KeyMapping(CLEAR_EDIT_MODE, KeyConflictContext.IN_GAME, InputConstants.Type.KEYSYM, GLFW.GLFW_KEY_GRAVE_ACCENT, CATEGORY_EDITMODE);
+		event.register(clearKey);
+		rotateKey = new KeyMapping(ROTATE_SELECTION, KeyConflictContext.IN_GAME, InputConstants.Type.KEYSYM, GLFW.GLFW_KEY_R, CATEGORY_EDITMODE);
 		event.register(rotateKey);
-		moveKey = new KeyMapping(MOVE_SELECTION, KeyConflictContext.IN_GAME, InputConstants.Type.KEYSYM, GLFW.GLFW_KEY_T, CATEGORY);
+		moveKey = new KeyMapping(MOVE_SELECTION, KeyConflictContext.IN_GAME, InputConstants.Type.KEYSYM, GLFW.GLFW_KEY_X, CATEGORY_EDITMODE);
 		event.register(moveKey);
-		copyKey = new KeyMapping(COPY_SELECTION, KeyConflictContext.IN_GAME, InputConstants.Type.KEYSYM, GLFW.GLFW_KEY_Y, CATEGORY);
+		copyKey = new KeyMapping(COPY_SELECTION, KeyConflictContext.IN_GAME, InputConstants.Type.KEYSYM, GLFW.GLFW_KEY_C, CATEGORY_EDITMODE);
 		event.register(copyKey);
 		
-		editKey = new KeyMapping(EXIT_EDIT_MODE, KeyConflictContext.IN_GAME, InputConstants.Type.KEYSYM, GLFW.GLFW_KEY_K, CATEGORY);
+		editKey = new KeyMapping(EXIT_EDIT_MODE, KeyConflictContext.IN_GAME, InputConstants.Type.KEYSYM, GLFW.GLFW_KEY_K, CATEGORY_EDITMODE);
 		event.register(editKey);
+		
 		captchaKey = new KeyMapping(CAPTCHALOGUE, GLFW.GLFW_KEY_V, CATEGORY);
 		event.register(captchaKey);
 		effectToggleKey = new KeyMapping(ASPECT_EFFECT_TOGGLE, KeyConflictContext.IN_GAME, InputConstants.Type.KEYSYM, GLFW.GLFW_KEY_BACKSLASH, CATEGORY);
@@ -109,6 +116,9 @@ public class MSKeyHandler
 			
 			if(rotateKey.isActiveAndMatches(input) && ClientEditmodeData.isInEditmode())
 				ClientEditToolDrag.cycleRotation();
+			
+			if(clearKey.isActiveAndMatches(input) && ClientEditmodeData.isInEditmode())
+				ClientEditToolDrag.clearSelection();
 			
 			if(editKey.isActiveAndMatches(input))
 				ClientEditHandler.onKeyPressed();

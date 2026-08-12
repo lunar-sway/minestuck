@@ -119,6 +119,7 @@ public final class MSSoundEvents
 	public static final Supplier<SoundEvent> EVENT_EDIT_TOOL_REVISE = register("event.edit_tools.revise");
 	public static final Supplier<SoundEvent> EVENT_EDIT_TOOL_RECYCLE = register("event.edit_tools.recycle");
 	public static final Supplier<SoundEvent> EVENT_EDIT_TOOL_SELECT = register("event.edit_tools.select");
+	public static final Supplier<SoundEvent> EVENT_EDIT_TOOL_CLEAR = register("event.edit_tools.clear");
 	public static final Supplier<SoundEvent> EVENT_EDIT_TOOL_MOVE = register("event.edit_tools.move");
 	public static final Supplier<SoundEvent> EVENT_EDIT_TOOL_COPY = register("event.edit_tools.copy");
 	public static final Supplier<SoundEvent> EVENT_EDIT_MODE_ENTER = register("event.edit_mode.enter");

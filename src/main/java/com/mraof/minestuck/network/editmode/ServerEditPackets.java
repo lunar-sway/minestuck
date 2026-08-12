@@ -75,7 +75,7 @@ public final class ServerEditPackets
 				cap.setSelectionPos1(newMin);
 				cap.setSelectionPos2(newMax);
 				cap.setPreviewRotation(0);
-				ClientSelectionCache.capture(player.level(), newMin, newMax);
+				ClientSelectionCache.scheduleRecapture(newMin, newMax);
 			}
 		}
 	}

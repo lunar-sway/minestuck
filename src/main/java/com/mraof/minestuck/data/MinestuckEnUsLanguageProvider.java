@@ -2546,11 +2546,18 @@ public class MinestuckEnUsLanguageProvider extends MinestuckLanguageProvider
 		add(JeiGristCost.GRIST_COSTS, "Grist Costs");
 		
 		add(MSKeyHandler.CATEGORY, "Minestuck");
+		add(MSKeyHandler.CATEGORY_EDITMODE, "Minestuck (Edit Mode)");
 		add(MSKeyHandler.STATS_GUI, "View General Minestuck Gui");
 		add(MSKeyHandler.EXIT_EDIT_MODE, "Exit Edit Mode");
 		add(MSKeyHandler.CAPTCHALOGUE, "Captchalogue Held Item");
 		add(MSKeyHandler.ASPECT_EFFECT_TOGGLE, "Toggle Aspect Effects");
 		add(MSKeyHandler.SYLLADEX, "Open Sylladex");
+		
+		add(MSKeyHandler.SELECT_EDIT_MODE, "Select");
+		add(MSKeyHandler.CLEAR_EDIT_MODE, "Clear");
+		add(MSKeyHandler.ROTATE_SELECTION, "Rotate");
+		add(MSKeyHandler.MOVE_SELECTION, "Move");
+		add(MSKeyHandler.COPY_SELECTION, "Copy");
 		
 		add(LotusFlowerEntity.REGROW, "There are no petals on this plant, maybe it will regrow?");
 		
