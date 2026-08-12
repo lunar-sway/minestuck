@@ -13,9 +13,13 @@ import net.minecraft.core.particles.ParticleTypes;
 import net.minecraft.server.level.ServerLevel;
 import net.minecraft.sounds.SoundEvents;
 import net.minecraft.sounds.SoundSource;
+import net.minecraft.world.entity.Entity;
+import net.minecraft.world.entity.item.FallingBlockEntity;
 import net.minecraft.world.level.BlockGetter;
 import net.minecraft.world.level.Level;
+import net.minecraft.world.level.block.AnvilBlock;
 import net.minecraft.world.level.block.Block;
+import net.minecraft.world.level.block.Blocks;
 import net.minecraft.world.level.block.state.BlockState;
 import net.minecraft.world.level.material.PushReaction;
 import net.minecraft.world.phys.Vec3;
@@ -80,5 +84,21 @@ public class CruxtruderLidBlock extends Block
 				data.setData(MSAttachments.HAS_KERNELSPRITE, true);
 			}
 		}
+	}
+	@Override
+	public void entityInside(BlockState state, Level level, BlockPos pos, Entity entity)
+	{
+		if(!level.isClientSide && entity instanceof FallingBlockEntity fallingBlock)
+		{
+			Block fallingBlockType = fallingBlock.getBlockState().getBlock();
+			
+			if(fallingBlockType instanceof AnvilBlock
+					|| fallingBlockType == Blocks.POINTED_DRIPSTONE)
+			{
+				level.destroyBlock(pos, true);
+			}
+		}
+		
+		super.entityInside(state, level, pos, entity);
 	}
 }
