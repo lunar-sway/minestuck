@@ -242,7 +242,7 @@ public class ClientEditToolDrag
 			return;
 		
 		KeyMapping toolKey = MSKeyHandler.selectKey;
-		boolean clickMode = MinestuckConfig.CLIENT.editmodeClickToPlace.get();
+		boolean clickMode = MinestuckConfig.CLIENT.editmodeClickToSelect.get();
 		boolean pressedEdge = toolKey.isDown() && !selectKeyWasDown;
 		
 		boolean active;
