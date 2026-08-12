@@ -52,6 +52,7 @@ public final class ClientEditmodeData
 		activated = false;
 		locations = null;
 		clientLand = null;
+		ClientEditToolDrag.cancelClickSessions();
 	}
 	
 	public static void onActivatePacket()

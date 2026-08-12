@@ -1,6 +1,7 @@
 package com.mraof.minestuck.network.editmode;
 
 import com.mraof.minestuck.Minestuck;
+import com.mraof.minestuck.MinestuckConfig;
 import com.mraof.minestuck.computer.editmode.*;
 import com.mraof.minestuck.network.MSPacket;
 import com.mraof.minestuck.skaianet.SburbPlayerData;
@@ -68,15 +69,32 @@ public final class ServerEditPackets
 			if(cleared)
 			{
 				cap.clearSelection();
+				cap.clearOriginalSelection();
 				ClientSelectionCache.clear();
+				return;
+			}
+			
+			if(cap.getOriginalSelectionPos1() == null || cap.getOriginalSelectionPos2() == null)
+				cap.setOriginalSelection(newMin, newMax); //safety fallback, shouldn't normally happen
+			
+			boolean continueFromLast = MinestuckConfig.CLIENT.editmodeCopyFromLastPlacement.get();
+			BlockPos captureMin, captureMax;
+			
+			if(continueFromLast)
+			{
+				captureMin = newMin;
+				captureMax = newMax;
 			}
 			else
 			{
-				cap.setSelectionPos1(newMin);
-				cap.setSelectionPos2(newMax);
-				cap.setPreviewRotation(0);
-				ClientSelectionCache.scheduleRecapture(newMin, newMax);
+				captureMin = cap.getOriginalSelectionPos1();
+				captureMax = cap.getOriginalSelectionPos2();
 			}
+			
+			cap.setSelectionPos1(captureMin);
+			cap.setSelectionPos2(captureMax);
+			cap.setPreviewRotation(0);
+			ClientSelectionCache.scheduleRecapture(captureMin, captureMax);
 		}
 	}
 	

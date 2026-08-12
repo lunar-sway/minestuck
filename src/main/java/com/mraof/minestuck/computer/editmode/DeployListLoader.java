@@ -148,9 +148,11 @@ public class DeployListLoader extends SimpleJsonResourceReloadListener
 			}
 			
 			MinecraftServer server = ServerLifecycleHooks.getCurrentServer();
-			if(server == null) return set.asImmutable();
+			if(server == null)
+				return entry.cost.isEmpty() ? set.asImmutable() : null;
 			ServerPlayer player = playerData.playerId().getPlayer(server);
-			if(player == null) return set.asImmutable();
+			if(player == null)
+				return entry.cost.isEmpty() ? set.asImmutable() : null;
 			
 			for(GristCost cost : entry.cost)
 			{

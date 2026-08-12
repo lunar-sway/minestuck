@@ -3,6 +3,7 @@ package com.mraof.minestuck.computer.editmode;
 import com.mojang.blaze3d.systems.RenderSystem;
 import com.mojang.blaze3d.vertex.*;
 import com.mraof.minestuck.Minestuck;
+import com.mraof.minestuck.MinestuckConfig;
 import com.mraof.minestuck.block.machine.EditmodeDestroyable;
 import com.mraof.minestuck.block.machine.MachineBlock;
 import com.mraof.minestuck.client.util.MSKeyHandler;
@@ -56,6 +57,11 @@ public class ClientEditToolDrag
 {
 	private static boolean moveKeyWasDown = false;
 	private static boolean copyKeyWasDown = false;
+	private static boolean selectKeyWasDown = false;
+	private static boolean selectClickArmed = false;
+	private static boolean wasPreviewingMove = false;
+	private static boolean wasPreviewingCopy = false;
+	private static Boolean clickModeActiveIsCopy = null; // null = no click-mode session pending; false = move armed; true = copy armed
 	
 	@SubscribeEvent
 	public static void onClientTick(ClientTickEvent.Pre event)
@@ -116,12 +122,13 @@ public class ClientEditToolDrag
 	 * @param targetTool The tool you want to update. Must be a drag tool (Revise, Recycle or Select).
 	 * @param cap The current edit-tools capability.
 	 * @param player Current client-side player.
-	 * @param toolKey The given tool's key.
+	 * @param isActive Whether the tool is currently in-progress, the physical key being held for
+	 *                 drag-style tools, or the click-style armed state for tools that support it.
 	 */
-	private static void updateDragPosition(EditTools.ToolMode targetTool, EditTools cap, Player player, KeyMapping toolKey)
+	private static void updateDragPosition(EditTools.ToolMode targetTool, EditTools cap, Player player, boolean isActive)
 	{
 		cap.setEditPos2(getSelectionEndPoint(player, cap.getEditReachDistance(), targetTool == EditTools.ToolMode.REVISE));
-		PacketDistributor.sendToServer(new EditmodeDragPackets.Cursor(toolKey.isDown(), cap.getEditPos1(), cap.getEditPos2()));
+		PacketDistributor.sendToServer(new EditmodeDragPackets.Cursor(isActive, cap.getEditPos1(), cap.getEditPos2()));
 	}
 	
 	/**
@@ -171,7 +178,7 @@ public class ClientEditToolDrag
 		
 		//If the selection has already successfully found a starting point, find the end-point.
 		if(cap.getEditPos1() != null)
-			updateDragPosition(EditTools.ToolMode.REVISE, cap, player, toolKey);
+			updateDragPosition(EditTools.ToolMode.REVISE, cap, player, toolKey.isDown());
 		
 		//If key has just been released, finish drag.
 		if(!toolKey.isDown() && cap.getEditPos1() != null)
@@ -218,7 +225,7 @@ public class ClientEditToolDrag
 		
 		//If the selection has already successfully found a starting point, find the end-point.
 		if(cap.getEditPos1() != null)
-			updateDragPosition(EditTools.ToolMode.RECYCLE, cap, player, toolKey);
+			updateDragPosition(EditTools.ToolMode.RECYCLE, cap, player, toolKey.isDown());
 		
 		//If key has just been released, finish drag.
 		if(!toolKey.isDown() && cap.getEditPos1() != null)
@@ -235,22 +242,54 @@ public class ClientEditToolDrag
 			return;
 		
 		KeyMapping toolKey = MSKeyHandler.selectKey;
+		boolean clickMode = MinestuckConfig.CLIENT.editmodeClickToPlace.get();
+		boolean pressedEdge = toolKey.isDown() && !selectKeyWasDown;
 		
-		if(toolKey.isDown() && (!ClientEditmodeData.isInEditmode() || mc.isPaused())
+		boolean active;
+		boolean shouldCommit;
+		
+		if(clickMode)
+		{
+			if(!ClientEditmodeData.isInEditmode() || mc.isPaused())
+				selectClickArmed = false; //full cancel on anything that invalidates the session
+			
+			shouldCommit = false;
+			
+			if(!selectClickArmed && pressedEdge)
+				selectClickArmed = true; //If first press then arm and start growing the box
+			else if(selectClickArmed && pressedEdge)
+				shouldCommit = true; //If second press then lock the selection in
+			
+			active = selectClickArmed;
+		}
+		else
+		{
+			active = toolKey.isDown();
+			shouldCommit = selectKeyWasDown && !toolKey.isDown();
+		}
+		
+		if(active && (!ClientEditmodeData.isInEditmode() || mc.isPaused())
 				&& (cap.getToolMode() == null || cap.getToolMode() == EditTools.ToolMode.SELECT))
 		{
 			cancelDrag(cap);
+			selectClickArmed = false;
+			selectKeyWasDown = toolKey.isDown();
 			return;
 		}
 		
-		if(toolKey.isDown() && cap.getEditPos1() == null)
+		if(active && cap.getEditPos1() == null)
+		{
 			if(!tryBeginDrag(EditTools.ToolMode.SELECT, cap, player))
+			{
+				selectKeyWasDown = toolKey.isDown();
 				return;
+			}
+		}
 		
 		if(cap.getEditPos1() != null)
-			updateDragPosition(EditTools.ToolMode.SELECT, cap, player, toolKey);
+			updateDragPosition(EditTools.ToolMode.SELECT, cap, player, active);
 		
-		if(!toolKey.isDown() && cap.getEditPos1() != null)
+		if(shouldCommit && cap.getEditPos1() != null)
 		{
 			cap.setSelectionPos1(cap.getEditPos1());
 			cap.setSelectionPos2(cap.getEditPos2());
@@ -259,13 +298,16 @@ public class ClientEditToolDrag
 			BlockPos a = cap.getEditPos1(), b = cap.getEditPos2();
 			BlockPos min = new BlockPos(Math.min(a.getX(), b.getX()), Math.min(a.getY(), b.getY()), Math.min(a.getZ(), b.getZ()));
 			BlockPos max = new BlockPos(Math.max(a.getX(), b.getX()), Math.max(a.getY(), b.getY()), Math.max(a.getZ(), b.getZ()));
+			cap.setOriginalSelection(min, max);
 			ClientSelectionCache.capture(player.level(), min, max);
 			
 			player.playSound(MSSoundEvents.EVENT_EDIT_TOOL_SELECT.get(), 1.0f, 1.0f);
 			
 			PacketDistributor.sendToServer(new EditmodeDragPackets.Reset());
 			cap.resetDragTools();
+			selectClickArmed = false;
 		}
+		selectKeyWasDown = toolKey.isDown();
 	}
 	
 	/**
@@ -278,11 +320,55 @@ public class ClientEditToolDrag
 		
 		boolean hasSelection = cap.getSelectionPos1() != null && cap.getSelectionPos2() != null;
 		boolean canPreview = hasSelection && ClientEditmodeData.isInEditmode() && !mc.isPaused() && cap.getToolMode() == null;
+		boolean clickMode = MinestuckConfig.CLIENT.editmodeClickToPlace.get();
 		
-		boolean moveDown = canPreview && moveKey.isDown() && !copyKey.isDown();
-		boolean copyDown = canPreview && copyKey.isDown() && !moveKey.isDown();
+		boolean movePressedEdge = moveKey.isDown() && !moveKeyWasDown;
+		boolean copyPressedEdge = copyKey.isDown() && !copyKeyWasDown;
 		
-		boolean previewJustStarted = (moveDown && !moveKeyWasDown) || (copyDown && !copyKeyWasDown);
+		boolean moveDown;
+		boolean copyDown;
+		boolean commitMove;
+		boolean commitCopy;
+		
+		if(clickMode)
+		{
+			if(!canPreview)
+				clickModeActiveIsCopy = null;
+			
+			commitMove = false;
+			commitCopy = false;
+			
+			if(clickModeActiveIsCopy == null)
+			{
+				if(canPreview && movePressedEdge)
+					clickModeActiveIsCopy = false; //arm move
+				else if(canPreview && copyPressedEdge)
+					clickModeActiveIsCopy = true; //arm copy
+			}
+			else if(!clickModeActiveIsCopy && movePressedEdge)
+			{
+				commitMove = true;
+				clickModeActiveIsCopy = null;
+			}
+			else if(clickModeActiveIsCopy && copyPressedEdge)
+			{
+				commitCopy = true;
+				clickModeActiveIsCopy = null;
+			}
+			
+			moveDown = clickModeActiveIsCopy != null && !clickModeActiveIsCopy;
+			copyDown = clickModeActiveIsCopy != null && clickModeActiveIsCopy;
+		}
+		else
+		{
+			moveDown = canPreview && moveKey.isDown() && !copyKey.isDown();
+			copyDown = canPreview && copyKey.isDown() && !moveKey.isDown();
+			
+			commitMove = moveKeyWasDown && !moveKey.isDown();
+			commitCopy = copyKeyWasDown && !copyKey.isDown();
+		}
+		
+		boolean previewJustStarted = (moveDown && !wasPreviewingMove) || (copyDown && !wasPreviewingCopy);
 		if(previewJustStarted)
 		{
 			//default placement distance scales with the footprint, so big structures land clear of the player by default
@@ -315,9 +401,12 @@ public class ClientEditToolDrag
 			cap.clearPreview();
 		}
 		
-		if(moveKeyWasDown && !moveKey.isDown())
+		wasPreviewingMove = moveDown;
+		wasPreviewingCopy = copyDown;
+		
+		if(commitMove)
 			commitSelectionAction(cap, false, lastAnchor);
-		if(copyKeyWasDown && !copyKey.isDown())
+		if(commitCopy)
 			commitSelectionAction(cap, true, lastAnchor);
 		
 		moveKeyWasDown = moveKey.isDown();
@@ -332,12 +421,14 @@ public class ClientEditToolDrag
 		
 		EditTools cap = mc.player.getData(MSAttachments.EDIT_TOOLS);
 		if(cap.getSelectionPos1() == null && cap.getSelectionPos2() == null)
-			return; //nothing to clear, dont spam the cancel sound
+			return;
 		
 		cap.clearSelection();
+		cap.clearOriginalSelection();
 		cap.clearPreview();
+		clickModeActiveIsCopy = null;
 		ClientSelectionCache.clear();
-		mc.player.playSound(MSSoundEvents.EVENT_EDIT_TOOL_CLEAR.get(), 0.7f, 0.6f);
+		mc.player.playSound(MSSoundEvents.EVENT_EDIT_TOOL_CLEAR.get(), 1.0f, 1.0f);
 	}
 	
 	public static void cycleRotation()
@@ -361,32 +452,17 @@ public class ClientEditToolDrag
 		if(anchor == null || oldPos1 == null || oldPos2 == null)
 			return;
 		
-		Rotation rot = Rotation.values()[Math.floorMod(rotation, 4)];
-		
 		if(isCopy)
 			PacketDistributor.sendToServer(new EditmodeDragPackets.CopySelection(oldPos1, oldPos2, anchor, rotation));
 		else
 			PacketDistributor.sendToServer(new EditmodeDragPackets.MoveSelection(oldPos1, oldPos2, anchor, rotation));
 		
-		Minecraft.getInstance().player.playSound(isCopy ? MSSoundEvents.EVENT_EDIT_TOOL_COPY.get() : MSSoundEvents.EVENT_EDIT_TOOL_MOVE.get(), 1.0f, 1.0f);
+		Player localPlayer = Minecraft.getInstance().player;
+		if(localPlayer != null)
+			localPlayer.playSound(isCopy ? MSSoundEvents.EVENT_EDIT_TOOL_COPY.get() : MSSoundEvents.EVENT_EDIT_TOOL_MOVE.get(), 1.0f, 1.0f);
 		
 		if(!isCopy)
-		{
 			startMoveTransitionAnimation(oldPos1, oldPos2, anchor, rotation);
-			//:optimistic: a successful move empties the selection immediately; the server's SelectionUpdate(cleared=true)
-			cap.clearSelection();
-			ClientSelectionCache.clear();
-		}
-		else
-		{
-			ClientSelectionCache.applyRotationAsBase(rot);
-			int newSizeX = ClientSelectionCache.getSizeX();
-			int newSizeY = ClientSelectionCache.getSizeY();
-			int newSizeZ = ClientSelectionCache.getSizeZ();
-			cap.setSelectionPos1(anchor);
-			cap.setSelectionPos2(anchor.offset(newSizeX - 1, newSizeY - 1, newSizeZ - 1));
-			cap.setPreviewRotation(0);
-		}
 	}
 	
 	private static void startMoveTransitionAnimation(BlockPos oldPos1, BlockPos oldPos2, BlockPos anchor, int rotation)
@@ -669,5 +745,11 @@ public class ClientEditToolDrag
 	private static void drawBoxOutline(PoseStack poseStack, VertexConsumer buffer, AABB box, float r, float g, float b, float a)
 	{
 		drawReviseToolOutline(poseStack, buffer, Shapes.create(box), 0, 0, 0, r, g, b, a);
+	}
+	
+	public static void cancelClickSessions()
+	{
+		clickModeActiveIsCopy = null;
+		selectClickArmed = false;
 	}
 }

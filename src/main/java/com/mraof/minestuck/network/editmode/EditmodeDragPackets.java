@@ -194,7 +194,7 @@ public final class EditmodeDragPackets
 		long volume = (long) sizeX * (max.getY() - min.getY() + 1) * sizeZ;
 		if(volume > MAX_SELECTION_VOLUME)
 		{
-			player.sendSystemMessage(Component.literal("Selection too large (" + volume + " blocks, max " + MAX_SELECTION_VOLUME + ")"));
+			player.sendSystemMessage(Component.literal("Selection too large (" + volume + " blocks, max " + MAX_SELECTION_VOLUME + ")"), true);
 			ServerEditHandler.removeCursorEntity(player, true);
 			return;
 		}
@@ -209,7 +209,7 @@ public final class EditmodeDragPackets
 				continue;
 			if(state.getDestroySpeed(level, pos) < 0 || state.is(MSTags.Blocks.EDITMODE_BREAK_BLACKLIST))
 			{
-				player.sendSystemMessage(Component.literal("Selection contains a block that can't be moved!"));
+				player.sendSystemMessage(Component.literal("Selection contains a block that can't be moved!"), true);
 				ServerEditHandler.removeCursorEntity(player, true);
 				return;
 			}
@@ -243,7 +243,7 @@ public final class EditmodeDragPackets
 			
 			if(!destInsideSelection && !level.getBlockState(dest).canBeReplaced())
 			{
-				player.sendSystemMessage(Component.literal("Can't fit the selection there!"));
+				player.sendSystemMessage(Component.literal("Can't fit the selection there!"), true);
 				ServerEditHandler.removeCursorEntity(player, true);
 				return;
 			}

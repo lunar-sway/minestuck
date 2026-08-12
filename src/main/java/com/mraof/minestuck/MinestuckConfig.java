@@ -47,6 +47,8 @@ public class MinestuckConfig
 		public final BooleanValue loginColorSelector;
 		public final BooleanValue alchemyIcons;
 		public final BooleanValue npcDialogueTextColors;
+		public final BooleanValue editmodeClickToPlace;
+		public final BooleanValue editmodeCopyFromLastPlacement;
 		
 		private Client(Builder builder)
 		{
@@ -59,6 +61,14 @@ public class MinestuckConfig
 					.defineEnum("echeladderAnimation", AnimationSpeed.NORMAL);
 			npcDialogueTextColors = builder.comment("Determines whether an NPC will use their custom formatted color value when talking in a dialogue screen.")
 					.define("npcDialogueTextColors", true);
+			
+			builder.push("editMode");
+			editmodeClickToPlace = builder.comment("Determines if the move/copy selection tools are triggered in click-style or drag-style.")
+					.define("editmodeClickToPlace", true);
+			editmodeCopyFromLastPlacement = builder.comment("Determines what a repeated copy uses as its source. Last successfully placed copy or always the original selection")
+					.define("editmodeCopyFromLastPlacement", true);
+			builder.pop();
+			
 			builder.pop();
 		}
 	}

@@ -34,6 +34,8 @@ public final class EditTools
 	private Direction editTraceDirection = Direction.NORTH;
 	private double editReachDistance = 0;
 	private UUID editCursorID = null;
+	private BlockPos originalSelectionPos1 = null;
+	private BlockPos originalSelectionPos2 = null;
 	private BlockPos selectionPos1 = null;
 	private BlockPos selectionPos2 = null;
 	private boolean isEditDragging = false;
@@ -106,6 +108,13 @@ public final class EditTools
 	}
 	
 	@Nullable
+	public BlockPos getOriginalSelectionPos1() { return originalSelectionPos1; }
+	
+	@Nullable
+	public BlockPos getOriginalSelectionPos2() { return originalSelectionPos2; }
+	
+	
+	@Nullable
 	public BlockPos getSelectionPos1() { return selectionPos1; }
 	
 	@Nullable
@@ -126,6 +135,12 @@ public final class EditTools
 		editPos2 = pos;
 	}
 	
+	public void setOriginalSelection(BlockPos min, BlockPos max)
+	{
+		originalSelectionPos1 = min;
+		originalSelectionPos2 = max;
+	}
+	
 	public void setSelectionPos1(BlockPos pos) { selectionPos1 = pos; }
 	public void setSelectionPos2(BlockPos pos) { selectionPos2 = pos; }
 	
@@ -141,10 +156,17 @@ public final class EditTools
 		previewAnchor = null;
 	}
 	
+	public void clearOriginalSelection()
+	{
+		originalSelectionPos1 = null;
+		originalSelectionPos2 = null;
+	}
+	
 	public void clearSelection()
 	{
 		selectionPos1 = null;
 		selectionPos2 = null;
+		clearOriginalSelection();
 	}
 	
 	private void setEditTraceHit(Vec3 hit)
