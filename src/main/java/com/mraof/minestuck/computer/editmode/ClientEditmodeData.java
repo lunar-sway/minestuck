@@ -14,6 +14,7 @@ import net.neoforged.api.distmarker.Dist;
 import net.neoforged.bus.api.SubscribeEvent;
 import net.neoforged.fml.common.EventBusSubscriber;
 import net.neoforged.neoforge.event.level.LevelEvent;
+import net.neoforged.neoforge.event.tick.PlayerTickEvent;
 
 import javax.annotation.Nullable;
 
@@ -81,5 +82,18 @@ public final class ClientEditmodeData
 	{
 		if(event.getLevel().isClientSide())
 			disable();
+	}
+	
+	@SubscribeEvent
+	public static void tickEnd(PlayerTickEvent.Post event)
+	{
+		if(event.getEntity().level().isClientSide && event.getEntity() == Minecraft.getInstance().player && ClientEditmodeData.isInEditmode())
+		{
+			Player player = event.getEntity();
+			
+			EditmodeLocations locations = ClientEditmodeData.getLocations();
+			if(locations != null)
+				locations.limitMovement(player, ClientEditmodeData.getClientLand());
+		}
 	}
 }

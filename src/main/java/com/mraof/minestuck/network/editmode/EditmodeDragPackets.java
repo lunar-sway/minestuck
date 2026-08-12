@@ -2,6 +2,8 @@ package com.mraof.minestuck.network.editmode;
 
 import com.mraof.minestuck.Minestuck;
 import com.mraof.minestuck.MinestuckConfig;
+import com.mraof.minestuck.alchemy.GristHelper;
+import com.mraof.minestuck.api.alchemy.GristAmount;
 import com.mraof.minestuck.api.alchemy.GristSet;
 import com.mraof.minestuck.api.alchemy.GristTypes;
 import com.mraof.minestuck.api.alchemy.MutableGristSet;
@@ -11,9 +13,12 @@ import com.mraof.minestuck.network.MSPacket;
 import com.mraof.minestuck.player.GristCache;
 import com.mraof.minestuck.util.MSAttachments;
 import com.mraof.minestuck.util.MSSoundEvents;
+import com.mraof.minestuck.util.MSTags;
 import net.minecraft.core.BlockPos;
 import net.minecraft.core.Direction;
+import net.minecraft.nbt.CompoundTag;
 import net.minecraft.network.FriendlyByteBuf;
+import net.minecraft.network.chat.Component;
 import net.minecraft.network.codec.ByteBufCodecs;
 import net.minecraft.network.codec.StreamCodec;
 import net.minecraft.network.protocol.common.custom.CustomPacketPayload;
@@ -25,21 +30,40 @@ import net.minecraft.world.entity.player.Player;
 import net.minecraft.world.item.BlockItem;
 import net.minecraft.world.item.ItemStack;
 import net.minecraft.world.item.context.UseOnContext;
+import net.minecraft.world.level.Level;
 import net.minecraft.world.level.block.Block;
 import net.minecraft.world.level.block.LevelEvent;
+import net.minecraft.world.level.block.Rotation;
 import net.minecraft.world.level.block.SoundType;
 import net.minecraft.world.level.block.state.BlockState;
 import net.minecraft.world.level.gameevent.GameEvent;
 import net.minecraft.world.phys.BlockHitResult;
 import net.minecraft.world.phys.Vec3;
+import net.neoforged.neoforge.network.PacketDistributor;
 import net.neoforged.neoforge.network.handling.IPayloadContext;
 
+import java.util.ArrayList;
+import java.util.List;
 import java.util.function.Consumer;
 
 import static com.mraof.minestuck.network.MSPayloads.VEC3_STREAM_CODEC;
 
 public final class EditmodeDragPackets
 {
+	private static final int MAX_SELECTION_VOLUME = 4096;
+	
+	public static BlockPos rotateOffset(BlockPos offset, int sizeX, int sizeZ, Rotation rotation)
+	{
+		int x = offset.getX(), y = offset.getY(), z = offset.getZ();
+		return switch(rotation)
+		{
+			case NONE -> offset;
+			case CLOCKWISE_90 -> new BlockPos(sizeZ - 1 - z, y, x);
+			case CLOCKWISE_180 -> new BlockPos(sizeX - 1 - x, y, sizeZ - 1 - z);
+			case COUNTERCLOCKWISE_90 -> new BlockPos(z, y, sizeX - 1 - x);
+		};
+	}
+	
 	private static boolean editModePlaceCheck(EditData data, Player player, GristSet cost, BlockPos pos, Consumer<GristSet> missingGristTracker)
 	{
 		if(!player.level().getBlockState(pos).canBeReplaced())
@@ -153,6 +177,184 @@ public final class EditmodeDragPackets
 				player.sendSystemMessage(GristCache.createMissingMessage(missingCost), true);
 			
 			ServerEditHandler.removeCursorEntity(player, !anyBlockPlaced);
+		}
+	}
+	
+	private record Captured(BlockPos sourcePos, BlockState state, CompoundTag blockEntityTag) {}
+	
+	private static void executeSelectionTransfer(ServerPlayer player, EditData data, BlockPos corner1, BlockPos corner2, BlockPos anchor, boolean isCopy, Rotation rotation)
+	{
+		Level level = player.level();
+		
+		BlockPos min = new BlockPos(Math.min(corner1.getX(), corner2.getX()), Math.min(corner1.getY(), corner2.getY()), Math.min(corner1.getZ(), corner2.getZ()));
+		BlockPos max = new BlockPos(Math.max(corner1.getX(), corner2.getX()), Math.max(corner1.getY(), corner2.getY()), Math.max(corner1.getZ(), corner2.getZ()));
+		int sizeX = max.getX() - min.getX() + 1;
+		int sizeZ = max.getZ() - min.getZ() + 1;
+		
+		long volume = (long) sizeX * (max.getY() - min.getY() + 1) * sizeZ;
+		if(volume > MAX_SELECTION_VOLUME)
+		{
+			player.sendSystemMessage(Component.literal("Selection too large (" + volume + " blocks, max " + MAX_SELECTION_VOLUME + ")"));
+			ServerEditHandler.removeCursorEntity(player, true);
+			return;
+		}
+		
+		List<Captured> captured = new ArrayList<>();
+		MutableGristSet totalCost = MutableGristSet.newDefault();
+		
+		for(BlockPos pos : BlockPos.betweenClosed(min, max))
+		{
+			BlockState state = level.getBlockState(pos);
+			if(state.isAir())
+				continue;
+			if(state.getDestroySpeed(level, pos) < 0 || state.is(MSTags.Blocks.EDITMODE_BREAK_BLACKLIST))
+			{
+				player.sendSystemMessage(Component.literal("Selection contains a block that can't be moved!"));
+				ServerEditHandler.removeCursorEntity(player, true);
+				return;
+			}
+			
+			var blockEntity = level.getBlockEntity(pos);
+			CompoundTag beTag = blockEntity != null ? blockEntity.saveWithFullMetadata(level.registryAccess()) : null;
+			captured.add(new Captured(pos.immutable(), state, beTag));
+			
+			ItemStack stack = state.getCloneItemStack(null, level, pos, player);
+			DeployEntry entry = DeployList.getEntryForItem(stack, data.sburbData(), level);
+			GristSet fullCost = entry != null ? entry.getCurrentCost(data.sburbData()) : GristCostRecipe.findCostForItem(stack, null, false, level);
+			if(fullCost != null)
+				totalCost.add(isCopy ? fullCost.asImmutable() : moveCost(fullCost));
+		}
+		
+		if(captured.isEmpty())
+		{
+			ServerEditHandler.removeCursorEntity(player, true);
+			return;
+		}
+		
+		for(Captured c : captured)
+		{
+			BlockPos localOffset = c.sourcePos().subtract(min);
+			BlockPos rotatedOffset = rotateOffset(localOffset, sizeX, sizeZ, rotation);
+			BlockPos dest = anchor.offset(rotatedOffset);
+			
+			boolean destInsideSelection = dest.getX() >= min.getX() && dest.getX() <= max.getX()
+					&& dest.getY() >= min.getY() && dest.getY() <= max.getY()
+					&& dest.getZ() >= min.getZ() && dest.getZ() <= max.getZ();
+			
+			if(!destInsideSelection && !level.getBlockState(dest).canBeReplaced())
+			{
+				player.sendSystemMessage(Component.literal("Can't fit the selection there!"));
+				ServerEditHandler.removeCursorEntity(player, true);
+				return;
+			}
+		}
+		
+		GristSet.Immutable cost = totalCost.asImmutable();
+		if(!data.getGristCache().canAfford(cost))
+		{
+			player.sendSystemMessage(GristCache.createMissingMessage(cost), true);
+			ServerEditHandler.removeCursorEntity(player, true);
+			return;
+		}
+		
+		if(!isCopy)
+			for(Captured c : captured)
+				level.removeBlock(c.sourcePos(), false);
+		
+		for(Captured c : captured)
+		{
+			BlockPos localOffset = c.sourcePos().subtract(min);
+			BlockPos rotatedOffset = rotateOffset(localOffset, sizeX, sizeZ, rotation);
+			BlockPos dest = anchor.offset(rotatedOffset);
+			
+			level.setBlock(dest, c.state().rotate(rotation), 3);
+			if(c.blockEntityTag() != null && level.getBlockEntity(dest) != null)
+			{
+				CompoundTag movedTag = c.blockEntityTag().copy();
+				movedTag.putInt("x", dest.getX());
+				movedTag.putInt("y", dest.getY());
+				movedTag.putInt("z", dest.getZ());
+				level.getBlockEntity(dest).loadWithComponents(movedTag, level.registryAccess());
+			}
+		}
+		
+		data.getGristCache().tryTake(cost, GristHelper.EnumSource.SERVER);
+		
+		level.playSound(player, anchor, MSSoundEvents.EVENT_EDIT_TOOL_REVISE.get(), SoundSource.AMBIENT, 1.0f, 1.0f);
+		player.swing(InteractionHand.MAIN_HAND);
+		
+		ServerEditHandler.removeCursorEntity(player, false);
+		
+		if(isCopy)
+		{
+			BlockPos rotatedMax = anchor.offset(rotateOffset(max.subtract(min), sizeX, sizeZ, rotation));
+			BlockPos newMin = new BlockPos(Math.min(anchor.getX(), rotatedMax.getX()), Math.min(anchor.getY(), rotatedMax.getY()), Math.min(anchor.getZ(), rotatedMax.getZ()));
+			BlockPos newMax = new BlockPos(Math.max(anchor.getX(), rotatedMax.getX()), Math.max(anchor.getY(), rotatedMax.getY()), Math.max(anchor.getZ(), rotatedMax.getZ()));
+			PacketDistributor.sendToPlayer(player, new ServerEditPackets.SelectionUpdate(false, newMin, newMax));
+		}
+		else
+		{
+			PacketDistributor.sendToPlayer(player, new ServerEditPackets.SelectionUpdate(true, BlockPos.ZERO, BlockPos.ZERO));
+		}
+	}
+	
+	/** 10% of the item normal cost per grist type rounded; floor of 1 per type present. */
+	private static GristSet.Immutable moveCost(GristSet fullCost)
+	{
+		MutableGristSet set = MutableGristSet.newDefault();
+		for(GristAmount amount : fullCost.asAmounts())
+		{
+			long reduced = Math.max(1, Math.round(amount.amount() * 0.1));
+			set.add(amount.type(), reduced);
+		}
+		return set.asImmutable();
+	}
+	
+	public record MoveSelection(BlockPos corner1, BlockPos corner2, BlockPos anchor, int rotation) implements MSPacket.PlayToServer
+	{
+		public static final Type<MoveSelection> ID = new Type<>(Minestuck.id("editmode_drag/move_selection"));
+		public static final StreamCodec<FriendlyByteBuf, MoveSelection> STREAM_CODEC = StreamCodec.composite(
+				BlockPos.STREAM_CODEC, MoveSelection::corner1,
+				BlockPos.STREAM_CODEC, MoveSelection::corner2,
+				BlockPos.STREAM_CODEC, MoveSelection::anchor,
+				ByteBufCodecs.VAR_INT, MoveSelection::rotation,
+				MoveSelection::new
+		);
+		
+		@Override
+		public Type<? extends CustomPacketPayload> type() { return ID; }
+		
+		@Override
+		public void execute(IPayloadContext context, ServerPlayer player)
+		{
+			EditData data = ServerEditHandler.getData(player);
+			if(data == null)
+				return;
+			executeSelectionTransfer(player, data, corner1, corner2, anchor, false, Rotation.values()[Math.floorMod(rotation, 4)]);
+		}
+	}
+	
+	public record CopySelection(BlockPos corner1, BlockPos corner2, BlockPos anchor, int rotation) implements MSPacket.PlayToServer
+	{
+		public static final Type<CopySelection> ID = new Type<>(Minestuck.id("editmode_drag/copy_selection"));
+		public static final StreamCodec<FriendlyByteBuf, CopySelection> STREAM_CODEC = StreamCodec.composite(
+				BlockPos.STREAM_CODEC, CopySelection::corner1,
+				BlockPos.STREAM_CODEC, CopySelection::corner2,
+				BlockPos.STREAM_CODEC, CopySelection::anchor,
+				ByteBufCodecs.VAR_INT, CopySelection::rotation,
+				CopySelection::new
+		);
+		
+		@Override
+		public Type<? extends CustomPacketPayload> type() { return ID; }
+		
+		@Override
+		public void execute(IPayloadContext context, ServerPlayer player)
+		{
+			EditData data = ServerEditHandler.getData(player);
+			if(data == null)
+				return;
+			executeSelectionTransfer(player, data, corner1, corner2, anchor, true, Rotation.values()[Math.floorMod(rotation, 4)]);
 		}
 	}
 	

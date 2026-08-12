@@ -98,6 +98,7 @@ public final class MSPayloads
 		registerPlayToServer(registrar, ClientEditPackets.Activate.ID, ClientEditPackets.Activate.STREAM_CODEC);
 		registerPlayToServer(registrar, ClientEditPackets.Exit.ID, ClientEditPackets.Exit.STREAM_CODEC);
 		registerPlayToClient(registrar, ServerEditPackets.Activate.ID, ServerEditPackets.Activate.STREAM_CODEC);
+		registerPlayToClient(registrar, ServerEditPackets.SelectionUpdate.ID, ServerEditPackets.SelectionUpdate.STREAM_CODEC);
 		registerPlayToClient(registrar, ServerEditPackets.UpdateDeployList.ID, ServerEditPackets.UpdateDeployList.STREAM_CODEC);
 		registerPlayToClient(registrar, ServerEditPackets.Exit.ID, ServerEditPackets.Exit.STREAM_CODEC);
 		
@@ -111,6 +112,8 @@ public final class MSPayloads
 		registerPlayToServer(registrar, EditmodeDragPackets.Destroy.ID, EditmodeDragPackets.Destroy.STREAM_CODEC);
 		registerPlayToServer(registrar, EditmodeDragPackets.Cursor.ID, EditmodeDragPackets.Cursor.STREAM_CODEC);
 		registerPlayToServer(registrar, EditmodeDragPackets.Reset.ID, EditmodeDragPackets.Reset.STREAM_CODEC);
+		registerPlayToServer(registrar, EditmodeDragPackets.MoveSelection.ID, EditmodeDragPackets.MoveSelection.STREAM_CODEC);
+		registerPlayToServer(registrar, EditmodeDragPackets.CopySelection.ID, EditmodeDragPackets.CopySelection.STREAM_CODEC);
 		
 		//Edit Mode Atheneum Packets
 		registerPlayToServer(registrar, AtheneumPackets.Scroll.ID, AtheneumPackets.Scroll.STREAM_CODEC);
