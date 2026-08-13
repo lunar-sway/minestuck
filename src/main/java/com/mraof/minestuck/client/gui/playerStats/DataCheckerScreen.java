@@ -47,7 +47,8 @@ public class DataCheckerScreen extends Screen
 	
 	private static final ResourceLocation icons = ResourceLocation.fromNamespaceAndPath("minestuck", "textures/gui/icons.png");
 	private static final ResourceLocation guiBackground = ResourceLocation.fromNamespaceAndPath("minestuck", "textures/gui/data_check.png");
-	private static final int GUI_WIDTH = 210, GUI_HEIGHT = 140;
+	private static final int GUI_WIDTH = 322, GUI_HEIGHT = 140;
+	private static final int LAND_INFO_X = 96;
 	private static final int LIST_Y = 25;
 	
 	private static final int LAND_RADIUS = 40;
@@ -55,6 +56,7 @@ public class DataCheckerScreen extends Screen
 	public static CompoundTag nbt = new CompoundTag();
 	private Button refreshButton;
 	private List<SessionButton> buttons = new ArrayList<>();
+	public SessionButton focusedButton;
 	private int index;
 	private boolean isScrolling;
 	private int xOffset;
@@ -101,13 +103,13 @@ public class DataCheckerScreen extends Screen
 			if(sessionTag.contains("completed"))
 				completed = sessionTag.getBoolean("completed");
 			
-			SessionWidget sessionWidget = new SessionWidget(xOffset + 5, yOffset + 5, GUI_HEIGHT - 10, landWidgets);
+			SessionWidget sessionWidget = new SessionWidget(xOffset + LAND_INFO_X + 5, yOffset + 5, GUI_HEIGHT - 10, landWidgets);
 			sessionWidget.visible = false;
 			sessionWidget.active = false;
 			addRenderableWidget(sessionWidget);
 			
 			Component sessionComponent = Component.literal("Session " + sessionIt);
-			SessionButton sessionButton = new SessionButton(xOffset + GUI_HEIGHT - 4, yOffset + 24 + (sessionIt * 22), 56, 20, sessionComponent, sessionWidget);
+			SessionButton sessionButton = new SessionButton(xOffset + LAND_INFO_X + GUI_HEIGHT - 4, yOffset + 24 + (sessionIt * 22), 56, 20, sessionComponent, sessionWidget);
 			MutableComponent sessionPlayers = sessionComponent.copy().withStyle(ChatFormatting.BOLD);
 			for(int i = 0; i < connectionTags.size(); i++)
 			{
@@ -160,7 +162,7 @@ public class DataCheckerScreen extends Screen
 	{
 		super.renderBackground(guiGraphics, mouseX, mouseY, partialTicks);
 		
-		guiGraphics.blit(guiBackground, xOffset, yOffset, 0, 0, GUI_WIDTH, GUI_HEIGHT);
+		guiGraphics.blit(guiBackground, xOffset, yOffset, 0, 0, GUI_WIDTH, GUI_HEIGHT, 352, 256);
 	}
 	
 	@Override
@@ -288,7 +290,7 @@ public class DataCheckerScreen extends Screen
 		} else return super.keyPressed(keyCode, scanCode, i);
 	}
 	
-	public static class SessionWidget extends IncipisphereWidget
+	public class SessionWidget extends IncipisphereWidget
 	{
 		public final List<LandWidget> landWidgets;
 		
@@ -353,7 +355,7 @@ public class DataCheckerScreen extends Screen
 		}
 	}
 	
-	public static class LandWidget extends IncipisphereWidget
+	public class LandWidget extends IncipisphereWidget
 	{
 		public final ResourceKey<Level> land;
 		public final Optional<LandTypePair.Named> oNamed;
@@ -415,12 +417,6 @@ public class DataCheckerScreen extends Screen
 			}
 		}
 		
-		@Override
-		public boolean isFocused()
-		{
-			return false;
-		}
-		
 		public void temp()
 		{
 			//list.add(new TextField("Land dim: %s", (!landDim.isEmpty() ? landDim : "Pre-entry")));
@@ -440,7 +436,7 @@ public class DataCheckerScreen extends Screen
 		}
 	}
 	
-	public static class IncipisphereWidget extends AbstractWidget
+	public class IncipisphereWidget extends AbstractWidget
 	{
 		public int size;
 		
@@ -472,7 +468,7 @@ public class DataCheckerScreen extends Screen
 		}
 	}
 	
-	public static class SessionButton extends ExtendedButton
+	public class SessionButton extends ExtendedButton
 	{
 		public final SessionWidget sessionWidget;
 		
@@ -485,7 +481,13 @@ public class DataCheckerScreen extends Screen
 		@Override
 		public void onPress()
 		{
+			focusedButton = this;
+		}
 		
+		@Override
+		public boolean isFocused()
+		{
+			return focusedButton == this || super.isFocused();
 		}
 		
 		@Override
