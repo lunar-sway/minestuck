@@ -2,6 +2,8 @@ package com.mraof.minestuck.client.gui.playerStats;
 
 import com.mojang.blaze3d.platform.InputConstants;
 import com.mojang.blaze3d.systems.RenderSystem;
+import com.mojang.blaze3d.vertex.PoseStack;
+import com.mojang.math.Axis;
 import com.mraof.minestuck.client.renderer.LandSkySpriteUploader;
 import com.mraof.minestuck.client.util.MSKeyHandler;
 import com.mraof.minestuck.network.DataCheckerPackets;
@@ -33,6 +35,7 @@ import net.neoforged.neoforge.client.gui.widget.ExtendedButton;
 import net.neoforged.neoforge.network.PacketDistributor;
 import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.Logger;
+import software.bernie.geckolib.util.RenderUtil;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -51,6 +54,7 @@ public class DataCheckerScreen extends Screen
 	
 	public static CompoundTag nbt = new CompoundTag();
 	private Button refreshButton;
+	private List<SessionButton> buttons = new ArrayList<>();
 	private int index;
 	private boolean isScrolling;
 	private int xOffset;
@@ -85,10 +89,11 @@ public class DataCheckerScreen extends Screen
 		refreshButton = addRenderableWidget(Button.builder(Component.empty(), button -> refresh()).pos(xOffset + GUI_WIDTH - 45, yOffset + 5).size(18, 18).build());
 		
 		ListTag sessionList = nbt.getList("sessions", Tag.TAG_COMPOUND);
-		List<SessionButton> buttons = new ArrayList<>();
 		
 		for(int sessionIt = 0; sessionIt < sessionList.size(); sessionIt++)
 		{
+			List<LandWidget> landWidgets = new ArrayList<>();
+			
 			CompoundTag sessionTag = sessionList.getCompound(sessionIt);
 			ListTag connectionTags = sessionTag.getList("connections", Tag.TAG_COMPOUND);
 			
@@ -96,14 +101,20 @@ public class DataCheckerScreen extends Screen
 			if(sessionTag.contains("completed"))
 				completed = sessionTag.getBoolean("completed");
 			
-			List<LandWidget> landWidgets = new ArrayList<>();
 			SessionWidget sessionWidget = new SessionWidget(xOffset + 5, yOffset + 5, GUI_HEIGHT - 10, landWidgets);
 			sessionWidget.visible = false;
 			sessionWidget.active = false;
 			addRenderableWidget(sessionWidget);
-			SessionButton sessionButton = new SessionButton(xOffset + GUI_HEIGHT - 4, yOffset + 24 + (sessionIt * 22), 56, 20, Component.literal("Session " + sessionIt), sessionWidget);
-			//TODO add player names to Session button
-			//sessionButton.setTooltip(Tooltip.create(Component.literal()));
+			
+			Component sessionComponent = Component.literal("Session " + sessionIt);
+			SessionButton sessionButton = new SessionButton(xOffset + GUI_HEIGHT - 4, yOffset + 24 + (sessionIt * 22), 56, 20, sessionComponent, sessionWidget);
+			MutableComponent sessionPlayers = sessionComponent.copy().withStyle(ChatFormatting.BOLD);
+			for(int i = 0; i < connectionTags.size(); i++)
+			{
+				CompoundTag connectionTag = connectionTags.getCompound(i);
+				sessionPlayers.append("\n" + connectionTag.getString("client")).withStyle(ChatFormatting.RESET);
+			}
+			sessionButton.setTooltip(Tooltip.create(sessionPlayers));
 			addRenderableWidget(sessionButton);
 			buttons.add(sessionButton);
 			
@@ -202,6 +213,14 @@ public class DataCheckerScreen extends Screen
 		//guiGraphics.blit(guiBackground, (width - GUI_WIDTH) / 2 + 190, (height - GUI_HEIGHT) / 2 + LIST_Y + 1 + (int) displayIndex * 91, textureIndex, 0, 12, 15);
 	}
 	
+	private void refresh()
+	{
+		PacketDistributor.sendToServer(DataCheckerPackets.Request.create());
+		nbt = new CompoundTag();
+		
+		buildWidgets();
+	}
+	
 	@Override
 	public void tick()
 	{
@@ -259,14 +278,6 @@ public class DataCheckerScreen extends Screen
 		return super.mouseReleased(mouseX, mouseY, mouseButton);
 	}
 	
-	private void refresh()
-	{
-		PacketDistributor.sendToServer(DataCheckerPackets.Request.create());
-		nbt = new CompoundTag();
-		
-		buildWidgets();
-	}
-	
 	@Override
 	public boolean keyPressed(int keyCode, int scanCode, int i)
 	{
@@ -297,26 +308,36 @@ public class DataCheckerScreen extends Screen
 			
 			RandomSource randomSource = RandomSource.create(0);
 			
+			int skaiaSize = 16;
+			guiGraphics.blit(getCenterX() - skaiaSize / 2, getCenterY() - skaiaSize / 2, 0, skaiaSize, skaiaSize, LandSkySpriteUploader.getInstance().getSkaiaSprite());
 			int meteorCount = 200;
+			
+			PoseStack poseStack = guiGraphics.pose();
+			poseStack.pushPose();
+			float rotation = (float) (RenderUtil.getCurrentTick() % 10000) * 0.0001F * 360;
+			poseStack.rotateAround(Axis.ZP.rotationDegrees(rotation), getCenterX(), getCenterY(), 0);
+			
 			for(int i = 0; i < meteorCount; i++)
 			{
-				float rotation = ((float) i / meteorCount) * 360;
-				int veilRadius = (int) (LAND_RADIUS * 1.35);
-				int veilX = getXOnRadius(getCenterX(), veilRadius, rotation) + randomSource.nextIntBetweenInclusive(-3, 3);
-				int veilY = getYOnRadius(getCenterY(), veilRadius, rotation) + randomSource.nextIntBetweenInclusive(-3, 3);
+				float veilRotation = ((float) i / meteorCount) * 360;
+				int veilRadius = (int) (LAND_RADIUS * 1.4);
+				int veilX = getXOnRadius(getCenterX(), veilRadius, veilRotation) + randomSource.nextIntBetweenInclusive(-3, 3);
+				int veilY = getYOnRadius(getCenterY(), veilRadius, veilRotation) + randomSource.nextIntBetweenInclusive(-3, 3);
 				guiGraphics.fill(veilX, veilY, veilX + 1, veilY + 1, randomSource.nextBoolean() ? 0xFFFFFFFF : 0xFFDDDDDD);
 			}
 			
-			int skaiaSize = 16;
 			int kingdomSize = 4;
-			guiGraphics.blit(getCenterX() - skaiaSize / 2, getCenterY() - skaiaSize / 2, 0, skaiaSize, skaiaSize, LandSkySpriteUploader.getInstance().getSkaiaSprite());
-			guiGraphics.blit(getCenterX() + 13, getCenterY() - 5, 0, kingdomSize, kingdomSize, LandSkySpriteUploader.getInstance().getProspitSprite());
 			
-			guiGraphics.blit(getX() + 10, getY() + height - 10, 0, kingdomSize, kingdomSize, LandSkySpriteUploader.getInstance().getDerseSprite());
+			guiGraphics.blit(getCenterX() + 8, getCenterY() - 7, 0, kingdomSize, kingdomSize, LandSkySpriteUploader.getInstance().getProspitSprite());
 			
-			//TODO replace with blank representation, handle on connection/land basis?
-			//if(isOpen)
-			//	guiGraphics.blitSprite(GristType.DUMMY_ICON_LOCATION, getX() + 10, getY() + height - 10, 0, 4, 4);
+			poseStack.pushPose();
+			int derseX = getX() + 16;
+			int derseY = getY() + height - 27;
+			poseStack.rotateAround(Axis.ZP.rotationDegrees(180), derseX, derseY, 0);
+			guiGraphics.blit(derseX, derseY, 0, kingdomSize, kingdomSize, LandSkySpriteUploader.getInstance().getDerseSprite());
+			poseStack.popPose();
+			
+			poseStack.popPose();
 		}
 		
 		@Override
@@ -374,7 +395,8 @@ public class DataCheckerScreen extends Screen
 		@Override
 		protected void renderWidget(GuiGraphics guiGraphics, int mouseX, int mouseY, float partialTick)
 		{
-			//TODO highlight if hovered
+			if(isHoveredOrFocused())
+				guiGraphics.fill(getX() - 1, getY() - 1, getX() + size + 1, getY() + size + 1, 0xFFFFFFFF);
 			
 			if(oNamed.isPresent())
 			{
