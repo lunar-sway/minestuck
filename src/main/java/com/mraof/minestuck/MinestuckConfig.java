@@ -50,6 +50,7 @@ public class MinestuckConfig
 		public final BooleanValue editmodeClickToSelect;
 		public final BooleanValue editmodeClickToPlace;
 		public final BooleanValue editmodeCopyFromLastPlacement;
+		public final IntValue editmodePreviewDistance;
 		
 		private Client(Builder builder)
 		{
@@ -70,6 +71,8 @@ public class MinestuckConfig
 					.define("editmodeClickToPlace", true);
 			editmodeCopyFromLastPlacement = builder.comment("Determines what a repeated copy uses as its source. Last successfully placed copy or always the original selection")
 					.define("editmodeCopyFromLastPlacement", true);
+			editmodePreviewDistance = builder.comment("Determines the distance of move/copy tools")
+					.defineInRange("editmodePreviewDistance", 5, 1, 64);
 			builder.pop();
 			
 			builder.pop();

@@ -454,7 +454,7 @@ public class ClientEditToolDrag
 				distance += 0.6;
 			if(MSKeyHandler.zoomOutKey.isDown())
 				distance -= 0.6;
-			cap.setPreviewDistance(Mth.clamp(distance, 1.0, 64.0));
+			cap.setPreviewDistance(Mth.clamp(distance, 1.0, MinestuckConfig.CLIENT.editmodePreviewDistance.get()));
 			
 			Vec3 eye = player.getEyePosition();
 			Vec3 look = player.getLookAngle();
