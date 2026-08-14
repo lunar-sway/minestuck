@@ -1,5 +1,9 @@
 {
   "values": [
-    "#minecraft:portals"
+    "#minecraft:portals",
+    "minecraft:spawner",
+    "minecraft:trial_spawner",
+    "minecraft:vault",
+    "minecraft:reinforced_deepslate"
   ]
 }
