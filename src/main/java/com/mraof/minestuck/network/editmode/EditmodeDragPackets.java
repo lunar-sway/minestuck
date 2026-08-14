@@ -340,7 +340,10 @@ public final class EditmodeDragPackets
 			
 			BlockState finalState = level.getBlockState(dest);
 			if(!finalState.isAir() && finalState.getBlock() == c.state().getBlock())
-				actualCost.add(c.blockCost());
+			{
+				GristSet.Immutable pieceCost = isCopy ? c.blockCost() : moveCost(c.blockCost());
+				actualCost.add(pieceCost);
+			}
 		}
 		
 		data.getGristCache().tryTake(actualCost.asImmutable(), GristHelper.EnumSource.SERVER);
@@ -353,9 +356,13 @@ public final class EditmodeDragPackets
 		
 		if(isCopy)
 		{
-			BlockPos rotatedMax = anchor.offset(rotateOffset(max.subtract(min), sizeX, sizeZ, rotation));
-			BlockPos newMin = new BlockPos(Math.min(anchor.getX(), rotatedMax.getX()), Math.min(anchor.getY(), rotatedMax.getY()), Math.min(anchor.getZ(), rotatedMax.getZ()));
-			BlockPos newMax = new BlockPos(Math.max(anchor.getX(), rotatedMax.getX()), Math.max(anchor.getY(), rotatedMax.getY()), Math.max(anchor.getZ(), rotatedMax.getZ()));
+			boolean swapXZ = rotation == Rotation.CLOCKWISE_90 || rotation == Rotation.COUNTERCLOCKWISE_90;
+			int rotatedSizeX = swapXZ ? sizeZ : sizeX;
+			int rotatedSizeZ = swapXZ ? sizeX : sizeZ;
+			int sizeY = max.getY() - min.getY() + 1;
+			
+			BlockPos newMin = anchor;
+			BlockPos newMax = anchor.offset(rotatedSizeX - 1, sizeY - 1, rotatedSizeZ - 1);
 			PacketDistributor.sendToPlayer(player, new ServerEditPackets.SelectionUpdate(false, newMin, newMax));
 		}
 		else
