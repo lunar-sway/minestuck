@@ -87,7 +87,6 @@ public final class ServerEditPackets
 			cap.setSelectionPos1(captureMin);
 			cap.setSelectionPos2(captureMax);
 			cap.setPreviewRotation(0);
-			ClientSelectionCache.scheduleRecapture(captureMin, captureMax);
 		}
 	}
 	

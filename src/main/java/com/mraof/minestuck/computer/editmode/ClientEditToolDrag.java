@@ -76,7 +76,6 @@ public class ClientEditToolDrag
 		if (player == null || !player.isAlive() || !ClientEditmodeData.isInEditmode())
 			return;
 		
-		ClientSelectionCache.tickPending(player.level());
 		EditTools cap = player.getData(MSAttachments.EDIT_TOOLS);
 		
 		ClientEditToolDrag.doRecycleCode(mc, player, cap);
@@ -439,6 +438,14 @@ public class ClientEditToolDrag
 		boolean previewJustStarted = (moveDown && !wasPreviewingMove) || (copyDown && !wasPreviewingCopy);
 		if(previewJustStarted)
 		{
+			if(cap.getSelectionPos1() != null && cap.getSelectionPos2() != null)
+			{
+				BlockPos a = cap.getSelectionPos1(), b = cap.getSelectionPos2();
+				BlockPos captureMin = new BlockPos(Math.min(a.getX(), b.getX()), Math.min(a.getY(), b.getY()), Math.min(a.getZ(), b.getZ()));
+				BlockPos captureMax = new BlockPos(Math.max(a.getX(), b.getX()), Math.max(a.getY(), b.getY()), Math.max(a.getZ(), b.getZ()));
+				ClientSelectionCache.capture(player.level(), captureMin, captureMax);
+			}
+			
 			//default placement distance scales with the footprint, so big structures land clear of the player by default
 			double diagonal = Math.sqrt((double) ClientSelectionCache.getSizeX() * ClientSelectionCache.getSizeX()
 					+ (double) ClientSelectionCache.getSizeZ() * ClientSelectionCache.getSizeZ());

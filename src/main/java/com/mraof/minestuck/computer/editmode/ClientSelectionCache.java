@@ -18,9 +18,6 @@ public final class ClientSelectionCache
 	
 	private static List<Entry> entries = List.of();
 	private static int sizeX = 1, sizeY = 1, sizeZ = 1;
-	private static BlockPos pendingMin = null;
-	private static BlockPos pendingMax = null;
-	private static int pendingDelayTicks = 0;
 	
 	public static void capture(Level level, BlockPos min, BlockPos max)
 	{
@@ -65,27 +62,6 @@ public final class ClientSelectionCache
 		entries = rotated;
 		sizeX = newSizeX;
 		sizeZ = newSizeZ;
-	}
-	
-	public static void scheduleRecapture(BlockPos min, BlockPos max)
-	{
-		pendingMin = min;
-		pendingMax = max;
-		pendingDelayTicks = 2;
-	}
-	
-	public static void tickPending(Level level)
-	{
-		if(pendingMin == null)
-			return;
-		if(pendingDelayTicks > 0)
-		{
-			pendingDelayTicks--;
-			return;
-		}
-		capture(level, pendingMin, pendingMax);
-		pendingMin = null;
-		pendingMax = null;
 	}
 	
 	public static List<Entry> getEntries() { return entries; }

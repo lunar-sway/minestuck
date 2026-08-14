@@ -42,6 +42,7 @@ import net.minecraft.world.InteractionHand;
 import net.minecraft.world.damagesource.DamageSource;
 import net.minecraft.world.effect.MobEffectInstance;
 import net.minecraft.world.effect.MobEffects;
+import net.minecraft.world.entity.Entity;
 import net.minecraft.world.entity.player.Inventory;
 import net.minecraft.world.entity.player.Player;
 import net.minecraft.world.inventory.AbstractContainerMenu;
@@ -431,7 +432,7 @@ public final class ServerEditHandler    //TODO Consider splitting this class int
 			if(entry != null)
 			{
 				GristSet cost = entry.getCurrentCost(targetData);
-				if(!gristCache.canAfford(cost))
+				if(cost == null || !gristCache.canAfford(cost))
 				{
 					if(cost != null)
 						event.getEntity().sendSystemMessage(GristCache.createMissingMessage(cost));
@@ -472,8 +473,12 @@ public final class ServerEditHandler    //TODO Consider splitting this class int
 			ItemStack stack = block.getCloneItemStack(null, event.getLevel(), event.getPos(), event.getEntity());
 			DeployEntry entry = DeployList.getEntryForItem(stack, data.sburbData(), event.getLevel());
 			if(block.getDestroySpeed(event.getLevel(), event.getPos()) < 0 || block.is(MSTags.Blocks.EDITMODE_BREAK_BLACKLIST)
-					|| (!data.getGristCache().canAfford(blockBreakCost()) && !MinestuckConfig.SERVER.gristRefund.get()
-					|| entry == null || entry.getCategory() == DeployList.EntryLists.ATHENEUM))
+					|| entry != null && entry.getCategory() == DeployList.EntryLists.ATHENEUM)
+			{
+				event.setCanceled(true);
+				return;
+			}
+			if(entry == null && !data.getGristCache().canAfford(blockBreakCost()) && !MinestuckConfig.SERVER.gristRefund.get())
 			{
 				event.setCanceled(true);
 				return;
@@ -514,8 +519,12 @@ public final class ServerEditHandler    //TODO Consider splitting this class int
 			if(!MinestuckConfig.SERVER.gristRefund.get())
 			{
 				if(entry != null)
-					data.getGristCache().addWithGutter(entry.getCurrentCost(data.sburbData()), GristHelper.EnumSource.SERVER);
-				else //Assumes that this will succeed because of the check in onLeftClickBlockControl()
+				{
+					GristSet cost = entry.getCurrentCost(data.sburbData());
+					if(cost != null)
+						data.getGristCache().addWithGutter(cost, GristHelper.EnumSource.SERVER);
+				}
+				else
 					data.getGristCache().tryTake(blockBreakCost(), GristHelper.EnumSource.SERVER);
 			} else
 			{
@@ -656,12 +665,16 @@ public final class ServerEditHandler    //TODO Consider splitting this class int
 	
 	public static void updateCursorEntity(ServerPlayer player, Vec3 newPosition, float cursorLean, boolean flip, UUID uuid)
 	{
-		ServerCursorEntity cursor = (ServerCursorEntity) player.serverLevel().getEntity(uuid);
-		
-		cursor.moveTo(newPosition.x, newPosition.y, newPosition.z, cursorLean - 45.0f, flip ? 135f : 45f);
-		cursor.setYBodyRot(cursorLean - 45.0f);
-		cursor.setYHeadRot(cursorLean - 45.0f);
-		cursor.setAnimation(ServerCursorEntity.AnimationType.IDLE);
+		Entity entity = player.serverLevel().getEntity(uuid);
+		if (entity instanceof ServerCursorEntity cursor)
+		{
+			cursor.moveTo(newPosition.x, newPosition.y, newPosition.z, cursorLean - 45.0f, flip ? 135f : 45f);
+			cursor.setYBodyRot(cursorLean - 45.0f);
+			cursor.setYHeadRot(cursorLean - 45.0f);
+			cursor.setAnimation(ServerCursorEntity.AnimationType.IDLE);
+		} else {
+			player.getData(MSAttachments.EDIT_TOOLS).setEditCursorID(null);
+		}
 	}
 	
 	/**
@@ -670,7 +683,6 @@ public final class ServerEditHandler    //TODO Consider splitting this class int
 	public static void removeCursorEntity(ServerPlayer player, boolean rejected)
 	{
 		EditTools cap = player.getData(MSAttachments.EDIT_TOOLS);
-		
 		if(cap.getEditCursorID() != null)
 		{
 			ServerCursorEntity cursor = (ServerCursorEntity) player.serverLevel().getEntity(cap.getEditCursorID());

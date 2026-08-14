@@ -144,32 +144,39 @@ public class DeployListLoader extends SimpleJsonResourceReloadListener
 			{
 				ItemStack stack = entry.stack.copy();
 				stack.setCount(1);
-				set = GristCostRecipe.findCostForItem(stack, null, false, ServerLifecycleHooks.getCurrentServer().overworld()).mutableCopy();
+				GristSet baseCost = GristCostRecipe.findCostForItem(stack, null, false, ServerLifecycleHooks.getCurrentServer().overworld());
+				if(baseCost == null)
+					return null;
+				set = baseCost.mutableCopy();
+				return set.asImmutable();
 			}
 			
 			MinecraftServer server = ServerLifecycleHooks.getCurrentServer();
-			if(server == null)
-				return entry.cost.isEmpty() ? set.asImmutable() : null;
-			ServerPlayer player = playerData.playerId().getPlayer(server);
-			if(player == null)
-				return entry.cost.isEmpty() ? set.asImmutable() : null;
+			ServerPlayer player = server != null ? playerData.playerId().getPlayer(server) : null;
 			
 			for(GristCost cost : entry.cost)
 			{
-				if(cost.test(this.getContext(), player))
+				if(player != null)
 				{
-					if(cost.grist.isPresent())
+					if(cost.test(this.getContext(), player))
 					{
-						set.add(cost.grist.get());
+						if(cost.grist().isPresent())
+							set.add(cost.grist().get());
+						if(cost.primary() != 0)
+							set.add(playerData.getBaseGrist(), cost.primary());
+						return set.asImmutable();
 					}
-					if(cost.primary != 0)
-					{
-						set.add(playerData.getBaseGrist(), cost.primary);
-					}
-					break;
+				}
+				else if(cost.testWithoutPlayer(this.getContext()))
+				{
+					if(cost.grist().isPresent())
+						set.add(cost.grist().get());
+					if(cost.primary() != 0)
+						set.add(playerData.getBaseGrist(), cost.primary());
+					return set.asImmutable();
 				}
 			}
-			return set.asImmutable();
+			return null;
 		};
 	}
 	
@@ -204,6 +211,17 @@ public class DeployListLoader extends SimpleJsonResourceReloadListener
 			for(PlayerOnlyCondition condition : clientConditions)
 			{
 				if(!condition.test(player)) return false;
+			}
+			return true;
+		}
+		
+		public boolean testWithoutPlayer(ICondition.IContext context)
+		{
+			if(!clientConditions.isEmpty())
+				return false;
+			for(ICondition condition : neoforgeConditions)
+			{
+				if(!condition.test(context)) return false;
 			}
 			return true;
 		}
