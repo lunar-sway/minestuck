@@ -63,6 +63,7 @@ public class MinestuckConfig
 					.defineEnum("echeladderAnimation", AnimationSpeed.NORMAL);
 			npcDialogueTextColors = builder.comment("Determines whether an NPC will use their custom formatted color value when talking in a dialogue screen.")
 					.define("npcDialogueTextColors", true);
+			builder.pop();
 			
 			builder.push("editMode");
 			editmodeClickToSelect = builder.comment("Determines if the selection tool is triggered in click-style or drag-style.")
@@ -73,8 +74,6 @@ public class MinestuckConfig
 					.define("editmodeCopyFromLastPlacement", true);
 			editmodePreviewDistance = builder.comment("Determines the distance of move/copy tools")
 					.defineInRange("editmodePreviewDistance", 5, 1, 64);
-			builder.pop();
-			
 			builder.pop();
 		}
 	}
