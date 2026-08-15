@@ -309,7 +309,7 @@ public class ClientEditToolDrag
 			return;
 		
 		KeyMapping toolKey = MSKeyHandler.selectKey;
-		boolean clickMode = MinestuckConfig.CLIENT.editmodeClickToSelect.get();
+		boolean clickMode = MinestuckConfig.CLIENT.clickToSelect.get();
 		boolean pressedEdge = toolKey.isDown() && !selectKeyWasDown;
 		
 		boolean active;
@@ -387,7 +387,7 @@ public class ClientEditToolDrag
 		
 		boolean hasSelection = cap.getSelectionPos1() != null && cap.getSelectionPos2() != null;
 		boolean canPreview = hasSelection && ClientEditmodeData.isInEditmode() && !mc.isPaused() && cap.getToolMode() == null;
-		boolean clickMode = MinestuckConfig.CLIENT.editmodeClickToPlace.get();
+		boolean clickMode = MinestuckConfig.CLIENT.clickToPlace.get();
 		
 		boolean movePressedEdge = moveKey.isDown() && !moveKeyWasDown;
 		boolean copyPressedEdge = copyKey.isDown() && !copyKeyWasDown;
@@ -461,7 +461,7 @@ public class ClientEditToolDrag
 				distance += 0.6;
 			if(MSKeyHandler.zoomOutKey.isDown())
 				distance -= 0.6;
-			cap.setPreviewDistance(Mth.clamp(distance, 1.0, MinestuckConfig.CLIENT.editmodePreviewDistance.get()));
+			cap.setPreviewDistance(Mth.clamp(distance, 1.0, MinestuckConfig.CLIENT.toolsDistance.get()));
 			
 			Vec3 eye = player.getEyePosition();
 			Vec3 look = player.getLookAngle();

@@ -70,7 +70,7 @@ public final class ServerEditPackets
 			if(cap.getOriginalSelectionPos1() == null || cap.getOriginalSelectionPos2() == null)
 				cap.setOriginalSelection(newMin, newMax); //safety fallback, shouldn't normally happen
 			
-			boolean continueFromLast = MinestuckConfig.CLIENT.editmodeCopyFromLastPlacement.get();
+			boolean continueFromLast = MinestuckConfig.CLIENT.copyFromLastPlacement.get();
 			BlockPos captureMin, captureMax;
 			
 			if(continueFromLast)

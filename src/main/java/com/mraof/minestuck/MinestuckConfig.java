@@ -47,10 +47,10 @@ public class MinestuckConfig
 		public final BooleanValue loginColorSelector;
 		public final BooleanValue alchemyIcons;
 		public final BooleanValue npcDialogueTextColors;
-		public final BooleanValue editmodeClickToSelect;
-		public final BooleanValue editmodeClickToPlace;
-		public final BooleanValue editmodeCopyFromLastPlacement;
-		public final IntValue editmodePreviewDistance;
+		public final BooleanValue clickToSelect;
+		public final BooleanValue clickToPlace;
+		public final BooleanValue copyFromLastPlacement;
+		public final IntValue toolsDistance;
 		
 		private Client(Builder builder)
 		{
@@ -66,14 +66,14 @@ public class MinestuckConfig
 			builder.pop();
 			
 			builder.push("editMode");
-			editmodeClickToSelect = builder.comment("Determines if the selection tool is triggered in click-style or drag-style.")
-					.define("editmodeClickToSelect", true);
-			editmodeClickToPlace = builder.comment("Determines if the move/copy tools are triggered in click-style or drag-style.")
-					.define("editmodeClickToPlace", true);
-			editmodeCopyFromLastPlacement = builder.comment("Determines what a repeated copy uses as its source. Last successfully placed copy or always the original selection")
-					.define("editmodeCopyFromLastPlacement", true);
-			editmodePreviewDistance = builder.comment("Determines the distance of move/copy tools")
-					.defineInRange("editmodePreviewDistance", 5, 1, 64);
+			clickToSelect = builder.comment("Determines if the selection tool is triggered in click-style or drag-style.")
+					.define("clickToSelect", true);
+			clickToPlace = builder.comment("Determines if the move/copy tools are triggered in click-style or drag-style.")
+					.define("clickToPlace", true);
+			copyFromLastPlacement = builder.comment("Determines what a repeated copy uses as its source. Last successfully placed copy or always the original selection")
+					.define("copyFromLastPlacement", true);
+			toolsDistance = builder.comment("Determines the distance of move/copy tools")
+					.defineInRange("toolsDistance", 5, 1, 64);
 			builder.pop();
 		}
 	}
