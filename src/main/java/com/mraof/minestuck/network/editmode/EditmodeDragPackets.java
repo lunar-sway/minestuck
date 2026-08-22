@@ -210,7 +210,7 @@ public final class EditmodeDragPackets
 		DeployEntry entry = DeployList.getEntryForItem(stack, playerData, level);
 		GristSet baseCost = entry != null ? entry.getCurrentCost(playerData) : GristCostRecipe.findCostForItem(stack, null, false, level);
 		if(baseCost == null)
-			baseCost = GristTypes.BUILD.get().amount(1);
+			return new ItemCostResult(MutableGristSet.newDefault().asImmutable(), true);
 		total.add(baseCost.asImmutable());
 		
 		ItemContainerContents containerComponent = stack.get(DataComponents.CONTAINER);
@@ -289,7 +289,9 @@ public final class EditmodeDragPackets
 			
 			DeployEntry entry = DeployList.getEntryForItem(bareStack, data.sburbData(), level);
 			GristSet blockCostRaw = entry != null ? entry.getCurrentCost(data.sburbData()) : GristCostRecipe.findCostForItem(bareStack, null, false, level);
-			MutableGristSet blockCost = (blockCostRaw != null ? blockCostRaw : GristTypes.BUILD.get().amount(1)).mutableCopy();
+			if(blockCostRaw == null && isCopy)
+				continue;
+			MutableGristSet blockCost = blockCostRaw != null ? blockCostRaw.mutableCopy() : MutableGristSet.newDefault();
 			
 			// calculate the cost of items within container
 			// and adding it to the total price (to avoid dupe abuse)
@@ -304,7 +306,7 @@ public final class EditmodeDragPackets
 					ItemCostResult containedResult = computeItemStackCost(contained, data.sburbData(), level, 0);
 					if(containedResult.truncated())
 					{
-						player.sendSystemMessage(Component.literal("Selection contains an item nested too deeply to safely evaluate!"), true);
+						player.sendSystemMessage(Component.literal("Selection contains an item nested too deeply to safely evaluate (or it does not have a grist cost yet)!"), true);
 						ServerEditHandler.removeCursorEntity(player, true);
 						return;
 					}
