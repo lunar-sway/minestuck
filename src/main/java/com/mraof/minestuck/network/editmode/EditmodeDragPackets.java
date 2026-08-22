@@ -356,7 +356,7 @@ public final class EditmodeDragPackets
 			{
 				if(c.blockEntityTag() != null)
 					level.removeBlockEntity(c.sourcePos());
-				level.removeBlock(c.sourcePos(), false);
+				level.setBlock(c.sourcePos(), Blocks.AIR.defaultBlockState(), Block.UPDATE_CLIENTS | Block.UPDATE_KNOWN_SHAPE);
 			}
 		}
 		
@@ -373,7 +373,7 @@ public final class EditmodeDragPackets
 			BlockState toPlace = c.state().rotate(rotation);
 			if(toPlace.hasProperty(BlockStateProperties.EXTENDED))
 				toPlace = toPlace.setValue(BlockStateProperties.EXTENDED, false);
-			level.setBlock(dest, toPlace, 3);
+			level.setBlock(dest, toPlace, Block.UPDATE_CLIENTS | Block.UPDATE_KNOWN_SHAPE);
 			
 			if(c.blockEntityTag() != null && level.getBlockEntity(dest) != null)
 			{
@@ -391,6 +391,15 @@ public final class EditmodeDragPackets
 				broadcastFrom.add(c.sourcePos());
 				broadcastTo.add(dest);
 			}
+		}
+		
+		for(BlockPos dest : placedPositions)
+			level.updateNeighborsAt(dest, level.getBlockState(dest).getBlock());
+		
+		if(!isCopy)
+		{
+			for(Captured c : captured)
+				level.updateNeighborsAt(c.sourcePos(), Blocks.AIR);
 		}
 		
 		for(BlockPos dest : placedPositions)
