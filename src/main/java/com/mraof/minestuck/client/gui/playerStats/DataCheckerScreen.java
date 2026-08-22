@@ -13,11 +13,13 @@ import com.mraof.minestuck.player.EnumClass;
 import com.mraof.minestuck.player.Title;
 import com.mraof.minestuck.world.lands.LandTypePair;
 import net.minecraft.ChatFormatting;
+import net.minecraft.client.Minecraft;
 import net.minecraft.client.gui.GuiGraphics;
 import net.minecraft.client.gui.components.AbstractWidget;
 import net.minecraft.client.gui.components.Button;
 import net.minecraft.client.gui.components.Tooltip;
 import net.minecraft.client.gui.narration.NarrationElementOutput;
+import net.minecraft.client.gui.screens.ChatScreen;
 import net.minecraft.client.gui.screens.Screen;
 import net.minecraft.client.renderer.texture.TextureAtlasSprite;
 import net.minecraft.core.registries.Registries;
@@ -88,7 +90,7 @@ public class DataCheckerScreen extends Screen
 	private void buildWidgets()
 	{
 		//TODO window needs resizing or closed for session buttons to show up. Using refresh button does not work to refresh
-		refreshButton = addRenderableWidget(Button.builder(Component.empty(), button -> refresh()).pos(xOffset + GUI_WIDTH - 45, yOffset + 5).size(18, 18).build());
+		refreshButton = addRenderableWidget(Button.builder(Component.empty(), button -> refresh()).pos(xOffset + GUI_WIDTH - 23, yOffset + 5).size(18, 18).build());
 		
 		ListTag sessionList = nbt.getList("sessions", Tag.TAG_COMPOUND);
 		
@@ -109,7 +111,7 @@ public class DataCheckerScreen extends Screen
 			addRenderableWidget(sessionWidget);
 			
 			Component sessionComponent = Component.literal("Session " + sessionIt);
-			SessionButton sessionButton = new SessionButton(xOffset + LAND_INFO_X + GUI_HEIGHT - 4, yOffset + 24 + (sessionIt * 22), 56, 20, sessionComponent, sessionWidget);
+			SessionButton sessionButton = new SessionButton(xOffset + LAND_INFO_X + GUI_HEIGHT - 2, yOffset + 5 + (sessionIt * 22), 60, 20, sessionComponent, sessionWidget);
 			MutableComponent sessionPlayers = sessionComponent.copy().withStyle(ChatFormatting.BOLD);
 			for(int i = 0; i < connectionTags.size(); i++)
 			{
@@ -189,7 +191,7 @@ public class DataCheckerScreen extends Screen
 		if(this.refreshButton.active)
 			RenderSystem.setShaderColor(1, 1, 1, 1);
 		else RenderSystem.setShaderColor(.5F, .5F, .5F, 1);
-		guiGraphics.blit(icons, xOffset + GUI_WIDTH - 44, yOffset + 6, 224, 0, 16, 16);
+		guiGraphics.blit(icons, xOffset + GUI_WIDTH - 22, yOffset + 6, 224, 0, 16, 16);
 		
 		/*
 		if(guiComponent != null)
@@ -360,6 +362,7 @@ public class DataCheckerScreen extends Screen
 		public final ResourceKey<Level> land;
 		public final Optional<LandTypePair.Named> oNamed;
 		public final CompoundTag landNbt;
+		public final Button gristButton;
 		
 		public LandWidget(int x, int y, int size, CompoundTag landNbt)
 		{
@@ -378,27 +381,40 @@ public class DataCheckerScreen extends Screen
 			if(land != null && landNbt.contains("landTypes"))
 				oNamed = LandTypePair.Named.CODEC.parse(NbtOps.INSTANCE, landNbt.get("landTypes")).resultOrPartial(LOGGER::error);
 			this.oNamed = oNamed;
-			if(oNamed.isPresent())
-				component.append(oNamed.get().asComponentWithLandFont());
-			else
-				component.append("Land of ").append("Null").withStyle(ChatFormatting.OBFUSCATED).append(" and ").withStyle(ChatFormatting.RESET).append("Null").withStyle(ChatFormatting.OBFUSCATED);
-			
-			MutableComponent landPlayer = Component.literal("\n" + landNbt.getString("client")).withStyle(ChatFormatting.RESET);
-			if(landNbt.contains("playerColor"))
-				landPlayer.withColor(landNbt.getInt("playerColor"));
-			component.append(landPlayer);
-			
-			component.append("\n\n" + "Server is " + landNbt.getString("server"));
-			component.append("\n" + "Is Primary Connection: " + landNbt.getBoolean("isMain"));
+			appendLandAndPlayer(landNbt, oNamed, component);
 			
 			setTooltip(Tooltip.create(component));
+			
+			gristButton = addRenderableWidget(Button.builder(Component.literal("View Grist Cache"), button -> gristButtonPress(landNbt)).pos(xOffset + 3, yOffset + GUI_HEIGHT - 20).size(90, 16).build());
+			gristButton.visible = false;
+		}
+		
+		private void gristButtonPress(CompoundTag landNbt)
+		{
+			ChatScreen chat = new ChatScreen("/grist get " + landNbt.getString("client"));
+			Minecraft.getInstance().setScreen(chat);
 		}
 		
 		@Override
 		protected void renderWidget(GuiGraphics guiGraphics, int mouseX, int mouseY, float partialTick)
 		{
 			if(isHoveredOrFocused())
+			{
+				//highlight Land
 				guiGraphics.fill(getX() - 1, getY() - 1, getX() + size + 1, getY() + size + 1, 0xFFFFFFFF);
+			}
+			
+			gristButton.visible = isFocused();
+			if(isFocused())
+			{
+				//fill in left section of GUI
+				MutableComponent component = Component.empty();
+				appendLandAndPlayer(landNbt, oNamed, component);
+				component.append("\n\n" + "Server is " + landNbt.getString("server"));
+				component.append("\n" + "Is Primary Connection: " + landNbt.getBoolean("isMain"));
+				
+				guiGraphics.drawWordWrap(minecraft.font, component, xOffset + 4, yOffset + 4, 90, 0xFF000000);
+			}
 			
 			if(oNamed.isPresent())
 			{
@@ -415,6 +431,19 @@ public class DataCheckerScreen extends Screen
 				guiGraphics.fill(getX(), getY(), getX() + size, getY() + size, 0xFFFFFFFF);
 				guiGraphics.fill(getX() + 1, getY() + 1, getX() + size - 1, getY() + size - 1, 0xFF000000);
 			}
+		}
+		
+		private static void appendLandAndPlayer(CompoundTag landNbt, Optional<LandTypePair.Named> oNamed, MutableComponent component)
+		{
+			if(oNamed.isPresent())
+				component.append(oNamed.get().asComponentWithLandFont());
+			else
+				component.append("Land of ").append("Null").withStyle(ChatFormatting.OBFUSCATED).append(" and ").withStyle(ChatFormatting.RESET).append("Null").withStyle(ChatFormatting.OBFUSCATED);
+			
+			MutableComponent landPlayer = Component.literal("\n\n" + landNbt.getString("client")).withStyle(ChatFormatting.RESET);
+			if(landNbt.contains("playerColor"))
+				landPlayer.withColor(landNbt.getInt("playerColor"));
+			component.append(landPlayer);
 		}
 		
 		public void temp()
