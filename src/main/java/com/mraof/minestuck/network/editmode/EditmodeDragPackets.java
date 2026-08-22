@@ -480,10 +480,10 @@ public final class EditmodeDragPackets
 	/** 5% of the item normal cost per grist type rounded; floor of 1 per type present. */
 	private static GristSet.Immutable moveCost(GristSet fullCost)
 	{
-		long totalValue = 0;
-		for(GristAmount amount : fullCost.asAmounts()) totalValue += amount.amount();
-		long buildAmount = Math.max(1, Math.round(totalValue * 0.05));
-		return GristTypes.BUILD.get().amount(buildAmount);
+//		long totalValue = 0;
+//		for(GristAmount amount : fullCost.asAmounts()) totalValue += amount.amount();
+//		long buildAmount = Math.max(1, Math.round(totalValue * 0.05));
+		return GristTypes.BUILD.get().amount(1);
 	}
 	
 	public record MoveSelection(BlockPos corner1, BlockPos corner2, BlockPos anchor, int rotation) implements MSPacket.PlayToServer
