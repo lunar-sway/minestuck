@@ -38,11 +38,8 @@ import net.minecraft.world.item.ItemStack;
 import net.minecraft.world.item.component.ItemContainerContents;
 import net.minecraft.world.item.context.UseOnContext;
 import net.minecraft.world.level.Level;
-import net.minecraft.world.level.block.Block;
-import net.minecraft.world.level.block.Blocks;
-import net.minecraft.world.level.block.LevelEvent;
-import net.minecraft.world.level.block.Rotation;
-import net.minecraft.world.level.block.SoundType;
+import net.minecraft.world.level.block.*;
+import net.minecraft.world.level.block.entity.BlockEntity;
 import net.minecraft.world.level.block.state.BlockState;
 import net.minecraft.world.level.block.state.properties.BlockStateProperties;
 import net.minecraft.world.level.gameevent.GameEvent;
@@ -247,6 +244,7 @@ public final class EditmodeDragPackets
 	
 	private static void executeSelectionTransfer(ServerPlayer player, EditData data, BlockPos corner1, BlockPos corner2, BlockPos anchor, boolean isCopy, Rotation rotation)
 	{
+		boolean hasBlockWithoutCost = false;
 		Level level = player.level();
 		
 		BlockPos min = new BlockPos(Math.min(corner1.getX(), corner2.getX()), Math.min(corner1.getY(), corner2.getY()), Math.min(corner1.getZ(), corner2.getZ()));
@@ -289,14 +287,17 @@ public final class EditmodeDragPackets
 			
 			DeployEntry entry = DeployList.getEntryForItem(bareStack, data.sburbData(), level);
 			GristSet blockCostRaw = entry != null ? entry.getCurrentCost(data.sburbData()) : GristCostRecipe.findCostForItem(bareStack, null, false, level);
-			if(blockCostRaw == null && isCopy)
+			if(blockCostRaw == null && isCopy){
+				hasBlockWithoutCost = true;
 				continue;
+			}
 			MutableGristSet blockCost = blockCostRaw != null ? blockCostRaw.mutableCopy() : MutableGristSet.newDefault();
 			
 			// calculate the cost of items within container
 			// and adding it to the total price (to avoid dupe abuse)
 			if(isCopy && blockEntity instanceof Container container)
 			{
+				List<Integer> slotsToStrip = new ArrayList<>();
 				for(int slot = 0; slot < container.getContainerSize(); slot++)
 				{
 					ItemStack contained = container.getItem(slot);
@@ -306,11 +307,24 @@ public final class EditmodeDragPackets
 					ItemCostResult containedResult = computeItemStackCost(contained, data.sburbData(), level, 0);
 					if(containedResult.truncated())
 					{
-						player.sendSystemMessage(Component.literal("Selection contains an item nested too deeply to safely evaluate (or it does not have a grist cost yet)!"), true);
-						ServerEditHandler.removeCursorEntity(player, true);
-						return;
+						player.sendSystemMessage(Component.literal("Selection contains an item that does not have a grist cost or nested too deeply!"), true);
+						slotsToStrip.add(slot);
+						continue;
 					}
 					addScaled(blockCost, containedResult.cost(), contained.getCount());
+				}
+				
+				if(!slotsToStrip.isEmpty() && state.getBlock() instanceof EntityBlock entityBlock)
+				{
+					BlockEntity ghostEntity = entityBlock.newBlockEntity(pos, state);
+					if(ghostEntity instanceof Container ghostContainer && beTag != null)
+					{
+						ghostEntity.setLevel(level);
+						ghostEntity.loadWithComponents(beTag, level.registryAccess());
+						for(int slot : slotsToStrip)
+							ghostContainer.setItem(slot, ItemStack.EMPTY);
+						beTag = ghostEntity.saveWithFullMetadata(level.registryAccess());
+					}
 				}
 			}
 			
@@ -318,6 +332,8 @@ public final class EditmodeDragPackets
 			captured.add(new Captured(pos.immutable(), state, beTag, blockCostImmutable));
 			worstCaseCost.add(blockCostImmutable);
 		}
+		if(hasBlockWithoutCost)
+			player.sendSystemMessage(Component.literal("Some blocks were not pasted because they do not have a grist cost!"), true);
 		
 		if(captured.isEmpty())
 		{
