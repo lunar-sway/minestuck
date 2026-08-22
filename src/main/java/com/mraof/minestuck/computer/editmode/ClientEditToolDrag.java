@@ -121,7 +121,7 @@ public class ClientEditToolDrag
 		
 		RenderSystem.enableBlend();
 		RenderSystem.defaultBlendFunc();
-		RenderSystem.depthMask(false);
+		RenderSystem.depthMask(true);
 		
 		MultiBufferSource.BufferSource previewBuffer = MultiBufferSource.immediate(new ByteBufferBuilder(4096));
 		BlockRenderDispatcher blockRenderer = mc.getBlockRenderer();
