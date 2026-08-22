@@ -9,20 +9,23 @@ import com.mraof.minestuck.api.alchemy.GristTypes;
 import com.mraof.minestuck.api.alchemy.MutableGristSet;
 import com.mraof.minestuck.api.alchemy.recipe.GristCostRecipe;
 import com.mraof.minestuck.computer.editmode.*;
+import com.mraof.minestuck.item.components.EncodedItemComponent;
+import com.mraof.minestuck.item.components.MSItemComponents;
 import com.mraof.minestuck.network.MSPacket;
 import com.mraof.minestuck.player.GristCache;
+import com.mraof.minestuck.skaianet.SburbPlayerData;
 import com.mraof.minestuck.util.MSAttachments;
 import com.mraof.minestuck.util.MSSoundEvents;
 import com.mraof.minestuck.util.MSTags;
 import net.minecraft.core.BlockPos;
 import net.minecraft.core.Direction;
+import net.minecraft.core.component.DataComponents;
 import net.minecraft.nbt.CompoundTag;
 import net.minecraft.network.FriendlyByteBuf;
 import net.minecraft.network.chat.Component;
 import net.minecraft.network.codec.ByteBufCodecs;
 import net.minecraft.network.codec.StreamCodec;
 import net.minecraft.network.protocol.common.custom.CustomPacketPayload;
-import net.minecraft.server.level.ServerLevel;
 import net.minecraft.server.level.ServerPlayer;
 import net.minecraft.sounds.SoundEvent;
 import net.minecraft.sounds.SoundSource;
@@ -32,14 +35,16 @@ import net.minecraft.world.InteractionResult;
 import net.minecraft.world.entity.player.Player;
 import net.minecraft.world.item.BlockItem;
 import net.minecraft.world.item.ItemStack;
+import net.minecraft.world.item.component.ItemContainerContents;
 import net.minecraft.world.item.context.UseOnContext;
-import net.minecraft.world.level.ChunkPos;
 import net.minecraft.world.level.Level;
 import net.minecraft.world.level.block.Block;
+import net.minecraft.world.level.block.Blocks;
 import net.minecraft.world.level.block.LevelEvent;
 import net.minecraft.world.level.block.Rotation;
 import net.minecraft.world.level.block.SoundType;
 import net.minecraft.world.level.block.state.BlockState;
+import net.minecraft.world.level.block.state.properties.BlockStateProperties;
 import net.minecraft.world.level.gameevent.GameEvent;
 import net.minecraft.world.phys.BlockHitResult;
 import net.minecraft.world.phys.Vec3;
@@ -54,7 +59,8 @@ import static com.mraof.minestuck.network.MSPayloads.VEC3_STREAM_CODEC;
 
 public final class EditmodeDragPackets
 {
-	private static final int MAX_SELECTION_VOLUME = 4096;
+	private static final int MAX_SELECTION_VOLUME = 1024;
+	private static final int MAX_CONTAINER_RECURSION_DEPTH = 8;
 	
 	public static BlockPos rotateOffset(BlockPos offset, int sizeX, int sizeZ, Rotation rotation)
 	{
@@ -189,6 +195,56 @@ public final class EditmodeDragPackets
 	
 	private record Captured(BlockPos sourcePos, BlockState state, CompoundTag blockEntityTag, GristSet.Immutable blockCost) {}
 	
+	private record ItemCostResult(GristSet.Immutable cost, boolean truncated) {}
+	
+	private static ItemCostResult computeItemStackCost(ItemStack stack, SburbPlayerData playerData, Level level, int depth)
+	{
+		if(stack.isEmpty())
+			return new ItemCostResult(MutableGristSet.newDefault().asImmutable(), false);
+		if(depth > MAX_CONTAINER_RECURSION_DEPTH)
+			return new ItemCostResult(MutableGristSet.newDefault().asImmutable(), true);
+		
+		MutableGristSet total = MutableGristSet.newDefault();
+		boolean truncated = false;
+		
+		DeployEntry entry = DeployList.getEntryForItem(stack, playerData, level);
+		GristSet baseCost = entry != null ? entry.getCurrentCost(playerData) : GristCostRecipe.findCostForItem(stack, null, false, level);
+		if(baseCost == null)
+			baseCost = GristTypes.BUILD.get().amount(1);
+		total.add(baseCost.asImmutable());
+		
+		ItemContainerContents containerComponent = stack.get(DataComponents.CONTAINER);
+		if(containerComponent != null)
+		{
+			for(ItemStack inner : containerComponent.nonEmptyItems())
+			{
+				ItemCostResult innerResult = computeItemStackCost(inner, playerData, level, depth + 1);
+				truncated |= innerResult.truncated();
+				addScaled(total, innerResult.cost(), inner.getCount());
+			}
+		}
+		
+		EncodedItemComponent encoded = stack.get(MSItemComponents.ENCODED_ITEM);
+		if(encoded != null)
+		{
+			ItemStack inner = encoded.asItemStack();
+			if(!inner.isEmpty())
+			{
+				ItemCostResult innerResult = computeItemStackCost(inner, playerData, level, depth + 1);
+				truncated |= innerResult.truncated();
+				addScaled(total, innerResult.cost(), inner.getCount());
+			}
+		}
+		
+		return new ItemCostResult(total.asImmutable(), truncated);
+	}
+	
+	private static void addScaled(MutableGristSet target, GristSet.Immutable cost, int count)
+	{
+		for(GristAmount amount : cost.asAmounts())
+			target.add(amount.type(), amount.amount() * count);
+	}
+	
 	private static void executeSelectionTransfer(ServerPlayer player, EditData data, BlockPos corner1, BlockPos corner2, BlockPos anchor, boolean isCopy, Rotation rotation)
 	{
 		Level level = player.level();
@@ -225,9 +281,15 @@ public final class EditmodeDragPackets
 			CompoundTag beTag = blockEntity != null ? blockEntity.saveWithFullMetadata(level.registryAccess()) : null;
 			
 			ItemStack stack = state.getCloneItemStack(null, level, pos, player);
-			DeployEntry entry = DeployList.getEntryForItem(stack, data.sburbData(), level);
-			GristSet blockCostRaw = entry != null ? entry.getCurrentCost(data.sburbData()) : GristCostRecipe.findCostForItem(stack, null, false, level);
-			MutableGristSet blockCost = blockCostRaw != null ? blockCostRaw.mutableCopy() : MutableGristSet.newDefault();
+			ItemStack bareStack = stack.copy();
+			bareStack.remove(DataComponents.BLOCK_ENTITY_DATA);
+			bareStack.remove(DataComponents.CONTAINER);
+			bareStack.remove(DataComponents.CONTAINER_LOOT);
+			bareStack.remove(DataComponents.LOCK);
+			
+			DeployEntry entry = DeployList.getEntryForItem(bareStack, data.sburbData(), level);
+			GristSet blockCostRaw = entry != null ? entry.getCurrentCost(data.sburbData()) : GristCostRecipe.findCostForItem(bareStack, null, false, level);
+			MutableGristSet blockCost = (blockCostRaw != null ? blockCostRaw : GristTypes.BUILD.get().amount(1)).mutableCopy();
 			
 			// calculate the cost of items within container
 			// and adding it to the total price (to avoid dupe abuse)
@@ -239,14 +301,14 @@ public final class EditmodeDragPackets
 					if(contained.isEmpty())
 						continue;
 					
-					DeployEntry containedEntry = DeployList.getEntryForItem(contained, data.sburbData(), level);
-					GristSet containedCost = containedEntry != null ? containedEntry.getCurrentCost(data.sburbData())
-							: GristCostRecipe.findCostForItem(contained, null, false, level);
-					if(containedCost == null)
-						continue;
-					
-					for(GristAmount amount : containedCost.asAmounts())
-						blockCost.add(amount.type(), amount.amount() * contained.getCount());
+					ItemCostResult containedResult = computeItemStackCost(contained, data.sburbData(), level, 0);
+					if(containedResult.truncated())
+					{
+						player.sendSystemMessage(Component.literal("Selection contains an item nested too deeply to safely evaluate!"), true);
+						ServerEditHandler.removeCursorEntity(player, true);
+						return;
+					}
+					addScaled(blockCost, containedResult.cost(), contained.getCount());
 				}
 			}
 			
@@ -308,7 +370,11 @@ public final class EditmodeDragPackets
 			BlockPos rotatedOffset = rotateOffset(localOffset, sizeX, sizeZ, rotation);
 			BlockPos dest = anchor.offset(rotatedOffset);
 			
-			level.setBlock(dest, c.state().rotate(rotation), 3);
+			BlockState toPlace = c.state().rotate(rotation);
+			if(toPlace.hasProperty(BlockStateProperties.EXTENDED))
+				toPlace = toPlace.setValue(BlockStateProperties.EXTENDED, false);
+			level.setBlock(dest, toPlace, 3);
+			
 			if(c.blockEntityTag() != null && level.getBlockEntity(dest) != null)
 			{
 				CompoundTag movedTag = c.blockEntityTag().copy();
@@ -327,19 +393,32 @@ public final class EditmodeDragPackets
 			}
 		}
 		
+		for(BlockPos dest : placedPositions)
+		{
+			BlockState current = level.getBlockState(dest);
+			BlockState updated = Block.updateFromNeighbourShapes(current, level, dest);
+			if(updated != current)
+				level.setBlock(dest, updated, 3);
+		}
+		
 		MutableGristSet actualCost = MutableGristSet.newDefault();
 		for(int i = 0; i < captured.size(); i++)
 		{
 			Captured c = captured.get(i);
 			BlockPos dest = placedPositions.get(i);
 			
-			BlockState current = level.getBlockState(dest);
-			BlockState updated = Block.updateFromNeighbourShapes(current, level, dest);
-			if(updated != current)
-				level.setBlock(dest, updated, 3);
-			
 			BlockState finalState = level.getBlockState(dest);
-			if(!finalState.isAir() && finalState.getBlock() == c.state().getBlock())
+			boolean stillCorrectBlock = !finalState.isAir() && finalState.getBlock() == c.state().getBlock();
+			
+			if(stillCorrectBlock && !finalState.canSurvive(level, dest))
+			{
+				if(finalState.hasBlockEntity())
+					level.removeBlockEntity(dest);
+				level.setBlock(dest, Blocks.AIR.defaultBlockState(), Block.UPDATE_CLIENTS | Block.UPDATE_SUPPRESS_DROPS);
+				stillCorrectBlock = false;
+			}
+			
+			if(stillCorrectBlock)
 			{
 				GristSet.Immutable pieceCost = isCopy ? c.blockCost() : moveCost(c.blockCost());
 				actualCost.add(pieceCost);
@@ -374,13 +453,10 @@ public final class EditmodeDragPackets
 	/** 5% of the item normal cost per grist type rounded; floor of 1 per type present. */
 	private static GristSet.Immutable moveCost(GristSet fullCost)
 	{
-		MutableGristSet set = MutableGristSet.newDefault();
-		for(GristAmount amount : fullCost.asAmounts())
-		{
-			long reduced = Math.max(1, Math.round(amount.amount() * 0.05));
-			set.add(amount.type(), reduced);
-		}
-		return set.asImmutable();
+		long totalValue = 0;
+		for(GristAmount amount : fullCost.asAmounts()) totalValue += amount.amount();
+		long buildAmount = Math.max(1, Math.round(totalValue * 0.05));
+		return GristTypes.BUILD.get().amount(buildAmount);
 	}
 	
 	public record MoveSelection(BlockPos corner1, BlockPos corner2, BlockPos anchor, int rotation) implements MSPacket.PlayToServer

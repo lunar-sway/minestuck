@@ -174,17 +174,15 @@ public final class DeployList
 			return ItemStack.EMPTY;
 		stack = stack.copy();
 		stack.setCount(1);
-		
-		for(var patchEntry : stack.getComponentsPatch().entrySet())
-			resetComponent(stack, patchEntry.getKey());
+		stack.applyComponents(stack.getItem().components());
 		
 		return stack;
 	}
 	
-	private static <T> void resetComponent(ItemStack stack, DataComponentType<T> type)
+/*	private static <T> void resetComponent(ItemStack stack, DataComponentType<T> type)
 	{
 		stack.set(type, stack.getPrototype().get(type));
-	}
+	}*/
 	
 	public static boolean containsEntry(String name)
 	{
