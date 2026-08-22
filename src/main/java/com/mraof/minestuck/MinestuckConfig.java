@@ -136,6 +136,7 @@ public class MinestuckConfig
 		public final IntValue overworldEditRange;
 		public final IntValue landEditRange;
 		public final BooleanValue giveItems;
+		public final IntValue maxSelectionVolume;
 		
 		private Server(Builder builder)
 		{
@@ -200,6 +201,8 @@ public class MinestuckConfig
 					.defineInRange("overworldEditRange", 15, 1, Integer.MAX_VALUE);
 			landEditRange = builder.comment("A number that determines how far away from the center of the brought land that an editmode player may be after entry.")
 					.defineInRange("landEditRange", 30, 1, Integer.MAX_VALUE);
+			maxSelectionVolume = builder.comment("A number that determines how many blocks can be moved/copied with the selection tool.")
+					.defineInRange("maxSelectionVolume", 1024, 1, 4096);
 			builder.pop();
 			
 			builder.push("machines");

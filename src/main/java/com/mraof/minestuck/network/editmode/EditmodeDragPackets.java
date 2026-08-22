@@ -56,7 +56,6 @@ import static com.mraof.minestuck.network.MSPayloads.VEC3_STREAM_CODEC;
 
 public final class EditmodeDragPackets
 {
-	private static final int MAX_SELECTION_VOLUME = 1024;
 	private static final int MAX_CONTAINER_RECURSION_DEPTH = 8;
 	
 	public static BlockPos rotateOffset(BlockPos offset, int sizeX, int sizeZ, Rotation rotation)
@@ -253,9 +252,9 @@ public final class EditmodeDragPackets
 		int sizeZ = max.getZ() - min.getZ() + 1;
 		
 		long volume = (long) sizeX * (max.getY() - min.getY() + 1) * sizeZ;
-		if(volume > MAX_SELECTION_VOLUME)
+		if(volume > MinestuckConfig.SERVER.maxSelectionVolume.get())
 		{
-			player.sendSystemMessage(Component.literal("Selection too large (" + volume + " blocks, max " + MAX_SELECTION_VOLUME + ")"), true);
+			player.sendSystemMessage(Component.literal("Selection too large (" + volume + " blocks, max " + MinestuckConfig.SERVER.gristRefund.get() + ")"), true);
 			ServerEditHandler.removeCursorEntity(player, true);
 			return;
 		}
