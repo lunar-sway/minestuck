@@ -748,9 +748,9 @@ public class ClientEditToolDrag
 						Math.max(posA.getX(), posB.getX()) + 1, Math.max(posA.getY(), posB.getY()) + 1, Math.max(posA.getZ(), posB.getZ()) + 1)
 						.move(-d1, -d2, -d3).deflate(0.002);
 				
-				float red = cap.getToolMode() == EditTools.ToolMode.RECYCLE ? 1 : 0;
-				float green = cap.getToolMode() == EditTools.ToolMode.REVISE ? 1 : 0;
-				float blue = cap.getToolMode() == EditTools.ToolMode.SELECT ? 1 : 0;
+				float red = cap.getToolMode() == EditTools.ToolMode.RECYCLE ? 1f : (cap.getToolMode() == EditTools.ToolMode.SELECT ? 0.2f : 0f);
+				float green = cap.getToolMode() == EditTools.ToolMode.REVISE ? 1f : (cap.getToolMode() == EditTools.ToolMode.SELECT ? 0.4f : 0f);
+				float blue = cap.getToolMode() == EditTools.ToolMode.SELECT ? 1f : 0f;
 				
 				drawBoxOutline(event.getPoseStack(), lineBuffer, boundingBox, red, green, blue, 1);
 			}
@@ -768,20 +768,21 @@ public class ClientEditToolDrag
 				int footprintX = swapXZ ? sizeZ : sizeX;
 				int footprintZ = swapXZ ? sizeX : sizeZ;
 				
-				float r = cap.isPreviewCopy() ? 0f : 1f; //move = orange, copy = green
-				float g = cap.isPreviewCopy() ? 1f : 0.5f;
+				float r = cap.isPreviewCopy() ? 0.1f : 1f;
+				float g = cap.isPreviewCopy() ? 0.85f : 0.75f;
+				float b = cap.isPreviewCopy() ? 0.75f : 0f;
 				
 				AABB footprintBox = new AABB(minCorner.getX(), minCorner.getY(), minCorner.getZ(),
 						minCorner.getX() + footprintX, minCorner.getY() + sizeY, minCorner.getZ() + footprintZ)
 						.move(-d1, -d2, -d3).deflate(0.002);
-				drawBoxOutline(event.getPoseStack(), lineBuffer, footprintBox, r, g, 0f, 1f);
+				drawBoxOutline(event.getPoseStack(), lineBuffer, footprintBox, r, g, b, 1f);
 			}
 			
 			//:4 move animation
 			for(double[] pos : ClientMoveTransitions.getInterpolatedPositions())
 			{
 				AABB box = new AABB(pos[0], pos[1], pos[2], pos[0] + 1, pos[1] + 1, pos[2] + 1).move(-d1, -d2, -d3).deflate(0.03);
-				drawBoxOutline(event.getPoseStack(), lineBuffer, box, 1f, 0.8f, 0.2f, 0.7f);
+				drawBoxOutline(event.getPoseStack(), lineBuffer, box, 1f, 0.75f, 0f, 0.7f);
 			}
 			
 			renderTypeBuffer.endBatch();

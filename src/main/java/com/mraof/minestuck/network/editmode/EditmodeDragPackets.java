@@ -254,7 +254,7 @@ public final class EditmodeDragPackets
 		long volume = (long) sizeX * (max.getY() - min.getY() + 1) * sizeZ;
 		if(volume > MinestuckConfig.SERVER.maxSelectionVolume.get())
 		{
-			player.sendSystemMessage(Component.literal("Selection too large (" + volume + " blocks, max " + MinestuckConfig.SERVER.gristRefund.get() + ")"), true);
+			player.sendSystemMessage(Component.literal("Selection too large (" + volume + " blocks, max " + MinestuckConfig.SERVER.maxSelectionVolume.get() + ")"), true);
 			ServerEditHandler.removeCursorEntity(player, true);
 			return;
 		}
@@ -358,7 +358,7 @@ public final class EditmodeDragPackets
 			}
 		}
 		
-		GristSet.Immutable worstCase = isCopy ? worstCaseCost.asImmutable() : moveCost(worstCaseCost.asImmutable());
+		GristSet.Immutable worstCase = isCopy ? worstCaseCost.asImmutable() : moveCost(captured.size());
 		
 		if(!data.getGristCache().canAfford(worstCase))
 		{
@@ -373,7 +373,7 @@ public final class EditmodeDragPackets
 			{
 				if(c.blockEntityTag() != null)
 					level.removeBlockEntity(c.sourcePos());
-				level.setBlock(c.sourcePos(), Blocks.AIR.defaultBlockState(), Block.UPDATE_CLIENTS | Block.UPDATE_KNOWN_SHAPE);
+				level.setBlock(c.sourcePos(), Blocks.AIR.defaultBlockState(), Block.UPDATE_CLIENTS);
 			}
 		}
 		
@@ -390,7 +390,7 @@ public final class EditmodeDragPackets
 			BlockState toPlace = c.state().rotate(rotation);
 			if(toPlace.hasProperty(BlockStateProperties.EXTENDED))
 				toPlace = toPlace.setValue(BlockStateProperties.EXTENDED, false);
-			level.setBlock(dest, toPlace, Block.UPDATE_CLIENTS | Block.UPDATE_KNOWN_SHAPE);
+			level.setBlock(dest, toPlace, Block.UPDATE_CLIENTS);
 			
 			if(c.blockEntityTag() != null && level.getBlockEntity(dest) != null)
 			{
@@ -428,6 +428,7 @@ public final class EditmodeDragPackets
 		}
 		
 		MutableGristSet actualCost = MutableGristSet.newDefault();
+		int successfullyMovedCount = 0;
 		for(int i = 0; i < captured.size(); i++)
 		{
 			Captured c = captured.get(i);
@@ -446,10 +447,15 @@ public final class EditmodeDragPackets
 			
 			if(stillCorrectBlock)
 			{
-				GristSet.Immutable pieceCost = isCopy ? c.blockCost() : moveCost(c.blockCost());
-				actualCost.add(pieceCost);
+				if(isCopy)
+					actualCost.add(c.blockCost());
+				else
+					successfullyMovedCount++;
 			}
 		}
+		
+		if(!isCopy && successfullyMovedCount > 0)
+			actualCost.add(moveCost(successfullyMovedCount));
 		
 		data.getGristCache().tryTake(actualCost.asImmutable(), GristHelper.EnumSource.SERVER);
 		
@@ -476,13 +482,24 @@ public final class EditmodeDragPackets
 		}
 	}
 	
-	/** 5% of the item normal cost per grist type rounded; floor of 1 per type present. */
+/*	*//** 5% of the item normal cost per grist type rounded; floor of 1 per type present. *//*
 	private static GristSet.Immutable moveCost(GristSet fullCost)
 	{
-//		long totalValue = 0;
-//		for(GristAmount amount : fullCost.asAmounts()) totalValue += amount.amount();
-//		long buildAmount = Math.max(1, Math.round(totalValue * 0.05));
+		long totalValue = 0;
+		for(GristAmount amount : fullCost.asAmounts()) totalValue += amount.amount();
+		long buildAmount = Math.max(1, Math.round(totalValue * 0.05));
 		return GristTypes.BUILD.get().amount(1);
+	}*/
+	
+	/**
+	 * Cost of the entire move operation using floor(log2(blockCount))
+	 */
+	private static GristSet.Immutable moveCost(int blockCount)
+	{
+		if(blockCount <= 1)
+			return MutableGristSet.newDefault().asImmutable();
+		int amount = 31 - Integer.numberOfLeadingZeros(blockCount);
+		return GristTypes.BUILD.get().amount(amount);
 	}
 	
 	public record MoveSelection(BlockPos corner1, BlockPos corner2, BlockPos anchor, int rotation) implements MSPacket.PlayToServer
