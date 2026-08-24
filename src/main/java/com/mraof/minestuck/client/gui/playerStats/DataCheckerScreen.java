@@ -52,10 +52,12 @@ public class DataCheckerScreen extends Screen
 	private static final int GUI_WIDTH = 322, GUI_HEIGHT = 140;
 	private static final int LAND_INFO_X = 96;
 	private static final int LIST_Y = 25;
-	
 	private static final int LAND_RADIUS = 40;
+	private static final int COLOR_BLACK = 0xFF000000;
+	private static final int COLOR_WHITE = 0xFFFFFFFF;
 	
 	public static CompoundTag nbt = new CompoundTag();
+	private boolean needsRefresh = true;
 	private Button refreshButton;
 	private List<SessionButton> buttons = new ArrayList<>();
 	public SessionButton focusedButton;
@@ -78,17 +80,23 @@ public class DataCheckerScreen extends Screen
 	@Override
 	public void init()
 	{
+		//TODO add a way to search through sessions
+		
 		xOffset = (width - GUI_WIDTH) / 2;
 		yOffset = (height - GUI_HEIGHT) / 2;
 		
 		if(nbt.isEmpty())
 			PacketDistributor.sendToServer(DataCheckerPackets.Request.create());
 		
-		buildWidgets();
+		needsRefresh = true;
 	}
 	
 	private void buildWidgets()
 	{
+		clearWidgets();
+		needsRefresh = false;
+		buttons.clear();
+		
 		//TODO window needs resizing or closed for session buttons to show up. Using refresh button does not work to refresh
 		refreshButton = addRenderableWidget(Button.builder(Component.empty(), button -> refresh()).pos(xOffset + GUI_WIDTH - 23, yOffset + 5).size(18, 18).build());
 		
@@ -188,7 +196,7 @@ public class DataCheckerScreen extends Screen
 		
 		super.render(guiGraphics, mouseX, mouseY, partialTicks);
 		
-		if(this.refreshButton.active)
+		if(this.refreshButton != null && this.refreshButton.active)
 			RenderSystem.setShaderColor(1, 1, 1, 1);
 		else RenderSystem.setShaderColor(.5F, .5F, .5F, 1);
 		guiGraphics.blit(icons, xOffset + GUI_WIDTH - 22, yOffset + 6, 224, 0, 16, 16);
@@ -221,8 +229,7 @@ public class DataCheckerScreen extends Screen
 	{
 		PacketDistributor.sendToServer(DataCheckerPackets.Request.create());
 		nbt = new CompoundTag();
-		
-		buildWidgets();
+		needsRefresh = true;
 	}
 	
 	@Override
@@ -230,6 +237,9 @@ public class DataCheckerScreen extends Screen
 	{
 		if(!ClientPlayerData.hasDataCheckerAccess())
 			minecraft.setScreen(null);
+		
+		if(needsRefresh)
+			buildWidgets();
 	}
 	
 	@Override
@@ -308,7 +318,7 @@ public class DataCheckerScreen extends Screen
 			updateChildren();
 			
 			//backdrop
-			guiGraphics.fill(getX(), getY(), getX() + width, getY() + height, 0xFF000000);
+			guiGraphics.fill(getX(), getY(), getX() + width, getY() + height, COLOR_BLACK);
 			
 			RandomSource randomSource = RandomSource.create(0);
 			
@@ -327,7 +337,7 @@ public class DataCheckerScreen extends Screen
 				int veilRadius = (int) (LAND_RADIUS * 1.4);
 				int veilX = getXOnRadius(getCenterX(), veilRadius, veilRotation) + randomSource.nextIntBetweenInclusive(-3, 3);
 				int veilY = getYOnRadius(getCenterY(), veilRadius, veilRotation) + randomSource.nextIntBetweenInclusive(-3, 3);
-				guiGraphics.fill(veilX, veilY, veilX + 1, veilY + 1, randomSource.nextBoolean() ? 0xFFFFFFFF : 0xFFDDDDDD);
+				guiGraphics.fill(veilX, veilY, veilX + 1, veilY + 1, randomSource.nextBoolean() ? COLOR_WHITE : 0xFFDDDDDD);
 			}
 			
 			int kingdomSize = 4;
@@ -385,7 +395,7 @@ public class DataCheckerScreen extends Screen
 			
 			setTooltip(Tooltip.create(component));
 			
-			gristButton = addRenderableWidget(Button.builder(Component.literal("View Grist Cache"), button -> gristButtonPress(landNbt)).pos(xOffset + 3, yOffset + GUI_HEIGHT - 20).size(90, 16).build());
+			gristButton = addRenderableWidget(Button.builder(Component.literal("View Grist Cache"), button -> gristButtonPress(landNbt)).pos(xOffset + 3, yOffset + GUI_HEIGHT - 18).size(90, 14).build());
 			gristButton.visible = false;
 		}
 		
@@ -401,7 +411,7 @@ public class DataCheckerScreen extends Screen
 			if(isHoveredOrFocused())
 			{
 				//highlight Land
-				guiGraphics.fill(getX() - 1, getY() - 1, getX() + size + 1, getY() + size + 1, 0xFFFFFFFF);
+				guiGraphics.fill(getX() - 1, getY() - 1, getX() + size + 1, getY() + size + 1, COLOR_WHITE);
 			}
 			
 			gristButton.visible = isFocused();
@@ -410,10 +420,16 @@ public class DataCheckerScreen extends Screen
 				//fill in left section of GUI
 				MutableComponent component = Component.empty();
 				appendLandAndPlayer(landNbt, oNamed, component);
-				component.append("\n\n" + "Server is " + landNbt.getString("server"));
+				component.append("\n");
+				if(landNbt.contains("class"))
+				{
+					Title title = new Title(EnumClass.values()[landNbt.getByte("class")], EnumAspect.values()[landNbt.getByte("aspect")]);
+					component.append("\n" + "Title: ").append(title.asTextComponent()).withStyle(ChatFormatting.BOLD);
+				}
+				component.append("\n" + "Server is " + landNbt.getString("server")).withStyle(ChatFormatting.RESET);
 				component.append("\n" + "Is Primary Connection: " + landNbt.getBoolean("isMain"));
 				
-				guiGraphics.drawWordWrap(minecraft.font, component, xOffset + 4, yOffset + 4, 90, 0xFF000000);
+				guiGraphics.drawWordWrap(minecraft.font, component, xOffset + 4, yOffset + 1, 90, COLOR_BLACK);
 			}
 			
 			if(oNamed.isPresent())
@@ -428,8 +444,8 @@ public class DataCheckerScreen extends Screen
 			} else
 			{
 				//placeholder for planet
-				guiGraphics.fill(getX(), getY(), getX() + size, getY() + size, 0xFFFFFFFF);
-				guiGraphics.fill(getX() + 1, getY() + 1, getX() + size - 1, getY() + size - 1, 0xFF000000);
+				guiGraphics.fill(getX(), getY(), getX() + size, getY() + size, COLOR_WHITE);
+				guiGraphics.fill(getX() + 1, getY() + 1, getX() + size - 1, getY() + size - 1, COLOR_BLACK);
 			}
 		}
 		
@@ -438,30 +454,12 @@ public class DataCheckerScreen extends Screen
 			if(oNamed.isPresent())
 				component.append(oNamed.get().asComponentWithLandFont());
 			else
-				component.append("Land of ").append("Null").withStyle(ChatFormatting.OBFUSCATED).append(" and ").withStyle(ChatFormatting.RESET).append("Null").withStyle(ChatFormatting.OBFUSCATED);
+				component.append("Land of ").append("§kNull§f").append(" and ").append("§kNull§f").withStyle(LandTypePair.LAND_OF_COPYLEFT_AND_FREEDOM_FONT_STYLE);
 			
 			MutableComponent landPlayer = Component.literal("\n\n" + landNbt.getString("client")).withStyle(ChatFormatting.RESET);
 			if(landNbt.contains("playerColor"))
 				landPlayer.withColor(landNbt.getInt("playerColor"));
 			component.append(landPlayer);
-		}
-		
-		public void temp()
-		{
-			//list.add(new TextField("Land dim: %s", (!landDim.isEmpty() ? landDim : "Pre-entry")));
-			
-			if(landNbt.contains("class"))
-			{
-				byte cl = landNbt.getByte("class"), as = landNbt.getByte("aspect");
-				Title title = new Title(EnumClass.values()[cl], EnumAspect.values()[as]);
-			}
-			
-			//if(landNbt.contains("titleLandType"))
-			//String titleType = "Title land type: %s" + landNbt.getString("titleLandType");
-			//if(landNbt.contains("terrainLandType"))
-			//list.add(new TextField("Terrain land type: %s", landNbt.getString("terrainLandType")));
-			
-			//list.add(new GristCacheButton(landNbt.getString("clientId")));
 		}
 	}
 	
