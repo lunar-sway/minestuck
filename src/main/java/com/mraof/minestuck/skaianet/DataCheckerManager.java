@@ -5,9 +5,6 @@ import com.mraof.minestuck.player.PlayerIdentifier;
 import com.mraof.minestuck.player.Title;
 import com.mraof.minestuck.util.ColorHandler;
 import com.mraof.minestuck.world.lands.LandTypePair;
-import com.mraof.minestuck.world.lands.LandTypes;
-import com.mraof.minestuck.world.lands.terrain.TerrainLandType;
-import com.mraof.minestuck.world.lands.title.TitleLandType;
 import net.minecraft.nbt.CompoundTag;
 import net.minecraft.nbt.ListTag;
 import net.minecraft.nbt.NbtOps;
@@ -33,6 +30,7 @@ public class DataCheckerManager
 			PacketDistributor.sendToPlayer(player, new DataCheckerPackets.Data(index, data));
 		}
 	}
+	
 	/**
 	 * Creates data to be used for the data checker
 	 */
@@ -66,7 +64,6 @@ public class DataCheckerManager
 		CompoundTag tag = new CompoundTag();
 		
 		tag.putString("client", player.getUsername());
-		tag.putString("clientId", player.getCommandString());
 		
 		writeConnectionData(tag, player, mcServer);
 		writeExtraData(tag, player, mcServer);
@@ -110,7 +107,7 @@ public class DataCheckerManager
 	 * This function is meant to write that data.
 	 */
 	private static void writeEntryPreparedData(CompoundTag tag, PlayerIdentifier player,
-											   ResourceKey<Level> landDimensionKey, MinecraftServer mcServer)
+	                                           ResourceKey<Level> landDimensionKey, MinecraftServer mcServer)
 	{
 		tag.putString("clientDim", landDimensionKey.location().toString());
 		
@@ -133,12 +130,5 @@ public class DataCheckerManager
 			tag.putByte("class", (byte) data.getTitle().heroClass().ordinal());
 			tag.putByte("aspect", (byte) data.getTitle().heroAspect().ordinal());
 		}
-		
-		TerrainLandType terrainType = data.getTerrainLandType();
-		TitleLandType titleType = data.getTitleLandType();
-		if(terrainType != null)
-			tag.putString("terrainLandType", LandTypes.TERRAIN_REGISTRY.getKey(terrainType).toString());
-		if(titleType != null)
-			tag.putString("titleLandType", LandTypes.TITLE_REGISTRY.getKey(titleType).toString());
 	}
 }

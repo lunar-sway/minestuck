@@ -1,7 +1,6 @@
 package com.mraof.minestuck.client.gui.playerStats;
 
 import com.mojang.blaze3d.platform.InputConstants;
-import com.mojang.blaze3d.systems.RenderSystem;
 import com.mojang.blaze3d.vertex.PoseStack;
 import com.mojang.math.Axis;
 import com.mraof.minestuck.client.renderer.LandSkySpriteUploader;
@@ -422,7 +421,8 @@ public class DataCheckerScreen extends Screen
 					Title title = new Title(EnumClass.values()[landNbt.getByte("class")], EnumAspect.values()[landNbt.getByte("aspect")]);
 					component.append("\n" + "Title: ").append(title.asTextComponent()).withStyle(ChatFormatting.BOLD);
 				}
-				component.append("\n" + "Server is " + landNbt.getString("server")).withStyle(ChatFormatting.RESET);
+				if(landNbt.contains("server"))
+					component.append("\n" + "Server is " + landNbt.getString("server")).withStyle(ChatFormatting.RESET);
 				component.append("\n" + "Is Primary Connection: " + landNbt.getBoolean("isMain"));
 				
 				guiGraphics.drawWordWrap(minecraft.font, component, xOffset + 4, yOffset + 1, 90, COLOR_BLACK);
