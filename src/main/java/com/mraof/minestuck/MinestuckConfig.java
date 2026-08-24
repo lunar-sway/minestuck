@@ -48,7 +48,7 @@ public class MinestuckConfig
 		public final BooleanValue loginColorSelector;
 		public final BooleanValue alchemyIcons;
 		public final BooleanValue npcDialogueTextColors;
-		public final BooleanValue backgroundShadeOnStrifeSwitch;
+		public final BooleanValue switcherBackground;
 		
 		private Client(Builder builder)
 		{
@@ -63,9 +63,9 @@ public class MinestuckConfig
 					.define("npcDialogueTextColors", true);
 			builder.pop();
 			
-			builder.push("strife portfolio");
-			backgroundShadeOnStrifeSwitch = builder.comment("If true, shades background while the strife switcher is active.")
-					.define("dimBackgroundOnStrifeSwitch", true);
+			builder.push("strife");
+			switcherBackground = builder.comment("If true, shades the background while the strife switcher is active.")
+					.define("switcherBackground", true);
 			builder.pop();
 		}
 	}
@@ -158,19 +158,22 @@ public class MinestuckConfig
 					"- Fireballs will rain around players entering the medium",
 					"- Medium dungeons spawners contain Liches instead of Imps",
 					"- Underlings have a 50% chance to have the artifact grist").define("hardMode", false);
+			builder.pop();
+			
+			builder.push("strife");
 			restrictedStrife = builder
 					.comment("Prevents players from attacking or using right-click abilities with a weapon " +
 							"that is not assigned to their Strife Portfolio.")
 					.define("restrictedStrife", true);
 			keepPortfolioOnDeath = builder
-					.comment("If true, the Strife Portfolio is kept on death. " +
+					.comment("If true, the strife portfolio is kept on death. " +
 							"Otherwise all specibus slots are dropped as Strife Cards.")
 					.define("keepPortfolioOnDeath", true);
 			abstrataSwitcherRung = builder
-					.comment("Echeladder rung required to unlock the Strife Specibus Quick-Switcher " +
+					.comment("Echeladder rung required to unlock the strife switcher " +
 							"(hold strife key + scroll to switch specibus slots). " +
 							"Set to -1 to allow all players, or to " + Rungs.finalRung() + " to disable entirely.")
-					.defineInRange("abstrataSwitcherRung", 17, -1, Rungs.finalRung());
+					.defineInRange("abstrataSwitcherRung", 14, -1, Rungs.finalRung());
 			weaponAttackMultiplier = builder
 					.comment("When restrictedStrife is enabled, this is the fraction of normal damage dealt " +
 							"when attacking with an unassigned weapon (0.15 = 15% damage).")

@@ -169,7 +169,7 @@ public final class StrifeSwitcherHud
 		int cx = sw / 2;
 		int baseY = sh * 3 / 4;
 		
-		if(MinestuckConfig.CLIENT.backgroundShadeOnStrifeSwitch.get())
+		if(MinestuckConfig.CLIENT.switcherBackground.get())
 			g.fill(0, 0, sw, sh, 0x80000000);
 		
 		StrifePortfolioData data = mc.player.getData(MSAttachments.STRIFE_PORTFOLIO.get());
