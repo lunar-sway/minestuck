@@ -64,7 +64,7 @@ public class MinestuckConfig
 			builder.pop();
 			
 			builder.push("strife portfolio");
-			backgroundShadeOnStrifeSwitch = builder.comment("If true, dims the rest of the screen while the Strife Switcher HUD (weapon/specibus quick-switch) is open.")
+			backgroundShadeOnStrifeSwitch = builder.comment("If true, shades background while the strife switcher is active.")
 					.define("dimBackgroundOnStrifeSwitch", true);
 			builder.pop();
 		}

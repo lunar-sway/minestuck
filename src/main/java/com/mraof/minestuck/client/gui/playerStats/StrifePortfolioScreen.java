@@ -115,18 +115,6 @@ public class StrifePortfolioScreen extends PlayerStatsScreen
 		for(int[] f : FAN)
 			detectHover(g, f[0], f[1], f[2], true, port, active);
 		
-		float speed = 0.2F;
-		
-		for(int i = 0; i < hoverAnim.length; i++)
-		{
-			boolean hovered = i == selectedCard;
-			
-			if(hovered)
-				hoverAnim[i] = Math.min(1F, hoverAnim[i] + speed);
-			else
-				hoverAnim[i] = Math.max(0F, hoverAnim[i] - speed);
-		}
-		
 		// foreground frame overlay
 		RenderSystem.setShaderColor(1, 1, 1, 1);
 		g.blit(FRAME_TEX, xOffset, yOffset, 0, 0, guiWidth, guiHeight);
@@ -148,6 +136,17 @@ public class StrifePortfolioScreen extends PlayerStatsScreen
 			RenderSystem.setShaderColor(1, 1, 1, 1);
 			g.blit(iconLoc(t), (int) ((xOffset + 23 + 20 * i) / s), (int) ((yOffset + 166) / s), 0, 0, 256, 256);
 			g.pose().popPose();
+		}
+		
+		float speed = 0.2F;
+		for(int i = 0; i < hoverAnim.length; i++)
+		{
+			boolean hovered = i == selectedCard;
+			
+			if(hovered)
+				hoverAnim[i] = Math.min(1F, hoverAnim[i] + speed);
+			else
+				hoverAnim[i] = Math.max(0F, hoverAnim[i] - speed);
 		}
 	}
 	
