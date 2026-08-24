@@ -9,7 +9,7 @@ import com.mraof.minestuck.entity.item.MetalBoatEntity;
 import com.mraof.minestuck.fluid.MSFluids;
 import com.mraof.minestuck.item.armor.IronLassArmorItem;
 import com.mraof.minestuck.item.armor.MSArmorItem;
-import com.mraof.minestuck.item.armor.PrismarineArmorItem;
+import com.mraof.minestuck.item.armor.GeoArmorItem;
 import com.mraof.minestuck.item.artifact.CruxiteAppleItem;
 import com.mraof.minestuck.item.artifact.CruxitePotionItem;
 import com.mraof.minestuck.item.block.*;
@@ -26,8 +26,6 @@ import com.mraof.minestuck.util.MSTags;
 
 import net.minecraft.core.component.DataComponents;
 import net.minecraft.core.particles.ParticleTypes;
-import net.minecraft.core.registries.Registries;
-import net.minecraft.resources.ResourceKey;
 import net.minecraft.sounds.SoundEvents;
 import net.minecraft.world.effect.MobEffectInstance;
 import net.minecraft.world.effect.MobEffects;
@@ -459,10 +457,10 @@ public class MSItems
 	
 	
 	//Armor
-	public static final DeferredItem<Item> PRISMARINE_HELMET = REGISTER.register("prismarine_helmet", () -> new PrismarineArmorItem(MSItemTypes.PRISMARINE_ARMOR, ArmorItem.Type.HELMET, new Item.Properties().durability(ArmorItem.Type.HELMET.getDurability(20))));
-	public static final DeferredItem<Item> PRISMARINE_CHESTPLATE = REGISTER.register("prismarine_chestplate", () -> new PrismarineArmorItem(MSItemTypes.PRISMARINE_ARMOR, ArmorItem.Type.CHESTPLATE, new Item.Properties().durability(ArmorItem.Type.CHESTPLATE.getDurability(20))));
-	public static final DeferredItem<Item> PRISMARINE_LEGGINGS = REGISTER.register("prismarine_leggings", () -> new PrismarineArmorItem(MSItemTypes.PRISMARINE_ARMOR, ArmorItem.Type.LEGGINGS, new Item.Properties().durability(ArmorItem.Type.LEGGINGS.getDurability(20))));
-	public static final DeferredItem<Item> PRISMARINE_BOOTS = REGISTER.register("prismarine_boots", () -> new PrismarineArmorItem(MSItemTypes.PRISMARINE_ARMOR, ArmorItem.Type.BOOTS, new Item.Properties().durability(ArmorItem.Type.BOOTS.getDurability(20))));
+	public static final DeferredItem<Item> PRISMARINE_HELMET = REGISTER.register("prismarine_helmet", () -> new GeoArmorItem(MSItemTypes.PRISMARINE_ARMOR, ArmorItem.Type.HELMET, "prismarine_armor", new Item.Properties().durability(ArmorItem.Type.HELMET.getDurability(20))));
+	public static final DeferredItem<Item> PRISMARINE_CHESTPLATE = REGISTER.register("prismarine_chestplate", () -> new GeoArmorItem(MSItemTypes.PRISMARINE_ARMOR, ArmorItem.Type.CHESTPLATE, "prismarine_armor", new Item.Properties().durability(ArmorItem.Type.CHESTPLATE.getDurability(20))));
+	public static final DeferredItem<Item> PRISMARINE_LEGGINGS = REGISTER.register("prismarine_leggings", () -> new GeoArmorItem(MSItemTypes.PRISMARINE_ARMOR, ArmorItem.Type.LEGGINGS, "prismarine_armor", new Item.Properties().durability(ArmorItem.Type.LEGGINGS.getDurability(20))));
+	public static final DeferredItem<Item> PRISMARINE_BOOTS = REGISTER.register("prismarine_boots", () -> new GeoArmorItem(MSItemTypes.PRISMARINE_ARMOR, ArmorItem.Type.BOOTS, "prismarine_armor", new Item.Properties().durability(ArmorItem.Type.BOOTS.getDurability(20))));
 	public static final DeferredItem<Item> IRON_LASS_GLASSES = REGISTER.register("iron_lass_glasses", () -> new IronLassArmorItem(MSItemTypes.IRON_LASS_ARMOR, ArmorItem.Type.HELMET, new Item.Properties().durability(ArmorItem.Type.HELMET.getDurability(50))));
 	public static final DeferredItem<Item> IRON_LASS_CHESTPLATE = REGISTER.register("iron_lass_chestplate", () -> new IronLassArmorItem(MSItemTypes.IRON_LASS_ARMOR, ArmorItem.Type.CHESTPLATE, new Item.Properties().durability(ArmorItem.Type.CHESTPLATE.getDurability(50))));
 	public static final DeferredItem<Item> IRON_LASS_SKIRT = REGISTER.register("iron_lass_skirt", () -> new IronLassArmorItem(MSItemTypes.IRON_LASS_ARMOR, ArmorItem.Type.LEGGINGS, new Item.Properties().durability(ArmorItem.Type.LEGGINGS.getDurability(50))));
@@ -480,6 +478,8 @@ public class MSItems
 	public static final DeferredItem<MSArmorItem> AMPHIBEANIE = REGISTER.register("amphibeanie", () -> new MSArmorItem(MSItemTypes.CLOTH_ARMOR, ArmorItem.Type.HELMET, new Item.Properties().stacksTo(1)));
 	public static final DeferredItem<MSArmorItem> NOSTRILDAMUS = REGISTER.register("nostrildamus", () -> new MSArmorItem(MSItemTypes.CLOTH_ARMOR, ArmorItem.Type.HELMET, new Item.Properties().stacksTo(1)));
 	public static final DeferredItem<MSArmorItem> PONYTAIL = REGISTER.register("ponytail", () -> new MSArmorItem(MSItemTypes.CLOTH_ARMOR, ArmorItem.Type.HELMET, new Item.Properties().stacksTo(1)));
+	public static final DeferredItem<Item> ANOMALOCARIS_HAT = REGISTER.register("anomalocaris_hat", () -> new GeoArmorItem(MSItemTypes.CLOTH_ARMOR, ArmorItem.Type.HELMET, "anomalocaris_hat", new Item.Properties().stacksTo(1)));
+	public static final DeferredItem<Item> ALIEN_BOPPERS = REGISTER.register("alien_boppers", () -> new GeoArmorItem(MSItemTypes.CLOTH_ARMOR, ArmorItem.Type.HELMET, "alien_boppers", new Item.Properties().stacksTo(1)));
 	
 	
 	//Core Items
