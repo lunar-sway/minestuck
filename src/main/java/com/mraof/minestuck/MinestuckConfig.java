@@ -48,6 +48,7 @@ public class MinestuckConfig
 		public final BooleanValue loginColorSelector;
 		public final BooleanValue alchemyIcons;
 		public final BooleanValue npcDialogueTextColors;
+		public final BooleanValue backgroundShadeOnStrifeSwitch;
 		
 		private Client(Builder builder)
 		{
@@ -60,6 +61,11 @@ public class MinestuckConfig
 					.defineEnum("echeladderAnimation", AnimationSpeed.NORMAL);
 			npcDialogueTextColors = builder.comment("Determines whether an NPC will use their custom formatted color value when talking in a dialogue screen.")
 					.define("npcDialogueTextColors", true);
+			builder.pop();
+			
+			builder.push("strife portfolio");
+			backgroundShadeOnStrifeSwitch = builder.comment("If true, dims the rest of the screen while the Strife Switcher HUD (weapon/specibus quick-switch) is open.")
+					.define("dimBackgroundOnStrifeSwitch", true);
 			builder.pop();
 		}
 	}

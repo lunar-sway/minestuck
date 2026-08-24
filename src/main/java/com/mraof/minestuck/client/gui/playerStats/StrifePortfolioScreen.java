@@ -9,12 +9,14 @@ import com.mraof.minestuck.player.StrifePortfolioData;
 import com.mraof.minestuck.player.StrifeSpecibus;
 import com.mraof.minestuck.util.MSAttachments;
 import net.minecraft.MethodsReturnNonnullByDefault;
+import net.minecraft.client.Minecraft;
 import net.minecraft.client.gui.GuiGraphics;
 import net.minecraft.network.chat.Component;
 import net.minecraft.resources.ResourceLocation;
 import net.minecraft.world.InteractionHand;
 import net.minecraft.world.item.ItemStack;
 import net.neoforged.neoforge.network.PacketDistributor;
+import org.lwjgl.opengl.GL11;
 
 import javax.annotation.ParametersAreNonnullByDefault;
 import java.util.LinkedList;
@@ -130,7 +132,7 @@ public class StrifePortfolioScreen extends PlayerStatsScreen
 		g.blit(FRAME_TEX, xOffset, yOffset, 0, 0, guiWidth, guiHeight);
 		drawActiveTabAndOther(g, mx, my);
 		
-		// ── bottom abstrata icon strip
+		// bottom abstrata icon strip
 		float s = 0.0625f;
 		for(int i = 0; i < StrifePortfolioData.PORTFOLIO_SIZE; i++)
 		{
@@ -138,6 +140,8 @@ public class StrifePortfolioScreen extends PlayerStatsScreen
 			if(sp == null || !sp.isAssigned()) continue;
 			KindAbstratusType t = sp.getKindAbstratus();
 			if(t == null) continue;
+			
+			detectHoverBottom(i, port);
 			
 			g.pose().pushPose();
 			g.pose().scale(s, s, 1f);
@@ -244,6 +248,7 @@ public class StrifePortfolioScreen extends PlayerStatsScreen
 			
 			g.flush();
 		}
+		RenderSystem.clear(GL11.GL_DEPTH_BUFFER_BIT, Minecraft.ON_OSX);
 	}
 	
 	/**
@@ -273,6 +278,17 @@ public class StrifePortfolioScreen extends PlayerStatsScreen
 		int h = Math.round((256 + (selectedCard == idx ? 20 : 0)) * CS);
 		
 		if(isPointInRegion(x, y, w, h, mouseX, mouseY)) selectedCard = idx;
+	}
+	
+	private void detectHoverBottom(int idx, StrifeSpecibus[] port)
+	{
+		if(idx < 0 || idx >= port.length) return;
+		if(port[idx] == null) return;
+		if(selectedCard >= 0 && selectedCard != idx) return;
+		
+		int sx = xOffset + 22 + 20 * idx;
+		int sy = yOffset + 165;
+		if(isPointInRegion(sx, sy, 18, 18, mouseX, mouseY)) selectedCard = idx;
 	}
 	
 	@Override

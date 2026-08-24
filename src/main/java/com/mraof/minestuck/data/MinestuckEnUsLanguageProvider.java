@@ -2589,6 +2589,7 @@ public class MinestuckEnUsLanguageProvider extends MinestuckLanguageProvider
 		add(JeiGristCost.GRIST_COSTS, "Grist Costs");
 		
 		add(MSKeyHandler.CATEGORY, "Minestuck");
+		add(MSKeyHandler.CATEGORY_STRIFE, "Strife Portfolio");
 		add(MSKeyHandler.STATS_GUI, "View General Minestuck Gui");
 		add(MSKeyHandler.EXIT_EDIT_MODE, "Exit Edit Mode");
 		add(MSKeyHandler.CAPTCHALOGUE, "Captchalogue Held Item");

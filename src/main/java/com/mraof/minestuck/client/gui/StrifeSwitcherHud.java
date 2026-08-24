@@ -2,6 +2,7 @@ package com.mraof.minestuck.client.gui;
 
 import com.mojang.blaze3d.systems.RenderSystem;
 import com.mraof.minestuck.Minestuck;
+import com.mraof.minestuck.MinestuckConfig;
 import com.mraof.minestuck.item.components.MSItemComponents;
 import com.mraof.minestuck.network.StrifePackets;
 import com.mraof.minestuck.player.KindAbstratusType;
@@ -41,9 +42,6 @@ public final class StrifeSwitcherHud
 	
 	public static boolean showSwitcher = false;
 	public static boolean offhandMode = false;
-	
-	private static boolean prevStrifeDown = false;
-	private static boolean prevSwapDown = false;
 	
 	public static int selSpecibus = -1;
 	public static int selWeapon = 0;
@@ -170,6 +168,9 @@ public final class StrifeSwitcherHud
 		int sh = mc.getWindow().getGuiScaledHeight();
 		int cx = sw / 2;
 		int baseY = sh * 3 / 4;
+		
+		if(MinestuckConfig.CLIENT.backgroundShadeOnStrifeSwitch.get())
+			g.fill(0, 0, sw, sh, 0x80000000);
 		
 		StrifePortfolioData data = mc.player.getData(MSAttachments.STRIFE_PORTFOLIO.get());
 		boolean sneaking = mc.player.isCrouching();

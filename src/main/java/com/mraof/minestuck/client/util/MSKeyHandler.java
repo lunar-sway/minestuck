@@ -27,11 +27,13 @@ import org.lwjgl.glfw.GLFW;
 public class MSKeyHandler
 {
 	public static final String CATEGORY = "key.categories.minestuck";
+	public static final String CATEGORY_STRIFE = "key.categories.minestuck.strife";
 	public static final String STATS_GUI = "key.minestuck.stats_gui";
 	public static final String EXIT_EDIT_MODE = "key.minestuck.exit_edit_mode";
 	public static final String CAPTCHALOGUE = "key.minestuck.captchalogue";
 	public static final String ASPECT_EFFECT_TOGGLE = "key.minestuck.aspext_effect_toggle";
 	public static final String SYLLADEX = "key.minestuck.sylladex";
+	
 	public static final String STRIFE = "key.minestuck.strife";
 	public static final String STRIFE_LEFT = "key.minestuck.strifeLeft";
 	public static final String STRIFE_RIGHT = "key.minestuck.strifeRight";
@@ -42,6 +44,7 @@ public class MSKeyHandler
 	public static KeyMapping captchaKey;
 	public static KeyMapping effectToggleKey;
 	public static KeyMapping sylladexKey;
+	
 	public static KeyMapping strifeKey;
 	public static KeyMapping strifeLeftKey;
 	public static KeyMapping strifeRightKey;
@@ -63,13 +66,13 @@ public class MSKeyHandler
 		sylladexKey = new KeyMapping(SYLLADEX, GLFW.GLFW_KEY_UNKNOWN, CATEGORY);
 		event.register(sylladexKey);
 		
-		strifeKey = new KeyMapping(STRIFE, GLFW.GLFW_KEY_C, CATEGORY);
+		strifeKey = new KeyMapping(STRIFE, GLFW.GLFW_KEY_C, CATEGORY_STRIFE);
 		event.register(strifeKey);
-		strifeLeftKey = new KeyMapping(STRIFE_LEFT, GLFW.GLFW_KEY_UNKNOWN, CATEGORY);
+		strifeLeftKey = new KeyMapping(STRIFE_LEFT, GLFW.GLFW_KEY_UNKNOWN, CATEGORY_STRIFE);
 		event.register(strifeLeftKey);
-		strifeRightKey = new KeyMapping(STRIFE_RIGHT, GLFW.GLFW_KEY_UNKNOWN, CATEGORY);
+		strifeRightKey = new KeyMapping(STRIFE_RIGHT, GLFW.GLFW_KEY_UNKNOWN, CATEGORY_STRIFE);
 		event.register(strifeRightKey);
-		swapOffhandKey = new KeyMapping(SWAP_OFFHAND, GLFW.GLFW_KEY_B, CATEGORY);
+		swapOffhandKey = new KeyMapping(SWAP_OFFHAND, GLFW.GLFW_KEY_B, CATEGORY_STRIFE);
 		event.register(swapOffhandKey);
 	}
 	
