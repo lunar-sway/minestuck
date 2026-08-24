@@ -31,6 +31,7 @@ import net.minecraft.network.chat.Component;
 import net.minecraft.network.chat.MutableComponent;
 import net.minecraft.resources.ResourceKey;
 import net.minecraft.resources.ResourceLocation;
+import net.minecraft.util.Mth;
 import net.minecraft.util.RandomSource;
 import net.minecraft.world.level.Level;
 import net.neoforged.neoforge.client.gui.widget.ExtendedButton;
@@ -52,15 +53,16 @@ public class DataCheckerScreen extends Screen
 	private static final int GUI_WIDTH = 322, GUI_HEIGHT = 140;
 	private static final int LAND_INFO_X = 96;
 	private static final int LIST_Y = 25;
+	private static final int VISIBLE_BUTTON_COUNT = 6;
 	private static final int LAND_RADIUS = 40;
 	private static final int COLOR_BLACK = 0xFF000000;
 	private static final int COLOR_WHITE = 0xFFFFFFFF;
 	
 	public static CompoundTag nbt = new CompoundTag();
 	private boolean needsRefresh = true;
-	private Button refreshButton;
-	private List<SessionButton> buttons = new ArrayList<>();
+	private List<SessionButton> sessionButtons = new ArrayList<>();
 	public SessionButton focusedButton;
+	private float displayIndex;
 	private int index;
 	private boolean isScrolling;
 	private int xOffset;
@@ -95,10 +97,10 @@ public class DataCheckerScreen extends Screen
 	{
 		clearWidgets();
 		needsRefresh = false;
-		buttons.clear();
+		sessionButtons.clear();
 		
 		//TODO window needs resizing or closed for session buttons to show up. Using refresh button does not work to refresh
-		refreshButton = addRenderableWidget(Button.builder(Component.empty(), button -> refresh()).pos(xOffset + GUI_WIDTH - 23, yOffset + 5).size(18, 18).build());
+		addRenderableWidget(Button.builder(Component.empty(), button -> refresh()).pos(xOffset + GUI_WIDTH - 23, yOffset + 5).size(18, 18).build());
 		
 		ListTag sessionList = nbt.getList("sessions", Tag.TAG_COMPOUND);
 		
@@ -128,7 +130,8 @@ public class DataCheckerScreen extends Screen
 			}
 			sessionButton.setTooltip(Tooltip.create(sessionPlayers));
 			addRenderableWidget(sessionButton);
-			buttons.add(sessionButton);
+			sessionButtons.add(sessionButton);
+			modifySessionButtonVisibility();
 			
 			buildLandWidgets(connectionTags, completed, sessionWidget, landWidgets);
 		}
@@ -180,49 +183,47 @@ public class DataCheckerScreen extends Screen
 	{
 		xOffset = (width - GUI_WIDTH) / 2;
 		yOffset = (height - GUI_HEIGHT) / 2;
-		/*boolean canScroll = guiComponent != null && guiComponent.getComponentList().size() > 5;
+		
+		boolean canScroll = sessionButtons.size() > VISIBLE_BUTTON_COUNT;
 		
 		if(canScroll && isScrolling)
 		{
 			displayIndex = (mouseY - yOffset - 28.5F) / 91;
 			displayIndex = Mth.clamp(displayIndex, 0.0F, 1.0F);
-			int newIndex = (int) ((guiComponent.getComponentList().size() - 5) * displayIndex + 0.5);
+			int newIndex = (int) ((sessionButtons.size() - VISIBLE_BUTTON_COUNT) * displayIndex + 0.5);
 			if(newIndex != index)
 			{
 				index = newIndex;
-				//updateGuiButtons();
+				modifySessionButtonVisibility();
 			}
-		}*/
+		}
 		
 		super.render(guiGraphics, mouseX, mouseY, partialTicks);
 		
-		if(this.refreshButton != null && this.refreshButton.active)
-			RenderSystem.setShaderColor(1, 1, 1, 1);
-		else RenderSystem.setShaderColor(.5F, .5F, .5F, 1);
 		guiGraphics.blit(icons, xOffset + GUI_WIDTH - 22, yOffset + 6, 224, 0, 16, 16);
 		
-		/*
-		if(guiComponent != null)
-		{
-			List<IDataComponent> list = guiComponent.getComponentList();
-			for(int i = 0; i < 5; i++)
-			{
-				guiGraphics.drawString(font, guiComponent.getName(), xOffset + 9, yOffset + 15 - font.lineHeight / 2, 0, false);
-				IDataComponent component = i + index < list.size() ? list.get(i + index) : null;
-				if(component != null && !component.isButton())
-				{
-					RenderSystem.setShaderColor(1, 1, 1, 1);
-					guiGraphics.blit(guiBackground, xOffset + 5, yOffset + LIST_Y + i * 22, 0, 236, 180, 20);
-					guiGraphics.drawString(font, component.getName(), xOffset + 9, yOffset + LIST_Y + 10 - font.lineHeight / 2 + i * 22, 0, false);
-				}
-			}
-		} else
-			guiGraphics.drawString(font, "Retrieving data from server...", xOffset + 9, yOffset + 15 - font.lineHeight / 2, 0, false);
-		*/
+		int textureIndex = canScroll ? 328 : 340;
+		guiGraphics.blit(guiBackground, xOffset + GUI_WIDTH - 20, yOffset + LIST_Y + 1 + (int) (displayIndex * 91), textureIndex, 0, 12, 15, 352, 256);
+	}
+	
+	private void modifySessionButtonVisibility()
+	{
+		if(sessionButtons.isEmpty())
+			return;
 		
-		RenderSystem.setShaderColor(1, 1, 1, 1);
-		//int textureIndex = canScroll ? 232 : 244;
-		//guiGraphics.blit(guiBackground, (width - GUI_WIDTH) / 2 + 190, (height - GUI_HEIGHT) / 2 + LIST_Y + 1 + (int) displayIndex * 91, textureIndex, 0, 12, 15);
+		sessionButtons.forEach(sessionButton -> {
+			sessionButton.active = false;
+			sessionButton.visible = false;
+		});
+		for(int i = 0; i < VISIBLE_BUTTON_COUNT; i++)
+		{
+			if(sessionButtons.size() > index + i)
+			{
+				sessionButtons.get(index + i).setY(yOffset + 5 + (i * 22));
+				sessionButtons.get(index + i).active = true;
+				sessionButtons.get(index + i).visible = true;
+			}
+		}
 	}
 	
 	private void refresh()
@@ -245,36 +246,31 @@ public class DataCheckerScreen extends Screen
 	@Override
 	public boolean mouseScrolled(double mouseX, double mouseY, double scrollX, double scrollY)
 	{
-		/*
-		if(scrollY != 0 && guiComponent != null)
+		if(scrollY != 0)
 		{
-			int size = guiComponent.getComponentList().size();
-			if(size <= 5)
+			int size = sessionButtons.size();
+			if(size <= VISIBLE_BUTTON_COUNT)
 				return super.mouseScrolled(mouseX, mouseY, scrollX, scrollY);
 			
 			int prevIndex = index;
 			if(scrollY > 0)
 				index -= 1;
 			else index += 1;
-			index = Mth.clamp(index, 0, size - 5);
+			index = Mth.clamp(index, 0, size - VISIBLE_BUTTON_COUNT);
 			
 			if(index != prevIndex)
 			{
-				displayIndex = index / ((float) size - 5);
-				updateGuiButtons();
+				displayIndex = index / ((float) size - VISIBLE_BUTTON_COUNT);
+				modifySessionButtonVisibility();
 			}
 			return true;
 		} else return super.mouseScrolled(mouseX, mouseY, scrollX, scrollY);
-		 */
-		return super.mouseScrolled(mouseX, mouseY, scrollX, scrollY);
 	}
 	
 	@Override
 	public boolean mouseClicked(double mouseX, double mouseY, int mouseButton)
 	{
-		int xOffset = (width - GUI_WIDTH) / 2;
-		int yOffset = (height - GUI_HEIGHT) / 2;
-		if(mouseButton == 0 && mouseX >= xOffset + 190 && mouseX < xOffset + 202 && mouseY >= yOffset + LIST_Y + 1 && mouseY < yOffset + LIST_Y + 102)
+		if(mouseButton == 0 && mouseX >= xOffset + GUI_WIDTH - 20 && mouseX < xOffset + GUI_WIDTH - 8 && mouseY >= yOffset + LIST_Y + 1 && mouseY < yOffset + LIST_Y + 102)
 		{
 			isScrolling = true;
 			return true;
@@ -451,10 +447,11 @@ public class DataCheckerScreen extends Screen
 		
 		private static void appendLandAndPlayer(CompoundTag landNbt, Optional<LandTypePair.Named> oNamed, MutableComponent component)
 		{
+			//TODO formatting is wrong for null lands
 			if(oNamed.isPresent())
 				component.append(oNamed.get().asComponentWithLandFont());
 			else
-				component.append("Land of ").append("§kNull§f").append(" and ").append("§kNull§f").withStyle(LandTypePair.LAND_OF_COPYLEFT_AND_FREEDOM_FONT_STYLE);
+				component.append("Land of §kNull§r and §kNull").withStyle(LandTypePair.LAND_OF_COPYLEFT_AND_FREEDOM_FONT_STYLE);
 			
 			MutableComponent landPlayer = Component.literal("\n\n" + landNbt.getString("client")).withStyle(ChatFormatting.RESET);
 			if(landNbt.contains("playerColor"))
