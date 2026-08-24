@@ -56,7 +56,7 @@ public abstract class PlayerStatsScreen extends MinestuckScreen
 			new TabSprite(0, 224), new TabSprite(tabWidth, 224), new TabSprite(tabWidth * 2, 224)
 	);
 	
-	public static final TabSpritePool GRIST_CACHE_POOL = new TabSpritePool(
+	public static final TabSpritePool NEW_POOL = new TabSpritePool(
 			new TabSprite(84, 192), new TabSprite(84 + tabWidth, 192), new TabSprite(84 + (tabWidth * 2), 192),
 			new TabSprite(84, 224), new TabSprite(84 + tabWidth, 224), new TabSprite(84 + (tabWidth * 2), 224)
 	);
@@ -79,8 +79,8 @@ public abstract class PlayerStatsScreen extends MinestuckScreen
 			return null;
 		}, SylladexScreen.TITLE, false, null),
 		STRIFE_SPECIBUS(StrifeSpecibusScreen::new, StrifeSpecibusScreen.TITLE, false, STRIFE_POOL),
-		ECHELADDER(EcheladderScreen::new, EcheladderScreen.TITLE, false, null),
-		GRIST_CACHE(GristCacheScreen::new, GristCacheScreen.TITLE, true, GRIST_CACHE_POOL);
+		ECHELADDER(EcheladderScreen::new, EcheladderScreen.TITLE, false, NEW_POOL),
+		GRIST_CACHE(GristCacheScreen::new, GristCacheScreen.TITLE, true, NEW_POOL);
 		
 		final Supplier<? extends Screen> factory;
 		final BiFunction<Integer, Inventory, ? extends AbstractContainerScreen<?>> factory2;
@@ -134,7 +134,7 @@ public abstract class PlayerStatsScreen extends MinestuckScreen
 	public enum EditmodeGuiType
 	{
 		DEPLOY_LIST(InventoryEditmodeScreen::new, InventoryEditmodeScreen.TITLE, null),
-		GRIST_CACHE(GristCacheScreen::new, GristCacheScreen.TITLE, GRIST_CACHE_POOL),
+		GRIST_CACHE(GristCacheScreen::new, GristCacheScreen.TITLE, NEW_POOL),
 		ATHENEUM(AtheneumScreen::new, AtheneumScreen.TITLE, null);
 		
 		final Supplier<? extends Screen> factory;
