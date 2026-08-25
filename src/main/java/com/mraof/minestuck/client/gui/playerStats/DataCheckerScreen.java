@@ -27,6 +27,7 @@ import net.minecraft.nbt.ListTag;
 import net.minecraft.nbt.NbtOps;
 import net.minecraft.nbt.Tag;
 import net.minecraft.network.chat.Component;
+import net.minecraft.network.chat.FormattedText;
 import net.minecraft.network.chat.MutableComponent;
 import net.minecraft.resources.ResourceKey;
 import net.minecraft.resources.ResourceLocation;
@@ -51,7 +52,7 @@ public class DataCheckerScreen extends Screen
 	private static final ResourceLocation guiBackground = ResourceLocation.fromNamespaceAndPath("minestuck", "textures/gui/data_check.png");
 	private static final int GUI_WIDTH = 322, GUI_HEIGHT = 140;
 	private static final int LAND_INFO_X = 96;
-	private static final int LIST_Y = 25;
+	private static final int LIST_Y = 26;
 	private static final int VISIBLE_BUTTON_COUNT = 6;
 	private static final int LAND_RADIUS = 40;
 	private static final int COLOR_BLACK = 0xFF000000;
@@ -98,7 +99,6 @@ public class DataCheckerScreen extends Screen
 		needsRefresh = false;
 		sessionButtons.clear();
 		
-		//TODO window needs resizing or closed for session buttons to show up. Using refresh button does not work to refresh
 		addRenderableWidget(Button.builder(Component.empty(), button -> refresh()).pos(xOffset + GUI_WIDTH - 23, yOffset + 5).size(18, 18).build());
 		
 		ListTag sessionList = nbt.getList("sessions", Tag.TAG_COMPOUND);
@@ -120,7 +120,7 @@ public class DataCheckerScreen extends Screen
 			addRenderableWidget(sessionWidget);
 			
 			Component sessionComponent = Component.literal("Session " + sessionIt);
-			SessionButton sessionButton = new SessionButton(xOffset + LAND_INFO_X + GUI_HEIGHT - 2, yOffset + 5 + (sessionIt * 22), 60, 20, sessionComponent, sessionWidget);
+			SessionButton sessionButton = new SessionButton(xOffset + GUI_WIDTH - 88, yOffset + 5 + (sessionIt * 22), 64, 20, sessionComponent, sessionWidget);
 			MutableComponent sessionPlayers = sessionComponent.copy().withStyle(ChatFormatting.BOLD);
 			for(int i = 0; i < connectionTags.size(); i++)
 			{
@@ -202,7 +202,7 @@ public class DataCheckerScreen extends Screen
 		guiGraphics.blit(icons, xOffset + GUI_WIDTH - 22, yOffset + 6, 224, 0, 16, 16);
 		
 		int textureIndex = canScroll ? 328 : 340;
-		guiGraphics.blit(guiBackground, xOffset + GUI_WIDTH - 20, yOffset + LIST_Y + 1 + (int) (displayIndex * 91), textureIndex, 0, 12, 15, 352, 256);
+		guiGraphics.blit(guiBackground, xOffset + GUI_WIDTH - 20, yOffset + LIST_Y + (int) (displayIndex * 91), textureIndex, 0, 12, 15, 352, 256);
 	}
 	
 	private void modifySessionButtonVisibility()
@@ -269,7 +269,7 @@ public class DataCheckerScreen extends Screen
 	@Override
 	public boolean mouseClicked(double mouseX, double mouseY, int mouseButton)
 	{
-		if(mouseButton == 0 && mouseX >= xOffset + GUI_WIDTH - 20 && mouseX < xOffset + GUI_WIDTH - 8 && mouseY >= yOffset + LIST_Y + 1 && mouseY < yOffset + LIST_Y + 102)
+		if(mouseButton == 0 && mouseX >= xOffset + GUI_WIDTH - 20 && mouseX < xOffset + GUI_WIDTH - 8 && mouseY >= yOffset + LIST_Y && mouseY < yOffset + LIST_Y + 101)
 		{
 			isScrolling = true;
 			return true;
@@ -381,13 +381,16 @@ public class DataCheckerScreen extends Screen
 			this.landNbt = landNbt;
 			
 			MutableComponent component = Component.empty();
+			List<Component> components = new ArrayList<>();
 			
 			Optional<LandTypePair.Named> oNamed = Optional.empty();
 			if(land != null && landNbt.contains("landTypes"))
 				oNamed = LandTypePair.Named.CODEC.parse(NbtOps.INSTANCE, landNbt.get("landTypes")).resultOrPartial(LOGGER::error);
 			this.oNamed = oNamed;
-			appendLandAndPlayer(landNbt, oNamed, component);
 			
+			appendLandAndPlayer(landNbt, oNamed, components);
+			
+			components.forEach(component::append);
 			setTooltip(Tooltip.create(component));
 			
 			gristButton = addRenderableWidget(Button.builder(Component.literal("View Grist Cache"), button -> gristButtonPress(landNbt)).pos(xOffset + 3, yOffset + GUI_HEIGHT - 18).size(90, 14).build());
@@ -413,19 +416,19 @@ public class DataCheckerScreen extends Screen
 			if(isFocused())
 			{
 				//fill in left section of GUI
-				MutableComponent component = Component.empty();
-				appendLandAndPlayer(landNbt, oNamed, component);
-				component.append("\n");
+				List<Component> components = new ArrayList<>();
+				appendLandAndPlayer(landNbt, oNamed, components);
+				components.add(Component.literal("\n"));
 				if(landNbt.contains("class"))
 				{
 					Title title = new Title(EnumClass.values()[landNbt.getByte("class")], EnumAspect.values()[landNbt.getByte("aspect")]);
-					component.append("\n" + "Title: ").append(title.asTextComponent()).withStyle(ChatFormatting.BOLD);
+					components.add(Component.literal("\n" + "Title: ").append(title.asTextComponent()).withStyle(ChatFormatting.BOLD));
 				}
 				if(landNbt.contains("server"))
-					component.append("\n" + "Server is " + landNbt.getString("server")).withStyle(ChatFormatting.RESET);
-				component.append("\n" + "Is Primary Connection: " + landNbt.getBoolean("isMain"));
+					components.add(Component.literal("\n" + "Server is " + landNbt.getString("server")).withStyle(ChatFormatting.RESET));
+				components.add(Component.literal("\n" + "Is Primary Connection: " + landNbt.getBoolean("isMain")));
 				
-				guiGraphics.drawWordWrap(minecraft.font, component, xOffset + 4, yOffset + 1, 90, COLOR_BLACK);
+				guiGraphics.drawWordWrap(minecraft.font, FormattedText.composite(components), xOffset + 4, yOffset + 1, 90, COLOR_BLACK);
 			}
 			
 			if(oNamed.isPresent())
@@ -445,18 +448,18 @@ public class DataCheckerScreen extends Screen
 			}
 		}
 		
-		private static void appendLandAndPlayer(CompoundTag landNbt, Optional<LandTypePair.Named> oNamed, MutableComponent component)
+		private static void appendLandAndPlayer(CompoundTag landNbt, Optional<LandTypePair.Named> oNamed, List<Component> components)
 		{
-			//TODO formatting is wrong for null lands
 			if(oNamed.isPresent())
-				component.append(oNamed.get().asComponentWithLandFont());
+				components.add(oNamed.get().asComponentWithLandFont());
 			else
-				component.append("Land of §kNull§r and §kNull").withStyle(LandTypePair.LAND_OF_COPYLEFT_AND_FREEDOM_FONT_STYLE);
+				components.add(Component.literal("Land of §kNull§r and §kNull").withStyle(LandTypePair.LAND_OF_COPYLEFT_AND_FREEDOM_FONT_STYLE));
+			//TODO LOCAF Font Style not applied after use of §r
 			
 			MutableComponent landPlayer = Component.literal("\n\n" + landNbt.getString("client")).withStyle(ChatFormatting.RESET);
 			if(landNbt.contains("playerColor"))
 				landPlayer.withColor(landNbt.getInt("playerColor"));
-			component.append(landPlayer);
+			components.add(landPlayer);
 		}
 	}
 	
