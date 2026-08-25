@@ -1,7 +1,9 @@
 package com.mraof.minestuck.client.gui.playerStats;
 
 import com.mojang.blaze3d.platform.InputConstants;
-import com.mojang.blaze3d.systems.RenderSystem;
+import com.mojang.blaze3d.vertex.PoseStack;
+import com.mojang.math.Axis;
+import com.mraof.minestuck.client.renderer.LandSkySpriteUploader;
 import com.mraof.minestuck.client.util.MSKeyHandler;
 import com.mraof.minestuck.network.DataCheckerPackets;
 import com.mraof.minestuck.player.ClientPlayerData;
@@ -9,26 +11,38 @@ import com.mraof.minestuck.player.EnumAspect;
 import com.mraof.minestuck.player.EnumClass;
 import com.mraof.minestuck.player.Title;
 import com.mraof.minestuck.world.lands.LandTypePair;
+import net.minecraft.ChatFormatting;
 import net.minecraft.client.Minecraft;
 import net.minecraft.client.gui.GuiGraphics;
+import net.minecraft.client.gui.components.AbstractWidget;
 import net.minecraft.client.gui.components.Button;
+import net.minecraft.client.gui.components.Tooltip;
+import net.minecraft.client.gui.narration.NarrationElementOutput;
 import net.minecraft.client.gui.screens.ChatScreen;
 import net.minecraft.client.gui.screens.Screen;
+import net.minecraft.client.renderer.texture.TextureAtlasSprite;
+import net.minecraft.core.registries.Registries;
 import net.minecraft.nbt.CompoundTag;
 import net.minecraft.nbt.ListTag;
 import net.minecraft.nbt.NbtOps;
 import net.minecraft.nbt.Tag;
 import net.minecraft.network.chat.Component;
+import net.minecraft.network.chat.FormattedText;
+import net.minecraft.network.chat.MutableComponent;
+import net.minecraft.resources.ResourceKey;
 import net.minecraft.resources.ResourceLocation;
 import net.minecraft.util.Mth;
+import net.minecraft.util.RandomSource;
+import net.minecraft.world.level.Level;
 import net.neoforged.neoforge.client.gui.widget.ExtendedButton;
 import net.neoforged.neoforge.network.PacketDistributor;
 import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.Logger;
+import software.bernie.geckolib.util.RenderUtil;
 
 import java.util.ArrayList;
-import java.util.HashSet;
 import java.util.List;
+import java.util.Optional;
 
 public class DataCheckerScreen extends Screen
 {
@@ -36,16 +50,23 @@ public class DataCheckerScreen extends Screen
 	
 	private static final ResourceLocation icons = ResourceLocation.fromNamespaceAndPath("minestuck", "textures/gui/icons.png");
 	private static final ResourceLocation guiBackground = ResourceLocation.fromNamespaceAndPath("minestuck", "textures/gui/data_check.png");
-	private static final int GUI_WIDTH = 210, GUI_HEIGHT = 140;
-	private static final int LIST_Y = 25;
+	private static final int GUI_WIDTH = 322, GUI_HEIGHT = 140;
+	private static final int LAND_INFO_X = 96;
+	private static final int LIST_Y = 26;
+	private static final int VISIBLE_BUTTON_COUNT = 6;
+	private static final int LAND_RADIUS = 40;
+	private static final int COLOR_BLACK = 0xFF000000;
+	private static final int COLOR_WHITE = 0xFFFFFFFF;
 	
-	public static IDataComponent activeComponent = null;
-	private IDataComponent guiComponent;
-	private Button[] contentButtons = new Button[5];
-	private Button returnButton, refreshButton;
-	private int index;
+	public static CompoundTag nbt = new CompoundTag();
+	private boolean needsRefresh = true;
+	private List<SessionButton> sessionButtons = new ArrayList<>();
+	public SessionButton focusedButton;
 	private float displayIndex;
+	private int index;
 	private boolean isScrolling;
+	private int xOffset;
+	private int yOffset;
 	
 	public DataCheckerScreen()
 	{
@@ -61,20 +82,91 @@ public class DataCheckerScreen extends Screen
 	@Override
 	public void init()
 	{
-		int xOffset = (width - GUI_WIDTH)/2;
-		int yOffset = (height - GUI_HEIGHT)/2;
-		for(int i = 0; i < 5; i++)
-		{
-			final int id = i;
-			contentButtons[id] = addRenderableWidget(new ExtendedButton(xOffset + 5, yOffset + LIST_Y + i*22, 180, 20, Component.empty(), button -> contentButton(id)));
-		}
-		returnButton = addRenderableWidget(Button.builder(Component.empty(), button -> goBack()).pos(xOffset + GUI_WIDTH - 25, yOffset + 5).size(18, 18).build());
-		refreshButton = addRenderableWidget(Button.builder(Component.empty(), button -> refresh()).pos(xOffset + GUI_WIDTH - 45, yOffset + 5).size(18, 18).build());
+		//TODO add a way to search through sessions
 		
-		if(activeComponent == null)
+		xOffset = (width - GUI_WIDTH) / 2;
+		yOffset = (height - GUI_HEIGHT) / 2;
+		
+		if(nbt.isEmpty())
 			PacketDistributor.sendToServer(DataCheckerPackets.Request.create());
 		
-		componentChanged();
+		needsRefresh = true;
+	}
+	
+	private void buildWidgets()
+	{
+		clearWidgets();
+		needsRefresh = false;
+		sessionButtons.clear();
+		
+		addRenderableWidget(Button.builder(Component.empty(), button -> refresh()).pos(xOffset + GUI_WIDTH - 23, yOffset + 5).size(18, 18).build());
+		
+		ListTag sessionList = nbt.getList("sessions", Tag.TAG_COMPOUND);
+		
+		for(int sessionIt = 0; sessionIt < sessionList.size(); sessionIt++)
+		{
+			List<LandWidget> landWidgets = new ArrayList<>();
+			
+			CompoundTag sessionTag = sessionList.getCompound(sessionIt);
+			ListTag connectionTags = sessionTag.getList("connections", Tag.TAG_COMPOUND);
+			
+			boolean completed = false;
+			if(sessionTag.contains("completed"))
+				completed = sessionTag.getBoolean("completed");
+			
+			SessionWidget sessionWidget = new SessionWidget(xOffset + LAND_INFO_X + 5, yOffset + 5, GUI_HEIGHT - 10, landWidgets);
+			sessionWidget.visible = false;
+			sessionWidget.active = false;
+			addRenderableWidget(sessionWidget);
+			
+			Component sessionComponent = Component.literal("Session " + sessionIt);
+			SessionButton sessionButton = new SessionButton(xOffset + GUI_WIDTH - 88, yOffset + 5 + (sessionIt * 22), 64, 20, sessionComponent, sessionWidget);
+			MutableComponent sessionPlayers = sessionComponent.copy().withStyle(ChatFormatting.BOLD);
+			for(int i = 0; i < connectionTags.size(); i++)
+			{
+				CompoundTag connectionTag = connectionTags.getCompound(i);
+				sessionPlayers.append("\n" + connectionTag.getString("client")).withStyle(ChatFormatting.RESET);
+			}
+			sessionButton.setTooltip(Tooltip.create(sessionPlayers));
+			addRenderableWidget(sessionButton);
+			sessionButtons.add(sessionButton);
+			modifySessionButtonVisibility();
+			
+			buildLandWidgets(connectionTags, completed, sessionWidget, landWidgets);
+		}
+	}
+	
+	private void buildLandWidgets(ListTag connectionTags, boolean completed, SessionWidget sessionWidget, List<LandWidget> landWidgets)
+	{
+		//leave a space open visually if the loop is not closed
+		int landPositionCount = connectionTags.size() + (completed ? 0 : 1);
+		int size = Math.clamp(-(landPositionCount / 5) + 14, 6, 14);
+		int spriteOffset = size / 2;
+		
+		for(int connectionIt = 0; connectionIt < connectionTags.size(); connectionIt++)
+		{
+			CompoundTag connectionTag = connectionTags.getCompound(connectionIt);
+			
+			float rotation = ((float) connectionIt / landPositionCount) * 360;
+			int landX = getXOnRadius(sessionWidget.getCenterX(), LAND_RADIUS, rotation) - spriteOffset;
+			int landY = getYOnRadius(sessionWidget.getCenterY(), LAND_RADIUS, rotation) - spriteOffset;
+			
+			LandWidget landWidget = new LandWidget(landX, landY, size, connectionTag);
+			landWidget.visible = false;
+			landWidget.active = false;
+			landWidgets.add(landWidget);
+			addRenderableWidget(landWidget);
+		}
+	}
+	
+	private static int getXOnRadius(int center, int radius, float rotation)
+	{
+		return (int) (center + radius * Math.cos(Math.toRadians(rotation)));
+	}
+	
+	private static int getYOnRadius(int center, int radius, float rotation)
+	{
+		return (int) (center + radius * Math.sin(Math.toRadians(rotation)));
 	}
 	
 	@Override
@@ -82,91 +174,93 @@ public class DataCheckerScreen extends Screen
 	{
 		super.renderBackground(guiGraphics, mouseX, mouseY, partialTicks);
 		
-		int xOffset = (width - GUI_WIDTH)/2;
-		int yOffset = (height - GUI_HEIGHT)/2;
-		guiGraphics.blit(guiBackground, xOffset, yOffset, 0, 0, GUI_WIDTH, GUI_HEIGHT);
+		guiGraphics.blit(guiBackground, xOffset, yOffset, 0, 0, GUI_WIDTH, GUI_HEIGHT, 352, 256);
 	}
 	
 	@Override
 	public void render(GuiGraphics guiGraphics, int mouseX, int mouseY, float partialTicks)
 	{
-		int xOffset = (width - GUI_WIDTH)/2;
-		int yOffset = (height - GUI_HEIGHT)/2;
-		boolean canScroll = guiComponent != null && guiComponent.getComponentList().size() > 5 ? true : false;
+		xOffset = (width - GUI_WIDTH) / 2;
+		yOffset = (height - GUI_HEIGHT) / 2;
+		
+		boolean canScroll = sessionButtons.size() > VISIBLE_BUTTON_COUNT;
 		
 		if(canScroll && isScrolling)
 		{
 			displayIndex = (mouseY - yOffset - 28.5F) / 91;
 			displayIndex = Mth.clamp(displayIndex, 0.0F, 1.0F);
-			int newIndex = (int) ((guiComponent.getComponentList().size() - 5) * displayIndex + 0.5);
+			int newIndex = (int) ((sessionButtons.size() - VISIBLE_BUTTON_COUNT) * displayIndex + 0.5);
 			if(newIndex != index)
 			{
 				index = newIndex;
-				updateGuiButtons();
+				modifySessionButtonVisibility();
 			}
 		}
 		
 		super.render(guiGraphics, mouseX, mouseY, partialTicks);
 		
-		if(this.returnButton.active)
-			RenderSystem.setShaderColor(1, 1, 1, 1);
-		else RenderSystem.setShaderColor(.5F, .5F, .5F, 1);
-		guiGraphics.blit(icons, xOffset + GUI_WIDTH - 24, yOffset + 6, 240, 0, 16, 16);
+		guiGraphics.blit(icons, xOffset + GUI_WIDTH - 22, yOffset + 6, 224, 0, 16, 16);
 		
-		if(this.refreshButton.active)
-			RenderSystem.setShaderColor(1, 1, 1, 1);
-		else RenderSystem.setShaderColor(.5F, .5F, .5F, 1);
-		guiGraphics.blit(icons, xOffset + GUI_WIDTH - 44, yOffset + 6, 224, 0, 16, 16);
+		int textureIndex = canScroll ? 328 : 340;
+		guiGraphics.blit(guiBackground, xOffset + GUI_WIDTH - 20, yOffset + LIST_Y + (int) (displayIndex * 91), textureIndex, 0, 12, 15, 352, 256);
+	}
+	
+	private void modifySessionButtonVisibility()
+	{
+		if(sessionButtons.isEmpty())
+			return;
 		
-		if(guiComponent != null)
+		sessionButtons.forEach(sessionButton -> {
+			sessionButton.active = false;
+			sessionButton.visible = false;
+		});
+		for(int i = 0; i < VISIBLE_BUTTON_COUNT; i++)
 		{
-			List<IDataComponent> list = guiComponent.getComponentList();
-			for(int i = 0; i < 5; i++)
+			if(sessionButtons.size() > index + i)
 			{
-				guiGraphics.drawString(font, guiComponent.getName(), xOffset + 9, yOffset + 15 - font.lineHeight/2, 0, false);
-				IDataComponent component = i + index < list.size() ? list.get(i + index) : null;
-				if(component != null && !component.isButton())
-				{
-					RenderSystem.setShaderColor(1, 1, 1, 1);
-					guiGraphics.blit(guiBackground, xOffset + 5, yOffset + LIST_Y + i*22, 0, 236, 180, 20);
-					guiGraphics.drawString(font, component.getName(), xOffset + 9, yOffset + LIST_Y + 10 - font.lineHeight/2 + i*22, 0, false);
-				}
+				sessionButtons.get(index + i).setY(yOffset + 5 + (i * 22));
+				sessionButtons.get(index + i).active = true;
+				sessionButtons.get(index + i).visible = true;
 			}
-		} else guiGraphics.drawString(font, "Retrieving data from server...", xOffset + 9, yOffset + 15 - font.lineHeight/2, 0, false);
-		
-		RenderSystem.setShaderColor(1, 1, 1, 1);
-		int textureIndex = canScroll ? 232 : 244;
-		guiGraphics.blit(guiBackground, (width - GUI_WIDTH)/2 + 190, (height - GUI_HEIGHT)/2 + LIST_Y + 1 + (int) displayIndex*91, textureIndex, 0, 12, 15);
+		}
+	}
+	
+	private void refresh()
+	{
+		PacketDistributor.sendToServer(DataCheckerPackets.Request.create());
+		nbt = new CompoundTag();
+		needsRefresh = true;
 	}
 	
 	@Override
 	public void tick()
 	{
-		if(guiComponent != activeComponent)
-			componentChanged();
 		if(!ClientPlayerData.hasDataCheckerAccess())
 			minecraft.setScreen(null);
+		
+		if(needsRefresh)
+			buildWidgets();
 	}
 	
 	@Override
 	public boolean mouseScrolled(double mouseX, double mouseY, double scrollX, double scrollY)
 	{
-		if(scrollY != 0 && guiComponent != null)
+		if(scrollY != 0)
 		{
-			int size = guiComponent.getComponentList().size();
-			if(size <= 5)
+			int size = sessionButtons.size();
+			if(size <= VISIBLE_BUTTON_COUNT)
 				return super.mouseScrolled(mouseX, mouseY, scrollX, scrollY);
 			
 			int prevIndex = index;
 			if(scrollY > 0)
 				index -= 1;
 			else index += 1;
-			index = Mth.clamp(index, 0, size - 5);
+			index = Mth.clamp(index, 0, size - VISIBLE_BUTTON_COUNT);
 			
 			if(index != prevIndex)
 			{
-				displayIndex = index/((float) size - 5);
-				updateGuiButtons();
+				displayIndex = index / ((float) size - VISIBLE_BUTTON_COUNT);
+				modifySessionButtonVisibility();
 			}
 			return true;
 		} else return super.mouseScrolled(mouseX, mouseY, scrollX, scrollY);
@@ -175,9 +269,7 @@ public class DataCheckerScreen extends Screen
 	@Override
 	public boolean mouseClicked(double mouseX, double mouseY, int mouseButton)
 	{
-		int xOffset = (width - GUI_WIDTH)/2;
-		int yOffset = (height - GUI_HEIGHT)/2;
-		if(mouseButton == 0 && mouseX >= xOffset + 190 && mouseX < xOffset + 202 && mouseY >= yOffset + LIST_Y + 1 && mouseY < yOffset + LIST_Y + 102)
+		if(mouseButton == 0 && mouseX >= xOffset + GUI_WIDTH - 20 && mouseX < xOffset + GUI_WIDTH - 8 && mouseY >= yOffset + LIST_Y && mouseY < yOffset + LIST_Y + 101)
 		{
 			isScrolling = true;
 			return true;
@@ -195,67 +287,6 @@ public class DataCheckerScreen extends Screen
 		return super.mouseReleased(mouseX, mouseY, mouseButton);
 	}
 	
-	private void contentButton(int id)
-	{
-		int buttonIndex = index + id;
-		if(buttonIndex < guiComponent.getComponentList().size() && guiComponent.getComponentList().get(buttonIndex) != null)
-		{
-			IDataComponent component = guiComponent.getComponentList().get(buttonIndex).onButtonPressed();
-			if(component != null)
-			{
-				activeComponent = component;
-				componentChanged();
-			}
-		}
-	}
-	
-	private void goBack()
-	{
-		if(guiComponent != null && guiComponent.getParentComponent() != null)
-		{
-			activeComponent = guiComponent.getParentComponent();
-			componentChanged();
-		}
-	}
-	
-	private void refresh()
-	{
-		PacketDistributor.sendToServer(DataCheckerPackets.Request.create());
-		activeComponent = null;
-		componentChanged();
-	}
-	
-	public void componentChanged()
-	{
-		index = 0;
-		displayIndex = 0F;
-		guiComponent = activeComponent;
-		returnButton.active = guiComponent != null && guiComponent.getParentComponent() != null;
-		refreshButton.active = guiComponent != null;
-		updateGuiButtons();
-	}
-	
-	public void updateGuiButtons()
-	{
-		if(guiComponent != null)
-		{
-			List<IDataComponent> components = guiComponent.getComponentList();
-			
-			for(int i = 0; i < 5; i++)
-			{
-				Button button = contentButtons[i];
-				IDataComponent component = i + index < components.size() ? components.get(i + index) : null;
-				if(component != null && component.isButton())
-				{
-					button.visible = true;
-					button.setMessage(Component.literal(component.getName()));
-					
-				} else button.visible = false;
-			}
-		} else for(Button button : contentButtons)
-			button.visible = false;
-	}
-	
 	@Override
 	public boolean keyPressed(int keyCode, int scanCode, int i)
 	{
@@ -263,304 +294,238 @@ public class DataCheckerScreen extends Screen
 		{
 			minecraft.setScreen(null);
 			return true;
-		}
-		else return super.keyPressed(keyCode, scanCode, i);
+		} else return super.keyPressed(keyCode, scanCode, i);
 	}
 	
-	public interface IDataComponent
+	public class SessionWidget extends IncipisphereWidget
 	{
-		public IDataComponent getParentComponent();
+		public final List<LandWidget> landWidgets;
 		
-		public List<IDataComponent> getComponentList();
-		
-		public IDataComponent onButtonPressed();
-		
-		public boolean isButton();
-		
-		public String getName();
-	}
-	
-	public static class TextField implements IDataComponent
-	{
-		String message;
-		
-		public TextField(String message, Object... args)
+		public SessionWidget(int x, int y, int size, List<LandWidget> landWidgets)
 		{
-			this(String.format(message, args));
-		}
-		public TextField(String message)
-		{
-			this.message = message;
+			super(x, y, size);
+			this.landWidgets = landWidgets;
 		}
 		
 		@Override
-		public IDataComponent getParentComponent()
+		protected void renderWidget(GuiGraphics guiGraphics, int mouseX, int mouseY, float partialTick)
 		{
-			return null;
+			updateChildren();
+			
+			//backdrop
+			guiGraphics.fill(getX(), getY(), getX() + width, getY() + height, COLOR_BLACK);
+			
+			RandomSource randomSource = RandomSource.create(0);
+			
+			int skaiaSize = 16;
+			guiGraphics.blit(getCenterX() - skaiaSize / 2, getCenterY() - skaiaSize / 2, 0, skaiaSize, skaiaSize, LandSkySpriteUploader.getInstance().getSkaiaSprite());
+			int meteorCount = 200;
+			
+			PoseStack poseStack = guiGraphics.pose();
+			poseStack.pushPose();
+			float rotation = (float) (RenderUtil.getCurrentTick() % 10000) * 0.0001F * 360;
+			poseStack.rotateAround(Axis.ZP.rotationDegrees(rotation), getCenterX(), getCenterY(), 0);
+			
+			for(int i = 0; i < meteorCount; i++)
+			{
+				float veilRotation = ((float) i / meteorCount) * 360;
+				int veilRadius = (int) (LAND_RADIUS * 1.4);
+				int veilX = getXOnRadius(getCenterX(), veilRadius, veilRotation) + randomSource.nextIntBetweenInclusive(-3, 3);
+				int veilY = getYOnRadius(getCenterY(), veilRadius, veilRotation) + randomSource.nextIntBetweenInclusive(-3, 3);
+				guiGraphics.fill(veilX, veilY, veilX + 1, veilY + 1, randomSource.nextBoolean() ? COLOR_WHITE : 0xFFDDDDDD);
+			}
+			
+			int kingdomSize = 4;
+			
+			guiGraphics.blit(getCenterX() + 8, getCenterY() - 7, 0, kingdomSize, kingdomSize, LandSkySpriteUploader.getInstance().getProspitSprite());
+			
+			poseStack.pushPose();
+			int derseX = getX() + 16;
+			int derseY = getY() + height - 27;
+			poseStack.rotateAround(Axis.ZP.rotationDegrees(180), derseX, derseY, 0);
+			guiGraphics.blit(derseX, derseY, 0, kingdomSize, kingdomSize, LandSkySpriteUploader.getInstance().getDerseSprite());
+			poseStack.popPose();
+			
+			poseStack.popPose();
 		}
+		
 		@Override
-		public List<IDataComponent> getComponentList()
-		{
-			return null;
-		}
-		@Override
-		public IDataComponent onButtonPressed()
-		{
-			return null;
-		}
-		@Override
-		public boolean isButton()
+		protected boolean isValidClickButton(int button)
 		{
 			return false;
 		}
-		@Override
-		public String getName()
+		
+		public void updateChildren()
 		{
-			return message;
+			landWidgets.forEach(landWidget -> landWidget.visible = this.visible);
+			landWidgets.forEach(landWidget -> landWidget.active = this.active);
 		}
 	}
 	
-	public record LocalizedTextField(Component component) implements IDataComponent
+	public class LandWidget extends IncipisphereWidget
 	{
-		public LocalizedTextField(String message, Object... params)
+		public final ResourceKey<Level> land;
+		public final Optional<LandTypePair.Named> oNamed;
+		public final CompoundTag landNbt;
+		public final Button gristButton;
+		
+		public LandWidget(int x, int y, int size, CompoundTag landNbt)
 		{
-			this(Component.translatable(message, params));
+			super(x, y, size);
+			
+			ResourceKey<Level> landKey = null;
+			if(landNbt.contains("clientDim"))
+				landKey = ResourceKey.create(Registries.DIMENSION, ResourceLocation.parse(landNbt.getString("clientDim")));
+			
+			this.land = landKey;
+			this.landNbt = landNbt;
+			
+			MutableComponent component = Component.empty();
+			List<Component> components = new ArrayList<>();
+			
+			Optional<LandTypePair.Named> oNamed = Optional.empty();
+			if(land != null && landNbt.contains("landTypes"))
+				oNamed = LandTypePair.Named.CODEC.parse(NbtOps.INSTANCE, landNbt.get("landTypes")).resultOrPartial(LOGGER::error);
+			this.oNamed = oNamed;
+			
+			appendLandAndPlayer(landNbt, oNamed, components);
+			
+			components.forEach(component::append);
+			setTooltip(Tooltip.create(component));
+			
+			gristButton = addRenderableWidget(Button.builder(Component.literal("View Grist Cache"), button -> gristButtonPress(landNbt)).pos(xOffset + 3, yOffset + GUI_HEIGHT - 18).size(90, 14).build());
+			gristButton.visible = false;
 		}
 		
-		@Override
-		public IDataComponent getParentComponent()
+		private void gristButtonPress(CompoundTag landNbt)
 		{
-			return null;
-		}
-		@Override
-		public List<IDataComponent> getComponentList()
-		{
-			return null;
-		}
-		@Override
-		public IDataComponent onButtonPressed()
-		{
-			return null;
-		}
-		@Override
-		public boolean isButton()
-		{
-			return false;
-		}
-		@Override
-		public String getName()
-		{
-			return this.component.getString();
-		}
-	}
-	
-	public static class MainComponent implements IDataComponent
-	{
-		List<IDataComponent> list = new ArrayList<IDataComponent>();
-		
-		public MainComponent(CompoundTag data)
-		{
-			if(data == null || data.isEmpty())
-				return;
-			
-			ListTag sessionList = data.getList("sessions", Tag.TAG_COMPOUND);
-			int nameIndex = 1;
-			for(int i = 0; i < sessionList.size(); i++)
-			{
-				CompoundTag sessionTag = sessionList.getCompound(i);
-				SessionComponent session = new SessionComponent(this, sessionTag, data);
-				session.name = "Session " + nameIndex++;
-				list.add(session);
-			}
-		}
-		
-		@Override
-		public IDataComponent getParentComponent()
-		{
-			return null;
-		}
-		@Override
-		public List<IDataComponent> getComponentList()
-		{
-			return list;
-		}
-		@Override
-		public IDataComponent onButtonPressed()
-		{
-			return this;
-		}
-		@Override
-		public boolean isButton()
-		{
-			return true;
-		}
-		@Override
-		public String getName()
-		{
-			return "Data Checker";	//Either "Data Checker" or "Sessions"
-		}
-	}
-	
-	public static class SessionComponent implements IDataComponent
-	{
-		List<IDataComponent> list = new ArrayList<>();
-		MainComponent parent;
-		String name;
-		int players, playersEntered;
-		
-		public SessionComponent(MainComponent parent, CompoundTag sessionTag, CompoundTag dataTag)
-		{
-			this.parent = parent;
-			HashSet<String> playerSet = new HashSet<>();
-			ListTag connectionList = sessionTag.getList("connections", Tag.TAG_COMPOUND);
-			for(int i = 0; i < connectionList.size(); i++)
-			{
-				ConnectionComponent connection = new ConnectionComponent(this, connectionList.getCompound(i), dataTag);
-				list.add(connection);
-				
-				if(!connection.landDim.isEmpty())
-					playersEntered++;
-				playerSet.add(connection.client);
-				playerSet.add(connection.server);
-			}
-			
-			playerSet.remove("");
-			players = playerSet.size();
-		}
-		
-		@Override
-		public IDataComponent getParentComponent()
-		{
-			return parent;
-		}
-		@Override
-		public List<IDataComponent> getComponentList()
-		{
-			return list;
-		}
-		@Override
-		public IDataComponent onButtonPressed()
-		{
-			return this;
-		}
-		@Override
-		public boolean isButton()
-		{
-			return true;
-		}
-		@Override
-		public String getName()
-		{
-			return String.format("%s (%d/%d)", name, playersEntered, players);
-		}
-	}
-	
-	public static class ConnectionComponent implements IDataComponent
-	{
-		List<IDataComponent> list = new ArrayList<IDataComponent>();
-		SessionComponent parent;
-		String client;
-		String server;
-		boolean isMain;
-		String landDim = "";
-		
-		public ConnectionComponent(SessionComponent parent, CompoundTag connectionTag, CompoundTag dataTag)
-		{
-			this.parent = parent;
-			this.client = connectionTag.getString("client");
-			this.server = connectionTag.getString("server");
-			this.isMain = connectionTag.getBoolean("isMain");
-			if(isMain)
-				landDim = connectionTag.getString("clientDim");
-			
-			list.add(new TextField("Client Player: %s", client));
-			if(!server.isEmpty())
-				list.add(new TextField("Server Player: %s", server));
-			list.add(new TextField("Is Primary Connection: %b", isMain));
-			
-			list.add(null);
-			list.add(new TextField("Land dim: %s", (!landDim.isEmpty() ? landDim : "Pre-entry")));
-			
-			if(!landDim.isEmpty() && connectionTag.contains("landTypes"))
-				LandTypePair.Named.CODEC.parse(NbtOps.INSTANCE, connectionTag.get("landTypes")).resultOrPartial(LOGGER::error)
-						.ifPresent(namedTypes -> list.add(new LocalizedTextField(namedTypes.asComponent())));
-			
-			if(connectionTag.contains("class"))
-			{
-				byte cl = connectionTag.getByte("class"), as = connectionTag.getByte("aspect");
-				Title title = new Title(EnumClass.values()[cl], EnumAspect.values()[as]);
-				list.add(new TextField(title.asTextComponent().getString()));
-			}
-			
-			if(connectionTag.contains("titleLandType"))
-				list.add(new TextField("Title land type: %s", connectionTag.getString("titleLandType")));
-			if(connectionTag.contains("terrainLandType"))
-				list.add(new TextField("Terrain land type: %s", connectionTag.getString("terrainLandType")));
-			
-			list.add(new GristCacheButton(connectionTag.getString("clientId")));
-		}
-		@Override
-		public IDataComponent getParentComponent()
-		{
-			return parent;
-		}
-		@Override
-		public List<IDataComponent> getComponentList()
-		{
-			return list;
-		}
-		@Override
-		public IDataComponent onButtonPressed()
-		{
-			return this;
-		}
-		@Override
-		public boolean isButton()
-		{
-			return true;
-		}
-		@Override
-		public String getName()
-		{
-			if(isMain)
-				return String.format("'%s' - %s", client, server.isEmpty() ? '?' : '\'' + server + '\'');
-			else return String.format("('%s' - '%s')", client, server);
-		}
-	}
-	
-	public static class GristCacheButton implements IDataComponent
-	{
-		String name;
-		public GristCacheButton(String name)
-		{
-			this.name = name;
-		}
-		@Override
-		public IDataComponent getParentComponent()
-		{
-			return null;
-		}
-		@Override
-		public List<IDataComponent> getComponentList()
-		{
-			return null;
-		}
-		@Override
-		public IDataComponent onButtonPressed()
-		{
-			ChatScreen chat = new ChatScreen("/grist @"+name+" get");
+			ChatScreen chat = new ChatScreen("/grist get " + landNbt.getString("client"));
 			Minecraft.getInstance().setScreen(chat);
-			return null;
 		}
+		
 		@Override
-		public boolean isButton()
+		protected void renderWidget(GuiGraphics guiGraphics, int mouseX, int mouseY, float partialTick)
 		{
-			return true;
+			if(isHoveredOrFocused())
+			{
+				//highlight Land
+				guiGraphics.fill(getX() - 1, getY() - 1, getX() + size + 1, getY() + size + 1, COLOR_WHITE);
+			}
+			
+			gristButton.visible = isFocused();
+			if(isFocused())
+			{
+				//fill in left section of GUI
+				List<Component> components = new ArrayList<>();
+				appendLandAndPlayer(landNbt, oNamed, components);
+				components.add(Component.literal("\n"));
+				if(landNbt.contains("class"))
+				{
+					Title title = new Title(EnumClass.values()[landNbt.getByte("class")], EnumAspect.values()[landNbt.getByte("aspect")]);
+					components.add(Component.literal("\n" + "Title: ").append(title.asTextComponent()).withStyle(ChatFormatting.BOLD));
+				}
+				if(landNbt.contains("server"))
+					components.add(Component.literal("\n" + "Server is " + landNbt.getString("server")).withStyle(ChatFormatting.RESET));
+				components.add(Component.literal("\n" + "Is Primary Connection: " + landNbt.getBoolean("isMain")));
+				
+				guiGraphics.drawWordWrap(minecraft.font, FormattedText.composite(components), xOffset + 4, yOffset + 1, 90, COLOR_BLACK);
+			}
+			
+			if(oNamed.isPresent())
+			{
+				LandTypePair.Named named = oNamed.get();
+				
+				TextureAtlasSprite planetSprite = LandSkySpriteUploader.getInstance().getPlanetSprite(named.landTypes().getTerrain(), named.terrainNameIndex());
+				TextureAtlasSprite overlaySprite = LandSkySpriteUploader.getInstance().getOverlaySprite(named.landTypes().getTitle(), named.titleNameIndex());
+				
+				guiGraphics.blit(getX(), getY(), 0, size, size, planetSprite);
+				guiGraphics.blit(getX(), getY(), 0, size, size, overlaySprite);
+			} else
+			{
+				//placeholder for planet
+				guiGraphics.fill(getX(), getY(), getX() + size, getY() + size, COLOR_WHITE);
+				guiGraphics.fill(getX() + 1, getY() + 1, getX() + size - 1, getY() + size - 1, COLOR_BLACK);
+			}
 		}
-		@Override
-		public String getName()
+		
+		private static void appendLandAndPlayer(CompoundTag landNbt, Optional<LandTypePair.Named> oNamed, List<Component> components)
 		{
-			return "View Grist Cache";
+			if(oNamed.isPresent())
+				components.add(oNamed.get().asComponentWithLandFont());
+			else
+				components.add(Component.literal("Land of §kNull§r and §kNull").withStyle(LandTypePair.LAND_OF_COPYLEFT_AND_FREEDOM_FONT_STYLE));
+			//TODO LOCAF Font Style not applied after use of §r
+			
+			MutableComponent landPlayer = Component.literal("\n\n" + landNbt.getString("client")).withStyle(ChatFormatting.RESET);
+			if(landNbt.contains("playerColor"))
+				landPlayer.withColor(landNbt.getInt("playerColor"));
+			components.add(landPlayer);
+		}
+	}
+	
+	public class IncipisphereWidget extends AbstractWidget
+	{
+		public int size;
+		
+		public IncipisphereWidget(int x, int y, int size)
+		{
+			super(x, y, size, size, Component.empty());
+			this.size = size;
+		}
+		
+		@Override
+		protected void renderWidget(GuiGraphics guiGraphics, int mouseX, int mouseY, float partialTick)
+		{
+		}
+		
+		@Override
+		protected void updateWidgetNarration(NarrationElementOutput narrationElementOutput)
+		{
+			this.defaultButtonNarrationText(narrationElementOutput);
+		}
+		
+		public int getCenterX()
+		{
+			return getX() + (width / 2);
+		}
+		
+		public int getCenterY()
+		{
+			return getY() + (height / 2);
+		}
+	}
+	
+	public class SessionButton extends ExtendedButton
+	{
+		public final SessionWidget sessionWidget;
+		
+		protected SessionButton(int x, int y, int width, int height, Component message, SessionWidget sessionWidget)
+		{
+			super(x, y, width, height, message, Button::onPress, DEFAULT_NARRATION);
+			this.sessionWidget = sessionWidget;
+		}
+		
+		@Override
+		public void onPress()
+		{
+			focusedButton = this;
+		}
+		
+		@Override
+		public boolean isFocused()
+		{
+			return focusedButton == this || super.isFocused();
+		}
+		
+		@Override
+		public boolean isHoveredOrFocused()
+		{
+			boolean hoveredOrFocused = super.isHoveredOrFocused();
+			sessionWidget.visible = hoveredOrFocused;
+			sessionWidget.active = hoveredOrFocused;
+			sessionWidget.updateChildren();
+			
+			return hoveredOrFocused;
 		}
 	}
 }
