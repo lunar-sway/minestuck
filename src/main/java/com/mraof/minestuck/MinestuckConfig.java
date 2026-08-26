@@ -123,7 +123,6 @@ public class MinestuckConfig
 		public final BooleanValue showGristChanges;
 		public final BooleanValue gristRefund;
 		public final BooleanValue deployCard;
-		public final BooleanValue deployDisk;
 		public final BooleanValue portableMachines;
 		public final IntValue overworldEditRange;
 		public final IntValue landEditRange;
@@ -192,8 +191,6 @@ public class MinestuckConfig
 					.define("gristRefund", false);
 			deployCard = builder.comment("Determines if a card with a captcha card punched on it should be added to the deploy list.")
 					.define("deployCard",false);
-			deployDisk = builder.comment("Determines if a disk with a program on it should be added to the deploy list.")
-					.define("deployDisk",false);
 			portableMachines = builder.comment("Determines if the small portable machines should be included in the deploy list.")
 					.define("portableMachines", false);
 			giveItems = builder.comment("Setting this to true replaces editmode with the old Give Items button.")
@@ -327,7 +324,6 @@ public class MinestuckConfig
 	public enum TorrentVisibility
 	{
 		NONE,
-		LAND,
 		SESSION,
 		GLOBAL
 	}

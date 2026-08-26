@@ -253,7 +253,7 @@ public class MSExtraData extends SavedData
 			}
 		}
 		
-		setDirty(); //TODO should this be set to dirty even if no information is changed?
+		setDirty();
 	}
 	
 	public void updateTorrentLeeching(PlayerIdentifier target, PlayerIdentifier playerID, GristType gristType, boolean isLeeching)
@@ -306,12 +306,6 @@ public class MSExtraData extends SavedData
 			torrentSessions.add(newSession);
 			setDirty();
 		}
-	}
-	
-	//TODO might not be necessary
-	public void removesSessions()
-	{
-		torrentSessions.clear();
 	}
 	
 	@Override

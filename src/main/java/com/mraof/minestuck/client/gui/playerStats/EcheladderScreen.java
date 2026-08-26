@@ -57,36 +57,6 @@ public class EcheladderScreen extends PlayerStatsScreen
 	private static final int TIME_BEFORE_ANIMATION = 10, TIME_BEFORE_NEXT = 16, TIME_FOR_RUNG = 4, TIME_FOR_SHOW_ONLY = 65;
 	private static final int TIME_TILL_NEXT = TIME_BEFORE_NEXT + TIME_FOR_RUNG;
 	
-	//Boondollar burst
-	private static final int BOONDOLLAR_ANIM_U = 208;
-	private static final int BOONDOLLAR_ANIM_V = 48;
-	private static final int BOONDOLLAR_ANIM_WIDTH = 48;
-	private static final int BOONDOLLAR_ANIM_HEIGHT = 16;
-	private static final int BOONDOLLAR_ANIM_FRAME_COUNT = 2;
-	private static final int BOONDOLLAR_ANIM_FRAME_TICKS = 3;
-	
-	private static final float BOONDOLLAR_ORIGIN_X = 237;
-	private static final float BOONDOLLAR_ORIGIN_Y_MIN = 42;
-	private static final float BOONDOLLAR_ORIGIN_Y_MAX = 53;
-	
-	private static final float BOONDOLLAR_MIN_SPEED_X = 3.5F;
-	private static final float BOONDOLLAR_MAX_SPEED_X = 7.0F;
-	private static final float BOONDOLLAR_SPREAD_Y = 2.5F;
-	private static final int BOONDOLLAR_MIN_LIFE_TICKS = 14;
-	private static final int BOONDOLLAR_MAX_LIFE_TICKS = 22;
-	
-	private static final int STREAM_MAIN_TICKS = 60;
-	private static final int STREAM_TAPER_TICKS = 20;
-	private static final int STREAM_TOTAL_TICKS = STREAM_MAIN_TICKS + STREAM_TAPER_TICKS;
-	private static final int STREAM_PARTICLES_PER_TICK_MIN = 1;
-	private static final int STREAM_PARTICLES_PER_TICK_MAX = 3;
-	
-	private static final int BOONDOLLAR_SOUND_INTERVAL_TICKS = 5;
-	private static final float BOONDOLLAR_SOUND_JITTER = 0.4F;
-	private static final float BOONDOLLAR_SOUND_VOLUME = 0.5F;
-	private static final float BOONDOLLAR_SOUND_MIN_PITCH = 0.85F;
-	private static final float BOONDOLLAR_SOUND_MAX_PITCH = 1.3F;
-	
 	private final List<BoondollarParticle> boondollarParticles = new ArrayList<>();
 	private final RandomSource particleRandom = RandomSource.create();
 	private int lastAnimatedRungForBurst = -1;
@@ -225,7 +195,7 @@ public class EcheladderScreen extends PlayerStatsScreen
 		if(streamTicksElapsed < 0)
 			return;
 		
-		if(streamTicksElapsed >= STREAM_TOTAL_TICKS)
+		if(streamTicksElapsed >= 80)
 		{
 			streamTicksElapsed = -1;
 			nextSoundAtTick = -1;
@@ -235,18 +205,18 @@ public class EcheladderScreen extends PlayerStatsScreen
 		if(streamTicksElapsed >= nextSoundAtTick)
 		{
 			playBoondollarSound();
-			float jitter = 1F + (particleRandom.nextFloat() - 0.5F) * BOONDOLLAR_SOUND_JITTER;
-			nextSoundAtTick = streamTicksElapsed + Math.max(1, Math.round(BOONDOLLAR_SOUND_INTERVAL_TICKS * jitter));
+			float jitter = 1F + (particleRandom.nextFloat() - 0.5F) * 0.4F;
+			nextSoundAtTick = streamTicksElapsed + Math.max(1, Math.round(5 * jitter));
 		}
 		
 		int count;
-		if(streamTicksElapsed < STREAM_MAIN_TICKS)
+		if(streamTicksElapsed < 60)
 		{
-			count = STREAM_PARTICLES_PER_TICK_MIN + particleRandom.nextInt(STREAM_PARTICLES_PER_TICK_MAX - STREAM_PARTICLES_PER_TICK_MIN + 1);
+			count = 1 + particleRandom.nextInt(3 - 1 + 1);
 		} else
 		{
-			int taperProgress = streamTicksElapsed - STREAM_MAIN_TICKS;
-			float taperFactor = 1F - (float) taperProgress / STREAM_TAPER_TICKS;
+			int taperProgress = streamTicksElapsed - 60;
+			float taperFactor = 1F - (float) taperProgress / 20;
 			count = particleRandom.nextFloat() < taperFactor ? 1 : 0;
 		}
 		
@@ -258,19 +228,19 @@ public class EcheladderScreen extends PlayerStatsScreen
 	
 	private void playBoondollarSound()
 	{
-		float pitch = BOONDOLLAR_SOUND_MIN_PITCH + particleRandom.nextFloat() * (BOONDOLLAR_SOUND_MAX_PITCH - BOONDOLLAR_SOUND_MIN_PITCH);
-		this.minecraft.getSoundManager().play(SimpleSoundInstance.forUI(MSSoundEvents.EVENT_ECHELADDER_BOONDOLLARS.get(), pitch, BOONDOLLAR_SOUND_VOLUME));
+		float pitch = 0.85F + particleRandom.nextFloat() * (1.3F - 0.85F);
+		this.minecraft.getSoundManager().play(SimpleSoundInstance.forUI(MSSoundEvents.EVENT_ECHELADDER_BOONDOLLARS.get(), pitch, 0.5F));
 	}
 	
 	private void spawnSingleBoondollar()
 	{
-		float originY = BOONDOLLAR_ORIGIN_Y_MIN + particleRandom.nextFloat() * (BOONDOLLAR_ORIGIN_Y_MAX - BOONDOLLAR_ORIGIN_Y_MIN);
-		float vx = BOONDOLLAR_MIN_SPEED_X + particleRandom.nextFloat() * (BOONDOLLAR_MAX_SPEED_X - BOONDOLLAR_MIN_SPEED_X);
-		float vy = (particleRandom.nextFloat() - 0.5F) * BOONDOLLAR_SPREAD_Y;
-		int life = BOONDOLLAR_MIN_LIFE_TICKS + particleRandom.nextInt(BOONDOLLAR_MAX_LIFE_TICKS - BOONDOLLAR_MIN_LIFE_TICKS + 1);
-		int frameOffset = particleRandom.nextInt(BOONDOLLAR_ANIM_FRAME_COUNT);
+		float originY = 42 + particleRandom.nextFloat() * (53 - 42);
+		float vx = 3.5F + particleRandom.nextFloat() * (7.0F - 3.5F);
+		float vy = (particleRandom.nextFloat() - 0.5F) * 2.5F;
+		int life = 14 + particleRandom.nextInt(22 - 14 + 1);
+		int frameOffset = particleRandom.nextInt(2);
 		
-		boondollarParticles.add(new BoondollarParticle(BOONDOLLAR_ORIGIN_X, originY, vx, vy, life, frameOffset));
+		boondollarParticles.add(new BoondollarParticle(237, originY, vx, vy, life, frameOffset));
 	}
 	
 	private void updateAndRenderBoondollarParticles(GuiGraphics guiGraphics)
@@ -288,17 +258,17 @@ public class EcheladderScreen extends PlayerStatsScreen
 			particle.y += particle.vy;
 			particle.ageTicks++;
 			
-			if(particle.ageTicks >= particle.lifeTicks || particle.x > guiWidth + BOONDOLLAR_ANIM_WIDTH)
+			if(particle.ageTicks >= particle.lifeTicks || particle.x > guiWidth + 48)
 			{
 				it.remove();
 				continue;
 			}
 			
-			int frame = (particle.spawnFrameOffset + particle.ageTicks / BOONDOLLAR_ANIM_FRAME_TICKS) % BOONDOLLAR_ANIM_FRAME_COUNT;
-			int v = BOONDOLLAR_ANIM_V + frame * BOONDOLLAR_ANIM_HEIGHT;
+			int frame = (particle.spawnFrameOffset + particle.ageTicks / 3) % 2;
+			int v = 48 + frame * 16;
 			
 			guiGraphics.blit(PlayerStatsScreen.icons, xOffset + Math.round(particle.x), yOffset + Math.round(particle.y),
-					BOONDOLLAR_ANIM_U, v, BOONDOLLAR_ANIM_WIDTH, BOONDOLLAR_ANIM_HEIGHT);
+					208, v, 48, 16);
 		}
 	}
 	
