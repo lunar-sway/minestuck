@@ -31,6 +31,7 @@ import com.mraof.minestuck.computer.theme.MSComputerThemes;
 import com.mraof.minestuck.data.dialogue.DialogueProvider;
 import com.mraof.minestuck.effects.MSEffects;
 import com.mraof.minestuck.entity.LotusFlowerEntity;
+import com.mraof.minestuck.entity.MSAttributes;
 import com.mraof.minestuck.entity.MSEntityTypes;
 import com.mraof.minestuck.entity.dialogue.Dialogue;
 import com.mraof.minestuck.entry.EntryProcess;
@@ -2678,5 +2679,9 @@ public class MinestuckEnUsLanguageProvider extends MinestuckLanguageProvider
 		addPainting("spades", "Spades", "kirderf1");
 		addPainting("diamonds", "Diamonds", "kirderf1");
 		addPainting("hearts", "Hearts", "kirderf1");
+		
+		addAttribute(MSAttributes.CAPTCHALOGUE_CAPACITY, "Captchalogue Capacity");
+		addAttribute(MSAttributes.UNDERLING_DAMAGE_MODIFIER, "Damage Against Underlings");
+		addAttribute(MSAttributes.UNDERLING_PROTECTION_MODIFIER, "Damage From Underlings");
 	}
 }
