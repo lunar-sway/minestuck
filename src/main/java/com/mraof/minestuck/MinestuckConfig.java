@@ -47,6 +47,7 @@ public class MinestuckConfig
 		public final BooleanValue loginColorSelector;
 		public final BooleanValue alchemyIcons;
 		public final BooleanValue npcDialogueTextColors;
+		public final BooleanValue echeladderPlayerFrameBorders;
 		
 		private Client(Builder builder)
 		{
@@ -57,6 +58,8 @@ public class MinestuckConfig
 					.define("loginColorSelector", true);
 			echeladderAnimation = builder.comment("Allows control of standard speed for the echeladder rung \"animation\", or if it should have one in the first place.")
 					.defineEnum("echeladderAnimation", AnimationSpeed.NORMAL);
+			echeladderPlayerFrameBorders = builder.comment("Determines whether a player model on the echeladder screen would render beyond or within the borders.")
+					.define("echeladderPlayerFrameBorders", true);
 			npcDialogueTextColors = builder.comment("Determines whether an NPC will use their custom formatted color value when talking in a dialogue screen.")
 					.define("npcDialogueTextColors", true);
 			builder.pop();
@@ -112,6 +115,9 @@ public class MinestuckConfig
 		public final BooleanValue privateComputers;
 		public final BooleanValue globalSession;
 		public final EnumValue<PermissionType> dataCheckerPermission;
+		public final EnumValue<TorrentVisibility> gristTorrentVisibility;
+		public final BooleanValue gristTorrentSeedAll;
+		public final BooleanValue gristTorrentNonSeededTrickle;
 		
 		//Edit Mode
 		public final BooleanValue showGristChanges;
@@ -168,6 +174,14 @@ public class MinestuckConfig
 					.define("globalSession",false);
 			dataCheckerPermission = builder.comment("Determines who's allowed to access the data checker. \"none\": No one is allowed. \"ops\": only those with a command permission of level 2 or more may access the data ckecker. (for single player, that would be if cheats are turned on) \"gamemode\": Only players with the creative or spectator gamemode may view the data checker. \"ops_or_gamemode\": Both ops and players in creative or spectator mode may view the data checker. \"anyone\": No access restrictions are used.")
 					.defineEnum("dataCheckerPermission", PermissionType.ANYONE);
+			gristTorrentVisibility = builder.comment("Determines the scope of players that are able to connect via GristTorrent. \"none\": GristTorrent is completely disabled. \"land\": GristTorrent only works for accounts from the same Land. \"session\": Only players within the same Session can connect. \"global\": Any players can connect.")
+					.defineEnum("gristTorrentVisibility", TorrentVisibility.SESSION);
+			gristTorrentSeedAll = builder.comment("Whether players will seed all grist types initially. Will seed nothing initially if false.")
+					.define("gristTorrentSeedAll", true);
+			gristTorrentNonSeededTrickle = builder.comment(
+							"If true, a leech requesting a grist type the seeder isn't actively seeding will still get a slow ",
+							"trickle of 1 grist/sec (if the seeder has any of that type), instead of nothing.")
+					.define("gristTorrentNonSeededTrickle", false);
 			builder.pop();
 			
 			builder.push("editMode");
@@ -305,6 +319,13 @@ public class MinestuckConfig
 		GAMEMODE,
 		OPS_OR_GAMEMODE,
 		ANYONE
+	}
+	
+	public enum TorrentVisibility
+	{
+		NONE,
+		SESSION,
+		GLOBAL
 	}
 	
 	public enum AnimationSpeed

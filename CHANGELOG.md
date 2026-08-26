@@ -8,12 +8,18 @@ The format is based on [Keep a Changelog](https://keepachangelog.com/en/1.1.0/).
 
 ### Added
 
+- GristTorrent Computer App
+- New /rung add, get, set commands
+- New /grist [args] all command
 - Terrain Flatenator can now flatten terrain
 - Computer themes can have custom buttons
 - Anomalocaris hat and alien boppers
 
 ### Changed
 
+- Updated Grist Cache gui texture
+- Echeladder progression animation
+- Some of header textures (grist cache & strife specibus)
 - Laptops can now be picked up
 - The range at which the Kernelsprite detects and travels to blocks has increased
 - Data checker is now available to everyone by default and has been visually overhauled
@@ -26,7 +32,7 @@ The format is based on [Keep a Changelog](https://keepachangelog.com/en/1.1.0/).
 
 ### Contributors for this release
 
-- Fl1s, Dweblenod, medsal15, Emma "Dilemma"
+- Dweblenod, Cibernet, Riotmode, kirderf1, medsal15, Caldw3ll, Fl1s, Emma "Dilemma"
 
 ## [1.21.1-1.14.0.1] - 2026-06-01
 
@@ -220,6 +226,8 @@ The format is based on [Keep a Changelog](https://keepachangelog.com/en/1.1.0/).
 - Computer interaction sound effects
 - New computer related advancement
 - Message when entering edit mode to remind players of the exit keybind
+- Added 2 tracks october and endless chasm by triagegremlin
+- Added 2 tracks the note desolation plays and desolate strife by Caldw3ll
 - Computer programs now have a tooltip when hovered over in computer gui
 - Data files for echeladder rungs and rung effects
 - Echeladder now provides fall damage resistance

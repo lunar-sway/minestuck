@@ -1572,6 +1572,7 @@ public class MinestuckEnUsLanguageProvider extends MinestuckLanguageProvider
 		addItemTooltip(MSItems.BLANK_DISK, "Can be put into a computer, has space to write a program on to it.");
 		addItem(MSItems.CLIENT_DISK, "SBURB Client Disk");
 		addItem(MSItems.SERVER_DISK, "SBURB Server Disk");
+		addItem(MSItems.TORRENT_DISK, "GristTorrent Disk");
 		addItem(MSItems.CAPTCHA_CARD, "Captchalogue Card");
 		addItemExtra(MSItems.CAPTCHA_CARD, "empty", "Empty");
 		addItemExtra(MSItems.CAPTCHA_CARD, "invalid", "Invalid Data");
@@ -2444,6 +2445,13 @@ public class MinestuckEnUsLanguageProvider extends MinestuckLanguageProvider
 		add(SettingsAppGui.THEME, "Choose Theme");
 		add(SettingsAppGui.DISK_MANAGER, "Disk Manager");
 		add(SettingsAppGui.TITLE, "Sburb Settings");
+		add(GristTorrentGui.NAME, "Grist Torrent");
+		add(GristTorrentGui.TITLE, "Grist Torrent");
+		add(GristTorrentGui.TOOLTIP_SEEDING_ON, "\nIs being seeded");
+		add(GristTorrentGui.TOOLTIP_SEEDING_OFF, "\nWill be seeded");
+		add(GristTorrentGui.TOOLTIP_LEECHING_ON, "\nIs being leeched");
+		add(GristTorrentGui.TOOLTIP_LEECHING_OFF, "\nWill be leeched");
+		add(GristTorrentGui.GUTTER_LOADING, "Loading...");
 		
 		add(EntryProcess.WRONG_DIMENSION, "Entry not permitted from this dimension");
 		add(EntryProcess.BUSY, "Someone else is already entering");
@@ -2501,6 +2509,7 @@ public class MinestuckEnUsLanguageProvider extends MinestuckLanguageProvider
 		add(GristCommand.FAILURE, "Failed to modify the grist cache for %s.");
 		add(GristCommand.SET, "Set the grist cache for %s players to %s.");
 		add(RungCommand.SET_SUCCESS, "Successfully changed the echeladder of %s players to rung %d with %d%% progress.");
+		add(RungCommand.ADD_SUCCESS, "Successfully added %d rungs to %s players on the echeladder.");
 		add(RungCommand.GET_SUCCESS, "%s's current echeladder rung is: %d.");
 		add(PorkhollowCommand.SEND, "Successfully sent %s boondollars to %s.");
 		add(PorkhollowCommand.RECEIVE, "Received %s boondollars from %s.");
