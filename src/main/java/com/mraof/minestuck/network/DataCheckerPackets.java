@@ -64,7 +64,7 @@ public final class DataCheckerPackets
 		public void execute(IPayloadContext context)
 		{
 			if(packetIndex == DataCheckerPackets.index)
-				DataCheckerScreen.activeComponent = new DataCheckerScreen.MainComponent(nbtData);
+				DataCheckerScreen.nbt = nbtData;
 		}
 	}
 	

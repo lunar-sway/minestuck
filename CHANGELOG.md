@@ -22,6 +22,7 @@ The format is based on [Keep a Changelog](https://keepachangelog.com/en/1.1.0/).
 - Some of header textures (grist cache & strife specibus)
 - Laptops can now be picked up
 - The range at which the Kernelsprite detects and travels to blocks has increased
+- Data checker is now available to everyone by default and has been visually overhauled
 
 ### Fixed
 
