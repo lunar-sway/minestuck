@@ -25,6 +25,7 @@ public final class ClientEditmodeData
 	public static final String ENTERED = "minestuck.editmode.entered";
 	
 	private static boolean activated;
+	private static boolean broadcastEnabled;
 	@Nullable
 	private static EditmodeLocations locations;
 	@Nullable
@@ -33,6 +34,10 @@ public final class ClientEditmodeData
 	public static boolean isInEditmode()
 	{
 		return activated;
+	}
+	public static boolean isBroadcastEnabled()
+	{
+		return broadcastEnabled;
 	}
 	
 	@Nullable
@@ -50,12 +55,13 @@ public final class ClientEditmodeData
 	private static void disable()
 	{
 		activated = false;
+		broadcastEnabled = false;
 		locations = null;
 		clientLand = null;
 		ClientEditToolDrag.cancelClickSessions();
 	}
 	
-	public static void onActivatePacket()
+	public static void onActivatePacket(boolean broadcastEnabled)
 	{
 		Player player = Minecraft.getInstance().player;
 		if(player != null)
@@ -64,6 +70,7 @@ public final class ClientEditmodeData
 			player.playSound(MSSoundEvents.EVENT_EDIT_MODE_ENTER.get(), 1.0f, 1.0f);
 		}
 		activated = true;
+		ClientEditmodeData.broadcastEnabled = broadcastEnabled;
 	}
 	
 	public static void onExitPacket(ServerEditPackets.Exit ignored)
@@ -89,7 +96,10 @@ public final class ClientEditmodeData
 	public static void onWorldUnload(LevelEvent.Unload event)
 	{
 		if(event.getLevel().isClientSide())
+		{
 			disable();
+			RemoteEditSessions.clearAll();
+		}
 	}
 	
 	@SubscribeEvent

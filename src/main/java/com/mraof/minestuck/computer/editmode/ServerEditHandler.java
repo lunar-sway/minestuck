@@ -15,6 +15,7 @@ import com.mraof.minestuck.event.SburbEvent;
 import com.mraof.minestuck.item.MSItems;
 import com.mraof.minestuck.item.components.EncodedItemComponent;
 import com.mraof.minestuck.item.components.MSItemComponents;
+import com.mraof.minestuck.network.editmode.EditmodeBroadcastPackets;
 import com.mraof.minestuck.network.editmode.EditmodeLocationsPacket;
 import com.mraof.minestuck.network.editmode.ServerEditPackets;
 import com.mraof.minestuck.player.GristCache;
@@ -40,8 +41,6 @@ import net.minecraft.server.level.ServerPlayer;
 import net.minecraft.util.Mth;
 import net.minecraft.world.InteractionHand;
 import net.minecraft.world.damagesource.DamageSource;
-import net.minecraft.world.effect.MobEffectInstance;
-import net.minecraft.world.effect.MobEffects;
 import net.minecraft.world.entity.Entity;
 import net.minecraft.world.entity.player.Inventory;
 import net.minecraft.world.entity.player.Player;
@@ -185,6 +184,9 @@ public final class ServerEditHandler    //TODO Consider splitting this class int
 		
 		PacketDistributor.sendToPlayer(player, new ServerEditPackets.Exit());
 		
+		if(MinestuckConfig.SERVER.visualsToOthers.get())
+			PacketDistributor.sendToPlayersTrackingEntity(player, new EditmodeBroadcastPackets.ClientSessionClear(player.getUUID()));
+		
 		editData.getDecoy().markedForDespawn = true;
 		
 		if(damageSource != null && damageSource.getDirectEntity() != player)
@@ -223,7 +225,7 @@ public final class ServerEditHandler    //TODO Consider splitting this class int
 			
 			data.locations().validateClosestSource(player, targetData);
 			
-			PacketDistributor.sendToPlayer(player, new ServerEditPackets.Activate());
+			PacketDistributor.sendToPlayer(player, new ServerEditPackets.Activate(MinestuckConfig.SERVER.visualsToOthers.get()));
 			data.sendGivenItemsToEditor();
 			EditmodeLocationsPacket.send(data);
 			
@@ -278,7 +280,7 @@ public final class ServerEditHandler    //TODO Consider splitting this class int
 		EditData data = getData(editor);
 		if(data != null)
 		{
-			PacketDistributor.sendToPlayer(editor, new ServerEditPackets.Activate());
+			PacketDistributor.sendToPlayer(editor, new ServerEditPackets.Activate(MinestuckConfig.SERVER.visualsToOthers.get()));
 			data.sendGivenItemsToEditor();
 			EditmodeLocationsPacket.send(data);
 			

@@ -17,10 +17,13 @@ import net.neoforged.neoforge.network.handling.IPayloadContext;
 
 public final class ServerEditPackets
 {
-	public record Activate() implements MSPacket.PlayToClient
+	public record Activate(boolean broadcastEnabled) implements MSPacket.PlayToClient
 	{
 		public static final Type<Activate> ID = new Type<>(Minestuck.id("server_edit/activate"));
-		public static final StreamCodec<FriendlyByteBuf, Activate> STREAM_CODEC = StreamCodec.unit(new Activate());
+		public static final StreamCodec<FriendlyByteBuf, Activate> STREAM_CODEC = StreamCodec.composite(
+				ByteBufCodecs.BOOL, Activate::broadcastEnabled,
+				Activate::new
+		);
 		
 		@Override
 		public Type<? extends CustomPacketPayload> type()
@@ -31,7 +34,7 @@ public final class ServerEditPackets
 		@Override
 		public void execute(IPayloadContext context)
 		{
-			ClientEditmodeData.onActivatePacket();
+			ClientEditmodeData.onActivatePacket(this.broadcastEnabled);
 		}
 	}
 	

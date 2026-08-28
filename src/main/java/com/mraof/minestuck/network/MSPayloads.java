@@ -115,6 +115,20 @@ public final class MSPayloads
 		registerPlayToServer(registrar, EditmodeDragPackets.MoveSelection.ID, EditmodeDragPackets.MoveSelection.STREAM_CODEC);
 		registerPlayToServer(registrar, EditmodeDragPackets.CopySelection.ID, EditmodeDragPackets.CopySelection.STREAM_CODEC);
 		
+		//Edit Mode Broadcast Packets
+		registerPlayToServer(registrar, EditmodeBroadcastPackets.BroadcastDragBox.ID, EditmodeBroadcastPackets.BroadcastDragBox.STREAM_CODEC);
+		registerPlayToClient(registrar, EditmodeBroadcastPackets.ClientDragBox.ID, EditmodeBroadcastPackets.ClientDragBox.STREAM_CODEC);
+		registerPlayToServer(registrar, EditmodeBroadcastPackets.BroadcastSelectionBox.ID, EditmodeBroadcastPackets.BroadcastSelectionBox.STREAM_CODEC);
+		registerPlayToClient(registrar, EditmodeBroadcastPackets.ClientSelectionBox.ID, EditmodeBroadcastPackets.ClientSelectionBox.STREAM_CODEC);
+		registerPlayToServer(registrar, EditmodeBroadcastPackets.BroadcastPreviewStart.ID, EditmodeBroadcastPackets.BroadcastPreviewStart.STREAM_CODEC);
+		registerPlayToClient(registrar, EditmodeBroadcastPackets.ClientPreviewBlocks.ID, EditmodeBroadcastPackets.ClientPreviewBlocks.STREAM_CODEC);
+		registerPlayToServer(registrar, EditmodeBroadcastPackets.BroadcastPreviewTransform.ID, EditmodeBroadcastPackets.BroadcastPreviewTransform.STREAM_CODEC);
+		registerPlayToClient(registrar, EditmodeBroadcastPackets.ClientPreviewTransform.ID, EditmodeBroadcastPackets.ClientPreviewTransform.STREAM_CODEC);
+		registerPlayToServer(registrar, EditmodeBroadcastPackets.BroadcastToolSound.ID, EditmodeBroadcastPackets.BroadcastToolSound.STREAM_CODEC);
+		registerPlayToClient(registrar, EditmodeBroadcastPackets.ClientSessionClear.ID, EditmodeBroadcastPackets.ClientSessionClear.STREAM_CODEC);
+		registerPlayToServer(registrar, EditmodeBroadcastPackets.BroadcastMoveTransition.ID, EditmodeBroadcastPackets.BroadcastMoveTransition.STREAM_CODEC);
+		registerPlayToClient(registrar, EditmodeBroadcastPackets.ClientMoveTransition.ID, EditmodeBroadcastPackets.ClientMoveTransition.STREAM_CODEC);
+		
 		//Edit Mode Atheneum Packets
 		registerPlayToServer(registrar, AtheneumPackets.Scroll.ID, AtheneumPackets.Scroll.STREAM_CODEC);
 		registerPlayToClient(registrar, AtheneumPackets.Update.ID, AtheneumPackets.Update.STREAM_CODEC);

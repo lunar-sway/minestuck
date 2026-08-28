@@ -137,6 +137,7 @@ public class MinestuckConfig
 		public final IntValue landEditRange;
 		public final BooleanValue giveItems;
 		public final IntValue maxSelectionVolume;
+		public final BooleanValue visualsToOthers;
 		
 		private Server(Builder builder)
 		{
@@ -203,6 +204,8 @@ public class MinestuckConfig
 					.defineInRange("landEditRange", 30, 1, Integer.MAX_VALUE);
 			maxSelectionVolume = builder.comment("A number that determines how many blocks can be moved/copied with the selection tool.")
 					.defineInRange("maxSelectionVolume", 1024, 1, 4096);
+			visualsToOthers = builder.comment("If true, nearby players will also see their server player editmode tools visuals.")
+					.define("visualsToOthers", true);
 			builder.pop();
 			
 			builder.push("machines");

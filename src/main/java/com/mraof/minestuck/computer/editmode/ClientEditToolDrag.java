@@ -8,6 +8,7 @@ import com.mraof.minestuck.block.machine.EditmodeDestroyable;
 import com.mraof.minestuck.block.machine.MachineBlock;
 import com.mraof.minestuck.client.renderer.SelectedPreviewRenderer;
 import com.mraof.minestuck.client.util.MSKeyHandler;
+import com.mraof.minestuck.network.editmode.EditmodeBroadcastPackets;
 import com.mraof.minestuck.network.editmode.EditmodeDragPackets;
 import com.mraof.minestuck.player.ClientPlayerData;
 import com.mraof.minestuck.util.MSAttachments;
@@ -98,22 +99,13 @@ public class ClientEditToolDrag
 	{
 		Minecraft mc = Minecraft.getInstance();
 		if(event.getStage() != RenderLevelStageEvent.Stage.AFTER_TRANSLUCENT_BLOCKS || mc.player == null
-				|| mc.getCameraEntity() != mc.player || !mc.player.isAlive() || !ClientEditmodeData.isInEditmode())
+				|| mc.getCameraEntity() != mc.player || !mc.player.isAlive())
+			return;
+		
+		if(!ClientEditmodeData.isInEditmode() && RemoteEditSessions.allSessions().isEmpty())
 			return;
 		
 		Player player = mc.player;
-		EditTools cap = player.getData(MSAttachments.EDIT_TOOLS);
-		
-		if(!cap.isPreviewing() || cap.getPreviewAnchor() == null || ClientSelectionCache.getEntries().isEmpty())
-			return;
-		if(ClientSelectionCache.getEntries().size() > 512)
-			return;
-		
-		int sizeX = ClientSelectionCache.getSizeX();
-		int sizeZ = ClientSelectionCache.getSizeZ();
-		Rotation rot = Rotation.values()[Math.floorMod(cap.getPreviewRotation(), 4)];
-		BlockPos minCorner = cap.getPreviewAnchor();
-		
 		Camera camera = event.getCamera();
 		double camX = camera.getPosition().x;
 		double camY = camera.getPosition().y;
@@ -129,11 +121,51 @@ public class ClientEditToolDrag
 		Level level = player.level();
 		float alpha = 0.55f;
 		
-		for(ClientSelectionCache.Entry entry : ClientSelectionCache.getEntries())
+		if(ClientEditmodeData.isInEditmode())
 		{
-			BlockPos dest = minCorner.offset(EditmodeDragPackets.rotateOffset(entry.localOffset(), sizeX, sizeZ, rot));
-			BlockState state = entry.state().rotate(rot);
+			EditTools cap = player.getData(MSAttachments.EDIT_TOOLS);
 			
+			if(cap.isPreviewing() && cap.getPreviewAnchor() != null && !ClientSelectionCache.getEntries().isEmpty()
+					&& ClientSelectionCache.getEntries().size() <= 512)
+			{
+				int sizeX = ClientSelectionCache.getSizeX();
+				int sizeZ = ClientSelectionCache.getSizeZ();
+				Rotation rot = Rotation.values()[Math.floorMod(cap.getPreviewRotation(), 4)];
+				BlockPos minCorner = cap.getPreviewAnchor();
+				
+				for(ClientSelectionCache.Entry entry : ClientSelectionCache.getEntries())
+				{
+					BlockPos dest = minCorner.offset(EditmodeDragPackets.rotateOffset(entry.localOffset(), sizeX, sizeZ, rot));
+					BlockState state = entry.state().rotate(rot);
+					renderGhostBlock(poseStack, level, blockRenderer, previewBuffer, dest, state, camX, camY, camZ, alpha);
+				}
+			}
+		}
+		
+		for(RemoteEditSessions.Session remote : RemoteEditSessions.allSessions().values())
+		{
+			if(!remote.previewActive || remote.previewAnchor == null || remote.previewBlocks.isEmpty() || remote.previewBlocks.size() > 512)
+				continue;
+			
+			Rotation rot = Rotation.values()[Math.floorMod(remote.previewRotation, 4)];
+			for(RemoteEditSessions.PreviewEntry entry : remote.previewBlocks)
+			{
+				BlockPos dest = remote.previewAnchor.offset(EditmodeDragPackets.rotateOffset(entry.localOffset(), remote.previewSizeX, remote.previewSizeZ, rot));
+				BlockState state = entry.state().rotate(rot);
+				renderGhostBlock(poseStack, level, blockRenderer, previewBuffer, dest, state, camX, camY, camZ, alpha);
+			}
+		}
+		
+		previewBuffer.endBatch();
+		
+		RenderSystem.depthMask(true);
+		RenderSystem.disableBlend();
+	}
+	
+	private static void renderGhostBlock(PoseStack poseStack, Level level, BlockRenderDispatcher blockRenderer,
+	                                     MultiBufferSource.BufferSource previewBuffer, BlockPos dest, BlockState state,
+	                                     double camX, double camY, double camZ, float alpha)
+	{
 			poseStack.pushPose();
 			poseStack.translate(dest.getX() - camX, dest.getY() - camY, dest.getZ() - camZ);
 			
@@ -145,12 +177,6 @@ public class ClientEditToolDrag
 			}
 			
 			poseStack.popPose();
-		}
-		
-		previewBuffer.endBatch();
-		
-		RenderSystem.depthMask(true);
-		RenderSystem.disableBlend();
 	}
 	
 	/**
@@ -159,7 +185,10 @@ public class ClientEditToolDrag
 	 */
 	private static void cancelDrag(EditTools cap)
 	{
-		PacketDistributor.sendToServer(new EditmodeDragPackets.Reset());
+		if(cap.getToolMode() != null)
+			broadcastDragBox(cap.getToolMode(), false, null, null);
+		
+		PacketDistributor.sendToServer(new EditmodeDragPackets.Reset(true));
 		cap.resetDragTools();
 	}
 	
@@ -196,6 +225,21 @@ public class ClientEditToolDrag
 	{
 		cap.setEditPos2(getSelectionEndPoint(player, cap.getEditReachDistance(), targetTool == EditTools.ToolMode.REVISE));
 		PacketDistributor.sendToServer(new EditmodeDragPackets.Cursor(isActive, cap.getEditPos1(), cap.getEditPos2()));
+		broadcastDragBox(targetTool, isActive, cap.getEditPos1(), cap.getEditPos2());
+	}
+	
+	private static void broadcastDragBox(EditTools.ToolMode toolMode, boolean active, @Nullable BlockPos pos1, @Nullable BlockPos pos2)
+	{
+		if(!ClientEditmodeData.isBroadcastEnabled())
+			return;
+		int kind = switch(toolMode)
+		{
+			case REVISE -> 0;
+			case RECYCLE -> 1;
+			case SELECT -> 2;
+		};
+		PacketDistributor.sendToServer(new EditmodeBroadcastPackets.BroadcastDragBox(
+				active, kind, pos1 != null ? pos1 : BlockPos.ZERO, pos2 != null ? pos2 : BlockPos.ZERO));
 	}
 	
 	/**
@@ -212,7 +256,9 @@ public class ClientEditToolDrag
 		else
 			PacketDistributor.sendToServer(new EditmodeDragPackets.Destroy(false, cap.getEditPos1(), cap.getEditPos2(), cap.getEditTraceHit(), cap.getEditTraceDirection()));
 		playSoundAndSetParticles(player, targetTool == EditTools.ToolMode.REVISE, cap.getEditPos1(), cap.getEditPos2());
-	
+		
+		broadcastDragBox(targetTool, false, null, null);
+		
 		cap.resetDragTools();
 	}
 	
@@ -369,8 +415,15 @@ public class ClientEditToolDrag
 			ClientSelectionCache.capture(player.level(), min, max);
 			
 			player.playSound(MSSoundEvents.EVENT_EDIT_TOOL_SELECT.get(), 1.0f, 1.0f);
+			if(ClientEditmodeData.isBroadcastEnabled())
+			{
+				PacketDistributor.sendToServer(new EditmodeBroadcastPackets.BroadcastToolSound(0));
+				PacketDistributor.sendToServer(new EditmodeBroadcastPackets.BroadcastSelectionBox(true, min, max));
+			}
 			
-			PacketDistributor.sendToServer(new EditmodeDragPackets.Reset());
+			broadcastDragBox(EditTools.ToolMode.SELECT, false, null, null);
+			
+			PacketDistributor.sendToServer(new EditmodeDragPackets.Reset(false));
 			cap.resetDragTools();
 			selectClickArmed = false;
 		}
@@ -444,6 +497,9 @@ public class ClientEditToolDrag
 				BlockPos captureMin = new BlockPos(Math.min(a.getX(), b.getX()), Math.min(a.getY(), b.getY()), Math.min(a.getZ(), b.getZ()));
 				BlockPos captureMax = new BlockPos(Math.max(a.getX(), b.getX()), Math.max(a.getY(), b.getY()), Math.max(a.getZ(), b.getZ()));
 				ClientSelectionCache.capture(player.level(), captureMin, captureMax);
+				
+				if(ClientEditmodeData.isBroadcastEnabled())
+					PacketDistributor.sendToServer(new EditmodeBroadcastPackets.BroadcastPreviewStart(captureMin, captureMax));
 			}
 			
 			//default placement distance scales with the footprint, so big structures land clear of the player by default
@@ -477,9 +533,15 @@ public class ClientEditToolDrag
 			
 			cap.setPreview(copyDown, minCorner);
 			lastAnchor = minCorner;
+			
+			if(ClientEditmodeData.isBroadcastEnabled())
+				PacketDistributor.sendToServer(new EditmodeBroadcastPackets.BroadcastPreviewTransform(true, minCorner, cap.getPreviewRotation(), copyDown));
 		}
 		else
 		{
+			if(ClientEditmodeData.isBroadcastEnabled() && (wasPreviewingMove || wasPreviewingCopy))
+				PacketDistributor.sendToServer(new EditmodeBroadcastPackets.BroadcastPreviewTransform(false, BlockPos.ZERO, 0, false));
+			
 			cap.clearPreview();
 		}
 		
@@ -511,6 +573,13 @@ public class ClientEditToolDrag
 		clickModeActiveIsCopy = null;
 		ClientSelectionCache.clear();
 		mc.player.playSound(MSSoundEvents.EVENT_EDIT_TOOL_CLEAR.get(), 1.0f, 1.0f);
+		
+		if(ClientEditmodeData.isBroadcastEnabled())
+		{
+			PacketDistributor.sendToServer(new EditmodeBroadcastPackets.BroadcastToolSound(1));
+			PacketDistributor.sendToServer(new EditmodeBroadcastPackets.BroadcastSelectionBox(false, BlockPos.ZERO, BlockPos.ZERO));
+			PacketDistributor.sendToServer(new EditmodeBroadcastPackets.BroadcastPreviewTransform(false, BlockPos.ZERO, 0, false));
+		}
 	}
 	
 	public static void cycleRotation()
@@ -544,7 +613,11 @@ public class ClientEditToolDrag
 			localPlayer.playSound(isCopy ? MSSoundEvents.EVENT_EDIT_TOOL_COPY.get() : MSSoundEvents.EVENT_EDIT_TOOL_MOVE.get(), 1.0f, 1.0f);
 		
 		if(!isCopy)
+		{
 			startMoveTransitionAnimation(oldPos1, oldPos2, anchor, rotation);
+			if(ClientEditmodeData.isBroadcastEnabled())
+				PacketDistributor.sendToServer(new EditmodeBroadcastPackets.BroadcastMoveTransition(oldPos1, oldPos2, anchor, rotation));
+		}
 	}
 	
 	private static void startMoveTransitionAnimation(BlockPos oldPos1, BlockPos oldPos2, BlockPos anchor, int rotation)
@@ -704,15 +777,15 @@ public class ClientEditToolDrag
 	{
 		Minecraft mc = Minecraft.getInstance();
 		
-		//make sure the stage is after translucent blocks so that the outlines render over everything.
-		if(event.getStage() == RenderLevelStageEvent.Stage.AFTER_TRANSLUCENT_BLOCKS && mc.player != null && mc.getCameraEntity() == mc.player
-				&& mc.player.isAlive() && ClientEditmodeData.isInEditmode())
-		{
+		if(event.getStage() != RenderLevelStageEvent.Stage.AFTER_TRANSLUCENT_BLOCKS || mc.player == null
+				|| mc.getCameraEntity() != mc.player || !mc.player.isAlive())
+			return;
+		
+		if(!ClientEditmodeData.isInEditmode() && RemoteEditSessions.allSessions().isEmpty() && !ClientMoveTransitions.hasActive())
+			return;
 			
 			Player player = mc.player;
 			Camera info = event.getCamera();
-			
-			EditTools cap = player.getData(MSAttachments.EDIT_TOOLS);
 			
 			double d1 = info.getPosition().x;
 			double d2 = info.getPosition().y;
@@ -724,29 +797,22 @@ public class ClientEditToolDrag
 			
 			MultiBufferSource.BufferSource renderTypeBuffer = MultiBufferSource.immediate(new ByteBufferBuilder(2048));
 			VertexConsumer lineBuffer = renderTypeBuffer.getBuffer(RenderType.LINES);
+		
+		if(ClientEditmodeData.isInEditmode())
+		{
+			EditTools cap = player.getData(MSAttachments.EDIT_TOOLS);
 			
 			//:1 selection outline
 			if(cap.getSelectionPos1() != null && cap.getSelectionPos2() != null)
 			{
-				BlockPos selA = cap.getSelectionPos1();
-				BlockPos selB = cap.getSelectionPos2();
-				AABB selectionBox = new AABB(
-						Math.min(selA.getX(), selB.getX()), Math.min(selA.getY(), selB.getY()), Math.min(selA.getZ(), selB.getZ()),
-						Math.max(selA.getX(), selB.getX()) + 1, Math.max(selA.getY(), selB.getY()) + 1, Math.max(selA.getZ(), selB.getZ()) + 1)
-						.move(-d1, -d2, -d3).deflate(0.002);
-				
+				AABB selectionBox = boxFromCorners(cap.getSelectionPos1(), cap.getSelectionPos2()).move(-d1, -d2, -d3).deflate(0.002);
 				drawBoxOutline(event.getPoseStack(), lineBuffer, selectionBox, 0, 1, 1, 1);
 			}
 			
 			//:2 active drag box outline
 			if(isValidDragTool(cap.getToolMode()) && cap.getEditPos1() != null && cap.getEditPos2() != null)
 			{
-				BlockPos posA = cap.getEditPos1();
-				BlockPos posB = cap.getEditPos2();
-				AABB boundingBox = new AABB(
-						Math.min(posA.getX(), posB.getX()), Math.min(posA.getY(), posB.getY()), Math.min(posA.getZ(), posB.getZ()),
-						Math.max(posA.getX(), posB.getX()) + 1, Math.max(posA.getY(), posB.getY()) + 1, Math.max(posA.getZ(), posB.getZ()) + 1)
-						.move(-d1, -d2, -d3).deflate(0.002);
+				AABB boundingBox = boxFromCorners(cap.getEditPos1(), cap.getEditPos2()).move(-d1, -d2, -d3).deflate(0.002);
 				
 				float red = cap.getToolMode() == EditTools.ToolMode.RECYCLE ? 1f : (cap.getToolMode() == EditTools.ToolMode.SELECT ? 0.2f : 0f);
 				float green = cap.getToolMode() == EditTools.ToolMode.REVISE ? 1f : (cap.getToolMode() == EditTools.ToolMode.SELECT ? 0.4f : 0f);
@@ -755,14 +821,14 @@ public class ClientEditToolDrag
 				drawBoxOutline(event.getPoseStack(), lineBuffer, boundingBox, red, green, blue, 1);
 			}
 			
-			//:3 floating move/copy ghost preview
+			//:3 floating move/copy ghost preview footprint
 			if(cap.isPreviewing() && cap.getPreviewAnchor() != null && !ClientSelectionCache.getEntries().isEmpty())
 			{
 				int sizeX = ClientSelectionCache.getSizeX();
 				int sizeY = ClientSelectionCache.getSizeY();
 				int sizeZ = ClientSelectionCache.getSizeZ();
 				Rotation rot = Rotation.values()[Math.floorMod(cap.getPreviewRotation(), 4)];
-				BlockPos minCorner = cap.getPreviewAnchor(); //already the min-corner centering is applied when this is computed
+				BlockPos minCorner = cap.getPreviewAnchor();
 				
 				boolean swapXZ = rot == Rotation.CLOCKWISE_90 || rot == Rotation.COUNTERCLOCKWISE_90;
 				int footprintX = swapXZ ? sizeZ : sizeX;
@@ -777,19 +843,61 @@ public class ClientEditToolDrag
 						.move(-d1, -d2, -d3).deflate(0.002);
 				drawBoxOutline(event.getPoseStack(), lineBuffer, footprintBox, r, g, b, 1f);
 			}
-			
+		}
 			//:4 move animation
 			for(double[] pos : ClientMoveTransitions.getInterpolatedPositions())
 			{
 				AABB box = new AABB(pos[0], pos[1], pos[2], pos[0] + 1, pos[1] + 1, pos[2] + 1).move(-d1, -d2, -d3).deflate(0.03);
 				drawBoxOutline(event.getPoseStack(), lineBuffer, box, 1f, 0.75f, 0f, 0.7f);
 			}
+		
+		//:5 remote editors
+		for(RemoteEditSessions.Session remote : RemoteEditSessions.allSessions().values())
+		{
+			if(remote.selectionActive && remote.selectionPos1 != null && remote.selectionPos2 != null)
+			{
+				AABB box = boxFromCorners(remote.selectionPos1, remote.selectionPos2).move(-d1, -d2, -d3).deflate(0.002);
+				drawBoxOutline(event.getPoseStack(), lineBuffer, box, 0, 1, 1, 1);
+			}
+			
+			if(remote.dragActive && remote.dragPos1 != null && remote.dragPos2 != null)
+			{
+				AABB box = boxFromCorners(remote.dragPos1, remote.dragPos2).move(-d1, -d2, -d3).deflate(0.002);
+				float red = remote.toolKind == 1 ? 1f : (remote.toolKind == 2 ? 0.2f : 0f);
+				float green = remote.toolKind == 0 ? 1f : (remote.toolKind == 2 ? 0.4f : 0f);
+				float blue = remote.toolKind == 2 ? 1f : 0f;
+				drawBoxOutline(event.getPoseStack(), lineBuffer, box, red, green, blue, 1);
+			}
+			
+			if(remote.previewActive && remote.previewAnchor != null && !remote.previewBlocks.isEmpty())
+			{
+				Rotation rot = Rotation.values()[Math.floorMod(remote.previewRotation, 4)];
+				boolean swapXZ = rot == Rotation.CLOCKWISE_90 || rot == Rotation.COUNTERCLOCKWISE_90;
+				int footprintX = swapXZ ? remote.previewSizeZ : remote.previewSizeX;
+				int footprintZ = swapXZ ? remote.previewSizeX : remote.previewSizeZ;
+				
+				float r = remote.previewIsCopy ? 0.1f : 1f;
+				float g = remote.previewIsCopy ? 0.85f : 0.75f;
+				float b = remote.previewIsCopy ? 0.75f : 0f;
+				
+				AABB footprintBox = new AABB(remote.previewAnchor.getX(), remote.previewAnchor.getY(), remote.previewAnchor.getZ(),
+						remote.previewAnchor.getX() + footprintX, remote.previewAnchor.getY() + remote.previewSizeY, remote.previewAnchor.getZ() + footprintZ)
+						.move(-d1, -d2, -d3).deflate(0.002);
+				drawBoxOutline(event.getPoseStack(), lineBuffer, footprintBox, r, g, b, 1f);
+			}
+		}
 			
 			renderTypeBuffer.endBatch();
 			
 			RenderSystem.depthMask(true);
 			RenderSystem.disableBlend();
 		}
+	
+	private static AABB boxFromCorners(BlockPos a, BlockPos b)
+	{
+		return new AABB(
+				Math.min(a.getX(), b.getX()), Math.min(a.getY(), b.getY()), Math.min(a.getZ(), b.getZ()),
+				Math.max(a.getX(), b.getX()) + 1, Math.max(a.getY(), b.getY()) + 1, Math.max(a.getZ(), b.getZ()) + 1);
 	}
 	
 	//taken directly from machineOutlineRenderer's drawPhernaliaPlacementOutline function, which was taken from LevelRenderer's drawShape function

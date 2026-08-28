@@ -49,7 +49,9 @@ import net.neoforged.neoforge.network.PacketDistributor;
 import net.neoforged.neoforge.network.handling.IPayloadContext;
 
 import java.util.ArrayList;
+import java.util.HashSet;
 import java.util.List;
+import java.util.Set;
 import java.util.function.Consumer;
 
 import static com.mraof.minestuck.network.MSPayloads.VEC3_STREAM_CODEC;
@@ -373,12 +375,10 @@ public final class EditmodeDragPackets
 			{
 				if(c.blockEntityTag() != null)
 					level.removeBlockEntity(c.sourcePos());
-				level.setBlock(c.sourcePos(), Blocks.AIR.defaultBlockState(), Block.UPDATE_CLIENTS);
+				level.setBlock(c.sourcePos(), Blocks.AIR.defaultBlockState(), Block.UPDATE_CLIENTS | Block.UPDATE_KNOWN_SHAPE);
 			}
 		}
 		
-		List<BlockPos> broadcastFrom = new ArrayList<>();
-		List<BlockPos> broadcastTo = new ArrayList<>();
 		List<BlockPos> placedPositions = new ArrayList<>(captured.size());
 		
 		for(Captured c : captured)
@@ -390,7 +390,7 @@ public final class EditmodeDragPackets
 			BlockState toPlace = c.state().rotate(rotation);
 			if(toPlace.hasProperty(BlockStateProperties.EXTENDED))
 				toPlace = toPlace.setValue(BlockStateProperties.EXTENDED, false);
-			level.setBlock(dest, toPlace, Block.UPDATE_CLIENTS);
+			level.setBlock(dest, toPlace, Block.UPDATE_CLIENTS | Block.UPDATE_KNOWN_SHAPE);
 			
 			if(c.blockEntityTag() != null && level.getBlockEntity(dest) != null)
 			{
@@ -402,30 +402,18 @@ public final class EditmodeDragPackets
 			}
 			
 			placedPositions.add(dest);
-			
-			if(!isCopy)
-			{
-				broadcastFrom.add(c.sourcePos());
-				broadcastTo.add(dest);
-			}
 		}
 		
-		for(BlockPos dest : placedPositions)
-			level.updateNeighborsAt(dest, level.getBlockState(dest).getBlock());
-		
+		Set<BlockPos> affected = new HashSet<>(placedPositions);
 		if(!isCopy)
 		{
 			for(Captured c : captured)
-				level.updateNeighborsAt(c.sourcePos(), Blocks.AIR);
+				for(Direction dir : Direction.values())
+					affected.add(c.sourcePos().relative(dir));
 		}
 		
-		for(BlockPos dest : placedPositions)
-		{
-			BlockState current = level.getBlockState(dest);
-			BlockState updated = Block.updateFromNeighbourShapes(current, level, dest);
-			if(updated != current)
-				level.setBlock(dest, updated, 3);
-		}
+		for(BlockPos pos : affected)
+			finalizeUpdate(level, pos);
 		
 		MutableGristSet actualCost = MutableGristSet.newDefault();
 		int successfullyMovedCount = 0;
@@ -433,19 +421,10 @@ public final class EditmodeDragPackets
 		{
 			Captured c = captured.get(i);
 			BlockPos dest = placedPositions.get(i);
-			
 			BlockState finalState = level.getBlockState(dest);
-			boolean stillCorrectBlock = !finalState.isAir() && finalState.getBlock() == c.state().getBlock();
+			boolean survived = !finalState.isAir() && finalState.getBlock() == c.state().getBlock();
 			
-			if(stillCorrectBlock && !finalState.canSurvive(level, dest))
-			{
-				if(finalState.hasBlockEntity())
-					level.removeBlockEntity(dest);
-				level.setBlock(dest, Blocks.AIR.defaultBlockState(), Block.UPDATE_CLIENTS | Block.UPDATE_SUPPRESS_DROPS);
-				stillCorrectBlock = false;
-			}
-			
-			if(stillCorrectBlock)
+			if(survived)
 			{
 				if(isCopy)
 					actualCost.add(c.blockCost());
@@ -475,10 +454,16 @@ public final class EditmodeDragPackets
 			BlockPos newMin = anchor;
 			BlockPos newMax = anchor.offset(rotatedSizeX - 1, sizeY - 1, rotatedSizeZ - 1);
 			PacketDistributor.sendToPlayer(player, new ServerEditPackets.SelectionUpdate(false, newMin, newMax));
+			
+			if(MinestuckConfig.SERVER.visualsToOthers.get())
+				PacketDistributor.sendToPlayersTrackingEntity(player, new EditmodeBroadcastPackets.ClientSelectionBox(player.getUUID(), true, newMin, newMax));
 		}
 		else
 		{
 			PacketDistributor.sendToPlayer(player, new ServerEditPackets.SelectionUpdate(true, BlockPos.ZERO, BlockPos.ZERO));
+			
+			if(MinestuckConfig.SERVER.visualsToOthers.get())
+				PacketDistributor.sendToPlayersTrackingEntity(player, new EditmodeBroadcastPackets.ClientSelectionBox(player.getUUID(), false, BlockPos.ZERO, BlockPos.ZERO));
 		}
 	}
 	
@@ -593,12 +578,11 @@ public final class EditmodeDragPackets
 			{
 				BlockState block = player.level().getBlockState(pos);
 				
-				Consumer<GristSet> missingCostTracker = missingCost::add; //Will add the block's grist cost to the running tally of how much more grist you need, if you cannot afford it in editModeDestroyCheck().
+				Consumer<GristSet> missingCostTracker = missingCost::add;
 				if(editModeDestroyCheck(data, player, pos, missingCostTracker))
 				{
 					player.gameMode.destroyAndAck(pos, 3, "creative destroy");
 					
-					//broadcasts block-break particles and sounds to other players.
 					player.level().levelEvent(LevelEvent.PARTICLES_DESTROY_BLOCK, pos, Block.getId(block));
 					player.level().gameEvent(GameEvent.BLOCK_DESTROY, pos, GameEvent.Context.of(player, block));
 					
@@ -654,10 +638,11 @@ public final class EditmodeDragPackets
 		}
 	}
 	
-	public record Reset() implements MSPacket.PlayToServer
+	public record Reset(boolean rejected) implements MSPacket.PlayToServer
 	{
 		public static final Type<Reset> ID = new Type<>(Minestuck.id("editmode_drag/reset"));
-		public static final StreamCodec<FriendlyByteBuf, Reset> STREAM_CODEC = StreamCodec.unit(new Reset());
+		public static final StreamCodec<FriendlyByteBuf, Reset> STREAM_CODEC =
+				ByteBufCodecs.BOOL.map(Reset::new, Reset::rejected).cast();
 		
 		@Override
 		public Type<? extends CustomPacketPayload> type()
@@ -671,10 +656,22 @@ public final class EditmodeDragPackets
 			if(!player.level().isClientSide())
 			{
 				EditTools cap = player.getData(MSAttachments.EDIT_TOOLS);
-				
-				ServerEditHandler.removeCursorEntity(player, true);
+				ServerEditHandler.removeCursorEntity(player, rejected);
 				cap.resetDragTools();
 			}
 		}
+	}
+	
+	private static void finalizeUpdate(Level level, BlockPos pos)
+	{
+		BlockState state = level.getBlockState(pos);
+		if(state.isAir())
+			return;
+		
+		BlockState updated = Block.updateFromNeighbourShapes(state, level, pos);
+		if(updated != state)
+			Block.updateOrDestroy(state, updated, level, pos, Block.UPDATE_ALL);
+		
+		level.updateNeighborsAt(pos, level.getBlockState(pos).getBlock());
 	}
 }
