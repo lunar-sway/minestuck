@@ -33,7 +33,7 @@ public final class SkaianetData extends SavedData
 	final InfoTracker infoTracker = new InfoTracker(this);
 	final ComputerInteractions computerInteractions;
 	final SburbConnections connections;
-	final SessionHandler sessionHandler;
+	public final SessionHandler sessionHandler;
 	private final Map<PlayerIdentifier, SburbPlayerData> playerDataMap = new HashMap<>();
 	private final Map<PlayerIdentifier, PredefineData> predefineData = new HashMap<>();
 	
@@ -108,7 +108,7 @@ public final class SkaianetData extends SavedData
 		return new SkaianetData(globalSession, helper.getLevel().getServer());
 	}
 	
-	SburbPlayerData getOrCreateData(PlayerIdentifier player)
+	public SburbPlayerData getOrCreateData(PlayerIdentifier player)
 	{
 		return this.playerDataMap.computeIfAbsent(player, playerId -> {
 			var data = new SburbPlayerData(playerId, this.mcServer);

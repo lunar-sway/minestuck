@@ -155,6 +155,11 @@ public final class MSPayloads
 		registerPlayToClient(registrar, GristToastPacket.ID, GristToastPacket.STREAM_CODEC);
 		registerPlayToClient(registrar, EntryEffectPackets.Effect.ID, EntryEffectPackets.Effect.STREAM_CODEC);
 		registerPlayToClient(registrar, EntryEffectPackets.Clear.ID, EntryEffectPackets.Clear.STREAM_CODEC);
+		registerPlayToClient(registrar, MeteorPackets.CountdownStart.ID,  MeteorPackets.CountdownStart.STREAM_CODEC);
+		registerPlayToClient(registrar, MeteorPackets.MeteorPosition.ID,  MeteorPackets.MeteorPosition.STREAM_CODEC);
+		registerPlayToClient(registrar, MeteorPackets.MeteorRemoved.ID,   MeteorPackets.MeteorRemoved.STREAM_CODEC);
+		registerPlayToClient(registrar, MeteorPackets.PlayMeteorMusic.ID, MeteorPackets.PlayMeteorMusic.STREAM_CODEC);
+		registerPlayToClient(registrar, MeteorPackets.MiniMeteorImpact.ID, MeteorPackets.MiniMeteorImpact.STREAM_CODEC);
 		
 		//Miscellaneous Packets
 		registerPlayToServer(registrar, ToggleAspectEffectsPacket.ID, ToggleAspectEffectsPacket.STREAM_CODEC);

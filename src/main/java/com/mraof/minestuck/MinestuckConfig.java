@@ -47,6 +47,9 @@ public class MinestuckConfig
 		public final BooleanValue loginColorSelector;
 		public final BooleanValue alchemyIcons;
 		public final BooleanValue npcDialogueTextColors;
+		public final BooleanValue impactScreenShake;
+		public final BooleanValue meteorSkyFog;
+		public final BooleanValue meteorImpactFlash;
 		
 		private Client(Builder builder)
 		{
@@ -59,6 +62,15 @@ public class MinestuckConfig
 					.defineEnum("echeladderAnimation", AnimationSpeed.NORMAL);
 			npcDialogueTextColors = builder.comment("Determines whether an NPC will use their custom formatted color value when talking in a dialogue screen.")
 					.define("npcDialogueTextColors", true);
+			builder.pop();
+			
+			builder.push("entry");
+			impactScreenShake = builder.comment("Determines whether player would see the screen shake or not from the nearby mini meteor impacts.")
+					.define("impactScreenShake", true);
+			meteorSkyFog = builder.comment("Determines whether player would see the fog and clouds colour changes from an approaching asteroid.")
+					.define("meteorSkyFog", true);
+			meteorImpactFlash = builder.comment("Determines whether the screen flashes white in the last few seconds before your meteor impacts (if you haven't entered the Medium yet).")
+					.define("meteorImpactFlash", true);
 			builder.pop();
 		}
 	}
@@ -107,6 +119,8 @@ public class MinestuckConfig
 		public final BooleanValue stopSecondEntry;
 		public final BooleanValue needComputer;
 		public final IntValue artifactRange;
+		public final BooleanValue meteorShower;
+		public final IntValue miniMeteorsCount;
 		
 		//Computer
 		public final BooleanValue privateComputers;
@@ -139,7 +153,6 @@ public class MinestuckConfig
 					.define("kernelspriteSpawn", true);
 			hardMode = builder.comment("Makes Minestuck overall harder:",
 					"- Only the first Cruxtruder, Totem Lathe, and Alchemiter will be free",
-					"- Fireballs will rain around players entering the medium",
 					"- Medium dungeons spawners contain Liches instead of Imps",
 					"- Underlings have a 50% chance to have the artifact grist").define("hardMode", false);
 			builder.pop();
@@ -215,6 +228,10 @@ public class MinestuckConfig
 					.define("needComputer", false);
 			artifactRange = builder.comment("Radius of the land brought into the medium.")
 					.defineInRange("artifactRange",30,0,Integer.MAX_VALUE);
+			meteorShower = builder.comment("If this is true, players will need to survive countless mini meteors that would destroy the area around the activated cruxtruder.")
+					.define("meteorShower",true);
+			miniMeteorsCount = builder.comment("Determines the count of maximum spawn rate of mini meteors at once.")
+					.defineInRange("miniMeteorsCount", 4,1, 8);
 			builder.pop();
 			
 			builder.push("medium");

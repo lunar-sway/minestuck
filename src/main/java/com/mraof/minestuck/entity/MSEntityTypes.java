@@ -49,6 +49,9 @@ public final class MSEntityTypes
 	public static final Supplier<EntityType<RookEntity>> DERSITE_ROOK = REGISTER.register("dersite_rook", () -> EntityType.Builder.of(RookEntity::createDersite, MobCategory.MONSTER).sized(3.5F, 3.5F).build(Minestuck.id("dersite_rook").toString()));
 	public static final Supplier<EntityType<RookEntity>> PROSPITIAN_ROOK = REGISTER.register("prospitian_rook", () -> EntityType.Builder.of(RookEntity::createProspitian, MobCategory.MONSTER).sized(3.5F, 3.5F).build(Minestuck.id("prospitian_rook").toString()));
 	
+	public static final Supplier<EntityType<MeteorEntity>> METEOR = REGISTER.register("meteor", () -> EntityType.Builder.of(MeteorEntity::new, MobCategory.MISC).sized(10.0F, 10.0F).setTrackingRange(512).setUpdateInterval(1).build(Minestuck.id("meteor").toString()));
+	public static final Supplier<EntityType<MiniMeteorEntity>> MINI_METEOR = REGISTER.register("mini_meteor", () -> EntityType.Builder.of(MiniMeteorEntity::new, MobCategory.MISC).sized(1.2F, 1.2F).setTrackingRange(256).setUpdateInterval(1).build(Minestuck.id("mini_meteor").toString()));
+	
 	public static final Supplier<EntityType<GristEntity>> GRIST = REGISTER.register("grist", () -> EntityType.Builder.<GristEntity>of(GristEntity::new, MobCategory.MISC).sized(1 / 3F, 1 / 3F).setTrackingRange(4).setUpdateInterval(20).build(Minestuck.id("grist").toString()));
 	public static final Supplier<EntityType<VitalityGelEntity>> VITALITY_GEL = REGISTER.register("vitality_gel", () -> EntityType.Builder.<VitalityGelEntity>of(VitalityGelEntity::new, MobCategory.MISC).sized(1 / 4F, 1 / 4F).setTrackingRange(4).setUpdateInterval(20).build(Minestuck.id("vitality_gel").toString()));
 	public static final Supplier<EntityType<DecoyEntity>> PLAYER_DECOY = REGISTER.register("player_decoy", () -> EntityType.Builder.<DecoyEntity>of(DecoyEntity::new, MobCategory.MISC).noSave().noSummon().build(Minestuck.id("player_decoy").toString()));

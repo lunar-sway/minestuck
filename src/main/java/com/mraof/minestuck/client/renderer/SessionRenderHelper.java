@@ -130,6 +130,26 @@ public final class SessionRenderHelper
 		poseStack.popPose();
 	}
 	
+	public static void drawSkyMeteor(Matrix4f matrix, float size, TextureAtlasSprite sprite, int frameIndex, int frameCount)
+	{
+		RenderSystem.setShaderTexture(0, sprite.atlasLocation());
+		RenderSystem.setShader(GameRenderer::getPositionTexShader);
+		BufferBuilder buffer = Tesselator.getInstance().begin(VertexFormat.Mode.QUADS, DefaultVertexFormat.POSITION_TEX);
+		
+		float u0 = sprite.getU0();
+		float u1 = sprite.getU1();
+		
+		float frameVSpan = (sprite.getV1() - sprite.getV0()) / frameCount;
+		float v0 = sprite.getV0() + frameVSpan * frameIndex;
+		float v1 = v0 + frameVSpan;
+		
+		buffer.addVertex(matrix, -size, 100, -size).setUv(u0, v0);
+		buffer.addVertex(matrix, size, 100, -size).setUv(u1, v0);
+		buffer.addVertex(matrix, size, 100, size).setUv(u1, v1);
+		buffer.addVertex(matrix, -size, 100, size).setUv(u0, v1);
+		BufferUploader.drawWithShader(buffer.buildOrThrow());
+	}
+	
 	public static void drawRotatingLands(Minecraft mc, PoseStack poseStack, ClientLevel level)
 	{
 		poseStack.pushPose();

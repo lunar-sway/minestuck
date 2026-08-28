@@ -20,6 +20,11 @@ public final class MSSoundEvents
 	public static final Holder<SoundEvent> MUSIC_DISC_DANCE_STAB_DANCE = register("music_disc.dance_stab_dance");
 	public static final Holder<SoundEvent> MUSIC_DISC_RETRO_BATTLE_THEME = register("music_disc.retro_battle_theme");
 	
+	public static final Supplier<SoundEvent> METEOR_THEME = REGISTER.register("meteor_theme",
+			() -> SoundEvent.createVariableRangeEvent(Minestuck.id("meteor_theme")));
+	public static final Supplier<SoundEvent> METEOR_IMPACT = REGISTER.register("meteor_impact",
+			() -> SoundEvent.createVariableRangeEvent(Minestuck.id("meteor_impact")));
+	
 	public static final ResourceKey<JukeboxSong> JUKEBOX_SONG_EMISSARY_OF_DANCE = ResourceKey.create(Registries.JUKEBOX_SONG, Minestuck.id("emissary_of_dance"));
 	public static final ResourceKey<JukeboxSong> JUKEBOX_SONG_DANCE_STAB_DANCE = ResourceKey.create(Registries.JUKEBOX_SONG, Minestuck.id("dance_stab_dance"));
 	public static final ResourceKey<JukeboxSong> JUKEBOX_SONG_RETRO_BATTLE_THEME = ResourceKey.create(Registries.JUKEBOX_SONG, Minestuck.id("retro_battle"));
