@@ -126,7 +126,7 @@ public class ClientEditToolDrag
 			EditTools cap = player.getData(MSAttachments.EDIT_TOOLS);
 			
 			if(cap.isPreviewing() && cap.getPreviewAnchor() != null && !ClientSelectionCache.getEntries().isEmpty()
-					&& ClientSelectionCache.getEntries().size() <= 512)
+					&& ClientSelectionCache.getEntries().size() <= MinestuckConfig.SERVER.maxSelectionVolume.get())
 			{
 				int sizeX = ClientSelectionCache.getSizeX();
 				int sizeZ = ClientSelectionCache.getSizeZ();
@@ -144,7 +144,7 @@ public class ClientEditToolDrag
 		
 		for(RemoteEditSessions.Session remote : RemoteEditSessions.allSessions().values())
 		{
-			if(!remote.previewActive || remote.previewAnchor == null || remote.previewBlocks.isEmpty() || remote.previewBlocks.size() > 512)
+			if(!isRemotePreviewRenderable(remote))
 				continue;
 			
 			Rotation rot = Rotation.values()[Math.floorMod(remote.previewRotation, 4)];
@@ -177,6 +177,11 @@ public class ClientEditToolDrag
 			}
 			
 			poseStack.popPose();
+	}
+	
+	private static boolean isRemotePreviewRenderable(RemoteEditSessions.Session remote)
+	{
+		return remote.previewActive && remote.previewAnchor != null && !remote.previewBlocks.isEmpty() && remote.previewBlocks.size() <= MinestuckConfig.SERVER.maxSelectionVolume.get();
 	}
 	
 	/**
@@ -882,7 +887,7 @@ public class ClientEditToolDrag
 				drawBoxOutline(poseStack, lineBuffer, box, red, green, blue, 1);
 			}
 			
-			if(remote.previewActive && remote.previewAnchor != null && !remote.previewBlocks.isEmpty())
+			if(isRemotePreviewRenderable(remote))
 			{
 				Rotation rot = Rotation.values()[Math.floorMod(remote.previewRotation, 4)];
 				boolean swapXZ = rot == Rotation.CLOCKWISE_90 || rot == Rotation.COUNTERCLOCKWISE_90;
