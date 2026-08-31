@@ -2597,6 +2597,12 @@ public class MinestuckEnUsLanguageProvider extends MinestuckLanguageProvider
 		addSubtitles("projectile_bounce", "Projectile bounces");
 		addSubtitles("tool_revise", "Server uses Revise tool");
 		addSubtitles("tool_recycle", "Server recycles blocks");
+		addSubtitles("tool_select", "Server select blocks");
+		addSubtitles("tool_clear", "Server clear selected blocks");
+		addSubtitles("tool_move", "Server move blocks");
+		addSubtitles("tool_copy", "Server copy blocks");
+		addSubtitles("edit_enter", "Server enter edit mode");
+		addSubtitles("edit_exit", "Server exit edit mode");
 		addSubtitles("computer_boot", "Computer booting up");
 		addSubtitles("computer_disk_insert", "Disk inserted");
 		addSubtitles("computer_disk_remove", "Disk removed");
