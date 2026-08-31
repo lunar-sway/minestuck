@@ -14,6 +14,7 @@ import com.mraof.minestuck.skaianet.SkaianetData;
 import com.mraof.minestuck.util.ColorHandler;
 import com.mraof.minestuck.world.storage.MSExtraData;
 
+import net.minecraft.core.component.DataComponentType;
 import net.minecraft.nbt.CompoundTag;
 import net.minecraft.nbt.ListTag;
 import net.minecraft.server.MinecraftServer;
@@ -174,8 +175,14 @@ public final class DeployList
 		stack = stack.copy();
 		stack.setCount(1);
 		stack.applyComponents(stack.getItem().components());
+		
 		return stack;
 	}
+	
+/*	private static <T> void resetComponent(ItemStack stack, DataComponentType<T> type)
+	{
+		stack.set(type, stack.getPrototype().get(type));
+	}*/
 	
 	public static boolean containsEntry(String name)
 	{

@@ -1,12 +1,14 @@
 package com.mraof.minestuck.computer.editmode;
 
 import com.mojang.blaze3d.systems.RenderSystem;
-import com.mojang.blaze3d.vertex.ByteBufferBuilder;
-import com.mojang.blaze3d.vertex.PoseStack;
-import com.mojang.blaze3d.vertex.VertexConsumer;
+import com.mojang.blaze3d.vertex.*;
 import com.mraof.minestuck.Minestuck;
+import com.mraof.minestuck.MinestuckConfig;
 import com.mraof.minestuck.block.machine.EditmodeDestroyable;
 import com.mraof.minestuck.block.machine.MachineBlock;
+import com.mraof.minestuck.client.renderer.SelectedPreviewRenderer;
+import com.mraof.minestuck.client.util.MSKeyHandler;
+import com.mraof.minestuck.network.editmode.EditmodeBroadcastPackets;
 import com.mraof.minestuck.network.editmode.EditmodeDragPackets;
 import com.mraof.minestuck.player.ClientPlayerData;
 import com.mraof.minestuck.util.MSAttachments;
@@ -15,17 +17,21 @@ import com.mraof.minestuck.util.MSTags;
 import net.minecraft.client.Camera;
 import net.minecraft.client.KeyMapping;
 import net.minecraft.client.Minecraft;
+import net.minecraft.client.renderer.ItemBlockRenderTypes;
 import net.minecraft.client.renderer.MultiBufferSource;
 import net.minecraft.client.renderer.RenderType;
+import net.minecraft.client.renderer.block.BlockRenderDispatcher;
 import net.minecraft.core.BlockPos;
 import net.minecraft.sounds.SoundSource;
 import net.minecraft.util.Mth;
+import net.minecraft.util.RandomSource;
 import net.minecraft.world.entity.ai.attributes.Attributes;
 import net.minecraft.world.entity.player.Player;
 import net.minecraft.world.item.BlockItem;
 import net.minecraft.world.item.ItemStack;
 import net.minecraft.world.level.ClipContext;
 import net.minecraft.world.level.Level;
+import net.minecraft.world.level.block.Rotation;
 import net.minecraft.world.level.block.state.BlockState;
 import net.minecraft.world.phys.AABB;
 import net.minecraft.world.phys.BlockHitResult;
@@ -40,7 +46,12 @@ import net.neoforged.neoforge.client.event.RenderLevelStageEvent;
 import net.neoforged.neoforge.network.PacketDistributor;
 import org.joml.Matrix4f;
 
-/** Class for handling the click-and-drag editmode tools (Revise and Recycle) on the client-side.
+import javax.annotation.Nullable;
+import java.util.ArrayList;
+import java.util.List;
+
+/** Class for handling the click-and-drag editmode tools (Revise, Recycle, Select) and the Move/Copy
+ * preview + commit flow on the client-side.
  * (Based on code from the Minestuck Universe addon, with Cibernet's permission.)
  * @see EditmodeDragPackets for the tool's server-sided block-placing code.
  * @see ServerEditHandler for server-sided code that handles the sburb-cursor.
@@ -49,6 +60,14 @@ import org.joml.Matrix4f;
 @EventBusSubscriber(modid = Minestuck.MOD_ID, bus = EventBusSubscriber.Bus.GAME, value = Dist.CLIENT)
 public class ClientEditToolDrag
 {
+	private static boolean moveKeyWasDown = false;
+	private static boolean copyKeyWasDown = false;
+	private static boolean selectKeyWasDown = false;
+	private static boolean selectClickArmed = false;
+	private static boolean wasPreviewingMove = false;
+	private static boolean wasPreviewingCopy = false;
+	private static Boolean clickModeActiveIsCopy = null; // null = no click-mode session pending; false = move armed; true = copy armed
+	private static final RandomSource PREVIEW_RANDOM = RandomSource.create();
 	
 	@SubscribeEvent
 	public static void onClientTick(ClientTickEvent.Pre event)
@@ -62,12 +81,107 @@ public class ClientEditToolDrag
 		
 		ClientEditToolDrag.doRecycleCode(mc, player, cap);
 		ClientEditToolDrag.doReviseCode(mc, player, cap);
+		ClientEditToolDrag.doSelectCode(mc, player, cap);
+		ClientEditToolDrag.doMoveCopyPreviewCode(mc, player, cap);
 	}
 	
 	@SubscribeEvent
 	public static void renderWorld(RenderLevelStageEvent event)
 	{
 		ClientEditToolDrag.renderOutlines(event);
+		ClientEditToolDrag.renderBlockPreview(event);
+	}
+	
+	/**
+	 * Renders the textured block models of the pending move/copy ghost preview.
+	 */
+	private static void renderBlockPreview(RenderLevelStageEvent event)
+	{
+		Minecraft mc = Minecraft.getInstance();
+		if(event.getStage() != RenderLevelStageEvent.Stage.AFTER_TRANSLUCENT_BLOCKS || mc.player == null
+				|| mc.getCameraEntity() != mc.player || !mc.player.isAlive())
+			return;
+		
+		if(!ClientEditmodeData.isInEditmode() && RemoteEditSessions.allSessions().isEmpty())
+			return;
+		
+		Player player = mc.player;
+		Camera camera = event.getCamera();
+		double camX = camera.getPosition().x;
+		double camY = camera.getPosition().y;
+		double camZ = camera.getPosition().z;
+		
+		RenderSystem.enableBlend();
+		RenderSystem.defaultBlendFunc();
+		RenderSystem.depthMask(true);
+		
+		MultiBufferSource.BufferSource previewBuffer = MultiBufferSource.immediate(new ByteBufferBuilder(4096));
+		BlockRenderDispatcher blockRenderer = mc.getBlockRenderer();
+		PoseStack poseStack = event.getPoseStack();
+		Level level = player.level();
+		float alpha = 0.55f;
+		
+		if(ClientEditmodeData.isInEditmode())
+		{
+			EditTools cap = player.getData(MSAttachments.EDIT_TOOLS);
+			
+			if(cap.isPreviewing() && cap.getPreviewAnchor() != null && !ClientSelectionCache.getEntries().isEmpty()
+					&& ClientSelectionCache.getEntries().size() <= MinestuckConfig.SERVER.maxSelectionVolume.get())
+			{
+				int sizeX = ClientSelectionCache.getSizeX();
+				int sizeZ = ClientSelectionCache.getSizeZ();
+				Rotation rot = Rotation.values()[Math.floorMod(cap.getPreviewRotation(), 4)];
+				BlockPos minCorner = cap.getPreviewAnchor();
+				
+				for(ClientSelectionCache.Entry entry : ClientSelectionCache.getEntries())
+				{
+					BlockPos dest = minCorner.offset(EditmodeDragPackets.rotateOffset(entry.localOffset(), sizeX, sizeZ, rot));
+					BlockState state = entry.state().rotate(rot);
+					renderGhostBlock(poseStack, level, blockRenderer, previewBuffer, dest, state, camX, camY, camZ, alpha);
+				}
+			}
+		}
+		
+		for(RemoteEditSessions.Session remote : RemoteEditSessions.allSessions().values())
+		{
+			if(!isRemotePreviewRenderable(remote))
+				continue;
+			
+			Rotation rot = Rotation.values()[Math.floorMod(remote.previewRotation, 4)];
+			for(RemoteEditSessions.PreviewEntry entry : remote.previewBlocks)
+			{
+				BlockPos dest = remote.previewAnchor.offset(EditmodeDragPackets.rotateOffset(entry.localOffset(), remote.previewSizeX, remote.previewSizeZ, rot));
+				BlockState state = entry.state().rotate(rot);
+				renderGhostBlock(poseStack, level, blockRenderer, previewBuffer, dest, state, camX, camY, camZ, alpha);
+			}
+		}
+		
+		previewBuffer.endBatch();
+		
+		RenderSystem.depthMask(true);
+		RenderSystem.disableBlend();
+	}
+	
+	private static void renderGhostBlock(PoseStack poseStack, Level level, BlockRenderDispatcher blockRenderer,
+	                                     MultiBufferSource.BufferSource previewBuffer, BlockPos dest, BlockState state,
+	                                     double camX, double camY, double camZ, float alpha)
+	{
+			poseStack.pushPose();
+			poseStack.translate(dest.getX() - camX, dest.getY() - camY, dest.getZ() - camZ);
+			
+			for(RenderType ignored : ItemBlockRenderTypes.getRenderLayers(state))
+			{
+				VertexConsumer raw = previewBuffer.getBuffer(RenderType.translucent());
+				VertexConsumer wrapped = new SelectedPreviewRenderer(raw, alpha);
+				blockRenderer.renderBatched(state, dest, level, poseStack, wrapped, false, PREVIEW_RANDOM);
+			}
+			
+			poseStack.popPose();
+	}
+	
+	private static boolean isRemotePreviewRenderable(RemoteEditSessions.Session remote)
+	{
+		return remote.previewActive && remote.previewAnchor != null && !remote.previewBlocks.isEmpty() && remote.previewBlocks.size() <= MinestuckConfig.SERVER.maxSelectionVolume.get();
 	}
 	
 	/**
@@ -76,14 +190,17 @@ public class ClientEditToolDrag
 	 */
 	private static void cancelDrag(EditTools cap)
 	{
-		PacketDistributor.sendToServer(new EditmodeDragPackets.Reset());
+		if(cap.getToolMode() != null)
+			broadcastDragBox(cap.getToolMode(), false, null, null);
+		
+		PacketDistributor.sendToServer(new EditmodeDragPackets.Reset(true));
 		cap.resetDragTools();
 	}
 	
 	/**
 	 * Attempts to get the currently highlighted block.
 	 * If the player is highlighting a block, initialize the target edit-tool's parameters.
-	 * @param targetTool The tool to begin using. Must be a drag tool (Revise or Recycle).
+	 * @param targetTool The tool to begin using. Must be a drag tool (Revise, Recycle or Select).
 	 * @param cap The current edit-tools capability.
 	 * @param player Current client-side player.
 	 * @return True if the ray hits a block. False if it doesn't
@@ -103,15 +220,31 @@ public class ClientEditToolDrag
 	/**
 	 * Sets/updates the second selection point according to the given tool,
 	 * and sends a packet to create/update the sburb cursor.
-	 * @param targetTool The tool you want to update. Must be a drag tool (Revise or Recycle).
+	 * @param targetTool The tool you want to update. Must be a drag tool (Revise, Recycle or Select).
 	 * @param cap The current edit-tools capability.
 	 * @param player Current client-side player.
-	 * @param toolKey The given tool's key.
+	 * @param isActive Whether the tool is currently in-progress, the physical key being held for
+	 *                 drag-style tools, or the click-style armed state for tools that support it.
 	 */
-	private static void updateDragPosition(EditTools.ToolMode targetTool, EditTools cap, Player player, KeyMapping toolKey)
+	private static void updateDragPosition(EditTools.ToolMode targetTool, EditTools cap, Player player, boolean isActive)
 	{
 		cap.setEditPos2(getSelectionEndPoint(player, cap.getEditReachDistance(), targetTool == EditTools.ToolMode.REVISE));
-		PacketDistributor.sendToServer(new EditmodeDragPackets.Cursor(toolKey.isDown(), cap.getEditPos1(), cap.getEditPos2()));
+		PacketDistributor.sendToServer(new EditmodeDragPackets.Cursor(isActive, cap.getEditPos1(), cap.getEditPos2()));
+		broadcastDragBox(targetTool, isActive, cap.getEditPos1(), cap.getEditPos2());
+	}
+	
+	private static void broadcastDragBox(EditTools.ToolMode toolMode, boolean active, @Nullable BlockPos pos1, @Nullable BlockPos pos2)
+	{
+		if(!ClientEditmodeData.isBroadcastEnabled())
+			return;
+		int kind = switch(toolMode)
+		{
+			case REVISE -> 0;
+			case RECYCLE -> 1;
+			case SELECT -> 2;
+		};
+		PacketDistributor.sendToServer(new EditmodeBroadcastPackets.BroadcastDragBox(
+				active, kind, pos1 != null ? pos1 : BlockPos.ZERO, pos2 != null ? pos2 : BlockPos.ZERO));
 	}
 	
 	/**
@@ -128,13 +261,15 @@ public class ClientEditToolDrag
 		else
 			PacketDistributor.sendToServer(new EditmodeDragPackets.Destroy(false, cap.getEditPos1(), cap.getEditPos2(), cap.getEditTraceHit(), cap.getEditTraceDirection()));
 		playSoundAndSetParticles(player, targetTool == EditTools.ToolMode.REVISE, cap.getEditPos1(), cap.getEditPos2());
-	
+		
+		broadcastDragBox(targetTool, false, null, null);
+		
 		cap.resetDragTools();
 	}
 	
 	public static boolean isValidDragToolOrNull(EditTools.ToolMode toolMode) { return toolMode == null || isValidDragTool(toolMode); }
 	
-	public static boolean isValidDragTool(EditTools.ToolMode toolMode) { return toolMode == EditTools.ToolMode.REVISE || toolMode == EditTools.ToolMode.RECYCLE; }
+	public static boolean isValidDragTool(EditTools.ToolMode toolMode) { return toolMode == EditTools.ToolMode.REVISE || toolMode == EditTools.ToolMode.RECYCLE || toolMode == EditTools.ToolMode.SELECT; }
 	
 	/**
 	 * Handles code for the revise tool on the client-side.
@@ -161,7 +296,7 @@ public class ClientEditToolDrag
 		
 		//If the selection has already successfully found a starting point, find the end-point.
 		if(cap.getEditPos1() != null)
-			updateDragPosition(EditTools.ToolMode.REVISE, cap, player, toolKey);
+			updateDragPosition(EditTools.ToolMode.REVISE, cap, player, toolKey.isDown());
 		
 		//If key has just been released, finish drag.
 		if(!toolKey.isDown() && cap.getEditPos1() != null)
@@ -208,12 +343,302 @@ public class ClientEditToolDrag
 		
 		//If the selection has already successfully found a starting point, find the end-point.
 		if(cap.getEditPos1() != null)
-			updateDragPosition(EditTools.ToolMode.RECYCLE, cap, player, toolKey);
+			updateDragPosition(EditTools.ToolMode.RECYCLE, cap, player, toolKey.isDown());
 		
 		//If key has just been released, finish drag.
 		if(!toolKey.isDown() && cap.getEditPos1() != null)
 			finishDragging(EditTools.ToolMode.RECYCLE, cap, player);
 
+	}
+	
+	/**
+	 * Handles the box-selection tool.
+	 */
+	public static void doSelectCode(Minecraft mc, Player player, EditTools cap)
+	{
+		if(cap.getToolMode() != null && cap.getToolMode() != EditTools.ToolMode.SELECT)
+			return;
+		
+		KeyMapping toolKey = MSKeyHandler.selectKey;
+		boolean clickMode = MinestuckConfig.CLIENT.clickToSelect.get();
+		boolean pressedEdge = toolKey.isDown() && !selectKeyWasDown;
+		
+		boolean active;
+		boolean shouldCommit;
+		
+		if(clickMode)
+		{
+			if(!ClientEditmodeData.isInEditmode() || mc.isPaused())
+				selectClickArmed = false; //full cancel on anything that invalidates the session
+			
+			shouldCommit = false;
+			
+			if(!selectClickArmed && pressedEdge)
+				selectClickArmed = true; //If first press then arm and start growing the box
+			else if(selectClickArmed && pressedEdge)
+				shouldCommit = true; //If second press then lock the selection in
+			
+			active = selectClickArmed;
+		}
+		else
+		{
+			active = toolKey.isDown();
+			shouldCommit = selectKeyWasDown && !toolKey.isDown();
+		}
+		
+		if(active && (!ClientEditmodeData.isInEditmode() || mc.isPaused())
+				&& (cap.getToolMode() == null || cap.getToolMode() == EditTools.ToolMode.SELECT))
+		{
+			cancelDrag(cap);
+			selectClickArmed = false;
+			selectKeyWasDown = toolKey.isDown();
+			return;
+		}
+		
+		if(active && cap.getEditPos1() == null)
+		{
+			if(!tryBeginDrag(EditTools.ToolMode.SELECT, cap, player))
+			{
+				selectKeyWasDown = toolKey.isDown();
+				return;
+			}
+		}
+		
+		if(cap.getEditPos1() != null)
+			updateDragPosition(EditTools.ToolMode.SELECT, cap, player, active);
+		
+		if(shouldCommit && cap.getEditPos1() != null)
+		{
+			cap.setSelectionPos1(cap.getEditPos1());
+			cap.setSelectionPos2(cap.getEditPos2());
+			cap.setPreviewRotation(0);
+			
+			BlockPos a = cap.getEditPos1(), b = cap.getEditPos2();
+			BlockPos min = new BlockPos(Math.min(a.getX(), b.getX()), Math.min(a.getY(), b.getY()), Math.min(a.getZ(), b.getZ()));
+			BlockPos max = new BlockPos(Math.max(a.getX(), b.getX()), Math.max(a.getY(), b.getY()), Math.max(a.getZ(), b.getZ()));
+			cap.setOriginalSelection(min, max);
+			ClientSelectionCache.capture(player.level(), min, max);
+			
+			player.playSound(MSSoundEvents.EVENT_EDIT_TOOL_SELECT.get(), 1.0f, 1.0f);
+			if(ClientEditmodeData.isBroadcastEnabled())
+			{
+				PacketDistributor.sendToServer(new EditmodeBroadcastPackets.BroadcastToolSound(0));
+				PacketDistributor.sendToServer(new EditmodeBroadcastPackets.BroadcastSelectionBox(true, min, max));
+			}
+			
+			broadcastDragBox(EditTools.ToolMode.SELECT, false, null, null);
+			
+			PacketDistributor.sendToServer(new EditmodeDragPackets.Reset(false));
+			cap.resetDragTools();
+			selectClickArmed = false;
+		}
+		selectKeyWasDown = toolKey.isDown();
+	}
+	
+	/**
+	 * Handles the hold-to-preview/release-to-commit behaviour of the Move and Copy tools.
+	 */
+	public static void doMoveCopyPreviewCode(Minecraft mc, Player player, EditTools cap)
+	{
+		KeyMapping moveKey = MSKeyHandler.moveKey;
+		KeyMapping copyKey = MSKeyHandler.copyKey;
+		
+		boolean hasSelection = cap.getSelectionPos1() != null && cap.getSelectionPos2() != null;
+		boolean canPreview = hasSelection && ClientEditmodeData.isInEditmode() && !mc.isPaused() && cap.getToolMode() == null;
+		boolean clickMode = MinestuckConfig.CLIENT.clickToPlace.get();
+		
+		boolean movePressedEdge = moveKey.isDown() && !moveKeyWasDown;
+		boolean copyPressedEdge = copyKey.isDown() && !copyKeyWasDown;
+		
+		boolean moveDown;
+		boolean copyDown;
+		boolean commitMove;
+		boolean commitCopy;
+		
+		if(clickMode)
+		{
+			if(!canPreview)
+				clickModeActiveIsCopy = null;
+			
+			commitMove = false;
+			commitCopy = false;
+			
+			if(clickModeActiveIsCopy == null)
+			{
+				if(canPreview && movePressedEdge)
+					clickModeActiveIsCopy = false; //arm move
+				else if(canPreview && copyPressedEdge)
+					clickModeActiveIsCopy = true; //arm copy
+			}
+			else if(!clickModeActiveIsCopy && movePressedEdge)
+			{
+				commitMove = true;
+				clickModeActiveIsCopy = null;
+			}
+			else if(clickModeActiveIsCopy && copyPressedEdge)
+			{
+				commitCopy = true;
+				clickModeActiveIsCopy = null;
+			}
+			
+			moveDown = clickModeActiveIsCopy != null && !clickModeActiveIsCopy;
+			copyDown = clickModeActiveIsCopy != null && clickModeActiveIsCopy;
+		}
+		else
+		{
+			moveDown = canPreview && moveKey.isDown() && !copyKey.isDown();
+			copyDown = canPreview && copyKey.isDown() && !moveKey.isDown();
+			
+			commitMove = moveKeyWasDown && !moveKey.isDown();
+			commitCopy = copyKeyWasDown && !copyKey.isDown();
+		}
+		
+		boolean previewJustStarted = (moveDown && !wasPreviewingMove) || (copyDown && !wasPreviewingCopy);
+		if(previewJustStarted)
+		{
+			if(cap.getSelectionPos1() != null && cap.getSelectionPos2() != null)
+			{
+				BlockPos a = cap.getSelectionPos1(), b = cap.getSelectionPos2();
+				BlockPos captureMin = new BlockPos(Math.min(a.getX(), b.getX()), Math.min(a.getY(), b.getY()), Math.min(a.getZ(), b.getZ()));
+				BlockPos captureMax = new BlockPos(Math.max(a.getX(), b.getX()), Math.max(a.getY(), b.getY()), Math.max(a.getZ(), b.getZ()));
+				ClientSelectionCache.capture(player.level(), captureMin, captureMax);
+				
+				if(ClientEditmodeData.isBroadcastEnabled())
+					PacketDistributor.sendToServer(new EditmodeBroadcastPackets.BroadcastPreviewStart(captureMin, captureMax));
+			}
+			
+			//default placement distance scales with the footprint, so big structures land clear of the player by default
+			double diagonal = Math.sqrt((double) ClientSelectionCache.getSizeX() * ClientSelectionCache.getSizeX()
+					+ (double) ClientSelectionCache.getSizeZ() * ClientSelectionCache.getSizeZ());
+			cap.setPreviewDistance(Math.max(3.0, diagonal / 2.0 + 2.5));
+		}
+		
+		BlockPos lastAnchor = cap.getPreviewAnchor();
+		
+		if(moveDown || copyDown)
+		{
+			double distance = cap.getPreviewDistance();
+			if(MSKeyHandler.zoomInKey.isDown())
+				distance += 0.6;
+			if(MSKeyHandler.zoomOutKey.isDown())
+				distance -= 0.6;
+			cap.setPreviewDistance(Mth.clamp(distance, 1.0, MinestuckConfig.CLIENT.toolsDistance.get()));
+			
+			Vec3 eye = player.getEyePosition();
+			Vec3 look = player.getLookAngle();
+			Vec3 target = eye.add(look.scale(cap.getPreviewDistance()));
+			BlockPos aimPoint = BlockPos.containing(target.x, target.y, target.z);
+			
+			Rotation rot = Rotation.values()[Math.floorMod(cap.getPreviewRotation(), 4)];
+			boolean swapXZ = rot == Rotation.CLOCKWISE_90 || rot == Rotation.COUNTERCLOCKWISE_90;
+			int footprintX = swapXZ ? ClientSelectionCache.getSizeZ() : ClientSelectionCache.getSizeX();
+			int footprintZ = swapXZ ? ClientSelectionCache.getSizeX() : ClientSelectionCache.getSizeZ();
+			
+			BlockPos minCorner = aimPoint.offset(-(footprintX / 2), -(ClientSelectionCache.getSizeY() / 2), -(footprintZ / 2));
+			
+			cap.setPreview(copyDown, minCorner);
+			lastAnchor = minCorner;
+			
+			if(ClientEditmodeData.isBroadcastEnabled())
+				PacketDistributor.sendToServer(new EditmodeBroadcastPackets.BroadcastPreviewTransform(true, minCorner, cap.getPreviewRotation(), copyDown));
+		}
+		else
+		{
+			if(ClientEditmodeData.isBroadcastEnabled() && (wasPreviewingMove || wasPreviewingCopy))
+				PacketDistributor.sendToServer(new EditmodeBroadcastPackets.BroadcastPreviewTransform(false, BlockPos.ZERO, 0, false));
+			
+			cap.clearPreview();
+		}
+		
+		wasPreviewingMove = moveDown;
+		wasPreviewingCopy = copyDown;
+		
+		if(commitMove)
+			commitSelectionAction(cap, false, lastAnchor);
+		if(commitCopy)
+			commitSelectionAction(cap, true, lastAnchor);
+		
+		moveKeyWasDown = moveKey.isDown();
+		copyKeyWasDown = copyKey.isDown();
+	}
+	
+	public static void clearSelection()
+	{
+		Minecraft mc = Minecraft.getInstance();
+		if(mc.player == null)
+			return;
+		
+		EditTools cap = mc.player.getData(MSAttachments.EDIT_TOOLS);
+		if(cap.getSelectionPos1() == null && cap.getSelectionPos2() == null)
+			return;
+		
+		cap.clearSelection();
+		cap.clearOriginalSelection();
+		cap.clearPreview();
+		clickModeActiveIsCopy = null;
+		ClientSelectionCache.clear();
+		mc.player.playSound(MSSoundEvents.EVENT_EDIT_TOOL_CLEAR.get(), 1.0f, 1.0f);
+		
+		if(ClientEditmodeData.isBroadcastEnabled())
+		{
+			PacketDistributor.sendToServer(new EditmodeBroadcastPackets.BroadcastToolSound(1));
+			PacketDistributor.sendToServer(new EditmodeBroadcastPackets.BroadcastSelectionBox(false, BlockPos.ZERO, BlockPos.ZERO));
+			PacketDistributor.sendToServer(new EditmodeBroadcastPackets.BroadcastPreviewTransform(false, BlockPos.ZERO, 0, false));
+		}
+	}
+	
+	public static void cycleRotation()
+	{
+		Minecraft mc = Minecraft.getInstance();
+		if(mc.player == null)
+			return;
+		EditTools cap = mc.player.getData(MSAttachments.EDIT_TOOLS);
+		if(!cap.isPreviewing())
+			return;
+		cap.setPreviewRotation(cap.getPreviewRotation() + 1);
+	}
+	
+	private static void commitSelectionAction(EditTools cap, boolean isCopy, @Nullable BlockPos anchor)
+	{
+		int rotation = cap.getPreviewRotation();
+		cap.clearPreview();
+		
+		BlockPos oldPos1 = cap.getSelectionPos1();
+		BlockPos oldPos2 = cap.getSelectionPos2();
+		if(anchor == null || oldPos1 == null || oldPos2 == null)
+			return;
+		
+		if(isCopy)
+			PacketDistributor.sendToServer(new EditmodeDragPackets.CopySelection(oldPos1, oldPos2, anchor, rotation));
+		else
+			PacketDistributor.sendToServer(new EditmodeDragPackets.MoveSelection(oldPos1, oldPos2, anchor, rotation));
+		
+		Player localPlayer = Minecraft.getInstance().player;
+		if(localPlayer != null)
+			localPlayer.playSound(isCopy ? MSSoundEvents.EVENT_EDIT_TOOL_COPY.get() : MSSoundEvents.EVENT_EDIT_TOOL_MOVE.get(), 1.0f, 1.0f);
+		
+		if(!isCopy)
+		{
+			startMoveTransitionAnimation(oldPos1, oldPos2, anchor, rotation);
+			if(ClientEditmodeData.isBroadcastEnabled())
+				PacketDistributor.sendToServer(new EditmodeBroadcastPackets.BroadcastMoveTransition(oldPos1, oldPos2, anchor, rotation));
+		}
+	}
+	
+	private static void startMoveTransitionAnimation(BlockPos oldPos1, BlockPos oldPos2, BlockPos anchor, int rotation)
+	{
+		BlockPos min = new BlockPos(Math.min(oldPos1.getX(), oldPos2.getX()), Math.min(oldPos1.getY(), oldPos2.getY()), Math.min(oldPos1.getZ(), oldPos2.getZ()));
+		int sizeX = ClientSelectionCache.getSizeX(), sizeZ = ClientSelectionCache.getSizeZ();
+		Rotation rot = Rotation.values()[Math.floorMod(rotation, 4)];
+		
+		List<BlockPos> from = new ArrayList<>();
+		List<BlockPos> to = new ArrayList<>();
+		for(ClientSelectionCache.Entry entry : ClientSelectionCache.getEntries())
+		{
+			from.add(min.offset(entry.localOffset()));
+			to.add(anchor.offset(EditmodeDragPackets.rotateOffset(entry.localOffset(), sizeX, sizeZ, rot)));
+		}
+		ClientMoveTransitions.start(from, to);
 	}
 	
 	/**
@@ -270,7 +695,7 @@ public class ClientEditToolDrag
 	}
 	
 	/**
-	 * Calculates the second corner of a revise/recycle selection,
+	 * Calculates the second corner of a revise/recycle/select selection,
 	 * based on whether the player is pointing at a block or not,
 	 * and the distance from the player to the block they first highlighted
 	 * at the start of the selection.
@@ -349,59 +774,148 @@ public class ClientEditToolDrag
 		return level.clip(new ClipContext(eyeVec, endVec, ClipContext.Block.COLLIDER, ClipContext.Fluid.NONE, player));
 	}
 	
-	
 	/**
-	 * Renders the outlines of the selection box. Green if revise, red if recycle.
+	 * Renders the outlines the active drag box (revise/recycle/select)
+	 * Green if revise, red if recycle, cyan if selected, green if pasted, orange if moved
 	 */
 	public static void renderOutlines(RenderLevelStageEvent event)
 	{
 		Minecraft mc = Minecraft.getInstance();
 		
-		//make sure the stage is after translucent blocks so that the outlines render over everything.
-		if(event.getStage() == RenderLevelStageEvent.Stage.AFTER_TRANSLUCENT_BLOCKS && mc.player != null && mc.getCameraEntity() == mc.player
-				&& mc.player.isAlive() && ClientEditmodeData.isInEditmode())
+		if(event.getStage() != RenderLevelStageEvent.Stage.AFTER_TRANSLUCENT_BLOCKS || mc.player == null
+				|| mc.getCameraEntity() != mc.player || !mc.player.isAlive())
+			return;
+		
+		if(!ClientEditmodeData.isInEditmode() && RemoteEditSessions.allSessions().isEmpty() && !ClientMoveTransitions.hasActive())
+			return;
+		
+		Player player = mc.player;
+		Vec3 camPos = event.getCamera().getPosition();
+		PoseStack poseStack = event.getPoseStack();
+		
+		RenderSystem.defaultBlendFunc();
+		RenderSystem.lineWidth(2.0F);
+		RenderSystem.depthMask(false);
+		
+		MultiBufferSource.BufferSource renderTypeBuffer = MultiBufferSource.immediate(new ByteBufferBuilder(2048));
+		VertexConsumer lineBuffer = renderTypeBuffer.getBuffer(RenderType.LINES);
+		
+		if(ClientEditmodeData.isInEditmode())
+			renderLocalOutlines(player, poseStack, lineBuffer, camPos);
+		
+		renderMoveTransitionOutlines(poseStack, lineBuffer, camPos);
+		renderRemoteOutlines(poseStack, lineBuffer, camPos);
+		
+		renderTypeBuffer.endBatch();
+		
+		RenderSystem.depthMask(true);
+		RenderSystem.disableBlend();
+	}
+	
+	private static void renderLocalOutlines(Player player, PoseStack poseStack, VertexConsumer lineBuffer, Vec3 camPos)
+	{
+		EditTools cap = player.getData(MSAttachments.EDIT_TOOLS);
+		
+		//:1 selection outline
+		if(cap.getSelectionPos1() != null && cap.getSelectionPos2() != null)
 		{
+			AABB selectionBox = boxFromCorners(cap.getSelectionPos1(), cap.getSelectionPos2()).move(-camPos.x, -camPos.y, -camPos.z).deflate(0.002);
+			drawBoxOutline(poseStack, lineBuffer, selectionBox, 0, 1, 1, 1);
+		}
+		
+		//:2 active drag box outline
+		if(isValidDragTool(cap.getToolMode()) && cap.getEditPos1() != null && cap.getEditPos2() != null)
+		{
+			AABB boundingBox = boxFromCorners(cap.getEditPos1(), cap.getEditPos2()).move(-camPos.x, -camPos.y, -camPos.z).deflate(0.002);
 			
-			Player player = mc.player;
-			Camera info = event.getCamera();
+			float red = cap.getToolMode() == EditTools.ToolMode.RECYCLE ? 1f : (cap.getToolMode() == EditTools.ToolMode.SELECT ? 0.2f : 0f);
+			float green = cap.getToolMode() == EditTools.ToolMode.REVISE ? 1f : (cap.getToolMode() == EditTools.ToolMode.SELECT ? 0.4f : 0f);
+			float blue = cap.getToolMode() == EditTools.ToolMode.SELECT ? 1f : 0f;
 			
-			EditTools cap = player.getData(MSAttachments.EDIT_TOOLS);
+			drawBoxOutline(poseStack, lineBuffer, boundingBox, red, green, blue, 1);
+		}
+		
+		//:3 floating move/copy ghost preview footprint
+		if(cap.isPreviewing() && cap.getPreviewAnchor() != null && !ClientSelectionCache.getEntries().isEmpty())
+		{
+			int sizeX = ClientSelectionCache.getSizeX();
+			int sizeY = ClientSelectionCache.getSizeY();
+			int sizeZ = ClientSelectionCache.getSizeZ();
+			Rotation rot = Rotation.values()[Math.floorMod(cap.getPreviewRotation(), 4)];
+			BlockPos minCorner = cap.getPreviewAnchor();
 			
-			double d1 = info.getPosition().x;
-			double d2 = info.getPosition().y;
-			double d3 = info.getPosition().z;
+			boolean swapXZ = rot == Rotation.CLOCKWISE_90 || rot == Rotation.COUNTERCLOCKWISE_90;
+			int footprintX = swapXZ ? sizeZ : sizeX;
+			int footprintZ = swapXZ ? sizeX : sizeZ;
 			
-			if(isValidDragTool(cap.getToolMode()) && cap.getEditPos1() != null)
+			float r = cap.isPreviewCopy() ? 0.1f : 1f;
+			float g = cap.isPreviewCopy() ? 0.85f : 0.75f;
+			float b = cap.isPreviewCopy() ? 0.75f : 0f;
+			
+			AABB footprintBox = new AABB(minCorner.getX(), minCorner.getY(), minCorner.getZ(),
+					minCorner.getX() + footprintX, minCorner.getY() + sizeY, minCorner.getZ() + footprintZ)
+					.move(-camPos.x, -camPos.y, -camPos.z).deflate(0.002);
+			drawBoxOutline(poseStack, lineBuffer, footprintBox, r, g, b, 1f);
+		}
+	}
+	
+	private static void renderMoveTransitionOutlines(PoseStack poseStack, VertexConsumer lineBuffer, Vec3 camPos)
+	{
+		for(double[] pos : ClientMoveTransitions.getInterpolatedPositions())
+		{
+			AABB box = new AABB(pos[0], pos[1], pos[2], pos[0] + 1, pos[1] + 1, pos[2] + 1).move(-camPos.x, -camPos.y, -camPos.z).deflate(0.03);
+			drawBoxOutline(poseStack, lineBuffer, box, 1f, 0.75f, 0f, 0.7f);
+		}
+	}
+	
+	private static void renderRemoteOutlines(PoseStack poseStack, VertexConsumer lineBuffer, Vec3 camPos)
+	{
+		for(RemoteEditSessions.Session remote : RemoteEditSessions.allSessions().values())
+		{
+			if(remote.selectionActive && remote.selectionPos1 != null && remote.selectionPos2 != null)
 			{
-				BlockPos posA = cap.getEditPos1();
-				BlockPos posB = cap.getEditPos2();
+				AABB box = boxFromCorners(remote.selectionPos1, remote.selectionPos2).move(-camPos.x, -camPos.y, -camPos.z).deflate(0.002);
+				drawBoxOutline(poseStack, lineBuffer, box, 0, 1, 1, 1);
+			}
+			
+			if(remote.dragActive && remote.dragPos1 != null && remote.dragPos2 != null)
+			{
+				AABB box = boxFromCorners(remote.dragPos1, remote.dragPos2).move(-camPos.x, -camPos.y, -camPos.z).deflate(0.002);
+				float red = remote.toolKind == 1 ? 1f : (remote.toolKind == 2 ? 0.2f : 0f);
+				float green = remote.toolKind == 0 ? 1f : (remote.toolKind == 2 ? 0.4f : 0f);
+				float blue = remote.toolKind == 2 ? 1f : 0f;
+				drawBoxOutline(poseStack, lineBuffer, box, red, green, blue, 1);
+			}
+			
+			if(isRemotePreviewRenderable(remote))
+			{
+				Rotation rot = Rotation.values()[Math.floorMod(remote.previewRotation, 4)];
+				boolean swapXZ = rot == Rotation.CLOCKWISE_90 || rot == Rotation.COUNTERCLOCKWISE_90;
+				int footprintX = swapXZ ? remote.previewSizeZ : remote.previewSizeX;
+				int footprintZ = swapXZ ? remote.previewSizeX : remote.previewSizeZ;
 				
-				if(posB != null)
-				{
-					
-					AABB boundingBox = new AABB(Math.min(posA.getX(), posB.getX()), Math.min(posA.getY(), posB.getY()), Math.min(posA.getZ(), posB.getZ()),
-							Math.max(posA.getX(), posB.getX()) + 1, Math.max(posA.getY(), posB.getY()) + 1, Math.max(posA.getZ(), posB.getZ()) + 1).move(-d1, -d2, -d3).deflate(0.002);
-					
-					//set blend func to default, set the width of the line, disable textures because we are using lines, and disable the depth mask because it doesn't matter with lines, and is slower if enabled.
-					RenderSystem.defaultBlendFunc();
-					RenderSystem.lineWidth(2.0F);
-					RenderSystem.depthMask(false);    //GL stuff was copied from the standard mouseover bounding box drawing, which is likely why the alpha isn't working
-					
-					//Create new MultiBufferSource because RenderLevelStageEvent doesn't come with one.
-					MultiBufferSource.BufferSource renderTypeBuffer = MultiBufferSource.immediate(new ByteBufferBuilder(1536));
-					
-					drawReviseToolOutline(event.getPoseStack(), renderTypeBuffer.getBuffer(RenderType.LINES), Shapes.create(boundingBox), 0, 0, 0, cap.getToolMode() == EditTools.ToolMode.RECYCLE ? 1 : 0, cap.getToolMode() == EditTools.ToolMode.REVISE ? 1 : 0, 0, 1);
-					renderTypeBuffer.endBatch();
-					
-					RenderSystem.depthMask(true);
-					RenderSystem.disableBlend();
-				}
+				float r = remote.previewIsCopy ? 0.1f : 1f;
+				float g = remote.previewIsCopy ? 0.85f : 0.75f;
+				float b = remote.previewIsCopy ? 0.75f : 0f;
+				
+				AABB footprintBox = new AABB(remote.previewAnchor.getX(), remote.previewAnchor.getY(), remote.previewAnchor.getZ(),
+						remote.previewAnchor.getX() + footprintX, remote.previewAnchor.getY() + remote.previewSizeY, remote.previewAnchor.getZ() + footprintZ)
+						.move(-camPos.x, -camPos.y, -camPos.z).deflate(0.002);
+				drawBoxOutline(poseStack, lineBuffer, footprintBox, r, g, b, 1f);
 			}
 		}
 	}
 	
-	//taken directly from MachineOutlineRenderer's drawPhernaliaPlacementOutline function, which was taken from the LevelRenderer's drawShape function.
-	private static void drawReviseToolOutline(PoseStack poseStack, VertexConsumer bufferIn, VoxelShape shapeIn, double xIn, double yIn, double zIn, float red, float green, float blue, float alpha) {
+	private static AABB boxFromCorners(BlockPos a, BlockPos b)
+	{
+		return new AABB(
+				Math.min(a.getX(), b.getX()), Math.min(a.getY(), b.getY()), Math.min(a.getZ(), b.getZ()),
+				Math.max(a.getX(), b.getX()) + 1, Math.max(a.getY(), b.getY()) + 1, Math.max(a.getZ(), b.getZ()) + 1);
+	}
+	
+	//taken directly from machineOutlineRenderer's drawPhernaliaPlacementOutline function, which was taken from LevelRenderer's drawShape function
+	private static void drawReviseToolOutline(PoseStack poseStack, VertexConsumer bufferIn, VoxelShape shapeIn, double xIn, double yIn, double zIn, float red, float green, float blue, float alpha)
+	{
 		PoseStack.Pose pose = poseStack.last();
 		Matrix4f matrix4f = pose.pose();
 		shapeIn.forAllEdges((startX, startY, startZ, endX, endY, endZ) -> {
@@ -419,5 +933,16 @@ public class ClientEditToolDrag
 					.setColor(red, green, blue, alpha)
 					.setNormal(pose, dX, dY, dZ);
 		});
+	}
+	
+	private static void drawBoxOutline(PoseStack poseStack, VertexConsumer buffer, AABB box, float r, float g, float b, float a)
+	{
+		drawReviseToolOutline(poseStack, buffer, Shapes.create(box), 0, 0, 0, r, g, b, a);
+	}
+	
+	public static void cancelClickSessions()
+	{
+		clickModeActiveIsCopy = null;
+		selectClickArmed = false;
 	}
 }

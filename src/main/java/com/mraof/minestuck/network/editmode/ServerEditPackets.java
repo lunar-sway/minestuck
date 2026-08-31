@@ -1,23 +1,29 @@
 package com.mraof.minestuck.network.editmode;
 
 import com.mraof.minestuck.Minestuck;
-import com.mraof.minestuck.computer.editmode.ClientDeployList;
-import com.mraof.minestuck.computer.editmode.ClientEditmodeData;
+import com.mraof.minestuck.MinestuckConfig;
+import com.mraof.minestuck.computer.editmode.*;
 import com.mraof.minestuck.network.MSPacket;
+import com.mraof.minestuck.util.MSAttachments;
 import io.netty.buffer.ByteBuf;
+import net.minecraft.core.BlockPos;
 import net.minecraft.nbt.CompoundTag;
 import net.minecraft.network.FriendlyByteBuf;
 import net.minecraft.network.codec.ByteBufCodecs;
 import net.minecraft.network.codec.StreamCodec;
 import net.minecraft.network.protocol.common.custom.CustomPacketPayload;
+import net.minecraft.world.entity.player.Player;
 import net.neoforged.neoforge.network.handling.IPayloadContext;
 
 public final class ServerEditPackets
 {
-	public record Activate() implements MSPacket.PlayToClient
+	public record Activate(boolean broadcastEnabled) implements MSPacket.PlayToClient
 	{
 		public static final Type<Activate> ID = new Type<>(Minestuck.id("server_edit/activate"));
-		public static final StreamCodec<FriendlyByteBuf, Activate> STREAM_CODEC = StreamCodec.unit(new Activate());
+		public static final StreamCodec<FriendlyByteBuf, Activate> STREAM_CODEC = StreamCodec.composite(
+				ByteBufCodecs.BOOL, Activate::broadcastEnabled,
+				Activate::new
+		);
 		
 		@Override
 		public Type<? extends CustomPacketPayload> type()
@@ -28,7 +34,62 @@ public final class ServerEditPackets
 		@Override
 		public void execute(IPayloadContext context)
 		{
-			ClientEditmodeData.onActivatePacket();
+			ClientEditmodeData.onActivatePacket(this.broadcastEnabled);
+		}
+	}
+	
+	public record SelectionUpdate(boolean cleared, BlockPos newMin, BlockPos newMax) implements MSPacket.PlayToClient
+	{
+		public static final Type<SelectionUpdate> ID = new Type<>(Minestuck.id("server_edit/selection_update"));
+		public static final StreamCodec<FriendlyByteBuf, SelectionUpdate> STREAM_CODEC = StreamCodec.composite(
+				ByteBufCodecs.BOOL, SelectionUpdate::cleared,
+				BlockPos.STREAM_CODEC, SelectionUpdate::newMin,
+				BlockPos.STREAM_CODEC, SelectionUpdate::newMax,
+				SelectionUpdate::new
+		);
+		
+		@Override
+		public Type<? extends CustomPacketPayload> type()
+		{
+			return ID;
+		}
+		
+		@Override
+		public void execute(IPayloadContext context)
+		{
+			Player player = context.player();
+			if(player == null)
+				return;
+			
+			EditTools cap = player.getData(MSAttachments.EDIT_TOOLS);
+			if(cleared)
+			{
+				cap.clearSelection();
+				cap.clearOriginalSelection();
+				ClientSelectionCache.clear();
+				return;
+			}
+			
+			if(cap.getOriginalSelectionPos1() == null || cap.getOriginalSelectionPos2() == null)
+				cap.setOriginalSelection(newMin, newMax); //safety fallback, shouldn't normally happen
+			
+			boolean continueFromLast = MinestuckConfig.CLIENT.copyFromLastPlacement.get();
+			BlockPos captureMin, captureMax;
+			
+			if(continueFromLast)
+			{
+				captureMin = newMin;
+				captureMax = newMax;
+			}
+			else
+			{
+				captureMin = cap.getOriginalSelectionPos1();
+				captureMax = cap.getOriginalSelectionPos2();
+			}
+			
+			cap.setSelectionPos1(captureMin);
+			cap.setSelectionPos2(captureMax);
+			cap.setPreviewRotation(0);
 		}
 	}
 	

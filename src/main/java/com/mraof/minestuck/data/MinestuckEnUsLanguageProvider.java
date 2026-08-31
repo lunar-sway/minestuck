@@ -2546,11 +2546,20 @@ public class MinestuckEnUsLanguageProvider extends MinestuckLanguageProvider
 		add(JeiGristCost.GRIST_COSTS, "Grist Costs");
 		
 		add(MSKeyHandler.CATEGORY, "Minestuck");
+		add(MSKeyHandler.CATEGORY_EDITMODE, "Minestuck (Edit Mode)");
 		add(MSKeyHandler.STATS_GUI, "View General Minestuck Gui");
 		add(MSKeyHandler.EXIT_EDIT_MODE, "Exit Edit Mode");
 		add(MSKeyHandler.CAPTCHALOGUE, "Captchalogue Held Item");
 		add(MSKeyHandler.ASPECT_EFFECT_TOGGLE, "Toggle Aspect Effects");
 		add(MSKeyHandler.SYLLADEX, "Open Sylladex");
+		
+		add(MSKeyHandler.SELECT_EDIT_MODE, "Select");
+		add(MSKeyHandler.CLEAR_EDIT_MODE, "Clear");
+		add(MSKeyHandler.ROTATE_SELECTION, "Rotate");
+		add(MSKeyHandler.MOVE_SELECTION, "Move");
+		add(MSKeyHandler.COPY_SELECTION, "Copy");
+		add(MSKeyHandler.ZOOM_IN_SELECTION, "Zoom In");
+		add(MSKeyHandler.ZOOM_OUT_SELECTION, "Zoom Out");
 		
 		add(LotusFlowerEntity.REGROW, "There are no petals on this plant, maybe it will regrow?");
 		
@@ -2588,6 +2597,12 @@ public class MinestuckEnUsLanguageProvider extends MinestuckLanguageProvider
 		addSubtitles("projectile_bounce", "Projectile bounces");
 		addSubtitles("tool_revise", "Server uses Revise tool");
 		addSubtitles("tool_recycle", "Server recycles blocks");
+		addSubtitles("tool_select", "Server select blocks");
+		addSubtitles("tool_clear", "Server clear selected blocks");
+		addSubtitles("tool_move", "Server move blocks");
+		addSubtitles("tool_copy", "Server copy blocks");
+		addSubtitles("edit_enter", "Server enter edit mode");
+		addSubtitles("edit_exit", "Server exit edit mode");
 		addSubtitles("computer_boot", "Computer booting up");
 		addSubtitles("computer_disk_insert", "Disk inserted");
 		addSubtitles("computer_disk_remove", "Disk removed");
