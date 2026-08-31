@@ -156,25 +156,15 @@ public class DeployListLoader extends SimpleJsonResourceReloadListener
 			
 			for(GristCost cost : entry.cost)
 			{
-				if(player != null)
-				{
-					if(cost.test(this.getContext(), player))
-					{
-						if(cost.grist().isPresent())
-							set.add(cost.grist().get());
-						if(cost.primary() != 0)
-							set.add(playerData.getBaseGrist(), cost.primary());
-						return set.asImmutable();
-					}
-				}
-				else if(cost.testWithoutPlayer(this.getContext()))
-				{
-					if(cost.grist().isPresent())
-						set.add(cost.grist().get());
-					if(cost.primary() != 0)
-						set.add(playerData.getBaseGrist(), cost.primary());
-					return set.asImmutable();
-				}
+				boolean qualifies = player != null ? cost.test(this.getContext(), player) : cost.testWithoutPlayer(this.getContext());
+				if(!qualifies)
+					continue;
+				
+				if(cost.grist().isPresent())
+					set.add(cost.grist().get());
+				if(cost.primary() != 0)
+					set.add(playerData.getBaseGrist(), cost.primary());
+				return set.asImmutable();
 			}
 			return null;
 		};

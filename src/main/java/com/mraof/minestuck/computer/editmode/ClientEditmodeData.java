@@ -101,17 +101,4 @@ public final class ClientEditmodeData
 			RemoteEditSessions.clearAll();
 		}
 	}
-	
-	@SubscribeEvent
-	public static void tickEnd(PlayerTickEvent.Post event)
-	{
-		if(event.getEntity().level().isClientSide && event.getEntity() == Minecraft.getInstance().player && ClientEditmodeData.isInEditmode())
-		{
-			Player player = event.getEntity();
-			
-			EditmodeLocations locations = ClientEditmodeData.getLocations();
-			if(locations != null)
-				locations.limitMovement(player, ClientEditmodeData.getClientLand());
-		}
-	}
 }

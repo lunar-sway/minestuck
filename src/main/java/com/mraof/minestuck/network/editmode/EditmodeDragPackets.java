@@ -8,6 +8,7 @@ import com.mraof.minestuck.api.alchemy.GristSet;
 import com.mraof.minestuck.api.alchemy.GristTypes;
 import com.mraof.minestuck.api.alchemy.MutableGristSet;
 import com.mraof.minestuck.api.alchemy.recipe.GristCostRecipe;
+import com.mraof.minestuck.block.machine.MachineBlock;
 import com.mraof.minestuck.computer.editmode.*;
 import com.mraof.minestuck.item.components.EncodedItemComponent;
 import com.mraof.minestuck.item.components.MSItemComponents;
@@ -32,6 +33,7 @@ import net.minecraft.sounds.SoundSource;
 import net.minecraft.world.Container;
 import net.minecraft.world.InteractionHand;
 import net.minecraft.world.InteractionResult;
+import net.minecraft.world.entity.Entity;
 import net.minecraft.world.entity.player.Player;
 import net.minecraft.world.item.BlockItem;
 import net.minecraft.world.item.ItemStack;
@@ -43,8 +45,10 @@ import net.minecraft.world.level.block.entity.BlockEntity;
 import net.minecraft.world.level.block.state.BlockState;
 import net.minecraft.world.level.block.state.properties.BlockStateProperties;
 import net.minecraft.world.level.gameevent.GameEvent;
+import net.minecraft.world.phys.AABB;
 import net.minecraft.world.phys.BlockHitResult;
 import net.minecraft.world.phys.Vec3;
+import net.minecraft.world.phys.shapes.VoxelShape;
 import net.neoforged.neoforge.network.PacketDistributor;
 import net.neoforged.neoforge.network.handling.IPayloadContext;
 
@@ -215,26 +219,23 @@ public final class EditmodeDragPackets
 		if(containerComponent != null)
 		{
 			for(ItemStack inner : containerComponent.nonEmptyItems())
-			{
-				ItemCostResult innerResult = computeItemStackCost(inner, playerData, level, depth + 1);
-				truncated |= innerResult.truncated();
-				addScaled(total, innerResult.cost(), inner.getCount());
-			}
+				truncated |= accumulateInnerCost(inner, playerData, level, depth, total);
 		}
 		
 		EncodedItemComponent encoded = stack.get(MSItemComponents.ENCODED_ITEM);
 		if(encoded != null)
-		{
-			ItemStack inner = encoded.asItemStack();
-			if(!inner.isEmpty())
-			{
-				ItemCostResult innerResult = computeItemStackCost(inner, playerData, level, depth + 1);
-				truncated |= innerResult.truncated();
-				addScaled(total, innerResult.cost(), inner.getCount());
-			}
-		}
+			truncated |= accumulateInnerCost(encoded.asItemStack(), playerData, level, depth, total);
 		
 		return new ItemCostResult(total.asImmutable(), truncated);
+	}
+	
+	private static boolean accumulateInnerCost(ItemStack inner, SburbPlayerData playerData, Level level, int depth, MutableGristSet total)
+	{
+		if(inner.isEmpty())
+			return false;
+		ItemCostResult innerResult = computeItemStackCost(inner, playerData, level, depth + 1);
+		addScaled(total, innerResult.cost(), inner.getCount());
+		return innerResult.truncated();
 	}
 	
 	private static void addScaled(MutableGristSet target, GristSet.Immutable cost, int count)
@@ -358,6 +359,13 @@ public final class EditmodeDragPackets
 				ServerEditHandler.removeCursorEntity(player, true);
 				return;
 			}
+			
+			if(!destInsideSelection && wouldSuffocateEntity(level, dest, c.state().rotate(rotation)))
+			{
+				player.sendSystemMessage(Component.literal("An entity is in the way!"), true);
+				ServerEditHandler.removeCursorEntity(player, true);
+				return;
+			}
 		}
 		
 		GristSet.Immutable worstCase = isCopy ? worstCaseCost.asImmutable() : moveCost(captured.size());
@@ -465,6 +473,16 @@ public final class EditmodeDragPackets
 			if(MinestuckConfig.SERVER.visualsToOthers.get())
 				PacketDistributor.sendToPlayersTrackingEntity(player, new EditmodeBroadcastPackets.ClientSelectionBox(player.getUUID(), false, BlockPos.ZERO, BlockPos.ZERO));
 		}
+	}
+	
+	private static boolean wouldSuffocateEntity(Level level, BlockPos pos, BlockState state)
+	{
+		VoxelShape collisionShape = state.getCollisionShape(level, pos);
+		if(collisionShape.isEmpty())
+			return false;
+		
+		AABB box = collisionShape.bounds().move(pos.getX(), pos.getY(), pos.getZ());
+		return !level.getEntities((Entity) null, box, entity -> !entity.isSpectator()).isEmpty();
 	}
 	
 /*	*//** 5% of the item normal cost per grist type rounded; floor of 1 per type present. *//*

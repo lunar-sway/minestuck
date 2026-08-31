@@ -336,6 +336,7 @@ public final class MinestuckBlockTagsProvider extends BlockTagsProvider
 		tag(PETRIFIED_FLORA_PLACEABLE).addTags(Tags.Blocks.STONES, Tags.Blocks.COBBLESTONES, Tags.Blocks.GRAVELS);
 		tag(EDITMODE_BREAK_BLACKLIST).addTags(BlockTags.PORTALS).add(Blocks.SPAWNER, Blocks.TRIAL_SPAWNER, Blocks.VAULT, Blocks.REINFORCED_DEEPSLATE);
 		tag(FARMINE_BREAK_BLACKLIST).add(Blocks.OBSIDIAN);
+		tag(HEAVY_BLOCKS).add(Blocks.ANVIL, Blocks.CHIPPED_ANVIL, Blocks.DAMAGED_ANVIL, Blocks.POINTED_DRIPSTONE);
 	}
 	
 	@Override

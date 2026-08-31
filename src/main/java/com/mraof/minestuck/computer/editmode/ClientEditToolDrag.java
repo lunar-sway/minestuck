@@ -783,90 +783,103 @@ public class ClientEditToolDrag
 		
 		if(!ClientEditmodeData.isInEditmode() && RemoteEditSessions.allSessions().isEmpty() && !ClientMoveTransitions.hasActive())
 			return;
-			
-			Player player = mc.player;
-			Camera info = event.getCamera();
-			
-			double d1 = info.getPosition().x;
-			double d2 = info.getPosition().y;
-			double d3 = info.getPosition().z;
-			
-			RenderSystem.defaultBlendFunc();
-			RenderSystem.lineWidth(2.0F);
-			RenderSystem.depthMask(false);
-			
-			MultiBufferSource.BufferSource renderTypeBuffer = MultiBufferSource.immediate(new ByteBufferBuilder(2048));
-			VertexConsumer lineBuffer = renderTypeBuffer.getBuffer(RenderType.LINES);
+		
+		Player player = mc.player;
+		Vec3 camPos = event.getCamera().getPosition();
+		PoseStack poseStack = event.getPoseStack();
+		
+		RenderSystem.defaultBlendFunc();
+		RenderSystem.lineWidth(2.0F);
+		RenderSystem.depthMask(false);
+		
+		MultiBufferSource.BufferSource renderTypeBuffer = MultiBufferSource.immediate(new ByteBufferBuilder(2048));
+		VertexConsumer lineBuffer = renderTypeBuffer.getBuffer(RenderType.LINES);
 		
 		if(ClientEditmodeData.isInEditmode())
-		{
-			EditTools cap = player.getData(MSAttachments.EDIT_TOOLS);
-			
-			//:1 selection outline
-			if(cap.getSelectionPos1() != null && cap.getSelectionPos2() != null)
-			{
-				AABB selectionBox = boxFromCorners(cap.getSelectionPos1(), cap.getSelectionPos2()).move(-d1, -d2, -d3).deflate(0.002);
-				drawBoxOutline(event.getPoseStack(), lineBuffer, selectionBox, 0, 1, 1, 1);
-			}
-			
-			//:2 active drag box outline
-			if(isValidDragTool(cap.getToolMode()) && cap.getEditPos1() != null && cap.getEditPos2() != null)
-			{
-				AABB boundingBox = boxFromCorners(cap.getEditPos1(), cap.getEditPos2()).move(-d1, -d2, -d3).deflate(0.002);
-				
-				float red = cap.getToolMode() == EditTools.ToolMode.RECYCLE ? 1f : (cap.getToolMode() == EditTools.ToolMode.SELECT ? 0.2f : 0f);
-				float green = cap.getToolMode() == EditTools.ToolMode.REVISE ? 1f : (cap.getToolMode() == EditTools.ToolMode.SELECT ? 0.4f : 0f);
-				float blue = cap.getToolMode() == EditTools.ToolMode.SELECT ? 1f : 0f;
-				
-				drawBoxOutline(event.getPoseStack(), lineBuffer, boundingBox, red, green, blue, 1);
-			}
-			
-			//:3 floating move/copy ghost preview footprint
-			if(cap.isPreviewing() && cap.getPreviewAnchor() != null && !ClientSelectionCache.getEntries().isEmpty())
-			{
-				int sizeX = ClientSelectionCache.getSizeX();
-				int sizeY = ClientSelectionCache.getSizeY();
-				int sizeZ = ClientSelectionCache.getSizeZ();
-				Rotation rot = Rotation.values()[Math.floorMod(cap.getPreviewRotation(), 4)];
-				BlockPos minCorner = cap.getPreviewAnchor();
-				
-				boolean swapXZ = rot == Rotation.CLOCKWISE_90 || rot == Rotation.COUNTERCLOCKWISE_90;
-				int footprintX = swapXZ ? sizeZ : sizeX;
-				int footprintZ = swapXZ ? sizeX : sizeZ;
-				
-				float r = cap.isPreviewCopy() ? 0.1f : 1f;
-				float g = cap.isPreviewCopy() ? 0.85f : 0.75f;
-				float b = cap.isPreviewCopy() ? 0.75f : 0f;
-				
-				AABB footprintBox = new AABB(minCorner.getX(), minCorner.getY(), minCorner.getZ(),
-						minCorner.getX() + footprintX, minCorner.getY() + sizeY, minCorner.getZ() + footprintZ)
-						.move(-d1, -d2, -d3).deflate(0.002);
-				drawBoxOutline(event.getPoseStack(), lineBuffer, footprintBox, r, g, b, 1f);
-			}
-		}
-			//:4 move animation
-			for(double[] pos : ClientMoveTransitions.getInterpolatedPositions())
-			{
-				AABB box = new AABB(pos[0], pos[1], pos[2], pos[0] + 1, pos[1] + 1, pos[2] + 1).move(-d1, -d2, -d3).deflate(0.03);
-				drawBoxOutline(event.getPoseStack(), lineBuffer, box, 1f, 0.75f, 0f, 0.7f);
-			}
+			renderLocalOutlines(player, poseStack, lineBuffer, camPos);
 		
-		//:5 remote editors
+		renderMoveTransitionOutlines(poseStack, lineBuffer, camPos);
+		renderRemoteOutlines(poseStack, lineBuffer, camPos);
+		
+		renderTypeBuffer.endBatch();
+		
+		RenderSystem.depthMask(true);
+		RenderSystem.disableBlend();
+	}
+	
+	private static void renderLocalOutlines(Player player, PoseStack poseStack, VertexConsumer lineBuffer, Vec3 camPos)
+	{
+		EditTools cap = player.getData(MSAttachments.EDIT_TOOLS);
+		
+		//:1 selection outline
+		if(cap.getSelectionPos1() != null && cap.getSelectionPos2() != null)
+		{
+			AABB selectionBox = boxFromCorners(cap.getSelectionPos1(), cap.getSelectionPos2()).move(-camPos.x, -camPos.y, -camPos.z).deflate(0.002);
+			drawBoxOutline(poseStack, lineBuffer, selectionBox, 0, 1, 1, 1);
+		}
+		
+		//:2 active drag box outline
+		if(isValidDragTool(cap.getToolMode()) && cap.getEditPos1() != null && cap.getEditPos2() != null)
+		{
+			AABB boundingBox = boxFromCorners(cap.getEditPos1(), cap.getEditPos2()).move(-camPos.x, -camPos.y, -camPos.z).deflate(0.002);
+			
+			float red = cap.getToolMode() == EditTools.ToolMode.RECYCLE ? 1f : (cap.getToolMode() == EditTools.ToolMode.SELECT ? 0.2f : 0f);
+			float green = cap.getToolMode() == EditTools.ToolMode.REVISE ? 1f : (cap.getToolMode() == EditTools.ToolMode.SELECT ? 0.4f : 0f);
+			float blue = cap.getToolMode() == EditTools.ToolMode.SELECT ? 1f : 0f;
+			
+			drawBoxOutline(poseStack, lineBuffer, boundingBox, red, green, blue, 1);
+		}
+		
+		//:3 floating move/copy ghost preview footprint
+		if(cap.isPreviewing() && cap.getPreviewAnchor() != null && !ClientSelectionCache.getEntries().isEmpty())
+		{
+			int sizeX = ClientSelectionCache.getSizeX();
+			int sizeY = ClientSelectionCache.getSizeY();
+			int sizeZ = ClientSelectionCache.getSizeZ();
+			Rotation rot = Rotation.values()[Math.floorMod(cap.getPreviewRotation(), 4)];
+			BlockPos minCorner = cap.getPreviewAnchor();
+			
+			boolean swapXZ = rot == Rotation.CLOCKWISE_90 || rot == Rotation.COUNTERCLOCKWISE_90;
+			int footprintX = swapXZ ? sizeZ : sizeX;
+			int footprintZ = swapXZ ? sizeX : sizeZ;
+			
+			float r = cap.isPreviewCopy() ? 0.1f : 1f;
+			float g = cap.isPreviewCopy() ? 0.85f : 0.75f;
+			float b = cap.isPreviewCopy() ? 0.75f : 0f;
+			
+			AABB footprintBox = new AABB(minCorner.getX(), minCorner.getY(), minCorner.getZ(),
+					minCorner.getX() + footprintX, minCorner.getY() + sizeY, minCorner.getZ() + footprintZ)
+					.move(-camPos.x, -camPos.y, -camPos.z).deflate(0.002);
+			drawBoxOutline(poseStack, lineBuffer, footprintBox, r, g, b, 1f);
+		}
+	}
+	
+	private static void renderMoveTransitionOutlines(PoseStack poseStack, VertexConsumer lineBuffer, Vec3 camPos)
+	{
+		for(double[] pos : ClientMoveTransitions.getInterpolatedPositions())
+		{
+			AABB box = new AABB(pos[0], pos[1], pos[2], pos[0] + 1, pos[1] + 1, pos[2] + 1).move(-camPos.x, -camPos.y, -camPos.z).deflate(0.03);
+			drawBoxOutline(poseStack, lineBuffer, box, 1f, 0.75f, 0f, 0.7f);
+		}
+	}
+	
+	private static void renderRemoteOutlines(PoseStack poseStack, VertexConsumer lineBuffer, Vec3 camPos)
+	{
 		for(RemoteEditSessions.Session remote : RemoteEditSessions.allSessions().values())
 		{
 			if(remote.selectionActive && remote.selectionPos1 != null && remote.selectionPos2 != null)
 			{
-				AABB box = boxFromCorners(remote.selectionPos1, remote.selectionPos2).move(-d1, -d2, -d3).deflate(0.002);
-				drawBoxOutline(event.getPoseStack(), lineBuffer, box, 0, 1, 1, 1);
+				AABB box = boxFromCorners(remote.selectionPos1, remote.selectionPos2).move(-camPos.x, -camPos.y, -camPos.z).deflate(0.002);
+				drawBoxOutline(poseStack, lineBuffer, box, 0, 1, 1, 1);
 			}
 			
 			if(remote.dragActive && remote.dragPos1 != null && remote.dragPos2 != null)
 			{
-				AABB box = boxFromCorners(remote.dragPos1, remote.dragPos2).move(-d1, -d2, -d3).deflate(0.002);
+				AABB box = boxFromCorners(remote.dragPos1, remote.dragPos2).move(-camPos.x, -camPos.y, -camPos.z).deflate(0.002);
 				float red = remote.toolKind == 1 ? 1f : (remote.toolKind == 2 ? 0.2f : 0f);
 				float green = remote.toolKind == 0 ? 1f : (remote.toolKind == 2 ? 0.4f : 0f);
 				float blue = remote.toolKind == 2 ? 1f : 0f;
-				drawBoxOutline(event.getPoseStack(), lineBuffer, box, red, green, blue, 1);
+				drawBoxOutline(poseStack, lineBuffer, box, red, green, blue, 1);
 			}
 			
 			if(remote.previewActive && remote.previewAnchor != null && !remote.previewBlocks.isEmpty())
@@ -882,16 +895,11 @@ public class ClientEditToolDrag
 				
 				AABB footprintBox = new AABB(remote.previewAnchor.getX(), remote.previewAnchor.getY(), remote.previewAnchor.getZ(),
 						remote.previewAnchor.getX() + footprintX, remote.previewAnchor.getY() + remote.previewSizeY, remote.previewAnchor.getZ() + footprintZ)
-						.move(-d1, -d2, -d3).deflate(0.002);
-				drawBoxOutline(event.getPoseStack(), lineBuffer, footprintBox, r, g, b, 1f);
+						.move(-camPos.x, -camPos.y, -camPos.z).deflate(0.002);
+				drawBoxOutline(poseStack, lineBuffer, footprintBox, r, g, b, 1f);
 			}
 		}
-			
-			renderTypeBuffer.endBatch();
-			
-			RenderSystem.depthMask(true);
-			RenderSystem.disableBlend();
-		}
+	}
 	
 	private static AABB boxFromCorners(BlockPos a, BlockPos b)
 	{

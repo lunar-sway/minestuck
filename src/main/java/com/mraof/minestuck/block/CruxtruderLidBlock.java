@@ -8,6 +8,7 @@ import com.mraof.minestuck.entity.MSEntityTypes;
 import com.mraof.minestuck.player.PlayerData;
 import com.mraof.minestuck.player.PlayerIdentifier;
 import com.mraof.minestuck.util.MSAttachments;
+import com.mraof.minestuck.util.MSTags;
 import net.minecraft.core.BlockPos;
 import net.minecraft.core.particles.ParticleTypes;
 import net.minecraft.server.level.ServerLevel;
@@ -92,8 +93,7 @@ public class CruxtruderLidBlock extends Block
 		{
 			Block fallingBlockType = fallingBlock.getBlockState().getBlock();
 			
-			if(fallingBlockType instanceof AnvilBlock
-					|| fallingBlockType == Blocks.POINTED_DRIPSTONE)
+			if(fallingBlockType.builtInRegistryHolder().is(MSTags.Blocks.HEAVY_BLOCKS))
 			{
 				level.destroyBlock(pos, true);
 			}
