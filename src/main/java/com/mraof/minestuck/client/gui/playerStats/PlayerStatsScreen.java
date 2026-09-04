@@ -17,6 +17,7 @@ import net.minecraft.client.gui.GuiGraphics;
 import net.minecraft.client.gui.screens.Screen;
 import net.minecraft.client.gui.screens.inventory.AbstractContainerScreen;
 import net.minecraft.client.resources.sounds.SimpleSoundInstance;
+import net.minecraft.nbt.CompoundTag;
 import net.minecraft.network.chat.Component;
 import net.minecraft.network.protocol.game.ServerboundContainerClosePacket;
 import net.minecraft.resources.ResourceLocation;
@@ -309,7 +310,7 @@ public abstract class PlayerStatsScreen extends MinestuckScreen
 	{
 		normalTab = NormalGuiType.CAPTCHA_DECK;
 		editmodeTab = EditmodeGuiType.DEPLOY_LIST;
-		DataCheckerScreen.activeComponent = null;
+		DataCheckerScreen.nbt = new CompoundTag();
 		EcheladderScreen.lastRung = -1;
 		EcheladderScreen.animatedRung = 0;
 	}

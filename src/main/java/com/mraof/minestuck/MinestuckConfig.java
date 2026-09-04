@@ -203,7 +203,7 @@ public class MinestuckConfig
 			globalSession = builder.comment("Whenever all sburb connections should be put into a single session or not.")
 					.define("globalSession", false);
 			dataCheckerPermission = builder.comment("Determines who's allowed to access the data checker. \"none\": No one is allowed. \"ops\": only those with a command permission of level 2 or more may access the data ckecker. (for single player, that would be if cheats are turned on) \"gamemode\": Only players with the creative or spectator gamemode may view the data checker. \"ops_or_gamemode\": Both ops and players in creative or spectator mode may view the data checker. \"anyone\": No access restrictions are used.")
-					.defineEnum("dataCheckerPermission", PermissionType.OPS_OR_GAMEMODE);
+					.defineEnum("dataCheckerPermission", PermissionType.ANYONE);
 			builder.pop();
 			
 			builder.push("editMode");
