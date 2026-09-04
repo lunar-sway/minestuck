@@ -33,7 +33,6 @@ import com.mraof.minestuck.item.components.MSItemComponents;
 import com.mraof.minestuck.item.crafting.MSRecipeTypes;
 import com.mraof.minestuck.item.loot.MSLootTables;
 import com.mraof.minestuck.player.EcheladderExpSources;
-import com.mraof.minestuck.player.KindAbstratusList;
 import com.mraof.minestuck.util.MSAttachments;
 import com.mraof.minestuck.util.MSParticleType;
 import com.mraof.minestuck.util.MSSoundEvents;
@@ -145,7 +144,6 @@ public class Minestuck
 	{
 		MSSuggestionProviders.register();
 		
-		KindAbstratusList.registerTypes();
 		DeployList.registerItems();
 		MSDispenserBehaviours.registerBehaviours();
 		

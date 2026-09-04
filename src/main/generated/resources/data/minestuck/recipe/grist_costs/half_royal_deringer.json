@@ -1,0 +1,10 @@
+{
+  "type": "minestuck:source_grist_cost",
+  "grist_cost": {},
+  "ingredient": {
+    "item": "minestuck:half_royal_deringer"
+  },
+  "sources": [
+    "minestuck:royal_deringer"
+  ]
+}

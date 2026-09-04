@@ -1,6 +1,7 @@
 package com.mraof.minestuck;
 
 import com.mraof.minestuck.computer.editmode.DeployList;
+import com.mraof.minestuck.player.Rungs;
 import net.minecraft.server.MinecraftServer;
 import net.neoforged.bus.api.SubscribeEvent;
 import net.neoforged.fml.common.EventBusSubscriber;
@@ -47,6 +48,7 @@ public class MinestuckConfig
 		public final BooleanValue loginColorSelector;
 		public final BooleanValue alchemyIcons;
 		public final BooleanValue npcDialogueTextColors;
+		public final BooleanValue switcherBackground;
 		
 		private Client(Builder builder)
 		{
@@ -59,6 +61,11 @@ public class MinestuckConfig
 					.defineEnum("echeladderAnimation", AnimationSpeed.NORMAL);
 			npcDialogueTextColors = builder.comment("Determines whether an NPC will use their custom formatted color value when talking in a dialogue screen.")
 					.define("npcDialogueTextColors", true);
+			builder.pop();
+			
+			builder.push("strife");
+			switcherBackground = builder.comment("If true, shades the background while the strife switcher is active.")
+					.define("switcherBackground", true);
 			builder.pop();
 		}
 	}
@@ -92,8 +99,15 @@ public class MinestuckConfig
 		public final EnumValue<AvailableOptions> hashmapChatModusSetting;
 		public final EnumValue<AvailableOptions> arrayChatModusSetting;
 		
+		//Strife
+		public final BooleanValue restrictedStrife;
+		public final BooleanValue keepPortfolioOnDeath;
+		public final IntValue abstrataSwitcherRung;
+		public final DoubleValue weaponAttackMultiplier;
+		
 		//Mechanics
 		public final BooleanValue hardMode;
+		public final IntValue maxSpecibusCount;
 		public final BooleanValue echeladderProgress;
 		public final BooleanValue playerSelectedTitle;
 		public final BooleanValue rungHealthOnRespawn;
@@ -125,6 +139,8 @@ public class MinestuckConfig
 		private Server(Builder builder)
 		{
 			builder.push("mechanics");
+			maxSpecibusCount = builder.comment("Maximum number of Kind Abstratuses a player can select. Damage bonus decreases with each additional abstratus selected.")
+					.defineInRange("maxSpecibusCount", 4, 1, 10);
 			echeladderProgress = builder.comment("If this is true, players will be able to see their progress towards the next rung. This is server side and will only be active in multiplayer if the server/Lan host has it activated.")
 					.define("echeladderProgress", true);
 			rungHealthOnRespawn = builder.comment("If true, players will respawn with full health, rung bonuses included. If false, health will be left alone (typically meaning that you respawn with 10 hearts)")
@@ -142,6 +158,26 @@ public class MinestuckConfig
 					"- Fireballs will rain around players entering the medium",
 					"- Medium dungeons spawners contain Liches instead of Imps",
 					"- Underlings have a 50% chance to have the artifact grist").define("hardMode", false);
+			builder.pop();
+			
+			builder.push("strife");
+			restrictedStrife = builder
+					.comment("Prevents players from attacking or using right-click abilities with a weapon " +
+							"that is not assigned to their Strife Portfolio.")
+					.define("restrictedStrife", true);
+			keepPortfolioOnDeath = builder
+					.comment("If true, the strife portfolio is kept on death. " +
+							"Otherwise all specibus slots are dropped as Strife Cards.")
+					.define("keepPortfolioOnDeath", true);
+			abstrataSwitcherRung = builder
+					.comment("Echeladder rung required to unlock the strife switcher " +
+							"(hold strife key + scroll to switch specibus slots). " +
+							"Set to -1 to allow all players, or to " + Rungs.finalRung() + " to disable entirely.")
+					.defineInRange("abstrataSwitcherRung", 14, -1, Rungs.finalRung());
+			weaponAttackMultiplier = builder
+					.comment("When restrictedStrife is enabled, this is the fraction of normal damage dealt " +
+							"when attacking with an unassigned weapon (0.15 = 15% damage).")
+					.defineInRange("weaponAttackMultiplier", 0.15F, 0.0F, 1.0F);
 			builder.pop();
 			
 			builder.push("sylladex");
@@ -165,18 +201,18 @@ public class MinestuckConfig
 			privateComputers = builder.comment("True if computers should only be able to be used by the owner.")
 					.define("privateComputers", true);
 			globalSession = builder.comment("Whenever all sburb connections should be put into a single session or not.")
-					.define("globalSession",false);
+					.define("globalSession", false);
 			dataCheckerPermission = builder.comment("Determines who's allowed to access the data checker. \"none\": No one is allowed. \"ops\": only those with a command permission of level 2 or more may access the data ckecker. (for single player, that would be if cheats are turned on) \"gamemode\": Only players with the creative or spectator gamemode may view the data checker. \"ops_or_gamemode\": Both ops and players in creative or spectator mode may view the data checker. \"anyone\": No access restrictions are used.")
 					.defineEnum("dataCheckerPermission", PermissionType.ANYONE);
 			builder.pop();
 			
 			builder.push("editMode");
 			showGristChanges = builder.comment("If this is true, grist change messages will appear.")
-					.define("showGristChanges",true);
+					.define("showGristChanges", true);
 			gristRefund = builder.comment("Enable this and players will get a (full) grist refund from breaking blocks in editmode.")
 					.define("gristRefund", false);
 			deployCard = builder.comment("Determines if a card with a captcha card punched on it should be added to the deploy list.")
-					.define("deployCard",false);
+					.define("deployCard", false);
 			portableMachines = builder.comment("Determines if the small portable machines should be included in the deploy list.")
 					.define("portableMachines", false);
 			giveItems = builder.comment("Setting this to true replaces editmode with the old Give Items button.")
@@ -191,9 +227,9 @@ public class MinestuckConfig
 			gristWidgetPercentage = builder.comment("The percentage of grist loss the widget incurs. 1.0 will have no loss.")
 					.defineInRange("gristWidgetPercentage", 0.75D, 0.0D, 1.0D);
 			alchemiterMaxStacks = builder.comment("The number of stacks that can be alchemized at the same time with the alchemiter.")
-					.defineInRange("alchemiterMaxStacks",16,0,999);
+					.defineInRange("alchemiterMaxStacks", 16, 0, 999);
 			puzzleBlockTickRate = builder.comment("How often puzzle/redstone related blocks such as the remote observer tick.")
-					.defineInRange("puzzleBlockTickRate",6,2,10);
+					.defineInRange("puzzleBlockTickRate", 6, 2, 10);
 			statStorerRadius = builder.comment("The radius in blocks that the stat storer should capture data for")
 					.defineInRange("statStorerRadius", 10, 1, 32);
 			cruxtruderIntake = builder.comment("If enabled, the regular cruxtruder will require raw cruxite to function, which is inserted through the pipe.")
@@ -206,30 +242,30 @@ public class MinestuckConfig
 			
 			builder.push("entry");
 			entryCrater = builder.comment("Disable this to prevent craters from people entering the medium.")
-					.define("entryCrater",true);
+					.define("entryCrater", true);
 			adaptEntryBlockHeight = builder.comment("Adapt the transferred height to make the top non-air block to be placed at y:120. Makes entry take slightly longer.")
-					.define("adaptEntryBlockHeight",true);
+					.define("adaptEntryBlockHeight", true);
 			stopSecondEntry = builder.comment("If this is true, players may only use an artifact once, even if they end up in the overworld again.")
-					.define("stopSecondEntry",false);
+					.define("stopSecondEntry", false);
 			needComputer = builder.comment("If this is true, players need to have a computer nearby to Enter")
 					.define("needComputer", false);
 			artifactRange = builder.comment("Radius of the land brought into the medium.")
-					.defineInRange("artifactRange",30,0,Integer.MAX_VALUE);
+					.defineInRange("artifactRange", 30, 0, Integer.MAX_VALUE);
 			builder.pop();
 			
 			builder.push("medium");
 			canBreakGates = builder.comment("Lets gates be destroyed by explosions. Turning this off will make gates use the same explosion resistance as bedrock.")
-					.define("canBreakGates",true);
+					.define("canBreakGates", true);
 			disableGiclops = builder.comment("Right now, the giclops pathfinding is currently causing huge amounts of lag due to their size. This option is a short-term solution that if true will disable giclops spawning and remove all existing giclopes.")
-					.define("disableGiclops",true);
+					.define("disableGiclops", true);
 			naturalImpSpawn = builder.comment("Determines if imps will spawn naturally. Note that this does not affect other spawning methods or any imps that has already spawned.")
-					.define("naturalImpSpawn",true);
+					.define("naturalImpSpawn", true);
 			naturalOgreSpawn = builder.comment("Determines if ogres will spawn naturally. Note that this does not affect other spawning methods or any ogres that has already spawned.")
-					.define("naturalOgreSpawn",true);
+					.define("naturalOgreSpawn", true);
 			naturalBasiliskSpawn = builder.comment("Determines if basilisks will spawn naturally. Note that this does not affect other spawning methods or any basilisks that has already spawned.")
-					.define("naturalBasiliskSpawn",true);
+					.define("naturalBasiliskSpawn", true);
 			naturalLichSpawn = builder.comment("Determines if liches will spawn naturally. Note that this does not affect other spawning methods or any liches that has already spawned.")
-					.define("naturalLichSpawn",true);
+					.define("naturalLichSpawn", true);
 			allowSecondaryConnections = builder.comment("Set this to true to allow so-called 'secondary connections' to be created.")
 					.define("secondaryConnections", true);
 			builder.pop();
@@ -238,6 +274,7 @@ public class MinestuckConfig
 	
 	static final ModConfigSpec commonSpec;
 	public static final Common COMMON;
+	
 	static
 	{
 		Pair<Common, ModConfigSpec> pair = new ModConfigSpec.Builder().configure(Common::new);
@@ -247,6 +284,7 @@ public class MinestuckConfig
 	
 	static final ModConfigSpec clientSpec;
 	public static final Client CLIENT;
+	
 	static
 	{
 		Pair<Client, ModConfigSpec> pair = new ModConfigSpec.Builder().configure(Client::new);
@@ -257,6 +295,7 @@ public class MinestuckConfig
 	
 	static final ModConfigSpec serverSpec;
 	public static final Server SERVER;
+	
 	static
 	{
 		Pair<Server, ModConfigSpec> pair = new ModConfigSpec.Builder().configure(Server::new);
@@ -268,7 +307,7 @@ public class MinestuckConfig
 	public static void onReload(final ModConfigEvent.Reloading event)
 	{
 		MinecraftServer server = ServerLifecycleHooks.getCurrentServer();
-		if(server != null && server.isSameThread())	//TODO Check if this will be true after server start. If not, use a static boolean together with a tick event instead
+		if(server != null && server.isSameThread())    //TODO Check if this will be true after server start. If not, use a static boolean together with a tick event instead
 			DeployList.onConditionsUpdated(server);
 	}
 	

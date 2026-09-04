@@ -479,6 +479,11 @@ public final class MinestuckGristCostsProvider
 		GristCostRecipeBuilder.of(MSItems.THORN_IN_YOUR_SIDE.get()).grist(BUILD, 26).grist(RUBY, 1).build(recipeSaver);
 		GristCostRecipeBuilder.of(MSItems.ROSE_PROTOCOL.get()).grist(BUILD, 458).grist(IODINE, 114).grist(MERCURY, 92).grist(RUBY, 35).grist(URANIUM, 1).build(recipeSaver);
 		
+		SourceGristCostBuilder.of(MSItems.HALF_ROYAL_DERINGER.get()).source(MSItems.ROYAL_DERINGER.get()).buildFor(recipeSaver, Minestuck.MOD_ID);
+		SourceGristCostBuilder.of(MSItems.HALF_CALEDSCRATCH.get()).source(MSItems.CALEDSCRATCH.get()).buildFor(recipeSaver, Minestuck.MOD_ID);
+		SourceGristCostBuilder.of(MSItems.HALF_SCARLET_RIBBITAR.get()).source(MSItems.SCARLET_RIBBITAR.get()).buildFor(recipeSaver, Minestuck.MOD_ID);
+		SourceGristCostBuilder.of(MSItems.HALF_CALEDFWLCH.get()).source(MSItems.CALEDFWLCH.get()).buildFor(recipeSaver, Minestuck.MOD_ID);
+		
 		GristCostRecipeBuilder.of(MSItems.DIAMOND_DAGGER.get()).grist(BUILD, 16).grist(DIAMOND, 36).build(recipeSaver);
 		GristCostRecipeBuilder.of(MSItems.PIGLINS_PRIDE.get()).grist(BUILD, 1730).grist(TAR, 865).grist(SULFUR, 692).grist(GOLD, 346).grist(URANIUM, 346).build(recipeSaver);
 		GristCostRecipeBuilder.of(MSItems.BASILISK_BREATH_DRAGONSLAYER.get()).grist(BUILD, 8176).grist(SHALE, 4088).grist(QUARTZ, 3270).grist(SULFUR, 3270).grist(AMETHYST, 2453).grist(URANIUM, 1635).build(recipeSaver);
@@ -670,6 +675,8 @@ public final class MinestuckGristCostsProvider
 		GristCostRecipeBuilder.of(MSItems.UMBRAL_INFILTRATOR.get()).grist(BUILD, 600).grist(TAR, 450).grist(DIAMOND, 55).grist(MERCURY, 55).grist(QUARTZ, 1).build(recipeSaver);
 		GristCostRecipeBuilder.of(MSItems.SORCERERS_PINBALL.get()).grist(BUILD, 200).grist(MERCURY, 30).grist(IODINE, 5).build(recipeSaver);
 		GristCostRecipeBuilder.of(MSItems.MUSIC_SWORD.get()).grist(BUILD, 18760).grist(MARBLE, 1876 ).grist(RUST, 1407).grist(AMBER, 2345 ).build(recipeSaver);
+		
+		GristCostRecipeBuilder.of(MSItems.STRIFE_CARD.get()).grist(BUILD, 2048).grist(URANIUM, 512).grist(DIAMOND, 256).build(recipeSaver);
 		
 		GristCostRecipeBuilder.of(MSItems.ARRAY_MODUS_CARD.get()).grist(BUILD, 1024).grist(COBALT, 512).grist(DIAMOND, 256).grist(SHALE, 128).build(recipeSaver);
 		GristCostRecipeBuilder.of(MSItems.CAPTCHAROID_CAMERA.get()).grist(BUILD, 5000).grist(CAULK, 500).grist(GOLD, 500).grist(MARBLE, 500).grist(MERCURY, 500).grist(SHALE, 500).build(recipeSaver);

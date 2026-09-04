@@ -161,6 +161,17 @@ public final class MSPayloads
 		registerPlayToServer(registrar, MiscContainerPacket.ID, MiscContainerPacket.STREAM_CODEC);
 		registerPlayToClient(registrar, StopCreativeShockEffectPacket.ID, StopCreativeShockEffectPacket.STREAM_CODEC);
 		registerPlayToClient(registrar, PushPlayerPacket.ID, PushPlayerPacket.STREAM_CODEC);
+		
+		//Strife Packets
+		registerPlayToClient(registrar, StrifePackets.SyncPortfolioPacket.ID, StrifePackets.SyncPortfolioPacket.STREAM_CODEC);
+		registerPlayToClient(registrar, StrifePackets.OpenStrifeCardGuiPacket.ID, StrifePackets.OpenStrifeCardGuiPacket.STREAM_CODEC);
+		
+		registerPlayToServer(registrar, StrifePackets.AssignStrifePacket.ID, StrifePackets.AssignStrifePacket.STREAM_CODEC);
+		registerPlayToServer(registrar, StrifePackets.RetrieveStrifeCardPacket.ID, StrifePackets.RetrieveStrifeCardPacket.STREAM_CODEC);
+		registerPlayToServer(registrar, StrifePackets.RetrieveWeaponPacket.ID, StrifePackets.RetrieveWeaponPacket.STREAM_CODEC);
+		registerPlayToServer(registrar, StrifePackets.SetActiveStrifePacket.ID, StrifePackets.SetActiveStrifePacket.STREAM_CODEC);
+		registerPlayToServer(registrar, StrifePackets.SwapOffhandStrifePacket.ID, StrifePackets.SwapOffhandStrifePacket.STREAM_CODEC);
+		registerPlayToServer(registrar, StrifePackets.SelectAbstrataForCardPacket.ID, StrifePackets.SelectAbstrataForCardPacket.STREAM_CODEC);
 	}
 	
 	private static <T extends MSPacket.PlayToServer> void registerPlayToServer(PayloadRegistrar registrar, CustomPacketPayload.Type<T> type, StreamCodec<? super RegistryFriendlyByteBuf, T> codec)
