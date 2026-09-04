@@ -100,6 +100,7 @@ public final class MSSoundEvents
 	public static final Supplier<SoundEvent> ITEM_LONG_FORGOTTEN_WARHORN_USE = register("item.long_forgotten_warhorn.use");
 	public static final Supplier<SoundEvent> ITEM_GRIMOIRE_USE = register("item.grimoire.use");
 	public static final Supplier<SoundEvent> ITEM_HORN_USE = register("item.horn.use");
+	public static final Supplier<SoundEvent> ITEM_STRIFE_CARD_USE = register("item.strife_card.use");
 	public static final Supplier<SoundEvent> ITEM_EEEEEEEEEEEE_HIT = register("item.eeeeeeeeeeee.hit");
 	public static final Supplier<SoundEvent> ITEM_ELECTRIC_AUTOHARP_STROKE = register("item.electric_autoharp.stroke");
 	public static final Supplier<SoundEvent> ITEM_MAGIC_CAST = register("item.magic.cast"); //based on evoker cast
@@ -118,6 +119,10 @@ public final class MSSoundEvents
 	public static final Supplier<SoundEvent> EVENT_LOTUS_FLOWER_RESTORE = register("event.lotus_flower.restore"); //identical to beehive exit
 	public static final Supplier<SoundEvent> EVENT_EDIT_TOOL_REVISE = register("event.edit_tools.revise");
 	public static final Supplier<SoundEvent> EVENT_EDIT_TOOL_RECYCLE = register("event.edit_tools.recycle");
+	public static final Supplier<SoundEvent> EVENT_STRIFE_SPECIBUS_EJECT = register("event.strife_specibus.eject");
+	public static final Supplier<SoundEvent> EVENT_STRIFE_SPECIBUS_SWITCH = register("event.strife_specibus.switch");
+	public static final Supplier<SoundEvent> EVENT_STRIFE_SWITCHER_ON = register("event.strife_switcher.on");
+	public static final Supplier<SoundEvent> EVENT_STRIFE_SWITCHER_OFF = register("event.strife_switcher.off");
 	public static final Supplier<SoundEvent> COMPUTER_BOOT = register("block.computer.boot");
 	public static final Supplier<SoundEvent> COMPUTER_DISK_INSERT = register("block.computer.disk_insert");
 	public static final Supplier<SoundEvent> COMPUTER_DISK_REMOVE = register("block.computer.disk_remove");

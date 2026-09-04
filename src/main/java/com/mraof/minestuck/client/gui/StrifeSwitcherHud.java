@@ -9,6 +9,7 @@ import com.mraof.minestuck.player.KindAbstratusType;
 import com.mraof.minestuck.player.StrifePortfolioData;
 import com.mraof.minestuck.player.StrifeSpecibus;
 import com.mraof.minestuck.util.MSAttachments;
+import com.mraof.minestuck.util.MSSoundEvents;
 import net.minecraft.client.Minecraft;
 import net.minecraft.client.gui.GuiGraphics;
 import net.minecraft.resources.ResourceLocation;
@@ -70,6 +71,7 @@ public final class StrifeSwitcherHud
 		}
 		
 		showSwitcher = true;
+		mc.player.playSound(MSSoundEvents.EVENT_STRIFE_SWITCHER_ON.get(), 0.5F, 1.0F);
 		
 		selSpecibus = data.getSelectedSpecibusIndex();
 		selWeapon = data.getSelectedWeaponIndex();
@@ -89,7 +91,10 @@ public final class StrifeSwitcherHud
 			return;
 		
 		showSwitcher = false;
-		commitSelection(Minecraft.getInstance());
+		Minecraft mc = Minecraft.getInstance();
+		if(mc.player != null)
+			mc.player.playSound(MSSoundEvents.EVENT_STRIFE_SWITCHER_OFF.get(), 0.5F, 1.0F);
+		commitSelection(mc);
 	}
 	
 	private static void commitSelection(Minecraft mc)

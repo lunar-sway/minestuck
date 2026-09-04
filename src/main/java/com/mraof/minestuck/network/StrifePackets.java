@@ -8,6 +8,7 @@ import com.mraof.minestuck.player.StrifePortfolioData;
 import com.mraof.minestuck.player.StrifeSpecibus;
 import com.mraof.minestuck.strife.StrifePortfolioHandler;
 import com.mraof.minestuck.util.MSAttachments;
+import com.mraof.minestuck.util.MSSoundEvents;
 import io.netty.buffer.ByteBuf;
 import net.minecraft.client.Minecraft;
 import net.minecraft.network.FriendlyByteBuf;
@@ -16,6 +17,7 @@ import net.minecraft.network.codec.ByteBufCodecs;
 import net.minecraft.network.codec.StreamCodec;
 import net.minecraft.network.protocol.common.custom.CustomPacketPayload;
 import net.minecraft.server.level.ServerPlayer;
+import net.minecraft.sounds.SoundSource;
 import net.minecraft.world.InteractionHand;
 import net.minecraft.world.item.ItemStack;
 import net.neoforged.neoforge.network.handling.IPayloadContext;
@@ -76,6 +78,8 @@ public class StrifePackets
 		public void execute(IPayloadContext context, ServerPlayer player)
 		{
 			StrifePortfolioHandler.retrieveCard(player, index());
+			player.serverLevel().playSound(null, player.blockPosition(),
+					MSSoundEvents.EVENT_STRIFE_SPECIBUS_EJECT.get(), SoundSource.PLAYERS, 0.6F, 1.0F);
 		}
 	}
 	
@@ -125,7 +129,12 @@ public class StrifePackets
 			if(StrifeCardItem.hasSpecibus(card)) return;
 			
 			StrifeSpecibus newSpecibus = new StrifeSpecibus(abstratusName());
-			if(StrifePortfolioHandler.addSpecibus(player, newSpecibus)) card.shrink(1);
+			if(StrifePortfolioHandler.addSpecibus(player, newSpecibus))
+			{
+				card.shrink(1);
+				player.serverLevel().playSound(null, player.blockPosition(),
+						MSSoundEvents.ITEM_STRIFE_CARD_USE.get(), SoundSource.PLAYERS, 0.8F, 1.0F);
+			}
 		}
 	}
 	
@@ -147,6 +156,8 @@ public class StrifePackets
 			if(specibusIndex() < 0 || specibusIndex() >= StrifePortfolioHandler.getData(player).getPortfolio().length)
 				return;
 			StrifePortfolioHandler.setSelectedSpecibus(player, specibusIndex());
+			player.serverLevel().playSound(null, player.blockPosition(),
+					MSSoundEvents.EVENT_STRIFE_SPECIBUS_SWITCH.get(), SoundSource.PLAYERS, 0.4F, 1.0F);
 		}
 	}
 	
