@@ -35,6 +35,7 @@ import com.mraof.minestuck.entity.MSAttributes;
 import com.mraof.minestuck.entity.MSEntityTypes;
 import com.mraof.minestuck.entity.dialogue.Dialogue;
 import com.mraof.minestuck.entry.EntryProcess;
+import com.mraof.minestuck.entry.meteor.MeteorManager;
 import com.mraof.minestuck.inventory.ConsortMerchantInventory;
 import com.mraof.minestuck.inventory.captchalogue.ArrayModus;
 import com.mraof.minestuck.inventory.captchalogue.CaptchaDeckHandler;
@@ -2458,6 +2459,7 @@ public class MinestuckEnUsLanguageProvider extends MinestuckLanguageProvider
 		add(EntryProcess.NOT_YOUR_COMPUTER, "You are not allowed to move other players' computers");
 		add(EntryProcess.NEEDS_COMPUTER, "There is no computer in range");
 		add(EntryProcess.EXCEPTION, "[Minestuck] Something went wrong during entry. %s");
+		add(MeteorManager.METEOR_EXCEPTION, "[Minestuck] Something went wrong during meteor impact. %s");
 		add(EntryCommand.ENTERING, "Preparing to enter The Medium");
 		add(EntryCommand.OTHER_PLAYER_ENTERING, "%s is now entering The Medium");
 		add(ClientEditmodeData.ENTERED, "[Minestuck] Press [%s] to exit edit mode");

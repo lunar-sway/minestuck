@@ -65,6 +65,7 @@ public class LandSkySpriteUploader extends TextureAtlasHolder
 		return getSprite(METEOR);
 	}
 	
+	
 	public TextureAtlasSprite getPlanetSprite(TerrainLandType type, int index)
 	{
 		ResourceLocation typeName = LandTypes.TERRAIN_REGISTRY.getKey(type);

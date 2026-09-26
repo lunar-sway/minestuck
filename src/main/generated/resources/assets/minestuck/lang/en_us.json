@@ -3431,6 +3431,7 @@
   "minestuck.jei.grist_costs": "Grist Costs",
   "minestuck.kind_abstratus": "Kind Abstratus",
   "minestuck.lotusflowerentity.regrow": "There are no petals on this plant, maybe it will regrow?",
+  "minestuck.meteor.exception": "[Minestuck] Something went wrong during meteor impact. %s",
   "minestuck.modus.captcha_limit": "Reached max modi capacity for this rung",
   "minestuck.music_player": "Music Player",
   "minestuck.music_player.hint_inactive": "Crouch and use to start playing",

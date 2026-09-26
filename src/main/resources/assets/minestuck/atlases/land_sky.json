@@ -21,6 +21,11 @@
             "sprite": "minestuck:meteor"
         },
         {
+            "type": "single",
+            "resource": "minestuck:environment/sky_meteor",
+            "sprite": "minestuck:sky_meteor"
+        },
+        {
             "type": "directory",
             "source": "environment/planets",
             "prefix": "planets/"
