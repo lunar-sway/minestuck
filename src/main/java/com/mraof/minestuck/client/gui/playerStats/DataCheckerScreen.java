@@ -435,8 +435,8 @@ public class DataCheckerScreen extends Screen
 			{
 				LandTypePair.Named named = oNamed.get();
 				
-				TextureAtlasSprite planetSprite = LandSkySpriteUploader.getInstance().getPlanetSprite(named.landTypes().getTerrain(), named.terrainNameIndex());
-				TextureAtlasSprite overlaySprite = LandSkySpriteUploader.getInstance().getOverlaySprite(named.landTypes().getTitle(), named.titleNameIndex());
+				TextureAtlasSprite planetSprite = LandSkySpriteUploader.getInstance().getPlanetSprite(named.landTypes().getTerrain(), named.terrainNameIndex() % LandSkySpriteUploader.VARIANT_COUNT);
+				TextureAtlasSprite overlaySprite = LandSkySpriteUploader.getInstance().getOverlaySprite(named.landTypes().getTitle(), named.titleNameIndex() % LandSkySpriteUploader.VARIANT_COUNT);
 				
 				guiGraphics.blit(getX(), getY(), 0, size, size, planetSprite);
 				guiGraphics.blit(getX(), getY(), 0, size, size, overlaySprite);
