@@ -64,7 +64,10 @@ public final class DataCheckerPackets
 		public void execute(IPayloadContext context)
 		{
 			if(packetIndex == DataCheckerPackets.index)
+			{
 				DataCheckerScreen.nbt = nbtData;
+				DataCheckerScreen.needsRefresh = true;
+			}
 		}
 	}
 	

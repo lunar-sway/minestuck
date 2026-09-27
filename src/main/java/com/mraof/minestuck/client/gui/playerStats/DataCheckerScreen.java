@@ -43,6 +43,7 @@ import software.bernie.geckolib.util.RenderUtil;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Optional;
+import java.util.Random;
 
 public class DataCheckerScreen extends Screen
 {
@@ -59,7 +60,7 @@ public class DataCheckerScreen extends Screen
 	private static final int COLOR_WHITE = 0xFFFFFFFF;
 	
 	public static CompoundTag nbt = new CompoundTag();
-	private boolean needsRefresh = true;
+	public static boolean needsRefresh = false;
 	private List<SessionButton> sessionButtons = new ArrayList<>();
 	public SessionButton focusedButton;
 	private float displayIndex;
@@ -87,13 +88,10 @@ public class DataCheckerScreen extends Screen
 		xOffset = (width - GUI_WIDTH) / 2;
 		yOffset = (height - GUI_HEIGHT) / 2;
 		
-		if(nbt.isEmpty())
-			PacketDistributor.sendToServer(DataCheckerPackets.Request.create());
-		
-		needsRefresh = true;
+		refresh();
 	}
 	
-	private void buildWidgets()
+	public void buildWidgets()
 	{
 		clearWidgets();
 		needsRefresh = false;
@@ -229,7 +227,7 @@ public class DataCheckerScreen extends Screen
 	{
 		PacketDistributor.sendToServer(DataCheckerPackets.Request.create());
 		nbt = new CompoundTag();
-		needsRefresh = true;
+		needsRefresh = false;
 	}
 	
 	@Override
@@ -434,9 +432,11 @@ public class DataCheckerScreen extends Screen
 			if(oNamed.isPresent())
 			{
 				LandTypePair.Named named = oNamed.get();
+				Random random = LandSkySpriteUploader.getInstance().getDimRandom(land);
+				int index = random.nextInt(LandSkySpriteUploader.VARIANT_COUNT);
 				
-				TextureAtlasSprite planetSprite = LandSkySpriteUploader.getInstance().getPlanetSprite(named.landTypes().getTerrain(), named.terrainNameIndex() % LandSkySpriteUploader.VARIANT_COUNT);
-				TextureAtlasSprite overlaySprite = LandSkySpriteUploader.getInstance().getOverlaySprite(named.landTypes().getTitle(), named.titleNameIndex() % LandSkySpriteUploader.VARIANT_COUNT);
+				TextureAtlasSprite planetSprite = LandSkySpriteUploader.getInstance().getPlanetSprite(named.landTypes().getTerrain(), index);
+				TextureAtlasSprite overlaySprite = LandSkySpriteUploader.getInstance().getOverlaySprite(named.landTypes().getTitle(), index);
 				
 				guiGraphics.blit(getX(), getY(), 0, size, size, planetSprite);
 				guiGraphics.blit(getX(), getY(), 0, size, size, overlaySprite);
