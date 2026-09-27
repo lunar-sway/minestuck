@@ -461,20 +461,24 @@ public class MSItems
 	public static final DeferredItem<Item> IRON_LASS_SKIRT = REGISTER.register("iron_lass_skirt", () -> new IronLassArmorItem(MSItemTypes.IRON_LASS_ARMOR, ArmorItem.Type.LEGGINGS, new Item.Properties().durability(ArmorItem.Type.LEGGINGS.getDurability(50))));
 	public static final DeferredItem<Item> IRON_LASS_SHOES = REGISTER.register("iron_lass_shoes", () -> new IronLassArmorItem(MSItemTypes.IRON_LASS_ARMOR, ArmorItem.Type.BOOTS, new Item.Properties().durability(ArmorItem.Type.BOOTS.getDurability(50))));
 	
-	public static final DeferredItem<MSArmorItem> PROSPIT_CIRCLET = REGISTER.register("prospit_circlet", () -> new MSArmorItem(MSItemTypes.DREAM_PAJAMAS, ArmorItem.Type.HELMET, new Item.Properties().durability(ArmorItem.Type.HELMET.getDurability(10))));
-	public static final DeferredItem<MSArmorItem> PROSPIT_SHIRT = REGISTER.register("prospit_shirt", () -> new MSArmorItem(MSItemTypes.DREAM_PAJAMAS, ArmorItem.Type.CHESTPLATE, new Item.Properties().durability(ArmorItem.Type.CHESTPLATE.getDurability(10))));
-	public static final DeferredItem<MSArmorItem> PROSPIT_PANTS = REGISTER.register("prospit_pants", () -> new MSArmorItem(MSItemTypes.DREAM_PAJAMAS, ArmorItem.Type.LEGGINGS, new Item.Properties().durability(ArmorItem.Type.LEGGINGS.getDurability(10))));
-	public static final DeferredItem<MSArmorItem> PROSPIT_SHOES = REGISTER.register("prospit_shoes", () -> new MSArmorItem(MSItemTypes.DREAM_PAJAMAS, ArmorItem.Type.BOOTS, new Item.Properties().durability(ArmorItem.Type.BOOTS.getDurability(10))));
-	public static final DeferredItem<MSArmorItem> DERSE_CIRCLET = REGISTER.register("derse_circlet", () -> new MSArmorItem(MSItemTypes.DREAM_PAJAMAS, ArmorItem.Type.HELMET, new Item.Properties().durability(ArmorItem.Type.HELMET.getDurability(10))));
-	public static final DeferredItem<MSArmorItem> DERSE_SHIRT = REGISTER.register("derse_shirt", () -> new MSArmorItem(MSItemTypes.DREAM_PAJAMAS, ArmorItem.Type.CHESTPLATE, new Item.Properties().durability(ArmorItem.Type.CHESTPLATE.getDurability(10))));
-	public static final DeferredItem<MSArmorItem> DERSE_PANTS = REGISTER.register("derse_pants", () -> new MSArmorItem(MSItemTypes.DREAM_PAJAMAS, ArmorItem.Type.LEGGINGS, new Item.Properties().durability(ArmorItem.Type.LEGGINGS.getDurability(10))));
-	public static final DeferredItem<MSArmorItem> DERSE_SHOES = REGISTER.register("derse_shoes", () -> new MSArmorItem(MSItemTypes.DREAM_PAJAMAS, ArmorItem.Type.BOOTS, new Item.Properties().durability(ArmorItem.Type.BOOTS.getDurability(10))));
+	public static final DeferredItem<MSArmorItem> PROSPIT_CIRCLET = REGISTER.register("prospit_circlet", () -> new MSArmorItem(MSItemTypes.CLOTH_ARMOR, ArmorItem.Type.HELMET, new Item.Properties().durability(ArmorItem.Type.HELMET.getDurability(10))));
+	public static final DeferredItem<MSArmorItem> PROSPIT_SHIRT = REGISTER.register("prospit_shirt", () -> new MSArmorItem(MSItemTypes.CLOTH_ARMOR, ArmorItem.Type.CHESTPLATE, new Item.Properties().durability(ArmorItem.Type.CHESTPLATE.getDurability(10))));
+	public static final DeferredItem<MSArmorItem> PROSPIT_PANTS = REGISTER.register("prospit_pants", () -> new MSArmorItem(MSItemTypes.CLOTH_ARMOR, ArmorItem.Type.LEGGINGS, new Item.Properties().durability(ArmorItem.Type.LEGGINGS.getDurability(10))));
+	public static final DeferredItem<MSArmorItem> PROSPIT_SHOES = REGISTER.register("prospit_shoes", () -> new MSArmorItem(MSItemTypes.CLOTH_ARMOR, ArmorItem.Type.BOOTS, new Item.Properties().durability(ArmorItem.Type.BOOTS.getDurability(10))));
+	public static final DeferredItem<MSArmorItem> DERSE_CIRCLET = REGISTER.register("derse_circlet", () -> new MSArmorItem(MSItemTypes.CLOTH_ARMOR, ArmorItem.Type.HELMET, new Item.Properties().durability(ArmorItem.Type.HELMET.getDurability(10))));
+	public static final DeferredItem<MSArmorItem> DERSE_SHIRT = REGISTER.register("derse_shirt", () -> new MSArmorItem(MSItemTypes.CLOTH_ARMOR, ArmorItem.Type.CHESTPLATE, new Item.Properties().durability(ArmorItem.Type.CHESTPLATE.getDurability(10))));
+	public static final DeferredItem<MSArmorItem> DERSE_PANTS = REGISTER.register("derse_pants", () -> new MSArmorItem(MSItemTypes.CLOTH_ARMOR, ArmorItem.Type.LEGGINGS, new Item.Properties().durability(ArmorItem.Type.LEGGINGS.getDurability(10))));
+	public static final DeferredItem<MSArmorItem> DERSE_SHOES = REGISTER.register("derse_shoes", () -> new MSArmorItem(MSItemTypes.CLOTH_ARMOR, ArmorItem.Type.BOOTS, new Item.Properties().durability(ArmorItem.Type.BOOTS.getDurability(10))));
+	public static final DeferredItem<Item> HARLEQUIN_HAT = REGISTER.register("harlequin_hat", () -> new GeoArmorItem(MSItemTypes.CLOTH_ARMOR, ArmorItem.Type.HELMET, "harlequin_outfit", new Item.Properties().durability(ArmorItem.Type.HELMET.getDurability(10))));
+	public static final DeferredItem<Item> HARLEQUIN_SHIRT = REGISTER.register("harlequin_shirt", () -> new GeoArmorItem(MSItemTypes.CLOTH_ARMOR, ArmorItem.Type.CHESTPLATE, "harlequin_outfit", new Item.Properties().durability(ArmorItem.Type.CHESTPLATE.getDurability(10))));
+	public static final DeferredItem<Item> HARLEQUIN_PANTS = REGISTER.register("harlequin_pants", () -> new GeoArmorItem(MSItemTypes.CLOTH_ARMOR, ArmorItem.Type.LEGGINGS, "harlequin_outfit", new Item.Properties().durability(ArmorItem.Type.LEGGINGS.getDurability(10))));
+	public static final DeferredItem<Item> HARLEQUIN_SHOES = REGISTER.register("harlequin_shoes", () -> new GeoArmorItem(MSItemTypes.CLOTH_ARMOR, ArmorItem.Type.BOOTS, "harlequin_outfit", new Item.Properties().durability(ArmorItem.Type.BOOTS.getDurability(10))));
 	
-	public static final DeferredItem<MSArmorItem> AMPHIBEANIE = REGISTER.register("amphibeanie", () -> new MSArmorItem(MSItemTypes.CLOTH_ARMOR, ArmorItem.Type.HELMET, new Item.Properties().stacksTo(1)));
-	public static final DeferredItem<MSArmorItem> NOSTRILDAMUS = REGISTER.register("nostrildamus", () -> new MSArmorItem(MSItemTypes.CLOTH_ARMOR, ArmorItem.Type.HELMET, new Item.Properties().stacksTo(1)));
-	public static final DeferredItem<MSArmorItem> PONYTAIL = REGISTER.register("ponytail", () -> new MSArmorItem(MSItemTypes.CLOTH_ARMOR, ArmorItem.Type.HELMET, new Item.Properties().stacksTo(1)));
-	public static final DeferredItem<Item> ANOMALOCARIS_HAT = REGISTER.register("anomalocaris_hat", () -> new GeoArmorItem(MSItemTypes.CLOTH_ARMOR, ArmorItem.Type.HELMET, "anomalocaris_hat", new Item.Properties().stacksTo(1)));
-	public static final DeferredItem<Item> ALIEN_BOPPERS = REGISTER.register("alien_boppers", () -> new GeoArmorItem(MSItemTypes.CLOTH_ARMOR, ArmorItem.Type.HELMET, "alien_boppers", new Item.Properties().stacksTo(1)));
+	public static final DeferredItem<MSArmorItem> AMPHIBEANIE = REGISTER.register("amphibeanie", () -> new MSArmorItem(MSItemTypes.CLOTH, ArmorItem.Type.HELMET, new Item.Properties().stacksTo(1)));
+	public static final DeferredItem<MSArmorItem> NOSTRILDAMUS = REGISTER.register("nostrildamus", () -> new MSArmorItem(MSItemTypes.CLOTH, ArmorItem.Type.HELMET, new Item.Properties().stacksTo(1)));
+	public static final DeferredItem<MSArmorItem> PONYTAIL = REGISTER.register("ponytail", () -> new MSArmorItem(MSItemTypes.CLOTH, ArmorItem.Type.HELMET, new Item.Properties().stacksTo(1)));
+	public static final DeferredItem<Item> ANOMALOCARIS_HAT = REGISTER.register("anomalocaris_hat", () -> new GeoArmorItem(MSItemTypes.CLOTH, ArmorItem.Type.HELMET, "anomalocaris_hat", new Item.Properties().stacksTo(1)));
+	public static final DeferredItem<Item> ALIEN_BOPPERS = REGISTER.register("alien_boppers", () -> new GeoArmorItem(MSItemTypes.CLOTH, ArmorItem.Type.HELMET, "alien_boppers", new Item.Properties().stacksTo(1)));
 	
 	
 	//Core Items
@@ -578,7 +582,7 @@ public class MSItems
 	public static final DeferredItem<Item> BUG_NET = REGISTER.register("bug_net", () -> new BugNetItem(new MSItemProperties().durability(64)));
 	public static final DeferredItem<Item> FROG = REGISTER.register("frog", () -> new FrogItem(new Item.Properties().stacksTo(1)));
 	public static final DeferredItem<Item> CARVING_TOOL = REGISTER.register("carving_tool", () -> new Item(new Item.Properties().stacksTo(1)));
-	public static final DeferredItem<MSArmorItem> CRUMPLY_HAT = REGISTER.register("crumply_hat", () -> new MSArmorItem(MSItemTypes.CLOTH_ARMOR, ArmorItem.Type.HELMET, new Item.Properties().stacksTo(1)));
+	public static final DeferredItem<MSArmorItem> CRUMPLY_HAT = REGISTER.register("crumply_hat", () -> new MSArmorItem(MSItemTypes.CLOTH, ArmorItem.Type.HELMET, new Item.Properties().stacksTo(1)));
 	public static final DeferredItem<Item> STONE_EYEBALLS = REGISTER.register("stone_eyeballs", () -> new Item(new Item.Properties()));
 	public static final DeferredItem<Item> STONE_TABLET = REGISTER.register("stone_tablet", () -> new StoneTabletItem(MSBlocks.STONE_TABLET.get(), new Item.Properties()));
 	public static final DeferredItem<Item> SHOP_POSTER = REGISTER.register("shop_poster", () -> new PosterItem(PosterComponent.withDefaultBack(MSTags.PaintingVariants.SHOP_POSTERS), new Item.Properties().stacksTo(1))); //not used
