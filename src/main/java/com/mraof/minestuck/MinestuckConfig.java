@@ -65,7 +65,7 @@ public class MinestuckConfig
 			
 			builder.push("strife");
 			switcherBackground = builder.comment("If true, shades the background while the strife switcher is active.")
-					.define("switcherBackground", true);
+					.define("switcherBackground", false);
 			builder.pop();
 		}
 	}
@@ -104,6 +104,15 @@ public class MinestuckConfig
 		public final BooleanValue keepPortfolioOnDeath;
 		public final IntValue abstrataSwitcherRung;
 		public final DoubleValue weaponAttackMultiplier;
+		public final IntValue strifeDeckMaxSize;
+		public final ConfigValue<List<? extends String>> restrictedStrifeBypass;
+		public final BooleanValue autoStowWeapons;
+		public final BooleanValue strifeEvolution;
+		public final IntValue strifeCardMobDrops;
+		public final DoubleValue strifeCardDropChance;
+		public final DoubleValue strifeCardFirstUnderlingDropChance;
+		public final DoubleValue strifeCardContentChance;
+		public final ConfigValue<List<? extends String>> strifeCardDropKinds;
 		
 		//Mechanics
 		public final BooleanValue hardMode;
@@ -162,22 +171,44 @@ public class MinestuckConfig
 			
 			builder.push("strife");
 			restrictedStrife = builder
-					.comment("Prevents players from attacking or using right-click abilities with a weapon " +
-							"that is not assigned to their Strife Portfolio.")
+					.comment("Prevents players from attacking or using right-click abilities with a weapon that is not assigned to their Strife Portfolio. Empty hands and the items in restrictedStrifeBypass are still allowed.")
 					.define("restrictedStrife", true);
+			restrictedStrifeBypass = builder
+					.comment("Items that can still be used with right-click while restrictedStrife is enabled, even though they are not assigned to the portfolio.")
+					.define("restrictedStrifeBypass", new ArrayList<>(List.of("minecraft:egg", "minecraft:snowball", "minecraft:ender_eye", "minecraft:ender_pearl", "minecraft:potion", "minecraft:splash_potion", "minecraft:lingering_potion", "minecraft:experience_bottle", "minecraft:firework_rocket", "minecraft:fishing_rod", "minecraft:shield", "minecraft:trident")));
 			keepPortfolioOnDeath = builder
-					.comment("If true, the strife portfolio is kept on death. " +
-							"Otherwise all specibus slots are dropped as Strife Cards.")
+					.comment("If true, the strife portfolio is kept on death. Otherwise all specibus slots are dropped as Strife Cards.")
 					.define("keepPortfolioOnDeath", true);
+			strifeDeckMaxSize = builder
+					.comment("The maximum amount of weapons that fit inside a single Strife Deck.Set to -1 to remove the limit. The player.strife_deck_capacity attribute is added on top of this value.")
+					.defineInRange("strifeDeckMaxSize", 20, -1, 1000);
 			abstrataSwitcherRung = builder
-					.comment("Echeladder rung required to unlock the strife switcher " +
-							"(hold strife key + scroll to switch specibus slots). " +
-							"Set to -1 to allow all players, or to " + Rungs.finalRung() + " to disable entirely.")
+					.comment("Echeladder rung required to unlock the strife switcher (hold strife key + sneak + scroll to switch specibus slots). Set to -1 to allow all players, or to " + Rungs.finalRung() + " to disable entirely.")
 					.defineInRange("abstrataSwitcherRung", 14, -1, Rungs.finalRung());
 			weaponAttackMultiplier = builder
-					.comment("When restrictedStrife is enabled, this is the fraction of normal damage dealt " +
-							"when attacking with an unassigned weapon (0.15 = 15% damage).")
-					.defineInRange("weaponAttackMultiplier", 0.15F, 0.0F, 1.0F);
+					.comment("When the portfolio is not empty, this is the fraction of normal damage dealt when attacking with an unassigned weapon against non-underlings (0.15 = 15% damage).")
+					.defineInRange("weaponAttackMultiplier", 0.15D, 0.0D, 1.0D);
+			autoStowWeapons = builder
+					.comment("If true, weapons that a player picks up are automatically moved into the matching strife deck (if the portfolio has a matching specibus with free space).")
+					.define("autoStowWeapons", true);
+			strifeEvolution = builder
+					.comment("If true, specibuses can evolve once per player (e.g. Bladekind becomes 1/2 Bladekind when a sword breaks). Once a player has a 1/2 Bladekind specibus, breaking swords turn into their halved version instead of disappearing.")
+					.define("strifeEvolution", true);
+			strifeCardMobDrops = builder
+					.comment("Hostile mobs have a chance to drop a Strife Card. This is the base amount of cards each player can get this way (players can get more as their echeladder rung increases: rung / 6). Set to 0 to disable card drops entirely.")
+					.defineInRange("strifeCardMobDrops", 5, 0, 1000);
+			strifeCardDropChance = builder
+					.comment("Chance for a card to drop when a player kills a hostile mob. Multiplied by (looting level + 1).")
+					.defineInRange("strifeCardDropChance", 0.01D, 0.0D, 1.0D);
+			strifeCardFirstUnderlingDropChance = builder
+					.comment("Chance for a card to drop when a player who hasn't received any cards yet kills an underling.")
+					.defineInRange("strifeCardFirstUnderlingDropChance", 0.05D, 0.0D, 1.0D);
+			strifeCardContentChance = builder
+					.comment("Chance that a dropped card already contains a weapon of its kind. Cheap weapons (by grist cost) are common, while expensive ones are extremely rare.")
+					.defineInRange("strifeCardContentChance", 0.15D, 0.0D, 1.0D);
+			strifeCardDropKinds = builder
+					.comment("Which kinds of abstrata (for example \"minestuck.sword\") can be found on dropped cards. Leave empty to allow every kind.")
+					.define("strifeCardDropKinds", new ArrayList<>(List.of("minestuck.sword", "minestuck.hammer", "minestuck.club", "minestuck.key", "minestuck.cane", "minestuck.sickle", "minestuck.spoon", "minestuck.fork", "minestuck.claw", "minestuck.needle", "minestuck.knife", "minestuck.axe", "minestuck.pickaxe", "minestuck.shovel", "minestuck.hoe", "minestuck.bow", "minestuck.baton", "minestuck.dice", "minestuck.fan", "minestuck.lance", "minestuck.scythe", "minestuck.staff", "minestuck.wand", "minestuck.star", "minestuck.saw", "minestuck.crossbow")));
 			builder.pop();
 			
 			builder.push("sylladex");

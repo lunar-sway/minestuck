@@ -138,11 +138,17 @@ public class StrifePackets
 		}
 	}
 	
-	public record SetActiveStrifePacket(int specibusIndex) implements MSPacket.PlayToServer
+	/**
+	 * @param playSound whether the switch sound plays. The strife deck screen wants it, the silent strife switcher HUD doesn't.
+	 */
+	public record SetActiveStrifePacket(int specibusIndex, boolean playSound) implements MSPacket.PlayToServer
 	{
 		public static final Type<SetActiveStrifePacket> ID = new Type<>(Minestuck.id("set_active_strife"));
 		
-		public static final StreamCodec<ByteBuf, SetActiveStrifePacket> STREAM_CODEC = ByteBufCodecs.INT.map(SetActiveStrifePacket::new, SetActiveStrifePacket::specibusIndex);
+		public static final StreamCodec<ByteBuf, SetActiveStrifePacket> STREAM_CODEC = StreamCodec.composite(
+				ByteBufCodecs.INT, SetActiveStrifePacket::specibusIndex,
+				ByteBufCodecs.BOOL, SetActiveStrifePacket::playSound,
+				SetActiveStrifePacket::new);
 		
 		@Override
 		public Type<? extends CustomPacketPayload> type()
@@ -153,11 +159,14 @@ public class StrifePackets
 		@Override
 		public void execute(IPayloadContext context, ServerPlayer player)
 		{
-			if(specibusIndex() < 0 || specibusIndex() >= StrifePortfolioHandler.getData(player).getPortfolio().length)
+			StrifeSpecibus[] portfolio = StrifePortfolioHandler.getData(player).getPortfolio();
+			if(specibusIndex() < 0 || specibusIndex() >= portfolio.length || portfolio[specibusIndex()] == null)
 				return;
-			StrifePortfolioHandler.setSelectedSpecibus(player, specibusIndex());
-			player.serverLevel().playSound(null, player.blockPosition(),
-					MSSoundEvents.EVENT_STRIFE_SPECIBUS_SWITCH.get(), SoundSource.PLAYERS, 0.4F, 1.0F);
+			
+			// The sound plays once, and only if the selection really changed. The switcher HUD sends playSound = false
+			if(StrifePortfolioHandler.setSelectedSpecibus(player, specibusIndex()) && playSound())
+				player.serverLevel().playSound(null, player.blockPosition(),
+						MSSoundEvents.EVENT_STRIFE_SPECIBUS_SWITCH.get(), SoundSource.PLAYERS, 0.4F, 1.0F);
 		}
 	}
 	

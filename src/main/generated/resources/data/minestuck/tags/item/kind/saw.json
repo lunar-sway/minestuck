@@ -1,14 +1,24 @@
 {
   "values": [
     "minestuck:lipstick_chainsaw",
+    "minestuck:lipstick",
     "minestuck:cakesaw",
+    "minestuck:cakesaw_lipstick",
     "minestuck:magenta_mauler",
+    "minestuck:magenta_mauler_lipstick",
     "minestuck:thistleblower",
+    "minestuck:thistleblower_lipstick",
     "minestuck:hand_cranked_vampire_eraser",
+    "minestuck:hand_cranked_vampire_eraser_lipstick",
     "minestuck:emerald_immolator",
+    "minestuck:emerald_immolator_lipstick",
     "minestuck:obsidiator",
+    "minestuck:obsidiator_lipstick",
     "minestuck:devils_delight",
+    "minestuck:devils_delight_lipstick",
     "minestuck:demonbane_ragripper",
-    "minestuck:frosttooth"
+    "minestuck:demonbane_ragripper_lipstick",
+    "minestuck:frosttooth",
+    "minestuck:frosttooth_lipstick"
   ]
 }

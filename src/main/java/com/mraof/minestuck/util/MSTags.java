@@ -167,6 +167,7 @@ public class MSTags
 		
 		// Kind Abstractuses
 		public static final TagKey<Item> KIND_SWORD = tag("kind/sword");
+		public static final TagKey<Item> KIND_KEY = tag("kind/key");
 		public static final TagKey<Item> KIND_HALF_SWORD = tag("kind/half_sword");
 		public static final TagKey<Item> KIND_BOW = tag("kind/bow");
 		public static final TagKey<Item> KIND_PICKAXE = tag("kind/pickaxe");

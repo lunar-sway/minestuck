@@ -24,6 +24,7 @@ public class KindAbstratusList {
 	public static final String CLUB = "minestuck.club";
 	public static final String CLAW = "minestuck.claw";
 	public static final String SAW = "minestuck.saw";
+	public static final String KEY = "minestuck.key";
 	public static final String LANCE = "minestuck.lance";
 	public static final String FAN = "minestuck.fan";
 	public static final String SICKLE = "minestuck.sickle";

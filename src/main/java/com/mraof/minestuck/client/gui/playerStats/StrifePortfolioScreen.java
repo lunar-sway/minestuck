@@ -298,7 +298,7 @@ public class StrifePortfolioScreen extends PlayerStatsScreen
 		// card fan click
 		if(selectedCard >= 0)
 		{
-			if(button == 0) PacketDistributor.sendToServer(new StrifePackets.SetActiveStrifePacket(selectedCard));
+			if(button == 0) PacketDistributor.sendToServer(new StrifePackets.SetActiveStrifePacket(selectedCard, true));
 			else if(button == 1) PacketDistributor.sendToServer(new StrifePackets.RetrieveStrifeCardPacket(selectedCard));
 			return true;
 		}
@@ -309,7 +309,7 @@ public class StrifePortfolioScreen extends PlayerStatsScreen
 			int sx = xOffset + 22 + 20 * i;
 			int sy = yOffset + 165;
 			if(!isPointInRegion(sx, sy, 18, 18, (int) mx, (int) my)) continue;
-			if(button == 0) PacketDistributor.sendToServer(new StrifePackets.SetActiveStrifePacket(i));
+			if(button == 0) PacketDistributor.sendToServer(new StrifePackets.SetActiveStrifePacket(i, true));
 			else if(button == 1) PacketDistributor.sendToServer(new StrifePackets.RetrieveStrifeCardPacket(i));
 			return true;
 		}
@@ -333,7 +333,7 @@ public class StrifePortfolioScreen extends PlayerStatsScreen
 				int sz = Math.round(16 * CS);
 				if(isPointInRegion(wx, wy, sz, sz, (int) mx, (int) my))
 				{
-					PacketDistributor.sendToServer(new StrifePackets.RetrieveWeaponPacket(i, InteractionHand.MAIN_HAND));
+					PacketDistributor.sendToServer(new StrifePackets.RetrieveWeaponPacket(data.rawToDeckIndex(i), InteractionHand.MAIN_HAND)); // the armed weapon isn't shown in the raw deck
 					return true;
 				}
 				n++;

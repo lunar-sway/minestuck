@@ -1,5 +1,6 @@
 package com.mraof.minestuck.strife;
 
+import com.mraof.minestuck.MinestuckConfig;
 import com.mraof.minestuck.entity.MSAttributes;
 import com.mraof.minestuck.item.MSItems;
 import com.mraof.minestuck.item.StrifeCardItem;
@@ -22,6 +23,12 @@ import javax.annotation.Nullable;
 /**
  * Server-side helper that encapsulates all mutations to a player's Strife Portfolio.
  * Every method that changes portfolio state MUST (!!!) call {@link #syncToClient} at the end.
+ *
+ * <p>Model: while a weapon is <i>armed</i> it lives in the player's main hand (tagged with
+ * {@code STRIFE_ASSIGNED}) and is <b>not</b> part of the deck list. {@link StrifePortfolioData#getSelectedWeaponIndex()}
+ * then remembers the deck slot that the weapon returns to when it is disarmed.
+ * Every weapon index that is exchanged with the client refers to the deck <i>including</i> the armed weapon
+ * (see {@link StrifePortfolioData#getDeckWithArmed}).</p>
  */
 public final class StrifePortfolioHandler
 {
@@ -49,10 +56,18 @@ public final class StrifePortfolioHandler
 		return !stack.isEmpty() && stack.has(MSItemComponents.STRIFE_ASSIGNED.get());
 	}
 	
-	
 	public static void syncToClient(ServerPlayer player)
 	{
 		PacketDistributor.sendToPlayer(player, new StrifePackets.SyncPortfolioPacket(getData(player)));
+	}
+	
+	/**
+	 * Puts the stack in the player's inventory, or drops it at the player's feet if there is no room.
+	 */
+	public static void giveOrDrop(ServerPlayer player, ItemStack stack)
+	{
+		if(stack.isEmpty()) return;
+		if(!player.getInventory().add(stack) && !stack.isEmpty()) player.drop(stack, false);
 	}
 	
 	public static boolean addSpecibus(ServerPlayer player, StrifeSpecibus specibus)
@@ -66,17 +81,14 @@ public final class StrifePortfolioHandler
 		}
 		if(specibus.isAssigned() && data.portfolioHasAbstratus(specibus.getAbstratusName()))
 		{
-			player.displayClientMessage(
-					Component.translatable("status.strife.portfolioDuplicate",
-							specibus.getDisplayName()), true);
+			player.displayClientMessage(Component.translatable("status.strife.portfolioDuplicate", specibus.getDisplayName()), true);
 			return false;
 		}
 		
 		data.addSpecibus(specibus);
 		
 		if(specibus.isAssigned())
-			player.displayClientMessage(
-					Component.translatable("status.strife.assign", specibus.getDisplayName()), true);
+			player.displayClientMessage(Component.translatable("status.strife.assign", specibus.getDisplayName()), true);
 		
 		syncToClient(player);
 		return true;
@@ -93,22 +105,18 @@ public final class StrifePortfolioHandler
 		if(stack.getItem() instanceof StrifeCardItem)
 		{
 			StrifeSpecibus specibus = stack.get(MSItemComponents.STRIFE_SPECIBUS_DATA.get());
-			if(specibus != null)
+			if(specibus != null && specibus.isAssigned())
 			{
-				if(addSpecibus(player, specibus))
-					stack.shrink(1);
+				if(addSpecibus(player, specibus)) stack.shrink(1);
 			} else
 			{
-				// Blank card – open the abstrata-selection GUI on client
+				// Blank card - open the abstrata-selection GUI on client
 				PacketDistributor.sendToPlayer(player, new StrifePackets.OpenStrifeCardGuiPacket(hand));
 			}
 		} else
 		{
 			// Non-card item: try to put it in a weapon deck
-			if(addWeapon(player, stack, true))
-			{
-				player.setItemInHand(InteractionHand.MAIN_HAND, ItemStack.EMPTY);
-			}
+			if(addWeapon(player, stack, true)) player.setItemInHand(hand, ItemStack.EMPTY);
 		}
 	}
 	
@@ -120,16 +128,14 @@ public final class StrifePortfolioHandler
 	{
 		StrifePortfolioData data = getData(player);
 		
-		// If this slot is currently armed, disarm before removing
-		if(data.isArmed() && data.getSelectedSpecibusIndex() == index)
-			clearArmedWeapon(player, data);
+		// If this slot is currently armed, return the weapon to its deck first so it ends up on the card
+		if(data.isArmed() && data.getSelectedSpecibusIndex() == index) disarm(player, data);
 		
 		StrifeSpecibus removed = data.removeSpecibus(index);
 		if(removed == null) return;
 		
 		ItemStack card = createStrifeCard(removed);
-		if(!player.addItem(card))
-			player.drop(card, false);
+		if(!player.addItem(card)) player.drop(card, false);
 		
 		syncToClient(player);
 	}
@@ -142,43 +148,29 @@ public final class StrifePortfolioHandler
 		return addWeapon(player, stack, true);
 	}
 	
-	/**
-	 * Finds the first compatible specibus slot (selected first, then others) and
-	 * adds a copy of {@code stack} to its deck.
-	 *
-	 * <p>Respects {@code strifeDeckMaxSize} config option.</p>
-	 */
-	public static boolean addWeapon(ServerPlayer player, ItemStack stack, boolean sendMessage)
+	private record Placement(@Nullable StrifeSpecibus placed, @Nullable StrifeSpecibus fullButCompatible)
 	{
-		if(stack.isEmpty()) return false;
-		StrifePortfolioData data = getData(player);
+	}
+	
+	/**
+	 * Finds the first compatible specibus slot (selected first, then others) and adds a copy of {@code stack} to its deck.
+	 */
+	private static Placement placeWeapon(ServerPlayer player, StrifePortfolioData data, ItemStack stack)
+	{
 		int maxSize = getStrifeDeckCapacity(player);
-		
 		StrifeSpecibus fullButCompatible = null;
 		
-		// 1 - try the selected slot first
 		StrifeSpecibus selected = data.getSelectedSpecibus();
 		if(selected != null)
 		{
 			KindAbstratusType type = selected.getKindAbstratus();
 			if(type != null && type.partOf(stack))
 			{
-				if(maxSize >= 0 && selected.getContents().size() >= maxSize)
-				{
-					fullButCompatible = selected;
-				} else if(selected.putItemStack(stack))
-				{
-					if(sendMessage)
-						player.displayClientMessage(
-								Component.translatable("status.strife.assignWeapon",
-										stack.getHoverName(), selected.getDisplayName()), true);
-					syncToClient(player);
-					return true;
-				}
+				if(maxSize >= 0 && selected.getContents().size() >= maxSize) fullButCompatible = selected;
+				else if(selected.putItemStack(stack)) return new Placement(selected, null);
 			}
 		}
 		
-		// 2 – try remaining slots
 		StrifeSpecibus[] portfolio = data.getPortfolio();
 		for(int i = 0; i < StrifePortfolioData.PORTFOLIO_SIZE; i++)
 		{
@@ -192,43 +184,79 @@ public final class StrifePortfolioHandler
 				if(fullButCompatible == null) fullButCompatible = sp;
 				continue;
 			}
-			if(sp.putItemStack(stack))
-			{
-				if(sendMessage)
-					player.displayClientMessage(
-							Component.translatable("status.strife.assignWeapon",
-									stack.getHoverName(), sp.getDisplayName()), true);
-				syncToClient(player);
-				return true;
-			}
+			if(sp.putItemStack(stack)) return new Placement(sp, null);
+		}
+		return new Placement(null, fullButCompatible);
+	}
+	
+	/**
+	 * Adds a copy of {@code stack} to the first compatible strife deck.
+	 *
+	 * <p>Respects the {@code strifeDeckMaxSize} config option and the strife deck capacity attribute.</p>
+	 */
+	public static boolean addWeapon(ServerPlayer player, ItemStack stack, boolean sendMessage)
+	{
+		if(stack.isEmpty()) return false;
+		StrifePortfolioData data = getData(player);
+		
+		Placement placement = placeWeapon(player, data, stack);
+		if(placement.placed() != null)
+		{
+			if(sendMessage)
+				player.displayClientMessage(Component.translatable("status.strife.assignWeapon", stack.getHoverName(), placement.placed().getDisplayName()), true);
+			syncToClient(player);
+			return true;
 		}
 		
-		// 3 – failure feedback
 		if(sendMessage)
 		{
-			if(fullButCompatible != null)
-				player.displayClientMessage(
-						Component.translatable("status.strife.strifeDeckFull",
-								fullButCompatible.getDisplayName()), true);
+			if(placement.fullButCompatible() != null)
+				player.displayClientMessage(Component.translatable("status.strife.strifeDeckFull", placement.fullButCompatible().getDisplayName()), true);
 			else
-				player.displayClientMessage(
-						Component.translatable("status.strife.weaponMismatch",
-								stack.getHoverName()), true);
+				player.displayClientMessage(Component.translatable("status.strife.weaponMismatch", stack.getHoverName()), true);
 		}
 		return false;
 	}
 	
-	public static int getStrifeDeckCapacity(ServerPlayer player)
+	/**
+	 * Automatically stows a picked up weapon into a matching strife deck.
+	 * @return true if the whole stack was moved into a deck and the caller should remove it from the world
+	 */
+	public static boolean autoStow(ServerPlayer player, ItemStack stack)
 	{
-		return (int) player.getAttributeValue(MSAttributes.STRIFE_DECK_CAPACITY);
+		if(stack.isEmpty() || stack.getMaxStackSize() > 1) return false;
+		if(isAssigned(stack)) return false;
+		
+		StrifePortfolioData data = getData(player);
+		if(data.isPortfolioEmpty() || !data.hasMatchingSpecibus(stack)) return false;
+		
+		Placement placement = placeWeapon(player, data, stack);
+		if(placement.placed() == null) return false;
+		
+		player.displayClientMessage(Component.translatable("status.strife.autoStow", stack.getHoverName(), placement.placed().getDisplayName()), true);
+		syncToClient(player);
+		return true;
 	}
 	
 	/**
-	 * Called from the armed tick when the player places a new (non-assigned) item
-	 * in their main hand while armed.  Attempts to find the item a compatible slot
-	 * and – if found – relocates the arm from the old slot to the new one.
+	 * The deck size limit for this player, or -1 if there is no limit.
+	 * The config value is the base, and the {@code player.strife_deck_capacity} attribute adds to it.
+	 */
+	public static int getStrifeDeckCapacity(ServerPlayer player)
+	{
+		int base = MinestuckConfig.SERVER.strifeDeckMaxSize.get();
+		if(base < 0) return -1;
+		return base + (int) player.getAttributeValue(MSAttributes.STRIFE_DECK_CAPACITY);
+	}
+	
+	/**
+	 * Called from the armed tick when the armed weapon has left the main hand (the player scrolled the hotbar)
+	 * and a new, non-assigned item is held instead. If that item fits a specibus it becomes the armed weapon,
+	 * possibly switching the selected specibus.
 	 *
-	 * @return the specibus slot the item was moved into, or {@code null}
+	 * <p>The new item stays in the hand; it is only tagged as assigned. It does not enter the deck while it is armed.</p>
+	 *
+	 * @return the specibus slot the item was armed from, or {@code null} if it doesn't fit anywhere
 	 */
 	@Nullable
 	public static StrifeSpecibus moveSelectedWeapon(ServerPlayer player, ItemStack newStack)
@@ -236,29 +264,21 @@ public final class StrifePortfolioHandler
 		StrifePortfolioData data = getData(player);
 		int maxSize = getStrifeDeckCapacity(player);
 		StrifeSpecibus selSp = data.getSelectedSpecibus();
-		int prevSelIndex = data.getSelectedSpecibusIndex();
-		
-		// Helper:: try a single specibus slot
-		// Returns the specibus if the item fits, null otherwise
 		StrifeSpecibus[] portfolio = data.getPortfolio();
 		
-		// Try selected slot first
 		if(selSp != null)
 		{
 			KindAbstratusType type = selSp.getKindAbstratus();
-			if(type != null && type.partOf(newStack)
-					&& (maxSize < 0 || selSp.getContents().size() < maxSize))
+			if(type != null && type.partOf(newStack) && (maxSize < 0 || selSp.getContents().size() < maxSize))
 			{
 				newStack.set(MSItemComponents.STRIFE_ASSIGNED.get(), Unit.INSTANCE);
-				selSp.getContents().add(newStack);
-				selSp.unassign(data.getSelectedWeaponIndex()); // remove old weapon from deck
-				data.setSelectedWeaponIndex(selSp.getContents().indexOf(newStack));
+				data.setSelectedWeaponIndex(selSp.getContents().size());
+				data.setArmed(true);
 				syncToClient(player);
 				return selSp;
 			}
 		}
 		
-		// Try other slots
 		for(int i = 0; i < StrifePortfolioData.PORTFOLIO_SIZE; i++)
 		{
 			StrifeSpecibus sp = portfolio[i];
@@ -268,11 +288,9 @@ public final class StrifePortfolioHandler
 			if(maxSize >= 0 && sp.getContents().size() >= maxSize) continue;
 			
 			newStack.set(MSItemComponents.STRIFE_ASSIGNED.get(), Unit.INSTANCE);
-			sp.getContents().add(newStack);
-			
-			if(selSp != null) selSp.unassign(data.getSelectedWeaponIndex());
 			data.setSelectedSpecibusIndex(i);
-			data.setSelectedWeaponIndex(sp.getContents().indexOf(newStack));
+			data.setSelectedWeaponIndex(sp.getContents().size());
+			data.setArmed(true);
 			syncToClient(player);
 			return sp;
 		}
@@ -281,12 +299,12 @@ public final class StrifePortfolioHandler
 	}
 	
 	/**
-	 * Toggles the "armed" state for the weapon at {@code weaponIndex} of the
-	 * currently selected specibus slot.
+	 * Arms the weapon at {@code weaponIndex} (an index into the deck including the armed weapon)
+	 * of the currently selected specibus slot, or disarms it if that weapon is already armed.
 	 *
 	 * <ul>
-	 *   <li>Hand occupied by a real (non-assigned) item → does nothing.</li>
-	 *   <li>Hand empty or has an assigned item → arm / disarm.</li>
+	 *   <li>Hand occupied by a real (non-assigned) item: does nothing.</li>
+	 *   <li>Hand empty or holding the armed weapon: arm / switch / disarm.</li>
 	 * </ul>
 	 */
 	public static void retrieveWeapon(ServerPlayer player, int weaponIndex, InteractionHand hand)
@@ -296,34 +314,30 @@ public final class StrifePortfolioHandler
 		if(selSp == null) return;
 		
 		ItemStack heldItem = player.getItemInHand(hand);
-		boolean handEmpty = heldItem.isEmpty();
-		boolean handArmed = isAssigned(heldItem);
+		boolean handArmed = data.isArmed() && isAssigned(heldItem);
 		
-		if(data.isArmed() && data.getSelectedWeaponIndex() == weaponIndex && handArmed)
-		{
-			heldItem.remove(MSItemComponents.STRIFE_ASSIGNED.get());
-			int at = Math.min(weaponIndex, selSp.getContents().size());
-			selSp.getContents().add(at, heldItem);
-			player.setItemInHand(hand, ItemStack.EMPTY);
-			data.setArmed(false);
-			syncToClient(player);
-			return;
-		}
+		if(!heldItem.isEmpty() && !handArmed) return;
 		
-		if(!handEmpty && !handArmed) return;
+		int armedSlot = handArmed ? data.armedWeaponSlot(selSp.getContents().size()) : -1;
 		
 		if(handArmed)
 		{
-			heldItem.remove(MSItemComponents.STRIFE_ASSIGNED.get());
-			selSp.getContents().add(
-					Math.min(data.getSelectedWeaponIndex(), selSp.getContents().size()),
-					heldItem);
+			// Put the armed weapon back so that weaponIndex refers to the complete deck
+			ItemStack back = heldItem.copy();
+			back.remove(MSItemComponents.STRIFE_ASSIGNED.get());
+			selSp.getContents().add(armedSlot, back);
 			player.setItemInHand(hand, ItemStack.EMPTY);
+			data.setArmed(false);
+			
+			if(weaponIndex == armedSlot)
+			{
+				syncToClient(player);
+				return;
+			}
 		}
 		
 		if(weaponIndex < 0 || weaponIndex >= selSp.getContents().size())
 		{
-			data.setArmed(false);
 			syncToClient(player);
 			return;
 		}
@@ -337,49 +351,44 @@ public final class StrifePortfolioHandler
 	}
 	
 	/**
-	 * Moves a weapon from a specibus deck slot into the player's offhand
-	 * (and tries to assign the current offhand item to the portfolio in return).
+	 * Moves a weapon from a specibus deck slot (index into the deck including the armed weapon)
+	 * into the player's offhand, and tries to store the previous offhand item in the portfolio in return.
 	 */
 	public static void swapOffhandWeapon(ServerPlayer player, int specibusIndex, int weaponIndex)
 	{
 		StrifePortfolioData data = getData(player);
+		if(specibusIndex < 0 || specibusIndex >= StrifePortfolioData.PORTFOLIO_SIZE) return;
 		StrifeSpecibus sp = data.getPortfolio()[specibusIndex];
 		if(sp == null) return;
 		
-		ItemStack weapon = sp.retrieveStack(weaponIndex);
-		if(weapon.isEmpty()) return;
+		// The weapon indexes count the armed weapon, so put it back first
+		if(data.isArmed() && data.getSelectedSpecibusIndex() == specibusIndex) disarm(player, data);
 		
-		// Disarm if this was the armed weapon
-		if(data.isArmed()
-				&& data.getSelectedSpecibusIndex() == specibusIndex
-				&& data.getSelectedWeaponIndex() == weaponIndex)
+		if(weaponIndex < 0 || weaponIndex >= sp.getContents().size())
 		{
-			data.setArmed(false);
-			for(InteractionHand h : InteractionHand.values())
-				if(isAssigned(player.getItemInHand(h)))
-					player.setItemInHand(h, ItemStack.EMPTY);
+			syncToClient(player);
+			return;
 		}
 		
-		sp.unassign(weaponIndex);
-		if(weaponIndex >= sp.getContents().size())
+		ItemStack weapon = sp.getContents().remove(weaponIndex);
+		if(specibusIndex == data.getSelectedSpecibusIndex() && data.getSelectedWeaponIndex() >= sp.getContents().size())
 			data.setSelectedWeaponIndex(0);
 		
 		ItemStack currentOffhand = player.getItemInHand(InteractionHand.OFF_HAND);
 		if(currentOffhand.isEmpty() || addWeapon(player, currentOffhand, false))
 		{
-			weapon.set(MSItemComponents.STRIFE_ASSIGNED.get(), Unit.INSTANCE);
 			player.setItemInHand(InteractionHand.OFF_HAND, weapon);
 		} else
 		{
-			player.drop(weapon, false);
+			// The offhand item doesn't fit anywhere, so nothing is swapped
+			sp.getContents().add(Math.min(weaponIndex, sp.getContents().size()), weapon);
 		}
 		
 		syncToClient(player);
 	}
 	
 	/**
-	 * Removes the currently selected weapon from the active specibus deck and
-	 * disarms the player.
+	 * Takes the currently selected weapon out of the active specibus deck and gives it back to the player.
 	 */
 	public static void unassignSelected(ServerPlayer player)
 	{
@@ -389,68 +398,60 @@ public final class StrifePortfolioHandler
 		
 		if(data.isArmed())
 		{
-			for(InteractionHand h : InteractionHand.values())
-			{
-				ItemStack held = player.getItemInHand(h);
-				if(isAssigned(held))
-				{
-					held.remove(MSItemComponents.STRIFE_ASSIGNED.get());
-					selSp.getContents().add(
-							Math.min(data.getSelectedWeaponIndex(), selSp.getContents().size()),
-							held);
-					player.setItemInHand(h, ItemStack.EMPTY);
-					break;
-				}
-			}
-		}
-		
-		selSp.unassign(data.getSelectedWeaponIndex());
-		if(data.getSelectedWeaponIndex() >= selSp.getContents().size())
-			data.setSelectedWeaponIndex(0);
-		data.setArmed(false);
-		syncToClient(player);
-	}
-	
-	/**
-	 * Changes the active specibus slot.  Disarms the player if they were armed.
-	 */
-	public static void setSelectedSpecibus(ServerPlayer player, int index)
-	{
-		StrifePortfolioData data = getData(player);
-		
-		if(data.isArmed())
-			clearArmedWeapon(player, data);
-		
-		data.setSelectedSpecibusIndex(index);
-		syncToClient(player);
-	}
-	
-	/**
-	 * Clears the assigned item from the player's hands and marks data as unarmed.
-	 */
-	private static void clearArmedWeapon(ServerPlayer player, StrifePortfolioData data)
-	{
-		for(InteractionHand hand : InteractionHand.values())
-		{
-			ItemStack held = player.getItemInHand(hand);
+			ItemStack held = player.getMainHandItem();
 			if(isAssigned(held))
 			{
-				player.setItemInHand(hand, ItemStack.EMPTY);
-				break;
+				ItemStack weapon = held.copy();
+				weapon.remove(MSItemComponents.STRIFE_ASSIGNED.get());
+				player.setItemInHand(InteractionHand.MAIN_HAND, ItemStack.EMPTY);
+				giveOrDrop(player, weapon);
 			}
+		} else if(data.getSelectedWeaponIndex() >= 0 && data.getSelectedWeaponIndex() < selSp.getContents().size())
+		{
+			giveOrDrop(player, selSp.getContents().remove(data.getSelectedWeaponIndex()));
 		}
+		
+		if(data.getSelectedWeaponIndex() >= selSp.getContents().size()) data.setSelectedWeaponIndex(0);
 		data.setArmed(false);
+		syncToClient(player);
 	}
 	
 	/**
-	 * Returns a copy of the stack with the STRIFE_ASSIGNED component removed (for comparison).
+	 * Changes the active specibus slot. Returns the armed weapon to its deck first.
+	 *
+	 * @return true if the selection actually changed
 	 */
-	private static ItemStack stripAssigned(ItemStack stack)
+	public static boolean setSelectedSpecibus(ServerPlayer player, int index)
 	{
-		if(stack.isEmpty()) return stack;
-		ItemStack copy = stack.copy();
-		copy.remove(MSItemComponents.STRIFE_ASSIGNED.get());
-		return copy;
+		StrifePortfolioData data = getData(player);
+		if(index == data.getSelectedSpecibusIndex()) return false;
+		
+		disarm(player, data);
+		data.setSelectedSpecibusIndex(index);
+		syncToClient(player);
+		return true;
+	}
+	
+	/**
+	 * Returns the armed weapon from the main hand to its slot in the selected deck and marks the data as unarmed.
+	 * Does not sync, the caller has to do that.
+	 */
+	public static void disarm(ServerPlayer player, StrifePortfolioData data)
+	{
+		if(!data.isArmed()) return;
+		
+		StrifeSpecibus selSp = data.getSelectedSpecibus();
+		ItemStack held = player.getMainHandItem();
+		if(isAssigned(held))
+		{
+			ItemStack weapon = held.copy();
+			weapon.remove(MSItemComponents.STRIFE_ASSIGNED.get());
+			player.setItemInHand(InteractionHand.MAIN_HAND, ItemStack.EMPTY);
+			
+			if(selSp != null) selSp.getContents().add(data.armedWeaponSlot(selSp.getContents().size()), weapon);
+			else giveOrDrop(player, weapon);
+		}
+		data.setArmed(false);
 	}
 	
 	/**
@@ -459,8 +460,7 @@ public final class StrifePortfolioHandler
 	public static ItemStack createStrifeCard(@Nullable StrifeSpecibus specibus)
 	{
 		ItemStack card = new ItemStack(MSItems.STRIFE_CARD.get());
-		if(specibus != null)
-			card.set(MSItemComponents.STRIFE_SPECIBUS_DATA.get(), specibus);
+		if(specibus != null) card.set(MSItemComponents.STRIFE_SPECIBUS_DATA.get(), specibus);
 		return card;
 	}
 }

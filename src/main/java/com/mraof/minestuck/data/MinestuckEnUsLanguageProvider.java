@@ -2277,6 +2277,11 @@ public class MinestuckEnUsLanguageProvider extends MinestuckLanguageProvider
 		add("status.strife.strifeDeckFull", "%s is full!");
 		add("status.strife.weaponMismatch", "%s doesn't match any specibus in your portfolio.");
 		add("status.strife.unlockSwitcher", "Strife Specibus Quick-Switcher unlocked!");
+		add("status.strife.autoStow", "Stowed %s in %s.");
+		add("status.strife.evolved", "Your %s specibus evolved into %s!");
+		add("status.strife.evolvedWeapon", "%s broke, but lives on as %s.");
+		add("strife.item.allocated", "[Strife Allocated]");
+		add("strife.item.abstrataList", "%s");
 		add("item.minestuck.strife_card.blank", "Blank! Right-click to assign a weapon type");
 
 		add(StrifePortfolioScreen.TITLE, "Strife Portfolio");
@@ -2290,6 +2295,7 @@ public class MinestuckEnUsLanguageProvider extends MinestuckLanguageProvider
 		addStrife(KindAbstratusList.HALF_SWORD, "½ Bladekind");
 		addStrife(KindAbstratusList.BOW, "Bowkind");
 		addStrife(KindAbstratusList.PICKAXE, "Pickaxekind");
+		addStrife(KindAbstratusList.KEY, "Keykind");
 		addStrife(KindAbstratusList.AXE, "Axekind");
 		addStrife(KindAbstratusList.HOE, "Hoekind");
 		addStrife(KindAbstratusList.SHOVEL, "Spadekind");
@@ -2589,7 +2595,7 @@ public class MinestuckEnUsLanguageProvider extends MinestuckLanguageProvider
 		add(JeiGristCost.GRIST_COSTS, "Grist Costs");
 		
 		add(MSKeyHandler.CATEGORY, "Minestuck");
-		add(MSKeyHandler.CATEGORY_STRIFE, "Strife Portfolio");
+		add(MSKeyHandler.CATEGORY_STRIFE, "Minestuck (Strife Portfolio)");
 		add(MSKeyHandler.STATS_GUI, "View General Minestuck Gui");
 		add(MSKeyHandler.EXIT_EDIT_MODE, "Exit Edit Mode");
 		add(MSKeyHandler.CAPTCHALOGUE, "Captchalogue Held Item");

@@ -2,14 +2,18 @@ package com.mraof.minestuck.player;
 
 import com.mojang.serialization.Codec;
 import com.mojang.serialization.codecs.RecordCodecBuilder;
+import com.mraof.minestuck.item.components.MSItemComponents;
 import net.minecraft.network.RegistryFriendlyByteBuf;
 import net.minecraft.network.codec.ByteBufCodecs;
 import net.minecraft.network.codec.StreamCodec;
+import net.minecraft.world.item.ItemStack;
 
 import javax.annotation.Nullable;
 import java.util.ArrayList;
+import java.util.HashSet;
 import java.util.List;
 import java.util.Objects;
+import java.util.Set;
 
 /**
  * Portfolio: up to PORTFOLIO_SIZE specibus slots, each containing a weapon type
@@ -42,6 +46,15 @@ public class StrifePortfolioData
 	 * Unlocked when the player's echeladder rung reaches the configured threshold.
 	 */
 	private boolean abstrataSwitcherUnlocked = false;
+	/**
+	 * Ids of the specibus evolutions this player has already performed (see {@code StrifeEvolution}).
+	 * Every evolution can only happen once per player.
+	 */
+	private final Set<String> completedEvolutions = new HashSet<>();
+	/**
+	 * How many strife cards this player has received from mob drops (used to cap the drops).
+	 */
+	private int droppedCards = 0;
 	
 	/**
 	 * A (slot-index, specibus) pair used for serialisation.
@@ -56,7 +69,15 @@ public class StrifePortfolioData
 		}, buf -> new PortfolioSlot(ByteBufCodecs.INT.decode(buf), StrifeSpecibus.STREAM_CODEC.decode(buf)));
 	}
 	
-	public static final Codec<StrifePortfolioData> CODEC = RecordCodecBuilder.create(instance -> instance.group(PortfolioSlot.CODEC.listOf().optionalFieldOf("portfolio", List.of()).forGetter(StrifePortfolioData::getPortfolioSlots), Codec.INT.optionalFieldOf("selected_specibus", -1).forGetter(d -> d.selectedSpecibusIndex), Codec.INT.optionalFieldOf("selected_weapon", -1).forGetter(d -> d.selectedWeaponIndex), Codec.BOOL.optionalFieldOf("armed", false).forGetter(d -> d.armed), Codec.BOOL.optionalFieldOf("switcher_unlocked", false).forGetter(d -> d.abstrataSwitcherUnlocked)).apply(instance, StrifePortfolioData::fromCodec));
+	public static final Codec<StrifePortfolioData> CODEC = RecordCodecBuilder.create(instance -> instance.group(
+			PortfolioSlot.CODEC.listOf().optionalFieldOf("portfolio", List.of()).forGetter(StrifePortfolioData::getPortfolioSlots),
+			Codec.INT.optionalFieldOf("selected_specibus", -1).forGetter(d -> d.selectedSpecibusIndex),
+			Codec.INT.optionalFieldOf("selected_weapon", -1).forGetter(d -> d.selectedWeaponIndex),
+			Codec.BOOL.optionalFieldOf("armed", false).forGetter(d -> d.armed),
+			Codec.BOOL.optionalFieldOf("switcher_unlocked", false).forGetter(d -> d.abstrataSwitcherUnlocked),
+			Codec.STRING.listOf().optionalFieldOf("completed_evolutions", List.of()).forGetter(d -> new ArrayList<>(d.completedEvolutions)),
+			Codec.INT.optionalFieldOf("dropped_cards", 0).forGetter(d -> d.droppedCards)
+	).apply(instance, StrifePortfolioData::fromCodec));
 	
 	public static final StreamCodec<RegistryFriendlyByteBuf, StrifePortfolioData> STREAM_CODEC = StreamCodec.of((buf, data) -> {
 		List<PortfolioSlot> slots = data.getPortfolioSlots();
@@ -67,15 +88,28 @@ public class StrifePortfolioData
 		ByteBufCodecs.INT.encode(buf, data.selectedWeaponIndex);
 		ByteBufCodecs.BOOL.encode(buf, data.armed);
 		ByteBufCodecs.BOOL.encode(buf, data.abstrataSwitcherUnlocked);
+		ByteBufCodecs.INT.encode(buf, data.completedEvolutions.size());
+		for(String id : data.completedEvolutions)
+			ByteBufCodecs.STRING_UTF8.encode(buf, id);
+		ByteBufCodecs.INT.encode(buf, data.droppedCards);
 	}, buf -> {
 		int slotCount = ByteBufCodecs.INT.decode(buf);
 		List<PortfolioSlot> slots = new ArrayList<>(slotCount);
 		for(int i = 0; i < slotCount; i++)
 			slots.add(PortfolioSlot.STREAM_CODEC.decode(buf));
-		return fromCodec(slots, ByteBufCodecs.INT.decode(buf), ByteBufCodecs.INT.decode(buf), ByteBufCodecs.BOOL.decode(buf), ByteBufCodecs.BOOL.decode(buf));
+		int selSpecibus = ByteBufCodecs.INT.decode(buf);
+		int selWeapon = ByteBufCodecs.INT.decode(buf);
+		boolean armed = ByteBufCodecs.BOOL.decode(buf);
+		boolean switcherUnlocked = ByteBufCodecs.BOOL.decode(buf);
+		int evolutionCount = ByteBufCodecs.INT.decode(buf);
+		List<String> evolutions = new ArrayList<>(evolutionCount);
+		for(int i = 0; i < evolutionCount; i++)
+			evolutions.add(ByteBufCodecs.STRING_UTF8.decode(buf));
+		int droppedCards = ByteBufCodecs.INT.decode(buf);
+		return fromCodec(slots, selSpecibus, selWeapon, armed, switcherUnlocked, evolutions, droppedCards);
 	});
 	
-	private static StrifePortfolioData fromCodec(List<PortfolioSlot> slots, int selSpecibus, int selWeapon, boolean armed, boolean switcherUnlocked)
+	private static StrifePortfolioData fromCodec(List<PortfolioSlot> slots, int selSpecibus, int selWeapon, boolean armed, boolean switcherUnlocked, List<String> evolutions, int droppedCards)
 	{
 		StrifePortfolioData data = new StrifePortfolioData();
 		for(PortfolioSlot slot : slots)
@@ -84,6 +118,8 @@ public class StrifePortfolioData
 		data.selectedWeaponIndex = selWeapon;
 		data.armed = armed;
 		data.abstrataSwitcherUnlocked = switcherUnlocked;
+		data.completedEvolutions.addAll(evolutions);
+		data.droppedCards = Math.max(0, droppedCards);
 		return data;
 	}
 	
@@ -134,7 +170,7 @@ public class StrifePortfolioData
 	 */
 	public StrifeSpecibus[] getNonEmptyPortfolio()
 	{
-		return java.util.Arrays.stream(portfolio).filter(sp -> sp != null && sp.isAssigned() && !sp.getContents().isEmpty()).toArray(StrifeSpecibus[]::new);
+		return java.util.Arrays.stream(portfolio).filter(sp -> sp != null && sp.isAssigned() && (!sp.getContents().isEmpty() || (armed && sp == getSelectedSpecibus()))).toArray(StrifeSpecibus[]::new);
 	}
 	
 	/**
@@ -242,6 +278,80 @@ public class StrifePortfolioData
 	}
 	
 	/**
+	 * Returns the slot index of the first specibus with the given abstratus name, or -1.
+	 */
+	public int findSpecibusIndex(@Nullable String abstratusName)
+	{
+		if(abstratusName == null) return -1;
+		for(int i = 0; i < PORTFOLIO_SIZE; i++)
+			if(portfolio[i] != null && abstratusName.equals(portfolio[i].getAbstratusName())) return i;
+		return -1;
+	}
+	
+	public boolean hasCompletedEvolution(String evolutionId)
+	{
+		return completedEvolutions.contains(evolutionId);
+	}
+	
+	public void completeEvolution(String evolutionId)
+	{
+		completedEvolutions.add(evolutionId);
+	}
+	
+	public int getDroppedCards()
+	{
+		return droppedCards;
+	}
+	
+	public void addDroppedCard()
+	{
+		droppedCards++;
+	}
+	
+	/**
+	 * Copies the state that has to survive death even when the portfolio itself is dropped
+	 * (unlocked switcher, completed evolutions and the mob-drop counter).
+	 */
+	public void copyPersistentStateFrom(StrifePortfolioData other)
+	{
+		this.abstrataSwitcherUnlocked = other.abstrataSwitcherUnlocked;
+		this.completedEvolutions.clear();
+		this.completedEvolutions.addAll(other.completedEvolutions);
+		this.droppedCards = other.droppedCards;
+	}
+	
+	/**
+	 * While a weapon is armed it is held in the main hand and is <b>not</b> part of the deck list.
+	 * This returns the deck the way the player experiences it: the armed weapon is put back at the slot it will return to.
+	 * All weapon indexes that are sent to the server refer to this list.
+	 */
+	public List<ItemStack> getDeckWithArmed(StrifeSpecibus specibus, ItemStack mainHand)
+	{
+		List<ItemStack> deck = new ArrayList<>(specibus.getContents());
+		if(armed && specibus == getSelectedSpecibus() && !mainHand.isEmpty() && mainHand.has(MSItemComponents.STRIFE_ASSIGNED.get()))
+			deck.add(armedWeaponSlot(deck.size()), mainHand);
+		return deck;
+	}
+	
+	/**
+	 * Converts an index into the raw deck list (without the armed weapon) to an index into {@link #getDeckWithArmed}.
+	 */
+	public int rawToDeckIndex(int rawIndex)
+	{
+		if(armed && rawIndex >= armedWeaponSlot(getSelectedSpecibus() == null ? 0 : getSelectedSpecibus().getContents().size()))
+			return rawIndex + 1;
+		return rawIndex;
+	}
+	
+	/**
+	 * The slot in the deck that the armed weapon returns to, clamped to the deck size.
+	 */
+	public int armedWeaponSlot(int deckSize)
+	{
+		return Math.max(0, Math.min(selectedWeaponIndex, deckSize));
+	}
+	
+	/**
 	 * Returns the currently selected StrifeSpecibus, or null if none is selected
 	 * or the index is out of range.
 	 */
@@ -256,7 +366,7 @@ public class StrifePortfolioData
 	 * Returns true if the portfolio contains any specibus whose weapon type
 	 * matches the given ItemStack.
 	 */
-	public boolean hasMatchingSpecibus(net.minecraft.world.item.ItemStack stack)
+	public boolean hasMatchingSpecibus(ItemStack stack)
 	{
 		for(StrifeSpecibus sp : portfolio)
 		{
@@ -272,12 +382,12 @@ public class StrifePortfolioData
 	{
 		if(this == o) return true;
 		if(!(o instanceof StrifePortfolioData other)) return false;
-		return selectedSpecibusIndex == other.selectedSpecibusIndex && selectedWeaponIndex == other.selectedWeaponIndex && armed == other.armed && abstrataSwitcherUnlocked == other.abstrataSwitcherUnlocked && java.util.Arrays.equals(portfolio, other.portfolio);
+		return selectedSpecibusIndex == other.selectedSpecibusIndex && selectedWeaponIndex == other.selectedWeaponIndex && armed == other.armed && abstrataSwitcherUnlocked == other.abstrataSwitcherUnlocked && droppedCards == other.droppedCards && completedEvolutions.equals(other.completedEvolutions) && java.util.Arrays.equals(portfolio, other.portfolio);
 	}
 	
 	@Override
 	public int hashCode()
 	{
-		return Objects.hash(selectedSpecibusIndex, selectedWeaponIndex, armed, abstrataSwitcherUnlocked, java.util.Arrays.hashCode(portfolio));
+		return Objects.hash(selectedSpecibusIndex, selectedWeaponIndex, armed, abstrataSwitcherUnlocked, droppedCards, completedEvolutions, java.util.Arrays.hashCode(portfolio));
 	}
 }

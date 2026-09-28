@@ -9,7 +9,6 @@ import com.mraof.minestuck.player.KindAbstratusType;
 import com.mraof.minestuck.player.StrifePortfolioData;
 import com.mraof.minestuck.player.StrifeSpecibus;
 import com.mraof.minestuck.util.MSAttachments;
-import com.mraof.minestuck.util.MSSoundEvents;
 import net.minecraft.client.Minecraft;
 import net.minecraft.client.gui.GuiGraphics;
 import net.minecraft.resources.ResourceLocation;
@@ -21,7 +20,7 @@ import net.neoforged.fml.common.EventBusSubscriber;
 import net.neoforged.neoforge.client.event.RenderGuiEvent;
 import net.neoforged.neoforge.network.PacketDistributor;
 
-import java.util.LinkedList;
+import java.util.List;
 
 /**
  * Client-side hud for quick weapon / specibus switching.
@@ -43,6 +42,7 @@ public final class StrifeSwitcherHud
 	
 	public static boolean showSwitcher = false;
 	public static boolean offhandMode = false;
+	private static boolean specibusScrolled = false;
 	
 	public static int selSpecibus = -1;
 	public static int selWeapon = 0;
@@ -55,6 +55,7 @@ public final class StrifeSwitcherHud
 			return;
 		
 		offhandMode = offhand;
+		specibusScrolled = false;
 		
 		ItemStack main = mc.player.getMainHandItem();
 		boolean armed = !main.isEmpty() && main.has(MSItemComponents.STRIFE_ASSIGNED.get());
@@ -71,7 +72,6 @@ public final class StrifeSwitcherHud
 		}
 		
 		showSwitcher = true;
-		mc.player.playSound(MSSoundEvents.EVENT_STRIFE_SWITCHER_ON.get(), 0.5F, 1.0F);
 		
 		selSpecibus = data.getSelectedSpecibusIndex();
 		selWeapon = data.getSelectedWeaponIndex();
@@ -83,6 +83,12 @@ public final class StrifeSwitcherHud
 			if(nonEmpty.length > 0)
 				selSpecibus = data.getSpecibusIndex(nonEmpty[0]);
 		}
+		
+		if(selSpecibus >= 0 && selSpecibus < data.getPortfolio().length && data.getPortfolio()[selSpecibus] != null)
+		{
+			int deckSize = data.getDeckWithArmed(data.getPortfolio()[selSpecibus], main).size();
+			selWeapon = Math.max(0, Math.min(selWeapon, deckSize - 1));
+		}
 	}
 	
 	public static void finishSwitch()
@@ -92,33 +98,30 @@ public final class StrifeSwitcherHud
 		
 		showSwitcher = false;
 		Minecraft mc = Minecraft.getInstance();
-		if(mc.player != null)
-			mc.player.playSound(MSSoundEvents.EVENT_STRIFE_SWITCHER_OFF.get(), 0.5F, 1.0F);
 		commitSelection(mc);
 	}
 	
 	private static void commitSelection(Minecraft mc)
 	{
-		if(selSpecibus < 0) return;
+		if(selSpecibus < 0 || mc.player == null) return;
+		
+		StrifePortfolioData data = mc.player.getData(MSAttachments.STRIFE_PORTFOLIO.get());
 		
 		if(offhandMode)
 		{
 			PacketDistributor.sendToServer(new StrifePackets.SwapOffhandStrifePacket(selSpecibus, selWeapon));
-		} else
-		{
-			boolean sneaking = mc.player != null && mc.player.isCrouching();
-			StrifePortfolioData data = mc.player.getData(MSAttachments.STRIFE_PORTFOLIO.get());
-			
-			if(sneaking && data.abstrataSwitcherUnlocked())
-			{
-				// Specibus already changed server-side via SetActiveStrifePacket during scroll
-				// Soo no further action needed =]
-			} else
-			{
-				// Arm/disarm selected weapon
-				PacketDistributor.sendToServer(new StrifePackets.RetrieveWeaponPacket(selWeapon, InteractionHand.MAIN_HAND));
-			}
+			return;
 		}
+		
+		boolean specibusChanged = selSpecibus != data.getSelectedSpecibusIndex();
+		boolean specibusOnly = specibusScrolled || (mc.player.isCrouching() && data.abstrataSwitcherUnlocked());
+		
+		if(specibusChanged)
+			PacketDistributor.sendToServer(new StrifePackets.SetActiveStrifePacket(selSpecibus, false));
+		
+		// Arm/disarm the selected weapon of the (possibly new) specibus. Packets are handled in order.
+		if(!specibusOnly)
+			PacketDistributor.sendToServer(new StrifePackets.RetrieveWeaponPacket(selWeapon, InteractionHand.MAIN_HAND));
 	}
 	
 	@SubscribeEvent
@@ -151,13 +154,15 @@ public final class StrifeSwitcherHud
 			curPos = Math.floorMod(curPos + dir, ne.length);
 			selSpecibus = data.getSpecibusIndex(ne[curPos]);
 			selWeapon = 0;
-			PacketDistributor.sendToServer(new StrifePackets.SetActiveStrifePacket(selSpecibus));
+			specibusScrolled = true;
+			// Only the local selection changes here, the server is told when the key is released
 		} else
 		{
 			if(selSpecibus < 0 || selSpecibus >= data.getPortfolio().length) return;
 			StrifeSpecibus sp = data.getPortfolio()[selSpecibus];
-			if(sp == null || sp.getContents().isEmpty()) return;
-			int deckSize = sp.getContents().size();
+			if(sp == null) return;
+			int deckSize = data.getDeckWithArmed(sp, mc.player.getMainHandItem()).size();
+			if(deckSize == 0) return;
 			selWeapon = Math.floorMod(selWeapon + dir, deckSize);
 		}
 	}
@@ -227,8 +232,12 @@ public final class StrifeSwitcherHud
 		StrifeSpecibus sp = data.getPortfolio()[selSpecibus];
 		if(sp == null) return;
 		
-		LinkedList<ItemStack> deck = sp.getContents();
+		// The armed weapon is held in the hand, but it still belongs to the deck
+		List<ItemStack> deck = data.getDeckWithArmed(sp, mc.player.getMainHandItem());
 		if(deck.isEmpty()) return;
+		
+		boolean armedDeck = data.isArmed() && sp == data.getSelectedSpecibus();
+		int armedIndex = armedDeck ? data.armedWeaponSlot(sp.getContents().size()) : -1;
 		
 		int toShow = (int) Math.min(5, Math.ceil((deck.size() - 1) / 2f) * 2);
 		
@@ -247,8 +256,8 @@ public final class StrifeSwitcherHud
 				g.drawString(mc.font, name, cx - mc.font.width(name) / 2, baseY - 14, 0x00AB54, true);
 			}
 			
-			// highlight if this is the currently armed weapon in offhand mode
-			if(data.isArmed() && offhandMode && wIdx == data.getSelectedWeaponIndex())
+			// mark the weapon that is currently armed
+			if(wIdx == armedIndex && !(offset == 0 && offhandMode))
 				drawWidgetBox(g, x - 3, baseY - 3, true);
 			
 			g.renderItem(stack, x, baseY);
