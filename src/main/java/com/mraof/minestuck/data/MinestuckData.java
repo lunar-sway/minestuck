@@ -66,6 +66,7 @@ public final class MinestuckData
 		gen.addProvider(event.includeServer(), new RungsProvider(output));
 		
 		gen.addProvider(event.includeClient(), new MSBlockStateProvider(output, fileHelper));
+		gen.addProvider(event.includeClient(), new HalfBladeTextureProvider(output, fileHelper));
 		gen.addProvider(event.includeClient(), new MinestuckItemModelProvider(output, fileHelper));
 		var enUsLanguageProvider = gen.addProvider(event.includeClient(), new MinestuckEnUsLanguageProvider(output));
 		

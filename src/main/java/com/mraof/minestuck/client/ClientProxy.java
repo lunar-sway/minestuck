@@ -31,6 +31,7 @@ import com.mraof.minestuck.item.components.CardStoredItemComponent;
 import com.mraof.minestuck.item.components.MSItemComponents;
 import com.mraof.minestuck.item.components.StoneTabletTextComponent;
 import com.mraof.minestuck.item.weapon.MusicPlayerWeapon;
+import com.mraof.minestuck.player.StrifeSpecibus;
 import com.mraof.minestuck.util.MSParticleType;
 import com.mraof.minestuck.world.MSDimensions;
 import net.minecraft.MethodsReturnNonnullByDefault;
@@ -154,6 +155,8 @@ public class ClientProxy
 		ItemProperties.register(MSItems.STONE_TABLET.get(), Minestuck.id("carved"), (stack, level, holder, seed) -> StoneTabletTextComponent.hasText(stack) ? 1 : 0);
 		ItemProperties.register(MSItems.MUSIC_SWORD.get(), Minestuck.id("has_cassette"), (stack, level, holder, seed) -> MusicPlayerWeapon.hasCassette(stack) ? 1 : 0);
 		ItemProperties.register(MSItems.BOOMBOX_BEATER.get(), Minestuck.id("has_cassette"), (stack, level, holder, seed) -> MusicPlayerWeapon.hasCassette(stack) ? 1 : 0);
+		
+		ItemProperties.register(MSItems.STRIFE_CARD.get(), Minestuck.id("has_weapons"), (stack, level, holder, seed) -> {StrifeSpecibus specibus = stack.get(MSItemComponents.STRIFE_SPECIBUS_DATA.get());return specibus != null && !specibus.getContents().isEmpty() ? 1 : 0;});
 		
 		ItemProperties.register(MSItems.TEMPLE_SCANNER.get(), Minestuck.id("angle"), new CompassItemPropertyFunction((level, stack, entity) -> stack.get(MSItemComponents.TARGET_LOCATION)));
 		ItemProperties.register(MSItems.TEMPLE_SCANNER.get(), Minestuck.id("powered"), (stack, level, entity, seed) -> StructureScannerItem.isPowered(stack) ? 1 : 0);

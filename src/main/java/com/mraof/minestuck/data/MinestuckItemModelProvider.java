@@ -27,7 +27,10 @@ public class MinestuckItemModelProvider extends ItemModelProvider
 		DreamerMoonBlocksData.addItems(this);
 		
 		// Specibuses
-		simpleItem(MSItems.STRIFE_CARD);
+		// The strife card texture changes when it has weapons inside, the same way as the music sword changes with a cassette.
+		// The has_weapons property is registered in ClientProxy.
+		ItemModelBuilder assignedStrifeCard = withExistingParent("strife_card_assigned", ResourceLocation.withDefaultNamespace("item/generated")).texture("layer0", texture("strife_card_assigned"));
+		simpleItem(MSItems.STRIFE_CARD).override().predicate(id("has_weapons"), 1).model(assignedStrifeCard).end();
 		
 		//Hammers
 		handheldItem(MSItems.CLAW_HAMMER);
@@ -93,6 +96,40 @@ public class MinestuckItemModelProvider extends ItemModelProvider
 		handheldItem(MSItems.HALF_SCARLET_RIBBITAR);
 		handheldItem(MSItems.HALF_CALEDSCRATCH);
 		handheldItem(MSItems.HALF_ROYAL_DERINGER);
+		handheldItem(MSItems.HALF_SORD);
+		handheldItem(MSItems.HALF_PAPER_SWORD);
+		handheldItem(MSItems.HALF_KEYBLADE);
+		handheldItem(MSItems.HALF_SWONGE);
+		handheldItem(MSItems.HALF_WET_SWONGE);
+		handheldItem(MSItems.HALF_PUMORD);
+		handheldItem(MSItems.HALF_WET_PUMORD);
+		handheldItem(MSItems.HALF_CACTACEAE_CUTLASS);
+		handheldItem(MSItems.HALF_STEAK_SWORD);
+		handheldItem(MSItems.HALF_BEEF_SWORD);
+		handheldItem(MSItems.HALF_IRRADIATED_STEAK_SWORD);
+		handheldItem(MSItems.HALF_MACUAHUITL);
+		handheldItem(MSItems.HALF_FROSTY_MACUAHUITL);
+		handheldItem(MSItems.HALF_UNBREAKABLE_KATANA);
+		handheldItem(MSItems.HALF_ANGEL_APOCALYPSE);
+		handheldItem(MSItems.HALF_FIRE_POKER);
+		handheldItem(MSItems.HALF_TOO_HOT_TO_HANDLE);
+		handheldItem(MSItems.HALF_CLAYMORE);
+		handheldItem(MSItems.HALF_CUTLASS_OF_ZILLYWAIR);
+		handheldItem(MSItems.HALF_REGISWORD);
+		handheldItem(MSItems.HALF_CRUEL_FATE_CRUCIBLE);
+		handheldItem(MSItems.HALF_DOGG_MACHETE);
+		handheldItem(MSItems.HALF_COBALT_SABRE);
+		handheldItem(MSItems.HALF_QUANTUM_SABRE);
+		handheldItem(MSItems.HALF_SHATTER_BEACON);
+		handheldItem(MSItems.HALF_SHATTER_BACON);
+		handheldItem(MSItems.HALF_MUSIC_SWORD);
+		handheldItem(MSItems.HALF_PILLOW_TALK);
+		handheldItem(MSItems.HALF_KRAKENS_EYE);
+		handheldItem(MSItems.HALF_CINNAMON_SWORD);
+		handheldItem(MSItems.HALF_UNION_BUSTER);
+		handheldItem(MSItems.HALF_THORN_IN_YOUR_SIDE);
+		handheldItem(MSItems.HALF_ROSE_PROTOCOL);
+		handheldItem(MSItems.HALF_EMERALD_SWORD);
 		
 		//Knives
 		knifeWeapon(MSItems.DAGGER);

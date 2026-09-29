@@ -13,6 +13,7 @@ import net.minecraft.core.registries.BuiltInRegistries;
 import net.minecraft.network.chat.Component;
 import net.minecraft.resources.ResourceLocation;
 import net.minecraft.server.level.ServerPlayer;
+import net.minecraft.tags.TagKey;
 import net.minecraft.util.Unit;
 import net.minecraft.world.InteractionHand;
 import net.minecraft.world.item.Item;
@@ -41,19 +42,24 @@ import java.util.function.Function;
 public final class StrifeEvolution
 {
 	/**
-	 * @param id         unique id that is stored in the player data once the evolution has happened
-	 * @param fromKind   the kind whose weapons evolve
-	 * @param toKind     the kind that the specibus evolves into
-	 * @param converter  finds the evolved counterpart for a broken weapon, or null if it has none
-	 * @param onEvolve   called (once per player) when the specibus itself evolves, used for advancements
+	 * @param id        unique id that is stored in the player data once the evolution has happened
+	 * @param fromKind  the kind whose weapons evolve
+	 * @param toKind    the kind that the specibus evolves into
+	 * @param blacklist weapons that cant be evolved
+	 * @param converter finds the evolved counterpart for a broken weapon, or null if it has none
+	 * @param onEvolve  called (once per player) when the specibus itself evolves, used for advancements
 	 */
-	public record Evolution(String id, String fromKind, String toKind, Function<ItemStack, Item> converter,
-	                        Consumer<ServerPlayer> onEvolve)
+	public record Evolution(String id, String fromKind, String toKind, TagKey<Item> blacklist,
+	                        Function<ItemStack, Item> converter, Consumer<ServerPlayer> onEvolve)
 	{
+		public boolean cannotEvolve(ItemStack stack)
+		{
+			KindAbstratusType type = KindAbstratusList.getTypeFromName(fromKind);
+			return type != null && type.partOf(stack) && (stack.is(blacklist) || converter.apply(stack) == null);
+		}
 	}
 	
-	public static final Evolution BLADEKIND = new Evolution("bladekind", KindAbstratusList.SWORD, KindAbstratusList.HALF_SWORD,
-			StrifeEvolution::halfBlade, player -> MSCriteriaTriggers.BLADEKIND_BREAK.get().trigger(player));
+	public static final Evolution BLADEKIND = new Evolution("bladekind", KindAbstratusList.SWORD, KindAbstratusList.HALF_SWORD, MSTags.Items.BLADEKIND_EVOLUTION_BLACKLIST, StrifeEvolution::halfBlade, player -> MSCriteriaTriggers.BLADEKIND_BREAK.get().trigger(player));
 	
 	public static final List<Evolution> EVOLUTIONS = List.of(BLADEKIND);
 	
@@ -73,13 +79,11 @@ public final class StrifeEvolution
 	@Nullable
 	private static Item halfBlade(ItemStack stack)
 	{
-		if(!stack.is(MSTags.Items.KIND_SWORD)) return null;
+		if(!stack.is(MSTags.Items.KIND_SWORD) || stack.is(MSTags.Items.BLADEKIND_EVOLUTION_BLACKLIST)) return null;
 		ResourceLocation id = BuiltInRegistries.ITEM.getKey(stack.getItem());
 		ResourceLocation halfId = Minestuck.id("half_" + id.getPath());
 		
-		return BuiltInRegistries.ITEM.getOptional(halfId)
-				.filter(item -> new ItemStack(item).is(MSTags.Items.KIND_HALF_SWORD))
-				.orElse(null);
+		return BuiltInRegistries.ITEM.getOptional(halfId).filter(item -> new ItemStack(item).is(MSTags.Items.KIND_HALF_SWORD)).orElse(null);
 	}
 	
 	/**
@@ -107,15 +111,25 @@ public final class StrifeEvolution
 		for(Evolution evolution : EVOLUTIONS)
 		{
 			Item toItem = evolution.converter().apply(broken);
-			if(toItem == null) continue;
 			
 			StrifePortfolioData data = StrifePortfolioHandler.getData(player);
 			boolean wasArmed = data.isArmed() && StrifePortfolioHandler.isAssigned(broken);
+			
+			if(toItem == null)
+			{
+				if(wasArmed && evolution.cannotEvolve(broken))
+				{
+					player.displayClientMessage(Component.translatable("status.strife.evolutionUnavailable", broken.getHoverName()), true);
+					return;
+				}
+				continue;
+			}
+			
 			int evolvedIndex = data.findSpecibusIndex(evolution.toKind());
 			
 			if(evolvedIndex >= 0)
 			{
-				continueAsEvolvedWeapon(player, data, evolution, broken, toItem, evolvedIndex, wasArmed);
+				continueAsEvolvedWeapon(player, data, broken, toItem, evolvedIndex, wasArmed);
 				return;
 			}
 			
@@ -142,31 +156,31 @@ public final class StrifeEvolution
 		{
 			Item converted = evolution.converter().apply(stack);
 			ItemStack candidate = converted != null ? convert(stack, converted) : stack;
-			if(newType.partOf(candidate))
-				keep.add(candidate);
-			else
-				returned.add(stack);
+			if(newType.partOf(candidate)) keep.add(candidate);
+			else returned.add(stack);
 		}
 		
-		specibus.getContents().clear();
-		specibus.switchKindAbstratus(evolution.toKind());
-		specibus.getContents().addAll(keep);
+		int slot = data.getSpecibusIndex(specibus);
+		if(slot < 0) return;
+		
+		StrifeSpecibus evolvedSpecibus = new StrifeSpecibus(evolution.toKind());
+		evolvedSpecibus.setCustomName(specibus.getCustomName());
+		evolvedSpecibus.getContents().addAll(keep);
+		data.setSpecibus(evolvedSpecibus, slot);
 		returned.forEach(stack -> StrifePortfolioHandler.giveOrDrop(player, stack));
 		
 		ItemStack evolved = convert(broken, toItem);
 		evolved.set(MSItemComponents.STRIFE_ASSIGNED.get(), Unit.INSTANCE);
 		setHandNow(player, evolved);
 		
-		data.setSelectedWeaponIndex(data.armedWeaponSlot(specibus.getContents().size()));
+		data.setSelectedWeaponIndex(data.armedWeaponSlot(evolvedSpecibus.getContents().size()));
 		data.completeEvolution(evolution.id());
 		
-		Component newName = specibus.getDisplayName();
-		player.displayClientMessage(Component.translatable("status.strife.evolved", oldType != null ? oldName : Component.empty(), newName), true);
 		evolution.onEvolve().accept(player);
 		StrifePortfolioHandler.syncToClient(player);
 	}
 	
-	private static void continueAsEvolvedWeapon(ServerPlayer player, StrifePortfolioData data, Evolution evolution, ItemStack broken, Item toItem, int evolvedIndex, boolean wasArmed)
+	private static void continueAsEvolvedWeapon(ServerPlayer player, StrifePortfolioData data, ItemStack broken, Item toItem, int evolvedIndex, boolean wasArmed)
 	{
 		ItemStack evolved = convert(broken, toItem);
 		
@@ -188,7 +202,6 @@ public final class StrifeEvolution
 		}
 		
 		setHandNow(player, evolved);
-		player.displayClientMessage(Component.translatable("status.strife.evolvedWeapon", broken.getHoverName(), evolved.getHoverName()), true);
 		StrifePortfolioHandler.syncToClient(player);
 	}
 	
@@ -203,8 +216,7 @@ public final class StrifeEvolution
 		Pending pending = PENDING.remove(player.getUUID());
 		if(pending == null) return;
 		
-		if(player.getItemInHand(pending.hand()).isEmpty())
-			player.setItemInHand(pending.hand(), pending.stack());
+		if(player.getItemInHand(pending.hand()).isEmpty()) player.setItemInHand(pending.hand(), pending.stack());
 	}
 	
 	public static void clearPending(ServerPlayer player)

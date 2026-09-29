@@ -2,6 +2,7 @@ package com.mraof.minestuck.data.tag;
 
 import com.mraof.minestuck.Minestuck;
 import com.mraof.minestuck.block.MSBlocks;
+import com.mraof.minestuck.data.EvolutionBlacklistDetector;
 import com.mraof.minestuck.item.MSItems;
 import com.mraof.minestuck.item.artifact.CruxiteArtifactItem;
 import com.mraof.minestuck.item.weapon.MSToolType;
@@ -14,6 +15,7 @@ import com.mraof.minestuck.util.ExtraModTags;
 import com.mraof.minestuck.util.MSTags;
 import net.minecraft.MethodsReturnNonnullByDefault;
 import net.minecraft.core.HolderLookup;
+import net.minecraft.core.registries.BuiltInRegistries;
 import net.minecraft.data.PackOutput;
 import net.minecraft.data.tags.ItemTagsProvider;
 import net.minecraft.data.tags.TagsProvider;
@@ -118,7 +120,7 @@ public class MinestuckItemTagsProvider extends ItemTagsProvider
 		
 		// [kinds abstractus]
 		tag(KIND_SWORD).addTag(SWORDS).add(SORD.get(), PAPER_SWORD.get(), KEYBLADE.get(), SWONGE.get(), WET_SWONGE.get(), PUMORD.get(), WET_PUMORD.get(), CACTACEAE_CUTLASS.get(), STEAK_SWORD.get(), BEEF_SWORD.get(), IRRADIATED_STEAK_SWORD.get(), MACUAHUITL.get(), FROSTY_MACUAHUITL.get(), KATANA.get(), UNBREAKABLE_KATANA.get(), ANGEL_APOCALYPSE.get(), FIRE_POKER.get(), TOO_HOT_TO_HANDLE.get(), CALEDSCRATCH.get(), CALEDFWLCH.get(), ROYAL_DERINGER.get(), CLAYMORE.get(), CUTLASS_OF_ZILLYWAIR.get(), REGISWORD.get(), CRUEL_FATE_CRUCIBLE.get(), SCARLET_RIBBITAR.get(), DOGG_MACHETE.get(), COBALT_SABRE.get(), QUANTUM_SABRE.get(), SHATTER_BEACON.get(), SHATTER_BACON.get(), SUBTRACTSHUMIDIRE_ZOMORRODNEGATIVE.get(), MUSIC_SWORD.get(), PILLOW_TALK.get(), KRAKENS_EYE.get(), CINNAMON_SWORD.get(), UNION_BUSTER.get(), CHAINSAW_KATANA.get(), THORN_IN_YOUR_SIDE.get(), ROSE_PROTOCOL.get(), EMERALD_SWORD.get()).remove(KIND_HALF_SWORD);
-		tag(KIND_HALF_SWORD).add(HALF_KATANA.get(), HALF_CALEDFWLCH.get(), HALF_ROYAL_DERINGER.get(), HALF_SCARLET_RIBBITAR.get(),  HALF_CALEDSCRATCH.get());
+		tag(KIND_HALF_SWORD).add(HALF_KATANA.get(), HALF_CALEDFWLCH.get(), HALF_ROYAL_DERINGER.get(), HALF_SCARLET_RIBBITAR.get(), HALF_CALEDSCRATCH.get(), HALF_SORD.get(), HALF_PAPER_SWORD.get(), HALF_KEYBLADE.get(), HALF_SWONGE.get(), HALF_WET_SWONGE.get(), HALF_PUMORD.get(), HALF_WET_PUMORD.get(), HALF_CACTACEAE_CUTLASS.get(), HALF_STEAK_SWORD.get(), HALF_BEEF_SWORD.get(), HALF_IRRADIATED_STEAK_SWORD.get(), HALF_MACUAHUITL.get(), HALF_FROSTY_MACUAHUITL.get(), HALF_UNBREAKABLE_KATANA.get(), HALF_ANGEL_APOCALYPSE.get(), HALF_FIRE_POKER.get(), HALF_TOO_HOT_TO_HANDLE.get(), HALF_CLAYMORE.get(), HALF_CUTLASS_OF_ZILLYWAIR.get(), HALF_REGISWORD.get(), HALF_CRUEL_FATE_CRUCIBLE.get(), HALF_DOGG_MACHETE.get(), HALF_COBALT_SABRE.get(), HALF_QUANTUM_SABRE.get(), HALF_SHATTER_BEACON.get(), HALF_SHATTER_BACON.get(), HALF_MUSIC_SWORD.get(), HALF_PILLOW_TALK.get(), HALF_KRAKENS_EYE.get(), HALF_CINNAMON_SWORD.get(), HALF_UNION_BUSTER.get(), HALF_THORN_IN_YOUR_SIDE.get(), HALF_ROSE_PROTOCOL.get(), HALF_EMERALD_SWORD.get());
 		tag(KIND_BOW).addTag(TOOLS_BOW);
 		tag(KIND_CROSSBOW).addTag(TOOLS_CROSSBOW);
 		tag(KIND_PICKAXE).addTag(PICKAXES).add(EMERALD_PICKAXE.get());
@@ -146,6 +148,8 @@ public class MinestuckItemTagsProvider extends ItemTagsProvider
 		tag(KIND_WAND).add(WAND.get(), NEEDLE_WAND.get(), ARTIFUCKER.get(), POINTER_WAND.get(), POOL_CUE_WAND.get(), THORN_OF_OGLOGOTH.get(),THISTLE_OF_ZILLYWICH.get(), QUILL_OF_ECHIDNA.get());
 		tag(KIND_STAR).add(SBAHJARANG.get(), SHURIKEN.get(), CLUBS_SUITARANG.get(), DIAMONDS_SUITARANG.get(), HEARTS_SUITARANG.get(), SPADES_SUITARANG.get(), CHAKRAM.get(), UMBRAL_INFILTRATOR.get(), SORCERERS_PINBALL.get());
 		tag(KIND_CAKE).add(APPLE_CAKE.get(), BLUE_CAKE.get(), COLD_CAKE.get(), RED_CAKE.get(), HOT_CAKE.get(), REVERSE_CAKE.get(), FUCHSIA_CAKE.get(), NEGATIVE_CAKE.get(), CARROT_CAKE.get(), LARGE_CAKE.get(), PINK_FROSTED_TOP_LARGE_CAKE.get(), CHOCOLATEY_CAKE.get(), MOON_CAKE.get(), PAN_CAKE.get());
+		
+		tag(BLADEKIND_EVOLUTION_BLACKLIST).add(Items.WOODEN_SWORD, Items.STONE_SWORD, Items.IRON_SWORD, Items.GOLDEN_SWORD, Items.DIAMOND_SWORD, Items.NETHERITE_SWORD).add(CHAINSAW_KATANA.get(), SUBTRACTSHUMIDIRE_ZOMORRODNEGATIVE.get());
 		
 		tag(HOES).add(EMERALD_HOE.get(), HELLBRINGERS_HOE_INACTIVE.get(), HELLBRINGERS_HOE_ACTIVE.get());
 		tag(HEAD_ARMOR).add(PRISMARINE_HELMET.get(), IRON_LASS_GLASSES.get(), PROSPIT_CIRCLET.get(), DERSE_CIRCLET.get(), AMPHIBEANIE.get(), NOSTRILDAMUS.get(), PONYTAIL.get(), ANOMALOCARIS_HAT.get(), ALIEN_BOPPERS.get());

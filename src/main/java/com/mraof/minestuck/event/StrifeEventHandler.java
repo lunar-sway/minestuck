@@ -60,6 +60,12 @@ public final class StrifeEventHandler
 	}
 	
 	@SubscribeEvent
+	public static void onPlayerRespawned(PlayerEvent.PlayerRespawnEvent event)
+	{
+		if(event.getEntity() instanceof ServerPlayer player) StrifePortfolioHandler.syncToClient(player);
+	}
+	
+	@SubscribeEvent
 	public static void onPlayerDimensionChange(PlayerEvent.PlayerChangedDimensionEvent event)
 	{
 		if(event.getEntity() instanceof ServerPlayer player) StrifePortfolioHandler.syncToClient(player);

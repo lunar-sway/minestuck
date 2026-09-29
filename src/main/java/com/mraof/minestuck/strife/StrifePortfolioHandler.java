@@ -58,6 +58,7 @@ public final class StrifePortfolioHandler
 	
 	public static void syncToClient(ServerPlayer player)
 	{
+		getData(player).removeDeadSlots();
 		PacketDistributor.sendToPlayer(player, new StrifePackets.SyncPortfolioPacket(getData(player)));
 	}
 	
@@ -124,7 +125,7 @@ public final class StrifePortfolioHandler
 	 * Removes the specibus at {@code index} from the portfolio, wraps it in a
 	 * {@link StrifeCardItem} and gives it to the player (or drops it).
 	 */
-	public static void retrieveCard(ServerPlayer player, int index)
+	public static boolean retrieveCard(ServerPlayer player, int index)
 	{
 		StrifePortfolioData data = getData(player);
 		
@@ -132,12 +133,13 @@ public final class StrifePortfolioHandler
 		if(data.isArmed() && data.getSelectedSpecibusIndex() == index) disarm(player, data);
 		
 		StrifeSpecibus removed = data.removeSpecibus(index);
-		if(removed == null) return;
+		if(removed == null) return false;
 		
 		ItemStack card = createStrifeCard(removed);
 		if(!player.addItem(card)) player.drop(card, false);
 		
 		syncToClient(player);
+		return true;
 	}
 	
 	/**

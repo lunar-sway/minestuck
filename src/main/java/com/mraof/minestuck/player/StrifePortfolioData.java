@@ -120,7 +120,36 @@ public class StrifePortfolioData
 		data.abstrataSwitcherUnlocked = switcherUnlocked;
 		data.completedEvolutions.addAll(evolutions);
 		data.droppedCards = Math.max(0, droppedCards);
+		data.removeDeadSlots();
 		return data;
+	}
+	
+	public boolean removeDeadSlots()
+	{
+		boolean changed = false;
+		for(int i = 0; i < PORTFOLIO_SIZE; i++)
+		{
+			StrifeSpecibus sp = portfolio[i];
+			if(sp == null) continue;
+			
+			boolean dead = !sp.isAssigned() && sp.getContents().isEmpty();
+			for(int j = 0; j < i && !dead; j++)
+				if(portfolio[j] == sp) dead = true;
+			
+			if(dead)
+			{
+				portfolio[i] = null;
+				changed = true;
+			}
+		}
+		
+		if(selectedSpecibusIndex >= 0 && (selectedSpecibusIndex >= PORTFOLIO_SIZE || portfolio[selectedSpecibusIndex] == null))
+		{
+			selectedSpecibusIndex = -1;
+			armed = false;
+			changed = true;
+		}
+		return changed;
 	}
 	
 	private List<PortfolioSlot> getPortfolioSlots()

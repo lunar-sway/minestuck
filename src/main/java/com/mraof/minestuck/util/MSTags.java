@@ -169,6 +169,8 @@ public class MSTags
 		public static final TagKey<Item> KIND_SWORD = tag("kind/sword");
 		public static final TagKey<Item> KIND_KEY = tag("kind/key");
 		public static final TagKey<Item> KIND_HALF_SWORD = tag("kind/half_sword");
+		public static final TagKey<Item> BLADEKIND_EVOLUTION_BLACKLIST = tag("strife_evolution_blacklist/bladekind");
+		
 		public static final TagKey<Item> KIND_BOW = tag("kind/bow");
 		public static final TagKey<Item> KIND_PICKAXE = tag("kind/pickaxe");
 		public static final TagKey<Item> KIND_AXE = tag("kind/axe");
