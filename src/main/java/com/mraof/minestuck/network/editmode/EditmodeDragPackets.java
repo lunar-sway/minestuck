@@ -71,6 +71,15 @@ public final class EditmodeDragPackets
 {
 	private static final int MAX_CONTAINER_RECURSION_DEPTH = 8;
 	
+	public static final String SELECTION_TOO_LARGE = "minestuck.editmode.selection_too_large";
+	public static final String UNMOVABLE_BLOCK = "minestuck.editmode.unmovable_block";
+	public static final String MOVING_PISTON = "minestuck.editmode.moving_piston";
+	public static final String PARTIAL_MULTIBLOCK = "minestuck.editmode.partial_multiblock";
+	public static final String NO_GRIST_COST = "minestuck.editmode.no_grist_cost";
+	public static final String ITEM_NO_GRIST_COST = "minestuck.editmode.item_no_grist_cost";
+	public static final String CANT_FIT = "minestuck.editmode.cant_fit";
+	public static final String ENTITY_IN_THE_WAY = "minestuck.editmode.entity_in_the_way";
+	
 	public static BlockPos rotateOffset(BlockPos offset, int sizeX, int sizeZ, Rotation rotation)
 	{
 		int x = offset.getX(), y = offset.getY(), z = offset.getZ();
@@ -292,7 +301,7 @@ public final class EditmodeDragPackets
 		
 		finalizeWorld(level, captured, placedPositions, isCopy);
 		
-		MutableGristSet actualCost = calculateActualCost(level, data, captured, placedPositions, isCopy);
+		calculateActualCost(level, data, captured, placedPositions, isCopy);
 		
 		announceResult(player, level, min, max, anchor, sizeX, sizeZ, isCopy, rotation);
 	}
@@ -312,7 +321,7 @@ public final class EditmodeDragPackets
 		long volume = (long) sizeX * (max.getY() - min.getY() + 1) * sizeZ;
 		if(volume > MinestuckConfig.SERVER.maxSelectionVolume.get())
 		{
-			player.sendSystemMessage(Component.literal("Selection too large (" + volume + " blocks, max " + MinestuckConfig.SERVER.maxSelectionVolume.get() + ")"), true);
+			player.sendSystemMessage(Component.translatable(SELECTION_TOO_LARGE, volume, MinestuckConfig.SERVER.maxSelectionVolume.get()), true);
 			ServerEditHandler.removeCursorEntity(player, true);
 			return false;
 		}
@@ -335,14 +344,14 @@ public final class EditmodeDragPackets
 				continue;
 			if(state.getDestroySpeed(level, pos) < 0 || state.is(MSTags.Blocks.EDITMODE_BREAK_BLACKLIST))
 			{
-				player.sendSystemMessage(Component.literal("Selection contains a block that can't be moved!"), true);
+				player.sendSystemMessage(Component.translatable(UNMOVABLE_BLOCK), true);
 				ServerEditHandler.removeCursorEntity(player, true);
 				return null;
 			}
 			
 			if(state.getBlock() instanceof MovingPistonBlock)
 			{
-				player.sendSystemMessage(Component.literal("Selection contains a piston that is moving!"), true);
+				player.sendSystemMessage(Component.translatable(MOVING_PISTON), true);
 				ServerEditHandler.removeCursorEntity(player, true);
 				return null;
 			}
@@ -350,7 +359,7 @@ public final class EditmodeDragPackets
 			Multipart multipart = findMultipart(level, pos, state);
 			if(multipart != null && !multipart.isFullyInside(min, max))
 			{
-				player.sendSystemMessage(Component.literal("Selection contains only a part of a multiblock object!"), true);
+				player.sendSystemMessage(Component.translatable(PARTIAL_MULTIBLOCK), true);
 				ServerEditHandler.removeCursorEntity(player, true);
 				return null;
 			}
@@ -395,7 +404,7 @@ public final class EditmodeDragPackets
 		}
 		
 		if(hasBlockWithoutCost)
-			player.sendSystemMessage(Component.literal("Some blocks were not pasted because they do not have a grist cost!"), true);
+			player.sendSystemMessage(Component.translatable(NO_GRIST_COST), true);
 		
 		return new CaptureResult(captured, worstCaseCost.asImmutable());
 	}
@@ -485,7 +494,7 @@ public final class EditmodeDragPackets
 			ItemCostResult containedResult = computeItemStackCost(contained, data.sburbData(), level, 0);
 			if(containedResult.truncated())
 			{
-				player.sendSystemMessage(Component.literal("Selection contains an item that does not have a grist cost or nested too deeply!"), true);
+				player.sendSystemMessage(Component.translatable(ITEM_NO_GRIST_COST), true);
 				slotsToStrip.add(slot);
 				continue;
 			}
@@ -520,14 +529,14 @@ public final class EditmodeDragPackets
 			
 			if(!destInsideSelection && !level.getBlockState(dest).canBeReplaced())
 			{
-				player.sendSystemMessage(Component.literal("Can't fit the selection there!"), true);
+				player.sendSystemMessage(Component.translatable(CANT_FIT), true);
 				ServerEditHandler.removeCursorEntity(player, true);
 				return false;
 			}
 			
 			if(!destInsideSelection && wouldSuffocateEntity(level, dest, c.state().rotate(rotation)))
 			{
-				player.sendSystemMessage(Component.literal("An entity is in the way!"), true);
+				player.sendSystemMessage(Component.translatable(ENTITY_IN_THE_WAY), true);
 				ServerEditHandler.removeCursorEntity(player, true);
 				return false;
 			}
