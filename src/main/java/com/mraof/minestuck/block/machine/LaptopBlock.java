@@ -1,6 +1,6 @@
 package com.mraof.minestuck.block.machine;
 
-import com.mraof.minestuck.blockentity.ComputerBlockEntity;
+import com.mraof.minestuck.blockentity.LaptopBlockEntity;
 
 import net.minecraft.core.BlockPos;
 import net.minecraft.core.Direction;
@@ -13,10 +13,12 @@ import net.minecraft.world.item.BlockItem;
 import net.minecraft.world.item.ItemStack;
 import net.minecraft.world.level.Level;
 import net.minecraft.world.level.block.Block;
+import net.minecraft.world.level.block.entity.BlockEntity;
 import net.minecraft.world.level.block.state.BlockState;
 import net.minecraft.world.phys.BlockHitResult;
 import net.minecraft.world.phys.shapes.VoxelShape;
 
+import javax.annotation.Nullable;
 import java.util.Map;
 
 public class LaptopBlock extends ComputerBlock
@@ -29,6 +31,13 @@ public class LaptopBlock extends ComputerBlock
 	public LaptopBlock(Map<Direction, VoxelShape> shapeOn, Map<Direction, VoxelShape> shapeOff, ResourceLocation defaultTheme, Properties properties)
 	{
 		super(shapeOn, shapeOff, defaultTheme, properties);
+	}
+	
+	@Nullable
+	@Override
+	public BlockEntity newBlockEntity(BlockPos pos, BlockState state)
+	{
+		return new LaptopBlockEntity(pos, state);
 	}
 	
 	@Override
@@ -57,7 +66,7 @@ public class LaptopBlock extends ComputerBlock
 	
 	private void pickUpLaptop(BlockState state, Level level, BlockPos pos, Player player)
 	{
-		if(!(level.getBlockEntity(pos) instanceof ComputerBlockEntity computer))
+		if(!(level.getBlockEntity(pos) instanceof LaptopBlockEntity computer))
 			return;
 		
 		computer.closeAll();
@@ -66,6 +75,7 @@ public class LaptopBlock extends ComputerBlock
 		ItemStack pickupStack = new ItemStack(state.getBlock().asItem());
 		BlockItem.setBlockEntityData(pickupStack, computer.getType(), beTag);
 		
+		computer.markPickedUp();
 		level.removeBlock(pos, false);
 		
 		if(!player.addItem(pickupStack))
@@ -73,5 +83,11 @@ public class LaptopBlock extends ComputerBlock
 	}
 	
 	@Override
-	protected void dropItems(Level level, BlockPos pos){}
+	protected void dropItems(Level level, BlockPos pos)
+	{
+		if(level.getBlockEntity(pos) instanceof LaptopBlockEntity computer && computer.isPickedUp())
+			return;
+		
+		super.dropItems(level, pos);
+	}
 }

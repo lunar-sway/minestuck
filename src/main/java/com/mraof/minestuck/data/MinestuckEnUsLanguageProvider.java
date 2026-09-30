@@ -1600,6 +1600,9 @@ public class MinestuckEnUsLanguageProvider extends MinestuckLanguageProvider
 		addItemExtra(MSItems.TEMPLE_SCANNER, "noFuelMessage", "This device requires uranium to run");
 		addItem(MSItems.CRUXITE_APPLE, "Cruxite Artifact");
 		addItem(MSItems.CRUXITE_POTION, "Cruxite Artifact");
+		addItem(MSItems.CRUXITE_SHEARS, "Cruxite Artifact");
+		addItem(MSItems.CRUXITE_DISK, "Cruxite Artifact");
+		addItem(MSItems.CRUXITE_DISC, "Cruxite Artifact");
 		addItem(MSItems.SBURB_CODE, "SBURB Code");
 		addItemTooltip(MSItems.SBURB_CODE, "It seems hieroglyphs can be translated into genetic code. Perhaps this genetic code could in turn be made into computer code?");
 		addItemExtra(MSItems.SBURB_CODE, "completion", "§dPercent completion: %s%%§r"); //section signs result in the percent number being light purple, double percent symbol required to get it to show up in game
