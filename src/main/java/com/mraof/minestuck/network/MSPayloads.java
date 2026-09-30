@@ -163,6 +163,9 @@ public final class MSPayloads
 		registerPlayToClient(registrar, PushPlayerPacket.ID, PushPlayerPacket.STREAM_CODEC);
 		
 		//Strife Packets
+		registerPlayToClient(registrar, StrifePackets.OpenStartingSpecibusPacket.ID, StrifePackets.OpenStartingSpecibusPacket.STREAM_CODEC);
+		registerPlayToServer(registrar, StrifePackets.ChooseStartingSpecibusPacket.ID, StrifePackets.ChooseStartingSpecibusPacket.STREAM_CODEC);
+		registerPlayToServer(registrar, StrifePackets.DeclineStartingSpecibusPacket.ID, StrifePackets.DeclineStartingSpecibusPacket.STREAM_CODEC);
 		registerPlayToClient(registrar, StrifePackets.SyncPortfolioPacket.ID, StrifePackets.SyncPortfolioPacket.STREAM_CODEC);
 		registerPlayToClient(registrar, StrifePackets.OpenStrifeCardGuiPacket.ID, StrifePackets.OpenStrifeCardGuiPacket.STREAM_CODEC);
 		

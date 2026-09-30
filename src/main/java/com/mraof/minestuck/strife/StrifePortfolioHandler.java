@@ -6,6 +6,7 @@ import com.mraof.minestuck.item.MSItems;
 import com.mraof.minestuck.item.StrifeCardItem;
 import com.mraof.minestuck.item.components.MSItemComponents;
 import com.mraof.minestuck.network.StrifePackets;
+import com.mraof.minestuck.player.KindAbstratusList;
 import com.mraof.minestuck.player.KindAbstratusType;
 import com.mraof.minestuck.player.StrifePortfolioData;
 import com.mraof.minestuck.player.StrifeSpecibus;
@@ -19,6 +20,9 @@ import net.minecraft.world.item.ItemStack;
 import net.neoforged.neoforge.network.PacketDistributor;
 
 import javax.annotation.Nullable;
+import java.util.Set;
+import java.util.UUID;
+import java.util.concurrent.ConcurrentHashMap;
 
 /**
  * Server-side helper that encapsulates all mutations to a player's Strife Portfolio.
@@ -32,6 +36,34 @@ import javax.annotation.Nullable;
  */
 public final class StrifePortfolioHandler
 {
+	private static final Set<UUID> PENDING_STARTING_SPECIBUS = ConcurrentHashMap.newKeySet();
+	
+	public static void offerStartingSpecibus(ServerPlayer player)
+	{
+		PENDING_STARTING_SPECIBUS.add(player.getUUID());
+		PacketDistributor.sendToPlayer(player, new StrifePackets.OpenStartingSpecibusPacket());
+	}
+	
+	public static boolean chooseStartingSpecibus(ServerPlayer player, String abstratusName)
+	{
+		if(!PENDING_STARTING_SPECIBUS.contains(player.getUUID())) return false;
+		if(KindAbstratusList.getTypeFromName(abstratusName) == null) return false;
+		
+		for(StrifeSpecibus s : getData(player).getPortfolio())
+			if(s != null) return false;
+		
+		if(!addSpecibus(player, new StrifeSpecibus(abstratusName))) return false;
+		PENDING_STARTING_SPECIBUS.remove(player.getUUID());
+		return true;
+	}
+	
+	public static void declineStartingSpecibus(ServerPlayer player)
+	{
+		if(!PENDING_STARTING_SPECIBUS.remove(player.getUUID())) return;
+		
+		ItemStack card = createStrifeCard(StrifeSpecibus.empty());
+		if(!player.addItem(card)) player.drop(card, false);
+	}
 	
 	public static StrifePortfolioData getData(Player player)
 	{

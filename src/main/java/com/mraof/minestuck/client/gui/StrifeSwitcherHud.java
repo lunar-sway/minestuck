@@ -17,6 +17,7 @@ import net.minecraft.world.item.ItemStack;
 import net.neoforged.api.distmarker.Dist;
 import net.neoforged.bus.api.SubscribeEvent;
 import net.neoforged.fml.common.EventBusSubscriber;
+import net.neoforged.neoforge.client.event.InputEvent;
 import net.neoforged.neoforge.client.event.RenderGuiEvent;
 import net.neoforged.neoforge.network.PacketDistributor;
 
@@ -114,7 +115,7 @@ public final class StrifeSwitcherHud
 		}
 		
 		boolean specibusChanged = selSpecibus != data.getSelectedSpecibusIndex();
-		boolean specibusOnly = specibusScrolled || (mc.player.isCrouching() && data.abstrataSwitcherUnlocked());
+		boolean specibusOnly = specibusScrolled || specibusMode(mc, data);
 		
 		if(specibusChanged)
 			PacketDistributor.sendToServer(new StrifePackets.SetActiveStrifePacket(selSpecibus, false));
@@ -124,11 +125,19 @@ public final class StrifeSwitcherHud
 			PacketDistributor.sendToServer(new StrifePackets.RetrieveWeaponPacket(selWeapon, InteractionHand.MAIN_HAND));
 	}
 	
+	private static boolean specibusMode(Minecraft mc, StrifePortfolioData data)
+	{
+		return data.abstrataSwitcherUnlocked() && mc.options.keyShift.isDown();
+	}
+	
 	@SubscribeEvent
-	public static void onMouseScroll(net.neoforged.neoforge.client.event.InputEvent.MouseScrollingEvent event)
+	public static void onMouseScroll(InputEvent.MouseScrollingEvent event)
 	{
 		if(!showSwitcher || Minecraft.getInstance().player == null) return;
-		scroll(Minecraft.getInstance(), (int) -Math.signum(event.getScrollDeltaY()));
+		double delta = Math.abs(event.getScrollDeltaX()) > Math.abs(event.getScrollDeltaY())
+				? event.getScrollDeltaX() : event.getScrollDeltaY();
+		if(delta == 0) return;
+		scroll(Minecraft.getInstance(), (int) -Math.signum(delta));
 		event.setCanceled(true);
 	}
 	
@@ -136,9 +145,7 @@ public final class StrifeSwitcherHud
 	{
 		if(mc.player == null) return;
 		StrifePortfolioData data = mc.player.getData(MSAttachments.STRIFE_PORTFOLIO.get());
-		boolean sneaking = mc.player.isCrouching();
-		
-		if(sneaking && data.abstrataSwitcherUnlocked())
+		if(specibusMode(mc, data))
 		{
 			StrifeSpecibus[] ne = data.getNonEmptyPortfolio();
 			if(ne.length == 0) return;
@@ -183,9 +190,7 @@ public final class StrifeSwitcherHud
 			g.fill(0, 0, sw, sh, 0x80000000);
 		
 		StrifePortfolioData data = mc.player.getData(MSAttachments.STRIFE_PORTFOLIO.get());
-		boolean sneaking = mc.player.isCrouching();
-		
-		if(sneaking && data.abstrataSwitcherUnlocked()) renderSpecibusPicker(g, data, cx, baseY);
+		if(specibusMode(mc, data)) renderSpecibusPicker(g, data, cx, baseY);
 		else renderWeaponPicker(g, data, cx, baseY, mc);
 	}
 	

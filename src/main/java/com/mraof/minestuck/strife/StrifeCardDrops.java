@@ -26,10 +26,7 @@ import net.minecraft.world.item.crafting.RecipeManager;
 import net.neoforged.neoforge.common.util.FakePlayer;
 import net.neoforged.neoforge.event.entity.living.LivingDropsEvent;
 
-import java.util.ArrayList;
-import java.util.HashMap;
-import java.util.List;
-import java.util.Map;
+import java.util.*;
 
 /**
  * Lets hostile mobs drop strife cards when they are killed by a player.
@@ -134,11 +131,20 @@ public final class StrifeCardDrops
 		KindAbstratusType kind = allowed.get(roll);
 		StrifeSpecibus specibus = new StrifeSpecibus(kind.getUnlocalizedName());
 		
-		if(random.nextDouble() < MinestuckConfig.SERVER.strifeCardContentChance.get())
+		double contentChance = MinestuckConfig.SERVER.strifeCardContentChance.get();
+		if(random.nextDouble() < contentChance)
 		{
-			Item weapon = pickWeightedWeapon(level, kind, random);
-			if(weapon != null)
-				specibus.putItemStack(new ItemStack(weapon));
+			int max = MinestuckConfig.SERVER.strifeCardMaxContents.get();
+			int count = 1;
+			while(count < max && random.nextDouble() < contentChance) count++;
+			
+			Set<Item> picked = new HashSet<>();
+			for(int tries = 0; tries < count * 4 && picked.size() < count; tries++)
+			{
+				Item weapon = pickWeightedWeapon(level, kind, random);
+				if(weapon != null && picked.add(weapon))
+					specibus.putItemStack(new ItemStack(weapon));
+			}
 		}
 		
 		return StrifePortfolioHandler.createStrifeCard(specibus);

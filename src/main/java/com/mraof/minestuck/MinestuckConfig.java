@@ -46,6 +46,7 @@ public class MinestuckConfig
 	{
 		public final EnumValue<AnimationSpeed> echeladderAnimation;
 		public final BooleanValue loginColorSelector;
+		public final BooleanValue loginSpecibusSelector;
 		public final BooleanValue alchemyIcons;
 		public final BooleanValue npcDialogueTextColors;
 		public final BooleanValue switcherBackground;
@@ -57,6 +58,8 @@ public class MinestuckConfig
 					.define("alchemyIcons", true);
 			loginColorSelector = builder.comment("Determines if the color selector should be displayed when entering a save file for the first time.")
 					.define("loginColorSelector", true);
+			loginSpecibusSelector = builder.comment("Determines if the strife specibus selector should be displayed when entering a save file for the first time.")
+					.define("loginSpecibusSelector", true);
 			echeladderAnimation = builder.comment("Allows control of standard speed for the echeladder rung \"animation\", or if it should have one in the first place.")
 					.defineEnum("echeladderAnimation", AnimationSpeed.NORMAL);
 			npcDialogueTextColors = builder.comment("Determines whether an NPC will use their custom formatted color value when talking in a dialogue screen.")
@@ -113,6 +116,7 @@ public class MinestuckConfig
 		public final DoubleValue strifeCardFirstUnderlingDropChance;
 		public final DoubleValue strifeCardContentChance;
 		public final ConfigValue<List<? extends String>> strifeCardDropKinds;
+		public final IntValue strifeCardMaxContents;
 		
 		//Mechanics
 		public final BooleanValue hardMode;
@@ -184,7 +188,7 @@ public class MinestuckConfig
 					.defineInRange("strifeDeckMaxSize", 20, -1, 1000);
 			abstrataSwitcherRung = builder
 					.comment("Echeladder rung required to unlock the strife switcher (hold strife key + sneak + scroll to switch specibus slots). Set to -1 to allow all players, or to " + Rungs.finalRung() + " to disable entirely.")
-					.defineInRange("abstrataSwitcherRung", 14, -1, Rungs.finalRung());
+					.defineInRange("abstrataSwitcherRung", -1, -1, 20);
 			weaponAttackMultiplier = builder
 					.comment("When the portfolio is not empty, this is the fraction of normal damage dealt when attacking with an unassigned weapon against non-underlings (0.15 = 15% damage).")
 					.defineInRange("weaponAttackMultiplier", 0.15D, 0.0D, 1.0D);
@@ -209,6 +213,9 @@ public class MinestuckConfig
 			strifeCardDropKinds = builder
 					.comment("Which kinds of abstrata (for example \"minestuck.sword\") can be found on dropped cards. Leave empty to allow every kind.")
 					.define("strifeCardDropKinds", new ArrayList<>(List.of("minestuck.sword", "minestuck.hammer", "minestuck.club", "minestuck.key", "minestuck.cane", "minestuck.sickle", "minestuck.spoon", "minestuck.fork", "minestuck.claw", "minestuck.needle", "minestuck.knife", "minestuck.axe", "minestuck.pickaxe", "minestuck.shovel", "minestuck.hoe", "minestuck.bow", "minestuck.baton", "minestuck.dice", "minestuck.fan", "minestuck.lance", "minestuck.scythe", "minestuck.staff", "minestuck.wand", "minestuck.star", "minestuck.saw", "minestuck.crossbow")));
+			strifeCardMaxContents = builder
+					.comment("Maximum number of weapons a dropped card can contain.")
+					.defineInRange("strifeCardMaxContents", 1, 1, 10);
 			builder.pop();
 			
 			builder.push("sylladex");

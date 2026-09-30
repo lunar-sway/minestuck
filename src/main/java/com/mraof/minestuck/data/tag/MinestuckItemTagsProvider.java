@@ -2,7 +2,6 @@ package com.mraof.minestuck.data.tag;
 
 import com.mraof.minestuck.Minestuck;
 import com.mraof.minestuck.block.MSBlocks;
-import com.mraof.minestuck.data.EvolutionBlacklistDetector;
 import com.mraof.minestuck.item.MSItems;
 import com.mraof.minestuck.item.artifact.CruxiteArtifactItem;
 import com.mraof.minestuck.item.weapon.MSToolType;
@@ -15,7 +14,6 @@ import com.mraof.minestuck.util.ExtraModTags;
 import com.mraof.minestuck.util.MSTags;
 import net.minecraft.MethodsReturnNonnullByDefault;
 import net.minecraft.core.HolderLookup;
-import net.minecraft.core.registries.BuiltInRegistries;
 import net.minecraft.data.PackOutput;
 import net.minecraft.data.tags.ItemTagsProvider;
 import net.minecraft.data.tags.TagsProvider;
@@ -115,8 +113,6 @@ public class MinestuckItemTagsProvider extends ItemTagsProvider
 		tag(AXES).add(EMERALD_AXE.get()).add(relevantItems(item -> hasToolType(item, List.of(AXE_TOOL, CHAINSAW_TOOL))));
 		tag(PICKAXES).add(EMERALD_PICKAXE.get()).add(relevantItems(item -> hasToolType(item, List.of(PICKAXE_TOOL))));
 		tag(SHOVELS).add(EMERALD_SHOVEL.get()).add(relevantItems(item -> hasToolType(item, List.of(SHOVEL_TOOL, SPOON_TOOL))));
-		
-		tag(WEAPONS).addTag(KIND_SWORD).addTag(KIND_HALF_SWORD).addTag(KIND_KNIFE).addTag(KIND_KEY).addTag(KIND_BATON).addTag(KIND_DICE).addTag(KIND_CLAW).addTag(KIND_SAW).addTag(KIND_LANCE).addTag(KIND_FAN).addTag(KIND_SICKLE).addTag(KIND_SCYTHE).addTag(KIND_CLUB).addTag(KIND_STAFF).addTag(KIND_CANE).addTag(KIND_SPOON).addTag(KIND_FORK).addTag(KIND_NEEDLE).addTag(KIND_WAND).addTag(KIND_STAR).addTag(KIND_BOW).addTag(KIND_CROSSBOW).addTag(KIND_PICKAXE).addTag(KIND_AXE).addTag(KIND_HOE).addTag(KIND_SHOVEL).addTag(KIND_HAMMER);
 		
 		// [kinds abstractus]
 		tag(KIND_SWORD).addTag(SWORDS).add(SORD.get(), PAPER_SWORD.get(), KEYBLADE.get(), SWONGE.get(), WET_SWONGE.get(), PUMORD.get(), WET_PUMORD.get(), CACTACEAE_CUTLASS.get(), STEAK_SWORD.get(), BEEF_SWORD.get(), IRRADIATED_STEAK_SWORD.get(), MACUAHUITL.get(), FROSTY_MACUAHUITL.get(), KATANA.get(), UNBREAKABLE_KATANA.get(), ANGEL_APOCALYPSE.get(), FIRE_POKER.get(), TOO_HOT_TO_HANDLE.get(), CALEDSCRATCH.get(), CALEDFWLCH.get(), ROYAL_DERINGER.get(), CLAYMORE.get(), CUTLASS_OF_ZILLYWAIR.get(), REGISWORD.get(), CRUEL_FATE_CRUCIBLE.get(), SCARLET_RIBBITAR.get(), DOGG_MACHETE.get(), COBALT_SABRE.get(), QUANTUM_SABRE.get(), SHATTER_BEACON.get(), SHATTER_BACON.get(), SUBTRACTSHUMIDIRE_ZOMORRODNEGATIVE.get(), MUSIC_SWORD.get(), PILLOW_TALK.get(), KRAKENS_EYE.get(), CINNAMON_SWORD.get(), UNION_BUSTER.get(), CHAINSAW_KATANA.get(), THORN_IN_YOUR_SIDE.get(), ROSE_PROTOCOL.get(), EMERALD_SWORD.get()).remove(KIND_HALF_SWORD);

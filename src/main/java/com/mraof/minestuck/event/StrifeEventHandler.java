@@ -167,6 +167,7 @@ public final class StrifeEventHandler
 	
 	private static void checkAbstrataSwitcherUnlock(ServerPlayer player)
 	{
+		//TODO: useless checks
 		int threshold = MinestuckConfig.SERVER.abstrataSwitcherRung.get();
 		int rung = Echeladder.get(player).getRung();
 		boolean shouldUnlock = threshold != Rungs.finalRung() && (threshold == -1 || rung >= threshold);

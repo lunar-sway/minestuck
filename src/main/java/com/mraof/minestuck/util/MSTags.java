@@ -122,7 +122,6 @@ public class MSTags
 	
 	public static class Items
 	{
-		public static final TagKey<Item> WEAPONS = tag("weapons");
 		public static final TagKey<Item> GLOWING_LOGS = tag("logs/glowing");
 		public static final TagKey<Item> FROST_LOGS = tag("logs/frost");
 		public static final TagKey<Item> RAINBOW_LOGS = tag("logs/rainbow");

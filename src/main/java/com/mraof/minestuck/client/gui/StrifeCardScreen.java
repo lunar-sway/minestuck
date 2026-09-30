@@ -15,6 +15,7 @@ import net.minecraft.resources.ResourceLocation;
 import net.minecraft.world.InteractionHand;
 import net.neoforged.neoforge.network.PacketDistributor;
 
+import javax.annotation.Nullable;
 import java.util.List;
 
 /**
@@ -40,8 +41,11 @@ public class StrifeCardScreen extends Screen
 	private static final int SCROLL_Y = 23;
 	private static final int SCROLL_H = 155;
 	private static final float TEXT_SCALE = 0.65f;
+	
+	@Nullable
 	private final InteractionHand hand;
 	private List<KindAbstratusType> types;
+	private boolean chosen = false;
 	
 	private int xOff, yOff;
 	
@@ -52,7 +56,15 @@ public class StrifeCardScreen extends Screen
 	private int scroll = 0;
 	private boolean draggingScrollbar = false;
 	
-	public StrifeCardScreen(InteractionHand hand)
+	/**
+	 * Starting selection on first login.
+	 */
+	public StrifeCardScreen()
+	{
+		this(null);
+	}
+	
+	public StrifeCardScreen(@Nullable InteractionHand hand)
 	{
 		super(Component.translatable("gui.strifeCard.title"));
 		this.hand = hand;
@@ -67,6 +79,7 @@ public class StrifeCardScreen extends Screen
 		yOff = (height - GUI_H) / 2;
 		
 		types = KindAbstratusList.getTypeList();
+		if(hand == null) types.removeIf(t -> KindAbstratusList.HALF_SWORD.equals(t.getUnlocalizedName()));
 		
 		rowH = minecraft.font.lineHeight;
 		int itemAreaH = (LIST_Y + LIST_H) - LIST_ITEMS_Y;
@@ -80,6 +93,14 @@ public class StrifeCardScreen extends Screen
 	public boolean isPauseScreen()
 	{
 		return false;
+	}
+	
+	@Override
+	public void removed()
+	{
+		if(hand == null && !chosen)
+			PacketDistributor.sendToServer(new StrifePackets.DeclineStartingSpecibusPacket());
+		super.removed();
 	}
 	
 	@Override
@@ -186,7 +207,14 @@ public class StrifeCardScreen extends Screen
 				
 				if(isInRegion(cellX, cellY, COL_W, rowH, (int) mx, (int) my))
 				{
-					PacketDistributor.sendToServer(new StrifePackets.SelectAbstrataForCardPacket(hand, types.get(index).getUnlocalizedName()));
+					String name = types.get(index).getUnlocalizedName();
+					if(hand != null)
+						PacketDistributor.sendToServer(new StrifePackets.SelectAbstrataForCardPacket(hand, name));
+					else
+					{
+						chosen = true;
+						PacketDistributor.sendToServer(new StrifePackets.ChooseStartingSpecibusPacket(name));
+					}
 					onClose();
 					return true;
 				}

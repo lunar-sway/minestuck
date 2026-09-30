@@ -3,6 +3,7 @@ package com.mraof.minestuck.network;
 import com.mraof.minestuck.Minestuck;
 import com.mraof.minestuck.client.gui.MSScreenFactories;
 import com.mraof.minestuck.item.StrifeCardItem;
+import com.mraof.minestuck.player.ClientPlayerData;
 import com.mraof.minestuck.player.KindAbstratusList;
 import com.mraof.minestuck.player.StrifePortfolioData;
 import com.mraof.minestuck.player.StrifeSpecibus;
@@ -24,6 +25,54 @@ import net.neoforged.neoforge.network.handling.IPayloadContext;
 
 public class StrifePackets
 {
+	public record OpenStartingSpecibusPacket() implements MSPacket.PlayToClient
+	{
+		public static final Type<OpenStartingSpecibusPacket> ID = new Type<>(Minestuck.id("open_starting_specibus"));
+		public static final StreamCodec<FriendlyByteBuf, OpenStartingSpecibusPacket> STREAM_CODEC = StreamCodec.unit(new OpenStartingSpecibusPacket());
+		
+		@Override
+		public Type<? extends CustomPacketPayload> type() { return ID; }
+		
+		@Override
+		public void execute(IPayloadContext context)
+		{
+			ClientPlayerData.handleDataPacket(this);
+		}
+	}
+	
+	public record ChooseStartingSpecibusPacket(String abstratusName) implements MSPacket.PlayToServer
+	{
+		public static final Type<ChooseStartingSpecibusPacket> ID = new Type<>(Minestuck.id("choose_starting_specibus"));
+		public static final StreamCodec<ByteBuf, ChooseStartingSpecibusPacket> STREAM_CODEC =
+				ByteBufCodecs.STRING_UTF8.map(ChooseStartingSpecibusPacket::new, ChooseStartingSpecibusPacket::abstratusName);
+		
+		@Override
+		public Type<? extends CustomPacketPayload> type() { return ID; }
+		
+		@Override
+		public void execute(IPayloadContext context, ServerPlayer player)
+		{
+			if(StrifePortfolioHandler.chooseStartingSpecibus(player, abstratusName()))
+				player.serverLevel().playSound(null, player.blockPosition(),
+						MSSoundEvents.ITEM_STRIFE_CARD_USE.get(), SoundSource.PLAYERS, 0.8F, 1.0F);
+			else
+				StrifePortfolioHandler.declineStartingSpecibus(player);
+		}
+	}
+	public record DeclineStartingSpecibusPacket() implements MSPacket.PlayToServer
+	{
+		public static final Type<DeclineStartingSpecibusPacket> ID = new Type<>(Minestuck.id("decline_starting_specibus"));
+		public static final StreamCodec<ByteBuf, DeclineStartingSpecibusPacket> STREAM_CODEC = StreamCodec.unit(new DeclineStartingSpecibusPacket());
+		
+		@Override
+		public Type<? extends CustomPacketPayload> type() { return ID; }
+		
+		@Override
+		public void execute(IPayloadContext context, ServerPlayer player)
+		{
+			StrifePortfolioHandler.declineStartingSpecibus(player);
+		}
+	}
 	public record AssignStrifePacket(InteractionHand hand) implements MSPacket.PlayToServer
 	{
 		public static final Type<AssignStrifePacket> ID = new Type<>(Minestuck.id("assign_strife"));
@@ -77,9 +126,9 @@ public class StrifePackets
 		@Override
 		public void execute(IPayloadContext context, ServerPlayer player)
 		{
-			StrifePortfolioHandler.retrieveCard(player, index());
-			player.serverLevel().playSound(null, player.blockPosition(),
-					MSSoundEvents.EVENT_STRIFE_SPECIBUS_EJECT.get(), SoundSource.PLAYERS, 0.6F, 1.0F);
+			if(StrifePortfolioHandler.retrieveCard(player, index()))
+				player.serverLevel().playSound(null, player.blockPosition(),
+						MSSoundEvents.EVENT_STRIFE_SPECIBUS_EJECT.get(), SoundSource.PLAYERS, 0.6F, 1.0F);
 		}
 	}
 	
