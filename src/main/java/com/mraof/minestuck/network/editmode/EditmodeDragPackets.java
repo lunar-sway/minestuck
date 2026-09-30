@@ -8,8 +8,10 @@ import com.mraof.minestuck.api.alchemy.GristSet;
 import com.mraof.minestuck.api.alchemy.GristTypes;
 import com.mraof.minestuck.api.alchemy.MutableGristSet;
 import com.mraof.minestuck.api.alchemy.recipe.GristCostRecipe;
+import com.mraof.minestuck.block.machine.MachineMultiblock;
 import com.mraof.minestuck.computer.editmode.*;
 import com.mraof.minestuck.item.components.EncodedItemComponent;
+import com.mraof.minestuck.item.block.MultiblockItem;
 import com.mraof.minestuck.item.components.MSItemComponents;
 import com.mraof.minestuck.network.MSPacket;
 import com.mraof.minestuck.player.GristCache;
@@ -41,8 +43,13 @@ import net.minecraft.world.item.context.UseOnContext;
 import net.minecraft.world.level.Level;
 import net.minecraft.world.level.block.*;
 import net.minecraft.world.level.block.entity.BlockEntity;
+import net.minecraft.world.level.block.piston.MovingPistonBlock;
+import net.minecraft.world.level.block.piston.PistonBaseBlock;
+import net.minecraft.world.level.block.piston.PistonHeadBlock;
 import net.minecraft.world.level.block.state.BlockState;
+import net.minecraft.world.level.block.state.properties.BedPart;
 import net.minecraft.world.level.block.state.properties.BlockStateProperties;
+import net.minecraft.world.level.block.state.properties.DoubleBlockHalf;
 import net.minecraft.world.level.gameevent.GameEvent;
 import net.minecraft.world.phys.AABB;
 import net.minecraft.world.phys.BlockHitResult;
@@ -51,6 +58,7 @@ import net.minecraft.world.phys.shapes.VoxelShape;
 import net.neoforged.neoforge.network.PacketDistributor;
 import net.neoforged.neoforge.network.handling.IPayloadContext;
 
+import javax.annotation.Nullable;
 import java.util.ArrayList;
 import java.util.HashSet;
 import java.util.List;
@@ -194,7 +202,7 @@ public final class EditmodeDragPackets
 		}
 	}
 	
-	private record Captured(BlockPos sourcePos, BlockState state, CompoundTag blockEntityTag, GristSet.Immutable blockCost) {}
+	private record Captured(BlockPos sourcePos, BlockState state, CompoundTag blockEntityTag, GristSet.Immutable blockCost, boolean secondaryPart) {}
 	
 	private record ItemCostResult(GristSet.Immutable cost, boolean truncated) {}
 	
@@ -269,7 +277,7 @@ public final class EditmodeDragPackets
 		if(!validateDestinations(player, level, captured, min, max, anchor, sizeX, sizeZ, rotation))
 			return;
 		
-		GristSet.Immutable worstCase = isCopy ? captureResult.worstCaseCost() : moveCost(captured.size());
+		GristSet.Immutable worstCase = isCopy ? captureResult.worstCaseCost() : moveCost(countObjects(captured));
 		if(!data.getGristCache().canAfford(worstCase))
 		{
 			player.sendSystemMessage(GristCache.createMissingMessage(worstCase), true);
@@ -288,6 +296,17 @@ public final class EditmodeDragPackets
 		
 		announceResult(player, level, min, max, anchor, sizeX, sizeZ, isCopy, rotation);
 	}
+	
+	//counts multipart objects
+	private static int countObjects(List<Captured> captured)
+	{
+		int count = 0;
+		for(Captured c : captured)
+			if(!c.secondaryPart())
+				count++;
+		return count;
+	}
+	
 	private static boolean validateVolume(ServerPlayer player, BlockPos min, BlockPos max, int sizeX, int sizeZ)
 	{
 		long volume = (long) sizeX * (max.getY() - min.getY() + 1) * sizeZ;
@@ -307,6 +326,7 @@ public final class EditmodeDragPackets
 		boolean hasBlockWithoutCost = false;
 		List<Captured> captured = new ArrayList<>();
 		MutableGristSet worstCaseCost = MutableGristSet.newDefault();
+		Set<Object> chargedParts = new HashSet<>();
 		
 		for(BlockPos pos : BlockPos.betweenClosed(min, max))
 		{
@@ -320,30 +340,57 @@ public final class EditmodeDragPackets
 				return null;
 			}
 			
+			if(state.getBlock() instanceof MovingPistonBlock)
+			{
+				player.sendSystemMessage(Component.literal("Selection contains a piston that is moving!"), true);
+				ServerEditHandler.removeCursorEntity(player, true);
+				return null;
+			}
+			
+			Multipart multipart = findMultipart(level, pos, state);
+			if(multipart != null && !multipart.isFullyInside(min, max))
+			{
+				player.sendSystemMessage(Component.literal("Selection contains only a part of a multiblock object!"), true);
+				ServerEditHandler.removeCursorEntity(player, true);
+				return null;
+			}
+			
 			var blockEntity = level.getBlockEntity(pos);
 			CompoundTag beTag = blockEntity != null ? blockEntity.saveWithFullMetadata(level.registryAccess()) : null;
 			
-			ItemStack stack = state.getCloneItemStack(null, level, pos, player);
-			ItemStack bareStack = stack.copy();
-			bareStack.remove(DataComponents.BLOCK_ENTITY_DATA);
-			bareStack.remove(DataComponents.CONTAINER);
-			bareStack.remove(DataComponents.CONTAINER_LOOT);
-			bareStack.remove(DataComponents.LOCK);
+			Object partKey = multipart != null ? multipart.key() : null;
+			boolean secondaryPart = partKey != null && chargedParts.contains(partKey);
 			
-			DeployEntry entry = DeployList.getEntryForItem(bareStack, data.sburbData(), level);
-			GristSet blockCostRaw = entry != null ? entry.getCurrentCost(data.sburbData()) : GristCostRecipe.findCostForItem(bareStack, null, false, level);
-			if(blockCostRaw == null && isCopy)
+			MutableGristSet blockCost;
+			if(secondaryPart)
+				blockCost = MutableGristSet.newDefault();
+			else
 			{
-				hasBlockWithoutCost = true;
-				continue;
+				ItemStack stack = state.getCloneItemStack(null, level, pos, player);
+				ItemStack bareStack = stack.copy();
+				bareStack.remove(DataComponents.BLOCK_ENTITY_DATA);
+				bareStack.remove(DataComponents.CONTAINER);
+				bareStack.remove(DataComponents.CONTAINER_LOOT);
+				bareStack.remove(DataComponents.LOCK);
+				
+				DeployEntry entry = DeployList.getEntryForItem(bareStack, data.sburbData(), level);
+				GristSet blockCostRaw = entry != null ? entry.getCurrentCost(data.sburbData()) : GristCostRecipe.findCostForItem(bareStack, null, false, level);
+				if(blockCostRaw == null && isCopy)
+				{
+					hasBlockWithoutCost = true;
+					continue;
+				}
+				blockCost = blockCostRaw != null ? blockCostRaw.mutableCopy() : MutableGristSet.newDefault();
+				
+				if(partKey != null)
+					chargedParts.add(partKey);
 			}
-			MutableGristSet blockCost = blockCostRaw != null ? blockCostRaw.mutableCopy() : MutableGristSet.newDefault();
 			
 			if(isCopy && blockEntity instanceof Container container)
 				beTag = accumulateContainerCost(player, level, pos, state, container, beTag, data, blockCost);
 			
 			GristSet.Immutable blockCostImmutable = blockCost.asImmutable();
-			captured.add(new Captured(pos.immutable(), state, beTag, blockCostImmutable));
+			captured.add(new Captured(pos.immutable(), state, beTag, blockCostImmutable, secondaryPart));
 			worstCaseCost.add(blockCostImmutable);
 		}
 		
@@ -351,6 +398,79 @@ public final class EditmodeDragPackets
 			player.sendSystemMessage(Component.literal("Some blocks were not pasted because they do not have a grist cost!"), true);
 		
 		return new CaptureResult(captured, worstCaseCost.asImmutable());
+	}
+	
+	private static boolean isInside(BlockPos pos, BlockPos min, BlockPos max)
+	{
+		return pos.getX() >= min.getX() && pos.getX() <= max.getX() && pos.getY() >= min.getY() && pos.getY() <= max.getY() && pos.getZ() >= min.getZ() && pos.getZ() <= max.getZ();
+	}
+	
+	private record Multipart(Object key, List<BlockPos> positions)
+	{
+		boolean isFullyInside(BlockPos min, BlockPos max)
+		{
+			for(BlockPos pos : positions)
+				if(!isInside(pos, min, max)) return false;
+			return true;
+		}
+	}
+	
+	@Nullable
+	private static Multipart findMultipart(Level level, BlockPos pos, BlockState state)
+	{
+		Block block = state.getBlock();
+		
+		if(block.asItem() instanceof MultiblockItem multiblockItem)
+		{
+			MachineMultiblock multiblock = multiblockItem.getMultiblock();
+			return multiblock.findValidPlacement(level, pos, state).map(placement -> new Multipart(new MachineKey(multiblock, placement), multiblock.getRequiredPositions(placement))).orElse(null);
+		}
+		
+		if(state.hasProperty(BlockStateProperties.DOUBLE_BLOCK_HALF))
+		{
+			BlockPos lowerPos = (state.getValue(BlockStateProperties.DOUBLE_BLOCK_HALF) == DoubleBlockHalf.UPPER ? pos.below() : pos).immutable();
+			BlockPos upperPos = lowerPos.above();
+			BlockState lower = level.getBlockState(lowerPos), upper = level.getBlockState(upperPos);
+			if(lower.is(block) && upper.is(block) && lower.getValue(BlockStateProperties.DOUBLE_BLOCK_HALF) == DoubleBlockHalf.LOWER && upper.getValue(BlockStateProperties.DOUBLE_BLOCK_HALF) == DoubleBlockHalf.UPPER)
+				return new Multipart(lowerPos, List.of(lowerPos, upperPos));
+			return null;
+		}
+		
+		if(state.hasProperty(BlockStateProperties.BED_PART) && state.hasProperty(BlockStateProperties.HORIZONTAL_FACING))
+		{
+			Direction facing = state.getValue(BlockStateProperties.HORIZONTAL_FACING);
+			BlockPos footPos = (state.getValue(BlockStateProperties.BED_PART) == BedPart.HEAD ? pos.relative(facing.getOpposite()) : pos).immutable();
+			BlockPos headPos = footPos.relative(facing);
+			BlockState foot = level.getBlockState(footPos), head = level.getBlockState(headPos);
+			if(foot.is(block) && head.is(block) && foot.getValue(BlockStateProperties.BED_PART) == BedPart.FOOT && head.getValue(BlockStateProperties.BED_PART) == BedPart.HEAD)
+				return new Multipart(footPos, List.of(footPos, headPos));
+			return null;
+		}
+		
+		if(block instanceof PistonHeadBlock)
+		{
+			Direction facing = state.getValue(BlockStateProperties.FACING);
+			BlockPos basePos = pos.relative(facing.getOpposite()).immutable();
+			BlockState base = level.getBlockState(basePos);
+			if(base.getBlock() instanceof PistonBaseBlock && base.getValue(BlockStateProperties.EXTENDED) && base.getValue(BlockStateProperties.FACING) == facing)
+				return new Multipart(basePos, List.of(basePos, pos.immutable()));
+			return null;
+		}
+		if(block instanceof PistonBaseBlock && state.getValue(BlockStateProperties.EXTENDED))
+		{
+			Direction facing = state.getValue(BlockStateProperties.FACING);
+			BlockPos headPos = pos.relative(facing).immutable();
+			BlockState head = level.getBlockState(headPos);
+			if(head.getBlock() instanceof PistonHeadBlock && head.getValue(BlockStateProperties.FACING) == facing)
+				return new Multipart(pos.immutable(), List.of(pos.immutable(), headPos));
+			return null;
+		}
+		
+		return null;
+	}
+	
+	private record MachineKey(MachineMultiblock multiblock, MachineMultiblock.Placement placement)
+	{
 	}
 	
 	private static CompoundTag accumulateContainerCost(ServerPlayer player, Level level, BlockPos pos, BlockState state, Container container, CompoundTag beTag, EditData data, MutableGristSet blockCost)
@@ -425,11 +545,15 @@ public final class EditmodeDragPackets
 	private static void clearSourceBlocks(Level level, List<Captured> captured)
 	{
 		for(Captured c : captured)
-		{
-			if(c.blockEntityTag() != null)
-				level.removeBlockEntity(c.sourcePos());
-			level.setBlock(c.sourcePos(), Blocks.AIR.defaultBlockState(), Block.UPDATE_CLIENTS | Block.UPDATE_KNOWN_SHAPE);
-		}
+			if(c.state().getBlock() instanceof PistonBaseBlock) clearSourceBlock(level, c);
+		for(Captured c : captured)
+			if(!(c.state().getBlock() instanceof PistonBaseBlock)) clearSourceBlock(level, c);
+	}
+	
+	private static void clearSourceBlock(Level level, Captured c)
+	{
+		if(c.blockEntityTag() != null) level.removeBlockEntity(c.sourcePos());
+		level.setBlock(c.sourcePos(), Blocks.AIR.defaultBlockState(), Block.UPDATE_CLIENTS | Block.UPDATE_KNOWN_SHAPE);
 	}
 	
 	private static List<BlockPos> placeBlocks(Level level, List<Captured> captured, BlockPos min, BlockPos anchor, int sizeX, int sizeZ, Rotation rotation)
@@ -441,8 +565,6 @@ public final class EditmodeDragPackets
 			BlockPos dest = computeDest(c.sourcePos(), min, anchor, sizeX, sizeZ, rotation);
 			
 			BlockState toPlace = c.state().rotate(rotation);
-			if(toPlace.hasProperty(BlockStateProperties.EXTENDED))
-				toPlace = toPlace.setValue(BlockStateProperties.EXTENDED, false);
 			level.setBlock(dest, toPlace, Block.UPDATE_CLIENTS | Block.UPDATE_KNOWN_SHAPE);
 			
 			if(c.blockEntityTag() != null && level.getBlockEntity(dest) != null)
@@ -470,6 +592,15 @@ public final class EditmodeDragPackets
 					affected.add(c.sourcePos().relative(dir));
 		}
 		
+		if(!isCopy)
+		{
+			for(Captured c : captured)
+			{
+				BlockPos source = c.sourcePos();
+				level.updateNeighborsAt(source, level.getBlockState(source).getBlock());
+			}
+		}
+		
 		for(BlockPos pos : affected)
 			finalizeUpdate(level, pos);
 	}
@@ -489,7 +620,7 @@ public final class EditmodeDragPackets
 			{
 				if(isCopy)
 					actualCost.add(c.blockCost());
-				else
+				else if(!c.secondaryPart())
 					successfullyMovedCount++;
 			}
 		}
