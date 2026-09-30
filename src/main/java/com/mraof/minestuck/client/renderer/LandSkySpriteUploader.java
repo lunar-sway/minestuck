@@ -8,14 +8,16 @@ import net.minecraft.client.Minecraft;
 import net.minecraft.client.renderer.texture.TextureAtlasSprite;
 import net.minecraft.client.renderer.texture.TextureManager;
 import net.minecraft.client.resources.TextureAtlasHolder;
+import net.minecraft.resources.ResourceKey;
 import net.minecraft.resources.ResourceLocation;
+import net.minecraft.world.level.Level;
 import net.neoforged.api.distmarker.Dist;
 import net.neoforged.bus.api.SubscribeEvent;
 import net.neoforged.fml.common.EventBusSubscriber;
-import net.neoforged.fml.common.Mod;
 import net.neoforged.neoforge.client.event.RegisterClientReloadListenersEvent;
 
 import java.util.Objects;
+import java.util.Random;
 
 @EventBusSubscriber(modid = Minestuck.MOD_ID, bus = EventBusSubscriber.Bus.MOD, value = Dist.CLIENT)
 public class LandSkySpriteUploader extends TextureAtlasHolder
@@ -65,17 +67,22 @@ public class LandSkySpriteUploader extends TextureAtlasHolder
 		return getSprite(METEOR);
 	}
 	
+	public Random getDimRandom(ResourceKey<Level> landId)
+	{
+		return new Random(landId.hashCode());
+	}
+	
 	public TextureAtlasSprite getPlanetSprite(TerrainLandType type, int index)
 	{
 		ResourceLocation typeName = LandTypes.TERRAIN_REGISTRY.getKey(type);
 		Objects.requireNonNull(typeName);
-		return getSprite(ResourceLocation.fromNamespaceAndPath(typeName.getNamespace(), "planets/planet_"+typeName.getPath()+"_"+index));
+		return getSprite(ResourceLocation.fromNamespaceAndPath(typeName.getNamespace(), "planets/planet_" + typeName.getPath() + "_" + index));
 	}
 	
 	public TextureAtlasSprite getOverlaySprite(TitleLandType type, int index)
 	{
 		ResourceLocation typeName = LandTypes.TITLE_REGISTRY.getKey(type);
 		Objects.requireNonNull(typeName);
-		return getSprite(ResourceLocation.fromNamespaceAndPath(typeName.getNamespace(), "overlays/overlay_"+typeName.getPath()+"_"+index));
+		return getSprite(ResourceLocation.fromNamespaceAndPath(typeName.getNamespace(), "overlays/overlay_" + typeName.getPath() + "_" + index));
 	}
 }

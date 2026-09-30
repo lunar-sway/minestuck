@@ -13,6 +13,7 @@ The format is based on [Keep a Changelog](https://keepachangelog.com/en/1.1.0/).
 - Anomalocaris hat and alien boppers
 - Added new select, move, rotate, copy and paste actions to edit mode
 - Added multiple misc sound effects made by remedyhearts to edit mode
+- New Cruxite Artifacts (Shears, Disk, Disc)
 
 ### Changed
 
