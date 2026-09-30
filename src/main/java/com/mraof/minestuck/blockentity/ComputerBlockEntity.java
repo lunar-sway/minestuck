@@ -36,6 +36,7 @@ import net.minecraft.world.item.ItemStack;
 import net.minecraft.world.item.Items;
 import net.minecraft.world.level.block.Block;
 import net.minecraft.world.level.block.entity.BlockEntity;
+import net.minecraft.world.level.block.entity.BlockEntityType;
 import net.minecraft.world.level.block.state.BlockState;
 import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.Logger;
@@ -52,7 +53,7 @@ import java.util.stream.Stream;
 
 @ParametersAreNonnullByDefault
 @MethodsReturnNonnullByDefault
-public final class ComputerBlockEntity extends BlockEntity implements ISburbComputer
+public class ComputerBlockEntity extends BlockEntity implements ISburbComputer
 {
 	public static final String DISK_REJECT = "block.minestuck.computer.disk_reject";
 	
@@ -73,13 +74,18 @@ public final class ComputerBlockEntity extends BlockEntity implements ISburbComp
 	private final Map<ProgramType<?>, ProgramType.Data> existingPrograms = new HashMap<>();
 	private ResourceLocation computerTheme = MSComputerThemes.DEFAULT;
 	
-	public ComputerBlockEntity(BlockPos pos, BlockState state)
+	protected ComputerBlockEntity(BlockEntityType<?> type, BlockPos pos, BlockState state)
 	{
-		super(MSBlockEntityTypes.COMPUTER.get(), pos, state);
+		super(type, pos, state);
 		
 		// always should exist on computers
 		insertNewProgramInstance(ProgramTypes.DISK_BURNER.get());
 		insertNewProgramInstance(ProgramTypes.SETTINGS.get());
+	}
+	
+	public ComputerBlockEntity(BlockPos pos, BlockState state)
+	{
+		this(MSBlockEntityTypes.COMPUTER.get(), pos, state);
 	}
 	
 	@Override

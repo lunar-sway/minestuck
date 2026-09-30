@@ -51,6 +51,9 @@ public final class MSCreativeTabs
 		
 		output.accept(MSItems.CRUXITE_APPLE.get());
 		output.accept(MSItems.CRUXITE_POTION.get());
+		output.accept(MSItems.CRUXITE_SHEARS.get());
+		output.accept(MSItems.CRUXITE_DISK.get());
+		output.accept(MSItems.CRUXITE_DISC.get());
 		
 		output.accept(MSItems.SBURB_CODE.get());
 		output.accept(MSItems.COMPLETED_SBURB_CODE.get());

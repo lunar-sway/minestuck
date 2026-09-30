@@ -382,6 +382,9 @@ public final class MinestuckGristCostsProvider
 		
 		GristCostRecipeBuilder.of(MSItems.CRUXITE_APPLE.get()).build(recipeSaver);
 		GristCostRecipeBuilder.of(MSItems.CRUXITE_POTION.get()).build(recipeSaver);
+		GristCostRecipeBuilder.of(MSItems.CRUXITE_SHEARS.get()).build(recipeSaver);
+		GristCostRecipeBuilder.of(MSItems.CRUXITE_DISK.get()).build(recipeSaver);
+		GristCostRecipeBuilder.of(MSItems.CRUXITE_DISC.get()).build(recipeSaver);
 		
 		GristCostRecipeBuilder.of(MSItems.FLUORITE_OCTET.get()).grist(DIAMOND, 5600).grist(COBALT, 8).grist(CHALK, 1).build(recipeSaver);
 		

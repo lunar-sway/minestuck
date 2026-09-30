@@ -6,14 +6,21 @@ import com.mraof.minestuck.api.alchemy.GristType;
 import com.mraof.minestuck.api.alchemy.GristTypeSpawnCategory;
 import com.mraof.minestuck.computer.editmode.EditmodeLocations;
 import com.mraof.minestuck.event.OnEntryEvent;
+import com.mraof.minestuck.item.MSItems;
+import com.mraof.minestuck.item.artifact.CruxiteArtifactItem;
 import com.mraof.minestuck.player.*;
 import com.mraof.minestuck.util.ColorHandler;
+import com.mraof.minestuck.util.MSTags;
 import com.mraof.minestuck.world.DynamicDimensions;
 import com.mraof.minestuck.world.MSDimensions;
 import com.mraof.minestuck.world.lands.LandTypePair;
 import com.mraof.minestuck.world.lands.LandTypes;
 import com.mraof.minestuck.world.lands.terrain.TerrainLandType;
 import com.mraof.minestuck.world.lands.title.TitleLandType;
+
+import net.minecraft.core.Holder;
+import net.minecraft.core.Registry;
+import net.minecraft.core.registries.Registries;
 import net.minecraft.network.chat.Component;
 import net.minecraft.network.protocol.game.ClientboundSetSubtitleTextPacket;
 import net.minecraft.network.protocol.game.ClientboundSetTitleTextPacket;
@@ -22,6 +29,7 @@ import net.minecraft.resources.ResourceKey;
 import net.minecraft.server.MinecraftServer;
 import net.minecraft.server.level.ServerPlayer;
 import net.minecraft.stats.Stats;
+import net.minecraft.world.item.Item;
 import net.minecraft.world.item.ItemStack;
 import net.minecraft.world.level.Level;
 import net.neoforged.neoforge.common.NeoForge;
@@ -77,7 +85,7 @@ public final class SburbHandler
 	{
 		int color = ColorHandler.getColorForPlayer(playerData.playerId(), level);
 		
-		return ColorHandler.setColor(playerData.artifactType.createItemStack(), color);
+		return ColorHandler.setColor(playerData.artifactType.copy(), color);
 	}
 	
 	/**
@@ -213,10 +221,26 @@ public final class SburbHandler
 		return connections.getActiveConnection(player).isEmpty() && !connections.hasPrimaryConnectionForClient(player);
 	}
 	
-	static void initNewData(SburbPlayerData playerData)
+	static void initNewData(SburbPlayerData playerData, MinecraftServer mcServer)
 	{
 		Random rand = new Random();    //TODO seed?
-		playerData.artifactType = SburbPlayerData.ArtifactType.values()[rand.nextInt(SburbPlayerData.ArtifactType.values().length)];
+		Registry<Item> itemRegistry = mcServer.getLevel(Level.OVERWORLD).registryAccess().registryOrThrow(Registries.ITEM);
+		Optional<Holder<Item>> artifact = itemRegistry.getRandomElementOf(MSTags.Items.CRUXITE_ARTIFACTS, mcServer.getLevel(Level.OVERWORLD).getRandom());
+		if(artifact.isEmpty())
+		{
+			// Check the minestuck:cruxite_artifacts tag if this happens, it might be empty or invalid
+			LOGGER.error("Failed to generate an artifact for player {}, defaulting to Cruxite Apple", playerData.playerId().getPlayer(mcServer).getName());
+			playerData.artifactType = MSItems.CRUXITE_APPLE.toStack();
+		} else
+		{
+			if(!(artifact.get().value() instanceof CruxiteArtifactItem))
+				// Player may not be able to enter
+				// Could be an item that just implements it separately, keep it just in case
+				// Could also be a mistake by the person who added it to the minestuck:cruxite_artifacts tag
+				// Worst case scenario, edit the player's data in minestuck_skaianet.nbt
+				LOGGER.warn("Random artifact {} for player {} does not extend CruxiteArtifactItem class, keeping it in case it is implemented in its own way", artifact.get(), playerData.playerId().getPlayer(mcServer).getName());
+			playerData.artifactType = new ItemStack(artifact.get(), 1);
+		}
 		playerData.setBaseGrist(generateGristType(rand));
 	}
 	

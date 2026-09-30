@@ -22,6 +22,7 @@ import java.util.*;
 
 /**
  * This class is the centerpoint of various sburb-related data, which all goes in the "minestuck_skaianet.dat" data file.
+ *
  * @author kirderf1
  */
 @ParametersAreNonnullByDefault
@@ -57,7 +58,7 @@ public final class SkaianetData extends SavedData
 		{
 			CompoundTag playerDataTag = playerDataList.getCompound(i);
 			IdentifierHandler.load(playerDataTag, "player").resultOrPartial(LOGGER::error)
-					.ifPresent(player -> getOrCreateData(player).read(playerDataTag));
+					.ifPresent(player -> getOrCreateData(player).read(playerDataTag, mcServer.registryAccess()));
 		}
 		
 		if(nbt.contains("predefine_data", Tag.TAG_LIST))
@@ -85,7 +86,7 @@ public final class SkaianetData extends SavedData
 		{
 			CompoundTag playerDataTag = new CompoundTag();
 			playerData.playerId().saveToNBT(playerDataTag, "player");
-			playerData.write(playerDataTag);
+			playerData.write(playerDataTag, mcServer.registryAccess());
 			playerDataList.add(playerDataTag);
 		}
 		compound.put("player_data", playerDataList);
@@ -112,7 +113,7 @@ public final class SkaianetData extends SavedData
 	{
 		return this.playerDataMap.computeIfAbsent(player, playerId -> {
 			var data = new SburbPlayerData(playerId, this.mcServer);
-			SburbHandler.initNewData(data);
+			SburbHandler.initNewData(data, mcServer);
 			return data;
 		});
 	}
@@ -129,6 +130,7 @@ public final class SkaianetData extends SavedData
 	
 	/**
 	 * Gets/creates an instance of predefine data for the given player.
+	 *
 	 * @return An empty optional if data can no longer be predefined for this player.
 	 */
 	public Optional<PredefineData> getOrCreatePredefineData(PlayerIdentifier player)
@@ -157,7 +159,7 @@ public final class SkaianetData extends SavedData
 		predefineData.remove(player);
 	}
 	
-	private static final String DATA_NAME = Minestuck.MOD_ID+"_skaianet";
+	private static final String DATA_NAME = Minestuck.MOD_ID + "_skaianet";
 	
 	public static SkaianetData get(MinecraftServer server)
 	{
