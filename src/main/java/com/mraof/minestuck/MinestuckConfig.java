@@ -73,7 +73,7 @@ public class MinestuckConfig
 			copyFromLastPlacement = builder.comment("Determines what a repeated copy uses as its source. Last successfully placed copy or always the original selection")
 					.define("copyFromLastPlacement", true);
 			toolsDistance = builder.comment("Determines the distance of move/copy tools")
-					.defineInRange("toolsDistance", 5, 1, 64);
+					.defineInRange("toolsDistance", 15, 1, 64);
 			builder.pop();
 		}
 	}
