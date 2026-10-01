@@ -271,7 +271,9 @@ public final class SburbPlayerData
 	@Deprecated
 	enum ArtifactType
 	{
+		@Deprecated
 		APPLE(MSItems.CRUXITE_APPLE),
+		@Deprecated
 		POTION(MSItems.CRUXITE_POTION);
 		
 		private final Supplier<Item> item;
@@ -281,11 +283,13 @@ public final class SburbPlayerData
 			this.item = item;
 		}
 		
+		@Deprecated
 		ItemStack createItemStack()
 		{
 			return new ItemStack(this.item.get());
 		}
 		
+		@Deprecated
 		static ArtifactType fromInt(int ordinal)
 		{
 			return values()[Mth.clamp(ordinal, 0, values().length - 1)];

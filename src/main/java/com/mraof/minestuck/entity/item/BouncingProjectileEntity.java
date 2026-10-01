@@ -132,6 +132,7 @@ public class BouncingProjectileEntity extends ThrowableItemProjectile
 		}
 	}
 	
+	@Override
 	public void tick()
 	{
 		Vec3 pos = position();
