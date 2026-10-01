@@ -18,7 +18,8 @@ import net.neoforged.api.distmarker.Dist;
 import net.neoforged.bus.api.SubscribeEvent;
 import net.neoforged.fml.common.EventBusSubscriber;
 import net.neoforged.neoforge.client.event.InputEvent;
-import net.neoforged.neoforge.client.event.RenderGuiEvent;
+import net.neoforged.neoforge.client.event.RenderGuiLayerEvent;
+import net.neoforged.neoforge.client.gui.VanillaGuiLayers;
 import net.neoforged.neoforge.network.PacketDistributor;
 
 import java.util.List;
@@ -175,8 +176,9 @@ public final class StrifeSwitcherHud
 	}
 	
 	@SubscribeEvent
-	public static void onRenderHud(RenderGuiEvent.Post event)
+	public static void onRenderHud(RenderGuiLayerEvent.Pre event)
 	{
+		if(!VanillaGuiLayers.CHAT.equals(event.getName())) return;
 		Minecraft mc = Minecraft.getInstance();
 		if(!showSwitcher || mc.player == null) return;
 		
