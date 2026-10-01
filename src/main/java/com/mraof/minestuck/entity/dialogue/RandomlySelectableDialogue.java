@@ -23,7 +23,7 @@ import javax.annotation.ParametersAreNonnullByDefault;
 import java.util.*;
 
 @ParametersAreNonnullByDefault
-@EventBusSubscriber(bus = EventBusSubscriber.Bus.GAME)
+@EventBusSubscriber
 public final class RandomlySelectableDialogue
 {
 	private final List<Dialogue.SelectableDialogue> selectableDialogueList;

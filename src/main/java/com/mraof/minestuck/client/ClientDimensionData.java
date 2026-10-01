@@ -16,7 +16,7 @@ import net.neoforged.neoforge.client.event.ClientPlayerNetworkEvent;
 import java.util.HashMap;
 import java.util.Map;
 
-@EventBusSubscriber(modid = Minestuck.MOD_ID, bus = EventBusSubscriber.Bus.GAME, value = Dist.CLIENT)
+@EventBusSubscriber(modid = Minestuck.MOD_ID, value = Dist.CLIENT)
 public class ClientDimensionData
 {
 	private static final Map<ResourceKey<Level>, LandTypePair> landTypes = new HashMap<>();

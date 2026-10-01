@@ -52,7 +52,7 @@ import java.util.*;
  */
 @ParametersAreNonnullByDefault
 @MethodsReturnNonnullByDefault
-@EventBusSubscriber(modid = Minestuck.MOD_ID, bus = EventBusSubscriber.Bus.GAME)
+@EventBusSubscriber(modid = Minestuck.MOD_ID)
 public final class LandTypeExtensions
 {
 	private static final Logger LOGGER = LogManager.getLogger();

@@ -41,7 +41,7 @@ import java.util.*;
  */
 @ParametersAreNonnullByDefault
 @MethodsReturnNonnullByDefault
-@EventBusSubscriber(modid = Minestuck.MOD_ID, bus = EventBusSubscriber.Bus.GAME)
+@EventBusSubscriber(modid = Minestuck.MOD_ID)
 public final class LandTypeSelectionLoader extends SimplePreparableReloadListener<LandTypeSelectionLoader.RawData>
 {
 	private static final Logger LOGGER = LogManager.getLogger();
