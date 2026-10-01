@@ -15,16 +15,16 @@ repositories {
         name = 'ModMaven'
         url = 'https://modmaven.dev'
     }
-    maven { url 'https://dl.cloudsmith.io/public/geckolib3/geckolib/maven/' }
+    maven { url = 'https://dl.cloudsmith.io/public/geckolib3/geckolib/maven/' }
     maven {
-        url "https://cursemaven.com"
+        url = "https://cursemaven.com"
         content {
             includeGroup "curse.maven"
         }
     }
     maven {
         // maven that contains infiniverse
-        url "https://commoble.net/maven/"
+        url = "https://maven.commoble.net/releases"
     }
     maven { url = "https://maven.createmod.net" } // Create, Ponder, Flywheel
     maven { url = "https://maven.ithundxr.dev/snapshots" } // Registrate
@@ -32,12 +32,14 @@ repositories {
 
 version = project.getProperty('mc_ms_version')
 group = 'com.mraof.minestuck'
-archivesBaseName = 'Minestuck'
+base {
+    archivesName = 'Minestuck'
+}
 
 java.toolchain.languageVersion = JavaLanguageVersion.of(21)
 
 neoForge {
-    version = "{neo_version}"
+    version = "${neo_version}"
 
     mods {
         minestuck {
@@ -46,8 +48,8 @@ neoForge {
     }
 
     parchment {
-        minecraftVersion = "{mc_version}"
-        mappingsVersion = "{mappings_version}"
+        minecraftVersion = "${mc_version}"
+        mappingsVersion = "${mappings_version}"
     }
 
     runs {
