@@ -62,7 +62,7 @@ enumExtensions="META-INF/enumextensions.json"
     # Does this dependency have to exist - if not, ordering below must be specified
     type="required"
     # The version range of the dependency
-    versionRange="[21,21.2)" #mandatory
+    versionRange="[21.1.181,21.2)" #mandatory
     # An ordering relationship for the dependency - BEFORE or AFTER required if the relationship is not mandatory
     ordering="NONE"
     # Side this dependency is applied on - BOTH, CLIENT or SERVER

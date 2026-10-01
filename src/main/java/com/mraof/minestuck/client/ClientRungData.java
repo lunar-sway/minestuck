@@ -12,7 +12,7 @@ import java.util.Collections;
 import java.util.List;
 import java.util.Optional;
 
-@EventBusSubscriber(modid = Minestuck.MOD_ID, bus = EventBusSubscriber.Bus.GAME, value = Dist.CLIENT)
+@EventBusSubscriber(modid = Minestuck.MOD_ID, value = Dist.CLIENT)
 public final class ClientRungData
 {
 	private static final Rung.DisplayData DUMMY_DATA = new Rung.DisplayData(0xFFFFFF, 0x000000, 0, Optional.empty(),
