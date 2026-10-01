@@ -90,6 +90,10 @@ neoForge {
             server()
         }
 
+        gameTestServer {
+            type = "gameTestServer"
+        }
+
         data {
             data()
             programArguments.addAll '--mod', 'minestuck', '--all', '--output', file('src/main/generated/resources/').getAbsolutePath(), '--existing', file('src/main/resources/').getAbsolutePath()
