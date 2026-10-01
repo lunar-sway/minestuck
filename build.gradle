@@ -9,13 +9,24 @@ repositories {
         // location of the maven that hosts JEI files
         name = 'Progwml6 maven'
         url = 'https://dvs1.progwml6.com/files/maven/'
+        content {
+            includeGroup 'mezz.jei'
+        }
     }
     maven {
         // location of a maven mirror for JEI files, as a fallback
         name = 'ModMaven'
         url = 'https://modmaven.dev'
+        content {
+            includeGroup 'mezz.jei'
+        }
     }
-    maven { url = 'https://dl.cloudsmith.io/public/geckolib3/geckolib/maven/' }
+    maven {
+        url = 'https://dl.cloudsmith.io/public/geckolib3/geckolib/maven/'
+        content {
+            includeGroup 'software.bernie.geckolib'
+        }
+    }
     maven {
         url = "https://cursemaven.com"
         content {
@@ -25,9 +36,24 @@ repositories {
     maven {
         // maven that contains infiniverse
         url = "https://maven.commoble.net/releases"
+        content {
+            includeGroup 'net.commoble.infiniverse'
+        }
     }
-    maven { url = "https://maven.createmod.net" } // Create, Ponder, Flywheel
-    maven { url = "https://maven.ithundxr.dev/snapshots" } // Registrate
+    maven { // Create, Ponder, Flywheel
+        url = "https://maven.createmod.net"
+        content {
+            includeGroup 'com.simibubi.create'
+            includeGroup 'net.createmod.ponder'
+            includeGroup 'dev.engine-room.flywheel'
+        }
+    }
+    maven { // Registrate
+        url = "https://maven.ithundxr.dev/snapshots"
+        content {
+            includeGroup 'com.tterrag.registrate'
+        }
+    }
 }
 
 version = project.getProperty('mc_ms_version')
@@ -79,12 +105,12 @@ dependencies {
     compileOnly "mezz.jei:jei-${mc_version}-neoforge-api:${mc_jei_version}"
     runtimeOnly "mezz.jei:jei-${mc_version}-neoforge:${mc_jei_version}"
 
-    implementation "software.bernie.geckolib:geckolib-${mc_gecko_version}"
-    implementation "net.commoble.infiniverse:${infiniverse_branch}:${infiniverse_version}"
+    implementation "software.bernie.geckolib:geckolib-neoforge-${mc_gecko_version}"
+    implementation "net.commoble.infiniverse:infiniverse-${infiniverse_branch}:${infiniverse_version}"
 
     // Add the Create mod to runtime to help test mod interactions
     runtimeOnly("com.simibubi.create:create-${mc_version}:${create_version}:slim") { transitive = false }
-    runtimeOnly("net.createmod.ponder:Ponder-NeoForge-${mc_version}:${ponder_version}")
+    runtimeOnly("net.createmod.ponder:ponder-neoforge:${ponder_version}")
     runtimeOnly("dev.engine-room.flywheel:flywheel-neoforge-${mc_version}:${flywheel_version}")
     runtimeOnly("com.tterrag.registrate:Registrate:${registrate_version}")
 }
