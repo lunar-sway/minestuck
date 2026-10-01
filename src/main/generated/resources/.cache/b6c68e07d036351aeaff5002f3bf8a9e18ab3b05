@@ -1,0 +1,12 @@
+// 1.21.1	2026-10-01T10:05:36.491356451	Minestuck Entity Type Tags
+3df3d8e55d1021b12b37646f5114776e800c44b8 data/minestuck/tags/entity_type/boss_mob.json
+ba157e44aafa0e36e4745365bba7e6743bede32c data/minestuck/tags/entity_type/carapacians.json
+567d9746b77cc44a2540f7918777bba5c126dae6 data/minestuck/tags/entity_type/carapacians/bishop.json
+6ff84ed4e0fb2acf97f1a66d0eff73eff977572d data/minestuck/tags/entity_type/carapacians/dersite.json
+f0df7ec1eabc6d78c9e32aceeed8bd8e79f703cc data/minestuck/tags/entity_type/carapacians/pawn.json
+bffb017545b7d67f26dd90b3b767c045d0f0f476 data/minestuck/tags/entity_type/carapacians/prospitian.json
+e7987d171366639f38b649f8caf9f76180ba8f92 data/minestuck/tags/entity_type/carapacians/rook.json
+6adf1d82d357a86c7672ead389c328d4ef6c36b1 data/minestuck/tags/entity_type/consorts.json
+62fb37201111e0f012c105df72615586e29f0663 data/minestuck/tags/entity_type/magnet_receptive.json
+a9b079f89a78f594abb26e7981f86dda30af76f7 data/minestuck/tags/entity_type/remote_observer_blacklist.json
+4e41aa9ec52ee8e6b6a0712d297618043bd557c1 data/minestuck/tags/entity_type/underlings.json
