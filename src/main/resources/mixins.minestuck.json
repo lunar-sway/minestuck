@@ -1,5 +1,6 @@
 {
+  "minVersion": "0.8",
   "package": "com.mraof.minestuck.mixin",
-  "refmap": "mixins.minestuck.refmap.json",
+  "compatibilityLevel": "JAVA_21",
   "mixins": [ "LivingEntityMixin" ]
 }
