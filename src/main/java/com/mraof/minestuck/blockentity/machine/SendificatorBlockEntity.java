@@ -39,6 +39,7 @@ public class SendificatorBlockEntity extends MachineProcessBlockEntity implement
 	private int fuel;
 	private final IUraniumHandler uraniumHandler = new SimpleUraniumHandler(() -> MAX_FUEL, () -> this.fuel, fuel -> this.fuel = fuel)
 	{
+		@Override
 		public boolean canExtractUranium()
 		{
 			return false;
