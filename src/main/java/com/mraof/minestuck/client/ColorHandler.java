@@ -44,6 +44,7 @@ public final class ColorHandler
 
     protected static class FrogItemColor implements ItemColor
     {
+        @Override
         public int getColor(ItemStack stack, int tintIndex)
         {
             if(stack.has(MSItemComponents.FROG_TRAITS) && stack.get(MSItemComponents.FROG_TRAITS).variant().orElse(FrogEntity.FrogVariants.DEFAULT) == FrogEntity.FrogVariants.DEFAULT)
