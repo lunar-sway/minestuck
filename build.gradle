@@ -1,8 +1,7 @@
 plugins {
     id 'eclipse'
     id 'maven-publish'
-    id 'net.neoforged.gradle.userdev' version '7.0.165'
-    id 'net.neoforged.gradle.mixin' version '7.0.165'
+    id 'net.neoforged.moddev' version '2.0.147'
 }
 
 repositories {
@@ -37,45 +36,45 @@ archivesBaseName = 'Minestuck'
 
 java.toolchain.languageVersion = JavaLanguageVersion.of(21)
 
-compileJava.options.encoding = 'UTF-8'
-compileTestJava.options.encoding = "UTF-8"
+neoForge {
+    version = "{neo_version}"
 
-minecraft.accessTransformers.file rootProject.file('src/main/resources/META-INF/accesstransformer.cfg')
-
-runs {
-    configureEach {
-        workingDirectory project.file('run')
-
-        systemProperty 'forge.logging.markers', 'REGISTRIES'
-
-        systemProperty 'forge.logging.console.level', 'debug'
-
-        modSource project.sourceSets.main
-    }
-    client {
-        // Add an uuid arg if you have specified it in a relevant gradle.properties file. NOTE: Do not use the gradle.properties file in the project! (because that one is supposed to be shared among all devs) Create one in your "gradle user home" instead.
-        if (project.hasProperty('mc_uuid')) {
-            arguments '--uuid', project.getProperty('mc_uuid')
-        }
-
-        // Add an username arg if you have specified it in a relevant gradle.properties file. Note that specifying a uuid and a non-matching username (or no username specified) may cause single-player worlds to freeze up when exiting the world.
-        if (project.hasProperty('mc_username')) {
-            arguments '--username', project.getProperty('mc_username')
+    mods {
+        minestuck {
+            sourceSet sourceSets.main
         }
     }
-    server {
+
+    parchment {
+        minecraftVersion = "{mc_version}"
+        mappingsVersion = "{mappings_version}"
     }
-    gameTestServer {
-    }
-    data {
-        arguments '--mod', 'minestuck', '--all', '--output', file('src/main/generated/resources/').getAbsolutePath(), '--existing', file('src/main/resources/').getAbsolutePath()
+
+    runs {
+        client {
+            client()
+            if (rootProject.findProperty('mc_username') != null) {
+                programArguments.addAll('--uuid', rootProject.findProperty('mc_uuid'), '--username', rootProject.findProperty('mc_username'))
+            }
+        }
+
+        server {
+            server()
+        }
+
+        gameTestServer {
+            type = "gameTestServer"
+        }
+
+        data {
+            data()
+            programArguments.addAll '--mod', 'minestuck', '--all', '--output', file('src/main/generated/resources/').getAbsolutePath(), '--existing', file('src/main/resources/').getAbsolutePath()
+        }
     }
 }
 
 dependencies {
-    implementation "net.neoforged:neoforge:${neo_version}"
-
-    annotationProcessor 'org.spongepowered:mixin:0.8.5:processor'
+    // annotationProcessor 'org.spongepowered:mixin:0.8.5:processor'
 
 	// http://dvs1.progwml6.com/files/maven
     compileOnly "mezz.jei:jei-${mc_version}-common-api:${mc_jei_version}"
@@ -92,12 +91,12 @@ dependencies {
     runtimeOnly("com.tterrag.registrate:Registrate:${registrate_version}")
 }
 
-sourceSets.main.resources {
-    srcDir 'src/main/generated/resources'
+tasks.withType(JavaCompile).configureEach {
+    options.encoding = 'UTF-8' // Use the UTF-8 charset for Java compilation
 }
 
-mixin {
-    config 'mixins.minestuck.json'
+sourceSets.main.resources {
+    srcDir 'src/main/generated/resources'
 }
 
 jar {
