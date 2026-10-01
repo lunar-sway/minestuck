@@ -80,7 +80,7 @@ import java.util.Arrays;
 
 @ParametersAreNonnullByDefault
 @MethodsReturnNonnullByDefault
-@EventBusSubscriber(value = Dist.CLIENT, bus = EventBusSubscriber.Bus.MOD, modid = Minestuck.MOD_ID)
+@EventBusSubscriber(value = Dist.CLIENT, modid = Minestuck.MOD_ID)
 public class ClientProxy
 {
 	@SubscribeEvent

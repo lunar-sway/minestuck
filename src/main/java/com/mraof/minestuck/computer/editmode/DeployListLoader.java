@@ -45,7 +45,7 @@ import java.util.function.BiFunction;
  * <p>
  * FIXME grist costs are only updated on rejoin
  */
-@EventBusSubscriber(modid = Minestuck.MOD_ID, bus = EventBusSubscriber.Bus.GAME)
+@EventBusSubscriber(modid = Minestuck.MOD_ID)
 @ParametersAreNonnullByDefault
 public class DeployListLoader extends SimpleJsonResourceReloadListener
 {
