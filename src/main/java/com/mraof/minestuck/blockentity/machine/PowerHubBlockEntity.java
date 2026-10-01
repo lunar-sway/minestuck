@@ -25,6 +25,7 @@ public class PowerHubBlockEntity extends BlockEntity
 	private int power;
 	private final IUraniumHandler powerHandler = new SimpleUraniumHandler(() -> MAX_POWER, () -> this.power, power -> this.power = power)
 	{
+		@Override
 		public boolean canReceiveUranium()
 		{
 			return false;
