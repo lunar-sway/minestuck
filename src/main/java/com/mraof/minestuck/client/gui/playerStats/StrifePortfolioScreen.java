@@ -19,7 +19,9 @@ import net.neoforged.neoforge.network.PacketDistributor;
 import org.lwjgl.opengl.GL11;
 
 import javax.annotation.ParametersAreNonnullByDefault;
+import java.util.HashMap;
 import java.util.LinkedList;
+import java.util.Map;
 
 /**
  * Port of GuiStrifePortfolio (Minestuck Universe 1.12.2).
@@ -37,6 +39,10 @@ public class StrifePortfolioScreen extends PlayerStatsScreen
 	private static final String ICONS = "textures/gui/strife_specibus/icons/";
 	private static final ResourceLocation PORTFOLIO_ICONS = ms("textures/gui/icons.png");
 	
+	private static final Component SPECIBUS_LABEL = Component.translatable("gui.strifePortfolio.specibus");
+	private static final Component DECK_LABEL = Component.translatable("gui.strifePortfolio.deck");
+	
+	private static final Map<KindAbstratusType, ResourceLocation> ICON_CACHE = new HashMap<>();
 	private static final float CS = 0.25f;
 	
 	// Card fan: {offsetX, offsetY, portfolioSlotIndex}
@@ -57,7 +63,7 @@ public class StrifePortfolioScreen extends PlayerStatsScreen
 	@Override
 	public void renderBackground(GuiGraphics g, int mx, int my, float pt)
 	{
-		super.renderBackground(g, mx, my, pt);
+		renderTransparentBackground(g);
 		drawTabs(g);
 	}
 	
@@ -122,6 +128,7 @@ public class StrifePortfolioScreen extends PlayerStatsScreen
 		
 		// bottom abstrata icon strip
 		float s = 0.0625f;
+		RenderSystem.setShaderColor(1, 1, 1, 1);
 		for(int i = 0; i < StrifePortfolioData.PORTFOLIO_SIZE; i++)
 		{
 			StrifeSpecibus sp = port[i];
@@ -133,7 +140,6 @@ public class StrifePortfolioScreen extends PlayerStatsScreen
 			
 			g.pose().pushPose();
 			g.pose().scale(s, s, 1f);
-			RenderSystem.setShaderColor(1, 1, 1, 1);
 			g.blit(iconLoc(t), (int) ((xOffset + 23 + 20 * i) / s), (int) ((yOffset + 166) / s), 0, 0, 256, 256);
 			g.pose().popPose();
 		}
@@ -198,7 +204,7 @@ public class StrifePortfolioScreen extends PlayerStatsScreen
 			float s = CS * 1.5f;
 			g.pose().pushPose();
 			g.pose().scale(s, s, 1f);
-			g.drawString(font, Component.translatable("gui.strifePortfolio.specibus"), (int) (x / s) + 5, (int) (y / s) + 4, 0xFF00E371, false);
+			g.drawString(font, SPECIBUS_LABEL, (int) (x / s) + 5, (int) (y / s) + 4, 0xFF00E371, false);
 			g.pose().popPose();
 		}
 		
@@ -216,13 +222,15 @@ public class StrifePortfolioScreen extends PlayerStatsScreen
 		{
 			g.pose().pushPose();
 			g.pose().scale(CS, CS, 1f);
-			g.drawString(font, Component.translatable("gui.strifePortfolio.deck"), (int) (x / CS) + 16, (int) (y / CS) + 179, 0xFFFFFFFF, false);
+			g.drawString(font, DECK_LABEL, (int) (x / CS) + 16, (int) (y / CS) + 179, 0xFFFFFFFF, false);
 			g.pose().popPose();
 		}
 		
 		// weapon items
 		LinkedList<ItemStack> items = sp.getContents();
 		int shown = Math.min(items.size(), 5);
+		if(shown == 0) return;
+		
 		int deckX = (int) (94 - 23 * (shown / 2f));
 
 		for(int n = 0; n < shown; n++)
@@ -244,9 +252,8 @@ public class StrifePortfolioScreen extends PlayerStatsScreen
 			g.pose().translate((x / CS) + ix + 2, (y / CS) + iy + 4, 0f);
 			g.renderItem(stack, 0, 0);
 			g.pose().popPose();
-			
-			g.flush();
 		}
+		g.flush();
 		RenderSystem.clear(GL11.GL_DEPTH_BUFFER_BIT, Minecraft.ON_OSX);
 	}
 	
@@ -345,9 +352,11 @@ public class StrifePortfolioScreen extends PlayerStatsScreen
 	
 	private static ResourceLocation iconLoc(KindAbstratusType type)
 	{
-		String n = type.getUnlocalizedName(); // e.g. "minestuck.sword"
-		int dot = n.lastIndexOf('.');
-		return ms(ICONS + (dot >= 0 ? n.substring(dot + 1) : n) + ".png");
+		return ICON_CACHE.computeIfAbsent(type, t -> {
+			String n = t.getUnlocalizedName(); // e.g. "minestuck.sword"
+			int dot = n.lastIndexOf('.');
+			return ms(ICONS + (dot >= 0 ? n.substring(dot + 1) : n) + ".png");
+		});
 	}
 	
 	private static ResourceLocation ms(String path)
