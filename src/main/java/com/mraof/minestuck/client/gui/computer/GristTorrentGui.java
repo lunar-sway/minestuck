@@ -21,6 +21,7 @@ import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
+import java.util.Objects;
 import java.util.stream.IntStream;
 
 import static com.mraof.minestuck.client.gui.computer.TorrentWidgets.scale;
@@ -41,6 +42,7 @@ public final class GristTorrentGui extends Screen implements ProgramGui<ProgramT
 	
 	private static final ResourceLocation BUILD_ICON = Minestuck.id("textures/grist/build.png");
 	private static final ResourceLocation TORRENT_ICON = Minestuck.id("textures/gui/torrent.png");
+	private static final Component LOADING_TEXT = Component.translatable(GUTTER_LOADING);
 	
 	static final int GUI_WIDTH = 190;
 	static final int GUI_HEIGHT = 200;
@@ -61,6 +63,8 @@ public final class GristTorrentGui extends Screen implements ProgramGui<ProgramT
 	
 	private GristSet gutterGrist;
 	private long filledVolume = 0;
+	private String volumeText = "0";
+	private int loadingTextWidth;
 	private GristSet previousGutterGrist = null;
 	private long gutterRemainingCapacity;
 	static final Map<Integer, TorrentSession.TorrentClientData> visibleTorrentData = new HashMap<>();
@@ -81,11 +85,18 @@ public final class GristTorrentGui extends Screen implements ProgramGui<ProgramT
 		ACTIVE,
 		INACTIVE;
 		
+		private final String displayName;
+		
+		TorrentFilter()
+		{
+			String title = this.name();
+			this.displayName = title.charAt(0) + title.substring(1).toLowerCase();
+		}
+		
 		@Override
 		public String toString()
 		{
-			String title = this.name();
-			return title.charAt(0) + title.substring(1).toLowerCase();
+			return displayName;
 		}
 	}
 	
@@ -104,6 +115,12 @@ public final class GristTorrentGui extends Screen implements ProgramGui<ProgramT
 		gristWidgetsYOffset = yOffset + 39;
 		
 		ownerId = (computer != null) ? computer.clientSideOwnerId() : SkaiaClient.playerId;
+		
+		loadingTextWidth = font.width(LOADING_TEXT);
+		
+		gutterBars.clear();
+		previousGutterGrist = null;
+		gutterLoading = true;
 		
 		gutterGrist = ClientPlayerData.getGutterSet();
 		visibleTorrentData.clear();
@@ -142,29 +159,40 @@ public final class GristTorrentGui extends Screen implements ProgramGui<ProgramT
 				55, 1, gatesContainer);
 		addRenderableWidget(gatesScrollBar);
 		
-		updateGutterBars();
+		refreshClientData();
+		updateTick = 1;
 	}
 	
 	public void setFilter(TorrentFilter filter)
 	{
 		activeFilter = filter;
+		if(statsContainer != null)
+			statsContainer.refresh(activeFilter);
 	}
 	
 	@Override
 	public void renderBackground(GuiGraphics guiGraphics, int mouseX, int mouseY, float partialTicks)
 	{
-		super.renderBackground(guiGraphics, mouseX, mouseY, partialTicks);
+		renderTransparentBackground(guiGraphics);
 		
 		guiGraphics.blit(GUI_MAIN, xOffset, yOffset, 0, 0, GUI_WIDTH, GUI_HEIGHT);
 	}
 	
 	@Override
+	public void tick()
+	{
+		super.tick();
+		
+		if(torrentContainerRow == null) return;
+		
+		if(updateTick % 20 == 0) refreshClientData();
+		
+		updateTick++;
+	}
+	
+	@Override
 	public void render(GuiGraphics guiGraphics, int mouseX, int mouseY, float partialTicks)
 	{
-		clientDataUpdates();
-		statsContainer.updateStats(activeFilter);
-		filterContainer.updateCounts();
-		
 		super.render(guiGraphics, mouseX, mouseY, partialTicks);
 		
 		int gutterX = xOffset + 53;
@@ -182,11 +210,9 @@ public final class GristTorrentGui extends Screen implements ProgramGui<ProgramT
 		
 		if(gutterLoading)
 		{
-			Component loading = Component.translatable(GUTTER_LOADING);
-			guiGraphics.drawString(font, loading, xOffset + 92 - font.width(loading) / 2, yOffset + 185 + 5, DARK_GREY, false);
+			guiGraphics.drawString(font, LOADING_TEXT, xOffset + 92 - loadingTextWidth / 2, yOffset + 185 + 5, DARK_GREY, false);
 		} else
 		{
-			String volumeText = String.valueOf(filledVolume);
 			guiGraphics.pose().pushPose();
 			guiGraphics.pose().scale(0.5F, 0.5F, 0.5F);
 			guiGraphics.drawString(font, volumeText, scale(xOffset + 105), scale(yOffset + 185 + 5), LIGHT_BLUE, false);
@@ -194,29 +220,27 @@ public final class GristTorrentGui extends Screen implements ProgramGui<ProgramT
 		}
 	}
 	
-	private void clientDataUpdates()
+	private void refreshClientData()
 	{
-		if(updateTick % 20 == 0)
-		{
-			gutterGrist = ClientPlayerData.getGutterSet();
-			gutterRemainingCapacity = ClientPlayerData.getGutterRemainingCapacity();
-			visibleTorrentData.clear();
-			visibleTorrentData.putAll(ClientPlayerData.getVisibleTorrentData());
-			gatesContainer.setPlayers(visibleTorrentData);
-			statsContainer.trackDownloads();
-			
-			if(!gutterGrist.equals(previousGutterGrist))
-			{
-				updateGutterBars();
-				previousGutterGrist = gutterGrist;
-			}
-			renderTorrentSessions();
-		}
+		gutterGrist = ClientPlayerData.getGutterSet();
+		gutterRemainingCapacity = ClientPlayerData.getGutterRemainingCapacity();
+		visibleTorrentData.clear();
+		visibleTorrentData.putAll(ClientPlayerData.getVisibleTorrentData());
+		gatesContainer.setPlayers(visibleTorrentData);
+		statsContainer.trackDownloads();
 		
-		updateTick++;
+		if(!Objects.equals(gutterGrist, previousGutterGrist))
+		{
+			updateGutterBars();
+			previousGutterGrist = gutterGrist;
+		}
+		refreshTorrentSessions();
+		
+		statsContainer.refresh(activeFilter);
+		filterContainer.updateCounts(statsContainer.allStats());
 	}
 	
-	private void renderTorrentSessions()
+	private void refreshTorrentSessions()
 	{
 		for(TorrentContainer container : torrentContainerRow.children())
 		{
@@ -242,6 +266,7 @@ public final class GristTorrentGui extends Screen implements ProgramGui<ProgramT
 		filledVolume = 0;
 		for(GristAmount amount : gutterGrist.asAmounts())
 			filledVolume += amount.amount();
+		volumeText = String.valueOf(filledVolume);
 		
 		double totalVolume = filledVolume + gutterRemainingCapacity;
 		
