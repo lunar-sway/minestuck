@@ -81,6 +81,7 @@ public final class DeployList
 		registerItem("artifact_card", GristSet.EMPTY, null, 0, HAS_NOT_ENTERED,
 				(playerData, level) -> CaptchaCardItem.createPunchedCard(SburbHandler.getEntryItem(level, playerData).getItem()), EntryLists.DEPLOY);
 		registerItem("alchemiter", new ItemStack(MSBlocks.ALCHEMITER), GristSet.EMPTY, GristTypes.BUILD.get().amount(100), 0, EntryLists.DEPLOY);
+		registerItem("grist_torrent_disk", new ItemStack(MSItems.TORRENT_DISK.get()), GristTypes.BUILD.get().amount(15), 0, EntryLists.DEPLOY);
 		registerItem("punch_designix", 0, null, item(MSBlocks.PUNCH_DESIGNIX),
 				(isPrimary, playerData) -> playerData.getBaseGrist().amount(4), EntryLists.DEPLOY);
 		registerItem("portable_cruxtruder", GristTypes.BUILD.get().amount(200), 1, config(MinestuckConfig.SERVER.portableMachines),

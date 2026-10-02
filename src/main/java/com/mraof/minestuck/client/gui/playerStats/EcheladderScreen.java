@@ -4,18 +4,22 @@ import com.google.common.collect.ImmutableList;
 import com.mojang.blaze3d.systems.RenderSystem;
 import com.mraof.minestuck.MinestuckConfig;
 import com.mraof.minestuck.client.ClientRungData;
-import com.mraof.minestuck.item.MSItems;
+import com.mraof.minestuck.computer.editmode.ClientEditmodeData;
 import com.mraof.minestuck.player.ClientPlayerData;
 import com.mraof.minestuck.player.Rung;
+import com.mraof.minestuck.util.MSSoundEvents;
 import net.minecraft.client.gui.GuiGraphics;
 import net.minecraft.client.gui.components.AbstractWidget;
 import net.minecraft.client.gui.components.Tooltip;
 import net.minecraft.client.gui.narration.NarrationElementOutput;
+import net.minecraft.client.gui.screens.inventory.InventoryScreen;
 import net.minecraft.client.resources.MobEffectTextureManager;
 import net.minecraft.client.resources.language.I18n;
+import net.minecraft.client.resources.sounds.SimpleSoundInstance;
 import net.minecraft.network.chat.Component;
 import net.minecraft.resources.ResourceLocation;
 import net.minecraft.util.Mth;
+import net.minecraft.util.RandomSource;
 import net.minecraft.world.effect.MobEffects;
 import org.lwjgl.glfw.GLFW;
 
@@ -42,16 +46,22 @@ public class EcheladderScreen extends PlayerStatsScreen
 	private static final int RUNG_Y = 14;
 	private static final int VISIBLE_RUNG_COUNT = 12;
 	private static final int BOONDOLLAR_Y = 12;
-	private static final int ATTACK_Y = 30;
-	private static final int HEALTH_Y = 78;
-	private static final int CACHE_Y = 126;
-	private static final int CAPTCHA_Y = 174;
+	private static final int ATTACK_Y = 88;
+	private static final int HEALTH_Y = 124;
+	private static final int CACHE_Y = 159;
+	private static final int CAPTCHA_Y = 179;
 	
 	private static final int GREY = 0x404040;
 	private static final int BLUE = 0x0094FF;
 	
 	private static final int TIME_BEFORE_ANIMATION = 10, TIME_BEFORE_NEXT = 16, TIME_FOR_RUNG = 4, TIME_FOR_SHOW_ONLY = 65;
 	private static final int TIME_TILL_NEXT = TIME_BEFORE_NEXT + TIME_FOR_RUNG;
+	
+	private final List<BoondollarParticle> boondollarParticles = new ArrayList<>();
+	private final RandomSource particleRandom = RandomSource.create();
+	private int lastAnimatedRungForBurst = -1;
+	private int streamTicksElapsed = -1;
+	private int nextSoundAtTick = -1;
 	
 	private int scroll = 0;
 	private final int maxScroll;
@@ -65,6 +75,24 @@ public class EcheladderScreen extends PlayerStatsScreen
 	private int fromRung;    //First rung to display increments from; (actually the one right before that one)
 	private int animationCycle;    //Ticks left on the animation cycle
 	private int animatedRungs;    //The amount of rungs to animate
+	
+	private int cachedRung = -1;
+	private String attackText = "", healthText = "", cacheText = "", captchaText = "";
+	private int attackWidth, healthWidth;
+	private List<Component> damageTooltip, protectionTooltip;
+	
+	private String attackLabel = "", healthLabel = "", cacheLabel = "", captchaLabel = "";
+	private String screenTitleText = "";
+	private int screenTitleWidth;
+	
+	private boolean titleCacheValid = false;
+	private boolean cachedEditmode;
+	private Object cachedTitleSource;
+	private String cachedPlayerTitle = "";
+	private int cachedPlayerTitleWidth;
+	
+	private static final String EQUALS = "=";
+	private int equalsWidth;
 	
 	public EcheladderScreen()
 	{
@@ -83,6 +111,21 @@ public class EcheladderScreen extends PlayerStatsScreen
 		fromRung = lastRung;
 		lastRung = ClientPlayerData.getRung();
 		
+		lastAnimatedRungForBurst = fromRung;
+		streamTicksElapsed = -1;
+		nextSoundAtTick = -1;
+		boondollarParticles.clear();
+		
+		attackLabel = I18n.get(ATTACK);
+		healthLabel = I18n.get(HEALTH);
+		cacheLabel = I18n.get(CACHE);
+		captchaLabel = I18n.get(CAPTCHA);
+		screenTitleText = title.getString();
+		screenTitleWidth = font.width(screenTitleText);
+		equalsWidth = font.width(EQUALS);
+		cachedRung = -1;
+		titleCacheValid = false;
+		
 		rungBars.clear();
 		for(int i = 0; i <= ClientRungData.getFinalRungIndex(); i++)
 		{
@@ -90,12 +133,18 @@ public class EcheladderScreen extends PlayerStatsScreen
 			
 			Optional<String> tooltip = ClientRungData.getData(i).description();
 			
-			RungBar rungBar = new RungBar(xOffset + 90, yOffset + 175 - i * RUNG_Y, 146, RUNG_Y, name, tooltip, i);
+			RungBar rungBar = new RungBar(xOffset + 96, yOffset + 175 - i * RUNG_Y, 140, RUNG_Y, name, tooltip, i);
 			rungBars.add(rungBar);
 			addRenderableWidget(rungBar);
 			
 			rungBar.visible = i <= VISIBLE_RUNG_COUNT;
 		}
+	}
+	
+	@Override
+	public void renderBackground(GuiGraphics guiGraphics, int mouseX, int mouseY, float partialTick)
+	{
+		renderTransparentBackground(guiGraphics);
 	}
 	
 	@Override
@@ -107,10 +156,21 @@ public class EcheladderScreen extends PlayerStatsScreen
 		
 		calculateRungAnimationStep(speedFactor);
 		
-		rungBars.forEach(rungBar -> {
-			rungBar.setY(rungBar.initY + getScrollMod());
+		if(currentRung > lastAnimatedRungForBurst)
+		{
+			lastAnimatedRungForBurst = currentRung;
+			streamTicksElapsed = 0;
+			nextSoundAtTick = 0;
+		}
+		
+		tickBoondollarStream();
+		
+		int scrollMod = getScrollMod();
+		for(RungBar rungBar : rungBars)
+		{
+			rungBar.setY(rungBar.initY + scrollMod);
 			rungBar.updateVisibility();
-		});
+		}
 		
 		super.render(guiGraphics, mouseX, mouseY, partialTicks);
 		
@@ -120,27 +180,194 @@ public class EcheladderScreen extends PlayerStatsScreen
 		
 		guiGraphics.blit(guiEcheladder, xOffset, yOffset, 0, 0, guiWidth, guiHeight);
 		
+		refreshTitleCache();
+		if(!cachedPlayerTitle.isEmpty())
+		{
+			guiGraphics.drawString(font, cachedPlayerTitle, xOffset + 96 + 70 - cachedPlayerTitleWidth / 2, yOffset + 20, 0x404040, false);
+		}
+		
 		//scroll bar
-		float scrollPercentage = (float) scroll / maxScroll;
-		guiGraphics.blit(guiEcheladder, xOffset + 80, (int) (yOffset + 42 + (130F * (1F - scrollPercentage))), 0, 243, 7, 13);
+		float scrollPercentage = maxScroll > 0 ? (float) scroll / maxScroll : 0F;
+		guiGraphics.blit(guiEcheladder, xOffset + 86, (int) (yOffset + 42 + (130F * (1F - scrollPercentage))), 0, 243, 7, 13);
+		
+		if (!MinestuckConfig.CLIENT.echeladderPlayerFrameBorders.get())
+		{
+			renderPlayerBeyondBorders(guiGraphics, mouseX, mouseY);
+		} else {
+			renderPlayerWithinBorders(guiGraphics, mouseX, mouseY);
+		}
 		
 		List<Component> tooltip = drawEffectIconsAndText(guiGraphics, currentRung, mouseX, mouseY);
 		
 		if(fromRung < currentRung)
 		{
-			for(int rung = Math.max(fromRung, currentRung - 4) + 1; rung <= currentRung; rung++)
+			for(int rung = Math.max(fromRung, currentRung - 2) + 1; rung <= currentRung; rung++)
 			{
-				int index = rung - 1 - Math.max(fromRung, currentRung - 4);
+				int index = rung - 1 - Math.max(fromRung, currentRung - 2);
 				List<Component> newTooltip = drawGainedRungBonuses(guiGraphics, rung, index, mouseX, mouseY);
 				if(newTooltip != null)
 					tooltip = newTooltip;
 			}
 		}
 		
+		updateAndRenderBoondollarParticles(guiGraphics);
+		
 		drawActiveTabAndOther(guiGraphics, mouseX, mouseY);
 		
 		if(tooltip != null)
 			guiGraphics.renderComponentTooltip(font, tooltip, mouseX, mouseY);
+	}
+	
+	private void refreshTitleCache()
+	{
+		boolean editmode = ClientEditmodeData.isInEditmode();
+		var playerTitle = ClientPlayerData.getTitle();
+		
+		if(titleCacheValid && editmode == cachedEditmode && Objects.equals(playerTitle, cachedTitleSource)) return;
+		
+		titleCacheValid = true;
+		cachedEditmode = editmode;
+		cachedTitleSource = playerTitle;
+		
+		if(editmode || playerTitle == null) cachedPlayerTitle = "";
+		else cachedPlayerTitle = playerTitle.asTextComponent().getString();
+		cachedPlayerTitleWidth = font.width(cachedPlayerTitle);
+	}
+	
+	private void refreshTextCache(int rung)
+	{
+		if(rung == cachedRung) return;
+		cachedRung = rung;
+		
+		Rung.DisplayData d = ClientRungData.getData(rung);
+		int attack = (int) Math.round(100 * (1 + d.attributes().attackBonus()));
+		attackText = attack + "%";
+		healthText = "+" + String.format(Locale.ROOT, "%.1f", d.attributes().healthBoost() / 2D);
+		cacheText = String.valueOf(d.gristCapacity());
+		captchaText = String.format(Locale.ROOT, "%d", (int) d.attributes().captchalogueCapacity());
+		attackWidth = font.width(attackText);
+		healthWidth = font.width(healthText);
+		
+		damageTooltip = ImmutableList.of(Component.translatable(DAMAGE_UNDERLING), Component.literal(Math.round(attack * d.attributes().underlingDamageMod()) + "%"));
+		protectionTooltip = ImmutableList.of(Component.translatable(PROTECTION_UNDERLING), Component.literal(String.format(Locale.ROOT, "%.1f", 100 * d.attributes().underlingProtectionMod()) + "%"));
+	}
+	
+	private void tickBoondollarStream()
+	{
+		if(streamTicksElapsed < 0)
+			return;
+		
+		if(streamTicksElapsed >= 80)
+		{
+			streamTicksElapsed = -1;
+			nextSoundAtTick = -1;
+			return;
+		}
+		
+		if(streamTicksElapsed >= nextSoundAtTick)
+		{
+			playBoondollarSound();
+			float jitter = 1F + (particleRandom.nextFloat() - 0.5F) * 0.4F;
+			nextSoundAtTick = streamTicksElapsed + Math.max(1, Math.round(5 * jitter));
+		}
+		
+		int count;
+		if(streamTicksElapsed < 60)
+		{
+			count = 1 + particleRandom.nextInt(3 - 1 + 1);
+		} else
+		{
+			int taperProgress = streamTicksElapsed - 60;
+			float taperFactor = 1F - (float) taperProgress / 20;
+			count = particleRandom.nextFloat() < taperFactor ? 1 : 0;
+		}
+		
+		for(int i = 0; i < count; i++)
+			spawnSingleBoondollar();
+		
+		streamTicksElapsed++;
+	}
+	
+	private void playBoondollarSound()
+	{
+		float pitch = 0.85F + particleRandom.nextFloat() * (1.3F - 0.85F);
+		this.minecraft.getSoundManager().play(SimpleSoundInstance.forUI(MSSoundEvents.EVENT_ECHELADDER_BOONDOLLARS.get(), pitch, 0.5F));
+	}
+	
+	private void spawnSingleBoondollar()
+	{
+		float originY = 42 + particleRandom.nextFloat() * (53 - 42);
+		float vx = 3.5F + particleRandom.nextFloat() * (7.0F - 3.5F);
+		float vy = (particleRandom.nextFloat() - 0.5F) * 2.5F;
+		int life = 14 + particleRandom.nextInt(22 - 14 + 1);
+		int frameOffset = particleRandom.nextInt(2);
+		
+		boondollarParticles.add(new BoondollarParticle(237, originY, vx, vy, life, frameOffset));
+	}
+	
+	private void updateAndRenderBoondollarParticles(GuiGraphics guiGraphics)
+	{
+		if(boondollarParticles.isEmpty())
+			return;
+		
+		RenderSystem.setShaderColor(1, 1, 1, 1);
+		
+		Iterator<BoondollarParticle> it = boondollarParticles.iterator();
+		while(it.hasNext())
+		{
+			BoondollarParticle particle = it.next();
+			particle.x += particle.vx;
+			particle.y += particle.vy;
+			particle.ageTicks++;
+			
+			if(particle.ageTicks >= particle.lifeTicks || particle.x > guiWidth + 48)
+			{
+				it.remove();
+				continue;
+			}
+			
+			int frame = (particle.spawnFrameOffset + particle.ageTicks / 3) % 2;
+			int v = 48 + frame * 16;
+			
+			guiGraphics.blit(PlayerStatsScreen.icons, xOffset + Math.round(particle.x), yOffset + Math.round(particle.y),
+					208, v, 48, 16);
+		}
+	}
+	
+	// clean mode
+	private void renderPlayerWithinBorders(GuiGraphics guiGraphics, int mouseX, int mouseY)
+	{
+		int x1 = xOffset + 20;
+		int y1 = yOffset + 30;
+		int x2 = x1 + 49;
+		int y2 = y1 + 49;
+		int scale = 50;
+		
+		InventoryScreen.renderEntityInInventoryFollowsMouse(
+				guiGraphics, x1, y1, x2, y2, scale, 0.580F,
+				(float) mouseX, (float) mouseY, this.minecraft.player);
+	}
+	
+	// boderless mode
+	private void renderPlayerBeyondBorders(GuiGraphics guiGraphics, int mouseX, int mouseY)
+	{
+		int x1 = xOffset + 17;
+		int y1 = yOffset + 15;
+		int x2 = x1 + 52;
+		int y2 = y1 + 64;
+		int scale = 50;
+		
+		int pad = 17;
+		int rx1 = x1 - pad;
+		int ry1 = y1 - pad;
+		int rx2 = x2 + pad;
+		int ry2 = y2 + pad;
+		
+		guiGraphics.enableScissor(rx1, ry1, x2, y2);
+		InventoryScreen.renderEntityInInventoryFollowsMouse(
+				guiGraphics, rx1, ry1, rx2, ry2, scale, 0.580F,
+				(float) mouseX, (float) mouseY, this.minecraft.player);
+		guiGraphics.disableScissor();
 	}
 	
 	private int getScrollMod()
@@ -192,41 +419,37 @@ public class EcheladderScreen extends PlayerStatsScreen
 		RenderSystem.setShaderColor(1, 1, 1, 1);
 		guiGraphics.blit(PlayerStatsScreen.icons, xOffset + 5, yOffset + BOONDOLLAR_Y - 5, 238, 16, 18, 18);
 		guiGraphics.blit(xOffset + 5, yOffset + ATTACK_Y, 0, 18, 18, effectSprites.get(MobEffects.DAMAGE_BOOST));
-		guiGraphics.blit(xOffset + 5, yOffset + HEALTH_Y, 0, 18, 18, effectSprites.get(MobEffects.HEALTH_BOOST));
+		guiGraphics.blit(PlayerStatsScreen.icons, xOffset + 5, yOffset + HEALTH_Y, 64, 80, 16, 16);
 		guiGraphics.blit(PlayerStatsScreen.icons, xOffset + 6, yOffset + CACHE_Y + 1, 48, 64, 16, 16);
-		guiGraphics.renderItem(MSItems.CAPTCHA_CARD.toStack(), xOffset + 5, yOffset + CAPTCHA_Y);
+		guiGraphics.blit(PlayerStatsScreen.icons, xOffset + 5, yOffset + CAPTCHA_Y, 48, 80,16, 16);
 		
+		refreshTextCache(currentRung);
+		String boondollarText = String.valueOf(ClientPlayerData.getBoondollars());
 		
-		String msg = title.getString();
-		guiGraphics.drawString(font, msg, xOffset + 168 - mc.font.width(msg) / 2F, yOffset + 12, GREY, false);
+		guiGraphics.drawManaged(() ->
+		{
+			guiGraphics.drawString(font, screenTitleText, xOffset + 168 - screenTitleWidth / 2F, yOffset + 10, GREY, false);
+			
+			guiGraphics.drawString(font, EQUALS, textOffset + 1, yOffset + BOONDOLLAR_Y, GREY, false);    //Should this be black, or the same blue as the numbers?
+			guiGraphics.drawString(font, boondollarText, textOffset + 3 + equalsWidth, yOffset + BOONDOLLAR_Y, BLUE, false);
+			
+			guiGraphics.drawString(font, attackLabel, textOffset, yOffset + ATTACK_Y, GREY, false);
+			guiGraphics.drawString(font, attackText, textOffset + 2, yOffset + ATTACK_Y + 9, BLUE, false);
+			
+			guiGraphics.drawString(font, healthLabel, textOffset, yOffset + HEALTH_Y, GREY, false);
+			guiGraphics.drawString(font, healthText, textOffset + 2, yOffset + HEALTH_Y + 9, BLUE, false);
+			
+			guiGraphics.drawString(font, cacheLabel, textOffset, yOffset + CACHE_Y, GREY, false);
+			guiGraphics.drawString(font, cacheText, textOffset + 2, yOffset + CACHE_Y + 9, BLUE, false);
+			
+			guiGraphics.drawString(font, captchaLabel, textOffset, yOffset + CAPTCHA_Y, GREY, false);
+			guiGraphics.drawString(font, captchaText, textOffset + 2, yOffset + CAPTCHA_Y + 9, BLUE, false);
+		});
 		
-		Rung.DisplayData rungData = ClientRungData.getData(currentRung);
-		
-		guiGraphics.drawString(font, "=", textOffset + 1, yOffset + BOONDOLLAR_Y, GREY, false);    //Should this be black, or the same blue as the numbers?
-		guiGraphics.drawString(font, String.valueOf(ClientPlayerData.getBoondollars()), textOffset + 3 + mc.font.width("="), yOffset + BOONDOLLAR_Y, BLUE, false);
-		//guiGraphics.drawString("Rep: " + ClientPlayerData.getConsortReputation(), xOffset + 75 + mc.fontRenderer.getCharWidth('='), yOffset + 12, BLUE);
-		
-		int attack = (int) Math.round(100 * (1 + rungData.attributes().attackBonus()));
-		guiGraphics.drawString(font, I18n.get(ATTACK), textOffset, yOffset + ATTACK_Y, GREY, false);
-		String attackValueText = attack + "%";
-		guiGraphics.drawString(font, attackValueText, textOffset + 2, yOffset + ATTACK_Y + 9, BLUE, false);
-		
-		double health = rungData.attributes().healthBoost() / 2D;
-		guiGraphics.drawString(font, I18n.get(HEALTH), textOffset, yOffset + HEALTH_Y, GREY, false);
-		String healthValueText = "+" + String.format(Locale.ROOT, "%.1f", health);
-		guiGraphics.drawString(font, healthValueText, textOffset + 2, yOffset + HEALTH_Y + 9, BLUE, false);
-		
-		guiGraphics.drawString(font, I18n.get(CACHE), textOffset, yOffset + CACHE_Y, GREY, false);
-		guiGraphics.drawString(font, String.valueOf(rungData.gristCapacity()), textOffset + 2, yOffset + CACHE_Y + 9, BLUE, false);
-		
-		guiGraphics.drawString(font, I18n.get(CAPTCHA), textOffset, yOffset + CAPTCHA_Y, GREY, false);
-		String captchaValueText = String.format(Locale.ROOT, "%d", (int) rungData.attributes().captchalogueCapacity());
-		guiGraphics.drawString(font, captchaValueText, textOffset + 2, yOffset + CAPTCHA_Y + 9, BLUE, false);
-		
-		if(mouseInBounds(mouseY, yOffset + ATTACK_Y + 9, mouseX, textOffset + 2, mc.font.width(attackValueText)))
-			return ImmutableList.of(Component.translatable(DAMAGE_UNDERLING), Component.literal(Math.round(attack * rungData.attributes().underlingDamageMod()) + "%"));
-		if(mouseInBounds(mouseY, yOffset + HEALTH_Y + 9, mouseX, textOffset + 2, mc.font.width(healthValueText)))
-			return ImmutableList.of(Component.translatable(PROTECTION_UNDERLING), Component.literal(String.format(Locale.ROOT, "%.1f", 100 * rungData.attributes().underlingProtectionMod()) + "%"));
+		if(mouseInBounds(mouseY, yOffset + ATTACK_Y + 9, mouseX, textOffset + 2, attackWidth))
+			return damageTooltip;
+		if(mouseInBounds(mouseY, yOffset + HEALTH_Y + 9, mouseX, textOffset + 2, healthWidth))
+			return protectionTooltip;
 		return null;
 	}
 	
@@ -246,12 +469,13 @@ public class EcheladderScreen extends PlayerStatsScreen
 		int maxX = xOffset + 35 + xMod;
 		
 		String str = "+" + (Math.round(100 * rungData.attributes().attackBonus()) - Math.round(100 * prevRungData.attributes().attackBonus())) + "%!";
-		guiGraphics.fill(minX, yOffset + ATTACK_Y + 18 + yMod, maxX, yOffset + ATTACK_Y + 30 + yMod, bg);
-		int strX = xOffset + 20 + xMod - mc.font.width(str) / 2;
-		int strY = yOffset + ATTACK_Y + 20 + yMod;
+		guiGraphics.fill(minX, yOffset + ATTACK_Y + 20 + yMod, maxX, yOffset + ATTACK_Y + 32 + yMod, bg);
+		int strWidth = font.width(str);
+		int strX = xOffset + 20 + xMod - strWidth / 2;
+		int strY = yOffset + ATTACK_Y + 22 + yMod;
 		guiGraphics.drawString(font, str, strX, strY, textColor, false);
 		
-		if(mouseInBounds(mouseY, strY, mouseX, strX, mc.font.width(str)))
+		if(mouseInBounds(mouseY, strY, mouseX, strX, strWidth))
 		{
 			int diff = (int) Math.round(100 * (1 + rungData.attributes().attackBonus()) * rungData.attributes().underlingDamageMod());
 			diff -= Math.round(100 * (1 + prevRungData.attributes().attackBonus()) * prevRungData.attributes().underlingDamageMod());
@@ -260,12 +484,13 @@ public class EcheladderScreen extends PlayerStatsScreen
 		
 		double d = (rungData.attributes().healthBoost() - prevRungData.attributes().healthBoost()) / 2D;
 		str = String.format(Locale.ROOT, "+%.1f!", d);
-		guiGraphics.fill(minX, yOffset + HEALTH_Y + 18 + yMod, maxX, yOffset + HEALTH_Y + 30 + yMod, bg);
-		strX = xOffset + 20 + xMod - mc.font.width(str) / 2;
-		strY = yOffset + HEALTH_Y + 20 + yMod;
+		guiGraphics.fill(minX, yOffset + HEALTH_Y + 20 + yMod, maxX, yOffset + HEALTH_Y + 32 + yMod, bg);
+		strWidth = font.width(str);
+		strX = xOffset + 20 + xMod - strWidth / 2;
+		strY = yOffset + HEALTH_Y + 22 + yMod;
 		guiGraphics.drawString(font, str, strX, strY, textColor, false);
 		
-		if(mouseInBounds(mouseY, strY, mouseX, strX, mc.font.width(str)))
+		if(mouseInBounds(mouseY, strY, mouseX, strX, strWidth))
 		{
 			int diff = (int) Math.round(1000 * prevRungData.attributes().underlingProtectionMod());
 			diff -= Math.round(1000 * rungData.attributes().underlingProtectionMod());
@@ -326,7 +551,7 @@ public class EcheladderScreen extends PlayerStatsScreen
 	@Override
 	public boolean mouseClicked(double xcor, double ycor, int mouseButton)
 	{
-		if(mouseButton == 0 && xcor >= xOffset + 80 && xcor < xOffset + 87)
+		if(mouseButton == 0 && xcor >= xOffset + 86 && xcor < xOffset + 93)
 		{
 			if(ycor >= yOffset + 35 && ycor < yOffset + 42)
 			{
@@ -342,16 +567,37 @@ public class EcheladderScreen extends PlayerStatsScreen
 		return super.mouseClicked(xcor, ycor, mouseButton);
 	}
 	
+	private static final class BoondollarParticle
+	{
+		float x, y;
+		final float vx, vy;
+		int ageTicks;
+		final int lifeTicks;
+		final int spawnFrameOffset;
+		
+		BoondollarParticle(float x, float y, float vx, float vy, int lifeTicks, int spawnFrameOffset)
+		{
+			this.x = x;
+			this.y = y;
+			this.vx = vx;
+			this.vy = vy;
+			this.lifeTicks = lifeTicks;
+			this.spawnFrameOffset = spawnFrameOffset;
+		}
+	}
+	
 	private final class RungBar extends AbstractWidget
 	{
 		private final int initY;
 		private final int rung;
+		private final int messageWidth;
 		
 		public RungBar(int initX, int initY, int width, int height, Component message, Optional<String> tooltip, int rung)
 		{
 			super(initX, initY, width, height, message);
 			this.initY = initY;
 			this.rung = rung;
+			this.messageWidth = font.width(message);
 			tooltip.ifPresent(string -> setTooltip(Tooltip.create(Component.translatable(string))));
 		}
 		
@@ -363,22 +609,24 @@ public class EcheladderScreen extends PlayerStatsScreen
 			
 			guiGraphics.blit(guiEcheladder, x, y, 7, 242, 146, RUNG_Y);
 			
+			Rung.DisplayData data = ClientRungData.getData(rung);
+			
 			int textColor = 0xFFFFFFFF;
-			int backgroundColor = ClientRungData.getData(rung).backgroundColor();
+			int backgroundColor = data.backgroundColor();
 			if(rung <= currentRung - (showLastRung ? 0 : 1))
 			{
-				textColor = ClientRungData.getData(rung).textColor();
+				textColor = data.textColor();
 				//full bar
-				guiGraphics.fill(x, y + 2, x + 146, y + 14, backgroundColor);
+				guiGraphics.fill(x, y + 2, x + 140, y + 14, backgroundColor);
 			} else if(rung == currentRung + 1 && animationCycle == 0)
 			{
 				//progress bar
 				float brightness = (((backgroundColor >> 16) & 0xFF) + ((backgroundColor >> 8) & 0xFF) + (backgroundColor & 0xFF)) / 765F;
 				boolean isDark = brightness < 0.2;
-				guiGraphics.fill(x, y + 12, x + (int) (146 * ClientPlayerData.getRungProgress()), y + 14, isDark ? 0xFFFFFFFF : backgroundColor);
+				guiGraphics.fill(x, y + 12, x + (int) (140 * ClientPlayerData.getRungProgress()), y + 14, isDark ? 0xFFFFFFFF : backgroundColor);
 			}
 			
-			guiGraphics.drawString(font, this.getMessage(), x + 73 - mc.font.width(this.getMessage()) / 2, y + 4, textColor, false);
+			guiGraphics.drawString(font, this.getMessage(), x + 70 - messageWidth / 2, y + 4, textColor, false);
 		}
 		
 		public void updateVisibility()
