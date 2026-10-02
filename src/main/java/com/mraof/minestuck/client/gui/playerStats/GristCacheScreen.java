@@ -13,6 +13,7 @@ public class GristCacheScreen extends PlayerStatsScreen
 	
 	private static final ResourceLocation guiGristcache = ResourceLocation.fromNamespaceAndPath("minestuck", "textures/gui/grist_cache.png");
 	private int page = 0;
+	private int maxPage = 0;
 
 	private Button previousButton;
 	private Button nextButton;
@@ -29,21 +30,22 @@ public class GristCacheScreen extends PlayerStatsScreen
 	public void init()
 	{
 		super.init();
+		
+		int perPage = rows * columns;
+		maxPage = Math.max(0, (GristTypes.REGISTRY.size() - 1) / perPage);
+		page = Math.min(page, maxPage);
+		
 		this.previousButton = new ExtendedButton(this.xOffset + 8, this.yOffset + 8, 16, 16, Component.literal("<"), button -> prevPage());
 		this.nextButton = new ExtendedButton(this.xOffset + guiWidth - 24, this.yOffset + 8, 16, 16, Component.literal(">"), button -> nextPage());
 		addRenderableWidget(this.nextButton);
 		addRenderableWidget(this.previousButton);
-		previousButton.visible = false;
-		if(GristTypes.REGISTRY.size() <= rows * columns)
-		{
-			nextButton.visible = false;
-		}
+		updateButtons();
 	}
 	
 	@Override
 	public void renderBackground(GuiGraphics guiGraphics, int mouseX, int mouseY, float partialTicks)
 	{
-		super.renderBackground(guiGraphics, mouseX, mouseY, partialTicks);
+		renderTransparentBackground(guiGraphics);
 		
 		drawTabs(guiGraphics);
 		guiGraphics.blit(guiGristcache, xOffset, yOffset, 0, 0, guiWidth, guiHeight);
@@ -58,28 +60,27 @@ public class GristCacheScreen extends PlayerStatsScreen
 		this.drawGrist(guiGraphics, xOffset, yOffset, mouseX, mouseY, page);
 	}
 	
+	private void updateButtons()
+	{
+		previousButton.visible = page > 0;
+		nextButton.visible = page < maxPage;
+	}
+	
 	private void prevPage()
 	{
 		if(page > 0)
 		{
 			page--;
-			if(page == 0) {
-				previousButton.visible = false;
-			}
-			nextButton.visible = true;
+			updateButtons();
 		}
 	}
 	
 	private void nextPage()
 	{
-		int maxPage = (GristTypes.REGISTRY.size() - 1) / (rows * columns);
 		if(page < maxPage)
 		{
 			page++;
-			if(page == maxPage) {
-				nextButton.visible = false;
-			}
-			previousButton.visible = true;
+			updateButtons();
 		}
 	}
 }
