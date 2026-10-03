@@ -133,7 +133,7 @@ public class MinestuckConfig
 			playerSelectedTitle = builder.comment("Enable this to let players select their own title. They will however not be able to select the Lord or Muse as class.")
 					.define("playerSelectedTitle", true);
 			playerSelectedLand = builder.comment("Enable this to let players select the terrain of their own land before they enter the Medium.")
-					.define("playerSelectedLand", false);
+					.define("playerSelectedLand", true);
 			dialogueRenewalSpeed = builder.comment("Determines how quickly consort dialogue and store stocks are renewed.")
 					.defineInRange("dialogueRenewalSpeed", 2, 0, 1000);
 			lotusRestorationTime = builder.comment("Determines how many seconds it takes for the lotus blossom to regrow after the opening process has started.")
