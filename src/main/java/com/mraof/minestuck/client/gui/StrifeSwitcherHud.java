@@ -3,6 +3,7 @@ package com.mraof.minestuck.client.gui;
 import com.mojang.blaze3d.systems.RenderSystem;
 import com.mraof.minestuck.Minestuck;
 import com.mraof.minestuck.MinestuckConfig;
+import com.mraof.minestuck.computer.editmode.ClientEditmodeData;
 import com.mraof.minestuck.item.components.MSItemComponents;
 import com.mraof.minestuck.network.StrifePackets;
 import com.mraof.minestuck.player.KindAbstratusType;
@@ -49,11 +50,20 @@ public final class StrifeSwitcherHud
 	public static int selSpecibus = -1;
 	public static int selWeapon = 0;
 	
+	private static boolean blockedByEditmode()
+	{
+		if(!ClientEditmodeData.isInEditmode())
+			return false;
+		
+		showSwitcher = false;
+		return true;
+	}
+	
 	public static void beginSwitch(boolean offhand)
 	{
 		Minecraft mc = Minecraft.getInstance();
 		
-		if(mc.player == null || mc.screen != null)
+		if(mc.player == null || mc.screen != null || blockedByEditmode())
 			return;
 		
 		offhandMode = offhand;
@@ -95,7 +105,7 @@ public final class StrifeSwitcherHud
 	
 	public static void finishSwitch()
 	{
-		if(!showSwitcher)
+		if(!showSwitcher || blockedByEditmode())
 			return;
 		
 		showSwitcher = false;
@@ -134,7 +144,7 @@ public final class StrifeSwitcherHud
 	@SubscribeEvent
 	public static void onMouseScroll(InputEvent.MouseScrollingEvent event)
 	{
-		if(!showSwitcher || Minecraft.getInstance().player == null) return;
+		if(!showSwitcher || Minecraft.getInstance().player == null || blockedByEditmode()) return;
 		double delta = Math.abs(event.getScrollDeltaX()) > Math.abs(event.getScrollDeltaY())
 				? event.getScrollDeltaX() : event.getScrollDeltaY();
 		if(delta == 0) return;
@@ -180,7 +190,7 @@ public final class StrifeSwitcherHud
 	{
 		if(!VanillaGuiLayers.CHAT.equals(event.getName())) return;
 		Minecraft mc = Minecraft.getInstance();
-		if(!showSwitcher || mc.player == null) return;
+		if(!showSwitcher || mc.player == null || blockedByEditmode()) return;
 		
 		GuiGraphics g = event.getGuiGraphics();
 		int sw = mc.getWindow().getGuiScaledWidth();

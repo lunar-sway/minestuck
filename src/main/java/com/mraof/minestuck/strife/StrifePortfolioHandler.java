@@ -1,6 +1,7 @@
 package com.mraof.minestuck.strife;
 
 import com.mraof.minestuck.MinestuckConfig;
+import com.mraof.minestuck.computer.editmode.ServerEditHandler;
 import com.mraof.minestuck.entity.MSAttributes;
 import com.mraof.minestuck.item.MSItems;
 import com.mraof.minestuck.item.StrifeCardItem;
@@ -68,6 +69,11 @@ public final class StrifePortfolioHandler
 	public static StrifePortfolioData getData(Player player)
 	{
 		return player.getData(MSAttachments.STRIFE_PORTFOLIO.get());
+	}
+	
+	public static boolean isLockedByEditmode(Player player)
+	{
+		return player instanceof ServerPlayer serverPlayer && ServerEditHandler.isInEditmode(serverPlayer);
 	}
 	
 	public static boolean isFull(Player player)

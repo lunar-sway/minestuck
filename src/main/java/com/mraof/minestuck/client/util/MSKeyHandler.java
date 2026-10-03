@@ -116,6 +116,9 @@ public class MSKeyHandler
 				PlayerStatsScreen.openGui(false);
 		}
 		
+		if(ClientEditmodeData.isInEditmode())
+			return;
+		
 		if(strifeKey.isActiveAndMatches(input))
 		{
 			if(event.getAction() == GLFW.GLFW_PRESS)

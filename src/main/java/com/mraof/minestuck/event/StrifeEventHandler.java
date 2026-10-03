@@ -76,6 +76,7 @@ public final class StrifeEventHandler
 	{
 		if(!(event.getEntity() instanceof ServerPlayer player)) return;
 		if(player instanceof FakePlayer) return;
+		if(StrifePortfolioHandler.isLockedByEditmode(player)) return;
 		
 		StrifeEvolution.applyPending(player);
 		checkArmedState(player);
@@ -208,6 +209,7 @@ public final class StrifeEventHandler
 	{
 		Entity attacker = event.getSource().getEntity();
 		if(!(attacker instanceof ServerPlayer player) || attacker instanceof FakePlayer) return;
+		if(StrifePortfolioHandler.isLockedByEditmode(player)) return;
 		
 		if(event.getEntity() instanceof UnderlingEntity)
 		{
@@ -234,6 +236,7 @@ public final class StrifeEventHandler
 	{
 		if(!MinestuckConfig.SERVER.restrictedStrife.get()) return;
 		if(event.getEntity() instanceof FakePlayer) return;
+		if(StrifePortfolioHandler.isLockedByEditmode(event.getEntity())) return;
 		
 		ItemStack stack = event.getItemStack();
 		if(stack.isEmpty() || StrifePortfolioHandler.isAssigned(stack) || isBypassed(stack)) return;
@@ -253,6 +256,7 @@ public final class StrifeEventHandler
 	{
 		if(!(event.getSource().getEntity() instanceof ServerPlayer player)) return;
 		if(player instanceof FakePlayer) return;
+		if(StrifePortfolioHandler.isLockedByEditmode(player)) return;
 		if(event.getSource().getDirectEntity() != player) return;
 		if(event.getEntity() instanceof UnderlingEntity) return; // full damage vs underlings
 		
@@ -271,6 +275,7 @@ public final class StrifeEventHandler
 	public static void onItemDestroyed(PlayerDestroyItemEvent event)
 	{
 		if(!(event.getEntity() instanceof ServerPlayer player) || player instanceof FakePlayer) return;
+		if(StrifePortfolioHandler.isLockedByEditmode(player)) return;
 		if(event.getHand() != InteractionHand.MAIN_HAND) return;
 		
 		ItemStack broken = event.getOriginal();
@@ -295,6 +300,7 @@ public final class StrifeEventHandler
 	{
 		if(!MinestuckConfig.SERVER.autoStowWeapons.get()) return;
 		if(!(event.getPlayer() instanceof ServerPlayer player) || player instanceof FakePlayer) return;
+		if(StrifePortfolioHandler.isLockedByEditmode(player)) return;
 		
 		ItemEntity itemEntity = event.getItemEntity();
 		ItemStack stack = itemEntity.getItem();

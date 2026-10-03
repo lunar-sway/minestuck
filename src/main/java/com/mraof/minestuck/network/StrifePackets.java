@@ -52,6 +52,9 @@ public class StrifePackets
 		@Override
 		public void execute(IPayloadContext context, ServerPlayer player)
 		{
+			if(StrifePortfolioHandler.isLockedByEditmode(player))
+				return;
+			
 			if(StrifePortfolioHandler.chooseStartingSpecibus(player, abstratusName()))
 				player.serverLevel().playSound(null, player.blockPosition(),
 						MSSoundEvents.ITEM_STRIFE_CARD_USE.get(), SoundSource.PLAYERS, 0.8F, 1.0F);
@@ -70,6 +73,9 @@ public class StrifePackets
 		@Override
 		public void execute(IPayloadContext context, ServerPlayer player)
 		{
+			if(StrifePortfolioHandler.isLockedByEditmode(player))
+				return;
+			
 			StrifePortfolioHandler.declineStartingSpecibus(player);
 		}
 	}
@@ -88,6 +94,9 @@ public class StrifePackets
 		@Override
 		public void execute(IPayloadContext context, ServerPlayer player)
 		{
+			if(StrifePortfolioHandler.isLockedByEditmode(player))
+				return;
+			
 			StrifePortfolioHandler.assignStrife(player, hand());
 		}
 	}
@@ -126,6 +135,9 @@ public class StrifePackets
 		@Override
 		public void execute(IPayloadContext context, ServerPlayer player)
 		{
+			if(StrifePortfolioHandler.isLockedByEditmode(player))
+				return;
+			
 			if(StrifePortfolioHandler.retrieveCard(player, index()))
 				player.serverLevel().playSound(null, player.blockPosition(),
 						MSSoundEvents.EVENT_STRIFE_SPECIBUS_EJECT.get(), SoundSource.PLAYERS, 0.6F, 1.0F);
@@ -147,6 +159,9 @@ public class StrifePackets
 		@Override
 		public void execute(IPayloadContext context, ServerPlayer player)
 		{
+			if(StrifePortfolioHandler.isLockedByEditmode(player))
+				return;
+			
 			StrifePortfolioHandler.retrieveWeapon(player, weaponIndex(), hand());
 		}
 	}
@@ -171,6 +186,9 @@ public class StrifePackets
 		@Override
 		public void execute(IPayloadContext context, ServerPlayer player)
 		{
+			if(StrifePortfolioHandler.isLockedByEditmode(player))
+				return;
+			
 			if(KindAbstratusList.getTypeFromName(abstratusName()) == null) return;
 			
 			ItemStack card = player.getItemInHand(hand());
@@ -208,6 +226,9 @@ public class StrifePackets
 		@Override
 		public void execute(IPayloadContext context, ServerPlayer player)
 		{
+			if(StrifePortfolioHandler.isLockedByEditmode(player))
+				return;
+			
 			StrifeSpecibus[] portfolio = StrifePortfolioHandler.getData(player).getPortfolio();
 			if(specibusIndex() < 0 || specibusIndex() >= portfolio.length || portfolio[specibusIndex()] == null)
 				return;
@@ -234,6 +255,9 @@ public class StrifePackets
 		@Override
 		public void execute(IPayloadContext context, ServerPlayer player)
 		{
+			if(StrifePortfolioHandler.isLockedByEditmode(player))
+				return;
+			
 			StrifePortfolioHandler.swapOffhandWeapon(player, specibusIndex(), weaponIndex());
 		}
 	}

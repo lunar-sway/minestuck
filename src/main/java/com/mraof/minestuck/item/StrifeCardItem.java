@@ -37,6 +37,8 @@ public class StrifeCardItem extends Item
 		
 		if(!(player instanceof ServerPlayer serverPlayer)) return InteractionResultHolder.pass(stack);
 		
+		if(StrifePortfolioHandler.isLockedByEditmode(serverPlayer)) return InteractionResultHolder.pass(stack);
+		
 		if(StrifePortfolioHandler.isFull(player))
 		{
 			player.displayClientMessage(Component.translatable("status.strife.portfolioFull"), true);
