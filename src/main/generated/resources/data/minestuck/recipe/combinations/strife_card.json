@@ -1,0 +1,11 @@
+{
+  "type": "minestuck:combination",
+  "input1": {
+    "item": "minestuck:array_modus_card"
+  },
+  "input2": {
+    "item": "minecraft:item_frame"
+  },
+  "mode": "or",
+  "output": "minestuck:strife_card"
+}

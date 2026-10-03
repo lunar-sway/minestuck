@@ -1072,6 +1072,8 @@ public class MinestuckEnUsLanguageProvider extends MinestuckLanguageProvider
 		addItemTooltip(MSItems.FROSTY_MACUAHUITL, "Now featuring real Ice Shards");
 		addItem(MSItems.KATANA, "Katana");
 		addItemTooltip(MSItems.KATANA, "A powerful Katana, once wielded by the most powerful of Otaku Masters");
+		addItem(MSItems.HALF_KATANA, "½ Katana");
+		addItemTooltip(MSItems.HALF_KATANA, "So called \"powerful\" Katana. Shitty quality for shitty money");
 		addItem(MSItems.UNBREAKABLE_KATANA, "Unbreakable Katana");
 		addItemTooltip(MSItems.UNBREAKABLE_KATANA, "This Katana has been fused with bedrock to make it even more kawai- I mean powerful!");
 		addItem(MSItems.ANGEL_APOCALYPSE, "Angel Apocalypse");
@@ -1083,9 +1085,14 @@ public class MinestuckEnUsLanguageProvider extends MinestuckLanguageProvider
 		addItemTooltip(MSItems.TOO_HOT_TO_HANDLE, "This sick blade slices and burns through enemies like there is no tomorrow!");
 		addItem(MSItems.CALEDSCRATCH, "Caledscratch");
 		addItemTooltip(MSItems.CALEDSCRATCH, "The chosen weapon of Hephaestus, Guardian of the land of heat and clockwork. They say if you break this blade you incur their godly wrath.");
+		addItem(MSItems.HALF_CALEDSCRATCH, "½ Caledscratch");
+		addItemTooltip(MSItems.HALF_CALEDSCRATCH, "The chosen weapon of Hephaestus, Guardian of the land of heat and clockwork. Ugh...");
 		addItem(MSItems.CALEDFWLCH, "Caledfwlch");
 		addItemTooltip(MSItems.CALEDFWLCH, "Dumb Welsh Sword. Probably has some chamic destiny.");
+		addItem(MSItems.HALF_CALEDFWLCH, "½ Caledfwlch");
+		addItemTooltip(MSItems.HALF_CALEDFWLCH, "Even dumber Welsh Sword. Probably has some chamic destiny.");
 		addItem(MSItems.ROYAL_DERINGER, "Royal Deringer");
+		addItem(MSItems.HALF_ROYAL_DERINGER, "½ Royal Deringer");
 		addItem(MSItems.CLAYMORE, "Claymore");
 		addItemTooltip(MSItems.CLAYMORE, "A featherweight amongst greatswords. It's still bloody heavy, though!");
 		addItem(MSItems.CUTLASS_OF_ZILLYWAIR, "Cutlass of Zillywair");
@@ -1095,6 +1102,41 @@ public class MinestuckEnUsLanguageProvider extends MinestuckLanguageProvider
 		addItem(MSItems.CRUEL_FATE_CRUCIBLE, "Cruel Fate Crucible");
 		addItemTooltip(MSItems.CRUEL_FATE_CRUCIBLE, "The aura of Nemesis enacts retribution on those who hurt it's wielder");
 		addItem(MSItems.SCARLET_RIBBITAR, "Scarlet Ribbitar");
+		addItem(MSItems.HALF_SCARLET_RIBBITAR, "½ Scarlet Ribbitar");
+		addItem(MSItems.HALF_SORD, "½ Sord");
+		addItem(MSItems.HALF_PAPER_SWORD, "½ Paper Sword");
+		addItem(MSItems.HALF_KEYBLADE, "½ Keyblade");
+		addItem(MSItems.HALF_SWONGE, "½ Swonge");
+		addItem(MSItems.HALF_WET_SWONGE, "½ Wet Swonge");
+		addItem(MSItems.HALF_PUMORD, "½ Pumord");
+		addItem(MSItems.HALF_WET_PUMORD, "½ Wet Pumord");
+		addItem(MSItems.HALF_CACTACEAE_CUTLASS, "½ Cactaceae Cutlass");
+		addItem(MSItems.HALF_STEAK_SWORD, "½ Steak Sword");
+		addItem(MSItems.HALF_BEEF_SWORD, "½ Beef Sword");
+		addItem(MSItems.HALF_IRRADIATED_STEAK_SWORD, "½ Irradiated Steak Sword");
+		addItem(MSItems.HALF_MACUAHUITL, "½ Macuahuitl");
+		addItem(MSItems.HALF_FROSTY_MACUAHUITL, "½ Frosty Macuahuitl");
+		addItem(MSItems.HALF_UNBREAKABLE_KATANA, "½ Unbreakable Katana");
+		addItem(MSItems.HALF_ANGEL_APOCALYPSE, "½ Angel Apocalypse");
+		addItem(MSItems.HALF_FIRE_POKER, "½ Fire Poker");
+		addItem(MSItems.HALF_TOO_HOT_TO_HANDLE, "½ Too Hot to Handle");
+		addItem(MSItems.HALF_CLAYMORE, "½ Claymore");
+		addItem(MSItems.HALF_CUTLASS_OF_ZILLYWAIR, "½ Cutlass of Zillywair");
+		addItem(MSItems.HALF_REGISWORD, "½ Regisword");
+		addItem(MSItems.HALF_CRUEL_FATE_CRUCIBLE, "½ Cruel Fate Crucible");
+		addItem(MSItems.HALF_DOGG_MACHETE, "½ Snoop Dogg Snow Cone Machete");
+		addItem(MSItems.HALF_COBALT_SABRE, "½ Cobalt Cobeam Coblade");
+		addItem(MSItems.HALF_QUANTUM_SABRE, "½ Quantum Sabre");
+		addItem(MSItems.HALF_SHATTER_BEACON, "½ ShatterBeacon");
+		addItem(MSItems.HALF_SHATTER_BACON, "½ ShatterBacon");
+		addItem(MSItems.HALF_MUSIC_SWORD, "½ Music Sword");
+		addItem(MSItems.HALF_PILLOW_TALK, "½ Pillow Talk");
+		addItem(MSItems.HALF_KRAKENS_EYE, "½ Kraken's Eye");
+		addItem(MSItems.HALF_CINNAMON_SWORD, "½ Cinnamon Sword");
+		addItem(MSItems.HALF_UNION_BUSTER, "½ Union Buster");
+		addItem(MSItems.HALF_THORN_IN_YOUR_SIDE, "½ Thorn in Your Side");
+		addItem(MSItems.HALF_ROSE_PROTOCOL, "½ Rose Protocol");
+		addItem(MSItems.HALF_EMERALD_SWORD, "½ Emerald Sword");
 		addItem(MSItems.DOGG_MACHETE, "Snoop Dogg Snow Cone Machete");
 		addItem(MSItems.COBALT_SABRE, "Cobalt Cobeam Coblade");
 		addItem(MSItems.QUANTUM_SABRE, "Quantum Sabre");
@@ -2163,6 +2205,7 @@ public class MinestuckEnUsLanguageProvider extends MinestuckLanguageProvider
 		addAdvancement(MSAdvancementProvider.BUY_OUT_SHOP, "Beware the Buyer", "Purchase every item available from a consort merchant");
 		addAdvancement(MSAdvancementProvider.BRICK_COMPUTER, "Brick Your Computer", "Did you try turning it on and off again?");
 		addAdvancement(MSAdvancementProvider.HAMMERGUY, "I Fucking Love Hammers", "Hahahah, hammer guy for life!");
+		addAdvancement(MSAdvancementProvider.CHEAP_PIECE_OF_SHIT, "CHEAP PIECE OF SHIT", "Break the bladekind weapon and get ½ of it");
 		
 		addLand(FungiLandType.FUNGI, "Fungi");
 		addLand(FungiLandType.DANK, "Dank");
@@ -2261,24 +2304,63 @@ public class MinestuckEnUsLanguageProvider extends MinestuckLanguageProvider
 		addEffect(MSEffects.SOPOR_SICKNESS, "Sopor Stupor");
 		addEffectDescription(MSEffects.SOPOR_SICKNESS, "Damages the player over time. Prevents the application of some effects, as long as their level is lower or equal");
 		
+		addItem(MSItems.STRIFE_CARD, "Strife Card");
+		addTooltip(MSItems.STRIFE_CARD, "Assign to portfolio or select a weapon type");
+		
+		add("status.strife.portfolioFull", "Your Strife Portfolio is full!");
+		add("status.strife.portfolioDuplicate", "Your portfolio already has a %s slot.");
+		add("status.strife.assign", "Added %s to your Strife Portfolio.");
+		add("status.strife.assignWeapon", "Assigned %s to %s.");
+		add("status.strife.strifeDeckFull", "%s is full!");
+		add("status.strife.weaponMismatch", "%s doesn't match any specibus in your portfolio.");
+		add("status.strife.unlockSwitcher", "Strife Specibus Quick-Switcher unlocked!");
+		add("status.strife.autoStow", "Stowed %s in %s.");
+		add("status.strife.evolutionUnavailable", "Evolution is not available for this weapon...");
+		add("strife.item.allocated", "[Strife Allocated]");
+		add("strife.item.abstrataList", "%s");
+		add("item.minestuck.strife_card.blank", "Blank! Right-click to assign a weapon type");
+
+		add(StrifePortfolioScreen.TITLE, "Strife Portfolio");
+		add("gui.strifePortfolio.deck", "Weapon Deck");
+		add("gui.strifePortfolio.specibus", "strife specibus");
+		add("gui.strifePortfolio.noActive", "No specibus selected");
+		add("gui.strifeCard.title", "Select Abstrata Type");
+		add("gui.strifeCard.label", "kind abstrata");
+		
 		addStrife(KindAbstratusList.SWORD, "Bladekind");
+		addStrife(KindAbstratusList.HALF_SWORD, "½ Bladekind");
 		addStrife(KindAbstratusList.BOW, "Bowkind");
 		addStrife(KindAbstratusList.PICKAXE, "Pickaxekind");
+		addStrife(KindAbstratusList.KEY, "Keykind");
 		addStrife(KindAbstratusList.AXE, "Axekind");
 		addStrife(KindAbstratusList.HOE, "Hoekind");
 		addStrife(KindAbstratusList.SHOVEL, "Spadekind");
 		addStrife(KindAbstratusList.HAMMER, "Hammerkind");
+		addStrife(KindAbstratusList.KNIFE, "Knifekind");
+		addStrife(KindAbstratusList.BATON, "Batonkind");
+		addStrife(KindAbstratusList.DICE, "Dicekind");
 		addStrife(KindAbstratusList.CANE, "Canekind");
 		addStrife(KindAbstratusList.CLUB, "Clubkind");
+		addStrife(KindAbstratusList.CLAW, "Clawkind");
+		addStrife(KindAbstratusList.SAW, "Sawkind");
+		addStrife(KindAbstratusList.LANCE, "Lancekind");
+		addStrife(KindAbstratusList.FAN, "Fankind");
 		addStrife(KindAbstratusList.SICKLE, "Sicklekind");
-		addStrife(KindAbstratusList.SPORK, "Sporkkind");
+		addStrife(KindAbstratusList.SCYTHE, "Scythekind");
+		addStrife(KindAbstratusList.STAFF, "Staffkind");
+		addStrife(KindAbstratusList.SPOON, "Spoonkind");
+		addStrife(KindAbstratusList.FORK, "Forkkind");
+//		addStrife(KindAbstratusList.SPORK, "Sporkkind");
+		addStrife(KindAbstratusList.NEEDLE, "Needlekind");
+		addStrife(KindAbstratusList.WAND, "Wandkind");
+		addStrife(KindAbstratusList.STAR, "Thrwstarkind");
+		addStrife(KindAbstratusList.CAKE, "Cakekind");
+		addStrife(KindAbstratusList.CROSSBOW, "Crossbowkind");
 		
 		add(MusicPlayerWeapon.TITLE, "Music Player");
 		add(MusicPlayerWeapon.HINT_INACTIVE, "Crouch and use to start playing");
 		add(CaptchaDeckHandler.TOO_LARGE, "Cannot captchalogue card, too much data stored");
 		add(GristCacheScreen.TITLE, "Grist Cache");
-		add(StrifeSpecibusScreen.TITLE, "Strife Specibus");
-		add(StrifeSpecibusScreen.KIND_ABSTRATUS, "Kind Abstratus");
 		add(SylladexScreen.USE_ITEM, "Use Item");
 		add(EcheladderScreen.TITLE, "Echeladder");
 		add(EcheladderScreen.ATTACK, "Attack");
@@ -2549,11 +2631,17 @@ public class MinestuckEnUsLanguageProvider extends MinestuckLanguageProvider
 		add(JeiGristCost.GRIST_COSTS, "Grist Costs");
 		
 		add(MSKeyHandler.CATEGORY, "Minestuck");
+		add(MSKeyHandler.CATEGORY_STRIFE, "Minestuck (Strife Portfolio)");
 		add(MSKeyHandler.STATS_GUI, "View General Minestuck Gui");
 		add(MSKeyHandler.EXIT_EDIT_MODE, "Exit Edit Mode");
 		add(MSKeyHandler.CAPTCHALOGUE, "Captchalogue Held Item");
 		add(MSKeyHandler.ASPECT_EFFECT_TOGGLE, "Toggle Aspect Effects");
 		add(MSKeyHandler.SYLLADEX, "Open Sylladex");
+
+		add(MSKeyHandler.STRIFE, "Manage Strife Switcher");
+		add(MSKeyHandler.STRIFE_LEFT, "Previous Weapon");
+		add(MSKeyHandler.STRIFE_RIGHT, "Next Weapon");
+		add(MSKeyHandler.SWAP_OFFHAND, "Swap Weapon To Offhand");
 		
 		add(LotusFlowerEntity.REGROW, "There are no petals on this plant, maybe it will regrow?");
 		

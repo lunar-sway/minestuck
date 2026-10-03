@@ -778,6 +778,16 @@
       }
     ]
   },
+  "item.strife_card.use": {
+    "category": "player",
+    "subtitle": "subtitles.minestuck.strife_card",
+    "sounds": [
+      {
+        "name": "minestuck:item/strife_card",
+        "stream": false
+      }
+    ]
+  },
   "item.eeeeeeeeeeee.hit": {
     "category": "ambient",
     "subtitle": "subtitles.minestuck.screech",
@@ -939,6 +949,46 @@
     "sounds": [
       {
         "name": "minestuck:random/tool_recycle",
+        "stream": false
+      }
+    ]
+  },
+  "event.strife_specibus.eject": {
+    "category": "player",
+    "subtitle": "subtitles.minestuck.specibus_eject",
+    "sounds": [
+      {
+        "name": "minestuck:random/specibus_eject",
+        "stream": false
+      }
+    ]
+  },
+  "event.strife_specibus.switch": {
+    "category": "player",
+    "subtitle": "subtitles.minestuck.specibus_switch",
+    "sounds": [
+      {
+        "name": "minestuck:random/specibus_switch",
+        "stream": false
+      }
+    ]
+  },
+  "event.strife_switcher.on": {
+    "category": "player",
+    "subtitle": "subtitles.minestuck.switcher_on",
+    "sounds": [
+      {
+        "name": "minestuck:random/switcher_on",
+        "stream": false
+      }
+    ]
+  },
+  "event.strife_switcher.off": {
+    "category": "player",
+    "subtitle": "subtitles.minestuck.switcher_off",
+    "sounds": [
+      {
+        "name": "minestuck:random/switcher_off",
         "stream": false
       }
     ]
