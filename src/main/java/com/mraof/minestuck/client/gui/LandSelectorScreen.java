@@ -3,7 +3,6 @@ package com.mraof.minestuck.client.gui;
 import com.mraof.minestuck.network.LandSelectPackets;
 import com.mraof.minestuck.world.lands.LandTypes;
 import com.mraof.minestuck.world.lands.terrain.TerrainLandType;
-import net.minecraft.ChatFormatting;
 import net.minecraft.client.gui.GuiGraphics;
 import net.minecraft.client.gui.components.Button;
 import net.minecraft.client.gui.screens.Screen;
@@ -53,9 +52,9 @@ public class LandSelectorScreen extends Screen
 		{
 			TerrainLandType type = terrainTypes.get(i);
 			int local = i - page * perPage;
-			Component name = landName(type);
-			if(type == currentTerrain) name = name.copy().withStyle(ChatFormatting.YELLOW);
-			addRenderableWidget(Button.builder(name, button -> pickTerrain(type)).bounds(leftX + 4 + (local % columns) * 98, topY + 24 + (local / columns) * 16, 80, 16).build());
+			Button button = Button.builder(landName(type), button1 -> pickTerrain(type)).bounds(leftX + 4 + (local % columns) * 98, topY + 24 + (local / columns) * 16, 80, 16).build();
+			button.active = type != currentTerrain;
+			addRenderableWidget(button);
 		}
 		
 		if(pageCount > 1)
