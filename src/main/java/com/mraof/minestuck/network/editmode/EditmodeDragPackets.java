@@ -226,7 +226,7 @@ public final class EditmodeDragPackets
 		boolean truncated = false;
 		
 		DeployEntry entry = DeployList.getEntryForItem(stack, playerData, level);
-		GristSet baseCost = entry != null ? entry.getCurrentCost(playerData) : GristCostRecipe.findCostForItem(stack, null, false, level);
+		GristSet baseCost = entry != null ? entry.getRepeatCost(playerData) : GristCostRecipe.findCostForItem(stack, null, false, level);
 		if(baseCost == null)
 			return new ItemCostResult(MutableGristSet.newDefault().asImmutable(), true);
 		total.add(baseCost.asImmutable());
@@ -383,7 +383,7 @@ public final class EditmodeDragPackets
 				bareStack.remove(DataComponents.LOCK);
 				
 				DeployEntry entry = DeployList.getEntryForItem(bareStack, data.sburbData(), level);
-				GristSet blockCostRaw = entry != null ? entry.getCurrentCost(data.sburbData()) : GristCostRecipe.findCostForItem(bareStack, null, false, level);
+				GristSet blockCostRaw = entry != null ? entry.getRepeatCost(data.sburbData()) : GristCostRecipe.findCostForItem(bareStack, null, false, level);
 				if(blockCostRaw == null && isCopy)
 				{
 					hasBlockWithoutCost = true;
