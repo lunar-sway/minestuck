@@ -55,7 +55,7 @@ public class LandSelectorScreen extends Screen
 			int local = i - page * perPage;
 			Component name = landName(type);
 			if(type == currentTerrain) name = name.copy().withStyle(ChatFormatting.YELLOW);
-			addRenderableWidget(new ExtendedButton(leftX + 4 + (local % columns) * 98, topY + 24 + (local / columns) * 16, 80, 16, name, button -> pickTerrain(type)));
+			addRenderableWidget(Button.builder(name, button -> pickTerrain(type)).bounds(leftX + 4 + (local % columns) * 98, topY + 24 + (local / columns) * 16, 80, 16).build());
 		}
 		
 		if(pageCount > 1)
