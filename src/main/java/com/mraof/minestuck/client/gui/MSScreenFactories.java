@@ -14,6 +14,7 @@ import com.mraof.minestuck.inventory.captchalogue.Modus;
 import com.mraof.minestuck.inventory.captchalogue.ModusType;
 import com.mraof.minestuck.inventory.captchalogue.ModusTypes;
 import com.mraof.minestuck.player.Title;
+import com.mraof.minestuck.world.lands.terrain.TerrainLandType;
 import net.minecraft.client.Minecraft;
 import net.minecraft.data.models.blockstates.PropertyDispatch.TriFunction;
 import net.minecraft.world.InteractionHand;
@@ -27,6 +28,7 @@ import net.neoforged.neoforge.client.event.RegisterMenuScreensEvent;
 
 import javax.annotation.Nullable;
 import java.util.HashMap;
+import java.util.List;
 import java.util.Map;
 import java.util.Set;
 import java.util.function.Supplier;
@@ -141,6 +143,11 @@ public class MSScreenFactories
 	public static void displayTitleSelectScreen(Title title)
 	{
 		Minecraft.getInstance().setScreen(new TitleSelectorScreen(title));
+	}
+	
+	public static void displayLandSelectScreen(List<TerrainLandType> terrainTypes)
+	{
+		Minecraft.getInstance().setScreen(new LandSelectorScreen(terrainTypes));
 	}
 	
 	public static SylladexScreen displaySylladexScreen(Modus modus, int windowId, Inventory playerInventory) throws NoModusFactoryException

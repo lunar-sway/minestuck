@@ -96,6 +96,7 @@ public class MinestuckConfig
 		public final BooleanValue hardMode;
 		public final BooleanValue echeladderProgress;
 		public final BooleanValue playerSelectedTitle;
+		public final BooleanValue playerSelectedLand;
 		public final BooleanValue rungHealthOnRespawn;
 		public final IntValue dialogueRenewalSpeed;
 		public final IntValue lotusRestorationTime;
@@ -131,6 +132,8 @@ public class MinestuckConfig
 					.define("rungHealthOnRespawn", true);
 			playerSelectedTitle = builder.comment("Enable this to let players select their own title. They will however not be able to select the Lord or Muse as class.")
 					.define("playerSelectedTitle", true);
+			playerSelectedLand = builder.comment("Enable this to let players select the terrain of their own land before they enter the Medium.")
+					.define("playerSelectedLand", false);
 			dialogueRenewalSpeed = builder.comment("Determines how quickly consort dialogue and store stocks are renewed.")
 					.defineInRange("dialogueRenewalSpeed", 2, 0, 1000);
 			lotusRestorationTime = builder.comment("Determines how many seconds it takes for the lotus blossom to regrow after the opening process has started.")
