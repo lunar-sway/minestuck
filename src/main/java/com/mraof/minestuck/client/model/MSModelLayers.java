@@ -12,7 +12,7 @@ import net.neoforged.fml.common.EventBusSubscriber;
 import net.neoforged.fml.common.Mod;
 import net.neoforged.neoforge.client.event.EntityRenderersEvent;
 
-@EventBusSubscriber(bus = EventBusSubscriber.Bus.MOD, modid = Minestuck.MOD_ID, value = Dist.CLIENT)
+@EventBusSubscriber(modid = Minestuck.MOD_ID, value = Dist.CLIENT)
 public final class MSModelLayers
 {
 	public static final ModelLayerLocation FROG = new ModelLayerLocation(Minestuck.id("frog"), "main");

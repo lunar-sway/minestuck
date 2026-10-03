@@ -1,0 +1,8 @@
+// 1.21.1	2026-10-01T10:05:36.51664065	Minestuck Terrain Land Type Tags
+b48e7e8f1e574eb352576fa10e93e5d91df1c9b1 data/minestuck/tags/minestuck/terrain_land_type/forest.json
+00a04a7b7afac8436726e764322652aefb759c49 data/minestuck/tags/minestuck/terrain_land_type/is_dangerous.json
+90965984985f6fe1825b85d23e52e910555877a6 data/minestuck/tags/minestuck/terrain_land_type/is_desolate.json
+00a04a7b7afac8436726e764322652aefb759c49 data/minestuck/tags/minestuck/terrain_land_type/is_fluid_important.json
+2da371090f2fb8793e6cbe42ce33ac09343bd92b data/minestuck/tags/minestuck/terrain_land_type/rock.json
+7b3fe93f6230f509318f340606cda26bdf8ac4a9 data/minestuck/tags/minestuck/terrain_land_type/sand.json
+e6a83d9dd3e8fbdcd937c3749aa5984cc79cb798 data/minestuck/tags/minestuck/terrain_land_type/sandstone.json
