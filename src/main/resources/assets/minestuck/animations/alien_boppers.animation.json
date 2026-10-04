@@ -4,11 +4,6 @@
 		"misc.idle": {
 			"loop": true,
 			"bones": {
-				"hairTuft": {
-					"rotation": {
-						"vector": [0, 0, 0]
-					}
-				}
 			}
 		}
 	},
