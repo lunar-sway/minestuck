@@ -1041,6 +1041,7 @@ public final class MinestuckCombinationsProvider
 		CombinationRecipeBuilder.of(MSItems.PONYTAIL).namedInput(Items.HANGING_ROOTS).or().input(Items.SADDLE).build(consumer);
 		CombinationRecipeBuilder.of(MSItems.ANOMALOCARIS_HAT).namedInput(MSItems.CICADA).or().input(Items.WATER_BUCKET).build(consumer);
 		CombinationRecipeBuilder.of(MSItems.ALIEN_BOPPERS).namedInput(Items.GLOWSTONE).and().input(Items.LEATHER_HELMET).build(consumer);
+		CombinationRecipeBuilder.of(MSItems.HOOD_OF_THE_HUNTRESS).namedInput(MSItems.CAT_CLAWS_DRAWN).and().input(Items.BLUE_WOOL).build(consumer);
 		
 		CombinationRecipeBuilder.of(MSBlocks.PRIMED_TNT).input(Items.TNT).or().input(ItemTags.BUTTONS).build(consumer);
 		CombinationRecipeBuilder.of(MSBlocks.UNSTABLE_TNT).input(Items.TNT).or().input(Items.REDSTONE_TORCH).build(consumer);
