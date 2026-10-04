@@ -1924,6 +1924,10 @@ public final class MSCreativeTabs
 		output.accept(MSItems.IRON_LASS_CHESTPLATE.get());
 		output.accept(MSItems.IRON_LASS_SKIRT.get());
 		output.accept(MSItems.IRON_LASS_SHOES.get());
+		output.accept(MSItems.HARLEQUIN_HAT.get());
+		output.accept(MSItems.HARLEQUIN_SHIRT.get());
+		output.accept(MSItems.HARLEQUIN_PANTS.get());
+		output.accept(MSItems.HARLEQUIN_SHOES.get());
 		
 		output.accept(MSItems.PROSPIT_CIRCLET.get());
 		output.accept(MSItems.PROSPIT_SHIRT.get());
