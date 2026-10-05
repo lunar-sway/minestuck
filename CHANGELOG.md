@@ -24,6 +24,7 @@ The format is based on [Keep a Changelog](https://keepachangelog.com/en/1.1.0/).
 - Fixed server tick crash related to kernelsprite dialogue
 - Fixed certain block not being in their relevant tag
 - Fixed items sometimes disappearing when closing the sylladex
+- Fixed a crash when items without grist costs are put in a GristWidget 12000
 
 ### Contributors for this release
 
