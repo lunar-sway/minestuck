@@ -418,6 +418,10 @@ public class MinestuckItemModelProvider extends ItemModelProvider
 		simpleItem(MSItems.DERSE_SHIRT);
 		simpleItem(MSItems.DERSE_PANTS);
 		simpleItem(MSItems.DERSE_SHOES);
+		simpleItem(MSItems.HARLEQUIN_HAT);
+		simpleItem(MSItems.HARLEQUIN_SHIRT);
+		simpleItem(MSItems.HARLEQUIN_PANTS);
+		simpleItem(MSItems.HARLEQUIN_SHOES);
 		
 		simpleItem(MSItems.AMPHIBEANIE);
 		simpleItem(MSItems.NOSTRILDAMUS);

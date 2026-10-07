@@ -1536,6 +1536,10 @@ public class MinestuckEnUsLanguageProvider extends MinestuckLanguageProvider
 		addItem(MSItems.DERSE_SHIRT, "Derse Shirt");
 		addItem(MSItems.DERSE_PANTS, "Derse Pants");
 		addItem(MSItems.DERSE_SHOES, "Derse Shoes");
+		addItem(MSItems.HARLEQUIN_HAT, "Harlequin Hat");
+		addItem(MSItems.HARLEQUIN_SHIRT, "Harlequin Shirt");
+		addItem(MSItems.HARLEQUIN_PANTS, "Harlequin Pants");
+		addItem(MSItems.HARLEQUIN_SHOES, "Harlequin Shoes");
 		addItem(MSItems.AMPHIBEANIE, "Amphibeanie");
 		addItem(MSItems.NOSTRILDAMUS, "Nostrildamus");
 		addItem(MSItems.PONYTAIL, "Ponytail");
