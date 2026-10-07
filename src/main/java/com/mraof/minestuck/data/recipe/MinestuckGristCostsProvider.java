@@ -777,6 +777,7 @@ public final class MinestuckGristCostsProvider
 		GristCostRecipeBuilder.of(MSItems.PONYTAIL.get()).grist(AMBER, 20).grist(MARBLE, 3).grist(QUARTZ, 2).build(recipeSaver);
 		GristCostRecipeBuilder.of(MSItems.ANOMALOCARIS_HAT.get()).grist(AMBER, 20).grist(CHALK, 4).grist(URANIUM, 1).build(recipeSaver);
 		GristCostRecipeBuilder.of(MSItems.ALIEN_BOPPERS.get()).grist(MERCURY, 15).grist(SULFUR, 3).grist(URANIUM, 1).build(recipeSaver);
+		GristCostRecipeBuilder.of(MSItems.HOOD_OF_THE_HUNTRESS.get()).grist(RUST, 25).grist(COBALT, 1).grist(URANIUM, 1).grist(DIAMOND, 1).build(recipeSaver);
 		
 		GristCostRecipeBuilder.of(MSItems.CARDBOARD_TUBE.get()).grist(BUILD, 1).build(recipeSaver);
 		GristCostRecipeBuilder.of(MSBlocks.GLOWYSTONE_DUST.get()).grist(BUILD, 1).grist(AMBER, 1).build(recipeSaver);

@@ -1547,6 +1547,8 @@ public class MinestuckEnUsLanguageProvider extends MinestuckLanguageProvider
 		addItemTooltip(MSItems.ANOMALOCARIS_HAT, "An anomalocaris does their best!");
 		addItem(MSItems.ALIEN_BOPPERS, "Alien Boppers");
 		addItemTooltip(MSItems.ALIEN_BOPPERS, "They call outwards to the stars, signaling a message of friendliness.");
+		addItem(MSItems.HOOD_OF_THE_HUNTRESS, "Hood of the Huntress");
+		addItemTooltip(MSItems.HOOD_OF_THE_HUNTRESS, "A well loved cap. It has been patched up countless times.");
 		addItem(MSItems.BOONDOLLARS, "Boondollars");
 		addItemExtra(MSItems.BOONDOLLARS, "amount", "Amount: %s");
 		addItem(MSItems.RAW_CRUXITE, "Raw Cruxite");

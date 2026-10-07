@@ -1943,6 +1943,7 @@ public final class MSCreativeTabs
 		output.accept(MSItems.PONYTAIL.get());
 		output.accept(MSItems.ANOMALOCARIS_HAT.get());
 		output.accept(MSItems.ALIEN_BOPPERS.get());
+		output.accept(MSItems.HOOD_OF_THE_HUNTRESS.get());
 	}
 	
 	@SubscribeEvent
