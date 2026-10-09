@@ -1,7 +1,7 @@
 package com.mraof.minestuck.effects;
 
 import com.mraof.minestuck.Minestuck;
-import com.mraof.minestuck.item.artifact.CruxiteArtifactItem;
+import com.mraof.minestuck.item.artifact.CruxiteArtifact;
 import com.mraof.minestuck.network.StopCreativeShockEffectPacket;
 import com.mraof.minestuck.util.MSTags;
 import net.minecraft.server.level.ServerPlayer;
@@ -148,7 +148,7 @@ public class CreativeShockEffect extends MobEffect
 	{
 		if(doesCreativeShockLimit(event.getEntity(), LIMIT_BLOCK_PLACEMENT_AND_BREAKING))
 		{
-			if(event.getItemStack().getItem() instanceof CruxiteArtifactItem //Cruxite check prevents players from using an artifact to enter while under effects of Creative Shock
+			if(event.getItemStack().getItem() instanceof CruxiteArtifact //Cruxite check prevents players from using an artifact to enter while under effects of Creative Shock
 					|| event.getItemStack().getItem() instanceof EnderpearlItem
 					|| event.getItemStack().is(MSTags.Items.CREATIVE_SHOCK_RIGHT_CLICK_LIMIT))
 				event.setCanceled(true);

@@ -3,7 +3,7 @@ package com.mraof.minestuck.player;
 import com.mraof.minestuck.Minestuck;
 import com.mraof.minestuck.api.alchemy.GristSet;
 import com.mraof.minestuck.event.AlchemyEvent;
-import com.mraof.minestuck.item.artifact.CruxiteArtifactItem;
+import com.mraof.minestuck.item.artifact.CruxiteArtifact;
 import net.neoforged.bus.api.SubscribeEvent;
 import net.neoforged.fml.common.EventBusSubscriber;
 
@@ -60,7 +60,7 @@ public enum EcheladderBonusType
 	{
 		Echeladder e = Echeladder.get(event.getPlayer(), event.getLevel());
 		
-		if(!(event.getItemResult().getItem() instanceof CruxiteArtifactItem))
+		if(!(event.getItemResult().getItem() instanceof CruxiteArtifact))
 		{
 			e.checkBonus(ALCHEMY_1);
 			GristSet cost = event.getCost();

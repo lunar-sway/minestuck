@@ -5,7 +5,7 @@ import com.mraof.minestuck.item.AlchemizedColored;
 import net.minecraft.server.level.ServerPlayer;
 import net.minecraft.world.item.Item;
 
-public abstract class CruxiteArtifactItem extends Item implements AlchemizedColored
+public abstract class CruxiteArtifactItem extends Item implements CruxiteArtifact
 {
 	public CruxiteArtifactItem(Properties properties)
 	{
