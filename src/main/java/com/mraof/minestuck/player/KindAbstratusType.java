@@ -1,6 +1,7 @@
 package com.mraof.minestuck.player;
 
 import net.minecraft.network.chat.Component;
+import net.minecraft.tags.TagKey;
 import net.minecraft.world.item.Item;
 import net.minecraft.world.item.ItemStack;
 
@@ -15,11 +16,6 @@ public class KindAbstratusType
 	
 	public KindAbstratusType(String unlocName) {
 		this.unlocalizedName = unlocName;
-	}
-	
-	public KindAbstratusType addItemClass(Class<? extends Item> item) {
-		items.add(new ItemClassType(item));
-		return this;
 	}
 	
 	public KindAbstratusType addItemId(Item item) {
@@ -48,23 +44,6 @@ public class KindAbstratusType
 		
 	}
 	
-	private static class ItemClassType extends ItemType {
-		
-		final Class<? extends Item> itemClass;
-		
-		ItemClassType(Class<? extends Item> itemClass)
-		{
-			this.itemClass = itemClass;
-		}
-		
-		@Override
-		boolean partOf(ItemStack item)
-		{
-			return this.itemClass.isInstance(item.getItem().getClass());
-		}
-		
-	}
-	
 	private static class ItemIdType extends ItemType
 	{
 		final Item item;
@@ -78,6 +57,25 @@ public class KindAbstratusType
 		boolean partOf(ItemStack stack)
 		{
 			return stack.is(this.item);
+		}
+	}
+	public KindAbstratusType addItemTag(TagKey<Item> tag){
+		items.add(new ItemTagType(tag));
+		return this;
+	}
+	private static class ItemTagType extends ItemType
+	{
+		final TagKey<Item> tag;
+		
+		ItemTagType(TagKey<Item> tag)
+		{
+			this.tag = tag;
+		}
+		
+		@Override
+		boolean partOf(ItemStack stack)
+		{
+			return stack.is(tag);
 		}
 	}
 }

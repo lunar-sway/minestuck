@@ -45,6 +45,8 @@ public final class MSCreativeTabs
 		output.accept(BoondollarsItem.setCount(new ItemStack(MSItems.BOONDOLLARS.get()), 1000));
 		output.accept(BoondollarsItem.setCount(new ItemStack(MSItems.BOONDOLLARS.get()), 10000));
 		
+		output.accept(MSItems.STRIFE_CARD.get());
+		
 		output.accept(MSItems.RAW_CRUXITE.get());
 		output.accept(MSItems.RAW_URANIUM.get());
 		output.accept(MSItems.ENERGY_CORE.get());
@@ -1642,6 +1644,46 @@ public final class MSCreativeTabs
 		output.accept(MSItems.CHAINSAW_KATANA.get());
 		output.accept(MSItems.THORN_IN_YOUR_SIDE.get());
 		output.accept(MSItems.ROSE_PROTOCOL.get());
+		
+		output.accept(MSItems.HALF_KATANA.get());
+		output.accept(MSItems.HALF_CALEDFWLCH.get());
+		output.accept(MSItems.HALF_SCARLET_RIBBITAR.get());
+		output.accept(MSItems.HALF_CALEDSCRATCH.get());
+		output.accept(MSItems.HALF_ROYAL_DERINGER.get());
+		output.accept(MSItems.HALF_SORD.get());
+		output.accept(MSItems.HALF_PAPER_SWORD.get());
+		output.accept(MSItems.HALF_KEYBLADE.get());
+		output.accept(MSItems.HALF_SWONGE.get());
+		output.accept(MSItems.HALF_WET_SWONGE.get());
+		output.accept(MSItems.HALF_PUMORD.get());
+		output.accept(MSItems.HALF_WET_PUMORD.get());
+		output.accept(MSItems.HALF_CACTACEAE_CUTLASS.get());
+		output.accept(MSItems.HALF_STEAK_SWORD.get());
+		output.accept(MSItems.HALF_BEEF_SWORD.get());
+		output.accept(MSItems.HALF_IRRADIATED_STEAK_SWORD.get());
+		output.accept(MSItems.HALF_MACUAHUITL.get());
+		output.accept(MSItems.HALF_FROSTY_MACUAHUITL.get());
+		output.accept(MSItems.HALF_UNBREAKABLE_KATANA.get());
+		output.accept(MSItems.HALF_ANGEL_APOCALYPSE.get());
+		output.accept(MSItems.HALF_FIRE_POKER.get());
+		output.accept(MSItems.HALF_TOO_HOT_TO_HANDLE.get());
+		output.accept(MSItems.HALF_CLAYMORE.get());
+		output.accept(MSItems.HALF_CUTLASS_OF_ZILLYWAIR.get());
+		output.accept(MSItems.HALF_REGISWORD.get());
+		output.accept(MSItems.HALF_CRUEL_FATE_CRUCIBLE.get());
+		output.accept(MSItems.HALF_DOGG_MACHETE.get());
+		output.accept(MSItems.HALF_COBALT_SABRE.get());
+		output.accept(MSItems.HALF_QUANTUM_SABRE.get());
+		output.accept(MSItems.HALF_SHATTER_BEACON.get());
+		output.accept(MSItems.HALF_SHATTER_BACON.get());
+		output.accept(MSItems.HALF_MUSIC_SWORD.get());
+		output.accept(MSItems.HALF_PILLOW_TALK.get());
+		output.accept(MSItems.HALF_KRAKENS_EYE.get());
+		output.accept(MSItems.HALF_CINNAMON_SWORD.get());
+		output.accept(MSItems.HALF_UNION_BUSTER.get());
+		output.accept(MSItems.HALF_THORN_IN_YOUR_SIDE.get());
+		output.accept(MSItems.HALF_ROSE_PROTOCOL.get());
+		output.accept(MSItems.HALF_EMERALD_SWORD.get());
 		
 		output.accept(MSItems.DAGGER.get());
 		output.accept(MSItems.DIAMOND_DAGGER.get());

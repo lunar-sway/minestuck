@@ -1,0 +1,10 @@
+{
+  "type": "minestuck:source_grist_cost",
+  "grist_cost": {},
+  "ingredient": {
+    "item": "minestuck:half_scarlet_ribbitar"
+  },
+  "sources": [
+    "minestuck:scarlet_ribbitar"
+  ]
+}
