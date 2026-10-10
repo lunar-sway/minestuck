@@ -1,0 +1,11 @@
+{
+  "type": "minestuck:combination",
+  "input1": {
+    "item": "minestuck:cat_claws_drawn"
+  },
+  "input2": {
+    "item": "minecraft:blue_wool"
+  },
+  "mode": "and",
+  "output": "minestuck:hood_of_the_huntress"
+}
