@@ -418,12 +418,17 @@ public class MinestuckItemModelProvider extends ItemModelProvider
 		simpleItem(MSItems.DERSE_SHIRT);
 		simpleItem(MSItems.DERSE_PANTS);
 		simpleItem(MSItems.DERSE_SHOES);
+		simpleItem(MSItems.HARLEQUIN_HAT);
+		simpleItem(MSItems.HARLEQUIN_SHIRT);
+		simpleItem(MSItems.HARLEQUIN_PANTS);
+		simpleItem(MSItems.HARLEQUIN_SHOES);
 		
 		simpleItem(MSItems.AMPHIBEANIE);
 		simpleItem(MSItems.NOSTRILDAMUS);
 		simpleItem(MSItems.PONYTAIL);
 		simpleItem(MSItems.ANOMALOCARIS_HAT);
 		simpleItem(MSItems.ALIEN_BOPPERS);
+		simpleItem(MSItems.HOOD_OF_THE_HUNTRESS);
 		
 		//Core Items
 		simpleItem(MSItems.RAW_CRUXITE);
@@ -607,13 +612,20 @@ public class MinestuckItemModelProvider extends ItemModelProvider
 		simpleItem(MSItems.SCALEMATE_WITNESS);
 		
 		simpleItem(MSItems.PLUSH_MUTATED_CAT);
-	
+		
 		//Incredibly Useful Items
 		handheldItem(MSItems.URANIUM_POWERED_STICK);
 		simpleItem(MSItems.IRON_BOAT);
 		simpleItem(MSItems.GOLD_BOAT);
 		simpleItem(MSItems.COCOA_WART);
 		simpleItem(MSItems.HORSE_CLOCK);
+		
+		// Cruxite Artifacts
+		cruxiteArtifact(MSItems.CRUXITE_APPLE);
+		cruxiteArtifact(MSItems.CRUXITE_POTION);
+		cruxiteArtifact(MSItems.CRUXITE_SHEARS);
+		cruxiteArtifact(MSItems.CRUXITE_DISK);
+		cruxiteArtifact(MSItems.CRUXITE_DISC);
 		
 		//Music Discs/Cassettes
 		simpleItem(MSItems.MUSIC_DISC_EMISSARY_OF_DANCE, "record_emissary");
@@ -727,6 +739,17 @@ public class MinestuckItemModelProvider extends ItemModelProvider
 		return withExistingParent(name,
 				id("item/large_weapon"))
 				.texture("layer0", texture(name));
+	}
+	
+	/**
+	 * Generates a model that has 2 layers.
+	 */
+	private ItemModelBuilder cruxiteArtifact(Supplier<? extends Item> item)
+	{
+		String name = id(item).getPath();
+		return withExistingParent(name, ResourceLocation.withDefaultNamespace("item/generated"))
+				.texture("layer0", texture(name + "_0"))
+				.texture("layer1", texture(name + "_1"));
 	}
 	
 	private static ResourceLocation texture(String path)

@@ -10,7 +10,9 @@ The format is based on [Keep a Changelog](https://keepachangelog.com/en/1.1.0/).
 
 - Terrain Flatenator can now flatten terrain
 - Computer themes can have custom buttons
-- Anomalocaris hat and alien boppers
+- Anomalocaris hat, alien boppers, and Hood of the Huntress
+- New Cruxite Artifacts (Shears, Disk, Disc)
+- Harlequin outfit
 
 ### Changed
 

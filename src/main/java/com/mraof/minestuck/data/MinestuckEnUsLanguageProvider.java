@@ -1537,6 +1537,10 @@ public class MinestuckEnUsLanguageProvider extends MinestuckLanguageProvider
 		addItem(MSItems.DERSE_SHIRT, "Derse Shirt");
 		addItem(MSItems.DERSE_PANTS, "Derse Pants");
 		addItem(MSItems.DERSE_SHOES, "Derse Shoes");
+		addItem(MSItems.HARLEQUIN_HAT, "Harlequin Hat");
+		addItem(MSItems.HARLEQUIN_SHIRT, "Harlequin Shirt");
+		addItem(MSItems.HARLEQUIN_PANTS, "Harlequin Pants");
+		addItem(MSItems.HARLEQUIN_SHOES, "Harlequin Shoes");
 		addItem(MSItems.AMPHIBEANIE, "Amphibeanie");
 		addItem(MSItems.NOSTRILDAMUS, "Nostrildamus");
 		addItem(MSItems.PONYTAIL, "Ponytail");
@@ -1544,6 +1548,8 @@ public class MinestuckEnUsLanguageProvider extends MinestuckLanguageProvider
 		addItemTooltip(MSItems.ANOMALOCARIS_HAT, "An anomalocaris does their best!");
 		addItem(MSItems.ALIEN_BOPPERS, "Alien Boppers");
 		addItemTooltip(MSItems.ALIEN_BOPPERS, "They call outwards to the stars, signaling a message of friendliness.");
+		addItem(MSItems.HOOD_OF_THE_HUNTRESS, "Hood of the Huntress");
+		addItemTooltip(MSItems.HOOD_OF_THE_HUNTRESS, "A well loved cap. It has been patched up countless times.");
 		addItem(MSItems.BOONDOLLARS, "Boondollars");
 		addItemExtra(MSItems.BOONDOLLARS, "amount", "Amount: %s");
 		addItem(MSItems.RAW_CRUXITE, "Raw Cruxite");
@@ -1559,6 +1565,9 @@ public class MinestuckEnUsLanguageProvider extends MinestuckLanguageProvider
 		addItemExtra(MSItems.TEMPLE_SCANNER, "noFuelMessage", "This device requires uranium to run");
 		addItem(MSItems.CRUXITE_APPLE, "Cruxite Artifact");
 		addItem(MSItems.CRUXITE_POTION, "Cruxite Artifact");
+		addItem(MSItems.CRUXITE_SHEARS, "Cruxite Artifact");
+		addItem(MSItems.CRUXITE_DISK, "Cruxite Artifact");
+		addItem(MSItems.CRUXITE_DISC, "Cruxite Artifact");
 		addItem(MSItems.SBURB_CODE, "SBURB Code");
 		addItemTooltip(MSItems.SBURB_CODE, "It seems hieroglyphs can be translated into genetic code. Perhaps this genetic code could in turn be made into computer code?");
 		addItemExtra(MSItems.SBURB_CODE, "completion", "§dPercent completion: %s%%§r"); //section signs result in the percent number being light purple, double percent symbol required to get it to show up in game

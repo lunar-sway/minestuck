@@ -51,6 +51,9 @@ public final class MSCreativeTabs
 		
 		output.accept(MSItems.CRUXITE_APPLE.get());
 		output.accept(MSItems.CRUXITE_POTION.get());
+		output.accept(MSItems.CRUXITE_SHEARS.get());
+		output.accept(MSItems.CRUXITE_DISK.get());
+		output.accept(MSItems.CRUXITE_DISC.get());
 		
 		output.accept(MSItems.SBURB_CODE.get());
 		output.accept(MSItems.COMPLETED_SBURB_CODE.get());
@@ -1921,6 +1924,10 @@ public final class MSCreativeTabs
 		output.accept(MSItems.IRON_LASS_CHESTPLATE.get());
 		output.accept(MSItems.IRON_LASS_SKIRT.get());
 		output.accept(MSItems.IRON_LASS_SHOES.get());
+		output.accept(MSItems.HARLEQUIN_HAT.get());
+		output.accept(MSItems.HARLEQUIN_SHIRT.get());
+		output.accept(MSItems.HARLEQUIN_PANTS.get());
+		output.accept(MSItems.HARLEQUIN_SHOES.get());
 		
 		output.accept(MSItems.PROSPIT_CIRCLET.get());
 		output.accept(MSItems.PROSPIT_SHIRT.get());
@@ -1936,6 +1943,7 @@ public final class MSCreativeTabs
 		output.accept(MSItems.PONYTAIL.get());
 		output.accept(MSItems.ANOMALOCARIS_HAT.get());
 		output.accept(MSItems.ALIEN_BOPPERS.get());
+		output.accept(MSItems.HOOD_OF_THE_HUNTRESS.get());
 	}
 	
 	@SubscribeEvent

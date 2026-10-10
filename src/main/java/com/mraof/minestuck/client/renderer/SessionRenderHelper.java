@@ -174,7 +174,7 @@ public final class SessionRenderHelper
 	
 	public static void drawLand(PoseStack poseStack, LandChain.AngledLand angledLand)
 	{
-		Random random = new Random(/*31*mc.world.getSeed() + TODO?*/ angledLand.landId().hashCode());
+		Random random = LandSkySpriteUploader.getInstance().getDimRandom(angledLand.landId());
 		LandTypePair landTypes = ClientDimensionData.getLandTypes(angledLand.landId());
 		if(landTypes == null)
 		{
