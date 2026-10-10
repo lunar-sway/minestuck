@@ -435,6 +435,7 @@ public class MeteorManager extends SavedData
 	 * Mini meteor spawn rate increases as timer progresses like:
 	 * Early phase: every ~160 ticks
 	 * Mid phase: every ~80 ticks
+	 * Faster mid phase: every ~40 ticks
 	 * Late phase: every ~20 ticks
 	 */
 	private void spawnMiniMeteorsIfNeeded(MeteorCountdown cd)
@@ -443,28 +444,36 @@ public class MeteorManager extends SavedData
 		
 		int ticks = cd.getTicksElapsed();
 		int interval;
+		double innerFraction;
 		
 		if(ticks < TOTAL_TICKS * 0.3)
 		{
 			interval = 160;
+			innerFraction = 0.75;
 		} else if(ticks < TOTAL_TICKS * 0.6)
 		{
 			interval = 80;
+			innerFraction = 0.5;
 		} else if(ticks < TOTAL_TICKS * 0.85)
 		{
 			interval = 40;
+			innerFraction = 0.25;
 		} else
 		{
 			interval = 20;
+			innerFraction = 0;
 		}
+		
+		if(!SERVER.miniMeteorsRing.get())
+			innerFraction = 0;
 		
 		if(ticks % interval == 0)
 		{
-			spawnMiniMeteor(cd);
+			spawnMiniMeteor(cd, innerFraction);
 		}
 	}
 	
-	private void spawnMiniMeteor(MeteorCountdown cd)
+	private void spawnMiniMeteor(MeteorCountdown cd, double innerFraction)
 	{
 		ServerLevel level = mcServer.getLevel(cd.getLevelKey());
 		if(level == null)
@@ -480,7 +489,8 @@ public class MeteorManager extends SavedData
 		if(existingCount >= SERVER.miniMeteorsCount.get()) return;
 		
 		double angle = level.random.nextDouble() * Math.PI * 2;
-		double dist = level.random.nextDouble() * radius;
+		double inner = radius * innerFraction;
+		double dist = Math.sqrt(level.random.nextDouble() * (radius * radius - inner * inner) + inner * inner);
 		double targetX = center.getX() + 0.5 + Math.cos(angle) * dist;
 		double targetZ = center.getZ() + 0.5 + Math.sin(angle) * dist;
 		double targetY = level.getHeight(Types.MOTION_BLOCKING, (int) targetX, (int) targetZ);

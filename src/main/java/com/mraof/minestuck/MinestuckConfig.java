@@ -121,6 +121,7 @@ public class MinestuckConfig
 		public final IntValue artifactRange;
 		public final BooleanValue meteorShower;
 		public final IntValue miniMeteorsCount;
+		public final BooleanValue miniMeteorsRing;
 		public final BooleanValue miniMeteorsDestroyMachines;
 //		public final IntValue impactCountdown;
 		
@@ -234,6 +235,8 @@ public class MinestuckConfig
 					.define("meteorShower",true);
 			miniMeteorsCount = builder.comment("Determines the count of maximum spawn rate of mini meteors at once.")
 					.defineInRange("miniMeteorsCount", 4,1, 8);
+			miniMeteorsRing = builder.comment("If true, mini meteors start out falling from a ring along the edge of the area, and each stage of the meteor shower opens up the ring further towards the cruxtruder.")
+					.define("miniMeteorsRing", true);
 			miniMeteorsDestroyMachines = builder.comment("If true, mini meteor explosions can destroy machine blocks. If false, these blocks are immune to mini meteor blasts, but still destroyed by the main meteor impact.")
 					.define("miniMeteorsDestroyMachines", false);
 			// I'll think about it
