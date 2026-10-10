@@ -45,6 +45,7 @@ import net.minecraft.client.renderer.RenderType;
 import net.minecraft.client.renderer.blockentity.HangingSignRenderer;
 import net.minecraft.client.renderer.blockentity.SignRenderer;
 import net.minecraft.client.renderer.entity.EntityRenderers;
+import net.minecraft.client.renderer.entity.NoopRenderer;
 import net.minecraft.client.renderer.entity.ThrownItemRenderer;
 import net.minecraft.client.renderer.item.CompassItemPropertyFunction;
 import net.minecraft.client.renderer.item.ItemProperties;
@@ -121,6 +122,8 @@ public class ClientProxy
 		EntityRenderers.register(MSEntityTypes.POSTER.get(), PosterRenderer::new);
 		EntityRenderers.register(MSEntityTypes.KERNELSPRITE.get(), KernelspriteRenderer::new);
 		
+		EntityRenderers.register(MSEntityTypes.METEOR.get(), MeteorRenderer::new);
+		EntityRenderers.register(MSEntityTypes.MINI_METEOR.get(), MiniMeteorRenderer::new);
 		
 		ProgramGui.Registry.register(ProgramTypes.SBURB_CLIENT, SburbClientGui::new);
 		ProgramGui.Registry.register(ProgramTypes.SBURB_SERVER, SburbServerGui::new);

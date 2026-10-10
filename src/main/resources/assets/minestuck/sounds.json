@@ -7,6 +7,24 @@
       }
     ]
   },
+  "meteor_theme": {
+    "sounds": [
+      {
+        "name": "minestuck:music/miscellaneous/meteor_theme_1",
+        "stream": true
+      },
+      {
+        "name": "minestuck:music/miscellaneous/meteor_theme_2",
+        "stream": true
+      }
+    ],
+    "category": "music"
+  },
+  "meteor_impact": {
+    "sounds": [
+      "minestuck:ambient/meteor_impact"
+    ]
+  },
   "music_disc.dance_stab_dance": {
     "sounds": [
       {
