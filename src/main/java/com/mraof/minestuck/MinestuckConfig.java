@@ -47,6 +47,7 @@ public class MinestuckConfig
 		public final BooleanValue loginColorSelector;
 		public final BooleanValue alchemyIcons;
 		public final BooleanValue npcDialogueTextColors;
+		public final BooleanValue landLiquidRain;
 		
 		private Client(Builder builder)
 		{
@@ -59,6 +60,11 @@ public class MinestuckConfig
 					.defineEnum("echeladderAnimation", AnimationSpeed.NORMAL);
 			npcDialogueTextColors = builder.comment("Determines whether an NPC will use their custom formatted color value when talking in a dialogue screen.")
 					.define("npcDialogueTextColors", true);
+			builder.pop();
+			
+			builder.push("lands");
+			landLiquidRain = builder.comment("If true, it rains the liquid of the land on lands that have a liquid of their own, by giving the rain its color.")
+					.define("landLiquidRain", true);
 			builder.pop();
 		}
 	}
