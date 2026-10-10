@@ -244,6 +244,43 @@ public final class Echeladder implements INBTSerializable<CompoundTag>
 		}
 	}
 	
+	public int addByCommand(int amount)
+	{
+		if(amount <= 0)
+			return 0;
+		
+		ServerPlayer player = identifier.getPlayer(mcServer);
+		if(player == null)
+			return 0;
+		
+		int topRung = Rungs.getMaxAttainableRung(player) - 1;
+		int prevRung = rung;
+		if(rung >= topRung)
+			return 0;
+		
+		int target = Math.min(rung + amount, topRung);
+		long boondollarsGained = 0;
+		while(rung < target)
+		{
+			rung++;
+			boondollarsGained += Rungs.getBoondollarsGained(rung);
+		}
+		progress = 0;
+		PlayerBoondollars.addBoondollars(PlayerData.get(identifier, mcServer), boondollarsGained, false);
+		sendDataPacket(player, true);
+		if(rung != prevRung)
+		{
+			updateEcheladderBonuses(player);
+			MSCriteriaTriggers.ECHELADDER.get().trigger(player, rung);
+			player.level().playSound(null, player.getX(), player.getY(), player.getZ(), MSSoundEvents.EVENT_ECHELADDER_INCREASE.get(), SoundSource.AMBIENT, 1F, 1F);
+			
+			EditData data = ServerEditHandler.getData(this.mcServer, this.identifier);
+			if(data != null)
+				data.sendCacheLimitToEditor();
+		}
+		return rung - prevRung;
+	}
+	
 	public void sendInitialPacket(ServerPlayer player)
 	{
 		EcheladderDataPacket packet = EcheladderDataPacket.init(getRung(), MinestuckConfig.SERVER.echeladderProgress.get() ? getProgress() : 0F);

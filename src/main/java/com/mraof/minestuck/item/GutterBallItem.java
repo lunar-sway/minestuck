@@ -1,5 +1,6 @@
 package com.mraof.minestuck.item;
 
+import com.mraof.minestuck.alchemy.GristGutter;
 import com.mraof.minestuck.player.PlayerData;
 import com.mraof.minestuck.util.MSAttachments;
 import net.minecraft.ChatFormatting;
@@ -44,6 +45,7 @@ public class GutterBallItem extends Item
 				double newMultiplier = playerData.getData(MSAttachments.GUTTER_MULTIPLIER) + 0.2;
 				playerData.setData(MSAttachments.GUTTER_MULTIPLIER, newMultiplier);
 			});
+			GristGutter.get(serverPlayer).ifPresent(gutter -> gutter.pushUpdateToSession(serverPlayer.server));
 		}
 		
 		return InteractionResultHolder.sidedSuccess(itemStack, level.isClientSide());
