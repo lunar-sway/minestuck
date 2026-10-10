@@ -55,13 +55,12 @@ public class MSItemTypes
 	public static final Holder<ArmorMaterial> IRON_LASS_ARMOR = registerArmorMaterial("iron_lass",
 			Map.of(ArmorItem.Type.BOOTS, 4, ArmorItem.Type.LEGGINGS, 7, ArmorItem.Type.CHESTPLATE, 8, ArmorItem.Type.HELMET, 3),
 			15, SoundEvents.ARMOR_EQUIP_IRON, 0.0F, 0F, () -> Ingredient.EMPTY);
-	public static final Holder<ArmorMaterial> CLOTH_ARMOR = registerArmorMaterial("cloth",
+	public static final Holder<ArmorMaterial> CLOTH = registerArmorMaterial("cloth",
 			Map.of(ArmorItem.Type.BOOTS, 0, ArmorItem.Type.LEGGINGS, 0, ArmorItem.Type.CHESTPLATE, 0, ArmorItem.Type.HELMET, 0),
 			5, SoundEvents.ARMOR_EQUIP_LEATHER, 0.0F, 0F, () -> Ingredient.EMPTY);
-	
-	public static final Holder<ArmorMaterial> DREAM_PAJAMAS = registerArmorMaterial("dream_pajamas",
+	public static final Holder<ArmorMaterial> CLOTH_ARMOR = registerArmorMaterial("cloth_armor",
 			Map.of(ArmorItem.Type.BOOTS, 1, ArmorItem.Type.LEGGINGS, 2, ArmorItem.Type.CHESTPLATE, 3, ArmorItem.Type.HELMET, 1),
-			0, SoundEvents.ARMOR_EQUIP_LEATHER, 0.0F, 0F, () -> Ingredient.EMPTY);
+			5, SoundEvents.ARMOR_EQUIP_LEATHER, 0.0F, 0F, () -> Ingredient.EMPTY);
 	
 	public static Holder<ArmorMaterial> registerArmorMaterial(String name, Map<ArmorItem.Type, Integer> damageReductionByType, int enchantability, Holder<SoundEvent> soundEvent, float toughness, float knockbackResistance, Supplier<Ingredient> repairMaterial)
 	{
