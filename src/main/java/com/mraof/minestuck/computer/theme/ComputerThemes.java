@@ -32,7 +32,7 @@ import java.util.Optional;
  * @see com.mraof.minestuck.data.ComputerThemeProvider
  */
 @ParametersAreNonnullByDefault
-@EventBusSubscriber(modid = Minestuck.MOD_ID, bus = EventBusSubscriber.Bus.MOD, value = Dist.CLIENT)
+@EventBusSubscriber(modid = Minestuck.MOD_ID, value = Dist.CLIENT)
 public class ComputerThemes
 {
 	private static final Logger LOGGER = LogManager.getLogger("minestuck/ComputerThemes");

@@ -18,7 +18,7 @@ import net.neoforged.neoforge.event.entity.player.AdvancementEvent;
 import javax.annotation.ParametersAreNonnullByDefault;
 
 @ParametersAreNonnullByDefault
-@EventBusSubscriber(bus = EventBusSubscriber.Bus.GAME)
+@EventBusSubscriber
 public interface EcheladderExpSource
 {
 	

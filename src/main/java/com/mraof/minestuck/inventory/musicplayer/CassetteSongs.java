@@ -24,7 +24,7 @@ import org.apache.logging.log4j.Logger;
 
 import java.util.*;
 
-@EventBusSubscriber(bus = EventBusSubscriber.Bus.GAME)
+@EventBusSubscriber
 public final class CassetteSongs
 {
 	private static final Logger LOGGER = LogManager.getLogger();
