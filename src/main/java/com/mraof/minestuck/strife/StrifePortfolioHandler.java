@@ -360,6 +360,18 @@ public final class StrifePortfolioHandler
 		
 		int armedSlot = handArmed ? data.armedWeaponSlot(selSp.getContents().size()) : -1;
 		
+		if(!handArmed && data.isArmed())
+		{
+			armedSlot = data.armedWeaponSlot(selSp.getContents().size());
+			boolean returned = returnStrayArmedWeapon(player, data, selSp);
+			data.setArmed(false);
+			if(returned && weaponIndex == armedSlot)
+			{
+				syncToClient(player);
+				return;
+			}
+		}
+		
 		if(handArmed)
 		{
 			// Put the armed weapon back so that weaponIndex refers to the complete deck
@@ -445,6 +457,12 @@ public final class StrifePortfolioHandler
 				weapon.remove(MSItemComponents.STRIFE_ASSIGNED.get());
 				player.setItemInHand(InteractionHand.MAIN_HAND, ItemStack.EMPTY);
 				giveOrDrop(player, weapon);
+			} else
+			{
+				var inventory = player.getInventory();
+				for(int i = 0; i < inventory.getContainerSize(); i++)
+					if(isAssigned(inventory.getItem(i)))
+						inventory.getItem(i).remove(MSItemComponents.STRIFE_ASSIGNED.get());
 			}
 		} else if(data.getSelectedWeaponIndex() >= 0 && data.getSelectedWeaponIndex() < selSp.getContents().size())
 		{
@@ -490,8 +508,58 @@ public final class StrifePortfolioHandler
 			
 			if(selSp != null) selSp.getContents().add(data.armedWeaponSlot(selSp.getContents().size()), weapon);
 			else giveOrDrop(player, weapon);
+		} else if(selSp != null)
+		{
+			//With keepArmedWeaponInInventory, the armed weapon can be anywhere in the inventory
+			returnStrayArmedWeapon(player, data, selSp);
 		}
 		data.setArmed(false);
+	}
+	
+	/**
+	 * Finds the armed weapon somewhere else than the main hand (in the inventory, or on the cursor) and puts it back into the deck.
+	 * Does not change the armed state or sync.
+	 *
+	 * @return true if the weapon was found
+	 */
+	public static boolean returnStrayArmedWeapon(ServerPlayer player, StrifePortfolioData data, StrifeSpecibus deck)
+	{
+		var inventory = player.getInventory();
+		
+		for(int i = 0; i < inventory.getContainerSize(); i++)
+		{
+			ItemStack stack = inventory.getItem(i);
+			if(!isAssigned(stack)) continue;
+			
+			ItemStack weapon = stack.copy();
+			weapon.remove(MSItemComponents.STRIFE_ASSIGNED.get());
+			inventory.setItem(i, ItemStack.EMPTY);
+			deck.getContents().add(data.armedWeaponSlot(deck.getContents().size()), weapon);
+			return true;
+		}
+		
+		ItemStack carried = player.containerMenu.getCarried();
+		if(isAssigned(carried))
+		{
+			ItemStack weapon = carried.copy();
+			weapon.remove(MSItemComponents.STRIFE_ASSIGNED.get());
+			player.containerMenu.setCarried(ItemStack.EMPTY);
+			deck.getContents().add(data.armedWeaponSlot(deck.getContents().size()), weapon);
+			return true;
+		}
+		return false;
+	}
+	
+	/**
+	 * @return whether there is a weapon with the assigned mark somewhere in the inventory or on the cursor
+	 */
+	public static boolean hasAssignedWeapon(ServerPlayer player)
+	{
+		var inventory = player.getInventory();
+		for(int i = 0; i < inventory.getContainerSize(); i++)
+			if(isAssigned(inventory.getItem(i)))
+				return true;
+		return isAssigned(player.containerMenu.getCarried());
 	}
 	
 	/**

@@ -101,6 +101,14 @@ public final class StrifeEventHandler
 				// Nowhere to return the weapon to: it simply stays as a normal item
 				data.setArmed(false);
 				StrifePortfolioHandler.syncToClient(player);
+			} else if(MinestuckConfig.SERVER.keepArmedWeaponInInventory.get())
+			{
+				//The armed weapon may stay anywhere in the inventory. All that has to be noticed is that it is gone (thrown away, for example).
+				if(player.tickCount % 10 == 0 && !StrifePortfolioHandler.hasAssignedWeapon(player))
+				{
+					data.setArmed(false);
+					StrifePortfolioHandler.syncToClient(player);
+				}
 			} else if(!StrifePortfolioHandler.isAssigned(mainHand))
 			{
 				returnStrayArmedWeapon(player, data, selSp);
@@ -122,28 +130,7 @@ public final class StrifeEventHandler
 	 */
 	private static void returnStrayArmedWeapon(ServerPlayer player, StrifePortfolioData data, StrifeSpecibus deck)
 	{
-		var inventory = player.getInventory();
-		
-		for(int i = 0; i < inventory.getContainerSize(); i++)
-		{
-			ItemStack stack = inventory.getItem(i);
-			if(!StrifePortfolioHandler.isAssigned(stack)) continue;
-			
-			ItemStack weapon = stack.copy();
-			weapon.remove(MSItemComponents.STRIFE_ASSIGNED.get());
-			inventory.setItem(i, ItemStack.EMPTY);
-			deck.getContents().add(data.armedWeaponSlot(deck.getContents().size()), weapon);
-			return;
-		}
-		
-		ItemStack carried = player.containerMenu.getCarried();
-		if(StrifePortfolioHandler.isAssigned(carried))
-		{
-			ItemStack weapon = carried.copy();
-			weapon.remove(MSItemComponents.STRIFE_ASSIGNED.get());
-			player.containerMenu.setCarried(ItemStack.EMPTY);
-			deck.getContents().add(data.armedWeaponSlot(deck.getContents().size()), weapon);
-		}
+		StrifePortfolioHandler.returnStrayArmedWeapon(player, data, deck);
 	}
 	
 	/**
@@ -152,14 +139,17 @@ public final class StrifeEventHandler
 	private static void clearStrayAssigned(ServerPlayer player)
 	{
 		boolean armed = StrifePortfolioHandler.getData(player).isArmed();
+		boolean keepInInventory = MinestuckConfig.SERVER.keepArmedWeaponInInventory.get();
+		boolean armedWeaponFound = false;
 		
 		for(int i = 0; i < player.getInventory().getContainerSize(); i++)
 		{
 			ItemStack stack = player.getInventory().getItem(i);
 			if(!StrifePortfolioHandler.isAssigned(stack)) continue;
 			
-			boolean isArmedWeapon = armed && i == player.getInventory().selected;
-			if(!isArmedWeapon) stack.remove(MSItemComponents.STRIFE_ASSIGNED.get());
+			boolean isArmedWeapon = armed && (keepInInventory ? !armedWeaponFound : i == player.getInventory().selected);
+			if(isArmedWeapon) armedWeaponFound = true;
+			else stack.remove(MSItemComponents.STRIFE_ASSIGNED.get());
 		}
 		
 		ItemStack carried = player.containerMenu.getCarried();

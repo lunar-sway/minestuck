@@ -110,6 +110,7 @@ public class MinestuckConfig
 		public final IntValue strifeDeckMaxSize;
 		public final ConfigValue<List<? extends String>> restrictedStrifeBypass;
 		public final BooleanValue autoStowWeapons;
+		public final BooleanValue keepArmedWeaponInInventory;
 		public final BooleanValue strifeEvolution;
 		public final IntValue strifeCardMobDrops;
 		public final DoubleValue strifeCardDropChance;
@@ -195,6 +196,9 @@ public class MinestuckConfig
 			autoStowWeapons = builder
 					.comment("If true, weapons that a player picks up are automatically moved into the matching strife deck (if the portfolio has a matching specibus with free space).")
 					.define("autoStowWeapons", true);
+			keepArmedWeaponInInventory = builder
+					.comment("If true, a weapon that has been taken out of the strife portfolio stays in the inventory when it leaves the main hand..")
+					.define("keepArmedWeaponInInventory", false);
 			strifeEvolution = builder
 					.comment("If true, specibuses can evolve once per player (e.g. Bladekind becomes 1/2 Bladekind when a sword breaks). Once a player has a 1/2 Bladekind specibus, breaking swords turn into their halved version instead of disappearing.")
 					.define("strifeEvolution", true);
