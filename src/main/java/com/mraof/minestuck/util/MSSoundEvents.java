@@ -118,6 +118,12 @@ public final class MSSoundEvents
 	public static final Supplier<SoundEvent> EVENT_LOTUS_FLOWER_RESTORE = register("event.lotus_flower.restore"); //identical to beehive exit
 	public static final Supplier<SoundEvent> EVENT_EDIT_TOOL_REVISE = register("event.edit_tools.revise");
 	public static final Supplier<SoundEvent> EVENT_EDIT_TOOL_RECYCLE = register("event.edit_tools.recycle");
+	public static final Supplier<SoundEvent> EVENT_EDIT_TOOL_SELECT = register("event.edit_tools.select");
+	public static final Supplier<SoundEvent> EVENT_EDIT_TOOL_CLEAR = register("event.edit_tools.clear");
+	public static final Supplier<SoundEvent> EVENT_EDIT_TOOL_MOVE = register("event.edit_tools.move");
+	public static final Supplier<SoundEvent> EVENT_EDIT_TOOL_COPY = register("event.edit_tools.copy");
+	public static final Supplier<SoundEvent> EVENT_EDIT_MODE_ENTER = register("event.edit_mode.enter");
+	public static final Supplier<SoundEvent> EVENT_EDIT_MODE_EXIT = register("event.edit_mode.exit");
 	public static final Supplier<SoundEvent> COMPUTER_BOOT = register("block.computer.boot");
 	public static final Supplier<SoundEvent> COMPUTER_DISK_INSERT = register("block.computer.disk_insert");
 	public static final Supplier<SoundEvent> COMPUTER_DISK_REMOVE = register("block.computer.disk_remove");
