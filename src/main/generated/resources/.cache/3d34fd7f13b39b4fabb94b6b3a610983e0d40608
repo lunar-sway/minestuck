@@ -1,4 +1,4 @@
-// 1.21.1	2026-10-01T10:05:36.530874066	Minestuck Item Tags
+// 1.21.1	2026-10-10T11:33:32.890076551	Minestuck Item Tags
 55d184f1b02ccc8e0f7ac32d66ffa5a012d732e6 data/c/tags/item/chunks/uranium.json
 5b7066a238cf89fcc6fe512205ae5c10fc2ad3c4 data/c/tags/item/cobblestones.json
 3693bb0373f4bf4e83828f954b215b5563838cd6 data/c/tags/item/dusts.json
@@ -57,7 +57,7 @@ d33fa6207455631f2c419b3ccbaf162069c25a5b data/c/tags/item/tools/ranged_weapon.js
 3d8358fecf5cbc301c95b1daa79cb42451cae5d4 data/minecraft/tags/item/axes.json
 13f524ac4f5bc680bc58fb450a4ae26e877acbc6 data/minecraft/tags/item/breaks_decorated_pots.json
 071447bc16cf17537b68ff079e0d8f3e6b98f62e data/minecraft/tags/item/buttons.json
-8353819798694646a0bd4515c7172eb94b1c6288 data/minecraft/tags/item/chest_armor.json
+7d43df68cab20b51d00d1306927883ff4d24e911 data/minecraft/tags/item/chest_armor.json
 f846f74dbc5a55802a27fabf4f1af129482560a1 data/minecraft/tags/item/cluster_max_harvestables.json
 f204766a2f7add37a22401e5ff9d2091670510e8 data/minecraft/tags/item/enchantable/durability.json
 18e753fce21f02d0355bccd12416467cb65d188f data/minecraft/tags/item/enchantable/mining.json
@@ -65,11 +65,11 @@ f204766a2f7add37a22401e5ff9d2091670510e8 data/minecraft/tags/item/enchantable/du
 23f2b8ce204fcd315db7d23245aa2cf28a1dfe0b data/minecraft/tags/item/enchantable/sharp_weapon.json
 23f2b8ce204fcd315db7d23245aa2cf28a1dfe0b data/minecraft/tags/item/enchantable/sword.json
 23f2b8ce204fcd315db7d23245aa2cf28a1dfe0b data/minecraft/tags/item/enchantable/vanishing.json
-4849deb0d25844a775909111a9f7ffbd5e5257e4 data/minecraft/tags/item/foot_armor.json
-fa66acafacb61b2314d206739e05b923f460813b data/minecraft/tags/item/head_armor.json
+189f29701a0383ffbf3ebd47ba3db9e53e8860bf data/minecraft/tags/item/foot_armor.json
+b03751d4a7cc1775909bc9d3df7dade2dcb31806 data/minecraft/tags/item/head_armor.json
 1275bad0fc3b75c2509974f4c2af72b738862f72 data/minecraft/tags/item/hoes.json
 a1d9f8f31af092df45389c509a511591ae8ec985 data/minecraft/tags/item/leaves.json
-47e5bb7e264e0ba13b31dc4e32c519cb9eb35541 data/minecraft/tags/item/leg_armor.json
+21a924a83e3583dc8f3ad340b28f7979124086d0 data/minecraft/tags/item/leg_armor.json
 4f1c38d0cf55383d9ae00e6c1eb0ddc5417e7f15 data/minecraft/tags/item/logs.json
 5ba308414205198b2e923523081a697c37471dbd data/minecraft/tags/item/pickaxes.json
 3711a04362a3f0fd233f1a7b50df0857dcdc9973 data/minecraft/tags/item/planks.json

@@ -1,4 +1,4 @@
-// 1.21.1	2026-10-01T10:05:36.513408496	Item Models: minestuck
+// 1.21.1	2026-10-10T11:33:32.874182366	Item Models: minestuck
 07d93e82e74e0ad6771a7dfee9e79f7454ee9d45 assets/minestuck/models/item/ace_of_clubs.json
 80afa6084ab97cc508e6353d18a6785e1a4c1b84 assets/minestuck/models/item/ace_of_diamonds.json
 6b25b459eed99cd6424c6bbb8fddee5df4949e4c assets/minestuck/models/item/ace_of_hearts.json
@@ -247,6 +247,10 @@ db6562f7bc162817d7c7a23804d47a55b5c44dc5 assets/minestuck/models/item/gutter_bal
 f22b7883447b4f0c5c803e1710fdc6396f056ba6 assets/minestuck/models/item/hallowed_skewer.json
 72f5d34dfcef92f3bd8b1b042aa107e65a484580 assets/minestuck/models/item/hand_cranked_vampire_eraser.json
 b129fa6c2bbc4bca3090b497b972738077f8e6c9 assets/minestuck/models/item/hand_cranked_vampire_eraser_lipstick.json
+a39eb36fcb17b60bc0a05a42009bae7def8955b9 assets/minestuck/models/item/harlequin_hat.json
+06129a488b3f85b08b76828c5eaa9594a901571d assets/minestuck/models/item/harlequin_pants.json
+ed5db98732de6489ccdfdf049849aa8d1c274005 assets/minestuck/models/item/harlequin_shirt.json
+5a4017b5d0dc1db20e359f5205b0f1d17e79a462 assets/minestuck/models/item/harlequin_shoes.json
 0d79d3a7c3364a72441c906742efbe2fac6bb754 assets/minestuck/models/item/hashmap_modus_card.json
 47ef14d4bbd63cab7a945f53484190b6b9163ff0 assets/minestuck/models/item/hearts_suitarang.json
 3a356df3b5cba912478341db5e167395e46b4109 assets/minestuck/models/item/hellbringers_hoe_active.json
@@ -257,6 +261,7 @@ cef7e88ba98fd13a3758b4ecd4ec004e908bc640 assets/minestuck/models/item/hereticus_
 4f31ba570f7004435941fa9dcaa21f63d9d74834 assets/minestuck/models/item/home_by_midnight.json
 240629bc62b74981f93e6bddec3f81e28317463c assets/minestuck/models/item/home_grown_mace.json
 07a722bad76bd63f7a4389c710b6ff80dd1c9fda assets/minestuck/models/item/homes_smell_ya_later.json
+c8872963e6508bcdc372c78f2d4c17a00aca3656 assets/minestuck/models/item/hood_of_the_huntress.json
 6094ebc4684bc934d743b20e91fac353dfeb7c98 assets/minestuck/models/item/horn.json
 efce65b725f413711ddc164c1f691e06717ef050 assets/minestuck/models/item/horse_clock.json
 88f4d03194c3829dc2190eb261c37b2edc43f8e3 assets/minestuck/models/item/horse_hitcher.json
