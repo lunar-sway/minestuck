@@ -18,6 +18,7 @@ import net.minecraft.data.PackOutput;
 import net.minecraft.data.tags.ItemTagsProvider;
 import net.minecraft.data.tags.TagsProvider;
 import net.minecraft.tags.BlockTags;
+import net.minecraft.world.item.ArmorItem;
 import net.minecraft.world.item.Item;
 import net.minecraft.world.item.Items;
 import net.minecraft.world.level.block.Block;
@@ -148,10 +149,10 @@ public class MinestuckItemTagsProvider extends ItemTagsProvider
 		tag(BLADEKIND_EVOLUTION_BLACKLIST).add(Items.WOODEN_SWORD, Items.STONE_SWORD, Items.IRON_SWORD, Items.GOLDEN_SWORD, Items.DIAMOND_SWORD, Items.NETHERITE_SWORD).add(CHAINSAW_KATANA.get(), SUBTRACTSHUMIDIRE_ZOMORRODNEGATIVE.get());
 		
 		tag(HOES).add(EMERALD_HOE.get(), HELLBRINGERS_HOE_INACTIVE.get(), HELLBRINGERS_HOE_ACTIVE.get());
-		tag(HEAD_ARMOR).add(PRISMARINE_HELMET.get(), IRON_LASS_GLASSES.get(), PROSPIT_CIRCLET.get(), DERSE_CIRCLET.get(), AMPHIBEANIE.get(), NOSTRILDAMUS.get(), PONYTAIL.get(), ANOMALOCARIS_HAT.get(), ALIEN_BOPPERS.get());
-		tag(CHEST_ARMOR).add(PRISMARINE_CHESTPLATE.get(), IRON_LASS_CHESTPLATE.get(), PROSPIT_SHIRT.get(), DERSE_SHIRT.get());
-		tag(LEG_ARMOR).add(PRISMARINE_LEGGINGS.get(), IRON_LASS_SKIRT.get(), PROSPIT_PANTS.get(), DERSE_PANTS.get());
-		tag(FOOT_ARMOR).add(PRISMARINE_BOOTS.get(), IRON_LASS_SHOES.get(), PROSPIT_SHOES.get(), DERSE_SHOES.get());
+		tag(HEAD_ARMOR).add(relevantItems(item -> isArmorType(item, ArmorItem.Type.HELMET)));
+		tag(CHEST_ARMOR).add(relevantItems(item -> isArmorType(item, ArmorItem.Type.CHESTPLATE)));
+		tag(LEG_ARMOR).add(relevantItems(item -> isArmorType(item, ArmorItem.Type.LEGGINGS)));
+		tag(FOOT_ARMOR).add(relevantItems(item -> isArmorType(item, ArmorItem.Type.BOOTS)));
 		tag(CLUSTER_MAX_HARVESTABLES).add(relevantItems(item -> hasToolType(item, List.of(PICKAXE_TOOL, HAMMER_TOOL))));
 		tag(BREAKS_DECORATED_POTS).add(relevantItems(item -> hasToolType(item, minestuckToolTypes)));
 		
@@ -237,6 +238,14 @@ public class MinestuckItemTagsProvider extends ItemTagsProvider
 		for(MSToolType toolType : toolTypes)
 			if(weaponTypes.contains(toolType))
 				return true;
+		
+		return false;
+	}
+	
+	private static boolean isArmorType(Item item, ArmorItem.Type type)
+	{
+		if(item instanceof ArmorItem armorItem)
+			return armorItem.getType() == type;
 		
 		return false;
 	}

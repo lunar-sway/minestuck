@@ -1037,12 +1037,17 @@ public final class MinestuckCombinationsProvider
 		CombinationRecipeBuilder.of(MSItems.DERSE_SHIRT).namedInput(Items.LEATHER_CHESTPLATE).or().input(SkaiaBlocks.BLACK_CROWN_STAINED_GLASS).build(consumer);
 		CombinationRecipeBuilder.of(MSItems.DERSE_PANTS).namedInput(Items.LEATHER_LEGGINGS).or().input(SkaiaBlocks.BLACK_CROWN_STAINED_GLASS).build(consumer);
 		CombinationRecipeBuilder.of(MSItems.DERSE_SHOES).namedInput(Items.LEATHER_BOOTS).or().input(SkaiaBlocks.BLACK_CROWN_STAINED_GLASS).build(consumer);
+		CombinationRecipeBuilder.of(MSItems.HARLEQUIN_HAT).namedInput(Items.LEATHER_HELMET).or().input(MSItems.HORN).build(consumer);
+		CombinationRecipeBuilder.of(MSItems.HARLEQUIN_SHIRT).namedInput(Items.LEATHER_CHESTPLATE).or().input(MSItems.HORN).build(consumer);
+		CombinationRecipeBuilder.of(MSItems.HARLEQUIN_PANTS).namedInput(Items.LEATHER_LEGGINGS).or().input(MSItems.HORN).build(consumer);
+		CombinationRecipeBuilder.of(MSItems.HARLEQUIN_SHOES).namedInput(Items.LEATHER_BOOTS).or().input(MSItems.HORN).build(consumer);
 		
 		CombinationRecipeBuilder.of(MSItems.AMPHIBEANIE).namedInput(MSItems.CRUMPLY_HAT).and().input(MSItems.FROG).build(consumer);
 		CombinationRecipeBuilder.of(MSItems.NOSTRILDAMUS).namedInput(MSItems.TEMPLE_SCANNER).or().input(Items.EMERALD).build(consumer);
 		CombinationRecipeBuilder.of(MSItems.PONYTAIL).namedInput(Items.HANGING_ROOTS).or().input(Items.SADDLE).build(consumer);
 		CombinationRecipeBuilder.of(MSItems.ANOMALOCARIS_HAT).namedInput(MSItems.CICADA).or().input(Items.WATER_BUCKET).build(consumer);
 		CombinationRecipeBuilder.of(MSItems.ALIEN_BOPPERS).namedInput(Items.GLOWSTONE).and().input(Items.LEATHER_HELMET).build(consumer);
+		CombinationRecipeBuilder.of(MSItems.HOOD_OF_THE_HUNTRESS).namedInput(MSItems.CAT_CLAWS_DRAWN).and().input(Items.BLUE_WOOL).build(consumer);
 		
 		CombinationRecipeBuilder.of(MSBlocks.PRIMED_TNT).input(Items.TNT).or().input(ItemTags.BUTTONS).build(consumer);
 		CombinationRecipeBuilder.of(MSBlocks.UNSTABLE_TNT).input(Items.TNT).or().input(Items.REDSTONE_TORCH).build(consumer);

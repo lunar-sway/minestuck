@@ -775,11 +775,16 @@ public final class MinestuckGristCostsProvider
 		GristCostRecipeBuilder.of(MSItems.DERSE_SHIRT.get()).grist(CHALK, 45).grist(SHALE, 5).grist(MERCURY, 1).build(recipeSaver);
 		GristCostRecipeBuilder.of(MSItems.DERSE_PANTS.get()).grist(CHALK, 40).grist(SHALE, 5).grist(MERCURY, 1).build(recipeSaver);
 		GristCostRecipeBuilder.of(MSItems.DERSE_SHOES.get()).grist(CHALK, 25).grist(SHALE, 5).grist(MERCURY, 1).build(recipeSaver);
+		GristCostRecipeBuilder.of(MSItems.HARLEQUIN_HAT.get()).grist(AMBER, 30).grist(TAR, 5).grist(RUBY, 1).build(recipeSaver);
+		GristCostRecipeBuilder.of(MSItems.HARLEQUIN_SHIRT.get()).grist(AMBER, 45).grist(TAR, 5).grist(RUBY, 1).build(recipeSaver);
+		GristCostRecipeBuilder.of(MSItems.HARLEQUIN_PANTS.get()).grist(AMBER, 40).grist(TAR, 5).grist(RUBY, 1).build(recipeSaver);
+		GristCostRecipeBuilder.of(MSItems.HARLEQUIN_SHOES.get()).grist(AMBER, 25).grist(TAR, 5).grist(RUBY, 1).build(recipeSaver);
 		GristCostRecipeBuilder.of(MSItems.AMPHIBEANIE.get()).grist(CAULK, 20).grist(MARBLE, 10).grist(AMBER, 2).build(recipeSaver);
 		GristCostRecipeBuilder.of(MSItems.NOSTRILDAMUS.get()).grist(TAR, 20).grist(MARBLE, 10).grist(GOLD, 1).build(recipeSaver);
 		GristCostRecipeBuilder.of(MSItems.PONYTAIL.get()).grist(AMBER, 20).grist(MARBLE, 3).grist(QUARTZ, 2).build(recipeSaver);
 		GristCostRecipeBuilder.of(MSItems.ANOMALOCARIS_HAT.get()).grist(AMBER, 20).grist(CHALK, 4).grist(URANIUM, 1).build(recipeSaver);
 		GristCostRecipeBuilder.of(MSItems.ALIEN_BOPPERS.get()).grist(MERCURY, 15).grist(SULFUR, 3).grist(URANIUM, 1).build(recipeSaver);
+		GristCostRecipeBuilder.of(MSItems.HOOD_OF_THE_HUNTRESS.get()).grist(RUST, 25).grist(COBALT, 1).grist(URANIUM, 1).grist(DIAMOND, 1).build(recipeSaver);
 		
 		GristCostRecipeBuilder.of(MSItems.CARDBOARD_TUBE.get()).grist(BUILD, 1).build(recipeSaver);
 		GristCostRecipeBuilder.of(MSBlocks.GLOWYSTONE_DUST.get()).grist(BUILD, 1).grist(AMBER, 1).build(recipeSaver);
