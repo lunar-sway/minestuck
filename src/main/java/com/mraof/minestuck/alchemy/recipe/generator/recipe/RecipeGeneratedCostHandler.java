@@ -15,7 +15,9 @@ import com.mraof.minestuck.api.alchemy.recipe.generator.GristCostResult;
 import com.mraof.minestuck.api.alchemy.recipe.generator.LookupTracker;
 import net.minecraft.MethodsReturnNonnullByDefault;
 import net.minecraft.network.RegistryFriendlyByteBuf;
+import net.minecraft.resources.RegistryOps;
 import net.minecraft.resources.ResourceLocation;
+import net.minecraft.server.packs.resources.Resource;
 import net.minecraft.server.packs.resources.ResourceManager;
 import net.minecraft.server.packs.resources.SimplePreparableReloadListener;
 import net.minecraft.util.profiling.ProfilerFiller;
@@ -26,6 +28,7 @@ import net.minecraft.world.item.crafting.RecipeManager;
 import net.neoforged.bus.api.EventPriority;
 import net.neoforged.bus.api.SubscribeEvent;
 import net.neoforged.fml.common.EventBusSubscriber;
+import net.neoforged.neoforge.common.conditions.ConditionalOps;
 import net.neoforged.neoforge.event.AddReloadListenerEvent;
 import org.apache.commons.lang3.tuple.Pair;
 import org.apache.logging.log4j.LogManager;
@@ -33,7 +36,7 @@ import org.apache.logging.log4j.Logger;
 
 import javax.annotation.Nullable;
 import javax.annotation.ParametersAreNonnullByDefault;
-import java.io.Reader;
+import java.io.BufferedReader;
 import java.util.*;
 import java.util.function.BiConsumer;
 
@@ -123,23 +126,27 @@ public class RecipeGeneratedCostHandler extends SimplePreparableReloadListener<L
 	protected List<SourceEntry> prepare(ResourceManager resourceManagerIn, ProfilerFiller profilerIn)
 	{
 		List<SourceEntry> sources = new ArrayList<>();
+		ConditionalOps ops = makeConditionalOps();
+		
 		for(String namespace : resourceManagerIn.getNamespaces())
 		{
-			resourceManagerIn.getResource(ResourceLocation.fromNamespaceAndPath(namespace, PATH)).ifPresent(resource -> {
-				try(
-						Reader reader = resource.openAsReader()
-				)
-				{
-					JsonElement json = JsonParser.parseReader(reader);
-					SourceEntry.LIST_CODEC.parse(JsonOps.INSTANCE, json)
-							.resultOrPartial(LOGGER::error)
-							.ifPresent(sources::addAll);
-					
-				} catch(Exception runtimeexception)
-				{
-					LOGGER.warn("Unable to load grist_cost_generation.json in data pack: '{}'", resource.sourcePackId(), runtimeexception);
-				}
-			});
+			Optional<Resource> resourceOptional = resourceManagerIn.getResource(ResourceLocation.fromNamespaceAndPath(namespace, PATH));
+			if(!resourceOptional.isPresent()) continue;
+			
+			try(BufferedReader reader = resourceOptional.get().openAsReader())
+			{
+				JsonElement json = JsonParser.parseReader(reader);
+				Optional<List<Optional<SourceEntry>>> result = SourceEntry.OPTIONAL_ENTRY_LIST_CODEC.parse(ops, json)
+						.resultOrPartial(LOGGER::error);
+				if (result.isEmpty()) continue;
+				
+				for(Optional<SourceEntry> optional : result.get())
+					if(optional.isPresent())
+						sources.add(optional.get());
+			} catch(Exception exception)
+			{
+				LOGGER.warn("Unable to load grist_cost_generation.json in data pack: '{}'", resourceOptional.get().sourcePackId(), exception);
+			}
 		}
 		
 		return sources;
@@ -253,6 +260,10 @@ public class RecipeGeneratedCostHandler extends SimplePreparableReloadListener<L
 				RecipeSource.DISPATCH_CODEC.fieldOf("source").forGetter(SourceEntry::source),
 				RecipeInterpreter.DISPATCH_CODEC.fieldOf("interpreter").forGetter(SourceEntry::interpreter)
 		).apply(instance, SourceEntry::new));
+		
 		public static final Codec<List<SourceEntry>> LIST_CODEC = CODEC.listOf();
+		
+		public static final Codec<Optional<SourceEntry>> OPTIONAL_CODEC = ConditionalOps.createConditionalCodec(CODEC);
+		public static final Codec<List<Optional<SourceEntry>>> OPTIONAL_ENTRY_LIST_CODEC = OPTIONAL_CODEC.listOf();
 	}
 }
