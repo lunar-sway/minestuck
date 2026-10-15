@@ -29,6 +29,7 @@ import net.neoforged.bus.api.EventPriority;
 import net.neoforged.bus.api.SubscribeEvent;
 import net.neoforged.fml.common.EventBusSubscriber;
 import net.neoforged.neoforge.common.conditions.ConditionalOps;
+import net.neoforged.neoforge.common.conditions.WithConditions;
 import net.neoforged.neoforge.event.AddReloadListenerEvent;
 import org.apache.commons.lang3.tuple.Pair;
 import org.apache.logging.log4j.LogManager;
@@ -136,13 +137,13 @@ public class RecipeGeneratedCostHandler extends SimplePreparableReloadListener<L
 			try(BufferedReader reader = resourceOptional.get().openAsReader())
 			{
 				JsonElement json = JsonParser.parseReader(reader);
-				Optional<List<Optional<SourceEntry>>> result = SourceEntry.OPTIONAL_ENTRY_LIST_CODEC.parse(ops, json)
+				Optional<List<Optional<WithConditions<SourceEntry>>>> result = SourceEntry.OPTIONAL_ENTRY_LIST_CODEC.parse(ops, json)
 						.resultOrPartial(LOGGER::error);
-				if (result.isEmpty()) continue;
+				if(result.isEmpty()) continue;
 				
-				for(Optional<SourceEntry> optional : result.get())
+				for(Optional<WithConditions<SourceEntry>> optional : result.get())
 					if(optional.isPresent())
-						sources.add(optional.get());
+						sources.add(optional.get().carrier());
 			} catch(Exception exception)
 			{
 				LOGGER.warn("Unable to load grist_cost_generation.json in data pack: '{}'", resourceOptional.get().sourcePackId(), exception);
@@ -263,7 +264,7 @@ public class RecipeGeneratedCostHandler extends SimplePreparableReloadListener<L
 		
 		public static final Codec<List<SourceEntry>> LIST_CODEC = CODEC.listOf();
 		
-		public static final Codec<Optional<SourceEntry>> OPTIONAL_CODEC = ConditionalOps.createConditionalCodec(CODEC);
-		public static final Codec<List<Optional<SourceEntry>>> OPTIONAL_ENTRY_LIST_CODEC = OPTIONAL_CODEC.listOf();
+		public static final Codec<Optional<WithConditions<SourceEntry>>> OPTIONAL_CODEC = ConditionalOps.createConditionalCodecWithConditions(CODEC);
+		public static final Codec<List<Optional<WithConditions<SourceEntry>>>> OPTIONAL_ENTRY_LIST_CODEC = OPTIONAL_CODEC.listOf();
 	}
 }
