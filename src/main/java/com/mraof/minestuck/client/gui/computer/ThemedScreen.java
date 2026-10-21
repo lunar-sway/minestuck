@@ -5,6 +5,7 @@ import com.mraof.minestuck.blockentity.ComputerBlockEntity;
 import com.mraof.minestuck.client.gui.MSScreenFactories;
 import com.mraof.minestuck.computer.theme.ComputerTheme;
 import com.mraof.minestuck.computer.theme.ComputerThemes;
+import net.minecraft.client.Minecraft;
 import net.minecraft.client.gui.GuiGraphics;
 import net.minecraft.client.gui.components.Button;
 import net.minecraft.client.gui.components.Renderable;
@@ -128,7 +129,7 @@ public abstract class ThemedScreen extends Screen
 	{
 		public PowerButton()
 		{
-			super(builder(Component.empty(), b -> minecraft.setScreen(null))
+			super(builder(Component.empty(), b -> Minecraft.getInstance().setScreen(null))
 					.pos((ThemedScreen.this.width - GUI_WIDTH) / 2 + 143, (ThemedScreen.this.height - GUI_HEIGHT) / 2 + 3)
 					.size(29, 29));
 		}
