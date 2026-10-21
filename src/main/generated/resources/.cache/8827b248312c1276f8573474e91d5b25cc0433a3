@@ -1,0 +1,11 @@
+// 1.21.1	2026-10-01T10:05:36.492202965	Selectable dialogue provider: shady_consort
+b9e3231a875ebfd2b994d991e9be710bdfdb522b data/minestuck/minestuck/dialogue/shady_consort/peppy_offer/item.json
+41549576ddae361e53cfa14fcdf2e5699f396032 data/minestuck/minestuck/dialogue/shady_consort/peppy_offer/next.json
+0ca198ce0782762ee8e1ed1395756e9ed751f271 data/minestuck/minestuck/dialogue/shady_consort/peppy_offer/purchase.json
+28df377f7d488c7001ca3743b774aedf1187e52b data/minestuck/minestuck/dialogue/shady_consort/peppy_offer/start.json
+88ae6f0ff5b0cac83beb8306765620cc7d37153a data/minestuck/minestuck/dialogue/shady_consort/shady_offer/item.json
+0fad83a15ed8958c9cc23b049cb56bea33a66585 data/minestuck/minestuck/dialogue/shady_consort/shady_offer/next.json
+2a93ac86705b48189ebb3f69ffda5842cb51c675 data/minestuck/minestuck/dialogue/shady_consort/shady_offer/purchase.json
+c526b9678f739fc9b8b83889598fccd0b3ca46ba data/minestuck/minestuck/dialogue/shady_consort/shady_offer/start.json
+701fb620ab5c3ef2b7f68aea51ce8dae547bd032 data/minestuck/minestuck/selectable_dialogue/shady_consort/peppy_offer.json
+76af4b233a24818f3b2849678b2b4da1bb13d7c4 data/minestuck/minestuck/selectable_dialogue/shady_consort/shady_offer.json
