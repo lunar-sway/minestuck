@@ -39,6 +39,7 @@ public class GristIngredientHelper implements IIngredientHelper<GristAmount>
 		return ingredient.type().getDisplayName().getString();
 	}
 
+	@SuppressWarnings("removal")
 	@Override
 	public String getUniqueId(GristAmount ingredient, UidContext context)
 	{
