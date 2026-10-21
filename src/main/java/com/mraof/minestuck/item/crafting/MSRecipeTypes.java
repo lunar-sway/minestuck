@@ -29,7 +29,7 @@ public class MSRecipeTypes
 	
 	private static <T extends Recipe<?>> Supplier<RecipeType<T>> recipeType(String name)
 	{
-		return RECIPE_TYPE_REGISTER.register(name, () -> new RecipeType<>()
+		return RECIPE_TYPE_REGISTER.register(name, () -> new RecipeType<T>()
 		{
 			@Override
 			public String toString()
