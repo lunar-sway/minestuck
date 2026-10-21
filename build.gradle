@@ -87,7 +87,7 @@ dependencies {
 
     // Add the Create mod to runtime to help test mod interactions
     runtimeOnly("com.simibubi.create:create-${mc_version}:${create_version}:slim") { transitive = false }
-    runtimeOnly("net.createmod.ponder:ponder-neoforge-${mc_version}:${ponder_version}")
+    runtimeOnly("net.createmod.ponder:ponder-neoforge:${ponder_version}")
     runtimeOnly("dev.engine-room.flywheel:flywheel-neoforge-${mc_version}:${flywheel_version}")
     runtimeOnly("com.tterrag.registrate:Registrate:${registrate_version}")
 }
