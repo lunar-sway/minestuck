@@ -25,6 +25,7 @@ public class FrogRenderer extends MobRenderer<FrogEntity, FrogModel<FrogEntity>>
 		return ResourceLocation.fromNamespaceAndPath(Minestuck.MOD_ID, "textures/entity/frog/base.png");
 	}
 	
+	@Override
 	protected boolean shouldShowName(FrogEntity entity)
 	{
 		return super.shouldShowName(entity) && (entity.shouldShowName() || entity.hasCustomName() && entity == this.entityRenderDispatcher.crosshairPickEntity);

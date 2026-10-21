@@ -46,6 +46,7 @@ public enum EnumShopPoster implements StringRepresentable
         return DMG_LOOKUP[damage];
     }
     
+    @Override
     public String toString()
     {
         return this.unlocalizedName;

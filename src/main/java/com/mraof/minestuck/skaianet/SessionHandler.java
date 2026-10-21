@@ -25,7 +25,7 @@ import java.util.stream.Stream;
  * while the other dynamically creates, merges and splits up multiple sessions as players connect and disconnect to each other.
  * @author kirderf1
  */
-@EventBusSubscriber(modid = Minestuck.MOD_ID, bus = EventBusSubscriber.Bus.GAME)
+@EventBusSubscriber(modid = Minestuck.MOD_ID)
 public sealed abstract class SessionHandler
 {
 	final SkaianetData skaianetData;

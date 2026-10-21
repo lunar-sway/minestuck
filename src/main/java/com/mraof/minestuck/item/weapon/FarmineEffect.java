@@ -75,7 +75,6 @@ public class FarmineEffect implements DestroyBlockEffect
 	 * @param blockState The state of the initial block being destroyed.
 	 * @param pos        The position of the initial block being destroyed.
 	 * @param playerIn   The player doing the actual destroying. This MUST be an instance of EntityPlayer or no farmining will occur!
-	 * @return Returns false if and only if the world is remote.
 	 */
 	
 	@Override

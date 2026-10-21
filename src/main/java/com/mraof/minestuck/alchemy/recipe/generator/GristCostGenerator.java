@@ -22,7 +22,7 @@ import org.apache.logging.log4j.Logger;
 
 import java.util.*;
 
-@EventBusSubscriber(modid = Minestuck.MOD_ID, bus = EventBusSubscriber.Bus.GAME)
+@EventBusSubscriber(modid = Minestuck.MOD_ID)
 public final class GristCostGenerator
 {
 	private static final Logger LOGGER = LogManager.getLogger();
