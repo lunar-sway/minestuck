@@ -92,6 +92,8 @@ public class GristWidgetBlockEntity extends MachineProcessBlockEntity implements
 			return null;
 		
 		GristSet gristSet = GristCostRecipe.findCostForItem(containedItem, GristTypes.BUILD.get(), true, level);
+		if(gristSet == null)
+			return null;
 		return fullValue ? gristSet : gristSet.mutableCopy().scale(MinestuckConfig.SERVER.gristWidgetPercentage.get().floatValue(), false);
 	}
 	
