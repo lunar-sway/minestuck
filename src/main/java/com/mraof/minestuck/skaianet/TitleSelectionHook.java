@@ -60,6 +60,7 @@ public class TitleSelectionHook
 	public static void cancelSelection(ServerPlayer player)
 	{
 		playersInTitleSelection.remove(player);
+		LandSelectionHook.cancelSelection(player);
 	}
 	
 	public static void handleTitleSelection(ServerPlayer player, @Nullable Title title)

@@ -61,6 +61,8 @@ public final class MSPayloads
 		//Classpect Selection Screen Packets
 		registerPlayToClient(registrar, TitleSelectPackets.OpenScreen.ID, TitleSelectPackets.OpenScreen.STREAM_CODEC);
 		registerPlayToServer(registrar, TitleSelectPackets.PickTitle.ID, TitleSelectPackets.PickTitle.STREAM_CODEC);
+		registerPlayToClient(registrar, LandSelectPackets.OpenScreen.ID, LandSelectPackets.OpenScreen.STREAM_CODEC);
+		registerPlayToServer(registrar, LandSelectPackets.PickLand.ID, LandSelectPackets.PickLand.STREAM_CODEC);
 		
 		//Dialogue Packets
 		registerPlayToClient(registrar, DialoguePackets.OpenScreen.ID, DialoguePackets.OpenScreen.STREAM_CODEC);
