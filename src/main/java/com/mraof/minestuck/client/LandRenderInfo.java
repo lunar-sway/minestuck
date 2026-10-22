@@ -7,6 +7,7 @@ import net.minecraft.client.Camera;
 import net.minecraft.client.Minecraft;
 import net.minecraft.client.multiplayer.ClientLevel;
 import net.minecraft.client.renderer.DimensionSpecialEffects;
+import net.minecraft.client.renderer.LightTexture;
 import net.minecraft.world.phys.Vec3;
 import org.joml.Matrix4f;
 
@@ -41,6 +42,16 @@ public class LandRenderInfo extends DimensionSpecialEffects
 	public float[] getSunriseColor(float timeOfDay, float partialTicks)
 	{
 		return null;
+	}
+	
+	/**
+	 * Gives the rain the color of the liquid of the land, see {@link LandRainTint}.
+	 */
+	@Override
+	public boolean renderSnowAndRain(ClientLevel level, int ticks, float partialTick, LightTexture lightTexture, double camX, double camY, double camZ)
+	{
+		LandRainTint.applyBeforeRain(level, ticks, partialTick);
+		return false;
 	}
 	
 	@Override
