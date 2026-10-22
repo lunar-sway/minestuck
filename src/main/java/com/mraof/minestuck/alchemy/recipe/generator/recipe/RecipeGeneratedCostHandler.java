@@ -26,6 +26,7 @@ import net.minecraft.world.item.crafting.RecipeManager;
 import net.neoforged.bus.api.EventPriority;
 import net.neoforged.bus.api.SubscribeEvent;
 import net.neoforged.fml.common.EventBusSubscriber;
+import net.neoforged.neoforge.common.util.Lazy;
 import net.neoforged.neoforge.event.AddReloadListenerEvent;
 import org.apache.commons.lang3.tuple.Pair;
 import org.apache.logging.log4j.LogManager;
@@ -36,6 +37,7 @@ import javax.annotation.ParametersAreNonnullByDefault;
 import java.io.Reader;
 import java.util.*;
 import java.util.function.BiConsumer;
+import java.util.function.Supplier;
 
 /**
  * A portion of the grist cost generation process responsible for generating grist costs from recipes.
@@ -215,7 +217,7 @@ public class RecipeGeneratedCostHandler extends SimplePreparableReloadListener<L
 	 * The dominant source should be the most specific source (fewest recipes provided by that source).
 	 * If there are equally dominant sources, we won't bother to make a distinction and will instead pick whichever is more convenient implementation-wise.
 	 */
-	private Map<Item, List<Pair<RecipeHolder<?>, RecipeInterpreter>>> prepareRecipeMap(List<SourceEntry> sources, RecipeManager recipeManager)
+	private Supplier<Map<Item, List<Pair<RecipeHolder<?>, RecipeInterpreter>>>> prepareRecipeMap(List<SourceEntry> sources, RecipeManager recipeManager)
 	{
 		//Step 1: sort recipe interpreters paired with their recipes in the order depending on the number of recipes in the list
 		List<Pair<Collection<RecipeHolder<?>>, RecipeInterpreter>> recipeLists = new ArrayList<>(sources.size());
@@ -234,17 +236,19 @@ public class RecipeGeneratedCostHandler extends SimplePreparableReloadListener<L
 				recipeMap.put(recipe, pair.getRight());
 		}
 		
-		//Step 3: Take items from interpreter.getOutputItems() and map item -> recipe interpreter pair
-		Map<Item, List<Pair<RecipeHolder<?>, RecipeInterpreter>>> itemLookupMap = new HashMap<>();
-		for(Map.Entry<RecipeHolder<?>, RecipeInterpreter> entry : recipeMap.entrySet())
-		{
-			for(Item item : entry.getValue().getOutputItems(entry.getKey().value()))
+		return Lazy.of(() -> {
+			//Step 3: Take items from interpreter.getOutputItems() and map item -> recipe interpreter pair
+			Map<Item, List<Pair<RecipeHolder<?>, RecipeInterpreter>>> itemLookupMap = new HashMap<>();
+			for(Map.Entry<RecipeHolder<?>, RecipeInterpreter> entry : recipeMap.entrySet())
 			{
-				itemLookupMap.computeIfAbsent(item, item1 -> new ArrayList<>()).add(Pair.of(entry.getKey(), entry.getValue()));
+				for(Item item : entry.getValue().getOutputItems(entry.getKey().value()))
+				{
+					itemLookupMap.computeIfAbsent(item, item1 -> new ArrayList<>()).add(Pair.of(entry.getKey(), entry.getValue()));
+				}
 			}
-		}
-		
-		return itemLookupMap;
+			
+			return itemLookupMap;
+		});
 	}
 	
 	public record SourceEntry(RecipeSource source, RecipeInterpreter interpreter)

@@ -16,15 +16,16 @@ import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.Logger;
 
 import java.util.*;
+import java.util.function.Supplier;
 
 class RecipeGeneratedCostProcess
 {
 	private static final Logger LOGGER = LogManager.getLogger();
 	
-	private final Map<Item, List<Pair<RecipeHolder<?>, RecipeInterpreter>>> lookupMap;
+	private final Supplier<Map<Item, List<Pair<RecipeHolder<?>, RecipeInterpreter>>>> lookupMap;
 	private final Map<Item, GristSet.Immutable> generatedCosts = new HashMap<>();
 	
-	RecipeGeneratedCostProcess(Map<Item, List<Pair<RecipeHolder<?>, RecipeInterpreter>>> lookupMap)
+	RecipeGeneratedCostProcess(Supplier<Map<Item, List<Pair<RecipeHolder<?>, RecipeInterpreter>>>> lookupMap)
 	{
 		this.lookupMap = lookupMap;
 	}
@@ -39,12 +40,12 @@ class RecipeGeneratedCostProcess
 	
 	Set<Item> itemSet()
 	{
-		return lookupMap.keySet();
+		return lookupMap.get().keySet();
 	}
 	
 	void reportPreliminaryLookups(LookupTracker tracker)
 	{
-		for(List<Pair<RecipeHolder<?>, RecipeInterpreter>> recipes : this.lookupMap.values())
+		for(List<Pair<RecipeHolder<?>, RecipeInterpreter>> recipes : this.lookupMap.get().values())
 		{
 			for(Pair<RecipeHolder<?>, RecipeInterpreter> recipe : recipes)
 			{
@@ -81,7 +82,7 @@ class RecipeGeneratedCostProcess
 	
 	private GristSet costFromRecipes(Item item, GeneratorCallback callback)
 	{
-		List<Pair<RecipeHolder<?>, RecipeInterpreter>> recipes = lookupMap.getOrDefault(item, Collections.emptyList());
+		List<Pair<RecipeHolder<?>, RecipeInterpreter>> recipes = lookupMap.get().getOrDefault(item, Collections.emptyList());
 		
 		if(!recipes.isEmpty())
 		{
