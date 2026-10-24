@@ -120,6 +120,11 @@ public class WeaponItem extends TieredItem
 	}
 	
 	@Override
+	public int getUseDuration(ItemStack stack, LivingEntity entity) {
+		return useDuration;
+	}
+	
+	@Override
 	public UseAnim getUseAnimation(ItemStack stack)
 	{
 		return useAction;
