@@ -47,9 +47,13 @@ import net.neoforged.neoforge.network.PacketDistributor;
 import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.Logger;
 
+import java.util.ArrayDeque;
+import java.util.HashSet;
 import java.util.Iterator;
 import java.util.List;
 import java.util.Objects;
+import java.util.Queue;
+import java.util.Set;
 
 @EventBusSubscriber(modid = Minestuck.MOD_ID)
 public class EntryProcess
@@ -71,6 +75,14 @@ public class EntryProcess
 	private static final Logger LOGGER = LogManager.getLogger();
 	public static final TicketType<Unit> CHUNK_TICKET_TYPE = TicketType.create("entry", (_left, _right) -> 0);
 	
+	private static final int BLOCKS_PER_TICK_TOTAL = 10000;
+	private static final int MIN_BLOCKS_PER_TICK_PER_PROCESS = 1000;
+	
+	private enum Phase
+	{
+		WAITING, CHECKING, COPYING, TELEPORTING, REMOVING, DONE
+	}
+	
 	private final PlayerIdentifier playerId;
 	private final ServerLevel originLevel, landLevel;
 	private final int artifactRange = MinestuckConfig.SERVER.artifactRange.get();
@@ -78,6 +90,19 @@ public class EntryProcess
 	private final int xDiff, yDiff, zDiff;
 	private final BlockPos origin;
 	private final boolean creative;
+	private final long creationTime = System.currentTimeMillis();
+	
+	private Phase phase = Phase.WAITING;
+	private long startTime;
+	private boolean ticketRemoved = false;
+	
+	private ServerPlayer player;
+	private Iterator<? extends BlockPos> blockIterator;
+	private boolean foundComputer;
+	
+	private boolean wasInsideEntryArea;
+	private AABB entityTeleportBB;
+	private List<Entity> entities;
 	
 	private EntryProcess(ServerPlayer player, ServerLevel landLevel, BlockPos pos)
 	{
@@ -101,7 +126,6 @@ public class EntryProcess
 	
 	public static void enter(ServerPlayer player, BlockPos pos)
 	{
-		long time = System.currentTimeMillis();
 		if(player.level().dimension() == Level.NETHER)
 		{
 			player.sendSystemMessage(Component.translatable(WRONG_DIMENSION));
@@ -110,13 +134,15 @@ public class EntryProcess
 		
 		if(!TitleSelectionHook.performEntryCheck(player, pos))
 			return;
-		if(waitingProcess != null)
+		
+		PlayerIdentifier identifier = IdentifierHandler.encode(player);
+		
+		if(playersEntering.contains(identifier))
 		{
 			player.sendSystemMessage(Component.translatable(BUSY));
 			return;
 		}
 		
-		PlayerIdentifier identifier = IdentifierHandler.encode(player);
 		ResourceKey<Level> land = SburbPlayerData.get(identifier, player.server).getLandDimensionIfEntered();
 		
 		if(land != null)
@@ -148,10 +174,11 @@ public class EntryProcess
 		
 		landLevel.getChunkSource().addRegionTicket(CHUNK_TICKET_TYPE, new ChunkPos(0, 0), 0, Unit.INSTANCE);
 		
-		waitingProcess = process;
-		startTime = player.level().getGameTime() + MinestuckConfig.COMMON.entryDelay.get();
+		process.startTime = player.level().getGameTime() + MinestuckConfig.COMMON.entryDelay.get();
+		playersEntering.add(identifier);
+		activeProcesses.add(process);
+		
 		PacketDistributor.sendToAllPlayers(new EntryEffectPackets.Effect(player.level().dimension(), process.origin, process.artifactRange));
-		LOGGER.info("Entry prep done in {}ms", System.currentTimeMillis() - time);
 	}
 	
 	private static void secondEntryTeleport(ServerPlayer player, ResourceKey<Level> land)
@@ -179,144 +206,276 @@ public class EntryProcess
 		Teleport.teleportEntity(player, landLevel, spawn.getX() + 0.5F, spawn.getY(), spawn.getZ() + 0.5F, player.getYRot(), player.getXRot());
 	}
 	
-	private static EntryProcess waitingProcess;
-	private static long startTime;
+	private static final Queue<EntryProcess> activeProcesses = new ArrayDeque<>();
+	private static final Set<PlayerIdentifier> playersEntering = new HashSet<>();
 	
 	@SubscribeEvent
 	public static void onServerTick(ServerTickEvent.Pre event)
 	{
-		//noinspection resource
-		if(waitingProcess != null && startTime <= event.getServer().overworld().getGameTime())
+		if(activeProcesses.isEmpty())
+			return;
+		
+		long gameTime = event.getServer().overworld().getGameTime();
+		int perProcessBudget = Math.max(MIN_BLOCKS_PER_TICK_PER_PROCESS, BLOCKS_PER_TICK_TOTAL / activeProcesses.size());
+		
+		Iterator<EntryProcess> iterator = activeProcesses.iterator();
+		while(iterator.hasNext())
 		{
-			waitingProcess.landLevel.getChunkSource().removeRegionTicket(CHUNK_TICKET_TYPE, new ChunkPos(0, 0), 0, Unit.INSTANCE);
-			waitingProcess.runEntry();
-			waitingProcess = null;
-			PacketDistributor.sendToAllPlayers(new EntryEffectPackets.Clear());
+			EntryProcess process = iterator.next();
+			
+			try
+			{
+				process.advance(gameTime, perProcessBudget);
+			} catch(Exception e)
+			{
+				LOGGER.error("Exception during entry process for {}", process.playerId, e);
+				process.notifyException();
+				process.phase = Phase.DONE;
+			}
+			
+			if(process.phase == Phase.DONE)
+			{
+				process.cleanup();
+				iterator.remove();
+			}
 		}
 	}
 	
-	private void runEntry()
+	private void advance(long gameTime, int budget)
 	{
-		long time = System.currentTimeMillis();
-		ServerPlayer player = playerId.getPlayer(landLevel.getServer());
-		if(player == null)
+		if(phase != Phase.WAITING && phase != Phase.DONE)
 		{
-			LOGGER.warn("Player left before entry was completed. Cancelling entry.");
-			return;
-		}
-		
-		try
-		{
-			LOGGER.info("Checking entry block conditions");
-			
-			if(doesBlocksStopEntry(player, originLevel))
-				return;
-			
-			LOGGER.info("Entry starting");
-			copyBlocks(originLevel, landLevel);
-			
-			boolean wasInsideEntryArea = player.level() == originLevel && player.distanceToSqr(origin.getX() + 0.5, origin.getY() + 0.5, origin.getZ() + 0.5) <= artifactRange * artifactRange;
-			
-			if(Teleport.teleportEntity(player, landLevel) == null)
+			if(playerId.getPlayer(landLevel.getServer()) != player)
 			{
-				player.sendSystemMessage(Component.translatable(TELEPORT_FAILED));
+				phase = Phase.DONE;
 				return;
 			}
 			
-			finalizeEntry(player, originLevel, landLevel, wasInsideEntryArea);
-			SburbHandler.onEntry(player.server, player);
-			LOGGER.info("Entry finished in {}ms", System.currentTimeMillis() - time);
-			
-		} catch(Exception e)
+			if(player.isDeadOrDying())
+			{
+				phase = Phase.DONE;
+				return;
+			}
+		}
+		
+		switch(phase)
 		{
-			LOGGER.error("Exception when {} tried to enter their land.", player.getName().getString(), e);
-			player.sendSystemMessage(Component.translatable(EXCEPTION, (landLevel.getServer().isDedicatedServer() ? "Check the console for the error message." : "Notify the server owner about this.")).withStyle(ChatFormatting.RED));
+			case WAITING -> tickWaiting(gameTime);
+			case CHECKING -> tickChecking(budget);
+			case COPYING -> tickCopying(budget);
+			case TELEPORTING -> tickTeleporting();
+			case REMOVING -> tickRemoving(budget);
+			case DONE ->
+			{
+			}
 		}
 	}
 	
-	private boolean doesBlocksStopEntry(ServerPlayer player, ServerLevel level)
+	private void tickWaiting(long gameTime)
 	{
-		boolean foundComputer = false;
-		for(BlockPos pos : EntryBlockIterator.get(origin.getX(), origin.getY(), origin.getZ(), artifactRange))
+		if(gameTime < startTime)
+			return;
+		
+		landLevel.getChunkSource().removeRegionTicket(CHUNK_TICKET_TYPE, new ChunkPos(0, 0), 0, Unit.INSTANCE);
+		ticketRemoved = true;
+		PacketDistributor.sendToAllPlayers(new EntryEffectPackets.Clear());
+		
+		player = playerId.getPlayer(landLevel.getServer());
+		if(player == null)
 		{
-			if(!level.isInWorldBounds(pos))
+			phase = Phase.DONE;
+			return;
+		}
+		
+		blockIterator = EntryBlockIterator.get(origin.getX(), origin.getY(), origin.getZ(), artifactRange).iterator();
+		foundComputer = false;
+		phase = Phase.CHECKING;
+	}
+	
+	private void tickChecking(int budget)
+	{
+		int processed = 0;
+		while(blockIterator.hasNext() && processed < budget)
+		{
+			BlockPos pos = blockIterator.next();
+			processed++;
+			
+			if(!originLevel.isInWorldBounds(pos))
 				continue;
 			
-			BlockState block = level.getBlockState(pos);
-			BlockEntity be = level.getBlockEntity(pos);
+			BlockState block = originLevel.getBlockState(pos);
+			BlockEntity be = originLevel.getBlockEntity(pos);
 			
 			if(!creative && (block.is(Blocks.COMMAND_BLOCK) || block.is(Blocks.CHAIN_COMMAND_BLOCK) || block.is(Blocks.REPEATING_COMMAND_BLOCK)))
 			{
 				player.displayClientMessage(Component.translatable(COMMAND_BLOCK_DENIED), false);
-				return true;
+				phase = Phase.DONE;
+				return;
 			} else if(block.is(MSBlocks.SKAIANET_DENIER.get()))
 			{
 				player.displayClientMessage(Component.translatable(SKAIANET_DENIED, player.getDisplayName().getString(), pos.toShortString()), false);
-				return true;
+				phase = Phase.DONE;
+				return;
 			} else if(be instanceof ComputerBlockEntity computer)
 			{
 				if(computer.getOwner() != null && !computer.getOwner().appliesTo(player))
 				{
 					player.displayClientMessage(Component.translatable(NOT_YOUR_COMPUTER), false);
-					return true;
+					phase = Phase.DONE;
+					return;
 				}
 				
 				foundComputer = true;
 			}
 		}
 		
-		if(!foundComputer && MinestuckConfig.SERVER.needComputer.get())
+		if(!blockIterator.hasNext())
 		{
-			player.displayClientMessage(Component.translatable(NEEDS_COMPUTER), false);
-			return true;
+			if(!foundComputer && MinestuckConfig.SERVER.needComputer.get())
+			{
+				player.displayClientMessage(Component.translatable(NEEDS_COMPUTER), false);
+				phase = Phase.DONE;
+				return;
+			}
+			
+			blockIterator = EntryBlockIterator.get(origin.getX(), origin.getY(), origin.getZ(), artifactRange).iterator();
+			phase = Phase.COPYING;
 		}
-		
-		return false;
 	}
 	
-	private void copyBlocks(ServerLevel sourceLevel, ServerLevel targetLevel)
+	private void tickCopying(int budget)
 	{
-		for(BlockPos sourcePos : EntryBlockIterator.get(origin.getX(), origin.getY(), origin.getZ(), artifactRange))
+		int processed = 0;
+		while(blockIterator.hasNext() && processed < budget)
 		{
-			if(!sourceLevel.isInWorldBounds(sourcePos))
+			BlockPos sourcePos = blockIterator.next().immutable();
+			processed++;
+			
+			if(!originLevel.isInWorldBounds(sourcePos))
 				continue;
 			
-			sourcePos = sourcePos.immutable();
 			BlockPos targetPos = sourcePos.offset(xDiff, yDiff, zDiff);
 			
-			LevelChunk sourceChunk = sourceLevel.getChunkAt(sourcePos);
+			LevelChunk sourceChunk = originLevel.getChunkAt(sourcePos);
 			BlockState block = sourceChunk.getBlockState(sourcePos);
 			
 			if(block.is(Blocks.BEDROCK) || block.is(Blocks.NETHER_PORTAL))
 				block = Blocks.AIR.defaultBlockState();
 			
-			BlockCopier.copyBlock(sourceChunk, sourcePos, block, targetLevel.getChunkAt(targetPos), targetPos);
+			BlockCopier.copyBlock(sourceChunk, sourcePos, block, landLevel.getChunkAt(targetPos), targetPos);
+		}
+		
+		if(!blockIterator.hasNext())
+		{
+			blockIterator = null;
+			phase = Phase.TELEPORTING;
 		}
 	}
 	
-	private void finalizeEntry(ServerPlayer player, ServerLevel level0, ServerLevel level1, boolean wasInsideEntryArea)
+	private void tickTeleporting()
 	{
-		AABB entityTeleportBB = player.getBoundingBox().inflate(artifactRange + 0.5);
-		List<Entity> entities = level0.getEntities(player, entityTeleportBB);
-		moveOrCopyEntities(entities, level1);
-		
-		removeOriginalBlocks(level0);
-		
-		if(wasInsideEntryArea)
-			player.teleportTo(player.getX() + xDiff, player.getY() + yDiff, player.getZ() + zDiff);
-		else
-			player.teleportTo(origin.getX() + xDiff + 0.5, origin.getY() + yDiff, origin.getZ() + zDiff + 0.5);
-		
-		//Remove entities that were generated in the process of teleporting entities and removing blocks.
-		// This is usually caused by "anchored" blocks being updated between the removal of their anchor and their own removal.
-		if(!creative || MinestuckConfig.SERVER.entryCrater.get())
+		try
 		{
-			removeDroppedEntities(player, level0, entityTeleportBB, entities);
+			wasInsideEntryArea = player.level() == originLevel && player.distanceToSqr(origin.getX() + 0.5, origin.getY() + 0.5, origin.getZ() + 0.5) <= (double) artifactRange * artifactRange;
+			
+			if(Teleport.teleportEntity(player, landLevel) == null)
+			{
+				player.sendSystemMessage(Component.translatable(TELEPORT_FAILED));
+				phase = Phase.DONE;
+				return;
+			}
+			
+			entityTeleportBB = player.getBoundingBox().inflate(artifactRange + 0.5);
+			entities = originLevel.getEntities(player, entityTeleportBB);
+			moveOrCopyEntities(entities, landLevel);
+			
+			blockIterator = EntryBlockIterator.get(origin.getX(), origin.getY(), origin.getZ(), artifactRange).iterator();
+			phase = Phase.REMOVING;
+		} catch(Exception e)
+		{
+			LOGGER.error("Exception when {} tried to enter their land.", player.getName().getString(), e);
+			notifyException();
+			phase = Phase.DONE;
+		}
+	}
+	
+	private void tickRemoving(int budget)
+	{
+		int processed = 0;
+		while(blockIterator.hasNext() && processed < budget)
+		{
+			BlockPos pos = blockIterator.next();
+			processed++;
+			
+			if(!originLevel.isInWorldBounds(pos))
+				continue;
+			
+			removeBlockEntity(originLevel, pos, creative);
+			
+			if(MinestuckConfig.SERVER.entryCrater.get() && !originLevel.getBlockState(pos).is(Blocks.BEDROCK))
+			{
+				originLevel.setBlock(pos, Blocks.AIR.defaultBlockState(), Block.UPDATE_CLIENTS);
+			}
 		}
 		
-		placeGates(level1);
+		if(!blockIterator.hasNext())
+		{
+			blockIterator = null;
+			finishEntry();
+		}
+	}
+	
+	private void finishEntry()
+	{
+		try
+		{
+			if(wasInsideEntryArea)
+				player.teleportTo(player.getX() + xDiff, player.getY() + yDiff, player.getZ() + zDiff);
+			else
+				player.teleportTo(origin.getX() + xDiff + 0.5, origin.getY() + yDiff, origin.getZ() + zDiff + 0.5);
+			
+			//Remove entities that were generated in the process of teleporting entities and removing blocks.
+			// This is usually caused by "anchored" blocks being updated between the removal of their anchor and their own removal.
+			if(!creative || MinestuckConfig.SERVER.entryCrater.get())
+			{
+				removeDroppedEntities(player, originLevel, entityTeleportBB, entities);
+			}
+			
+			placeGates(landLevel);
+			
+			MSExtraData.get(landLevel).addPostEntryTask(new PostEntryTask(landLevel.dimension(), origin.getX() + xDiff, origin.getY() + yDiff, origin.getZ() + zDiff, artifactRange));
+			
+			com.mraof.minestuck.entry.meteor.MeteorManager.get(player.server).cancelCountdown(playerId);
+			
+			SburbHandler.onEntry(player.server, player);
+			
+			LOGGER.info("Entry finished in {}ms", System.currentTimeMillis() - creationTime);
+		} catch(Exception e)
+		{
+			notifyException();
+		} finally
+		{
+			phase = Phase.DONE;
+		}
+	}
+	
+	private void notifyException()
+	{
+		if(player != null)
+		{
+			player.sendSystemMessage(Component.translatable(EXCEPTION, (landLevel.getServer().isDedicatedServer() ? "Check the console for the error message." : "Notify the server owner about this.")).withStyle(ChatFormatting.RED));
+		}
+	}
+	
+	private void cleanup()
+	{
+		playersEntering.remove(playerId);
 		
-		MSExtraData.get(level1).addPostEntryTask(new PostEntryTask(level1.dimension(), origin.getX() + xDiff, origin.getY() + yDiff, origin.getZ() + zDiff, artifactRange));
+		if(!ticketRemoved)
+		{
+			landLevel.getChunkSource().removeRegionTicket(CHUNK_TICKET_TYPE, new ChunkPos(0, 0), 0, Unit.INSTANCE);
+			ticketRemoved = true;
+		}
 	}
 	
 	private static void removeDroppedEntities(ServerPlayer player, ServerLevel level0, AABB entityTeleportBB, List<Entity> entities)
@@ -347,22 +506,6 @@ public class EntryProcess
 		}
 	}
 	
-	private void removeOriginalBlocks(ServerLevel level0)
-	{
-		for(BlockPos pos : EntryBlockIterator.get(origin.getX(), origin.getY(), origin.getZ(), artifactRange))
-		{
-			if(!level0.isInWorldBounds(pos))
-				continue;
-			
-			removeBlockEntity(level0, pos, creative);
-			
-			if(MinestuckConfig.SERVER.entryCrater.get() && !level0.getBlockState(pos).is(Blocks.BEDROCK))
-			{
-				level0.setBlock(pos, Blocks.AIR.defaultBlockState(), Block.UPDATE_CLIENTS);
-			}
-		}
-	}
-	
 	private void moveOrCopyEntities(List<Entity> entities, ServerLevel level1)
 	{
 		//The fudge here is to ensure that the AABB will always contain every entity meant to be moved.
@@ -371,7 +514,7 @@ public class EntryProcess
 		while(iterator.hasNext())
 		{
 			Entity entity = iterator.next();
-			if(origin.distToCenterSqr(entity.getX(), entity.getY(), entity.getZ()) <= artifactRange * artifactRange)
+			if(origin.distToCenterSqr(entity.getX(), entity.getY(), entity.getZ()) <= (double) artifactRange * artifactRange)
 			{
 				if(entity instanceof KernelspriteEntity kernelsprite)
 					kernelsprite.setBoundOrigin(new BlockPos(0, GateHandler.GATE_HEIGHT_1, 0));
@@ -462,20 +605,14 @@ public class EntryProcess
 	 */
 	private int getTopHeight(ServerLevel level, int x, int y, int z)
 	{
-		LOGGER.debug("Getting maxY..");
 		int maxY = y;
 		for(BlockPos.MutableBlockPos pos : EntryBlockIterator.getHorizontal(x, y, z, artifactRange))
 		{
-			int height = EntryBlockIterator.yReach(pos, artifactRange, x, z);
-			for(int blockY = Math.min(level.getMaxBuildHeight(), y + height); blockY > maxY; blockY--)
-				if(!level.isEmptyBlock(pos.setY(blockY)))
-				{
-					maxY = blockY;
-					break;
-				}
+			int height = level.getHeight(Heightmap.Types.WORLD_SURFACE, pos.getX(), pos.getZ()) - 1;
+			if(height > maxY)
+				maxY = height;
 		}
 		
-		LOGGER.debug("maxY: {}", maxY);
 		return maxY;
 	}
 	

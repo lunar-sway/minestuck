@@ -1,0 +1,198 @@
+{
+	"format_version": "1.12.0",
+	"minecraft:geometry": [
+		{
+			"description": {
+				"identifier": "geometry.meteor",
+				"texture_width": 256,
+				"texture_height": 256,
+				"visible_bounds_width": 5,
+				"visible_bounds_height": 9.5,
+				"visible_bounds_offset": [0, 4.25, 0]
+			},
+			"bones": [
+				{
+					"name": "group",
+					"pivot": [0, 10, 8],
+					"rotation": [90, 0, 0]
+				},
+				{
+					"name": "inferno",
+					"parent": "group",
+					"pivot": [0, 10, 8],
+					"cubes": [
+						{
+							"origin": [-24, -6, -1.8],
+							"size": [48, 48, 0],
+							"uv": {
+								"north": {"uv": [0, 79], "uv_size": [48, 48]}
+							}
+						}
+					]
+				},
+				{
+					"name": "beam",
+					"parent": "group",
+					"pivot": [0, 10, 8],
+					"cubes": [
+						{
+							"origin": [-19.5, -6, -32],
+							"size": [0, 48, 126],
+							"pivot": [-9.75, 19, 47],
+							"rotation": [0, 180, 0],
+							"uv": {
+								"east": {"uv": [48, 80], "uv_size": [126, 48]}
+							}
+						}
+					]
+				},
+				{
+					"name": "beam2",
+					"parent": "group",
+					"pivot": [-8, 18, 8],
+					"rotation": [0, 0, 90],
+					"cubes": [
+						{
+							"origin": [-27.5, 2, -32],
+							"size": [0, 48, 126],
+							"pivot": [-17.75, 27, 47],
+							"rotation": [0, 180, 0],
+							"uv": {
+								"east": {"uv": [48, 80], "uv_size": [126, 48]}
+							}
+						}
+					]
+				},
+				{
+					"name": "root",
+					"parent": "group",
+					"pivot": [0, 18, 8],
+					"cubes": [
+						{"origin": [-8, 10, 0], "size": [16, 16, 16], "uv": [0, 0]}
+					],
+					"locators": {
+						"locator": [0, 27, 10]
+					}
+				},
+				{
+					"name": "crater",
+					"parent": "root",
+					"pivot": [7, 10, 1],
+					"cubes": [
+						{"origin": [8, 15, 2], "size": [1, 9, 9], "uv": [70, 29]}
+					]
+				},
+				{
+					"name": "crater2",
+					"parent": "root",
+					"pivot": [-10, 8, 3],
+					"cubes": [
+						{"origin": [-9, 12, 7], "size": [1, 7, 7], "uv": [0, 42]}
+					]
+				},
+				{
+					"name": "crater3",
+					"parent": "root",
+					"pivot": [-10, 15, -4],
+					"cubes": [
+						{"origin": [-9, 19, 1], "size": [1, 5, 5], "uv": [0, 32]},
+						{"origin": [-9, 20, 2], "size": [1, 3, 3], "uv": [12, 34]}
+					]
+				},
+				{
+					"name": "crater4",
+					"parent": "root",
+					"pivot": [7, 8, 15],
+					"cubes": [
+						{"origin": [-7, 11, 16], "size": [14, 14, 1], "uv": [64, 1]},
+						{"origin": [-6, 12, 16], "size": [12, 12, 1], "uv": [66, 16]}
+					]
+				},
+				{
+					"name": "crater5",
+					"parent": "root",
+					"pivot": [7, 8, -2],
+					"cubes": [
+						{"origin": [0, 11, -1], "size": [7, 7, 1], "uv": [0, 8]},
+						{"origin": [1, 12, -1], "size": [5, 5, 1], "uv": [2, 2]},
+						{"origin": [-6, 20, -1], "size": [3, 3, 1], "uv": [48, 12]}
+					]
+				},
+				{
+					"name": "crater6",
+					"parent": "root",
+					"pivot": [12, -9, 17],
+					"cubes": [
+						{"origin": [-2, 9, 6], "size": [8, 1, 8], "uv": [30, 41]}
+					]
+				},
+				{
+					"name": "crater7",
+					"parent": "root",
+					"pivot": [7, 8, 15],
+					"cubes": [
+						{"origin": [-7, 26, 4], "size": [8, 1, 8], "uv": [30, 32]}
+					]
+				},
+				{
+					"name": "tail",
+					"parent": "group",
+					"pivot": [0, 17, 16],
+					"locators": {
+						"locator2": [0, 18, 17]
+					}
+				},
+				{
+					"name": "smoke",
+					"parent": "tail",
+					"pivot": [0, 18, 22],
+					"cubes": [
+						{"origin": [-5, 13, 17], "size": [10, 10, 10], "uv": [0, 56]}
+					]
+				},
+				{
+					"name": "outsmoke",
+					"parent": "tail",
+					"pivot": [0, 18, 22],
+					"cubes": [
+						{"origin": [-5, 13, 17], "size": [10, 10, 10], "inflate": 0.2, "uv": [88, 38]}
+					]
+				},
+				{
+					"name": "tail2",
+					"parent": "tail",
+					"pivot": [0, 17, 26]
+				},
+				{
+					"name": "smoke2",
+					"parent": "tail2",
+					"pivot": [0, 18, 32],
+					"cubes": [
+						{"origin": [-5, 13, 27], "size": [10, 10, 10], "uv": [0, 56]}
+					]
+				},
+				{
+					"name": "outsmoke2",
+					"parent": "tail2",
+					"pivot": [0, 18, 32],
+					"cubes": [
+						{"origin": [-5, 13, 27], "size": [10, 10, 10], "inflate": 0.2, "uv": [88, 38]}
+					]
+				},
+				{
+					"name": "tail3",
+					"parent": "tail2",
+					"pivot": [0, 17, 39]
+				},
+				{
+					"name": "outsmoke3",
+					"parent": "tail3",
+					"pivot": [0, 18, 45],
+					"cubes": [
+						{"origin": [-5, 13, 40], "size": [10, 10, 10], "inflate": 0.2, "uv": [88, 58]}
+					]
+				}
+			]
+		}
+	]
+}
