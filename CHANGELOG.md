@@ -6,6 +6,8 @@ The format is based on [Keep a Changelog](https://keepachangelog.com/en/1.1.0/).
 
 ## [Unreleased]
 
+## [1.21.1-1.14.1.0] - 2026-10-25
+
 ### Added
 
 - GristTorrent Computer App
@@ -34,7 +36,7 @@ The format is based on [Keep a Changelog](https://keepachangelog.com/en/1.1.0/).
 
 ### Contributors for this release
 
-- Dweblenod, Cibernet, Riotmode, kirderf1, medsal15, Caldw3ll, Fl1s, Emma "Dilemma", EnderTurret
+- Dweblenod, Cibernet, Riotmode, kirderf1, medsal15, Caldw3ll, Fl1s, Emma "Dilemma", EnderTurret, heartsremedy
 
 ## [1.21.1-1.14.0.1] - 2026-06-01
 
