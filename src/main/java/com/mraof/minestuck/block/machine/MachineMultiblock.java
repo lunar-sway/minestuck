@@ -148,6 +148,23 @@ public abstract class MachineMultiblock implements ItemLike    //An abstraction 
 		return placements;
 	}
 	
+	public Optional<Placement> findValidPlacement(BlockGetter level, BlockPos pos, BlockState state)
+	{
+		for(Placement placement : guessPlacement(pos, state))
+			if(!isInvalid(level, placement))
+				return Optional.of(placement);
+		return Optional.empty();
+	}
+	
+	public List<BlockPos> getRequiredPositions(Placement placement)
+	{
+		List<BlockPos> positions = new ArrayList<>();
+		for(PlacementEntry entry : blockEntries)
+			if(entry.mustExist)
+				positions.add(entry.getPos(placement));
+		return positions;
+	}
+	
 	public void removeAt(LevelAccessor level, Placement placement)
 	{
 		for(PlacementEntry entry : blockEntries)

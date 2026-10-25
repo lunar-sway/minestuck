@@ -334,8 +334,9 @@ public final class MinestuckBlockTagsProvider extends BlockTagsProvider
 		tag(PLATFORM_ABSORBING).addTag(Tags.Blocks.OBSIDIANS).add(Blocks.BEDROCK, Blocks.NETHER_PORTAL, Blocks.END_PORTAL, Blocks.END_PORTAL_FRAME, Blocks.REINFORCED_DEEPSLATE, PUSHABLE_BLOCK.get()); //excludes Platform Receptacle blocks as they only absorb conditionally
 		tag(PUSHABLE_BLOCK_REPLACEABLE).addTags(SAPLINGS, FLOWERS);
 		tag(PETRIFIED_FLORA_PLACEABLE).addTags(Tags.Blocks.STONES, Tags.Blocks.COBBLESTONES, Tags.Blocks.GRAVELS);
-		tag(EDITMODE_BREAK_BLACKLIST).addTags(BlockTags.PORTALS);
+		tag(EDITMODE_BREAK_BLACKLIST).addTags(BlockTags.PORTALS).add(Blocks.SPAWNER, Blocks.TRIAL_SPAWNER, Blocks.VAULT, Blocks.REINFORCED_DEEPSLATE);
 		tag(FARMINE_BREAK_BLACKLIST).add(Blocks.OBSIDIAN);
+		tag(HEAVY_BLOCKS).add(Blocks.ANVIL, Blocks.CHIPPED_ANVIL, Blocks.DAMAGED_ANVIL, Blocks.POINTED_DRIPSTONE);
 	}
 	
 	@Override

@@ -943,6 +943,66 @@
       }
     ]
   },
+  "event.edit_tools.select": {
+    "category": "ambient",
+    "subtitle": "subtitles.minestuck.tool_select",
+    "sounds": [
+      {
+        "name": "minestuck:random/tool_select",
+        "stream": false
+      }
+    ]
+  },
+  "event.edit_tools.clear": {
+    "category": "ambient",
+    "subtitle": "subtitles.minestuck.tool_clear",
+    "sounds": [
+      {
+        "name": "minestuck:random/tool_clear",
+        "stream": false
+      }
+    ]
+  },
+  "event.edit_tools.move": {
+    "category": "ambient",
+    "subtitle": "subtitles.minestuck.tool_move",
+    "sounds": [
+      {
+        "name": "minestuck:random/tool_move",
+        "stream": false
+      }
+    ]
+  },
+  "event.edit_tools.copy": {
+    "category": "ambient",
+    "subtitle": "subtitles.minestuck.tool_copy",
+    "sounds": [
+      {
+        "name": "minestuck:random/tool_copy",
+        "stream": false
+      }
+    ]
+  },
+  "event.edit_mode.enter": {
+    "category": "ambient",
+    "subtitle": "subtitles.minestuck.editmode_enter",
+    "sounds": [
+      {
+        "name": "minestuck:random/editmode_enter",
+        "stream": false
+      }
+    ]
+  },
+  "event.edit_mode.exit": {
+    "category": "ambient",
+    "subtitle": "subtitles.minestuck.editmode_exit",
+    "sounds": [
+      {
+        "name": "minestuck:random/editmode_exit",
+        "stream": false
+      }
+    ]
+  },
   "block.computer.boot": {
     "category": "block",
     "subtitle": "subtitles.minestuck.computer_boot",

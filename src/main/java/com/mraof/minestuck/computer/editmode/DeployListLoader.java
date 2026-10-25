@@ -144,30 +144,29 @@ public class DeployListLoader extends SimpleJsonResourceReloadListener
 			{
 				ItemStack stack = entry.stack.copy();
 				stack.setCount(1);
-				set = GristCostRecipe.findCostForItem(stack, null, false, ServerLifecycleHooks.getCurrentServer().overworld()).mutableCopy();
+				GristSet baseCost = GristCostRecipe.findCostForItem(stack, null, false, ServerLifecycleHooks.getCurrentServer().overworld());
+				if(baseCost == null)
+					return null;
+				set = baseCost.mutableCopy();
+				return set.asImmutable();
 			}
 			
 			MinecraftServer server = ServerLifecycleHooks.getCurrentServer();
-			if(server == null) return set.asImmutable();
-			ServerPlayer player = playerData.playerId().getPlayer(server);
-			if(player == null) return set.asImmutable();
+			ServerPlayer player = server != null ? playerData.playerId().getPlayer(server) : null;
 			
 			for(GristCost cost : entry.cost)
 			{
-				if(cost.test(this.getContext(), player))
-				{
-					if(cost.grist.isPresent())
-					{
-						set.add(cost.grist.get());
-					}
-					if(cost.primary != 0)
-					{
-						set.add(playerData.getBaseGrist(), cost.primary);
-					}
-					break;
-				}
+				boolean qualifies = player != null ? cost.test(this.getContext(), player) : cost.testWithoutPlayer(this.getContext());
+				if(!qualifies)
+					continue;
+				
+				if(cost.grist().isPresent())
+					set.add(cost.grist().get());
+				if(cost.primary() != 0)
+					set.add(playerData.getBaseGrist(), cost.primary());
+				return set.asImmutable();
 			}
-			return set.asImmutable();
+			return null;
 		};
 	}
 	
@@ -202,6 +201,17 @@ public class DeployListLoader extends SimpleJsonResourceReloadListener
 			for(PlayerOnlyCondition condition : clientConditions)
 			{
 				if(!condition.test(player)) return false;
+			}
+			return true;
+		}
+		
+		public boolean testWithoutPlayer(ICondition.IContext context)
+		{
+			if(!clientConditions.isEmpty())
+				return false;
+			for(ICondition condition : neoforgeConditions)
+			{
+				if(!condition.test(context)) return false;
 			}
 			return true;
 		}
