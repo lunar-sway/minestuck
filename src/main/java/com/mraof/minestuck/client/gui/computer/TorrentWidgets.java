@@ -24,14 +24,19 @@ import net.minecraft.network.chat.Component;
 import net.minecraft.network.chat.MutableComponent;
 import net.minecraft.resources.ResourceLocation;
 import net.neoforged.neoforge.network.PacketDistributor;
+import org.lwjgl.glfw.GLFW;
 
 import java.util.*;
 import java.util.concurrent.atomic.AtomicInteger;
 
+import static com.mraof.minestuck.client.gui.computer.GristTorrentGui.*;
+
 public class TorrentWidgets
 {
-	static final ResourceLocation TORRENT_MISC = com.mraof.minestuck.Minestuck.id("textures/gui/torrent_misc.png");
+	private static final ResourceLocation TORRENT_MISC = com.mraof.minestuck.Minestuck.id("textures/gui/torrent_misc.png");
 	private static final ResourceLocation COLOR_SELECTOR_TEX = ResourceLocation.fromNamespaceAndPath("minestuck", "textures/gui/color_selector.png");
+	
+	public static final int ICON_SIZE = 16;
 	
 	static int scale(int input)
 	{
@@ -45,11 +50,8 @@ public class TorrentWidgets
 		RenderSystem.setShader(GameRenderer::getPositionTexShader);
 		RenderSystem.setShaderTexture(0, icon);
 		
-		int iconW = 16;
-		int iconH = 16;
-		
-		float scaledW = iconW * iconScale;
-		float scaledH = iconH * iconScale;
+		float scaledW = ICON_SIZE * iconScale;
+		float scaledH = ICON_SIZE * iconScale;
 		
 		BufferBuilder render = Tesselator.getInstance()
 				.begin(VertexFormat.Mode.QUADS, DefaultVertexFormat.POSITION_TEX);
@@ -61,6 +63,7 @@ public class TorrentWidgets
 		
 		BufferUploader.drawWithShader(render.buildOrThrow());
 	}
+	
 	protected static void drawIcon(int x, int y, ResourceLocation icon)
 	{
 		if(icon == null) return;
@@ -70,19 +73,17 @@ public class TorrentWidgets
 		
 		float scale = (float) 1 / 16;
 		
-		int iconX = 16;
-		int iconY = 16;
 		int iconU = 0;
 		int iconV = 0;
 		
-		float scaledIconX = (float) iconX * 0.65F;
-		float scaledIconY = (float) iconY * 0.65F;
+		float scaledIconX = (float) ICON_SIZE * 0.65F;
+		float scaledIconY = (float) ICON_SIZE * 0.65F;
 		
 		BufferBuilder render = Tesselator.getInstance().begin(VertexFormat.Mode.QUADS, DefaultVertexFormat.POSITION_TEX);
 		
-		render.addVertex(x, y + scaledIconY, 0).setUv((iconU) * scale, (iconV + iconY) * scale);
-		render.addVertex(x + scaledIconX, y + scaledIconY, 0).setUv((iconU + iconX) * scale, (iconV + iconY) * scale);
-		render.addVertex(x + scaledIconX, y, 0).setUv((iconU + iconX) * scale, (iconV) * scale);
+		render.addVertex(x, y + scaledIconY, 0).setUv((iconU) * scale, (iconV + ICON_SIZE) * scale);
+		render.addVertex(x + scaledIconX, y + scaledIconY, 0).setUv((iconU + ICON_SIZE) * scale, (iconV + ICON_SIZE) * scale);
+		render.addVertex(x + scaledIconX, y, 0).setUv((iconU + ICON_SIZE) * scale, (iconV) * scale);
 		render.addVertex(x, y, 0).setUv((iconU) * scale, (iconV) * scale);
 		
 		BufferUploader.drawWithShader(render.buildOrThrow());
@@ -141,9 +142,9 @@ public class TorrentWidgets
 			MutableComponent tooltip = gristType.getDisplayName();
 			
 			if(isOwner)
-				tooltip.append(Component.translatable(on ? GristTorrentGui.TOOLTIP_SEEDING_ON : GristTorrentGui.TOOLTIP_SEEDING_OFF));
+				tooltip.append(Component.translatable(on ? TOOLTIP_SEEDING_ON : TOOLTIP_SEEDING_OFF));
 			else
-				tooltip.append(Component.translatable(on ? GristTorrentGui.TOOLTIP_LEECHING_ON : GristTorrentGui.TOOLTIP_LEECHING_OFF));
+				tooltip.append(Component.translatable(on ? TOOLTIP_LEECHING_ON : TOOLTIP_LEECHING_OFF));
 			
 			setTooltip(Tooltip.create(tooltip));
 		}
@@ -171,7 +172,7 @@ public class TorrentWidgets
 				guiGraphics.drawString(font, amountText, scale(gristCountXMod), scale(gristIconYMod + 7), 0x19b3ef, false);
 				
 				//renders bars
-				guiGraphics.fill(scale(gristCountXMod), scale(gristIconYMod + 1), scale((int) (gristCountXMod + BAR_WIDTH)), scale(gristIconYMod + 6), GristTorrentGui.DARK_GREY);
+				guiGraphics.fill(scale(gristCountXMod), scale(gristIconYMod + 1), scale((int) (gristCountXMod + BAR_WIDTH)), scale(gristIconYMod + 6), DARK_GREY);
 				if(cacheLimit > 0)
 				{
 					double gristFraction = Math.min(1D, (double) gristAmount / cacheLimit);
@@ -186,7 +187,7 @@ public class TorrentWidgets
 		private int getColor()
 		{
 			//is gray unless active, at which point color is determined by whether it is owned by the user
-			int color = GristTorrentGui.GREY;
+			int color = GREY;
 			
 			if(isActive)
 				color = isOwner ? 0xFF00FF00 : 0xFFFF0000;
@@ -332,7 +333,7 @@ public class TorrentWidgets
 			guiGraphics.pose().pushPose();
 			guiGraphics.pose().scale(0.5F, 0.5F, 0.5F);
 			
-			guiGraphics.drawString(font, displayName, scale(getX() + 1), scale(getY() + 10), 0xFF000000, false);
+			guiGraphics.drawString(font, displayName, scale(getX() + 1), scale(getY() + 10), BLACK, false);
 			
 			guiGraphics.pose().popPose();
 			guiGraphics.disableScissor();
@@ -485,7 +486,7 @@ public class TorrentWidgets
 		@Override
 		protected boolean isValidClickButton(int pButton)
 		{
-			return pButton == 0;
+			return pButton == GLFW.GLFW_MOUSE_BUTTON_1;
 		}
 		
 		@Override
@@ -539,11 +540,6 @@ public class TorrentWidgets
 		{
 			return Math.max(0, children().size() - VISIBLE_COUNT);
 		}
-		
-		@Override
-		protected void updateWidgetNarration(NarrationElementOutput output)
-		{
-		}
 	}
 	
 	protected static class GateIcon extends AbstractWidget
@@ -591,7 +587,7 @@ public class TorrentWidgets
 	{
 		public static final int X_OFFSET_FROM_EDGE = 50;
 		public static final int Y_OFFSET_FROM_EDGE = 130;
-		public static final int WIDTH = GristTorrentGui.GUI_WIDTH - X_OFFSET_FROM_EDGE;
+		public static final int WIDTH = GUI_WIDTH - X_OFFSET_FROM_EDGE;
 		public static final int HEIGHT = 12;
 		public static final int TEXT_Y_OFFSET = 5;
 		
@@ -642,21 +638,21 @@ public class TorrentWidgets
 			typeDownSpeedRange = ZERO_PAIR;
 			typeUpSpeed = 0;
 			
-			userData = GristTorrentGui.visibleTorrentData.get(ownerId);
+			userData = visibleTorrentData.get(ownerId);
 			if(userData == null) return;
 			
 			int minDownSpeed = Integer.MAX_VALUE;
 			int maxDownSpeed = 1;
 			AtomicInteger totalSeeds = new AtomicInteger();
 			
-			userIsLeeching = GristTorrentGui.visibleTorrentData.entrySet().stream()
+			userIsLeeching = visibleTorrentData.entrySet().stream()
 					.filter(e -> e.getKey() != ownerId)
 					.anyMatch(e -> e.getValue().leeches()
 							.getOrDefault(ownerId, Collections.emptyList())
 							.contains(gristType));
 			
 			List<TorrentSession.TorrentClientData> filteredData = new ArrayList<>();
-			GristTorrentGui.visibleTorrentData.forEach((key, value) -> {
+			visibleTorrentData.forEach((key, value) -> {
 				if(key == ownerId) return;
 				
 				boolean couldSeed = value.cache().set().asAmounts().stream().anyMatch(gristAmount -> gristAmount.hasType(gristType) && !gristAmount.isEmpty());
@@ -710,16 +706,16 @@ public class TorrentWidgets
 				int textY = scale(y + TEXT_Y_OFFSET);
 				
 				//down
-				guiGraphics.drawString(font, downText, scale(x + 21), textY, GristTorrentGui.LIGHT_BLUE, false);
+				guiGraphics.drawString(font, downText, scale(x + 21), textY, LIGHT_BLUE, false);
 				
 				//up
-				guiGraphics.drawString(font, upText, scale(x + 56), textY, GristTorrentGui.LIGHT_BLUE, false);
+				guiGraphics.drawString(font, upText, scale(x + 56), textY, LIGHT_BLUE, false);
 				
 				//seeds
-				guiGraphics.drawString(font, seedsText, scale(x + 86), textY, GristTorrentGui.LIGHT_BLUE, false);
+				guiGraphics.drawString(font, seedsText, scale(x + 86), textY, LIGHT_BLUE, false);
 				
 				//downloaded
-				guiGraphics.drawString(font, downloadedText, scale(x + 108), textY, GristTorrentGui.LIGHT_BLUE, false);
+				guiGraphics.drawString(font, downloadedText, scale(x + 108), textY, LIGHT_BLUE, false);
 			});
 			
 			guiGraphics.pose().popPose();
@@ -730,7 +726,7 @@ public class TorrentWidgets
 			return typeDownSpeedRange.getSecond() > 0 || typeUpSpeed > 0;
 		}
 		
-		public boolean matchesFilter(GristTorrentGui.TorrentFilter filter)
+		public boolean matchesFilter(TorrentFilter filter)
 		{
 			boolean isCompleted = userIsLeeching && (seedsData.getSecond() == 0 || userData.cache().set().getGrist(gristType) >= userData.cache().limit());
 			return switch(filter)
@@ -771,7 +767,7 @@ public class TorrentWidgets
 		public static final int Y_OFFSET_FROM_EDGE = 128;
 		public static final int WIDTH = GristStat.X_OFFSET_FROM_EDGE - X_OFFSET_FROM_EDGE - 5;
 		public static final int ROW_HEIGHT = 6;
-		private static final GristTorrentGui.TorrentFilter[] FILTERS = GristTorrentGui.TorrentFilter.values();
+		private static final TorrentFilter[] FILTERS = TorrentFilter.values();
 		public static final int HEIGHT = ROW_HEIGHT * FILTERS.length + 6;
 		public static final int ICON_WIDTH = 7;
 		public static final int ICON_HEIGHT = 7;
@@ -780,7 +776,7 @@ public class TorrentWidgets
 		private final int[] filterCounts = new int[FILTERS.length];
 		private final String[] labels = new String[FILTERS.length];
 		
-		public GristTorrentGui.TorrentFilter activeFilter = GristTorrentGui.TorrentFilter.ALL;
+		public TorrentFilter activeFilter = TorrentFilter.ALL;
 		private final Font font;
 		private final GristTorrentGui gui;
 		private final int ownerId;
@@ -822,11 +818,11 @@ public class TorrentWidgets
 			guiGraphics.drawManaged(() -> {
 				for(int i = 0; i < FILTERS.length; i++)
 				{
-					GristTorrentGui.TorrentFilter filter = FILTERS[i];
+					TorrentFilter filter = FILTERS[i];
 					
 					int y = scale(getY() + i * ROW_HEIGHT + 5);
 					guiGraphics.blit(TORRENT_MISC, scale(getX() - 7), scale(getY() + i * ROW_HEIGHT + 4), 10, 10, START_U + i * 7, START_V, ICON_WIDTH, ICON_HEIGHT, 256, 256);
-					int color = filter == activeFilter ? GristTorrentGui.LIGHT_BLUE : GristTorrentGui.DARK_GREY;
+					int color = filter == activeFilter ? LIGHT_BLUE : DARK_GREY;
 					
 					guiGraphics.drawString(font, labels[i], x + 2, y, color, false);
 				}
@@ -839,7 +835,7 @@ public class TorrentWidgets
 		public void onClick(double mouseX, double mouseY, int button)
 		{
 			double relativeY = mouseY - getY();
-
+			
 			int index = (int) (relativeY - 5) / ROW_HEIGHT;
 			if(index >= 0 && index < FILTERS.length)
 			{
@@ -852,7 +848,7 @@ public class TorrentWidgets
 		@Override
 		protected boolean isValidClickButton(int pButton)
 		{
-			return pButton == 0;
+			return pButton == GLFW.GLFW_MOUSE_BUTTON_1;
 		}
 		
 		@Override
@@ -895,7 +891,7 @@ public class TorrentWidgets
 			return allStats;
 		}
 		
-		public void refresh(GristTorrentGui.TorrentFilter filter)
+		public void refresh(TorrentFilter filter)
 		{
 			this.children().clear();
 			
@@ -908,17 +904,17 @@ public class TorrentWidgets
 					this.children().add(stat);
 			}
 			
-			scroll = Math.max(0, Math.min(scroll, getMaxScroll()));
+			scroll = Math.clamp(scroll, 0, getMaxScroll());
 			this.updateVisibilityAndPosition();
 		}
 		
 		public void trackDownloads()
 		{
-			TorrentSession.TorrentClientData ownerData = GristTorrentGui.visibleTorrentData.get(ownerId);
+			TorrentSession.TorrentClientData ownerData = visibleTorrentData.get(ownerId);
 			if(ownerData == null) return;
 			
 			Set<GristType> leechedTypes = new HashSet<>();
-			for(Map.Entry<Integer, TorrentSession.TorrentClientData> e : GristTorrentGui.visibleTorrentData.entrySet())
+			for(Map.Entry<Integer, TorrentSession.TorrentClientData> e : visibleTorrentData.entrySet())
 			{
 				if(e.getKey() == ownerId) continue;
 				leechedTypes.addAll(e.getValue().leeches().getOrDefault(ownerId, Collections.emptyList()));
@@ -949,11 +945,11 @@ public class TorrentWidgets
 			
 			guiGraphics.drawManaged(() -> {
 				int y = scale(getY() + 2);
-				guiGraphics.drawString(font, HEADER_GRIST, scale(getX() + 2), y, GristTorrentGui.LIGHT_BLUE, false);
-				guiGraphics.drawString(font, HEADER_DOWN, scale(getX() + 20), y, GristTorrentGui.LIGHT_BLUE, false);
-				guiGraphics.drawString(font, HEADER_UP, scale(getX() + 55), y, GristTorrentGui.LIGHT_BLUE, false);
-				guiGraphics.drawString(font, HEADER_SEEDS, scale(getX() + 85), y, GristTorrentGui.LIGHT_BLUE, false);
-				guiGraphics.drawString(font, HEADER_DOWNLOADED, scale(getX() + 107), y, GristTorrentGui.LIGHT_BLUE, false);
+				guiGraphics.drawString(font, HEADER_GRIST, scale(getX() + 2), y, LIGHT_BLUE, false);
+				guiGraphics.drawString(font, HEADER_DOWN, scale(getX() + 20), y, LIGHT_BLUE, false);
+				guiGraphics.drawString(font, HEADER_UP, scale(getX() + 55), y, LIGHT_BLUE, false);
+				guiGraphics.drawString(font, HEADER_SEEDS, scale(getX() + 85), y, LIGHT_BLUE, false);
+				guiGraphics.drawString(font, HEADER_DOWNLOADED, scale(getX() + 107), y, LIGHT_BLUE, false);
 			});
 			
 			guiGraphics.pose().popPose();
@@ -989,11 +985,6 @@ public class TorrentWidgets
 		{
 			return Math.max(0, this.children().size() - visibleEntryCount());
 		}
-		
-		@Override
-		protected void updateWidgetNarration(NarrationElementOutput narrationElementOutput)
-		{
-		}
 	}
 	
 	protected static class GutterBar extends AbstractWidget
@@ -1007,7 +998,7 @@ public class TorrentWidgets
 			GristType gristType = gristAmount.type();
 			
 			if(gristType == GristTypes.BUILD.get() || gristType == GristTypes.DIAMOND.get())
-				color = GristTorrentGui.LIGHT_BLUE;
+				color = LIGHT_BLUE;
 			else if(gristType == GristTypes.MARBLE.get()) color = 0xFFFFC0CB; //pink
 			else color = gristType.getUnderlingColor();
 			
@@ -1030,7 +1021,7 @@ public class TorrentWidgets
 		
 		private int getColor()
 		{
-			return (color & 0xFF000000) != 0 ? color : (0xFF000000 | color);
+			return (color & BLACK) != 0 ? color : (BLACK | color);
 		}
 		
 		@Override
@@ -1111,6 +1102,11 @@ public class TorrentWidgets
 		{
 			return false;
 		}
+		
+		@Override
+		protected void updateWidgetNarration(NarrationElementOutput narrationElementOutput)
+		{
+		}
 	}
 	
 	protected static class HorizontalScrollBar extends AbstractWidget
@@ -1126,13 +1122,13 @@ public class TorrentWidgets
 		@Override
 		protected void renderWidget(GuiGraphics guiGraphics, int mouseX, int mouseY, float partialTick)
 		{
-			guiGraphics.fill(getX(), getY(), getX() + width, getY() + height, GristTorrentGui.LIGHT_GREY);
+			guiGraphics.fill(getX(), getY(), getX() + width, getY() + height, LIGHT_GREY);
 			
 			int total = target.children().size();
 			int maxScroll = target.getMaxScroll();
 			if(total > 0 && maxScroll > 0)
 			{
-				TorrentSession.TorrentClientData userData = GristTorrentGui.visibleTorrentData.get(SkaiaClient.playerId);
+				TorrentSession.TorrentClientData userData = visibleTorrentData.get(SkaiaClient.playerId);
 				int thumbColor = getPlayerColor(userData);
 				
 				int thumbWidth = Math.max(4, width * target.visibleEntryCount() / total);
@@ -1225,7 +1221,7 @@ public class TorrentWidgets
 		
 		public void setScroll(int newScroll)
 		{
-			this.scroll = Math.max(0, Math.min(getMaxScroll(), newScroll));
+			this.scroll = Math.clamp(getMaxScroll(), 0, newScroll);
 			updateVisibilityAndPosition();
 		}
 		
@@ -1264,6 +1260,11 @@ public class TorrentWidgets
 		{
 			return false;
 		}
+		
+		@Override
+		protected void updateWidgetNarration(NarrationElementOutput output)
+		{
+		}
 	}
 	
 	static int getPlayerColor(TorrentSession.TorrentClientData data)
@@ -1271,27 +1272,39 @@ public class TorrentWidgets
 		if(data != null && data.status() == 2)
 		{
 			int base = data.playerColor();
-			int r = Math.min(redComponent(base)   + 40, 255);
+			int r = Math.min(redComponent(base) + 40, 255);
 			int g = Math.min(greenComponent(base) + 40, 255);
-			int b = Math.min(blueComponent(base)  + 40, 255);
-			return 0xFF000000 | (r << 16) | (g << 8) | b;
+			int b = Math.min(blueComponent(base) + 40, 255);
+			return BLACK | (r << 16) | (g << 8) | b;
 		}
-		return GristTorrentGui.LIGHT_BLUE;
+		return LIGHT_BLUE;
 	}
-	static int redComponent(int color)   { return (color >> 16) & 0xFF; }
-	static int greenComponent(int color) { return (color >> 8)  & 0xFF; }
-	static int blueComponent(int color)  { return  color        & 0xFF; }
+	
+	static int redComponent(int color)
+	{
+		return (color >> 16) & 0xFF;
+	}
+	
+	static int greenComponent(int color)
+	{
+		return (color >> 8) & 0xFF;
+	}
+	
+	static int blueComponent(int color)
+	{
+		return color & 0xFF;
+	}
 	
 	static void applyShaderColor(int packedColor)
 	{
 		RenderSystem.setShaderColor(
-				redComponent(packedColor)   / 255F,
+				redComponent(packedColor) / 255F,
 				greenComponent(packedColor) / 255F,
-				blueComponent(packedColor)  / 255F,
+				blueComponent(packedColor) / 255F,
 				1.0F
 		);
 	}
-
+	
 	static void applyPlayerShaderColor(TorrentSession.TorrentClientData data)
 	{
 		if(data != null && data.status() == 2)

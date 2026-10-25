@@ -20,7 +20,6 @@ public class GristCacheScreen extends PlayerStatsScreen
 
 	public GristCacheScreen()
 	{
-		//TODO hide title
 		super(Component.translatable(TITLE));
 		guiWidth = 226;
 		guiHeight = 190;

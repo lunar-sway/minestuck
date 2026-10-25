@@ -123,7 +123,7 @@ public abstract class MinestuckScreen extends Screen
 		int iconY = 16;
 		int iconU = 0;
 		int iconV = 0;
-
+		
 		BufferBuilder buffer = Tesselator.getInstance().begin(VertexFormat.Mode.QUADS, DefaultVertexFormat.POSITION_TEX);
 		buffer.addVertex(x, y + iconY, 0).setUv((iconU) * scale, (iconV + iconY) * scale);
 		buffer.addVertex(x + iconX, y + iconY, 0).setUv((iconU + iconX) * scale, (iconV + iconY) * scale);

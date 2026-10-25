@@ -190,10 +190,11 @@ public class EcheladderScreen extends PlayerStatsScreen
 		float scrollPercentage = maxScroll > 0 ? (float) scroll / maxScroll : 0F;
 		guiGraphics.blit(guiEcheladder, xOffset + 86, (int) (yOffset + 42 + (130F * (1F - scrollPercentage))), 0, 243, 7, 13);
 		
-		if (!MinestuckConfig.CLIENT.echeladderPlayerFrameBorders.get())
+		if(!MinestuckConfig.CLIENT.echeladderPlayerFrameBorders.get())
 		{
 			renderPlayerBeyondBorders(guiGraphics, mouseX, mouseY);
-		} else {
+		} else
+		{
 			renderPlayerWithinBorders(guiGraphics, mouseX, mouseY);
 		}
 		
@@ -348,7 +349,7 @@ public class EcheladderScreen extends PlayerStatsScreen
 				(float) mouseX, (float) mouseY, this.minecraft.player);
 	}
 	
-	// boderless mode
+	// borderless mode
 	private void renderPlayerBeyondBorders(GuiGraphics guiGraphics, int mouseX, int mouseY)
 	{
 		int x1 = xOffset + 17;
@@ -421,7 +422,7 @@ public class EcheladderScreen extends PlayerStatsScreen
 		guiGraphics.blit(xOffset + 5, yOffset + ATTACK_Y, 0, 18, 18, effectSprites.get(MobEffects.DAMAGE_BOOST));
 		guiGraphics.blit(PlayerStatsScreen.icons, xOffset + 5, yOffset + HEALTH_Y, 64, 80, 16, 16);
 		guiGraphics.blit(PlayerStatsScreen.icons, xOffset + 6, yOffset + CACHE_Y + 1, 48, 64, 16, 16);
-		guiGraphics.blit(PlayerStatsScreen.icons, xOffset + 5, yOffset + CAPTCHA_Y, 48, 80,16, 16);
+		guiGraphics.blit(PlayerStatsScreen.icons, xOffset + 5, yOffset + CAPTCHA_Y, 48, 80, 16, 16);
 		
 		refreshTextCache(currentRung);
 		String boondollarText = String.valueOf(ClientPlayerData.getBoondollars());

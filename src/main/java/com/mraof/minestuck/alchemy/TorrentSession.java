@@ -28,7 +28,8 @@ import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
-import static com.mraof.minestuck.alchemy.TorrentHelper.sendOutUpdates;
+
+import static com.mraof.minestuck.alchemy.TorrentHelper.*;
 
 @EventBusSubscriber(modid = Minestuck.MOD_ID, bus = EventBusSubscriber.Bus.GAME)
 public class TorrentSession
@@ -135,7 +136,7 @@ public class TorrentSession
 			List<TorrentSession> sessions = data.getTorrentSessions();
 			for(TorrentSession torrentSession : sessions)
 			{
-				TorrentHelper.handleTorrent(torrentSession, server);
+				handleTorrent(torrentSession, server);
 			}
 			sendOutUpdates(sessions, server);
 		}
@@ -145,7 +146,7 @@ public class TorrentSession
 	public static void onPlayerLoggedIn(PlayerEvent.PlayerLoggedInEvent event)
 	{
 		ServerPlayer player = (ServerPlayer) event.getEntity();
-		TorrentHelper.createPlayerTorrentSession(player, player.server);
+		createPlayerTorrentSession(player, player.server);
 	}
 	
 	public List<GristType> getViableSeeding(ClientPlayerData.ClientCache cache)
@@ -190,7 +191,8 @@ public class TorrentSession
 		//TODO find a way to express the share ratio, for potential leech banning
 	}
 	
-	public record TorrentClientData(String username,int playerColor, int status, List<GristType> seededTypes, Map<Integer, List<GristType>> leeches, ClientPlayerData.ClientCache cache)
+	public record TorrentClientData(String username, int playerColor, int status, List<GristType> seededTypes,
+	                                Map<Integer, List<GristType>> leeches, ClientPlayerData.ClientCache cache)
 	{
 		public static final StreamCodec<RegistryFriendlyByteBuf, TorrentClientData> STREAM_CODEC = StreamCodec.composite(
 				ByteBufCodecs.STRING_UTF8,
@@ -207,8 +209,16 @@ public class TorrentSession
 				TorrentClientData::cache,
 				TorrentClientData::new);
 		
-		public boolean isOnline() { return status == 2; } // may be used in the future
-		public boolean hasEntered() { return status >= 1; }
+		public boolean isOnline()
+		{
+			return status == 2;
+		} // may be used in the future
+		
+		public boolean hasEntered()
+		{
+			return status >= 1;
+		}
+		
 		public List<GristType> getViableSeeding()
 		{
 			return this.seededTypes.stream().filter(this.cache.set()::hasType).toList();

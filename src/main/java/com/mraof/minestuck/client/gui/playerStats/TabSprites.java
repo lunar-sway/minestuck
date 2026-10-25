@@ -12,7 +12,7 @@ public class TabSprites
 	}
 	
 	public record TabSpritePool(TabSprite left, TabSprite middle, TabSprite right, TabSprite leftActive,
-	                            TabSprite middleActive, TabSprite rightActive)
+								TabSprite middleActive, TabSprite rightActive)
 	{
 		public TabSprite get(TabPosition position, boolean active)
 		{

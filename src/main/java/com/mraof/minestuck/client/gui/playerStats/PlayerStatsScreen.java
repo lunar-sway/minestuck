@@ -64,7 +64,6 @@ public abstract class PlayerStatsScreen extends MinestuckScreen
 	
 	public enum NormalGuiType
 	{
-		
 		CAPTCHA_DECK((windowId, inventory) -> {
 			if(ClientPlayerData.getModus() != null)
 			{

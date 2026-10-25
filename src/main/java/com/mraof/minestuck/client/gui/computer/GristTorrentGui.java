@@ -1,12 +1,10 @@
 package com.mraof.minestuck.client.gui.computer;
 
 import com.mraof.minestuck.Minestuck;
-import com.mraof.minestuck.alchemy.TorrentSession;
 import com.mraof.minestuck.api.alchemy.GristAmount;
 import com.mraof.minestuck.api.alchemy.GristSet;
 import com.mraof.minestuck.blockentity.ComputerBlockEntity;
 import com.mraof.minestuck.client.gui.MSScreenFactories;
-import com.mraof.minestuck.client.gui.computer.TorrentWidgets.*;
 import com.mraof.minestuck.computer.ProgramType;
 import com.mraof.minestuck.player.ClientPlayerData;
 import com.mraof.minestuck.skaianet.client.SkaiaClient;
@@ -17,14 +15,11 @@ import net.minecraft.resources.ResourceLocation;
 import org.lwjgl.glfw.GLFW;
 
 import javax.annotation.ParametersAreNonnullByDefault;
-import java.util.ArrayList;
-import java.util.HashMap;
-import java.util.List;
-import java.util.Map;
-import java.util.Objects;
+import java.util.*;
 import java.util.stream.IntStream;
 
-import static com.mraof.minestuck.client.gui.computer.TorrentWidgets.scale;
+import static com.mraof.minestuck.alchemy.TorrentSession.TorrentClientData;
+import static com.mraof.minestuck.client.gui.computer.TorrentWidgets.*;
 
 @ParametersAreNonnullByDefault
 public final class GristTorrentGui extends Screen implements ProgramGui<ProgramType.EmptyData>
@@ -52,6 +47,7 @@ public final class GristTorrentGui extends Screen implements ProgramGui<ProgramT
 	static final int LIGHT_GREY = 0xFFF5F5F5;
 	static final int GREY = 0xFFCFCFCF;
 	static final int DARK_GREY = 0xFF333333;
+	static final int BLACK = 0xFF000000;
 	
 	private ComputerBlockEntity computer;
 	
@@ -67,7 +63,7 @@ public final class GristTorrentGui extends Screen implements ProgramGui<ProgramT
 	private int loadingTextWidth;
 	private GristSet previousGutterGrist = null;
 	private long gutterRemainingCapacity;
-	static final Map<Integer, TorrentSession.TorrentClientData> visibleTorrentData = new HashMap<>();
+	static final Map<Integer, TorrentClientData> visibleTorrentData = new HashMap<>();
 	
 	private TorrentContainerRow torrentContainerRow;
 	private final List<GutterBar> gutterBars = new ArrayList<>();
@@ -198,15 +194,13 @@ public final class GristTorrentGui extends Screen implements ProgramGui<ProgramT
 		int gutterX = xOffset + 53;
 		int gutterY = yOffset + 185;
 		
-		int iconSize = 16;
+		int buildX = gutterX - 6 - ICON_SIZE;
+		int torrentX = buildX - 12 - ICON_SIZE;
+		int iconY = gutterY - (ICON_SIZE - 3) / 2 - 8;
 		
-		int buildX = gutterX - 6 - iconSize;
-		int torrentX = buildX - 12 - iconSize;
-		int iconY = gutterY - (iconSize - 3) / 2 - 8;
-		
-		TorrentWidgets.drawIcon(xOffset + 44, yOffset + 3, TORRENT_ICON, 1.25f);
-		TorrentWidgets.drawIcon(buildX, iconY, BUILD_ICON, 1.25f);
-		TorrentWidgets.drawIcon(torrentX, iconY, TORRENT_ICON, 1.25f);
+		drawIcon(xOffset + 44, yOffset + 3, TORRENT_ICON, 1.25f);
+		drawIcon(buildX, iconY, BUILD_ICON, 1.25f);
+		drawIcon(torrentX, iconY, TORRENT_ICON, 1.25f);
 		
 		if(gutterLoading)
 		{
@@ -249,7 +243,7 @@ public final class GristTorrentGui extends Screen implements ProgramGui<ProgramT
 				addTorrentSessions();
 				break;
 			}
-			TorrentSession.TorrentClientData data = visibleTorrentData.get(container.playerId);
+			TorrentClientData data = visibleTorrentData.get(container.playerId);
 			container.refreshEntries(data);
 		}
 	}
@@ -270,9 +264,6 @@ public final class GristTorrentGui extends Screen implements ProgramGui<ProgramT
 		
 		double totalVolume = filledVolume + gutterRemainingCapacity;
 		
-		record BarData(int width, Object payload)
-		{
-		}
 		List<BarData> newBars = new ArrayList<>();
 		
 		if(totalVolume > 0)
@@ -318,9 +309,8 @@ public final class GristTorrentGui extends Screen implements ProgramGui<ProgramT
 		
 		if(newBars.isEmpty()) return;
 		
-		final int barStartX = xOffset + 53;
-		final int barY = yOffset + 185;
-		int currentX = barStartX;
+		int barY = yOffset + BarData.BAR_Y;
+		int currentX = xOffset + BarData.BAR_X;
 		
 		for(BarData bd : newBars)
 		{
@@ -338,7 +328,7 @@ public final class GristTorrentGui extends Screen implements ProgramGui<ProgramT
 	
 	private void addTorrentSessions()
 	{
-		TorrentSession.TorrentClientData ownerData = visibleTorrentData.get(ownerId);
+		TorrentClientData ownerData = visibleTorrentData.get(ownerId);
 		if(ownerData == null) return;
 		
 		torrentContainerRow.children().forEach(this::removeWidget);
@@ -346,7 +336,7 @@ public final class GristTorrentGui extends Screen implements ProgramGui<ProgramT
 		
 		createTorrentWidget(ownerId, ownerData);
 		
-		for(Map.Entry<Integer, TorrentSession.TorrentClientData> entry : visibleTorrentData.entrySet())
+		for(Map.Entry<Integer, TorrentClientData> entry : visibleTorrentData.entrySet())
 		{
 			if(entry.getKey() == ownerId) continue;
 			createTorrentWidget(entry.getKey(), entry.getValue());
@@ -355,7 +345,7 @@ public final class GristTorrentGui extends Screen implements ProgramGui<ProgramT
 		torrentContainerRow.updateVisibilityAndPosition();
 	}
 	
-	private void createTorrentWidget(int playerId, TorrentSession.TorrentClientData torrentData)
+	private void createTorrentWidget(int playerId, TorrentClientData torrentData)
 	{
 		TorrentContainer container = new TorrentContainer(
 				torrentContainerRow.getX(), gristWidgetsYOffset, font, playerId, torrentData.username(),
@@ -401,5 +391,11 @@ public final class GristTorrentGui extends Screen implements ProgramGui<ProgramT
 	public void render(GuiGraphics guiGraphics, ThemedScreen screen)
 	{
 		//handled by the screen render method
+	}
+	
+	record BarData(int width, Object payload)
+	{
+		public static final int BAR_X = 53;
+		public static final int BAR_Y = 185;
 	}
 }
