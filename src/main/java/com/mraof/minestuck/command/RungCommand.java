@@ -24,10 +24,10 @@ public class RungCommand
 	public static void register(CommandDispatcher<CommandSourceStack> dispatcher)
 	{
 		dispatcher.register(
-			Commands.literal("rung").requires(s -> s.hasPermission(Commands.LEVEL_GAMEMASTERS))
-					.then(subCommandAdd())
-					.then(subCommandGet())
-					.then(subCommandSet())
+				Commands.literal("rung").requires(s -> s.hasPermission(Commands.LEVEL_GAMEMASTERS))
+						.then(subCommandAdd())
+						.then(subCommandGet())
+						.then(subCommandSet())
 		);
 	}
 	
@@ -65,7 +65,8 @@ public class RungCommand
 	
 	private static int setRung(CommandContext<CommandSourceStack> context, Collection<ServerPlayer> players, int rung, double progress)
 	{
-		for (ServerPlayer player : players) {
+		for(ServerPlayer player : players)
+		{
 			Echeladder.get(player).setByCommand(rung, progress);
 			MSCriteriaTriggers.ECHELADDER.get().trigger(player, rung);
 		}
@@ -91,6 +92,7 @@ public class RungCommand
 			if(gained > 0) affected++;
 		}
 		int successCount = affected;
+		//TODO consider changing message when successCount is 0
 		context.getSource().sendSuccess(() ->
 				Component.translatable(ADD_SUCCESS, amount, successCount), true);
 		return affected;

@@ -26,7 +26,7 @@ public final class TorrentHelper
 	{
 		List<GristType> seeding = new ArrayList<>();
 		
-		if(MinestuckConfig.SERVER.gristTorrentSeedAll.get())
+		if(MinestuckConfig.SERVER.gristTorrentInitialSeedAll.get())
 			seeding.addAll(GristTypes.REGISTRY.stream().toList());
 		
 		TorrentSession torrentSession = new TorrentSession(player, seeding, new ArrayList<>());

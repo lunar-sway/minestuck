@@ -58,7 +58,6 @@ public final class GristTorrentGui extends Screen implements ProgramGui<ProgramT
 	private int ownerId;
 	
 	private GristSet gutterGrist;
-	private long filledVolume = 0;
 	private String volumeText = "0";
 	private int loadingTextWidth;
 	private GristSet previousGutterGrist = null;
@@ -257,7 +256,7 @@ public final class GristTorrentGui extends Screen implements ProgramGui<ProgramT
 		}
 		gutterLoading = false;
 		
-		filledVolume = 0;
+		long filledVolume = 0;
 		for(GristAmount amount : gutterGrist.asAmounts())
 			filledVolume += amount.amount();
 		volumeText = String.valueOf(filledVolume);

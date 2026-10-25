@@ -116,7 +116,7 @@ public class MinestuckConfig
 		public final BooleanValue globalSession;
 		public final EnumValue<PermissionType> dataCheckerPermission;
 		public final EnumValue<TorrentVisibility> gristTorrentVisibility;
-		public final BooleanValue gristTorrentSeedAll;
+		public final BooleanValue gristTorrentInitialSeedAll;
 		public final BooleanValue gristTorrentNonSeededTrickle;
 		
 		//Edit Mode
@@ -176,8 +176,8 @@ public class MinestuckConfig
 					.defineEnum("dataCheckerPermission", PermissionType.ANYONE);
 			gristTorrentVisibility = builder.comment("Determines the scope of players that are able to connect via GristTorrent. \"none\": GristTorrent is completely disabled. \"land\": GristTorrent only works for accounts from the same Land. \"session\": Only players within the same Session can connect. \"global\": Any players can connect.")
 					.defineEnum("gristTorrentVisibility", TorrentVisibility.SESSION);
-			gristTorrentSeedAll = builder.comment("Whether players will seed all grist types initially. Will seed nothing initially if false.")
-					.define("gristTorrentSeedAll", true);
+			gristTorrentInitialSeedAll = builder.comment("Whether players will seed all grist types initially. Will seed nothing initially if false.")
+					.define("gristTorrentInitialSeedAll", true);
 			gristTorrentNonSeededTrickle = builder.comment(
 							"If true, a leech requesting a grist type the seeder isn't actively seeding will still get a slow ",
 							"trickle of 1 grist/sec (if the seeder has any of that type), instead of nothing.")
