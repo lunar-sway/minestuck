@@ -2,6 +2,7 @@ package com.mraof.minestuck.alchemy;
 
 import com.mraof.minestuck.Minestuck;
 import com.mraof.minestuck.api.alchemy.*;
+import com.mraof.minestuck.network.GutterUpdatePacket;
 import com.mraof.minestuck.player.*;
 import com.mraof.minestuck.skaianet.SburbPlayerData;
 import com.mraof.minestuck.skaianet.Session;
@@ -15,7 +16,9 @@ import net.minecraft.server.level.ServerPlayer;
 import net.minecraft.util.RandomSource;
 import net.neoforged.bus.api.SubscribeEvent;
 import net.neoforged.fml.common.EventBusSubscriber;
+import net.neoforged.neoforge.event.entity.player.PlayerEvent;
 import net.neoforged.neoforge.event.tick.ServerTickEvent;
+import net.neoforged.neoforge.network.PacketDistributor;
 import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.Logger;
 
@@ -130,6 +133,20 @@ public class GristGutter
 		for(GristAmount amount : set.asAmounts())
 			this.addGristInternal(amount.type(), amount.amount());
 	}
+	public static void pushUpdateToPlayer(ServerPlayer player)
+	{
+		GristGutter.get(player).ifPresent(gutter ->
+				PacketDistributor.sendToPlayer(player, new GutterUpdatePacket(gutter.gristSet.asImmutable(), gutter.getRemainingCapacity())));
+	}
+	
+	public void pushUpdateToSession(MinecraftServer server)
+	{
+		this.gutterPlayers().forEach(id -> {
+			ServerPlayer player = id.getPlayer(server);
+			if(player != null)
+				pushUpdateToPlayer(player);
+		});
+	}
 	
 	/**
 	 * The grist set is currently only modified here,
@@ -165,12 +182,21 @@ public class GristGutter
 	public static void onServerTickEvent(ServerTickEvent.Pre event)
 	{
 		//noinspection resource
-		if(event.getServer().overworld().getGameTime() % 200 == 0)
+		if(event.getServer().overworld().getGameTime() % 60 == 0)
 		{
 			for(Session session : SessionHandler.get(event.getServer()).getSessions())
 				session.getGristGutter().distributeToPlayers();
 		}
 	}
+	
+	@SubscribeEvent
+	public static void playerLoggedInEvent(PlayerEvent.PlayerLoggedInEvent event)
+	{
+		ServerPlayer player = (ServerPlayer) event.getEntity();
+		GristGutter gutter = GristGutter.get(IdentifierHandler.encode(player), player.server);
+		PacketDistributor.sendToPlayer(player, new GutterUpdatePacket(gutter.gristSet.asImmutable(), gutter.getRemainingCapacity()));
+	}
+	
 	
 	private void distributeToPlayers()
 	{
@@ -196,11 +222,15 @@ public class GristGutter
 		GristSet remainder = gristCache.addWithinCapacity(gristToTransfer, null);
 		if(!remainder.isEmpty())
 			throw new IllegalStateException("Took more grist than could be given to the player. Got back grist: " + remainder);
+		
+		ServerPlayer serverPlayer = player.getPlayer(mcServer);
+		if(serverPlayer != null)
+			PacketDistributor.sendToPlayer(serverPlayer, new GutterUpdatePacket(this.gristSet.asImmutable(), this.getRemainingCapacity()));
 	}
 	
 	private double getDistributionRateModifier()
 	{
-		return 1D/20D;
+		return 0.50D;
 	}
 	
 	private MutableGristSet takeWithinCapacity(long amount, NonNegativeGristSet capacity, RandomSource rand)

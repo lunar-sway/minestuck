@@ -8,6 +8,9 @@ The format is based on [Keep a Changelog](https://keepachangelog.com/en/1.1.0/).
 
 ### Added
 
+- GristTorrent Computer App
+- New /rung add, get, set commands
+- New /grist [args] all command
 - Terrain Flatenator can now flatten terrain
 - Computer themes can have custom buttons
 - Anomalocaris hat, alien boppers, and Hood of the Huntress
@@ -16,6 +19,8 @@ The format is based on [Keep a Changelog](https://keepachangelog.com/en/1.1.0/).
 
 ### Changed
 
+- Updated some gui elements related to Grist Cache/Echeladder/Strife Specibus
+- Echeladder progression animation
 - Laptops can now be picked up
 - The range at which the Kernelsprite detects and travels to blocks has increased
 - Data checker is now available to everyone by default and has been visually overhauled
@@ -29,7 +34,7 @@ The format is based on [Keep a Changelog](https://keepachangelog.com/en/1.1.0/).
 
 ### Contributors for this release
 
-- Fl1s, Dweblenod, medsal15, Emma "Dilemma", EnderTurret
+- Dweblenod, Cibernet, Riotmode, kirderf1, medsal15, Caldw3ll, Fl1s, Emma "Dilemma", EnderTurret
 
 ## [1.21.1-1.14.0.1] - 2026-06-01
 
