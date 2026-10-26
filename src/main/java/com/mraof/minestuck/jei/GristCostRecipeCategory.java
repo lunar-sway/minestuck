@@ -41,7 +41,7 @@ public class GristCostRecipeCategory implements IRecipeCategory<JeiGristCost>
 	GristCostRecipeCategory(IGuiHelper guiHelper)
 	{
 		ResourceLocation alchemiterBackground = Minestuck.id("textures/gui/alchemiter.png");
-		background = guiHelper.createDrawable(alchemiterBackground, 8, 15, 160, 56);
+		background = guiHelper.createDrawable(alchemiterBackground, 8, 15, getWidth(), getHeight());
 		icon = guiHelper.createDrawableIngredient(VanillaTypes.ITEM_STACK, new ItemStack(MSBlocks.ALCHEMITER));
 	}
 	
@@ -58,9 +58,15 @@ public class GristCostRecipeCategory implements IRecipeCategory<JeiGristCost>
 	}
 
 	@Override
-	public IDrawable getBackground()
+	public int getWidth()
 	{
-		return background;
+		return 160;
+	}
+
+	@Override
+	public int getHeight()
+	{
+		return 56;
 	}
 
 	@Override
@@ -87,6 +93,7 @@ public class GristCostRecipeCategory implements IRecipeCategory<JeiGristCost>
 	@Override
 	public void draw(JeiGristCost recipe, IRecipeSlotsView recipeSlotsView, GuiGraphics guiGraphics, double mouseX, double mouseY)
 	{
+		background.draw(guiGraphics);
 		if(recipe instanceof JeiGristCost.Set gristSetRecipe)
 			GuiUtil.drawGristBoard(guiGraphics, gristSetRecipe.gristSet(), GuiUtil.GristboardMode.ALCHEMITER, 1, 30, Minecraft.getInstance().font);
 		else if(recipe instanceof JeiGristCost.Wildcard wildcardRecipe)
