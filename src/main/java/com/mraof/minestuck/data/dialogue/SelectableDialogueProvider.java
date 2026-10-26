@@ -17,7 +17,7 @@ import java.util.concurrent.CompletableFuture;
 import java.util.stream.Collectors;
 
 /**
- * A provider for building dialogue nodes and generating the file making them selectable within a specific {@link RandomlySelectableDialogue.DialogueCategory}.
+ * A provider for building dialogue nodes and generating the file making them selectable within a specific {@link com.mraof.minestuck.entity.dialogue.RandomlySelectableDialogue.DialogueCategory}.
  * Includes a {@link DialogueProvider} accessible through {@link SelectableDialogueProvider#dialogue()}.
  *
  * @see DialogueProvider

@@ -274,6 +274,7 @@ public class ReadableSburbCodeScreen extends Screen
 		this.backButton.visible = this.currentPage > 0;
 	}
 	
+	@Override
 	public boolean keyPressed(int pKeyCode, int pScanCode, int pModifiers)
 	{
 		if(super.keyPressed(pKeyCode, pScanCode, pModifiers))

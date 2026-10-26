@@ -41,7 +41,7 @@ import java.util.function.BiFunction;
  * items accessible by the server.
  * @author kirderf1
  */
-@EventBusSubscriber(modid = Minestuck.MOD_ID, bus= EventBusSubscriber.Bus.GAME)
+@EventBusSubscriber(modid = Minestuck.MOD_ID)
 public final class DeployList
 {
 	public static final IAvailabilityCondition HAS_NOT_ENTERED = playerData -> !playerData.hasEntered();

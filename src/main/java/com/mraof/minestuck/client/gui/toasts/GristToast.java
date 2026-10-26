@@ -94,6 +94,7 @@ public class GristToast implements Toast
 			case SERVER -> guiGraphics.blit(TEXTURE, 133, 7, 196, 20, 20, 20);
 			case SENDGRIST -> guiGraphics.blit(TEXTURE, 133	, 7, 216, 0, 20, 20);
 			case CONSOLE -> guiGraphics.blit(TEXTURE, 133, 7, 216, 20, 20, 20);
+			case GUTTER -> {}
 		}
 		
 		PoseStack posestack = guiGraphics.pose();

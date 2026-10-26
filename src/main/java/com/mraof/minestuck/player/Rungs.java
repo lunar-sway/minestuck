@@ -38,7 +38,7 @@ import java.io.Reader;
 import java.util.*;
 
 @ParametersAreNonnullByDefault
-@EventBusSubscriber(bus = EventBusSubscriber.Bus.GAME)
+@EventBusSubscriber
 public class Rungs
 {
 	private static final Logger LOGGER = LogManager.getLogger();

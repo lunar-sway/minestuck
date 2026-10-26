@@ -27,7 +27,7 @@ import java.util.List;
  * Otherwise, it will optionally add an extra tooltip for minestuck items specifically.
  * In all these cases, "optionally" means "if the to-be-used translation key exists".
  */
-@EventBusSubscriber(modid = Minestuck.MOD_ID, bus = EventBusSubscriber.Bus.GAME, value = Dist.CLIENT)
+@EventBusSubscriber(modid = Minestuck.MOD_ID, value = Dist.CLIENT)
 public final class ExtraTooltips
 {
 	@SubscribeEvent(priority = EventPriority.HIGHEST)

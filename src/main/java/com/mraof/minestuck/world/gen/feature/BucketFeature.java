@@ -83,6 +83,7 @@ public class BucketFeature extends Feature<NoneFeatureConfiguration>
 				case COMMON -> list.add(fluidBlock, 50);
 				case UNCOMMON -> list.add(fluidBlock, 10);
 				case RARE -> list.add(fluidBlock, 1);
+				default -> {}
 			}
 		}
 		

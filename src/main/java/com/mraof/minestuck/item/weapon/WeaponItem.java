@@ -75,6 +75,7 @@ public class WeaponItem extends TieredItem
 		tickEffects = ImmutableList.copyOf(builder.tickEffects);
 	}
 	
+	@Override
 	public boolean canAttackBlock(BlockState state, Level level, BlockPos pos, Player player)
 	{
 		return !player.isCreative();

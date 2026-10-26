@@ -10,7 +10,9 @@ import com.mraof.minestuck.api.uranium.UraniumCapabilities;
 @Deprecated
 public interface UraniumPowered
 {
+	@Deprecated
 	void addFuel(short fuelAmount);
 	
+	@Deprecated
 	boolean atMaxFuel();
 }

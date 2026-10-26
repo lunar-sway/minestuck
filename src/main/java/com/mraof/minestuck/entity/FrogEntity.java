@@ -254,6 +254,7 @@ public class FrogEntity extends PathfinderMob
 		}
 	}
 	
+	@Override
 	public void handleEntityEvent(byte id)
 	{
 		if(id == 1)
@@ -278,6 +279,7 @@ public class FrogEntity extends PathfinderMob
 		this.moveControl.setWantedPosition(this.moveControl.getWantedX(), this.moveControl.getWantedY(), this.moveControl.getWantedZ(), newSpeed);
 	}
 	
+	@Override
 	public void setJumping(boolean jumping)
 	{
 		super.setJumping(jumping);
@@ -295,6 +297,7 @@ public class FrogEntity extends PathfinderMob
 		this.jumpTicks = 0;
 	}
 	
+	@Override
 	public void customServerAiStep()
 	{
 		if(this.currentMoveTypeDuration > 0)

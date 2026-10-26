@@ -8,7 +8,7 @@
   "spawn_overrides": {
     "minestuck:consort": {
       "bounding_box": "full",
-      "spawns": [ ]
+      "spawns": []
     }
   },
   "start_height": {

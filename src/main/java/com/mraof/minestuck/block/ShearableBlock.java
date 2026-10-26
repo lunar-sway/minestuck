@@ -35,6 +35,7 @@ public class ShearableBlock extends Block
 		this.stackSize = stackSize;
 	}
 	
+	@Override
 	protected ItemInteractionResult useItemOn(ItemStack itemStack, BlockState blockState, Level level, BlockPos blockPos, Player player, InteractionHand interactionHand, BlockHitResult blockHitResult) {
 		if (!itemStack.canPerformAction(ItemAbilities.SHEARS_CARVE)) {
 			return super.useItemOn(itemStack, blockState, level, blockPos, player, interactionHand, blockHitResult);

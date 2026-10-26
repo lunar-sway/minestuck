@@ -30,11 +30,13 @@ public final class PinkTowerPiece extends TemplateStructurePiece implements Piec
 		return (new StructurePlaceSettings()).setRotation(pRotation).setMirror(Mirror.NONE);
 	}
 	
+	@Override
 	protected void addAdditionalSaveData(StructurePieceSerializationContext pContext, CompoundTag pTag) {
 		super.addAdditionalSaveData(pContext, pTag);
 		pTag.putString("Rot", this.placeSettings.getRotation().name());
 	}
 	
+	@Override
 	protected void handleDataMarker(String pName, BlockPos pPos, ServerLevelAccessor pLevel, RandomSource pRandom, BoundingBox pBox) {
 	}
 	

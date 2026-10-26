@@ -34,7 +34,7 @@ import java.util.Objects;
  *
  * @author kirderf1
  */
-@EventBusSubscriber(modid = Minestuck.MOD_ID, bus = EventBusSubscriber.Bus.GAME)
+@EventBusSubscriber(modid = Minestuck.MOD_ID)
 public final class GristCache implements INBTSerializable<Tag>
 {
 	public static final String MISSING_MESSAGE = "grist.missing";

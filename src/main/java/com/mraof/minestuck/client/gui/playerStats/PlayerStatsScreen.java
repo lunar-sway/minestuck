@@ -37,7 +37,7 @@ import java.util.Arrays;
 import java.util.function.BiFunction;
 import java.util.function.Supplier;
 
-@EventBusSubscriber(modid = Minestuck.MOD_ID, bus = EventBusSubscriber.Bus.GAME, value = Dist.CLIENT)
+@EventBusSubscriber(modid = Minestuck.MOD_ID, value = Dist.CLIENT)
 public abstract class PlayerStatsScreen extends MinestuckScreen
 {
 	//TODO A better way of working with inventory-like guis like these?
