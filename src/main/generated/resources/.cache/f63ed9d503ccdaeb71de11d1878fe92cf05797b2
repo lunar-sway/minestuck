@@ -1,0 +1,16 @@
+// 1.21.1	2026-10-01T10:05:36.492092148	Tags for minecraft:worldgen/biome mod id minestuck
+30baf40445a4e3f5e836924adbbcd30b49972302 data/minestuck/tags/worldgen/biome/has_structure/arena.json
+50bc749e98b2ae37fc91c4339dfb617e0461fe48 data/minestuck/tags/worldgen/biome/has_structure/consort_village.json
+30baf40445a4e3f5e836924adbbcd30b49972302 data/minestuck/tags/worldgen/biome/has_structure/derse_bunker.json
+b020f6cdcd2d955793278b2f89a178a1d31e599a data/minestuck/tags/worldgen/biome/has_structure/frog_temple.json
+30baf40445a4e3f5e836924adbbcd30b49972302 data/minestuck/tags/worldgen/biome/has_structure/imp_bunker.json
+30baf40445a4e3f5e836924adbbcd30b49972302 data/minestuck/tags/worldgen/biome/has_structure/imp_dungeon.json
+9784962b20e9a9db86285d61fb9b57d1c0cc90d1 data/minestuck/tags/worldgen/biome/has_structure/land_gate.json
+30baf40445a4e3f5e836924adbbcd30b49972302 data/minestuck/tags/worldgen/biome/has_structure/prospit_bunker.json
+35133e95f1c8fdd7a1c21afcc231fc0bffefb9a8 data/minestuck/tags/worldgen/biome/has_structure/skaia_castle.json
+2356fe3f1f2b355118dc952755e88f7cdfea0a6c data/minestuck/tags/worldgen/biome/has_structure/skaian_cathedral.json
+50bc749e98b2ae37fc91c4339dfb617e0461fe48 data/minestuck/tags/worldgen/biome/has_structure/small_ruin.json
+ac2673318b4c6953fe16834905c5441a58257706 data/minestuck/tags/worldgen/biome/land.json
+1dfedd9bf78d37ad735ce85ef5b7795b0b3ff2f3 data/minestuck/tags/worldgen/biome/land/normal.json
+d8b5ae20d6e5de404ed3d8a5fa607538f41ba34a data/minestuck/tags/worldgen/biome/land/ocean.json
+20a7119bdbc5aadca7fa0b8a68b17d93f2e6497f data/minestuck/tags/worldgen/biome/land/rough.json

@@ -1,0 +1,5 @@
+// 1.21.1	2026-10-01T10:05:36.516831788	Tags for minecraft:damage_type mod id minestuck
+4c2ed5f57a1fadef3eb9480703ad2d006c54540d data/minecraft/tags/damage_type/bypasses_armor.json
+b6209e506496669d95066e79869a94bbff59eb95 data/minecraft/tags/damage_type/bypasses_effects.json
+b6209e506496669d95066e79869a94bbff59eb95 data/minecraft/tags/damage_type/bypasses_invulnerability.json
+b6209e506496669d95066e79869a94bbff59eb95 data/minecraft/tags/damage_type/bypasses_resistance.json
