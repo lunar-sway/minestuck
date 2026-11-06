@@ -3,7 +3,7 @@ package com.mraof.minestuck.data.tag;
 import com.mraof.minestuck.Minestuck;
 import com.mraof.minestuck.block.MSBlocks;
 import com.mraof.minestuck.item.MSItems;
-import com.mraof.minestuck.item.artifact.CruxiteArtifactItem;
+import com.mraof.minestuck.item.artifact.CruxiteArtifact;
 import com.mraof.minestuck.item.weapon.MSToolType;
 import com.mraof.minestuck.item.weapon.MagicAOERightClickEffect;
 import com.mraof.minestuck.item.weapon.MagicRangedRightClickEffect;
@@ -186,7 +186,7 @@ public class MinestuckItemTagsProvider extends ItemTagsProvider
 				.addTag(LEGENDARY).addTag(SHULKER_BOXES).add(Items.PUMPKIN);
 		tag(LEGENDARY).add(relevantItems(item -> item instanceof WeaponItem weapon && (weapon.getTier() == DENIZEN_TIER || weapon.getTier() == ZILLY_TIER || weapon.getTier() == WELSH_TIER)))
 				.add(FLUORITE_OCTET.get(), UMBRAL_INFILTRATOR.get(), WHITE_KINGS_SCEPTER.get(), BLACK_KINGS_SCEPTER.get());
-		tag(CRUXITE_ARTIFACTS).add(relevantItems(item -> item instanceof CruxiteArtifactItem));
+		tag(CRUXITE_ARTIFACTS).add(relevantItems(item -> item instanceof CruxiteArtifact));
 	}
 	
 	private static Item[] relevantItems(Predicate<Item> predicate)
