@@ -1085,6 +1085,8 @@ public final class MSBlocks
 	public static final DeferredBlock<LiquidBlock> CAULK = REGISTER.register("caulk", () -> new MSLiquidBlock(MSFluids.CAULK.get(), false, Block.Properties.of().mapColor(MapColor.COLOR_GRAY).replaceable().pushReaction(PushReaction.DESTROY).liquid().noCollission().strength(100.0F).noLootTable().sound(SoundType.EMPTY)));
 	public static final DeferredBlock<LiquidBlock> MOLTEN_AMBER = REGISTER.register("molten_amber", () -> new MSLiquidBlock(MSFluids.MOLTEN_AMBER.get(), false, Block.Properties.of().mapColor(MapColor.FIRE).replaceable().pushReaction(PushReaction.DESTROY).liquid().noCollission().strength(100.0F).lightLevel(state -> 15).noLootTable().sound(SoundType.EMPTY)));
 	
+	// Decor
+	public static final DeferredBlock<PlushieBlock> SQUIDDLE = REGISTER.register("squiddle", () -> new PlushieBlock(Block.Properties.of().strength(0.5f).sound(SoundType.WOOL).noOcclusion()));
 	
 	protected static Function<BlockState, MapColor> logColors(MapColor topColor, MapColor barkColor)
 	{

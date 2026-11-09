@@ -1,0 +1,19 @@
+{
+  "variants": {
+    "facing=north": {
+      "model": "minestuck:block/squiddle"
+    },
+    "facing=east": {
+      "model": "minestuck:block/squiddle",
+      "y": 90
+    },
+    "facing=south": {
+      "model": "minestuck:block/squiddle",
+      "y": 180
+    },
+    "facing=west": {
+      "model": "minestuck:block/squiddle",
+      "y": 270
+    }
+  }
+}

@@ -1017,6 +1017,7 @@ public final class MSBlockLootTables extends BlockLootSubProvider
 		dropSelf(HORSE_CLOCK.BOTTOM.get());
 		dropSelf(GLOWYSTONE_DUST.get());
 		dropSelf(MIRROR.get());
+		dropSelf(SQUIDDLE.get());
 	}
 	
 	@Override

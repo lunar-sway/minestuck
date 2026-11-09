@@ -647,6 +647,7 @@ public class MSItems
 	public static final DeferredItem<Item> CAKE_MIX = REGISTER.register("cake_mix", () -> new Item(new Item.Properties()));
 	
 	
+	
 	//Structure Scanners
 	public static final DeferredItem<Item> TEMPLE_SCANNER = REGISTER.register("temple_scanner", () -> new StructureScannerItem(new Item.Properties(), MSTags.Structures.SCANNER_LOCATED, MSItems.RAW_URANIUM, 30));
 	
@@ -1660,6 +1661,10 @@ public class MSItems
 	public static final DeferredItem<Item> PERFECTLY_GENERIC_HANGING_SIGN = REGISTER.register("perfectly_generic_hanging_sign", () -> new HangingSignItem(MSBlocks.PERFECTLY_GENERIC_HANGING_SIGN.get(), MSBlocks.PERFECTLY_GENERIC_WALL_HANGING_SIGN.get(), new Item.Properties().stacksTo(16)));
 	public static final DeferredItem<Item> PERFECTLY_GENERIC_SIGN = REGISTER.register("perfectly_generic_sign", () -> new SignItem(new Item.Properties().stacksTo(16), MSBlocks.PERFECTLY_GENERIC_SIGN.get(), MSBlocks.PERFECTLY_GENERIC_WALL_SIGN.get()));
 
+	// Decorative Blocks
+	public static final DeferredItem<BlockItem> SQUIDDLE = registerBlockItem(MSBlocks.SQUIDDLE);
+	
+	
 	/**
 	 * Helper function to register a standard BlockItem with just the source block, no item properties
 	 */
