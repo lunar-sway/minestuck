@@ -556,11 +556,15 @@ public class EcheladderScreen extends PlayerStatsScreen
 		{
 			if(ycor >= yOffset + 35 && ycor < yOffset + 42)
 			{
-				scroll = maxScroll;
+				if (scroll < maxScroll){
+					scroll++;
+				}
 				return true;
 			} else if(ycor >= yOffset + 185 && ycor < yOffset + 192)
 			{
-				scroll = 0;
+				if (scroll > 0){
+					scroll--;
+				}
 				return true;
 			}
 		}
