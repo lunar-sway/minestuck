@@ -7,7 +7,6 @@ import com.mojang.brigadier.builder.ArgumentBuilder;
 import com.mojang.brigadier.context.CommandContext;
 import com.mraof.minestuck.advancements.MSCriteriaTriggers;
 import com.mraof.minestuck.player.Echeladder;
-import com.mraof.minestuck.player.Rungs;
 import net.minecraft.commands.CommandSourceStack;
 import net.minecraft.commands.Commands;
 import net.minecraft.commands.arguments.EntityArgument;
@@ -20,13 +19,15 @@ public class RungCommand
 {
 	public static final String GET_SUCCESS = "commands.minestuck.get_rung";
 	public static final String SET_SUCCESS = "commands.minestuck.set_rung";
+	public static final String ADD_SUCCESS = "commands.minestuck.add_rung";
 	
 	public static void register(CommandDispatcher<CommandSourceStack> dispatcher)
 	{
 		dispatcher.register(
-			Commands.literal("rung").requires(s -> s.hasPermission(Commands.LEVEL_GAMEMASTERS))
-					.then(subCommandGet())
-					.then(subCommandSet())
+				Commands.literal("rung").requires(s -> s.hasPermission(Commands.LEVEL_GAMEMASTERS))
+						.then(subCommandAdd())
+						.then(subCommandGet())
+						.then(subCommandSet())
 		);
 	}
 	
@@ -64,11 +65,36 @@ public class RungCommand
 	
 	private static int setRung(CommandContext<CommandSourceStack> context, Collection<ServerPlayer> players, int rung, double progress)
 	{
-		for (ServerPlayer player : players) {
+		for(ServerPlayer player : players)
+		{
 			Echeladder.get(player).setByCommand(rung, progress);
 			MSCriteriaTriggers.ECHELADDER.get().trigger(player, rung);
 		}
 		context.getSource().sendSuccess(() -> Component.translatable(SET_SUCCESS, players.size(), rung, progress), true);
 		return players.size();
+	}
+	
+	private static ArgumentBuilder<CommandSourceStack, ?> subCommandAdd()
+	{
+		return Commands.literal("add")
+				.then(Commands.argument("target", EntityArgument.players())
+						.then(Commands.argument("amount", IntegerArgumentType.integer(1))
+								.executes(context ->
+										addRung(context, EntityArgument.getPlayers(context, "target"), IntegerArgumentType.getInteger(context, "amount")))));
+	}
+	
+	private static int addRung(CommandContext<CommandSourceStack> context, Collection<ServerPlayer> players, int amount)
+	{
+		int affected = 0;
+		for(ServerPlayer player : players)
+		{
+			int gained = Echeladder.get(player).addByCommand(amount);
+			if(gained > 0) affected++;
+		}
+		int successCount = affected;
+		//TODO consider changing message when successCount is 0
+		context.getSource().sendSuccess(() ->
+				Component.translatable(ADD_SUCCESS, amount, successCount), true);
+		return affected;
 	}
 }

@@ -6,8 +6,13 @@ The format is based on [Keep a Changelog](https://keepachangelog.com/en/1.1.0/).
 
 ## [Unreleased]
 
+## [1.21.1-1.14.1.0] - 2026-10-25
+
 ### Added
 
+- GristTorrent Computer App
+- New /rung add, get, set commands
+- New /grist [args] all command
 - Terrain Flatenator can now flatten terrain
 - Computer themes can have custom buttons
 - Anomalocaris hat, alien boppers, and Hood of the Huntress
@@ -16,6 +21,8 @@ The format is based on [Keep a Changelog](https://keepachangelog.com/en/1.1.0/).
 
 ### Changed
 
+- Updated some gui elements related to Grist Cache/Echeladder/Strife Specibus
+- Echeladder progression animation
 - Laptops can now be picked up
 - The range at which the Kernelsprite detects and travels to blocks has increased
 - Data checker is now available to everyone by default and has been visually overhauled
@@ -25,10 +32,11 @@ The format is based on [Keep a Changelog](https://keepachangelog.com/en/1.1.0/).
 - Fixed server tick crash related to kernelsprite dialogue
 - Fixed certain block not being in their relevant tag
 - Fixed items sometimes disappearing when closing the sylladex
+- Fixed a crash when items without grist costs are put in a GristWidget 12000
 
 ### Contributors for this release
 
-- Fl1s, Dweblenod, medsal15, Emma "Dilemma"
+- Dweblenod, Cibernet, Riotmode, kirderf1, medsal15, Caldw3ll, Fl1s, Emma "Dilemma", EnderTurret, heartsremedy
 
 ## [1.21.1-1.14.0.1] - 2026-06-01
 

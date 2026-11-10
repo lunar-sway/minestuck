@@ -41,10 +41,10 @@ public final class DiskBurnerGui implements ProgramGui<DiskBurnerData>
 		{
 			this.message = Component.translatable(CHOOSE);
 			this.buttonListHelper.updateButtons(List.of(
-					new ButtonListHelper.ButtonData(Component.translatable(BURN_SERVER_DISK),
-							() -> PacketDistributor.sendToServer(BurnDiskPacket.create(gui.computer, false))),
 					new ButtonListHelper.ButtonData(Component.translatable(BURN_CLIENT_DISK),
-							() -> PacketDistributor.sendToServer(BurnDiskPacket.create(gui.computer, true)))));
+							() -> PacketDistributor.sendToServer(BurnDiskPacket.create(gui.computer, 0))),
+					new ButtonListHelper.ButtonData(Component.translatable(BURN_SERVER_DISK),
+							() -> PacketDistributor.sendToServer(BurnDiskPacket.create(gui.computer, 1)))));
 		}
 	}
 	

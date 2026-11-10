@@ -7,7 +7,7 @@ import com.mraof.minestuck.api.alchemy.GristTypeSpawnCategory;
 import com.mraof.minestuck.computer.editmode.EditmodeLocations;
 import com.mraof.minestuck.event.OnEntryEvent;
 import com.mraof.minestuck.item.MSItems;
-import com.mraof.minestuck.item.artifact.CruxiteArtifactItem;
+import com.mraof.minestuck.item.artifact.CruxiteArtifact;
 import com.mraof.minestuck.player.*;
 import com.mraof.minestuck.util.ColorHandler;
 import com.mraof.minestuck.util.MSTags;
@@ -233,12 +233,12 @@ public final class SburbHandler
 			playerData.artifactType = MSItems.CRUXITE_APPLE.toStack();
 		} else
 		{
-			if(!(artifact.get().value() instanceof CruxiteArtifactItem))
+			if(!(artifact.get().value() instanceof CruxiteArtifact))
 				// Player may not be able to enter
 				// Could be an item that just implements it separately, keep it just in case
 				// Could also be a mistake by the person who added it to the minestuck:cruxite_artifacts tag
 				// Worst case scenario, edit the player's data in minestuck_skaianet.nbt
-				LOGGER.warn("Random artifact {} for player {} does not extend CruxiteArtifactItem class, keeping it in case it is implemented in its own way", artifact.get(), playerData.playerId().getPlayer(mcServer).getName());
+				LOGGER.warn("Random artifact {} for player {} does not implement CruxiteArtifact interface, keeping it in case it is implemented in its own way", artifact.get(), playerData.playerId().getPlayer(mcServer).getName());
 			playerData.artifactType = new ItemStack(artifact.get(), 1);
 		}
 		playerData.setBaseGrist(generateGristType(rand));
