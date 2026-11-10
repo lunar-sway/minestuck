@@ -582,10 +582,8 @@ public class EcheladderScreen extends PlayerStatsScreen
 	@Override
 	public boolean mouseDragged(double mouseX, double mouseY, int button, double dragX, double dragY) {
 		if (this.isDraggingScroll) {
-			if (scroll > 0 && scroll < maxScroll){
-				int calculatedScroll = (int) (maxScroll  * (1.0 - ((mouseY - (yOffset + 43.0)) / 141.0)));
-				scroll = Mth.clamp(calculatedScroll, 0, maxScroll);
-			}
+			int calculatedScroll = (int) (maxScroll  * (1.0 - ((mouseY - (yOffset + 43.0)) / 141.0)));
+			scroll = Mth.clamp(calculatedScroll, 0, maxScroll);
 			return true;
 		}
 		return super.mouseDragged(mouseX, mouseY, button, dragX, dragY);
