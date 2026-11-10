@@ -9,10 +9,7 @@ import com.mraof.minestuck.entity.dialogue.DialogueComponent;
 import com.mraof.minestuck.fluid.MSFluidType;
 import com.mraof.minestuck.inventory.captchalogue.CaptchaDeckHandler;
 import com.mraof.minestuck.inventory.musicplayer.MusicPlaying;
-import com.mraof.minestuck.player.Echeladder;
-import com.mraof.minestuck.player.GristCache;
-import com.mraof.minestuck.player.PlayerData;
-import com.mraof.minestuck.player.Title;
+import com.mraof.minestuck.player.*;
 import net.minecraft.server.level.ServerPlayer;
 import net.minecraft.world.entity.LivingEntity;
 import net.minecraft.world.entity.player.Player;
@@ -21,6 +18,8 @@ import net.neoforged.neoforge.attachment.IAttachmentHolder;
 import net.neoforged.neoforge.registries.DeferredRegister;
 import net.neoforged.neoforge.registries.NeoForgeRegistries;
 
+import java.util.ArrayList;
+import java.util.List;
 import java.util.function.Function;
 import java.util.function.Supplier;
 
@@ -30,12 +29,18 @@ public final class MSAttachments
 	
 	public static final Supplier<AttachmentType<CaptchaDeckHandler.ModusHolder>> MODUS_HOLDER = REGISTER.register("modus_holder",
 			() -> AttachmentType.serializable(restricted(CaptchaDeckHandler.ModusHolder::new, PlayerData.class)).build());
+	public static final Supplier<AttachmentType<StrifePortfolioData>> STRIFE_PORTFOLIO = REGISTER.register("strife_portfolio",
+					() -> AttachmentType.builder(StrifePortfolioData::new).serialize(StrifePortfolioData.CODEC).build());
+	
 	public static final Supplier<AttachmentType<Boolean>> HAS_KERNELSPRITE = REGISTER.register("has_kernelsprite",
 			() -> AttachmentType.builder(restricted(() -> false, PlayerData.class)).serialize(Codec.BOOL).build());
 	public static final Supplier<AttachmentType<Integer>> PLAYER_COLOR = REGISTER.register("player_color",
 			() -> AttachmentType.builder(restricted(() -> ColorHandler.BuiltinColors.DEFAULT_COLOR, PlayerData.class)).serialize(Codec.INT).build());
 	public static final Supplier<AttachmentType<Long>> BOONDOLLARS = REGISTER.register("boondollars",
 			() -> AttachmentType.builder(restricted(() -> 0L, PlayerData.class)).serialize(Codec.LONG).build());
+	
+	public static final Supplier<AttachmentType<List<String>>> SELECTED_SPECIBUS = REGISTER.register("selected_specibus",
+			() -> AttachmentType.<List<String>>builder(() -> new ArrayList<>()).serialize(Codec.list(Codec.STRING)).copyOnDeath().build());
 	public static final Supplier<AttachmentType<GristCache>> GRIST_CACHE = REGISTER.register("grist_cache",
 			() -> AttachmentType.serializable(restricted(GristCache::new, PlayerData.class)).build());
 	public static final Supplier<AttachmentType<Double>> GUTTER_MULTIPLIER = REGISTER.register("gutter_multiplier",

@@ -11,6 +11,7 @@ import com.mraof.minestuck.player.PlayerData;
 import com.mraof.minestuck.player.PlayerIdentifier;
 import com.mraof.minestuck.skaianet.SburbHandler;
 import com.mraof.minestuck.skaianet.SburbPlayerData;
+import com.mraof.minestuck.strife.StrifePortfolioHandler;
 import net.minecraft.network.chat.Component;
 import net.minecraft.server.level.ServerLevel;
 import net.minecraft.server.level.ServerPlayer;
@@ -137,6 +138,7 @@ public final class ColorHandler
 		{
 			playerData.setData(MSAttachments.PLAYER_COLOR, BuiltinColors.DEFAULT_COLOR);
 			player.connection.send(new PlayerColorPackets.OpenSelection());
+			StrifePortfolioHandler.offerStartingSpecibus(player);
 		} else
 			player.connection.send(new PlayerColorPackets.Data(playerData.getData(MSAttachments.PLAYER_COLOR)));
 	}

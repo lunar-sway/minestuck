@@ -13,11 +13,12 @@ import com.mraof.minestuck.inventory.captchalogue.CaptchaDeckHandler;
 import com.mraof.minestuck.inventory.captchalogue.HashMapModus;
 import com.mraof.minestuck.inventory.captchalogue.Modus;
 import com.mraof.minestuck.item.MSItems;
-import com.mraof.minestuck.player.EnumAspect;
-import com.mraof.minestuck.player.IdentifierHandler;
-import com.mraof.minestuck.player.Title;
+import com.mraof.minestuck.player.*;
 import com.mraof.minestuck.skaianet.TitleSelectionHook;
+import com.mraof.minestuck.util.MSTags;
 import com.mraof.minestuck.world.storage.MSExtraData;
+import net.minecraft.core.registries.BuiltInRegistries;
+import net.minecraft.resources.ResourceLocation;
 import net.minecraft.server.MinecraftServer;
 import net.minecraft.server.level.ServerPlayer;
 import net.minecraft.sounds.SoundEvents;
@@ -29,6 +30,7 @@ import net.minecraft.world.entity.Entity;
 import net.minecraft.world.entity.EquipmentSlot;
 import net.minecraft.world.entity.LivingEntity;
 import net.minecraft.world.entity.item.ItemEntity;
+import net.minecraft.world.item.Item;
 import net.minecraft.world.item.ItemStack;
 import net.minecraft.world.item.Items;
 import net.minecraft.world.phys.AABB;
@@ -37,11 +39,9 @@ import net.neoforged.bus.api.SubscribeEvent;
 import net.neoforged.fml.common.EventBusSubscriber;
 import net.neoforged.neoforge.common.util.FakePlayer;
 import net.neoforged.neoforge.event.ServerChatEvent;
+import net.neoforged.neoforge.event.TagsUpdatedEvent;
 import net.neoforged.neoforge.event.entity.item.ItemExpireEvent;
-import net.neoforged.neoforge.event.entity.living.LivingDamageEvent;
-import net.neoforged.neoforge.event.entity.living.LivingDeathEvent;
-import net.neoforged.neoforge.event.entity.living.LivingIncomingDamageEvent;
-import net.neoforged.neoforge.event.entity.living.MobEffectEvent;
+import net.neoforged.neoforge.event.entity.living.*;
 import net.neoforged.neoforge.event.entity.player.CriticalHitEvent;
 import net.neoforged.neoforge.event.entity.player.PlayerEvent;
 import net.neoforged.neoforge.event.furnace.FurnaceFuelBurnTimeEvent;
@@ -49,7 +49,7 @@ import net.neoforged.neoforge.event.server.ServerStoppedEvent;
 import net.neoforged.neoforge.event.tick.ServerTickEvent;
 import net.neoforged.neoforge.server.ServerLifecycleHooks;
 
-import java.util.List;
+import java.util.*;
 
 @EventBusSubscriber(modid = Minestuck.MOD_ID, bus = EventBusSubscriber.Bus.GAME)
 public class ServerEventHandler
@@ -128,6 +128,64 @@ public class ServerEventHandler
 		}
 	}
 	
+	//	private static KindAbstratusType getSelectedSpecibus(ServerPlayer player)
+//	{
+//		List<String> selected = player.getData(MSAttachments.SELECTED_SPECIBUS);
+//
+//		if(selected.isEmpty())
+//			return null;
+//
+//		return KindAbstratusList.getTypeFromName(selected);
+//	}
+
+//		@SubscribeEvent
+//	public static void onLivingAttack(LivingIncomingDamageEvent event) {
+//		if (!(event.getSource().getEntity() instanceof ServerPlayer player)) return;
+//
+//		String selected = player.getData(MSAttachments.SELECTED_SPECIBUS);
+//		if (selected.isEmpty()) return;
+//
+//		KindAbstratusType type = KindAbstratusList.getTypeFromName(selected);
+//		if (type == null) return;
+//
+//		if (!type.partOf(player.getMainHandItem())) {
+//			float reducedDamage = event.getAmount() * 0.15f;
+//			event.setAmount(reducedDamage);
+//		}
+//	}
+	// [debug_stuff]
+/*	@SubscribeEvent
+	public static void onLivingAttack(LivingIncomingDamageEvent event)
+	{
+		if(!(event.getSource().getEntity() instanceof ServerPlayer attacker)) return;
+		
+		String selected = attacker.getData(MSAttachments.SELECTED_SPECIBUS);
+		if(selected.isEmpty()) return;
+		
+		KindAbstratusType type = KindAbstratusList.getTypeFromName(selected);
+		if(type == null) return;
+		
+		ItemStack held = attacker.getMainHandItem();
+		
+		if(!type.partOf(held))
+		{
+			event.setCanceled(true);
+		}
+	}*/
+	private static float getDamageMultiplier(int selectedCount)
+	{
+		int max = MinestuckConfig.SERVER.maxSpecibusCount.get();
+		if(selectedCount <= 0 || max <= 1) return 1.0f;
+		float step = 0.75f / (max - 1);
+		return 2.0f - step * (selectedCount - 1);
+	}
+	
+	
+	@SubscribeEvent
+	public static void onTagsUpdated(TagsUpdatedEvent event) {
+		KindAbstratusList.reloadFromTags();
+	}
+	
 	@SubscribeEvent(priority = EventPriority.NORMAL, receiveCanceled = false)
 	public static void onPlayerInjured(LivingDamageEvent.Post event)
 	{
@@ -193,6 +251,58 @@ public class ServerEventHandler
 	public static void playerChangedDimension(PlayerEvent.PlayerChangedDimensionEvent event)
 	{
 		TitleSelectionHook.cancelSelection((ServerPlayer) event.getEntity());
+	}
+	
+/*	@SubscribeEvent
+	public static void onEquipmentChange(LivingEquipmentChangeEvent event)
+	{
+		
+		if(!(event.getEntity() instanceof ServerPlayer player)) return;
+		if(event.getSlot() != EquipmentSlot.MAINHAND) return;
+		
+		ItemStack from = event.getFrom();
+		ItemStack to = event.getTo();
+		
+		if(from.isEmpty() || !to.isEmpty()) return;
+		if(from.getMaxDamage() <= 0) return;
+		if(from.getDamageValue() < from.getMaxDamage() - 2) return;
+		
+		Item halfItem = getHalfBlade(from);
+		if(halfItem == null) return;
+		
+		List<String> selected = new ArrayList<>(player.getData(MSAttachments.SELECTED_SPECIBUS));
+		if(!selected.contains(KindAbstratusList.SWORD)) return;
+		
+		ItemStack halfStack = new ItemStack(halfItem);
+		EnchantmentHelper.updateEnchantments(halfStack, mutable -> {
+			EnchantmentHelper.getEnchantmentsForCrafting(from).keySet().forEach(enchantment ->
+					mutable.set(enchantment, EnchantmentHelper.getEnchantmentsForCrafting(from).getLevel(enchantment))
+			);
+		});
+		player.setItemInHand(InteractionHand.MAIN_HAND, halfStack);
+		
+		String halfSword = KindAbstratusList.HALF_SWORD;
+		if(!selected.contains(halfSword))
+		{
+			selected.remove(KindAbstratusList.SWORD);
+			selected.add(halfSword);
+			player.setData(MSAttachments.SELECTED_SPECIBUS, selected);
+			PacketDistributor.sendToPlayer(player, new SyncSpecibusPacket(selected, MinestuckConfig.SERVER.maxSpecibusCount.get()));
+		}
+		
+		MSCriteriaTriggers.BLADEKIND_BREAK.get().trigger(player);
+	}*/
+	
+	
+	private static Item getHalfBlade(ItemStack stack)
+	{
+		if(!stack.is(MSTags.Items.KIND_SWORD)) return null;
+		ResourceLocation id = BuiltInRegistries.ITEM.getKey(stack.getItem());
+		ResourceLocation halfId = Minestuck.id("half_" + id.getPath());
+		
+		return BuiltInRegistries.ITEM.getOptional(halfId)
+				.filter(item -> new ItemStack(item).is(MSTags.Items.KIND_HALF_SWORD))
+				.orElse(null);
 	}
 	
 	@SubscribeEvent(priority=EventPriority.LOW, receiveCanceled=false)

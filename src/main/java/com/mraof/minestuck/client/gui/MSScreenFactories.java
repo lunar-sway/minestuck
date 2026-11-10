@@ -78,6 +78,11 @@ public class MSScreenFactories
 		Minecraft.getInstance().setScreen(new ComputerScreen(Minecraft.getInstance(), blockEntity));
 	}
 	
+	public static void displayStrifeCardScreen(InteractionHand hand)
+	{
+		Minecraft.getInstance().setScreen(new StrifeCardScreen(hand));
+	}
+	
 	public static void displayTransportalizerScreen(TransportalizerBlockEntity blockEntity)
 	{
 		Minecraft.getInstance().setScreen(new TransportalizerScreen(blockEntity));

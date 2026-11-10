@@ -42,6 +42,13 @@
       "operation": "add_value",
       "value": 8.0,
       "change_per_rung": 0.9
+    },
+    {
+      "attribute": "minestuck:player.strife_deck_capacity",
+      "id": "minestuck:echeladder_strife_deck_capacity",
+      "operation": "add_value",
+      "value": 20.0,
+      "change_per_rung": 0.0
     }
   ]
 }

@@ -3,6 +3,7 @@ package com.mraof.minestuck.advancements;
 import com.mraof.minestuck.Minestuck;
 import net.minecraft.advancements.CriterionTrigger;
 import net.minecraft.core.registries.BuiltInRegistries;
+import net.neoforged.neoforge.registries.DeferredHolder;
 import net.neoforged.neoforge.registries.DeferredRegister;
 
 import java.util.function.Supplier;
@@ -18,6 +19,7 @@ public class MSCriteriaTriggers
 	public static final Supplier<EventTrigger> BUY_OUT_SHOP = REGISTER.register("buy_out_shop", EventTrigger::new);
 	public static final Supplier<EventTrigger> BRICK_COMPUTER = REGISTER.register("brick_computer", EventTrigger::new);
 	public static final Supplier<EventTrigger> SPEEDRUN = REGISTER.register("speedrun", EventTrigger::new);
+	public static final Supplier<BladeKindBreakTrigger> BLADEKIND_BREAK = REGISTER.register("bladekind_break", BladeKindBreakTrigger::new);
 	
 	public static final Supplier<PunchDesignixTrigger> PUNCH_DESIGNIX = REGISTER.register("punch_designix", PunchDesignixTrigger::new);
 	public static final Supplier<IntellibeamLaserstationTrigger> INTELLIBEAM_LASERSTATION = REGISTER.register("intellibeam_laserstation", IntellibeamLaserstationTrigger::new);
