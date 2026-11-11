@@ -20,6 +20,8 @@ and [Prismarine armor](src/main/resources/assets/minestuck/geo/prismarine_armor.
 
 - Dweblenod
 
+- glubtier: [`item/squiddle.json`](src/main/resources/assets/minestuck/models/item/squiddle.json), [`block/squiddle.json`](src/main/resources/assets/minestuck/models/block/squiddle.json)
+
 - [iconmaster](https://github.com/iconmaster5326/)
 
 - Ishumire
