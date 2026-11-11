@@ -647,7 +647,6 @@ public class MSItems
 	public static final DeferredItem<Item> CAKE_MIX = REGISTER.register("cake_mix", () -> new Item(new Item.Properties()));
 	
 	
-	
 	//Structure Scanners
 	public static final DeferredItem<Item> TEMPLE_SCANNER = REGISTER.register("temple_scanner", () -> new StructureScannerItem(new Item.Properties(), MSTags.Structures.SCANNER_LOCATED, MSItems.RAW_URANIUM, 30));
 	
