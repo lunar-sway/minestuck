@@ -60,7 +60,9 @@ public class MSBlockShapes
 	public static final CustomVoxelShape PIPE = new CustomVoxelShape(new double[]{0, 0, 0, 2, 14, 16}, new double[]{0, 16, 0, 14, 14, 16}, new double[]{16, 16, 0, 14, 2, 16}, new double[]{16, 0, 0, 2, 2, 16});
 	public static final CustomVoxelShape PARCEL_PYXIS = new CustomVoxelShape(new double[]{3, 0, 3, 13, 16, 13}, new double[]{2, 0, 2, 14, 3, 14});
 	public static final CustomVoxelShape PYXIS_LID = new CustomVoxelShape(new double[]{3, 0, 3, 13, 3, 13});
-	public static final CustomVoxelShape SQUIDDLE = new CustomVoxelShape(new double[]{3, 0, 3, 13, 5, 13}, new double[]{5, 5, 5, 11, 9, 11});
+
+	public static final CustomVoxelShape SQUIDDLE_FLOOR = new CustomVoxelShape(new double[]{3, 0, 3, 13, 5, 13}, new double[]{5, 5, 5, 11, 9, 11});
+	public static final CustomVoxelShape SQUIDDLE_WALL = new CustomVoxelShape(new double[]{3, 6, 6, 13, 11, 16}, new double[]{5, 11, 8, 11, 15, 14});
 	
 	//Machines
 	public static final CustomVoxelShape ALCHEMITER_CENTER = new CustomVoxelShape(new double[]{0, 0, 0, 16, 16, 16});
