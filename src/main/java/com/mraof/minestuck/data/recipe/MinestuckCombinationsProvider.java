@@ -1107,6 +1107,7 @@ public final class MinestuckCombinationsProvider
 		CombinationRecipeBuilder.of(MSItems.PLUSH_NAKAGATOR).input(Items.RED_WOOL).and().input(MSItems.NAKAGATOR_STATUE).build(consumer);
 		CombinationRecipeBuilder.of(MSItems.PLUSH_TURTLE).input(Items.PINK_WOOL).and().input(Items.TURTLE_SCUTE).build(consumer);
 		CombinationRecipeBuilder.of(MSItems.PLUSH_IGUANA).input(Items.BLUE_WOOL).and().input(Items.MANGROVE_ROOTS).build(consumer);
+		CombinationRecipeBuilder.of(MSItems.SQUIDDLE).input(Items.PURPLE_WOOL).and().input(MSItems.INK_SQUID_PRO_QUO).build(consumer);
 		
 		CombinationRecipeBuilder.of(MSItems.ENERGY_CORE).input(MSItems.RAW_CRUXITE).and().input(MSItems.RAW_URANIUM).build(consumer);
 		CombinationRecipeBuilder.of(MSItems.IRRADIATED_STEAK).input(MSItems.RAW_URANIUM).or().input(Items.COOKED_BEEF).build(consumer);
