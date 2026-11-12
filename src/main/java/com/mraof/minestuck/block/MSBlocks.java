@@ -1085,6 +1085,10 @@ public final class MSBlocks
 	public static final DeferredBlock<LiquidBlock> CAULK = REGISTER.register("caulk", () -> new MSLiquidBlock(MSFluids.CAULK.get(), false, Block.Properties.of().mapColor(MapColor.COLOR_GRAY).replaceable().pushReaction(PushReaction.DESTROY).liquid().noCollission().strength(100.0F).noLootTable().sound(SoundType.EMPTY)));
 	public static final DeferredBlock<LiquidBlock> MOLTEN_AMBER = REGISTER.register("molten_amber", () -> new MSLiquidBlock(MSFluids.MOLTEN_AMBER.get(), false, Block.Properties.of().mapColor(MapColor.FIRE).replaceable().pushReaction(PushReaction.DESTROY).liquid().noCollission().strength(100.0F).lightLevel(state -> 15).noLootTable().sound(SoundType.EMPTY)));
 	
+	// Decor
+//	public static final DeferredBlock<PlushieBlock> SQUIDDLE = REGISTER.register("squiddle_floor", () -> new PlushieBlock(PlushieBlock.defaultProperties(), MSBlockShapes.SQUIDDLE_FLOOR.create(Direction.NORTH)));
+	public static final DeferredBlock<PlushieBlock> SQUIDDLE = REGISTER.register("squiddle_floor", () -> new PlushieBlock(PlushieBlock.defaultProperties(), MSBlockShapes.SQUIDDLE_FLOOR.createRotatedShapes()));
+	public static final DeferredBlock<PlushieWallBlock> SQUIDDLE_WALL = REGISTER.register("squiddle_wall", () -> new PlushieWallBlock(PlushieBlock.defaultProperties(), MSBlockShapes.SQUIDDLE_WALL.createRotatedShapes()));
 	
 	protected static Function<BlockState, MapColor> logColors(MapColor topColor, MapColor barkColor)
 	{

@@ -1148,6 +1148,7 @@
   "block.minestuck.space_aspect_trapdoor": "Space Trapdoor",
   "block.minestuck.space_aspect_wood": "Space Wood",
   "block.minestuck.spikes": "Spikes",
+  "block.minestuck.squiddle": "Squiddle",
   "block.minestuck.stat_storer": "Stat Storer",
   "block.minestuck.stat_storer.tooltip": "Lets off a redstone signal with the strength of the signal based on the active value type stored.",
   "block.minestuck.steel_beam": "Steel Beam",

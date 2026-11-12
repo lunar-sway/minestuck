@@ -1,0 +1,30 @@
+{
+	"parent": "item/handheld",
+	"loader": "neoforge:separate_transforms",
+	"base": {
+		"parent": "minestuck:block/squiddle_wall",
+		"textures": {
+			"layer0": "minestuck:block/squiddle"
+		}
+	},
+	"perspectives": {
+		"gui": {
+			"parent": "item/handheld",
+			"textures": {
+				"layer0": "minestuck:item/squiddle"
+			}
+		},
+		"ground": {
+			"parent": "item/handheld",
+			"textures": {
+				"layer0": "minestuck:item/squiddle"
+			}
+		},
+		"fixed": {
+			"parent": "item/handheld",
+			"textures": {
+				"layer0": "minestuck:item/squiddle"
+			}
+		}
+	}
+}
