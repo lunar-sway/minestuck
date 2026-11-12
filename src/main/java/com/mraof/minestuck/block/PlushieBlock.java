@@ -12,7 +12,6 @@ import net.minecraft.world.level.block.state.BlockBehaviour;
 import net.minecraft.world.level.block.state.BlockState;
 import net.minecraft.world.level.block.state.StateDefinition;
 import net.minecraft.world.phys.shapes.CollisionContext;
-import net.minecraft.world.phys.shapes.Shapes;
 import net.minecraft.world.phys.shapes.VoxelShape;
 import org.jetbrains.annotations.Nullable;
 
@@ -58,11 +57,12 @@ public class PlushieBlock extends HorizontalDirectionalBlock
 	@Override
 	public @Nullable BlockState getStateForPlacement(BlockPlaceContext ctx)
 	{
-		//~ FIXME: wrong direction being picked when placed at an angle
-//		return this.defaultBlockState().setValue(FACING, ctx.getHorizontalDirection().getOpposite());
-		return this.defaultBlockState().setValue(FACING, ctx.getClickedFace().getOpposite());
+		Direction direction = ctx.getClickedFace().getAxis().isHorizontal()
+				? ctx.getClickedFace()
+				: ctx.getHorizontalDirection().getOpposite();
+		
+		return this.defaultBlockState().setValue(FACING, direction);
 	}
-	
 	
 	@Override
 	protected void createBlockStateDefinition(StateDefinition.Builder<Block, BlockState> builder)
