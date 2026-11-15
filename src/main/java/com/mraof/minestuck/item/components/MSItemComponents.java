@@ -5,6 +5,7 @@ import com.mraof.minestuck.Minestuck;
 import com.mraof.minestuck.computer.ProgramType;
 import com.mraof.minestuck.computer.ProgramTypes;
 import com.mraof.minestuck.item.block.TransportalizerItem;
+import com.mraof.minestuck.player.StrifeSpecibus;
 import net.minecraft.core.GlobalPos;
 import net.minecraft.core.Holder;
 import net.minecraft.core.component.DataComponentType;
@@ -39,6 +40,18 @@ public final class MSItemComponents
 					.persistent(StoneTabletTextComponent.CODEC)
 					.networkSynchronized(StoneTabletTextComponent.STREAM_CODEC)
 					.build());
+	
+	public static final Supplier<DataComponentType<Unit>> STRIFE_ASSIGNED = REGISTRY.register("strife_assigned",
+			() -> DataComponentType.<Unit>builder()
+					.persistent(Codec.unit(Unit.INSTANCE))
+					.networkSynchronized(StreamCodec.unit(Unit.INSTANCE))
+					.build());
+	public static final Supplier<DataComponentType<StrifeSpecibus>> STRIFE_SPECIBUS_DATA = REGISTRY.register("strife_specibus_data",
+			() -> DataComponentType.<StrifeSpecibus>builder()
+					.persistent(StrifeSpecibus.CODEC)
+					.networkSynchronized(StrifeSpecibus.STREAM_CODEC)
+					.build());
+	
 	public static final Supplier<DataComponentType<HieroglyphCode>> HIEROGLYPH_CODE = REGISTRY.registerComponentType("hieroglyph_code",
 			builder -> builder.persistent(HieroglyphCode.CODEC).networkSynchronized(HieroglyphCode.STREAM_CODEC));
 	public static final Supplier<DataComponentType<Unit>> PARADOX_CODE = REGISTRY.registerComponentType("paradox_code",
