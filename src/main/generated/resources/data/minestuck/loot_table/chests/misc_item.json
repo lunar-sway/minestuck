@@ -108,6 +108,11 @@
         },
         {
           "type": "minecraft:item",
+          "name": "minestuck:squiddle",
+          "weight": 2
+        },
+        {
+          "type": "minecraft:item",
           "functions": [
             {
               "add": false,
