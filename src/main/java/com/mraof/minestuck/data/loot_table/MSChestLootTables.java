@@ -531,6 +531,7 @@ public final class MSChestLootTables implements LootTableSubProvider
 						.add(LootItem.lootTableItem(MSItems.BINARY_CODE).setWeight(2).setQuality(0))
 						.add(LootItem.lootTableItem(MSItems.NONBINARY_CODE).setWeight(2).setQuality(0))
 						.add(LootItem.lootTableItem(MSItems.INK_SQUID_PRO_QUO).setWeight(8).setQuality(0))
+						.add(LootItem.lootTableItem(MSItems.SQUIDDLE).setWeight(2).setQuality(0))
 						.add(LootItem.lootTableItem(MSItems.BARBASOL).setWeight(10).setQuality(0).apply(countRange(1, 8)))
 						.add(LootItem.lootTableItem(MSBlocks.GENERIC_OBJECT).setWeight(10).setQuality(-1))
 						.add(LootItem.lootTableItem(MSItems.SORROW_GUSHERS).setWeight(7).setQuality(-1).apply(countRange(3, 7)))

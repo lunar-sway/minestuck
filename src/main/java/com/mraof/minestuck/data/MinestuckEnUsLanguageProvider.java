@@ -1788,6 +1788,7 @@ public class MinestuckEnUsLanguageProvider extends MinestuckLanguageProvider
 		addItem(MSItems.PLUSH_IGUANA, "Iguana Plushie");
 		addItem(MSItems.PLUSH_TURTLE, "Turtle Plushie");
 		addItem(MSItems.PLUSH_MUTATED_CAT, "Mutated Cat Plushie");
+		addItem(MSItems.SQUIDDLE, "Squiddle");
 		addItem(MSItems.IRON_BOAT, "Iron Boat");
 		addItem(MSItems.GOLD_BOAT, "Golden Boat");
 		addItem(MSItems.FLARP_MANUAL, "Flarp Manual");
