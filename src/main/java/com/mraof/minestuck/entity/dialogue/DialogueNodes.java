@@ -26,7 +26,7 @@ import java.util.Objects;
 
 @ParametersAreNonnullByDefault
 @MethodsReturnNonnullByDefault
-@EventBusSubscriber(bus = EventBusSubscriber.Bus.GAME)
+@EventBusSubscriber
 public class DialogueNodes
 {
 	private final BiMap<ResourceLocation, Dialogue.NodeSelector> dialogues;

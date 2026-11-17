@@ -21,7 +21,7 @@ import net.neoforged.neoforge.registries.DeferredRegister;
 import java.util.Optional;
 import java.util.function.Supplier;
 
-@EventBusSubscriber(modid = Minestuck.MOD_ID, bus = EventBusSubscriber.Bus.MOD, value = Dist.CLIENT)
+@EventBusSubscriber(modid = Minestuck.MOD_ID, value = Dist.CLIENT)
 public final class MSCreativeTabs
 {
 	public static final String MAIN_KEY = "minestuck.item_group.main";

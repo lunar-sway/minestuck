@@ -34,7 +34,7 @@ import net.neoforged.neoforge.event.entity.player.PlayerEvent;
 import javax.annotation.Nullable;
 import java.util.EnumSet;
 
-@EventBusSubscriber(modid = Minestuck.MOD_ID, bus = EventBusSubscriber.Bus.GAME)
+@EventBusSubscriber(modid = Minestuck.MOD_ID)
 public class KernelspriteEntity extends PathfinderMob implements DialogueEntity
 {
 	private static final EntityDataAccessor<Integer> COLOR = SynchedEntityData.defineId(KernelspriteEntity.class, EntityDataSerializers.INT);

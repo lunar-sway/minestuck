@@ -19,7 +19,7 @@ import net.neoforged.neoforge.client.event.RegisterClientReloadListenersEvent;
 import java.util.Objects;
 import java.util.Random;
 
-@EventBusSubscriber(modid = Minestuck.MOD_ID, bus = EventBusSubscriber.Bus.MOD, value = Dist.CLIENT)
+@EventBusSubscriber(modid = Minestuck.MOD_ID, value = Dist.CLIENT)
 public class LandSkySpriteUploader extends TextureAtlasHolder
 {
 	public static final int VARIANT_COUNT = 3;

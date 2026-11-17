@@ -13,7 +13,7 @@ import net.neoforged.fml.common.EventBusSubscriber;
 import net.neoforged.neoforge.registries.datamaps.DataMapType;
 import net.neoforged.neoforge.registries.datamaps.RegisterDataMapTypesEvent;
 
-@EventBusSubscriber(modid = Minestuck.MOD_ID, bus = EventBusSubscriber.Bus.MOD)
+@EventBusSubscriber(modid = Minestuck.MOD_ID)
 public record UraniumPower(int power)
 {
 	public static final Codec<UraniumPower> POWER_CODEC = ExtraCodecs.POSITIVE_INT.xmap(UraniumPower::new, UraniumPower::power);

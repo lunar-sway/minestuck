@@ -39,7 +39,7 @@ import java.util.function.Function;
 /**
  * Contains types for describing pieces and how they connect, as well as builders for defining data of these types.
  */
-@EventBusSubscriber(modid = Minestuck.MOD_ID, bus = EventBusSubscriber.Bus.MOD)
+@EventBusSubscriber(modid = Minestuck.MOD_ID)
 public final class WFCData
 {
 	private static final Logger LOGGER = LogManager.getLogger();
@@ -460,7 +460,7 @@ public final class WFCData
 		}
 	}
 	
-	@EventBusSubscriber(modid = Minestuck.MOD_ID, bus = EventBusSubscriber.Bus.MOD)
+	@EventBusSubscriber(modid = Minestuck.MOD_ID)
 	public static record ConnectionSet(List<Pair<ConnectorType, ConnectorType>> connections)
 	{
 		public static final ResourceKey<Registry<ConnectionSet>> REGISTRY_KEY = ResourceKey.createRegistryKey(Minestuck.id("wfc_connection_set"));
@@ -477,7 +477,7 @@ public final class WFCData
 		}
 	}
 	
-	@EventBusSubscriber(modid = Minestuck.MOD_ID, bus = EventBusSubscriber.Bus.MOD)
+	@EventBusSubscriber(modid = Minestuck.MOD_ID)
 	public static record PaletteData(Holder<ConnectionSet> connectionSet, List<WeightedEntry.Wrapper<Holder<EntryPrototype>>> entries)
 	{
 		public static final ResourceKey<Registry<PaletteData>> REGISTRY_KEY = ResourceKey.createRegistryKey(Minestuck.id("wfc_palette"));

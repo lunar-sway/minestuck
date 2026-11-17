@@ -23,6 +23,7 @@ public class GristLayerDebugRender
 	private static final boolean RENDER = false;
 	private static final int RADIUS =  30;
 	
+	@SuppressWarnings("unused")
 	@SubscribeEvent
 	public static void onRenderTick(RenderLevelStageEvent event)
 	{

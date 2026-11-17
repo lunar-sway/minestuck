@@ -16,7 +16,7 @@ import net.neoforged.fml.common.EventBusSubscriber;
  * the alchemy ones refer to the first time you alchemize something of a certain value.
  * </p>
  */
-@EventBusSubscriber(modid = Minestuck.MOD_ID, bus = EventBusSubscriber.Bus.GAME)
+@EventBusSubscriber(modid = Minestuck.MOD_ID)
 public enum EcheladderBonusType
 {
 	IMP(10),
