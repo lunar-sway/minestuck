@@ -36,7 +36,15 @@ public final class BlockCopier
 	
 	static void copyBlock(LevelChunk sourceChunk, BlockPos source, BlockState block, LevelChunk targetChunk, BlockPos targetPos)
 	{
-		targetChunk.setBlockState(targetPos, block, true);
+		try
+		{
+			targetChunk.setBlockState(targetPos, block, true);
+		}
+		catch (NullPointerException e)
+		{
+			LOGGER.error("Exception while placing block {} during entry: {}", block, e);
+			return;
+		}
 		
 		BlockEntity blockEntity = sourceChunk.getBlockEntity(source, LevelChunk.EntityCreationType.CHECK);
 		BlockEntity newBE = null;
