@@ -15,6 +15,7 @@ import net.minecraft.network.chat.Component;
 import net.minecraft.resources.ResourceLocation;
 
 import javax.annotation.Nonnull;
+import javax.annotation.Nullable;
 import java.util.Collections;
 import java.util.List;
 import java.util.Set;
@@ -67,6 +68,11 @@ public final class PredefineData
 	{
 		//TODO Take a look at the title land type and warn if it's not connected to the set land type
 		this.title = title;
+	}
+	
+	public void predefineSelectedTerrainLandType(@Nullable TerrainLandType terrainLandType)
+	{
+		this.terrainLandType = terrainLandType;
 	}
 	
 	public void predefineTerrainLand(TerrainLandType landType, CommandSourceStack source)

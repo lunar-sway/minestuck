@@ -77,7 +77,7 @@ public final class SburbHandler
 			if(title == null)
 				return;
 			Title.setTitle(data, title);
-		} else if(!MinestuckConfig.SERVER.playerSelectedTitle.get())
+		} else if(!MinestuckConfig.SERVER.playerSelectedTitle.get() && !MinestuckConfig.SERVER.playerSelectedLand.get())
 			LOGGER.warn("Trying to generate a title for {} when a title is already assigned!", player.getUsername());
 	}
 	
