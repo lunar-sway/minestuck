@@ -94,6 +94,8 @@ public class EcheladderScreen extends PlayerStatsScreen
 	private static final String EQUALS = "=";
 	private int equalsWidth;
 	
+	private boolean isDraggingScroll = false;
+	
 	public EcheladderScreen()
 	{
 		super(Component.translatable(TITLE));
@@ -556,16 +558,42 @@ public class EcheladderScreen extends PlayerStatsScreen
 		{
 			if(ycor >= yOffset + 35 && ycor < yOffset + 42)
 			{
-				scroll = maxScroll;
+				if (scroll < maxScroll){
+					scroll++;
+				}
 				return true;
 			} else if(ycor >= yOffset + 185 && ycor < yOffset + 192)
 			{
-				scroll = 0;
+				if (scroll > 0){
+					scroll--;
+				}
+				return true;
+			} else if(ycor >= yOffset + 43 && ycor < yOffset + 184){
+				isDraggingScroll = true;
+				int calculatedScroll = (int) (maxScroll  * (1.0 - ((ycor - (yOffset + 43.0)) / 141.0)));
+				scroll = Mth.clamp(calculatedScroll, 0, maxScroll);
 				return true;
 			}
 		}
 		
 		return super.mouseClicked(xcor, ycor, mouseButton);
+	}
+	
+	@Override
+	public boolean mouseDragged(double mouseX, double mouseY, int button, double dragX, double dragY) {
+		if (this.isDraggingScroll) {
+			int calculatedScroll = (int) (maxScroll  * (1.0 - ((mouseY - (yOffset + 43.0)) / 141.0)));
+			scroll = Mth.clamp(calculatedScroll, 0, maxScroll);
+			return true;
+		}
+		return super.mouseDragged(mouseX, mouseY, button, dragX, dragY);
+	}
+	
+	
+	@Override
+	public boolean mouseReleased(double mouseX, double mouseY, int button){
+		isDraggingScroll = false;
+		return super.mouseReleased(mouseX, mouseY, button);
 	}
 	
 	private static final class BoondollarParticle
