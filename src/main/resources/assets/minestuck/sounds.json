@@ -886,6 +886,15 @@
       }
     ]
   },
+  "event.echeladder.boondollars": {
+    "category": "ambient",
+    "subtitle": "subtitles.minestuck.boondollars",
+    "sounds": [
+        "minestuck:random/coin1",
+        "minestuck:random/coin2",
+        "minestuck:random/coin3"
+    ]
+  },
   "event.electric_shock": {
     "category": "ambient",
     "subtitle": "subtitles.minestuck.electric_shock",

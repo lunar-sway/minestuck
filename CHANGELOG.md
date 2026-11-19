@@ -8,19 +8,32 @@ The format is based on [Keep a Changelog](https://keepachangelog.com/en/1.1.0/).
 
 ### Added
 
+- Added new select, move, rotate, copy and paste actions to edit mode
+- Added multiple misc sound effects made by remedyhearts to edit mode
+
+### Changed
+
+- Separated edit mode hotkeys in settings
+
+## [1.21.1-1.14.1.0] - 2026-10-25
+
+### Added
+
+- GristTorrent Computer App
+- New /rung add, get, set commands
+- New /grist [args] all command
 - Terrain Flatenator can now flatten terrain
 - Computer themes can have custom buttons
 - Anomalocaris hat, alien boppers, and Hood of the Huntress
-- Added new select, move, rotate, copy and paste actions to edit mode
-- Added multiple misc sound effects made by remedyhearts to edit mode
 - New Cruxite Artifacts (Shears, Disk, Disc)
 - Harlequin outfit
 
 ### Changed
 
+- Updated some gui elements related to Grist Cache/Echeladder/Strife Specibus
+- Echeladder progression animation
 - Laptops can now be picked up
 - The range at which the Kernelsprite detects and travels to blocks has increased
-- Separated edit mode hotkeys in settings
 - Data checker is now available to everyone by default and has been visually overhauled
 
 ### Fixed
@@ -32,7 +45,7 @@ The format is based on [Keep a Changelog](https://keepachangelog.com/en/1.1.0/).
 
 ### Contributors for this release
 
-- Fl1s, heartsremedy Dweblenod, medsal15, Emma "Dilemma", EnderTurret
+- Dweblenod, Cibernet, Riotmode, kirderf1, medsal15, Caldw3ll, Fl1s, Emma "Dilemma", EnderTurret, heartsremedy
 
 ## [1.21.1-1.14.0.1] - 2026-06-01
 

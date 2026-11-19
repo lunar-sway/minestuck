@@ -16,6 +16,7 @@ import java.util.*;
 /**
  * Used to encode/decode player usernames, to handle uses with LAN.
  * This file is to now only be used serverside.
+ *
  * @author kirderf1
  */
 public class IdentifierHandler
@@ -171,7 +172,12 @@ public class IdentifierHandler
 		@Override
 		public String getUsername()
 		{
-			return UsernameCache.containsUUID(uuid) ? UsernameCache.getLastKnownUsername(uuid) : "Unknown ("+getId()+")";
+			return UsernameCache.containsUUID(uuid) ? UsernameCache.getLastKnownUsername(uuid) : "Unknown (" + getId() + ")";
+		}
+		
+		public UUID getUUID()
+		{
+			return uuid;
 		}
 		
 		@Override
@@ -200,7 +206,7 @@ public class IdentifierHandler
 		@Override
 		public String toString()
 		{
-			return "Identifier:"+getUsername();
+			return "Identifier:" + getUsername();
 		}
 		
 		@Override
@@ -238,7 +244,7 @@ public class IdentifierHandler
 		@Override
 		public String getUsername()
 		{
-			return "Fake player "+count;
+			return "Fake player " + count;
 		}
 		
 		@Override
@@ -250,21 +256,21 @@ public class IdentifierHandler
 		@Override
 		public String getCommandString()
 		{
-			return "fake"+count;
+			return "fake" + count;
 		}
 		
 		@Override
 		public CompoundTag saveToNBT(CompoundTag nbt, String key)
 		{
 			nbt.putString(key, "fake");
-			nbt.putInt(key+"_count", count);
+			nbt.putInt(key + "_count", count);
 			return nbt;
 		}
 		
 		@Override
 		public String toString()
 		{
-			return "Identifier:fake_"+count;
+			return "Identifier:fake_" + count;
 		}
 		
 		@Override

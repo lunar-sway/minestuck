@@ -31,6 +31,8 @@ public final class ProgramTypes
 			() -> new ProgramType<>(Handlers.SERVER, SburbServerData::new));
 	public static final DeferredHolder<ProgramType<?>, ProgramType<SburbClientData>> SBURB_CLIENT = REGISTER.register("sburb_client",
 			() -> new ProgramType<>(Handlers.CLIENT, SburbClientData::new));
+	public static final DeferredHolder<ProgramType<?>, ProgramType<ProgramType.EmptyData>> GRIST_TORRENT = REGISTER.register("grist_torrent",
+			() -> new ProgramType<>(Handlers.EMPTY, ignored -> ProgramType.EmptyData.INSTANCE));
 	
 	public static final Comparator<ProgramType<?>> DISPLAY_ORDER_SORTER = Comparator.comparing(REGISTRY::getId);
 	
