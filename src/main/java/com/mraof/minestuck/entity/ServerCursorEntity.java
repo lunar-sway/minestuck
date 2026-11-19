@@ -211,4 +211,11 @@ public class ServerCursorEntity extends Entity implements GeoEntity, IEntityWith
 			this.length = length;
 		}
 	}
+	
+	@Override
+	public boolean shouldRenderAtSqrDistance(double pDistance)
+	{
+		double desiredRange = 64.0;
+		return pDistance < desiredRange * desiredRange;
+	}
 }

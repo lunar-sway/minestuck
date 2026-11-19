@@ -67,6 +67,12 @@ public class DeployEntry
 		return grist.apply(usePrimaryCost, playerData);
 	}
 	
+	@Nullable
+	public GristSet getRepeatCost(SburbPlayerData playerData)
+	{
+		return grist.apply(false, playerData);
+	}
+	
 	void tryAddDeployTag(SburbPlayerData playerData, Level level, int tier, ListTag list, int i)
 	{
 		if(isAvailable(playerData, tier))
