@@ -40,7 +40,7 @@ public final class BlockCopier
 		{
 			targetChunk.setBlockState(targetPos, block, true);
 		}
-		catch (NullPointerException e)
+		catch(NullPointerException e)
 		{
 			LOGGER.error("Exception while placing block {} at {} during entry: {}", block, targetPos, e);
 			return;
