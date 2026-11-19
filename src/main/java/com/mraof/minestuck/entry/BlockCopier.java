@@ -42,7 +42,7 @@ public final class BlockCopier
 		}
 		catch (NullPointerException e)
 		{
-			LOGGER.error("Exception while placing block {} during entry: {}", block, e);
+			LOGGER.error("Exception while placing block {} at {} during entry: {}", block, targetPos, e);
 			return;
 		}
 		
