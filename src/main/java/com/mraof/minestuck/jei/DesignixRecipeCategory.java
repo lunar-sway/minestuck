@@ -7,12 +7,14 @@ import com.mraof.minestuck.item.CaptchaCardItem;
 import mezz.jei.api.constants.VanillaTypes;
 import mezz.jei.api.gui.builder.IRecipeLayoutBuilder;
 import mezz.jei.api.gui.drawable.IDrawable;
+import mezz.jei.api.gui.ingredient.IRecipeSlotsView;
 import mezz.jei.api.helpers.IGuiHelper;
 import mezz.jei.api.recipe.IFocusGroup;
 import mezz.jei.api.recipe.RecipeIngredientRole;
 import mezz.jei.api.recipe.RecipeType;
 import mezz.jei.api.recipe.category.IRecipeCategory;
 import net.minecraft.MethodsReturnNonnullByDefault;
+import net.minecraft.client.gui.GuiGraphics;
 import net.minecraft.network.chat.Component;
 import net.minecraft.resources.ResourceLocation;
 import net.minecraft.world.item.ItemStack;
@@ -31,7 +33,7 @@ public class DesignixRecipeCategory implements IRecipeCategory<JeiCombination>
     DesignixRecipeCategory(IGuiHelper guiHelper)
     {
         ResourceLocation punchDesignixBackground = Minestuck.id("textures/gui/designix.png");
-        background = guiHelper.createDrawable(punchDesignixBackground, 43, 25, 94, 42);
+        background = guiHelper.createDrawable(punchDesignixBackground, 43, 25, getWidth(), getHeight());
 		icon = guiHelper.createDrawableIngredient(VanillaTypes.ITEM_STACK, new ItemStack(MSBlocks.PUNCH_DESIGNIX));
     }
 	
@@ -48,9 +50,15 @@ public class DesignixRecipeCategory implements IRecipeCategory<JeiCombination>
 	}
 
 	@Override
-	public IDrawable getBackground()
+	public int getWidth()
 	{
-		return background;
+		return 94;
+	}
+
+	@Override
+	public int getHeight()
+	{
+		return 42;
 	}
 
 	@Override
@@ -66,5 +74,11 @@ public class DesignixRecipeCategory implements IRecipeCategory<JeiCombination>
 		builder.addSlot(RecipeIngredientRole.INPUT, 1, 25).addIngredients(recipe.input2());
 		builder.addSlot(RecipeIngredientRole.OUTPUT, 73, 12).addItemStack(recipe.output())
 				.addItemStack(CaptchaCardItem.createPunchedCard(recipe.output().getItem()));
+	}
+
+	@Override
+	public void draw(JeiCombination recipe, IRecipeSlotsView recipeSlotsView, GuiGraphics guiGraphics, double mouseX, double mouseY)
+	{
+		background.draw(guiGraphics);
 	}
 }
