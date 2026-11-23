@@ -6,6 +6,15 @@ The format is based on [Keep a Changelog](https://keepachangelog.com/en/1.1.0/).
 
 ## [Unreleased]
 
+### Added
+
+- Added new select, move, rotate, copy and paste actions to edit mode
+- Added multiple misc sound effects made by remedyhearts to edit mode
+
+### Changed
+
+- Separated edit mode hotkeys in settings
+
 ## [1.21.1-1.14.1.0] - 2026-10-25
 
 ### Added
