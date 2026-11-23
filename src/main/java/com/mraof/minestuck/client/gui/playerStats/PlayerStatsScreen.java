@@ -51,11 +51,10 @@ public abstract class PlayerStatsScreen extends MinestuckScreen
 			new TabSprite(0, 0), new TabSprite(tabWidth, 0), new TabSprite(tabWidth, 0),
 			new TabSprite(0, tabHeight), new TabSprite(tabWidth, tabHeight), new TabSprite(tabWidth, tabHeight)
 	);
-	// will be used in strife portfolio branch
-/*	public static final TabSpritePool STRIFE_POOL = new TabSpritePool(
+	public static final TabSpritePool STRIFE_POOL = new TabSpritePool(
 			new TabSprite(0, 192), new TabSprite(tabWidth, 192), new TabSprite(tabWidth * 2, 192),
 			new TabSprite(0, 224), new TabSprite(tabWidth, 224), new TabSprite(tabWidth * 2, 224)
-	);*/
+	);
 	
 	public static final TabSpritePool NEW_POOL = new TabSpritePool(
 			new TabSprite(84, 192), new TabSprite(84 + tabWidth, 192), new TabSprite(84 + (tabWidth * 2), 192),
@@ -78,7 +77,7 @@ public abstract class PlayerStatsScreen extends MinestuckScreen
 			}
 			return null;
 		}, SylladexScreen.TITLE, false, null),
-		STRIFE_SPECIBUS(StrifeSpecibusScreen::new, StrifeSpecibusScreen.TITLE, false, CLASSIC_POOL),
+		STRIFE_SPECIBUS(StrifePortfolioScreen::new, StrifePortfolioScreen.TITLE, false, STRIFE_POOL),
 		ECHELADDER(EcheladderScreen::new, EcheladderScreen.TITLE, false, NEW_POOL),
 		GRIST_CACHE(GristCacheScreen::new, GristCacheScreen.TITLE, true, NEW_POOL);
 		

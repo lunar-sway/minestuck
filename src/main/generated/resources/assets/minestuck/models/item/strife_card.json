@@ -1,0 +1,14 @@
+{
+  "parent": "minecraft:item/generated",
+  "overrides": [
+    {
+      "model": "minestuck:item/strife_card_assigned",
+      "predicate": {
+        "minestuck:has_weapons": 1.0
+      }
+    }
+  ],
+  "textures": {
+    "layer0": "minestuck:item/strife_card"
+  }
+}

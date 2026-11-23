@@ -9,6 +9,7 @@ import com.mraof.minestuck.api.alchemy.GristSet;
 import com.mraof.minestuck.client.ClientRungData;
 import com.mraof.minestuck.client.gui.ColorSelectorScreen;
 import com.mraof.minestuck.client.gui.MSScreenFactories;
+import com.mraof.minestuck.client.gui.StrifeCardScreen;
 import com.mraof.minestuck.inventory.captchalogue.CaptchaDeckHandler;
 import com.mraof.minestuck.inventory.captchalogue.Modus;
 import com.mraof.minestuck.network.*;
@@ -53,6 +54,7 @@ public final class ClientPlayerData
 	private static Map<Integer, TorrentSession.TorrentClientData> visibleTorrentData = new HashMap<>();
 	private static int playerColor;
 	private static boolean displaySelectionGui;
+	private static boolean displaySpecibusGui;
 	private static boolean dataCheckerAccess;
 	
 	@SubscribeEvent
@@ -180,6 +182,11 @@ public final class ClientPlayerData
 		title = packet.getTitle();
 	}
 	
+	public static void handleDataPacket(StrifePackets.OpenStartingSpecibusPacket packet)
+	{
+		displaySpecibusGui = true;
+	}
+	
 	public static void handleDataPacket(EcheladderDataPacket packet)
 	{
 		rung = packet.getRung();
@@ -240,6 +247,12 @@ public final class ClientPlayerData
 			displaySelectionGui = false;
 			if(MinestuckConfig.CLIENT.loginColorSelector.get())
 				Minecraft.getInstance().setScreen(new ColorSelectorScreen(true));
+		}
+		if(displaySpecibusGui && Minecraft.getInstance().screen == null)
+		{
+			displaySpecibusGui = false;
+			if(MinestuckConfig.CLIENT.loginSpecibusSelector.get())
+				Minecraft.getInstance().setScreen(new StrifeCardScreen());
 		}
 	}
 }
