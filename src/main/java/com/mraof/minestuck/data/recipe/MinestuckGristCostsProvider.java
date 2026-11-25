@@ -918,6 +918,8 @@ public final class MinestuckGristCostsProvider
 		
 		GristCostRecipeBuilder.of(MSItems.PLUSH_MUTATED_CAT.get()).grist(BUILD, 4).grist(URANIUM,  1).build(recipeSaver);
 		
+		GristCostRecipeBuilder.of(MSItems.SQUIDDLE.get()).grist(BUILD, 8).grist(SHALE, 2).build(recipeSaver);
+		
 		GristCostRecipeBuilder.of(MSItems.PARTICLE_ACCELERATOR.get()).grist(BUILD, 14).grist(URANIUM, 3).build(recipeSaver);
 		
 		GristCostRecipeBuilder.of(MSBlocks.WOODEN_CACTUS.get()).grist(BUILD, 7).build(recipeSaver);
