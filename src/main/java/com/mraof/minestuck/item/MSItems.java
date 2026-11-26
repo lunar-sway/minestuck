@@ -26,7 +26,7 @@ import com.mraof.minestuck.item.weapon.projectiles.ReturningProjectileWeaponItem
 import com.mraof.minestuck.player.EnumAspect;
 import com.mraof.minestuck.util.MSSoundEvents;
 import com.mraof.minestuck.util.MSTags;
-
+import net.minecraft.core.Direction;
 import net.minecraft.core.component.DataComponents;
 import net.minecraft.core.particles.ParticleTypes;
 import net.minecraft.sounds.SoundEvents;
@@ -1660,6 +1660,10 @@ public class MSItems
 	public static final DeferredItem<Item> PERFECTLY_GENERIC_HANGING_SIGN = REGISTER.register("perfectly_generic_hanging_sign", () -> new HangingSignItem(MSBlocks.PERFECTLY_GENERIC_HANGING_SIGN.get(), MSBlocks.PERFECTLY_GENERIC_WALL_HANGING_SIGN.get(), new Item.Properties().stacksTo(16)));
 	public static final DeferredItem<Item> PERFECTLY_GENERIC_SIGN = REGISTER.register("perfectly_generic_sign", () -> new SignItem(new Item.Properties().stacksTo(16), MSBlocks.PERFECTLY_GENERIC_SIGN.get(), MSBlocks.PERFECTLY_GENERIC_WALL_SIGN.get()));
 
+	// Decorative Blocks
+	public static final DeferredItem<BlockItem> SQUIDDLE = REGISTER.register("squiddle", () -> new StandingAndWallBlockItem(MSBlocks.SQUIDDLE.get(), MSBlocks.SQUIDDLE_WALL.get(), new Item.Properties().rarity(Rarity.UNCOMMON), Direction.DOWN));
+	
+	
 	/**
 	 * Helper function to register a standard BlockItem with just the source block, no item properties
 	 */
