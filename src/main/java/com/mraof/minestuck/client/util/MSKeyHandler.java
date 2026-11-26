@@ -5,6 +5,7 @@ import com.mraof.minestuck.Minestuck;
 import com.mraof.minestuck.client.gui.StrifeSwitcherHud;
 import com.mraof.minestuck.client.gui.playerStats.PlayerStatsScreen;
 import com.mraof.minestuck.computer.editmode.ClientEditHandler;
+import com.mraof.minestuck.computer.editmode.ClientEditmodeData;
 import com.mraof.minestuck.network.CaptchaDeckPackets;
 import com.mraof.minestuck.network.ToggleAspectEffectsPacket;
 import com.mraof.minestuck.player.ClientPlayerData;
