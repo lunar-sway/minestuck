@@ -568,7 +568,6 @@ public final class StrifePortfolioHandler
 	public static ItemStack createStrifeCard(@Nullable StrifeSpecibus specibus)
 	{
 		ItemStack card = new ItemStack(MSItems.STRIFE_CARD.get());
-		if(specibus != null) card.set(MSItemComponents.STRIFE_SPECIBUS_DATA.get(), specibus);
-		return card;
+		return StrifeCardItem.injectStrifeSpecibus(specibus, card);
 	}
 }

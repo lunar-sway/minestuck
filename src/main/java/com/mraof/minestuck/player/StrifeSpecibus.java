@@ -9,10 +9,7 @@ import net.minecraft.network.codec.StreamCodec;
 import net.minecraft.world.item.ItemStack;
 
 import javax.annotation.Nullable;
-import java.util.ArrayList;
-import java.util.LinkedList;
-import java.util.List;
-import java.util.Optional;
+import java.util.*;
 
 /**
  * Ported from Minestuck Universe (1.12.2)
@@ -189,5 +186,19 @@ public class StrifeSpecibus
 	public String toString()
 	{
 		return abstratusName + " " + weapons;
+	}
+	
+	@Override
+	public boolean equals(Object o)
+	{
+		if(o == null || getClass() != o.getClass()) return false;
+		StrifeSpecibus that = (StrifeSpecibus) o;
+		return Objects.equals(abstratusName, that.abstratusName) && Objects.equals(weapons, that.weapons) && Objects.equals(customName, that.customName);
+	}
+	
+	@Override
+	public int hashCode()
+	{
+		return Objects.hash(abstratusName, weapons, customName);
 	}
 }
