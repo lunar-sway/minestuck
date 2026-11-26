@@ -28,21 +28,12 @@ public class CustomVoxelShape
 			double[] part = out[i]; //for north/default visualize a cube with left face 0, right face 3, front face 2, back face 5, bottom face 1, top face 4
 			switch(dir)
 			{
-				case WEST:
-					out[i] = new double[]{part[2], part[1], 16-part[3], part[5], part[4], 16-part[0]};
-				break;
-				case SOUTH:
-					out[i] = new double[] {16-part[3], part[1], 16-part[5], 16-part[0], part[4], 16-part[2]};
-				break;
-				case EAST:
-					out[i] = new double[] {16-part[5], part[1], part[0], 16-part[2], part[4], part[3]};
-				break;
-				case UP:
-					out[i] = new double[] {part[0], part[2], part[4], part[3], part[5], part[1]}; //works for vertically symmetric blocks but may not work otherwise
-					break;
-				case DOWN:
-					out[i] = new double[] {part[0], part[2], 16-part[4], part[3], part[5], 16-part[1]}; //works for vertically symmetric blocks but may not work otherwise
-					break;
+				case NORTH -> {}
+				case WEST -> out[i] = new double[]{part[2], part[1], 16-part[3], part[5], part[4], 16-part[0]};
+				case SOUTH -> out[i] = new double[] {16-part[3], part[1], 16-part[5], 16-part[0], part[4], 16-part[2]};
+				case EAST -> out[i] = new double[] {16-part[5], part[1], part[0], 16-part[2], part[4], part[3]};
+				case UP -> out[i] = new double[] {part[0], part[2], part[4], part[3], part[5], part[1]}; //works for vertically symmetric blocks but may not work otherwise
+				case DOWN -> out[i] = new double[] {part[0], part[2], 16-part[4], part[3], part[5], 16-part[1]}; //works for vertically symmetric blocks but may not work otherwise
 			}
 		}
 		return new CustomVoxelShape(out);

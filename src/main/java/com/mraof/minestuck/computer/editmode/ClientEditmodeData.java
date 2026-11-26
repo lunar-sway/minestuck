@@ -17,7 +17,7 @@ import net.neoforged.neoforge.event.level.LevelEvent;
 
 import javax.annotation.Nullable;
 
-@EventBusSubscriber(modid = Minestuck.MOD_ID, bus = EventBusSubscriber.Bus.GAME, value = Dist.CLIENT)
+@EventBusSubscriber(modid = Minestuck.MOD_ID, value = Dist.CLIENT)
 public final class ClientEditmodeData
 {
 	public static final String ENTERED = "minestuck.editmode.entered";

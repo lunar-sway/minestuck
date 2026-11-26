@@ -64,16 +64,19 @@ public class ImpEntity extends UnderlingEntity implements GeoEntity
 		return GristHelper.generateUnderlingGristDrops(this, damageMap, 1);
 	}
 	
+	@Override
 	protected SoundEvent getAmbientSound()
 	{
 		return MSSoundEvents.ENTITY_IMP_AMBIENT.get();
 	}
 	
+	@Override
 	protected SoundEvent getHurtSound(DamageSource damageSourceIn)
 	{
 		return MSSoundEvents.ENTITY_IMP_HURT.get();
 	}
 	
+	@Override
 	protected SoundEvent getDeathSound()
 	{
 		return MSSoundEvents.ENTITY_IMP_DEATH.get();

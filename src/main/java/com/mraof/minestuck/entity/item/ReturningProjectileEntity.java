@@ -116,6 +116,7 @@ public class ReturningProjectileEntity extends ThrowableItemProjectile
 		}
 	}
 	
+	@Override
 	public void tick()
 	{
 		Vec3 pos = position();

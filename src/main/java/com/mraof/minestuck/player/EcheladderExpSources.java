@@ -27,7 +27,7 @@ import java.util.Map;
 import java.util.Objects;
 import java.util.function.Function;
 
-@EventBusSubscriber(bus = EventBusSubscriber.Bus.GAME)
+@EventBusSubscriber
 public final class EcheladderExpSources
 {
 	public static final DeferredRegister<MapCodec<? extends EcheladderExpSource>> REGISTER = DeferredRegister.create(Minestuck.id("exp_source"), Minestuck.MOD_ID);
